@@ -5,23 +5,27 @@
 	<title>Kolibri</title>
     <style>
         body {
-            margin: 0;
+            margin: 3rem;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Segoe UI", Arial, sans-serif;
+            font-family: "Poppins Regular", "Segoe UI", Arial, fallback, sans-serif;
         }
+		header {
+			display: flex;
+			flex-direction: column;
+		}
+		header > * {
+			text-align: center;
+		}
+
     </style>
+    <link rel="shortcut icon" type="image/png" href="img/logo/logo-60x54.png"/>
 </head>
 <body>
 	<header>
+		<img src="img/logo/logo.svg" alt="Kolibri Logo">
         <h1>Kolibri</h1>
         <h2>The Web UI Toolkit</h2>
-<!--		<picture>-->
-			<!--possible use of larger media-->
-		    <!--<source media="(min-width: 800px)" srcset="larger.jpg">-->
-<!--		    <source srcset="Dierk_Koenig_small.jpg">-->
-<!--			<img src="Dierk_Koenig_small.jpg" alt="Dierk König Portrait">-->
-<!--		</picture>-->
 	</header>
 
 	<main>
@@ -35,19 +39,19 @@
 
 		<section>
       		  <h2>Contributions</h2>
-      		  <p> Andermatt, Brodwolf
+      		  <p> Andermatt, Brodwolf:
 				  <a href="https://github.com/mattwolf-corporation/ip6_lambda-calculus-in-js">code</a>,
 				  <a href="https://mattwolf-corporation.gitbook.io/ip5-lambda-calculus/">git book</a>
               </p>
-      		  <p> Häfliger, Misic
+      		  <p> Häfliger, Misic:
 				  <a href="https://github.com/fabianhaef/ip6-web-ui-toolkit">code</a>,
 				  <a href="https://dierk.github.io/Home/data/IP6_Bericht_Misic_Häfliger.pdf">documentation.pdf</a>,
               </p>
-			  <p> Christen, Robin
+			  <p> Christen, Robin:
 				  <a href="https://github.com/robin-fhnw/IP5-Puerro">code</a>,
 				  <a href="https://robin-christen.gitbook.io/puerro/">git book</a>
 			  </p>
-			  <p> Berchtold, Duss
+			  <p> Berchtold, Duss:
 				  <a href="https://www.fhnw.ch/plattformen/bachelor20/IMVS20/index.html">info</a>,
 				  <a href="https://github.com/KDuss/bezel">code</a>
 			  </p>
