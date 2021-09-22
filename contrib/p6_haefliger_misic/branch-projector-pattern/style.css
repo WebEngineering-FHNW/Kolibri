@@ -1,0 +1,53 @@
+.disabled {
+  opacity: 0.2;
+}
+
+.valid {
+  border: 5px solid green;
+}
+
+.line {
+  background: gray;
+  display: inline-block;
+  height: 6px;
+  width: 50px;
+  border-radius: 2px;
+}
+
+.line-bg-default {
+  background: gray;
+}
+
+.line-bg-red {
+  background: red;
+}
+
+.line-bg-orange {
+  background: orange;
+}
+
+.line-bg-green {
+  background: green;
+}
+
+.default {
+  color: gray;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.subtitle {
+  margin-bottom: 0.2rem;
+}
+
+.description {
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}

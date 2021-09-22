@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Observable Text-Input Example</title>
+</head>
+<style>
+ body{
+     position: fixed;top: 50%; left: 50%; margin-top: -50px;  margin-left: -100px;
+     font-family: 'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif
+ }
+ label{
+     font-weight: bold;
+ }
+</style>
+<body >
+
+<label for="inputText">Observable Text-Input: </label>
+<input name="inputText" id="inputText" type="text">
+
+<br>
+
+<input type="checkbox" id="unsubNewValue" name="unsubNewValue" checked>
+<label for="newValue">New Value: &nbsp;</label>
+<span id="newValue"></span>
+
+<br>
+
+<input type="checkbox" id="unsubOldValue" name="unsubOldValue" checked>
+<label for="oldValue">Old Value:  &nbsp;&nbsp;</label>
+<span id="oldValue"></span>
+
+<br>
+
+<input type="checkbox" id="unsubSize" name="unsubSize" checked>
+<label for="sizes">Text-Size:  &nbsp;&nbsp; </label>
+<span  id="sizes"></span>
+
+
+<script src="observableTextInputExample.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View</title>
+    <script src="observable.js"></script>
+</head>
+<body>
+
+<input id="name" type="text">
+<div id="label"></div>
+<div id="size"></div>
+
+<script>
+    const nameInput = document.getElementById("name");
+    const label     = document.getElementById("label");
+    const inputLength      = document.getElementById("size");
+
+    const inputAttr = ObservableLambdaStack("");
+    inputAttr(getOnChange)(val => label.innerText  = val)
+    inputAttr(getOnChange)(val => inputLength.innerText   = val.length);
+
+    const testStack = convertArrayToStack(["11", "22", "33", "44", "55", "66"])
+    const re0 = removeByIndex(testStack)(0)
+    const re1 = removeByIndex(testStack)(1)
+    const re2 = removeByIndex(testStack)(2)
+    const re3 = removeByIndex(testStack)(3)
+    const re4 = removeByIndex(testStack)(4)
+    const re5 = removeByIndex(testStack)(5)
+    const re6 = removeByIndex(testStack)(6)
+
+
+    nameInput.oninput = _ => (inputAttr(getSetValue))(nameInput.value);
+    inputAttr(getOnChange)(console.log);
+
+
+
+</script>
+
+</body>
+</html>
