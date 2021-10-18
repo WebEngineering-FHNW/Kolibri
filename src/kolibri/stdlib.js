@@ -17,7 +17,7 @@ export {
 
 /**
  * Identity function, aka "I" in the SKI calculus or "Ibis" (or "Idiot") in the Smullyan bird metaphors.
- * The function in free of side effects and runs in O(1). Function calls can be inlined.
+ * The function is pure and runs in O(1). Function calls can be inlined.
  * @haskell  a -> a
  * @function id
  * @param    {a} x
