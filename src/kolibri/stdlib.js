@@ -5,7 +5,10 @@
  */
 
 export {
-    id, c, snd
+    id, c, snd,
+    Tuple, Choice,
+    Pair, fst,
+    Left, Right, Nothing, Just
 }
 
 /**
@@ -54,3 +57,96 @@ const c = x => _ => x;
  * snd(undefined)(1) === 1
  */
 const snd = _ => y => y;
+
+// --------- ADT section ---------
+
+// private ADT implementation details ---------------------
+
+const TupleCtor = n => values =>
+    n === 0                                            // we have curried all ctor args, now
+        ? Object.seal(selector => selector(values))    // return a function that waits for the selector
+        : value =>                                     // there are still values to be curried
+          TupleCtor (n - 1) ([...values, value]);      // return the ctor for the remaining args
+
+const ChoiceCtor = position => n => choices =>
+    n === 0                                                      // we have curried all ctor args, now
+        ? Object.seal(choices[position] (choices[0]) )           // we call the chosen function with the ctor argument
+        : choice =>                                              // there are still choices to be curried
+          ChoiceCtor (position) (n - 1) ([...choices, choice]);  // return the ctor for the remaining args
+
+// end of private section, publicly exported constructors follow
+
+/**
+ * An n-Tuple stores n different values, which can be retrieved by accessor functions.
+ * It is the most general form of a Product Type. Tuples are immutable. Values are accessed in O(1).
+ * Since no indexes are managed by the user, there are no out-of-bounds errors.
+ * @param n - the cardinality, i.e. Tuple(n) can store n values. Must be > 0 or an error is thrown.
+ * @return {a[]} - an array where the first item is a constructor, follow by n accessor functions
+ * @constructor
+ * @example
+ * const [Triple, one, two, three] = Tuple(3);
+ * const triple = Triple(1)(2)(3);
+ * triple(two) === 2;
+ */
+const Tuple = n => {
+    if (n < 1) throw new Error("Tuple must have first argument n > 0");
+    return [
+        TupleCtor (n) ([]), // ctor curries all values and then waits for the selector
+        // every selector is a function that picks the value from the curried ctor at the same position
+        ...Array.from( {length:n}, (it, idx) => values => values[idx] )
+    ];
+};
+
+/**
+ * A Choice selects between n distinct values, each of which can only be accessed if a
+ * handling function is provided for each possible value. One cannot forget to handle edge cases.
+ * It is the most general form of a CoProduct aka Sum Type. Choices are immutable.
+ * @param n - the cardinality, i.e. number of possible choices. Must be > 0 or an error is thrown.
+ * @return {a[]} - an array of n choice constructors
+ * @constructor
+ * @example
+ * const [Bad, Good, Unknown] = Choice(3);
+ * const guessWhat = Good(1);
+ * guessWhat
+ *      (_ => console.error("this is bad"))
+ *      (x => x)
+ *      (_ => 0); // Unknown -> default value
+ */
+const Choice = n => { // number of ctors
+    if (n < 1) throw new Error("Choice must have first argument n > 0");
+    return Array.from( {length:n}, (it, idx) => ChoiceCtor (idx + 1) (n + 1) ([]) ) ; // n ctors with n curried args
+};
+
+/**
+ * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
+ * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
+ * @param x - x and y as curried arguments
+ * @return {function(*=): function(*): *}
+ * @constructor
+ * @example
+ * const dierk = Pair("Dierk")("König");
+ * dierk(fst) === "Dierk");
+ * dierk(snd) === "König");
+ */
+const Pair = x => y => selector => selector(x)(y);
+
+/**
+ * Select the first of two curried arguments for the use with {@link Pair}s.
+ * An alternative name for {@link c}:
+ * @function fst
+ * @param    {a} x
+ * @returns  { function(*): {a} } a function that ignores its argument and returns the parameter x unchanged.
+ */
+const fst = c;
+
+/**
+ * The Either types.
+ */
+const [Left, Right] = Choice(2);
+
+/**
+ * The Maybe types.
+ */
+const Nothing = Left();
+const Just = Right;
+// ----------- End of ADT section -----------
