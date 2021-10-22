@@ -5,12 +5,11 @@
  */
 
 export {
-    id
+    id, c
 }
 
-
 /**
- * Generic type names for the purpose of expressing the identity of an arbitrarily chosen type. {@see id}.
+ * Generic type names for the purpose of expressing the identity of an arbitrarily chosen type. See {@link id}.
  * @typedef {*} a
  * @typedef {*} b
  */
@@ -22,6 +21,22 @@ export {
  * @function id
  * @param    {a} x
  * @returns  {a} the parameter x unchanged.
+ * @example  id(1) === 1
  */
 const id = x => x;
 
+/**
+ * Constant function that captures and caches the argument.
+ * Aka "konst", "fst" (the first of two curried parameters),
+ * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
+ * @haskell  a -> b -> a
+ * @function f
+ * @param    {a} x
+ * @returns  { function(*): {a} } a function that ignores its argument and returns the parameter x unchanged.
+ * @example
+ * c(1)(undefined) === 1;
+ * const getExpr = c(expr);
+ * // expression changes
+ * getExpr() === expr;
+ */
+const c = x => _ => x;

@@ -15,8 +15,11 @@ const Assert = () => {
     let counter = 1;
     let ok = emptyStack;
 
-    const is = (actual, expected) =>
-        addTest(actual, expected, actual === expected);
+    const is = (actual, expected) => {
+        const result = actual === expected;
+        if (!result) debugger;
+        return addTest(actual, expected, result);
+    };
 
     const churchNumberEquals = (actual, expected) => {
         const result = (jsnum(actual) === jsnum(expected));
