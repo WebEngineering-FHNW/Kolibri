@@ -30,7 +30,7 @@ const id = x => x;
  * Aka "konst", "fst" (the first of two curried parameters),
  * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
  * @haskell  a -> b -> a
- * @function f
+ * @function c
  * @param    {a} x
  * @returns  { function(*): {a} } a function that ignores its argument and returns the parameter x unchanged.
  * @example
