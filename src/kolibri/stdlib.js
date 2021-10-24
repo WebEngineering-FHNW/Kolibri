@@ -120,9 +120,11 @@ const Choice = n => { // number of ctors
 /**
  * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
  * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
+ * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
  * @param x - x and y as curried arguments
  * @return {function(*=): function(*): *}
  * @constructor
+ * @haskell a -> b -> a|b
  * @example
  * const dierk = Pair("Dierk")("König");
  * dierk(fst) === "Dierk");
@@ -139,13 +141,52 @@ const Pair = x => y => selector => selector(x)(y);
  */
 const fst = c;
 
-/**
+/*
  * The Either types.
+ * @haskell Either a b
  */
-const [Left, Right] = Choice(2);
+
+/**
+ * The Left constructor of an Either type. An Either is either {@link Left} or {@link Right}.
+ * It is constructed with a value of type {@link a} and waits for two more functions f and g
+ * as curried arguments.
+ * When both are given, f(x) is called.
+ * The Left case of an Either type is usually (but not necessarily so) an error case.
+ * Left values are immutable.
+ * @haskell Left a :: Either a b
+ * @param   {a} x
+ * @return  {function({a}): function(*): *}
+ * @constructor
+ * @example
+ * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
+ * withFoo
+ *      (msg => console.error(msg))
+ *      (x   => doSomethingWithFoo(x));
+ */
+
+const Left  = x => f => _ => f(x);
+/**
+ * The Right constructor of an Either type. An Either is either {@link Left} or {@link Right}.
+ * It is constructed with a value of type {@link b} and waits for two more functions f and g
+ * as curried arguments.
+ * When both are given, g(x) is called.
+ * The Right case of an Either type is usually (but not necessarily so) the good case.
+ * Right values are immutable.
+ * @haskell Right b :: Either a b
+ * @param   {b} x
+ * @return  {function({b}): function(*): *}
+ * @constructor
+ * @example
+ * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
+ * withFoo
+ *      (msg => console.error(msg))
+ *      (x   => doSomethingWithFoo(x));
+ */
+const Right = x => _ => g => g(x);
 
 /**
  * The Maybe types.
+ * @haskell Maybe a
  */
 const Nothing = Left();
 const Just = Right;
