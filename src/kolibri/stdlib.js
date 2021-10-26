@@ -185,9 +185,30 @@ const Left  = x => f => _ => f(x);
 const Right = x => _ => g => g(x);
 
 /**
- * The Maybe types.
- * @haskell Maybe a
+ * Nothing is the error case of the Maybe type. A "Maybe a" is either Nothing or "{@link Just} a".
+ * Nothing is immutable. Nothing is a singleton.
+ * Nothing is used to get around missing null/undefined checks.
+ * @haskell Nothing :: Maybe a
+ * @type {function({a}): function(*): *}
+ * @example
+ * const mayFoo = (null == foo) ? Nothing : Just(foo);
+ * mayFoo
+ *      (_   => console.error("cannot find foo"))
+ *      (x   => doSomethingWithFoo(x));
  */
 const Nothing = Left (undefined);
+
+/**
+ * Just is the success case of the Maybe type. A "Maybe a" is either {@link Nothing} or "Just a".
+ * Just values are immutable.
+ * Just is used to get around missing null/undefined checks.
+ * @haskell Just a :: Maybe a
+ * @type {function(b): function(*): function(*): *}
+ * @example
+ * const mayFoo = (null == foo) ? Nothing : Just(foo);
+ * mayFoo
+ *      (_   => console.error("cannot find foo"))
+ *      (x   => doSomethingWithFoo(x));
+ */
 const Just = Right;
 // ----------- End of ADT section -----------
