@@ -112,9 +112,9 @@ const Tuple = n => {
  *      (x => x)
  *      (_ => 0); // Unknown -> default value
  */
-const Choice = n => { // number of ctors
+const Choice = n => { // number of constructors
     if (n < 1) throw new Error("Choice must have first argument n > 0");
-    return Array.from( {length:n}, (it, idx) => ChoiceCtor (idx + 1) (n + 1) ([]) ) ; // n ctors with n curried args
+    return Array.from( {length:n}, (it, idx) => ChoiceCtor (idx + 1) (n + 1) ([]) ) ; // n constructors with n curried args
 };
 
 /**
@@ -188,6 +188,6 @@ const Right = x => _ => g => g(x);
  * The Maybe types.
  * @haskell Maybe a
  */
-const Nothing = Left();
+const Nothing = Left (undefined);
 const Just = Right;
 // ----------- End of ADT section -----------
