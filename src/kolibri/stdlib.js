@@ -211,4 +211,14 @@ const Nothing = Left (undefined);
  *      (x   => doSomethingWithFoo(x));
  */
 const Just = Right;
+
 // ----------- End of ADT section -----------
+
+// todo
+// Eq typeclass, symmetry, reflexivity
+// booleanEq, pairEq, tupleEq, eitherEq, choiceEq, maybeEq, arrayEq
+
+// functor typeclass, associativity (if pure), left and right identity
+// pairMap, tupleMap, eitherMap (only Right), choiceMap (n functions), maybeMap
+
+// Num? Ord? Monoid? Monad?
