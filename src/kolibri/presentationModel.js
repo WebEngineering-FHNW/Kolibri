@@ -1,3 +1,4 @@
+// todo: jsdoc for exports
 
 import { Observable } from "./observable.js";
 import { id }         from "./stdlib.js";
@@ -92,7 +93,7 @@ const modelWorld = ModelWorld(); // make a single instance, not exported, this i
 const readQualifierValue = modelWorld.readQualifierValue; // specific export
 
 /** An Attribute that builds it's initial value from already existing qualified values
- *  instead of overriding maybe exiting qualified values with the constructor value */
+ *  instead of overriding possibly existing qualified values with the constructor value */
 const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier), qualifier);
 
 const Attribute = (value, qualifier) => {
