@@ -1,6 +1,6 @@
 // todo jsdoc
 
-import "./array.js"
+import "./util/array.js"
 
 export {Observable, ObservableList}
 
@@ -18,7 +18,7 @@ const Observable = value => {
             value = newValue;
             listeners.forEach(callback => {
                 if (value === newValue) { // pre-ordered listeners might have changed this and thus the callback no longer applies
-                    callback(value, oldValue)
+                    callback(value, oldValue);
                 }
             });
         }
@@ -41,7 +41,7 @@ const ObservableList = list => {
         del: item => {
             list.removeItem(item);
             const safeIterate = [...delListeners]; // shallow copy as we might change listeners array while iterating
-            safeIterate.forEach( (listener, index) => listener(item, () => removeDeleteListener(listener) ));
+            safeIterate.forEach( listener => listener(item, () => removeDeleteListener(listener) ));
         },
         removeAddListener,
         removeDeleteListener,

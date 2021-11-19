@@ -1,4 +1,4 @@
-import {TestSuite} from "../../test/test.js";
+import {TestSuite} from "./util/test.js";
 
 import {c, Choice, fst, id, Just, Left, Nothing, Pair, Right, snd, Tuple} from "./stdlib.js";
 
@@ -80,4 +80,4 @@ stdlibSuite.add("choice", assert => {
 });
 
 
-stdlibSuite.report();
+stdlibSuite.run();

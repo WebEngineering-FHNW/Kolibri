@@ -1,7 +1,7 @@
 
 import {Observable, ObservableList} from "./observable.js"
-import "./array.js"
-import {TestSuite} from "../../test/test.js";
+import "./util/array.js"
+import {TestSuite} from "./util/test.js";
 
 const observableSuite = TestSuite("Observable");
 
@@ -101,4 +101,4 @@ observableSuite.add("list", assert => {
 
 });
 
-observableSuite.report();
+observableSuite.run();

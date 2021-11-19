@@ -1,7 +1,7 @@
-import {TestSuite} from "../../test/test.js";
+import {TestSuite} from "./test.js";
 import "./array.js";
 
-const arraySuite = TestSuite("Array");
+const arraySuite = TestSuite("util-array");
 
 arraySuite.add("eq", assert => {
     assert.is( [].eq([]),       true);
@@ -52,4 +52,4 @@ arraySuite.add("times", assert => {
     }
 });
 
-arraySuite.report();
+arraySuite.run();
