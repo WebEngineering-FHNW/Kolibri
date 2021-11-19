@@ -2,7 +2,6 @@
 
 export { TestSuite, total }
 
-import { padLeft, padRight}   from "./strings.js"; // for formatting the report
 import { Tuple, id }          from "../stdlib.js";
 
 let total = 0;
@@ -57,15 +56,15 @@ function TestSuite(suiteName) {
 function report(origin, ok) {
     const extend = 20;
     if ( ok.every( elem => elem) ) {
-        write(" "+ padLeft(ok.length, 3) +" tests in " + padRight(origin, extend) + " ok.");
+        write(" "+ String(ok.length).padStart(3) +" tests in " + origin.padEnd(extend) + " ok.");
         return;
     }
-    let reportLine = "    Failing tests in " + padRight(origin, extend);
+    let reportLine = "    Failing tests in " + origin.padEnd(extend);
     bar(reportLine.length);
     write("|" + reportLine+ "|");
     for (let i = 0; i < ok.length; i++) {
         if( ! ok[i]) {
-            write("|    Test #"+ padLeft(i, 3) +" failed                     |");
+            write("|    Test #"+ String(i).padEnd(3) +" failed                     |");
         }
     }
     bar(reportLine.length);
