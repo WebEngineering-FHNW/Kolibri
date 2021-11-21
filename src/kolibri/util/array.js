@@ -4,8 +4,6 @@ export {
     // there is nothing to export since we only augment the prototypes
 }
 
-
-
 const arrayEq = arrayA => arrayB =>
     arrayA.length === arrayB.length && arrayA.every( (it, idx) => it === arrayB[idx])
 
@@ -36,3 +34,9 @@ const timesFunction = function (callback) {
 
 String.prototype.times = timesFunction;
 Number.prototype.times = timesFunction;
+
+const sum = function (callback = Number) {
+    return this.reduce( (acc, cur, idx) => acc + callback(cur, idx), 0);
+}
+
+Array.prototype.sum = sum;

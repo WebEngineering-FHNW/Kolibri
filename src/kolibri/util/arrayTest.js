@@ -52,4 +52,15 @@ arraySuite.add("times", assert => {
     }
 });
 
+arraySuite.add("sum", assert => {
+    assert.is( [].sum(), 0);
+    assert.is( [1].sum(), 1);
+    assert.is( ["1"].sum(), 1);
+    assert.is( (10).times().sum(), 9 * 10 / 2);
+    assert.is( [1].sum(Number), 1);
+    assert.is( ["1"].sum(Number), 1);
+    assert.is( (10).times().sum(Number), 9 * 10 / 2);
+    assert.is( (3).times().sum(n => n*n), 0 + 1 + 4);
+});
+
 arraySuite.run();
