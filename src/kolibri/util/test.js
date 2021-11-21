@@ -1,25 +1,35 @@
 // The test "framework", exports the Suite function plus a total of how many assertions have been tested
 
-export { TestSuite, total }
+export { TestSuite, total}
 
-import { Tuple, id }          from "../stdlib.js";
+import {id, Tuple} from "../stdlib.js";
 
 let total = 0;
 
 function Assert() {
     const results = []; // [Bool], true if test passed, false otherwise
+    const messages = [];
     return {
-        results: results,
-        true: (testResult) => {
-            if (!testResult) { console.error("test failed") }
+        results,
+        messages,
+        true: testResult => {
+            let message = "";
+            if (!testResult) {
+                console.error("test failed");
+                message = "not true";
+            }
             results.push(testResult);
+            messages.push(message);
         },
         is: (actual, expected) => {
             const testResult = actual === expected;
+            let message = "";
             if (!testResult) {
-                console.error("test failure. Got '"+ actual +"', expected '" + expected +"'");
+                message = "Got '"+ actual +"', expected '" + expected +"'";
+                console.error(message);
             }
             results.push(testResult);
+            messages.push(message);
         }
     }
 }
@@ -29,7 +39,7 @@ const [Test, name, logic] = Tuple(2); // data type to capture test to-be-run
 function test(name, callback) {
     const assert = Assert();
     callback(assert);
-    report(name, assert.results)
+    report(name, assert.results, assert.messages)
 }
 
 function TestSuite(suiteName) {
@@ -42,7 +52,7 @@ function TestSuite(suiteName) {
             tests.forEach( test => test(logic) (suiteAssert) );
             total += suiteAssert.results.length;
             if (suiteAssert.results.every( id )) { // whole suite was ok, report whole suite
-                report("suite " + suiteName, suiteAssert.results)
+                report(suiteName, suiteAssert.results);
             } else { // some test in suite failed, rerun tests for better error indication
                 tests.forEach( test => suite.test( test(name), test(logic) ) )
             }
@@ -53,29 +63,35 @@ function TestSuite(suiteName) {
 
 // test result report
 // report :: String, [Bool] -> DOM ()
-function report(origin, ok) {
-    const extend = 20;
-    if ( ok.every( elem => elem) ) {
-        write(" "+ String(ok.length).padStart(3) +" tests in " + origin.padEnd(extend) + " ok.");
+function report(origin, results, messages) {
+    if ( results.every( elem => elem) ) {
+        write (`
+            <div>${results.length}</div>
+            <div>tests in </div> 
+            <div>${origin}</div>
+            <div class="ok">ok</div> 
+        `);
         return;
     }
-    let reportLine = "    Failing tests in " + origin.padEnd(extend);
-    bar(reportLine.length);
-    write("|" + reportLine+ "|");
-    for (let i = 0; i < ok.length; i++) {
-        if( ! ok[i]) {
-            write("|    Test #"+ String(i).padEnd(3) +" failed                     |");
-        }
-    }
-    bar(reportLine.length);
+    write(`
+            <div></div>
+            <div>tests in </div> 
+            <div>${origin}</div>
+            <div class="failed">failed</div> 
+    `);
+    results.forEach((result, idx) => {
+        if (result) return;
+        write(`
+                <div></div>
+                <div>assertion </div> 
+                <div class="failed">#${idx+1}: ${messages[idx]}</div>
+                <div class="failed">failed</div> 
+        `);
+    });
 }
 
 function write(message) {
     const out = document.getElementById('out');
-    out.textContent += message + "\n";
-}
-
-function bar(extend) {
-    write("+" + "-".repeat(extend) + "+");
+    out.innerHTML += message ;
 }
 

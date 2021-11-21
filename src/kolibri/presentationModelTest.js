@@ -1,7 +1,7 @@
 import { TestSuite }     from "./util/test.js";
 import { Attribute, VALUE, VALID } from "./presentationModel.js";
 
-const pmSuite = TestSuite("presModel");
+const pmSuite = TestSuite("presentationModel");
 
 pmSuite.add("attr-value", assert => {
     const attr = Attribute("init");

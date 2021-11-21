@@ -3,7 +3,7 @@ import {Observable, ObservableList} from "./observable.js"
 import "./util/array.js"
 import {TestSuite} from "./util/test.js";
 
-const observableSuite = TestSuite("Observable");
+const observableSuite = TestSuite("observable");
 
 observableSuite.add("value", assert => {
 

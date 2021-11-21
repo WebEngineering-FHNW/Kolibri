@@ -1,7 +1,7 @@
 import {TestSuite} from "./test.js";
 import "./array.js";
 
-const arraySuite = TestSuite("util-array");
+const arraySuite = TestSuite("util/array");
 
 arraySuite.add("eq", assert => {
     assert.is( [].eq([]),       true);

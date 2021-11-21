@@ -2,7 +2,7 @@ import {TestSuite} from "./util/test.js";
 
 import {c, Choice, fst, id, Just, Left, Nothing, Pair, Right, snd, Tuple} from "./stdlib.js";
 
-const stdlibSuite = TestSuite("Standard Lib");
+const stdlibSuite = TestSuite("stdlib");
 
 stdlibSuite.add("id", assert => {
     assert.is(id(1), 1);

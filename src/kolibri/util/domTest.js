@@ -1,7 +1,7 @@
 import { TestSuite } from "./test.js";
 import { dom } from "./dom.js";
 
-const domSuite = TestSuite("util-dom");
+const domSuite = TestSuite("util/dom");
 
 domSuite.add("dom", assert => {
     const [resultElement] = dom('<section></section>');
