@@ -6,7 +6,6 @@ const dom = innerString => {
     return holder.children;
 };
 
-// todo: is there any way to test this automatically?
 const fireEvent = (element, eventTypeString) => {
     const event = new Event(eventTypeString);
     element.dispatchEvent(event);
