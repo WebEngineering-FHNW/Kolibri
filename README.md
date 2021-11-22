@@ -1,2 +1,1 @@
-# Kolibri
-The Web UI Toolkit
+[Home Page](https://webengineering-fhnw.github.io/Kolibri/)
