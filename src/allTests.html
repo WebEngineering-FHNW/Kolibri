@@ -5,9 +5,10 @@
     <link rel="icon" href="data:,">
     <style>
         :root {
-            --kolibri-accent-color: #de2d9d;
-            --kolibri-output-color: #5F2EEA;
-            --kolibri-ok-color:     hsl(104, 89%, 28%);
+            --kolibri-accent-color:  #de2d9d;
+            --kolibri-output-color:  #5F2EEA;
+            --kolibri-ok-color:      hsl(104, 89%, 28%);
+            --kolibri-neutral-color: hsl(0,   0%,   74%);
             font-family: 'Roboto', sans-serif;
             padding: 0;
             margin: 0;
@@ -38,7 +39,20 @@
         #out div:nth-child(4n-3) {
             justify-self: end;
         }
-
+        #grossTotal {
+            padding: 1.5em;
+        }
+        footer {
+            position: fixed;
+            bottom:     0;
+            left:       0;
+            right:      0;
+            text-align: center;
+            color:      white;
+            background: var(--kolibri-neutral-color);
+            padding:    0.5em;
+        ;
+        }
     </style>
 </head>
 <body>
@@ -47,6 +61,8 @@
 
 <p id="grossTotal">Check console for possible errors.</p>
 
+
+<footer></footer>
 <script type="module" src="./allTestsSuite.js"></script>
 
 </body>
