@@ -12,9 +12,11 @@ export {
 }
 
 /**
- * Generic type names for the purpose of expressing the identity of an arbitrarily chosen type. See {@link id}.
- * @typedef {*} a
- * @typedef {*} b
+ * Generic type names for the purpose of expressing the identity of an arbitrarily chosen "forall" type. See {@link id}.
+ * @template a
+ * @template b
+ * @typedef {a} a
+ * @typedef {b} b
  */
 
 /**
@@ -54,7 +56,7 @@ const c = x => _ => x;
  * @param    {*} _ - the parameter is ignored
  * @returns  { function(y:{a}): {a} } a function that returns its argument {@link a}
  * @example
- * snd(undefined)(1) === 1
+ * snd(undefined)(1) === 1;
  */
 const snd = _ => y => y;
 
@@ -62,12 +64,14 @@ const snd = _ => y => y;
 
 // private ADT implementation details ---------------------
 
+/** @private */
 const TupleCtor = n => values =>
     n === 0                                            // we have curried all ctor args, now
         ? Object.seal(selector => selector(values))    // return a function that waits for the selector
         : value =>                                     // there are still values to be curried
           TupleCtor (n - 1) ([...values, value]);      // return the ctor for the remaining args
 
+/** @private */
 const ChoiceCtor = position => n => choices =>
     n === 0                                                      // we have curried all ctor args, now
         ? Object.seal(choices[position] (choices[0]) )           // we call the chosen function with the ctor argument
@@ -80,8 +84,8 @@ const ChoiceCtor = position => n => choices =>
  * An n-Tuple stores n different values, which can be retrieved by accessor functions.
  * It is the most general form of a Product Type. Tuples are immutable. Values are accessed in O(1).
  * Since no indexes are managed by the user, there are no out-of-bounds errors.
- * @param n - the cardinality, i.e. Tuple(n) can store n values. Must be > 0 or an error is thrown.
- * @return {a[]} - an array where the first item is a constructor, follow by n accessor functions
+ * @param  {!number} n - the cardinality, i.e. Tuple(n) can store n values. Mandatory. Must be > 0 or an error is thrown.
+ * @return {Array<function>} - an array where the first item is a constructor, follow by n accessor functions
  * @constructor
  * @example
  * const [Triple, one, two, three] = Tuple(3);
@@ -101,16 +105,16 @@ const Tuple = n => {
  * A Choice selects between n distinct values, each of which can only be accessed if a
  * handling function is provided for each possible value. One cannot forget to handle edge cases.
  * It is the most general form of a CoProduct aka Sum Type. Choices are immutable.
- * @param n - the cardinality, i.e. number of possible choices. Must be > 0 or an error is thrown.
- * @return {a[]} - an array of n choice constructors
+ * @param {!number} n - the cardinality, i.e. number of possible choices. Mandatory. Must be > 0 or an error is thrown.
+ * @return {Array<function>} - an array of n choice constructors
  * @constructor
  * @example
  * const [Bad, Good, Unknown] = Choice(3);
  * const guessWhat = Good(1);
  * guessWhat
- *      (_ => console.error("this is bad"))
- *      (x => x)
- *      (_ => 0); // Unknown -> default value
+ *      (_ => console.error("this is bad")) // handle Bad case
+ *      (x => x)                            // handle Good case
+ *      (_ => 0);                           // Unknown -> default value
  */
 const Choice = n => { // number of constructors
     if (n < 1) throw new Error("Choice must have first argument n > 0");
@@ -118,13 +122,18 @@ const Choice = n => { // number of constructors
 };
 
 /**
+ * @callback pairSelector
+ * @param    {a} a
+ * @returns  {function(b): (a|b)}
+ */
+/**
  * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
  * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
  * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
- * @param x - x and y as curried arguments
- * @return {function(*=): function(*): *}
+ * @param {a} x - x and y as curried arguments
+ * @return {function(b): (function(pairSelector): (a|b))}
  * @constructor
- * @haskell a -> b -> a|b
+ * @haskell a -> b -> (a -> b -> a|b) -> a|b
  * @example
  * const dierk = Pair("Dierk")("König");
  * dierk(fst) === "Dierk");
@@ -135,9 +144,12 @@ const Pair = x => y => selector => selector(x)(y);
 /**
  * Select the first of two curried arguments for the use with {@link Pair}s.
  * An alternative name for {@link c}:
+ * @haskell  a -> b -> a
  * @function fst
  * @param    {a} x
- * @returns  { function(*): {a} } a function that ignores its argument and returns the parameter x unchanged.
+ * @returns  { function(*): a } a function that ignores its argument and returns the parameter x unchanged.
+ * @example
+ * fst(1)(undefined) === 1;
  */
 const fst = c;
 
@@ -147,24 +159,31 @@ const fst = c;
  */
 
 /**
+ * @callback functionAtoB
+ * @param {a} a
+ * @returns {b}
+ */
+
+/**
  * The Left constructor of an Either type. An Either is either {@link Left} or {@link Right}.
  * It is constructed with a value of type {@link a} and waits for two more functions f and g
  * as curried arguments.
  * When both are given, f(x) is called.
  * The Left case of an Either type is usually (but not necessarily so) an error case.
  * Left values are immutable.
- * @haskell Left a :: Either a b
+ * @haskell a -> (a -> b) -> c -> b
  * @param   {a} x
- * @return  {function({a}): function(*): *}
+ * @return  {function({functionAtoB}): function(*): b}
  * @constructor
  * @example
  * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
  * withFoo
- *      (msg => console.error(msg))
- *      (x   => doSomethingWithFoo(x));
+ *      (msg => console.error(msg))      // handle left case
+ *      (x   => doSomethingWithFoo(x));  // handle right case
  */
 
 const Left  = x => f => _ => f(x);
+
 /**
  * The Right constructor of an Either type. An Either is either {@link Left} or {@link Right}.
  * It is constructed with a value of type {@link b} and waits for two more functions f and g
@@ -172,9 +191,9 @@ const Left  = x => f => _ => f(x);
  * When both are given, g(x) is called.
  * The Right case of an Either type is usually (but not necessarily so) the good case.
  * Right values are immutable.
- * @haskell Right b :: Either a b
- * @param   {b} x
- * @return  {function({b}): function(*): *}
+ * @haskell a -> c -> (a -> b) -> b
+ * @param   {a} x
+ * @return  {function(*): function({functionAtoB}): b}
  * @constructor
  * @example
  * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
@@ -185,11 +204,16 @@ const Left  = x => f => _ => f(x);
 const Right = x => _ => g => g(x);
 
 /**
+ * @callback functionUndefinedToB
+ * @param {undefined} undefined
+ * @returns {b}
+ */
+/**
  * Nothing is the error case of the Maybe type. A "Maybe a" is either Nothing or "{@link Just} a".
  * Nothing is immutable. Nothing is a singleton.
  * Nothing is used to get around missing null/undefined checks.
  * @haskell Nothing :: Maybe a
- * @type {function({a}): function(*): *}
+ * @return  {function({functionUndefinedtoB}): function(*): b}
  * @example
  * const mayFoo = (null == foo) ? Nothing : Just(foo);
  * mayFoo
@@ -203,7 +227,7 @@ const Nothing = Left (undefined);
  * Just values are immutable.
  * Just is used to get around missing null/undefined checks.
  * @haskell Just a :: Maybe a
- * @type {function(b): function(*): function(*): *}
+ * @type {function({functionUndefinedToB}): function({functionAtoB}): b}
  * @example
  * const mayFoo = (null == foo) ? Nothing : Just(foo);
  * mayFoo

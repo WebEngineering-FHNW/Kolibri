@@ -20,6 +20,11 @@ stdlibSuite.add("c (konst)", assert => {
     assert.is(getX(), 0);
 });
 
+stdlibSuite.add("fst", assert => {
+    assert.is(fst(1)(undefined), 1);
+    assert.is(fst(1)(),          1);
+});
+
 stdlibSuite.add("snd", assert => {
     assert.is(snd(undefined)(1), 1);
     assert.is(snd()(1),          1);
