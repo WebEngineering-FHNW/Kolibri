@@ -15,15 +15,17 @@ export {
  * Generic type names for the purpose of expressing the identity of an arbitrarily chosen "forall" type. See {@link id}.
  * @template a
  * @template b
+ * @template c
  * @typedef {a} a
  * @typedef {b} b
+ * @typedef {c} c
  */
 
 /**
  * Identity function, aka "I" in the SKI calculus or "Ibis" (or "Idiot") in the Smullyan bird metaphors.
  * The function is pure and runs in O(1). Function calls can be inlined.
  * @haskell  a -> a
- * @function id
+ * @type     { (x:a) => a }
  * @param    {a} x
  * @returns  {a} the parameter x unchanged.
  * @example
@@ -36,9 +38,9 @@ const id = x => x;
  * Aka "konst", "fst" (the first of two curried parameters),
  * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
  * @haskell  a -> b -> a
- * @function c
+ * @type     { (x:a) => (y:b) => a}
  * @param    {a} x
- * @returns  { function(*): {a} } a function that ignores its argument and returns the parameter x unchanged.
+ * @returns  { (y:b) => a } - a function that ignores its argument and returns the parameter x unchanged.
  * @example
  * c(1)(undefined) === 1;
  * const getExpr = c(expr);
@@ -52,9 +54,9 @@ const c = x => _ => x;
  * "KI" in the SKI calculus, or "Kite" in the Smullyan bird metaphors.
  * It can be seen as a cached getter for the id function: {@link c}({@link id})
  * @haskell  b -> a -> a
- * @function snd
- * @param    {*} _ - the parameter is ignored
- * @returns  { function(y:{a}): {a} } a function that returns its argument {@link a}
+ * @type     { (x:b) => (y:a) => a}
+ * @param    {b} _ - the parameter is ignored
+ * @returns  { (y:a) => a } - a function that returns its argument {@link a}
  * @example
  * snd(undefined)(1) === 1;
  */
@@ -122,18 +124,22 @@ const Choice = n => { // number of constructors
 };
 
 /**
+ * A function that selects between two arguments that are given in curried style.
+ * Only needed internally for the sake of proper JsDoc.
  * @callback pairSelector
- * @param    {a} a
- * @returns  {function(b): (a|b)}
+ * @type     { (x:a) => (y:b) => (a|b)}
+ * @param    {a} x
+ * @returns  { (y:b) => (a|b) }
  */
 /**
  * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
  * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
  * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
- * @param {a} x - x and y as curried arguments
- * @return {function(b): (function(pairSelector): (a|b))}
- * @constructor
  * @haskell a -> b -> (a -> b -> a|b) -> a|b
+ * @type    { (x:a) => (y:b) => (s:pairSelector) => (a|b) }
+ * @param   {a} x - x and y as curried arguments
+ * @return  { (y:b) => (s:pairSelector) => (a|b) }
+ * @constructor
  * @example
  * const dierk = Pair("Dierk")("König");
  * dierk(fst) === "Dierk");
@@ -145,9 +151,9 @@ const Pair = x => y => selector => selector(x)(y);
  * Select the first of two curried arguments for the use with {@link Pair}s.
  * An alternative name for {@link c}:
  * @haskell  a -> b -> a
- * @function fst
+ * @type     { (x:a) => (y:b) => a}
  * @param    {a} x
- * @returns  { function(*): a } a function that ignores its argument and returns the parameter x unchanged.
+ * @returns  { (y:b) => a } - a function that ignores its argument and returns the parameter x unchanged.
  * @example
  * fst(1)(undefined) === 1;
  */
@@ -159,11 +165,13 @@ const fst = c;
  */
 
 /**
+ * A general function from whatever "a" to whatever "b".
+ * Only needed internally for the sake of proper JsDoc.
  * @callback functionAtoB
- * @param {a} a
- * @returns {b}
+ * @type     { (x:a) => b }
+ * @param    {a} x
+ * @returns  {b}
  */
-
 /**
  * The Left constructor of an Either type. An Either is either {@link Left} or {@link Right}.
  * It is constructed with a value of type {@link a} and waits for two more functions f and g
@@ -172,8 +180,9 @@ const fst = c;
  * The Left case of an Either type is usually (but not necessarily so) an error case.
  * Left values are immutable.
  * @haskell a -> (a -> b) -> c -> b
+ * @type    { (x:a) =>  (f:functionAtoB)  => (y:c) => b }
  * @param   {a} x
- * @return  {function({functionAtoB}): function(*): b}
+ * @return  { (f:functionAtoB)  => (y:c) => b }
  * @constructor
  * @example
  * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
@@ -192,8 +201,9 @@ const Left  = x => f => _ => f(x);
  * The Right case of an Either type is usually (but not necessarily so) the good case.
  * Right values are immutable.
  * @haskell a -> c -> (a -> b) -> b
+ * @type    { (x:a) => (y:c) => (f:functionAtoB) => b }
  * @param   {a} x
- * @return  {function(*): function({functionAtoB}): b}
+ * @return  { (y:c) => (f:functionAtoB) => b  }
  * @constructor
  * @example
  * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
@@ -204,16 +214,13 @@ const Left  = x => f => _ => f(x);
 const Right = x => _ => g => g(x);
 
 /**
- * @callback functionUndefinedToB
- * @param {undefined} undefined
- * @returns {b}
- */
-/**
  * Nothing is the error case of the Maybe type. A "Maybe a" is either Nothing or "{@link Just} a".
  * Nothing is immutable. Nothing is a singleton.
  * Nothing is used to get around missing null/undefined checks.
  * @haskell Nothing :: Maybe a
- * @return  {function({functionUndefinedtoB}): function(*): b}
+ * @type    { (f:functionAtoB)  => (y:c) => b }
+ * @param   { functionAtoB } f
+ * @return  { (y:c) => b }
  * @example
  * const mayFoo = (null == foo) ? Nothing : Just(foo);
  * mayFoo
@@ -227,7 +234,9 @@ const Nothing = Left (undefined);
  * Just values are immutable.
  * Just is used to get around missing null/undefined checks.
  * @haskell Just a :: Maybe a
- * @type {function({functionUndefinedToB}): function({functionAtoB}): b}
+ * @type    { (x:a) => (y:c) => (f:functionAtoB) => b }
+ * @param   {a} x
+ * @return  { (y:c) => (f:functionAtoB) => b  }
  * @example
  * const mayFoo = (null == foo) ? Nothing : Just(foo);
  * mayFoo
