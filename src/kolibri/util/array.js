@@ -1,4 +1,6 @@
 // todo: jsdoc
+// todo: differentiate between the static functions and the monkey patching
+// todo: distinguish pure and distructive versions of remove
 
 export {
     // there is nothing to export since we only augment the prototypes
