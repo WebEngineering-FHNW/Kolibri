@@ -25,6 +25,7 @@ export {
  * Identity function, aka "I" in the SKI calculus or "Ibis" (or "Idiot") in the Smullyan bird metaphors.
  * The function is pure and runs in O(1). Function calls can be inlined.
  * @haskell  a -> a
+ * @pure
  * @type     { (x:a) => a }
  * @param    {a} x
  * @returns  {a} the parameter x unchanged.
@@ -38,6 +39,7 @@ const id = x => x;
  * Aka "konst", "fst" (the first of two curried parameters),
  * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
  * @haskell  a -> b -> a
+ * @pure
  * @type     { (x:a) => (y:b) => a}
  * @param    {a} x
  * @returns  { (y:b) => a } - a function that ignores its argument and returns the parameter x unchanged.
@@ -54,6 +56,7 @@ const c = x => _ => x;
  * "KI" in the SKI calculus, or "Kite" in the Smullyan bird metaphors.
  * It can be seen as a cached getter for the id function: {@link c}({@link id})
  * @haskell  b -> a -> a
+ * @pure
  * @type     { (x:b) => (y:a) => a}
  * @param    {b} _ - the parameter is ignored
  * @returns  { (y:a) => a } - a function that returns its argument {@link a}
@@ -86,6 +89,7 @@ const ChoiceCtor = position => n => choices =>
  * An n-Tuple stores n different values, which can be retrieved by accessor functions.
  * It is the most general form of a Product Type. Tuples are immutable. Values are accessed in O(1).
  * Since no indexes are managed by the user, there are no out-of-bounds errors.
+ * @pure
  * @param  {!number} n - the cardinality, i.e. Tuple(n) can store n values. Mandatory. Must be > 0 or an error is thrown.
  * @return {Array<function>} - an array where the first item is a constructor, follow by n accessor functions
  * @constructor
@@ -107,6 +111,7 @@ const Tuple = n => {
  * A Choice selects between n distinct values, each of which can only be accessed if a
  * handling function is provided for each possible value. One cannot forget to handle edge cases.
  * It is the most general form of a CoProduct aka Sum Type. Choices are immutable.
+ * @pure
  * @param {!number} n - the cardinality, i.e. number of possible choices. Mandatory. Must be > 0 or an error is thrown.
  * @return {Array<function>} - an array of n choice constructors
  * @constructor
@@ -127,6 +132,7 @@ const Choice = n => { // number of constructors
  * A function that selects between two arguments that are given in curried style.
  * Only needed internally for the sake of proper JsDoc.
  * @callback pairSelector
+ * @pure
  * @type     { (x:a) => (y:b) => (a|b)}
  * @param    {a} x
  * @returns  { (y:b) => (a|b) }
@@ -136,6 +142,7 @@ const Choice = n => { // number of constructors
  * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
  * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
  * @haskell a -> b -> (a -> b -> a|b) -> a|b
+ * @pure    if the selector function is pure, which is usually is
  * @type    { (x:a) => (y:b) => (s:pairSelector) => (a|b) }
  * @param   {a} x - x and y as curried arguments
  * @return  { (y:b) => (s:pairSelector) => (a|b) }
@@ -151,6 +158,7 @@ const Pair = x => y => selector => selector(x)(y);
  * Select the first of two curried arguments for the use with {@link Pair}s.
  * An alternative name for {@link c}:
  * @haskell  a -> b -> a
+ * @pure
  * @type     { (x:a) => (y:b) => a}
  * @param    {a} x
  * @returns  { (y:b) => a } - a function that ignores its argument and returns the parameter x unchanged.
@@ -168,6 +176,7 @@ const fst = c;
  * A general function from whatever "a" to whatever "b".
  * Only needed internally for the sake of proper JsDoc.
  * @callback functionAtoB
+ * @pure     supposed to be pure
  * @type     { (x:a) => b }
  * @param    {a} x
  * @returns  {b}
@@ -180,6 +189,7 @@ const fst = c;
  * The Left case of an Either type is usually (but not necessarily so) an error case.
  * Left values are immutable.
  * @haskell a -> (a -> b) -> c -> b
+ * @pure    if functionAtoB is pure
  * @type    { (x:a) =>  (f:functionAtoB)  => (y:c) => b }
  * @param   {a} x
  * @return  { (f:functionAtoB)  => (y:c) => b }
@@ -201,6 +211,7 @@ const Left  = x => f => _ => f(x);
  * The Right case of an Either type is usually (but not necessarily so) the good case.
  * Right values are immutable.
  * @haskell a -> c -> (a -> b) -> b
+ * @pure    if functionAtoB is pure
  * @type    { (x:a) => (y:c) => (f:functionAtoB) => b }
  * @param   {a} x
  * @return  { (y:c) => (f:functionAtoB) => b  }
@@ -218,6 +229,7 @@ const Right = x => _ => g => g(x);
  * Nothing is immutable. Nothing is a singleton.
  * Nothing is used to get around missing null/undefined checks.
  * @haskell Nothing :: Maybe a
+ * @pure
  * @type    { (f:functionAtoB)  => (y:c) => b }
  * @param   { functionAtoB } f
  * @return  { (y:c) => b }
@@ -234,6 +246,7 @@ const Nothing = Left (undefined);
  * Just values are immutable.
  * Just is used to get around missing null/undefined checks.
  * @haskell Just a :: Maybe a
+ * @pure
  * @type    { (x:a) => (y:c) => (f:functionAtoB) => b }
  * @param   {a} x
  * @return  { (y:c) => (f:functionAtoB) => b  }

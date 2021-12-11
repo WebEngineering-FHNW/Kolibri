@@ -14,9 +14,9 @@ export { arrayEq, removeItem, removeAt, times, sum }
  * A function that compares two arrays for equality by checking that they are of the same length and
  * all elements are pairwise equal with respect to the "===" operator. Arguments are given in curried style.
  * Arguments must not be null/undefined and must be of type {@link Array}.
- * @Pure
+ * @pure
  * @Complexity O(n)
- * @Haskell  [a] -> [a] -> bool
+ * @haskell  [a] -> [a] -> bool
  * @function arrayEq
  * @type    { (arrayA:!Array<T>) => (arrayB:!Array<T>) => boolean }
  * @param   { !Array<T>} arrayA - the first array. Mandatory.
@@ -31,7 +31,7 @@ const arrayEq = arrayA => arrayB =>
 /**
  * From the {@link array}, remove the item at position "index". The arguments are given in curried style.
  * The index must be >= 0 and < array.length or nothing is removed and an empty array is returned.
- * @Impure Since the given array is modified.
+ * @impure Since the given array is modified.
  * @function removeAt
  * @type    { (array:!Array<T>) => (index:!number) => Array<T> }
  * @param   { !Array<T>} array - the array to remove from. Mandatory.
@@ -46,7 +46,7 @@ const removeAt = array => index => array.splice(index, 1);
 /**
  * From the {@link array}, remove the "item". The arguments are given in curried style.
  * In case that the item occurs multiple times in the array, only the first occurance is removed.
- * @Impure Since the given array is modified.
+ * @impure Since the given array is modified.
  * @function removeItem
  * @type    { (array:!Array<T>) => (item:!T) => Array<T> }
  * @param   { !Array<T>} array - the array to remove from. Mandatory.
@@ -74,8 +74,8 @@ const removeItem = array => item => {
  * A function that executes the optional {@link timesCallback} "soMany" times, assembles the results and returns them in an
  * {@link array} of length "soMany". The arguments are given in curried style.
  * If no callback is given, the unaltered index is returned. Indexes go from 0 to soMany-1.
- * @Impure if the callback is impure
- * @Haskell  Int -> (Int -> a) -> [a]
+ * @impure if the callback is impure
+ * @haskell  Int -> (Int -> a) -> [a]
  * @function times
  * @type    { (soMany:!number) => (callback:?timesCallback) => Array<T> }
  * @param   { !number | string } soMany - how often to execute the callback. Negative values will be treated like 0. Mandatory.
@@ -104,8 +104,8 @@ const times = soMany => callback => {
  * A function that sums up all items from an {@link array} by applying the {@link sumCallback} to each item before adding up.
  * The arguments are given in curried style.
  * If no callback is given, the Number constructor is used.
- * @Impure   if the callback is impure
- * @Haskell  Num n => [a] -> (a -> n) -> n
+ * @impure   if the callback is impure
+ * @haskell  Num n => [a] -> (a -> n) -> n
  * @function times
  * @type    { (array:!Array<T>) => (callback:?sumCallback) => number }
  * @param   { array:!Array<T> } array - the array to sum up. Mandatory.

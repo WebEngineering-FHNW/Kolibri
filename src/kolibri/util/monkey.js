@@ -25,7 +25,7 @@ Array.prototype.eq = function(array) { return arrayEq(this)(array);}
 
 /**
  * See {@link removeAt}.
- * @Impure Modifies the array instance.
+ * @impure Modifies the array instance.
  * @param  { number } index
  * @return { Array<T> }
  * @example
@@ -35,7 +35,7 @@ Array.prototype.removeAt = function(index){ return removeAt(this)(index); };
 
 /**
  * See {@link removeItem}.
- * @Impure Modifies the array instance.
+ * @impure Modifies the array instance.
  * @param  { T } item
  * @return { Array<T> }
  * @example

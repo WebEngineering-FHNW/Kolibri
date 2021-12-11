@@ -10,6 +10,7 @@ export {Observable, ObservableList}
 
 /**
  * @callback onValueChangeCallback
+ * @impure   this callback usually modifies the MVC view
  * @param {T} newValue   - the new value that is set by the change
  * @param {T} [oldValue] - the old value before the change. Can optionally be used by the callback.
  * @return void
@@ -20,6 +21,7 @@ export {Observable, ObservableList}
  * In this variant, we allow to register many observers but do not provide means to unregister.
  * Observers are not GC'ed before the observable itself is GC'ed.
  * @typedef IObservable<T>
+ * @impure   Observables change their inner state (value) and maintain a list of observers that changes over time.    
  * @property { ()  => T }   getValue - a function that returns the current value
  * @property { (T) => void} setValue - a function that sets a new value, calling all registered {@link onValueChangeCallback}s
  * @property { (onValueChangeCallback) => void } onChange -
@@ -29,6 +31,7 @@ export {Observable, ObservableList}
 
 /**
  * Constructor for an IObservable<T>.
+ * @pure
  * @param {!T} value      - the initial value to set. Mandatory.
  * @returns IObservable<T>
  * @constructor
@@ -62,6 +65,7 @@ const Observable = value => {
 
 /**
  * @callback observableListCallback
+ * @impure   this callback usually modifies the MVC view
  * @param {T} item - the item that has been added to or removed from the {@link IObservableList<T> }
  * @return void
  */
@@ -77,6 +81,7 @@ const Observable = value => {
  * In this variant, we allow to register and unregister many observers.
  * Observers that are still registered are not GC'ed before the observable list itself is GC'ed.
  * @typedef IObservableList<T>
+ * @impure   Observables change their inner decorated list and maintain two lists of observers that changes over time.  
  * @property { (observableListCallback) => void }  onAdd - register an observer that is called whenever an item is added.
  * @property { (observableListCallback) => void }  onDel - register an observer that is called whenever an item is added.
  * @property { (T) => void }  add - add an item to the observable list and notify the observers. Modifies the list.
@@ -89,6 +94,7 @@ const Observable = value => {
 
 /**
  * Constructor for an IObservableList<T>.
+ * @pure
  * @param {!Array<T>} list - the inner list that is to be decorated with observability. Mandatory. See also GoF decorator pattern.
  * @returns IObservableList<T>
  * @constructor
