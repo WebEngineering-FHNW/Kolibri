@@ -4,3 +4,4 @@ import "./observableTest.js";
 import "./presentationModelTest.js";
 import "./util/arrayTest.js";
 import "./util/domTest.js";
+import "./util/monkeyTest.js";

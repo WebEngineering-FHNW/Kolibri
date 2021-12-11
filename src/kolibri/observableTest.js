@@ -1,6 +1,6 @@
 
 import {Observable, ObservableList} from "./observable.js"
-import "./util/array.js"
+import "./util/monkey.js"
 import {TestSuite} from "./util/test.js";
 
 const observableSuite = TestSuite("observable");
