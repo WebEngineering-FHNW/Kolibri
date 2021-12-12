@@ -15,7 +15,7 @@ export { arrayEq, removeItem, removeAt, times, sum }
  * all elements are pairwise equal with respect to the "===" operator. Arguments are given in curried style.
  * Arguments must not be null/undefined and must be of type {@link Array}.
  * @pure
- * @Complexity O(n)
+ * @complexity O(n)
  * @haskell  [a] -> [a] -> bool
  * @function arrayEq
  * @type    { (arrayA:!Array<T>) => (arrayB:!Array<T>) => boolean }
