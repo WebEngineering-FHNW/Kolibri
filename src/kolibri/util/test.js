@@ -1,13 +1,37 @@
-// The test "framework", exports the Suite function plus a total of how many assertions have been tested
-
+/**
+ * @module util/test
+ * The test "framework", exports the Suite function plus a total of how many assertions have been tested
+ */
 export { TestSuite, total}
 
-import {id, Tuple} from "../stdlib.js";
+import { id, Tuple } from "../stdlib.js";
 
+/**
+ * The running total of executed test assertions.
+ * @impure Changes within this module but is read-only for module consumers.
+ * @type { Number }
+ */
 let total = 0;
 
-function Assert() {
-    const results = []; // [Bool], true if test passed, false otherwise
+/**
+ * @typedef {Object} AssertType
+ * @template T
+ * @property {Array<String>} messages -
+ * @property {Array<Boolean>} results -
+ * @property { (testResult: Boolean)     => void } true -
+ * @property { (actual: T, expected: T)  => void } is   -
+ */
+
+/**
+ * A newly created Assert object is passed into the {@link test} callback function where it is used to
+ * asserts test results against expectations and keep track of the results for later reporting.
+ * Follows GoF "Collecting Parameter Pattern".
+ * @return { AssertType }
+ * @constructor
+ * @impure assembles test results.
+ */
+const Assert = () => {
+    const results  = []; // [Bool], true if test passed, false otherwise
     const messages = [];
     return {
         results,
@@ -34,17 +58,51 @@ function Assert() {
     }
 }
 
-const [Test, name, logic] = Tuple(2); // data type to capture test to-be-run
+/**
+ * @private data type to capture the test to-be-run. A triple of ctor and two getter functions.
+ */
+const [Test, name, logic] = Tuple(2);
 
-function test(name, callback) {
+/**
+ * @callback TestCallback
+ * @param { AssertType } assert
+ */
+
+/**
+ * Creates a new assert object, passes it into the callback for execution, and reports the result.
+ * Follows Smalltalk Best Practice Patterns: "Method Around Pattern".
+ * @param { String } name - name of the test. Should be unique inside the {@link TestSuite}.
+ * @param { TestCallback } callback
+ * @private
+ */
+const test = (name, callback) => {
     const assert = Assert();
     callback(assert);
     report(name, assert.results, assert.messages)
 }
 
-function TestSuite(suiteName) {
+/**
+ * @typedef { Object } TestSuiteType
+ * @property { (testName:String, callback:TestCallback) => void} test - running a test function for this suite
+ * @property { (testName:String, callback:TestCallback) => void} add  - adding a test function for later execution
+ * @property { function(): void } run:                                - running and reporting the suite
+ */
+/**
+ * Tests are organised in test suites that contain test functions. Theses functions are added before the suite
+ * itself is "run", which in turn executes the tests and reports the results.
+ * @param  { String } suiteName
+ * @return { TestSuiteType }
+ * @constructor
+ * @example
+ * const suite = TestSuite("mysuite");
+ * suite.add("myName", assert => {
+ *     assert.is(true, true);
+ *  });
+ *  suite.run();
+ */
+const TestSuite = suiteName => {
     const tests = []; // [Test]
-    const suite = {
+    return {
         test: (testName, callback) => test(suiteName + "-"+ testName, callback),
         add:  (testName, callback) => tests.push(Test (testName) (callback)),
         run:  () => {
@@ -58,12 +116,16 @@ function TestSuite(suiteName) {
             }
         }
     };
-    return suite;
 }
 
-// test result report
-// report :: String, [Bool] -> DOM ()
-function report(origin, results, messages) {
+/**
+ * If all test results are ok, report a summary. Otherwise report the individual tests.
+ * @param { String }         origin
+ * @param { Array<Boolean> } results
+ * @param { Array<String> }  messages
+ * @private
+ */
+const report = (origin, results, messages) => {
     if ( results.every( elem => elem) ) {
         write (`
             <div>${results.length}</div>
@@ -90,7 +152,12 @@ function report(origin, results, messages) {
     });
 }
 
-function write(message) {
+/**
+ * A not very efficient way to write the formatted test results in the holding report HTML page.
+ * @param message
+ * @private
+ */
+const write = message =>  {
     const out = document.getElementById('out');
     out.innerHTML += message ;
 }
