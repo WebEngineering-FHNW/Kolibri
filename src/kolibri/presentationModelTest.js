@@ -1,5 +1,12 @@
-import { TestSuite }     from "./util/test.js";
-import { Attribute, VALUE, VALID } from "./presentationModel.js";
+import { TestSuite } from "./util/test.js";
+import {
+    Attribute,
+    VALUE,
+    VALID,
+    QualifiedAttribute,
+    valueOf,
+    presentationModelFromAttributeNames, LABEL
+} from "./presentationModel.js";
 
 const pmSuite = TestSuite("presentationModel");
 
@@ -8,6 +15,7 @@ pmSuite.add("attr-value", assert => {
     assert.true(attr.hasObs(VALUE));
     assert.is(attr.hasObs(VALID), false);
     assert.is(attr.getObs(VALUE).getValue(), "init");
+    assert.is(valueOf(attr), "init");
     assert.is(attr.getObs(VALID, true).getValue(), true);  // default
     assert.is(attr.hasObs(VALID), true);
 });
@@ -84,6 +92,27 @@ pmSuite.add("setQualifier", assert => {
     attr1.setConvertedValue("Dieter");
     assert.is(attr1.getObs(VALUE).getValue(), "Dieter"); // all syncs are now in place
     assert.is(attr2.getObs(VALUE).getValue(), "Dieter");
+});
+
+pmSuite.add("qualified", assert => {
+    const attr1 = Attribute("Dierk", "Person.4711.firstname");
+    const attr2 = QualifiedAttribute("Person.4711.firstname");
+
+    assert.is(attr1.getObs(VALUE).getValue(), "Dierk");
+    assert.is(attr2.getObs(VALUE).getValue(), "Dierk"); // old known values have been reused
+
+    const attr3 = QualifiedAttribute("does-not-exist");
+    assert.is(attr3.getObs(VALUE).getValue(), null);   // nothing to sync with (yet) and no initial value given
+});
+
+pmSuite.add("create-easy", assert => {
+    const pm = presentationModelFromAttributeNames(["firstname", "lastname"]);
+
+    assert.true(pm.firstname != null);
+    assert.true(pm.lastname != null);
+    assert.is(valueOf(pm.lastname), null); // initial value is null;
+    assert.is(pm.lastname.getObs(LABEL).getValue(), "lastname"); // default
+
 });
 
 /* Caveat:
