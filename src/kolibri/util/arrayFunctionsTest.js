@@ -39,8 +39,15 @@ arrayFunctionsSuite.add("times", assert => {
     assert.is( arrayEq (times( 0)()) ([]),     true);
     assert.is( arrayEq (times(-1)()) ([]),     true);
     assert.is( arrayEq (times( 1)()) ([0]),    true);
+    assert.is( arrayEq (times("1")()) ([0]),    true);
     assert.is( arrayEq (times(10)()) ([0,1,2,3,4,5,6,7,8,9]), true);
     assert.is( arrayEq (times( 5)(x=>x*x)) ([0,1,4,9,16]), true);
+    try {
+        times("not-a-number")();
+        assert.is("must not reach here", true);
+    } catch (typeError) {
+        assert.is(typeError.message, "Object 'not-a-number' is not a valid number.");
+    }
 });
 
 arrayFunctionsSuite.add("sum", assert => {

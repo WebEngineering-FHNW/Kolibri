@@ -88,7 +88,7 @@ const removeItem = array => item => {
 const times = soMany => callback => {
     const number = Number(soMany.valueOf());
     if (isNaN(number)) {
-        throw new TypeError("Object '" + this + "' is not a valid number.");
+        throw new TypeError("Object '" + soMany + "' is not a valid number.");
     }
     return Array.from({length: number}, (it, idx) => callback ? callback(idx) : idx);
 };
