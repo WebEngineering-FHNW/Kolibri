@@ -20,6 +20,8 @@ export {Observable, ObservableList}
  * IObservable<T> is the interface from the GoF Observable design pattern.
  * In this variant, we allow to register many observers but do not provide means to unregister.
  * Observers are not GC'ed before the observable itself is GC'ed.
+ * IObservables are intended to be used with the concept of "stable binding", i.e. with
+ * listeners that do not change after setup.
  * @typedef IObservable<T>
  * @impure   Observables change their inner state (value) and maintain a list of observers that changes over time.    
  * @property { ()  => T }   getValue - a function that returns the current value
@@ -117,7 +119,7 @@ const ObservableList = list => {
         },
         del: item => {
             list.removeItem(item);
-            const safeIterate = [...delListeners]; // shallow copy as we might change listeners array while iterating
+            const safeIterate = [...delListeners]; // shallow copy as we might change the listeners array while iterating
             safeIterate.forEach( listener => listener(item, () => removeDeleteListener(listener) ));
         },
         removeAddListener,
