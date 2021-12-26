@@ -1,1 +1,1 @@
-[Home Page](https://webengineering-fhnw.github.io/Kolibri/)
+[Home Page](https://webengineering-fhnw.github.io/Kolibri/docs/index.html)
