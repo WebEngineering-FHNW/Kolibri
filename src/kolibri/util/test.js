@@ -112,7 +112,7 @@ const TestSuite = suiteName => {
             if (suiteAssert.results.every( id )) { // whole suite was ok, report whole suite
                 report(suiteName, suiteAssert.results);
             } else { // some test in suite failed, rerun tests for better error indication
-                tests.forEach( test => suite.test( test(name), test(logic) ) )
+                tests.forEach( testInfo => test( testInfo(name), testInfo(logic) ) )
             }
         }
     };
