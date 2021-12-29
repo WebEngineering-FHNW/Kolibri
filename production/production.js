@@ -6,5 +6,9 @@ import '../src/kolibri/util/dom.js';
 import '../src/kolibri/observable.js';
 import '../src/kolibri/presentationModel.js';
 import '../src/kolibri/version.js';
+import '../src/kolibri/projector/simpleForm/simpleInputModel.js';
+import '../src/kolibri/projector/simpleForm/simpleInputController.js';
+import '../src/kolibri/projector/simpleForm/simpleFormProjector.js';
+import '../src/kolibri/projector/simpleForm/simpleFormController.js';
 
 

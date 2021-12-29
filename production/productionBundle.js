@@ -512,6 +512,8 @@ const fireChangeEvent = element => fireEvent(element, CHANGE);/**
  * IObservable<T> is the interface from the GoF Observable design pattern.
  * In this variant, we allow to register many observers but do not provide means to unregister.
  * Observers are not GC'ed before the observable itself is GC'ed.
+ * IObservables are intended to be used with the concept of "stable binding", i.e. with
+ * listeners that do not change after setup.
  * @typedef IObservable<T>
  * @impure   Observables change their inner state (value) and maintain a list of observers that changes over time.    
  * @property { ()  => T }   getValue - a function that returns the current value
@@ -609,7 +611,7 @@ const ObservableList = list => {
         },
         del: item => {
             list.removeItem(item);
-            const safeIterate = [...delListeners]; // shallow copy as we might change listeners array while iterating
+            const safeIterate = [...delListeners]; // shallow copy as we might change the listeners array while iterating
             safeIterate.forEach( listener => listener(item, () => removeDeleteListener(listener) ));
         },
         removeAddListener,
@@ -628,7 +630,7 @@ const ObservableList = list => {
  */
 
 /**
- * @typedef {'value'|'valid'|'editable'|'label'} ObservableTypeString
+ * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'} ObservableTypeString
  * Feel free to extend this type with new unique type strings as needed for your application.
  */
 
@@ -636,6 +638,8 @@ const ObservableList = list => {
 /** @type ObservableTypeString */ const VALID    = "valid";
 /** @type ObservableTypeString */ const EDITABLE = "editable";
 /** @type ObservableTypeString */ const LABEL    = "label";
+/** @type ObservableTypeString */ const NAME     = "name";
+/** @type ObservableTypeString */ const TYPE     = "type"; // HTML input types: text, number, checkbox, etc.
 
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
@@ -856,8 +860,205 @@ const Attribute = (value, qualifier) => {
     };
 
     return { getObs, hasObs, setValidator, setConverter, setConvertedValue, getQualifier, setQualifier }
-};const release       = "0.1.31";
+};const release       = "0.1.33";
 
-const dateStamp     = "2021-12-18 T 22:59:43 MEZ";
+const dateStamp     = "2021-12-29 T 18:26:49 MEZ";
 
-const versionInfo   = release + " at " + dateStamp;// production classes for bundling and statistics
+const versionInfo   = release + " at " + dateStamp;/**
+ * @typedef { object } InputAttributes
+ * @template T
+ * @property { !T } value      - mandatory value, will become the input value, defaults to undefined
+ * @property { ?String } label - optional label, defaults to undefined
+ * @property { ?String } name  - optional name that reflects the name attribute of an input element, used in forms
+ * @property { "text"|"number"|"checkbox"|"time"|"date" } type - optional type, allowed values are
+ *              the values of the HTML Input element's "type" attribute. Defaults to "text".
+ */
+
+/**
+ * Create a presentation model for the purpose of being used to bind against an single HTML Input in
+ * combinations with its pairing Label element.
+ * For a single input, it only needs one attribute.
+ * @constructor
+ * @param  { InputAttributes }
+ * @return { AttributeType<T> }
+ * @example
+ *     const model = SimpleInputModel({
+         value:  "Dierk",
+         label:  "First Name",
+         name:   "firstname",
+         type:   "text",
+     });
+ */
+const SimpleInputModel = ({value, label, name, type="text"}) => {
+    const singleAttr = Attribute(value);
+    singleAttr.getObs(TYPE).setValue(type);
+    if (null != label) singleAttr.getObs(LABEL).setValue(label);
+    if (null != name ) singleAttr.getObs(NAME) .setValue(name);
+
+    return singleAttr;
+};/**
+ * @typedef { object } SimpleInputControllerType
+ * @template T
+ * @property { ()  => T }     getValue
+ * @property { (T) => void }  setValue
+ * @property { ()  => String} getType
+ * @property { (onValueChangeCallback) => void } onLabelChanged
+ * @property { (onValueChangeCallback) => void } onValidChanged
+ * @property { (onValueChangeCallback) => void } onValueChanged
+ * @property { (onValueChangeCallback) => void } onNameChanged
+ */
+
+/**
+ * The SimpleInputController gives access to a {@link SimpleInputModel} but in a limited fashion.
+ * It does not expose the underlying {@link Attribute} but only those functions that a user of this
+ * controller needs to see.
+ * While controllers might contain business logic, this basic controller does not contain any.
+ * @constructor
+ * @template T
+ * @param  { InputAttributes } args
+ * @return { SimpleInputControllerType }
+ * @example
+ *     const controller = SimpleInputController({
+         value:  "Dierk",
+         label:  "First Name",
+         name:   "firstname",
+         type:   "text",
+     });
+ */
+const SimpleInputController = args => {
+    const singleAttr = SimpleInputModel(args);
+    return {
+        setValue:       singleAttr.setConvertedValue,
+        getValue:       singleAttr.getObs(VALUE).getValue,
+        getType:        singleAttr.getObs(TYPE) .getValue,
+        onValueChanged: singleAttr.getObs(VALUE).onChange,
+        onValidChanged: singleAttr.getObs(VALID).onChange,
+        onLabelChanged: singleAttr.getObs(LABEL).onChange,
+        onNameChanged:  singleAttr.getObs(NAME) .onChange,
+    };
+};/**
+ * @module projector/simpleForm/simpleFormProjector
+ *
+ * Following the projector pattern, this module exports projection functions
+ * ({@link projectInput} and {@link projectForm}) that create respective views
+ * and bind underlying models.
+ * Following classical MVC, the binding is available solely through a controller.
+ *
+ * Projectors are _compositional_. Projecting a form means projecting multiple inputs.
+ *
+ * Projectors are interchangeable. Any two projectors that export the same functions
+ * can be used in place of each other. This can provide a totally different "look & feel"
+ * to the application while all business logic and their test cases remain untouched.
+ */
+
+/**
+ * String that must be unique in CSS classes and DOM id prefixes throughout the application.
+ * @private
+ * @type {string}
+ */
+const FORM_CLASS_NAME = "kolibri-simpleForm";
+
+/**
+ * Internal mutable singleton state to produce unique id values for the label-input pairs.
+ * @private
+ * @type {number}
+ */
+let counter = 0;
+
+/**
+ * Projection function that creates a view for input purposes, binds the information that is available through
+ * the inputController, and returns the generated views.
+ * @constructor
+ * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
+ * @param  { !SimpleInputControllerType } inputController
+ * @return { Array<Element> }
+ * @example
+ * const [labelElement, inputElement] = projectInput(controller);
+ */
+const projectInput = inputController => {
+    const id = FORM_CLASS_NAME + "-id-" + (counter++);
+    // create view
+    const [labelElement, inputElement] = dom(`
+        <label for="${id}"></label>
+        <input type="${inputController.getType()}" id="${id}">
+    `);
+
+    if (inputController.getType() === "checkbox") { // checkboxes store the value differently
+        // view binding
+        inputElement.onchange = _ => inputController.setValue(inputElement.checked);
+        // data binding
+        inputController.onValueChanged(val => inputElement.checked = val);
+    } else {
+        // view binding
+        inputElement.onchange = _ => inputController.setValue(inputElement.value);
+        // data binding
+        inputController.onValueChanged(val => inputElement.value = val);
+    }
+
+    inputController.onLabelChanged (label => {
+        labelElement.textContent = label;
+        inputElement.setAttribute("title", label);
+    });
+    inputController.onNameChanged  (name  => inputElement.setAttribute("name", name));
+    inputController.onValidChanged (valid => inputElement.setCustomValidity(valid ? "" : "invalid"));
+
+    return [labelElement, inputElement];
+};
+
+/**
+ * Projection function that creates a form view for input purposes with as many inputs as the formController
+ * contains inputControllers, binds the information and returns the generated form view in an array.
+ * Even though not strictly necessary, the return value is an array for the sake of consistency amoung
+ * all view-generating functions.
+ * @constructor
+ * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
+ * @param  { !SimpleFormControllerType } formController
+ * @return { Array<Element> }
+ * @example
+ * const [form] = projectForm(controller);
+ */
+const projectForm = formController => {
+    // create view
+    const [form] = dom(`
+		<form>
+			<fieldset class="${FORM_CLASS_NAME}">
+			</fieldset>
+		</form>
+    `);
+    const fieldset = form.children[0];
+
+    formController.forEach(inputController => fieldset.append(...projectInput(inputController)));
+
+    return [form];
+};
+
+const FORM_CSS = `
+    fieldset.${FORM_CLASS_NAME} {        
+        padding: 2em;
+        display: grid;
+        grid-template-columns: max-content max-content;
+        grid-row-gap:   .5em;
+        grid-column-gap: 2em;        
+    }
+`;/**
+ * @typedef { Array<SimpleInputControllerType> } SimpleFormControllerType
+ */
+
+/**
+ * The SimpleFormController creates as many instances of {@link SimpleInputController} as needed for
+ * the inputs that are specified in the inputAttributesArray.
+ * Note that controllers are compositional by means of function (ctor) composition.
+ * @constructor
+ * @param  { Array<InputAttributes> } inputAttributesArray - Specification of the form to create and bind.
+ * @return { SimpleFormControllerType }
+ * @example
+ *     const controller = SimpleFormController([
+           { value: "Dierk", type: "text"   },
+           { value: 0,       type: "number" },
+       ]);
+ */
+const SimpleFormController = inputAttributesArray => {
+    const inputControllers = inputAttributesArray.map(SimpleInputController);
+    // set up any business rules (we do not have any, yet)
+    return inputControllers ;
+};// production classes for bundling and statistics

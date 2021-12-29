@@ -12,7 +12,8 @@ Make sure that production.js imports all modules that should be part of the dist
         cd production
         rollup -o productionBundle.js -f es -w . production.js --no-treeshake --compact
 
-        2021-12-18 T 22:50:49 MEZ
-        bundle:   231 LOC
-        tests:    460 LOC
-        jsdoc:    553 LOC
+### Latest statistics
+        2021-12-29 T 22:16:53 MEZ
+        bundle:   330 LOC
+        tests:    922 LOC
+        jsdoc:    817 LOC

@@ -5,3 +5,7 @@ import "./util/arrayTest.js";
 import "./util/domTest.js";
 import "./observableTest.js";
 import "./presentationModelTest.js";
+import "./projector/simpleForm/simpleInputModelTest.js"
+import "./projector/simpleForm/simpleInputControllerTest.js"
+import "./projector/simpleForm/simpleFormControllerTest.js"
+import "./projector/simpleForm/simpleFormProjectorTest.js"
