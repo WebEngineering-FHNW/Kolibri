@@ -1,5 +1,6 @@
 
 import "./stdlibTest.js";
+import "./versionTest.js";
 import "./util/arrayFunctionsTest.js";
 import "./util/arrayTest.js";
 import "./util/domTest.js";

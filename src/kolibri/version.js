@@ -1,7 +1,14 @@
-export { release, dateStamp, versionInfo }
+export { release, dateStamp, versionInfo, clientId }
 
-const release       = "0.1.33";
+const release       = "0.1.34";
 
-const dateStamp     = "2021-12-29 T 18:26:49 MEZ";
+const dateStamp     = "2022-01-02 T 00:22:51 MEZ";
 
 const versionInfo   = release + " at " + dateStamp;
+
+/**
+ * An constant random string of 22 lowercase characters/digits, probability: 1 of 36 ** 22 > 1.7e+34,
+ * generated at construction time.
+ * @type {string}
+ */
+const clientId      = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
