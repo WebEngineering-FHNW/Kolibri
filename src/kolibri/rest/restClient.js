@@ -2,9 +2,9 @@ export { client }
 
 /**
  * Representing the client of an HTTP request.
- * @param { !string } url - the url to fetch as a string. Mandatory.
+ * @param { !String } url - the url to fetch as a string. Mandatory.
  * @param { "GET"|"PUT"|"POST"|"DELETE"|"HEAD"|"OPTION" } method - HTTP request method, default: "GET"
- * @param { ?object} data - payload data for PUT or POST requests, will be converted to JSON
+ * @param { ?Object} data - payload data for PUT or POST requests, will be converted to JSON
  * @return { Promise<JSON> } a promise that is either
  *          rejected with an error code because the fetch failed or
  *          resolved with the JSON payload being parsed.
