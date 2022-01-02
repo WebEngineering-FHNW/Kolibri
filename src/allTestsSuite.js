@@ -5,7 +5,6 @@ import { versionInfo} from "./kolibri/version.js";
 import '../src/kolibri/allKolibriTestsSuite.js';
 import '../src/examples/simpleForm/simpleFormViewTest.js';
 
-
-document.getElementById('grossTotal').textContent = "" + total + " tests done.";
+total.onChange( value => document.getElementById('grossTotal').textContent = "" + value + " tests done.")
 
 document.querySelector("footer").textContent = "Built with Kolibri " + versionInfo;
