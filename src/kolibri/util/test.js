@@ -2,7 +2,7 @@
  * @module util/test
  * The test "framework", exports the Suite function plus a total of how many assertions have been tested
  */
-export { TestSuite, total, asyncTest}
+export { TestSuite, total, asyncTest }
 
 import { dom }        from "./dom.js";
 import { id, Tuple }  from "../stdlib.js";
@@ -98,7 +98,7 @@ const test = (name, callback) => {
 const asyncTest = (name, asyncCallback) => {
     const assert = Assert();
     asyncCallback(assert) // returns a promise
-        .catch( err   => {
+        .catch( _ => {
             assert.results.unshift(false);
             assert.messages.unshift(name + " promise rejected");
         })
