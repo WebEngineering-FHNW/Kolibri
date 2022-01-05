@@ -12,7 +12,7 @@ asyncTest("rest/restClient (async)", assert =>
                 reject();
             })
             .catch(err => {
-                assert.is(err.toString(), "TypeError: Failed to fetch");
+                assert.true(err.toString().startsWith("TypeError:"));
                 console.log("'Fetch API cannot load' is expected in the error log.");
                 resolve();
             } )
