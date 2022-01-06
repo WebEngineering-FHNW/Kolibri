@@ -17,13 +17,13 @@ const projectDay = dayController => {
     const [amDiv, pmDiv] = dom(`
         <div>
             <span id="am_start"></span>
-            until
+            <span class="until">until</span>
             <span id="am_end"></span>
         </div>
 
         <div>
             <span id="pm_start"></span>
-            until
+            <span class="until">until</span>
             <span id="pm_end"></span>
         </div>  
     `);

@@ -13,7 +13,9 @@
  * to the application while all business logic and their test cases remain untouched.
  */
 
-import { dom }  from "../../util/dom.js";
+import { dom }                     from "../../util/dom.js";
+import { timeStringToMinutes,
+         totalMinutesToTimeString} from "../projectorUtils.js";
 
 export { projectInput, projectForm, FORM_CSS }
 
@@ -70,32 +72,6 @@ const projectInput = inputController => {
     inputController.onValidChanged (valid => inputElement.setCustomValidity(valid ? "" : "invalid"));
 
     return [labelElement, inputElement];
-}
-
-/**
- * Helper function to convert time from string representation into number (minutes since midnight)
- * @private
- * @pure
- * @param  { !String } timeString - format "hh:mm"
- * @return { Number }
- */
-const timeStringToMinutes = timeString => {
-    if( ! /\d\d:\d\d/.test(timeString)) return 0 ; // if we cannot parse the string to a time, assume 00:00
-    const [hour, minute]  = timeString.split(":").map(Number);
-    return hour * 60 + minute;
-}
-
-/**
- * Helper function to convert time from number (minutes since midnight) representation to "hh:mm" string.
- * @private
- * @pure
- * @param  { !Number } totalMinutes
- * @return { String } - format "hh:mm"
- */
-const totalMinutesToTimeString = totalMinutes => {
-    const hour   = (totalMinutes / 60) | 0; // div
-    const minute = totalMinutes % 60;
-    return String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0");
 }
 
 /**

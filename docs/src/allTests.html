@@ -16,6 +16,8 @@
             color: var(--kolibri-accent-color);
         }
         #out {
+            max-height: calc(100vh - 20em);
+            overflow: scroll;
             display: grid;
             grid-template-columns: repeat(4, max-content);
             grid-column-gap: 2em;
@@ -51,7 +53,7 @@
 <div id="out"></div>
 
 <p id="grossTotal">Check console for possible errors.</p>
-<p>218 tests expected.</p>
+<p>252 tests expected.</p>
 
 
 <footer></footer>

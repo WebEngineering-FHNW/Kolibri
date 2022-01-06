@@ -1,7 +1,13 @@
 
-import {SimpleInputController}   from "../../kolibri/projector/simpleForm/simpleInputController.js";
+import { SimpleInputController } from "../../kolibri/projector/simpleForm/simpleInputController.js";
+import { Attribute, VALUE }      from "../../kolibri/presentationModel.js";
 
 export { DayController }
+
+const DayModel = () => {
+    const total = Attribute(0); // total minutes in this day
+    return { total };
+};
 
 const DayController = () => {
     // value is minutes since midnight as Number
@@ -9,6 +15,9 @@ const DayController = () => {
     const amEndCtrl   = SimpleInputController({value:12 * 60 ,label: "AM End"  , name: "am_end"  , type: "time" });
     const pmStartCtrl = SimpleInputController({value:13 * 60 ,label: "PM Start", name: "pm_start", type: "time" });
     const pmEndCtrl   = SimpleInputController({value:17 * 60 ,label: "PM End"  , name: "pm_end"  , type: "time" });
+    const timeControllers = [amStartCtrl, amEndCtrl, pmStartCtrl, pmEndCtrl];
+
+    const { total }    = DayModel(0);
 
     const am_sequence = sequenceRule(amStartCtrl,amEndCtrl);
     amStartCtrl.onValueChanged(am_sequence);
@@ -21,11 +30,14 @@ const DayController = () => {
     amEndCtrl  .onValueChanged( lunchBreak );
     pmStartCtrl.onValueChanged( lunchBreak );
 
-    const totalHours = totalHoursRule(amStartCtrl, amEndCtrl, pmStartCtrl, pmEndCtrl);
-    amStartCtrl.onValueChanged(totalHours);
-    amEndCtrl  .onValueChanged(totalHours);
-    pmStartCtrl.onValueChanged(totalHours);
-    pmEndCtrl  .onValueChanged(totalHours);
+    // whenever any time value changes, we have to update the total
+    const updateTotal = () => total.getObs(VALUE).setValue(totalValue(timeControllers));
+    timeControllers.forEach( ctrl =>
+        ctrl.onValueChanged(updateTotal)
+    );
+
+    // whenever the total changes, we have to check the totalHoursRule
+    total.getObs(VALUE).onChange(totalHoursRule(timeControllers) );
 
     return {
         setAmStart            : val => amStartCtrl.setValue(minMaxValuesConverter(val)),
@@ -40,7 +52,9 @@ const DayController = () => {
         onAmEndValidChanged   : amEndCtrl  .onValidChanged,
         onPmStartValidChanged : pmStartCtrl.onValidChanged,
         onPmEndValidChanged   : pmEndCtrl  .onValidChanged,
-        timeController        : [amStartCtrl, amEndCtrl, pmStartCtrl, pmEndCtrl]
+        onTotalChanged        : total  .getObs(VALUE).onChange,
+        getTotal              : total  .getObs(VALUE).getValue,
+        timeController        : timeControllers
     }
 };
 
@@ -56,22 +70,21 @@ const lunchBreakRule = (amEndCtrl, pmStartCtrl) => () => { // 40 min lunch break
 }
 
 const sequenceRule = (startInputCtrl, endInputCtrl) => () => { // start must be <= end
-    const start_total = startInputCtrl.getValue();
-    const end_total   = endInputCtrl  .getValue();
+    const start_val = startInputCtrl.getValue();
+    const end_val   = endInputCtrl  .getValue();
 
-    if (start_total <= end_total) return ; // ok, we're fine
+    if (start_val <= end_val) return ; // ok, we're fine
     // otherwise move the later time back
-    endInputCtrl.setValue(minMaxValuesConverter(start_total));
+    endInputCtrl.setValue(minMaxValuesConverter(start_val));
 }
 
-const totalHoursRule = (amStartCtrl, amEndCtrl, pmStartCtrl, pmEndCtrl) => () => { // not more than 12 hours
-    const am_start_total = amStartCtrl.getValue();
-    const am_end_total   = amEndCtrl  .getValue();
-    const pm_start_total = pmStartCtrl.getValue();
-    const pm_end_total   = pmEndCtrl  .getValue();
-
-    let isValid = am_end_total - am_start_total + pm_end_total - pm_start_total <= 12 * 60;
-
-    [amStartCtrl, amEndCtrl, pmStartCtrl, pmEndCtrl].forEach( ctrl =>
+const totalHoursRule = (timeControllers) => () => { // not more than 12 hours
+    const isValid = totalValue(timeControllers) <= 12 * 60;
+    timeControllers.forEach( ctrl =>
         ctrl.setValid(isValid));
+}
+
+const totalValue = timeControllers => {
+    const [am_start_val, am_end_val, pm_start_val, pm_end_val] = timeControllers.map( ctrl => ctrl.getValue());
+    return am_end_val - am_start_val + pm_end_val - pm_start_val;
 }

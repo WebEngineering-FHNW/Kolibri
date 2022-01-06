@@ -8,6 +8,7 @@ import '../src/kolibri/dataflow/dataflow.js';
 import '../src/kolibri/observable.js';
 import '../src/kolibri/presentationModel.js';
 import '../src/kolibri/version.js';
+import '../src/kolibri/projector/projectorUtils.js';
 import '../src/kolibri/projector/simpleForm/simpleInputModel.js';
 import '../src/kolibri/projector/simpleForm/simpleInputController.js';
 import '../src/kolibri/projector/simpleForm/simpleFormProjector.js';

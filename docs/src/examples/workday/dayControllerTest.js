@@ -63,4 +63,19 @@ dayControllerSuite.add("maxHourValidity", assert => {
 
 });
 
+dayControllerSuite.add("getTotal", assert => {
+    const controller = DayController();
+    let total;
+    controller.onTotalChanged(val => total = val);
+
+    assert.is(total, 8 * 60);                   // 8:00 .. 12:00 + 13:00 .. 17:00
+    assert.is(controller.getTotal(), total);
+
+    controller.setPmEnd  ( 17 * 60 + 1);
+
+    assert.is(total, 8 * 60 + 1);
+    assert.is(controller.getTotal(), total);
+
+});
+
 dayControllerSuite.run();

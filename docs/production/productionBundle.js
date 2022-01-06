@@ -993,9 +993,9 @@ const Attribute = (value, qualifier) => {
     };
 
     return { getObs, hasObs, setValidator, setConverter, setConvertedValue, getQualifier, setQualifier }
-};const release     = "0.1.36";
+};const release     = "0.1.37";
 
-const dateStamp   = "2022-01-04 T 15:32:20 MEZ";
+const dateStamp   = "2022-01-06 T 18:57:28 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
@@ -1007,6 +1007,34 @@ const stamp       = () => Math.random().toString(36).slice(2).padEnd(11,"X").sli
  * @type { String }
  */
 const clientId    = stamp() + stamp();/**
+ * @module projector/projectorUtils
+ * Helper functions for use in projectors.
+ */
+
+/**
+ * Helper function to convert time from string representation into number (minutes since midnight).
+ * If the string cannot be parsed, 00:00 is assumed.
+ * @pure
+ * @param  { !String } timeString - format "hh:mm"
+ * @return { Number }
+ */
+const timeStringToMinutes = timeString => {
+    if( ! /\d\d:\d\d/.test(timeString)) return 0 ; // if we cannot parse the string to a time, assume 00:00
+    const [hour, minute]  = timeString.split(":").map(Number);
+    return hour * 60 + minute;
+};
+
+/**
+ * Helper function to convert time from number (minutes since midnight) representation to "hh:mm" string.
+ * @pure
+ * @param  { !Number } totalMinutes
+ * @return { String } - format "hh:mm"
+ */
+const totalMinutesToTimeString = totalMinutes => {
+    const hour   = (totalMinutes / 60) | 0; // div
+    const minute = totalMinutes % 60;
+    return String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0");
+};/**
  * @typedef { object } InputAttributes
  * @template T
  * @property { !T } value      - mandatory value, will become the input value, defaults to undefined
@@ -1041,9 +1069,10 @@ const SimpleInputModel = ({value, label, name, type="text"}) => {
 };/**
  * @typedef { object } SimpleInputControllerType
  * @template T
- * @property { ()  => T }     getValue
- * @property { (T) => void }  setValue
- * @property { ()  => String} getType
+ * @property { ()  => T }           getValue
+ * @property { (T) => void }        setValue
+ * @property { ()  => String}       getType
+ * @property { (Boolean) => void }  setValid
  * @property { (onValueChangeCallback) => void } onLabelChanged
  * @property { (onValueChangeCallback) => void } onValidChanged
  * @property { (onValueChangeCallback) => void } onValueChanged
@@ -1072,6 +1101,7 @@ const SimpleInputController = args => {
     return {
         setValue:       singleAttr.setConvertedValue,
         getValue:       singleAttr.getObs(VALUE).getValue,
+        setValid:       singleAttr.getObs(VALID).setValue,
         getType:        singleAttr.getObs(TYPE) .getValue,
         onValueChanged: singleAttr.getObs(VALUE).onChange,
         onValidChanged: singleAttr.getObs(VALID).onChange,
@@ -1125,15 +1155,16 @@ const projectInput = inputController => {
         <input type="${inputController.getType()}" id="${id}">
     `);
 
-    if (inputController.getType() === "checkbox") { // checkboxes store the value differently
-        // view binding
+    // view and data binding can depend on the type
+    if (inputController.getType() === "time") { // "hh:mm" in the vies vs minutes since midnight in the model
+        inputElement.onchange = _ => inputController.setValue(timeStringToMinutes(inputElement.value));
+        inputController.onValueChanged(val => inputElement.value = totalMinutesToTimeString(val));
+    } else
+    if (inputController.getType() === "checkbox") { // "checked" attribute vs boolean in model
         inputElement.onchange = _ => inputController.setValue(inputElement.checked);
-        // data binding
         inputController.onValueChanged(val => inputElement.checked = val);
     } else {
-        // view binding
         inputElement.onchange = _ => inputController.setValue(inputElement.value);
-        // data binding
         inputController.onValueChanged(val => inputElement.value = val);
     }
 

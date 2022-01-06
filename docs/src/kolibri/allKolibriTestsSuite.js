@@ -8,6 +8,7 @@ import "./observableTest.js";
 import "./presentationModelTest.js";
 import "./rest/restClientTest.js";
 import "./dataflow/dataflowTest.js";
+import "./projector/projectorUtilsTest.js"
 import "./projector/simpleForm/simpleInputModelTest.js"
 import "./projector/simpleForm/simpleInputControllerTest.js"
 import "./projector/simpleForm/simpleFormControllerTest.js"

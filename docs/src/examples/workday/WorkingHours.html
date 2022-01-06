@@ -47,13 +47,17 @@
         Kolibri allows us to keep two things totally separate: what to display and how to display.
         The "what" part  with model and business rules is in the
         <a href="dayController.js">dayController</a>. The "how" part with view and binding
-        is in the <a href="simpleDayProjector.js">simpleDayProjector</a>.
-        Since both are separate, they can be separately <a href="dayControllerTest.js">tested</a>.
-        Also, the projector can be easily replaced in the <a href="starter.js">starter</a>
-        without touching the controller.
+        is in the <a href="simpleDayProjector.js">simpleDayProjector</a>, which is an instance of
+        the <a href="https://dierk.github.io/Home/projectorPattern/ProjectorPattern.html">projector pattern</a>.
+    </p>
+    <p>
+        Since controller and projector are separate, they can be separately <a href="dayControllerTest.js">tested</a>.
+        Also, the simple projector that just uses simple input fields, can be easily
+        replaced in the <a href="starter.js">starter</a> with a more elaborate projector.
+        When this happens, the controller - and thus all logic - remains untouched.
     </p>
 
-    <h2>Business rules</h2>
+    <h2>Business Rules</h2>
     <div class="rules">
         <div>Time values between 0:00 and 24:00, are required, cannot be empty.</div> <div>otherwise invalid</div>
         <div>AM Start <= AM End.</div>                        <div>automatically enforced</div>
@@ -79,6 +83,13 @@
         Set the PM End to 13:00 and delete the AM Start to --:--, with the DEL or Backspace key.
         Then check/uncheck "Required" and observe
         how the AM Start becomes invalid when it is required but has no value.
+    </p>
+
+
+    <h2>Next Step</h2>
+    <p>
+        Have a look at the <a href="../workweek/WorkingHours.html">work week</a> where we use
+        multiple day controllers and projectors in an aggregated way.
     </p>
 
     <script>
