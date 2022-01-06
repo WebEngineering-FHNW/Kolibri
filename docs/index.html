@@ -21,6 +21,10 @@
 			list-style-type: none;
 			padding-left: 0;
 		}
+		dl {
+			display: grid;
+			grid-template-columns: max-content auto;
+		}
 
     </style>
 </head>
@@ -34,9 +38,11 @@
 	<main>
 
         <section>
-      		  <h2>Under Construction</h2>
+      		  <h2>Under Development</h2>
       		  <p>
-                  Kolibri and its home page are <a href="https://github.com/webengineering-fhnw/Kolibri/">under construction</a>. Stay tuned.
+                  Kolibri and its home page are under development at
+				  <a href="https://github.com/webengineering-fhnw/Kolibri/">github</a>, which is
+				  also the place for any discussions and issues.
               </p>
         </section>
 
@@ -49,52 +55,58 @@
 				  and the completeness of the documentation.
 				  Every contribution must have proven its worth in an application.
               </p>
-			<ul>
-				<li> Andermatt, Brodwolf:
-					<a href="https://github.com/mattwolf-corporation/ip6_lambda-calculus-in-js">code</a>,
-					<a href="https://mattwolf-corporation.gitbook.io/ip5-lambda-calculus/">git book</a>
-			    </li>
-				<li> Häfliger, Misic:
-					<a href="https://github.com/fabianhaef/ip6-web-ui-toolkit">code</a>,
-					<a href="https://dierk.github.io/Home/data/IP6_Bericht_Misic_Häfliger.pdf">documentation.pdf</a>,
-				</li>
-				<li> Christen, Robin:
-					<a href="https://github.com/robin-fhnw/IP5-Puerro">code</a>,
-					<a href="https://robin-christen.gitbook.io/puerro/">git book</a>
-				</li>
-				<li> Berchtold, Duss:
-					<a href="https://www.fhnw.ch/plattformen/bachelor20/IMVS20/index.html">info</a>,
+			<dl>
+				<dt> Andermatt, Brodwolf
+				</dt>
+				<dd><a href="https://github.com/mattwolf-corporation/ip6_lambda-calculus-in-js">code</a>,
+					<a href="https://mattwolf-corporation.gitbook.io/ip5-lambda-calculus/">git book</a></dd>
+				<dt> Häfliger, Misic
+				</dt>
+				<dd><a href="https://github.com/fabianhaef/ip6-web-ui-toolkit">code</a>,
+					<a href="https://dierk.github.io/Home/data/IP6_Bericht_Misic_Häfliger.pdf">documentation.pdf</a>
+				</dd>
+				<dt> Christen, Robin
+				</dt>
+				<dd><a href="https://github.com/robin-fhnw/IP5-Puerro">code</a>,
+					<a href="https://robin-christen.gitbook.io/puerro/">git book</a></dd>
+				<dt> Berchtold, Duss
+				</dt>
+				<dd>
 					<a href="https://github.com/KDuss/bezel">code</a>,
 					<a href="https://dierk.github.io/Home/data/Bachelorarbeit_Facettierte_Suche_Duss_Berchtold.pdf"
-					>documentation.pdf</a>
-				</li>
-				<li> Fabian Affolter, Dr. Dieter Holz, François Martin, Marco Sanfratello, Dirk Lemmermann
-				</li>
-			</ul>
+					>documentation.pdf</a>,
+					<a href="https://www.fhnw.ch/plattformen/bachelor20/IMVS20/index.html">info</a></dd>
+				<dt> Advisors and Experts
+				</dt>
+				<dd>Prof. Dierk König, Fabian Affolter, Dr. Dieter Holz, François Martin, Marco Sanfratello, Dirk
+					Lemmermann
+				</dd>
+			</dl>
         </section>
 		<section>
 			<h2>Live Test Cases</h2>
-			<p>Have a look at the current <a href="./src/allTests.html">test case report</a>.
+			<p>Have a look at the live <a href="./src/allTests.html">test case report</a>.
 			</p>
-			<p>Showing the report actually runs the test cases live in your current browser.
+			<p>Showing the report actually runs the latest test cases live in your current browser window.
 			   The Kolibri test facility does not require any build steps or extra tooling.
 			</p>
 		</section>
 		<section>
-			<h2>Examples</h2>
-			<p>Some examples show how to use the Kolibri.
+			<h2>A Live Tutorial from Examples</h2>
+			<p>It is instructive to take a tour through the examples in order to understand how
+				Kolibri helps with developing web applications. They are arranged from simple to
+				increasingly complex and introduce new concepts along the way.
 			</p>
-			<ul>
-				<li>Create a <a href="./src/examples/simpleForm/simpleFormView.html">simple form</a> very
-					efficiently from a one line of code.
-				</li>
-				<li>Enforce <a href="./src/examples/workday/WorkingHours.html">business rules</a> in the UI to manage
-					working hours in a day.
-				</li>
-				<li>
-					more to come here ...
-				</li>
-			</ul>
+			<p>Create a <a href="./src/examples/simpleForm/simpleFormView.html">simple form</a> very
+				efficiently with just one line of code.
+			</p>
+			<p>Enforce and test <a href="./src/examples/workday/WorkingHours.html">business rules</a> in the UI
+				to interactively manage working hours in a day.
+			</p>
+			<p>
+				more to come here ...
+			</p>
+
 		</section>
 		<section>
 			<h2>Installation without dependency</h2>
