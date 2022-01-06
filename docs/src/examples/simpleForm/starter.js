@@ -8,7 +8,7 @@ const start = () => {
         {value: "Text",       label: "Text",   name: "text",   type: "text"    },
         {value: 0,            label: "Number", name: "number", type: "number"  },
         {value: "1968-04-19", label: "Date",   name: "date",   type: "date"    },
-        {value: "12:15",      label: "Time",   name: "time",   type: "time"    },
+        {value: 12 * 60 + 15, label: "Time",   name: "time",   type: "time"    },
         {value: false,        label: "Check",  name: "check",  type: "checkbox"},
         {value: "",           label: "Color",  name: "color",  type: "color"   }
     ];

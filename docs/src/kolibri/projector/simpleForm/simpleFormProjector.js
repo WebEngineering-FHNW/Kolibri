@@ -49,15 +49,16 @@ const projectInput = inputController => {
         <input type="${inputController.getType()}" id="${id}">
     `);
 
-    if (inputController.getType() === "checkbox") { // checkboxes store the value differently
-        // view binding
+    // view and data binding can depend on the type
+    if (inputController.getType() === "time") { // "hh:mm" in the vies vs minutes since midnight in the model
+        inputElement.onchange = _ => inputController.setValue(timeStringToMinutes(inputElement.value));
+        inputController.onValueChanged(val => inputElement.value = totalMinutesToTimeString(val));
+    } else
+    if (inputController.getType() === "checkbox") { // "checked" attribute vs boolean in model
         inputElement.onchange = _ => inputController.setValue(inputElement.checked);
-        // data binding
         inputController.onValueChanged(val => inputElement.checked = val);
     } else {
-        // view binding
         inputElement.onchange = _ => inputController.setValue(inputElement.value);
-        // data binding
         inputController.onValueChanged(val => inputElement.value = val);
     }
 
@@ -69,6 +70,32 @@ const projectInput = inputController => {
     inputController.onValidChanged (valid => inputElement.setCustomValidity(valid ? "" : "invalid"));
 
     return [labelElement, inputElement];
+}
+
+/**
+ * Helper function to convert time from string representation into number (minutes since midnight)
+ * @private
+ * @pure
+ * @param  { !String } timeString - format "hh:mm"
+ * @return { Number }
+ */
+const timeStringToMinutes = timeString => {
+    if( ! /\d\d:\d\d/.test(timeString)) return 0 ; // if we cannot parse the string to a time, assume 00:00
+    const [hour, minute]  = timeString.split(":").map(Number);
+    return hour * 60 + minute;
+}
+
+/**
+ * Helper function to convert time from number (minutes since midnight) representation to "hh:mm" string.
+ * @private
+ * @pure
+ * @param  { !Number } totalMinutes
+ * @return { String } - format "hh:mm"
+ */
+const totalMinutesToTimeString = totalMinutes => {
+    const hour   = (totalMinutes / 60) | 0; // div
+    const minute = totalMinutes % 60;
+    return String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0");
 }
 
 /**

@@ -63,6 +63,38 @@ simpleFormProjectorSuite.add("checkbox", assert => {
     assert.is(inputElement.checked, false);
 });
 
+
+// Testing the special time case since the "value" attribute is a string in the format "hh:mm"
+// while the model stores it as number meaning minutes since midnight.
+simpleFormProjectorSuite.add("time", assert => {
+    const controller = SimpleInputController({
+        value:  12 * 60 + 15,
+        label:  "Time",
+        name:   "time",
+        type:   "time",
+    });
+
+    const [labelElement, inputElement] = projectInput(controller);
+    assert.is(labelElement.getAttribute("for"), inputElement.getAttribute("id"));
+
+    // initial checkbox value is false
+    assert.is(controller.getValue(), 12 * 60 + 15);
+    assert.is(inputElement.value, "12:15");
+
+    inputElement.value = "11:00";
+    fireChangeEvent(inputElement);
+
+    assert.is(controller.getValue(), 11 * 60);
+    assert.is(inputElement.value, "11:00");
+
+    inputElement.value = "no-such-time";
+    fireChangeEvent(inputElement);
+
+    assert.is(controller.getValue(), 0);
+    assert.is(inputElement.value, "00:00");
+
+});
+
 simpleFormProjectorSuite.add("form", assert => {
     const formController = SimpleFormController([
         {value: "Dierk", type: "text"  },

@@ -6,9 +6,10 @@ export { SimpleInputController }
 /**
  * @typedef { object } SimpleInputControllerType
  * @template T
- * @property { ()  => T }     getValue
- * @property { (T) => void }  setValue
- * @property { ()  => String} getType
+ * @property { ()  => T }           getValue
+ * @property { (T) => void }        setValue
+ * @property { ()  => String}       getType
+ * @property { (Boolean) => void }  setValid
  * @property { (onValueChangeCallback) => void } onLabelChanged
  * @property { (onValueChangeCallback) => void } onValidChanged
  * @property { (onValueChangeCallback) => void } onValueChanged
@@ -37,6 +38,7 @@ const SimpleInputController = args => {
     return {
         setValue:       singleAttr.setConvertedValue,
         getValue:       singleAttr.getObs(VALUE).getValue,
+        setValid:       singleAttr.getObs(VALID).setValue,
         getType:        singleAttr.getObs(TYPE) .getValue,
         onValueChanged: singleAttr.getObs(VALUE).onChange,
         onValidChanged: singleAttr.getObs(VALID).onChange,

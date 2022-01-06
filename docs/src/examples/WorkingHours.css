@@ -1,0 +1,85 @@
+@import "../../css/kolibri-base.css";
+
+body {
+    max-width:        60em;
+    margin:           auto;
+    background-color: white; /*only needed for chrome :-(*/
+}
+
+main {
+    margin: 2em;
+}
+
+h2 {
+    margin-bottom: 0;
+}
+
+div {
+    line-height: 1.2em;
+    padding: 0.5em 0 0 0;
+}
+
+fieldset {
+    opacity: 1;
+    border-style: solid;
+    border-width: 0 0 0 2px;
+    border-color: transparent;
+}
+
+fieldset:disabled {
+    opacity: 0.5;
+}
+
+:invalid {
+    border-color: var(--kolibri-accent-color);
+}
+
+input:invalid {
+    border-color: transparent transparent var(--kolibri-accent-color) transparent;
+    position: relative;
+    overflow: visible;
+}
+
+input:invalid::before {
+    content: "";
+    position: absolute;
+    top: -.35ch;
+    left: -.75ch;
+    color: white;
+    background-color: var(--kolibri-accent-color);
+    width: 1ch;
+    height: 1ch;
+    border-radius: 50%;
+}
+
+output {
+    color: var(--kolibri-output-color);
+}
+
+.darkTheme {
+    filter: invert(85%) hue-rotate(180deg);
+}
+
+em {
+    color: var(--kolibri-accent-color);
+}
+
+.rules *:nth-child(even) {
+    color: var(--kolibri-accent-color);
+}
+
+header img {
+    position: absolute;
+    top: 3em;
+    margin-left: 38em;
+}
+
+.rules {
+    display: grid;
+    grid-column-gap: 2em;
+    grid-template-columns: max-content max-content;
+}
+
+label ~ input[type=time] {
+    margin-left: .7em;
+}
