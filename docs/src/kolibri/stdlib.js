@@ -40,16 +40,16 @@ const id = x => x;
  * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
  * @haskell  a -> b -> a
  * @pure
- * @type     { (x:a) => (y:?b) => a}
+ * @type     { (x:a) => () => a}
  * @param    {a} x
- * @returns  { (y:?b) => a } - a function that ignores its argument and returns the parameter x unchanged.
+ * @returns  { () => a } - a function that ignores its argument and returns the parameter x unchanged.
  * @example
  * c(1)(undefined) === 1;
  * const getExpr = c(expr);
  * // expression might change here
  * getExpr() === expr;
  */
-const c = x => _ => x;
+const c = x => () => x;
 
 /**
  * A Function that returns the second of two curried arguments.
@@ -58,7 +58,7 @@ const c = x => _ => x;
  * @haskell  b -> a -> a
  * @pure
  * @type     { (x:?b) => (y:a) => a}
- * @param    {?b} _ - the parameter is ignored
+ * @param    { ?b } _ - the parameter is ignored
  * @returns  { (y:a) => a } - a function that returns its argument {@link a}
  * @example
  * snd(undefined)(1) === 1;
@@ -225,7 +225,7 @@ const Left  = x => f => _ => f(x);
 const Right = x => _ => g => g(x);
 
 /**
- * Nothing is the error case of the Maybe type. A "Maybe a" is either Nothing or "{@link Just} a".
+ * Nothing is the error case of the Maybe type. A "Maybe a" can be either Nothing or "{@link Just} a".
  * Nothing is immutable. Nothing is a singleton.
  * Nothing is used to get around missing null/undefined checks.
  * @haskell Nothing :: Maybe a
@@ -242,7 +242,7 @@ const Right = x => _ => g => g(x);
 const Nothing = Left (undefined);
 
 /**
- * Just is the success case of the Maybe type. A "Maybe a" is either {@link Nothing} or "Just a".
+ * Just is the success case of the Maybe type. A "Maybe a" can be either {@link Nothing} or "Just a".
  * Just values are immutable.
  * Just is used to get around missing null/undefined checks.
  * @haskell Just a :: Maybe a
