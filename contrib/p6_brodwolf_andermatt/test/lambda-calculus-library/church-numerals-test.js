@@ -1,9 +1,11 @@
 import {TestSuite} from "../test.js";
 
 import { id, True, False, fst, snd, pair } from "../../src/lambda-calculus-library/lambda-calculus.js";
-import { n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, succ, pred, phi, is0, toChurchNum, jsnum,
+import {
+    n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, succ, pred, phi, is0, churchNum, jsNum,
     churchAddition, churchSubtraction, churchMultiplication, churchPotency,
-    leq, eq, gt} from "../../src/lambda-calculus-library/church-numerals.js";
+    leq, eq, gt, max, min
+} from "../../src/lambda-calculus-library/church-numerals.js";
 
 const churchTest = TestSuite("Church Numerals");
 
@@ -20,7 +22,7 @@ churchTest.add("numbers", assert => {
 churchTest.add("succ", assert => {
     assert.churchNumberEquals(succ(n0), n1);
     assert.churchNumberEquals(succ(n5), n6);
-    assert.equals(jsnum(succ(n9)), 10);
+    assert.equals(jsNum(succ(n9)), 10);
 });
 
 churchTest.add("pre", assert => {
@@ -68,7 +70,7 @@ churchTest.add("phi", assert => {
     const testPhiPair3  = phi(testPair3);
 
     assert.churchNumberEquals( testPhiPair3(fst), n9 );
-    assert.equals( jsnum(testPhiPair3(snd)), 10 );
+    assert.equals( jsNum(testPhiPair3(snd)), 10 );
 });
 
 churchTest.add("pred", assert => {
@@ -85,35 +87,35 @@ churchTest.add("isZero", assert => {
     assert.equals( is0(n9), False );
 });
 
-churchTest.add("toChurchNumber", assert =>{
-   assert.churchNumberEquals(toChurchNum(0), n0);
-   assert.churchNumberEquals(toChurchNum(1), n1);
-   assert.churchNumberEquals(toChurchNum(5), n5);
-   assert.churchNumberEquals(toChurchNum(7), n7);
-   assert.churchNumberEquals(toChurchNum(9), n9);
-   assert.churchNumberEquals(toChurchNum(25), churchMultiplication(n5)(n5));
-   assert.churchNumberEquals(toChurchNum(54), churchMultiplication(n9)(n6));
-   assert.churchNumberEquals(toChurchNum(42), churchMultiplication(n6)(n7));
+churchTest.add("churchNum", assert =>{
+   assert.churchNumberEquals( churchNum( 0),  n0);
+   assert.churchNumberEquals( churchNum( 1),  n1);
+   assert.churchNumberEquals( churchNum( 5),  n5);
+   assert.churchNumberEquals( churchNum( 7),  n7);
+   assert.churchNumberEquals( churchNum( 9),  n9);
+   assert.churchNumberEquals( churchNum( 25), churchMultiplication(n5)(n5));
+   assert.churchNumberEquals( churchNum( 54), churchMultiplication(n9)(n6));
+   assert.churchNumberEquals( churchNum( 42), churchMultiplication(n6)(n7));
 });
 
 
 churchTest.add("jsNum", assert => {
-    assert.equals(jsnum(n0), 0);
-    assert.equals(jsnum(n1), 1);
-    assert.equals(jsnum(n2), 2);
-    assert.equals(jsnum(n3), 3);
-    assert.equals(jsnum(n4), 4);
-    assert.equals(jsnum(n5), 5);
-    assert.equals(jsnum(n6), 6);
-    assert.equals(jsnum(n7), 7);
-    assert.equals(jsnum(n8), 8);
-    assert.equals(jsnum(n9), 9);
+    assert.equals( jsNum(n0) , 0);
+    assert.equals( jsNum(n1) , 1);
+    assert.equals( jsNum(n2) , 2);
+    assert.equals( jsNum(n3) , 3);
+    assert.equals( jsNum(n4) , 4);
+    assert.equals( jsNum(n5) , 5);
+    assert.equals( jsNum(n6) , 6);
+    assert.equals( jsNum(n7) , 7);
+    assert.equals( jsNum(n8) , 8);
+    assert.equals( jsNum(n9) , 9);
 
-    assert.equals(jsnum(churchAddition(n9)(n9)), 18);
-    assert.equals(jsnum(churchAddition(n6)(n8)), 14);
-    assert.equals(jsnum(churchMultiplication(n9)(n9)), 81);
-    assert.equals(jsnum(churchPotency(n2)(n5)), 32);
-    assert.equals(jsnum(churchSubtraction(n9)(n4)), 5);
+    assert.equals( jsNum( churchAddition(n9)(n9) ), 18);
+    assert.equals( jsNum( churchAddition(n6)(n8) ), 14);
+    assert.equals( jsNum( churchMultiplication(n9)(n9) ), 81);
+    assert.equals( jsNum( churchPotency(n2)(n5) ), 32);
+    assert.equals( jsNum( churchSubtraction(n9)(n4) ), 5);
 });
 
 churchTest.add("church less or equal", assert => {
@@ -150,6 +152,23 @@ churchTest.add("church greater than", assert => {
     assert.churchBooleanEquals(  gt(n5)(n1) , True  );
     assert.churchBooleanEquals(  gt(n5)(n5) , False  );
     assert.churchBooleanEquals(  gt(n5)(n8) , False  );
+});
+
+churchTest.add("max", assert => {
+    assert.churchNumberEquals(  max(n0)(n0) , n0  );
+    assert.churchNumberEquals(  max(n1)(n0) , n1  );
+    assert.churchNumberEquals(  max(n0)(n5) , n5  );
+    assert.churchNumberEquals(  max(n5)(n5) , n5  );
+    assert.churchNumberEquals(  max(n5)(n6) , n6  );
+    assert.churchNumberEquals(  max(n7)(n6) , n7  );
+});
+churchTest.add("min", assert => {
+    assert.churchNumberEquals(  min(n0)(n0) , n0  );
+    assert.churchNumberEquals(  min(n1)(n0) , n0  );
+    assert.churchNumberEquals(  min(n0)(n5) , n0  );
+    assert.churchNumberEquals(  min(n5)(n5) , n5  );
+    assert.churchNumberEquals(  min(n5)(n6) , n5  );
+    assert.churchNumberEquals(  min(n7)(n6) , n6  );
 });
 
 churchTest.report();
