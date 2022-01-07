@@ -12,7 +12,7 @@ const pmSuite = TestSuite("presentationModel");
 
 pmSuite.add("attr-value", assert => {
     const attr = Attribute("init");
-    assert.true(attr.hasObs(VALUE));
+    assert.isTrue(attr.hasObs(VALUE));
     assert.is(attr.hasObs(VALID), false);
     assert.is(attr.getObs(VALUE).getValue(), "init");
     assert.is(valueOf(attr), "init");
@@ -74,7 +74,7 @@ pmSuite.add("attr-notify", assert => {
 
     attr1.setConvertedValue("Dieter");                // conflicting validators
     attr1.setValidator( val => val.length > 6);       // "dieter has length 6 and is thus valid for attr2 but not for attr1"
-    assert.is(attr1.getObs(VALID).getValue(), false); // currently, latest change wins but in principle it is unspecified.
+    assert.is(attr1.getObs(VALID).getValue(), false); // currently, the latest change wins but in principle it is unspecified.
     assert.is(attr2.getObs(VALID).getValue(), false);
 });
 
@@ -108,15 +108,15 @@ pmSuite.add("qualified", assert => {
 pmSuite.add("create-easy", assert => {
     const pm = presentationModelFromAttributeNames(["firstname", "lastname"]);
 
-    assert.true(pm.firstname != null);
-    assert.true(pm.lastname != null);
+    assert.isTrue(pm.firstname != null);
+    assert.isTrue(pm.lastname  != null);
     assert.is(valueOf(pm.lastname), null); // initial value is null;
     assert.is(pm.lastname.getObs(LABEL).getValue(), "lastname"); // default
 
 });
 
 /* Caveat:
-It is possible that two Attributes synchronize their values (plus label, valid state, etc.) via qualifier
+It is possible that two Attributes synchronize their values (plus label, valid state, etc.) via qualifier,
 but they have different converters and validators. In this case, only the converter/validator of the
 attribute that received the last setConvertedValue() call is in effect - and the dependent attribute will
 experience value changes that might not be in line with its own converter/validation rules.

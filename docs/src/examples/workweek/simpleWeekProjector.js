@@ -25,7 +25,9 @@ const projectWeek = weekController => {
         <div><output>00:00</output></div>
     `);
     // data binding
-    weekController.onTotalWeekMinutesChanged( mins => totalElement.firstElementChild.textContent = totalMinutesToTimeString(mins))
+    weekController.onTotalWeekMinutesChanged( minutes =>
+        totalElement.firstElementChild.textContent = totalMinutesToTimeString(minutes)
+    );
 
     allWeekElements.push(x1, x2, x3, totalElement);
     return allWeekElements;
@@ -40,9 +42,11 @@ const projectWeek = weekController => {
  */
 const projectDayWithTotal = (dayController, weekDay) => {
 
-    const [amDiv, pmDiv]   = projectDay(dayController);
-    const [weekDayElement] = dom(`<div>${weekDay}</div>`);
-    const [totalElement]   = dom(`<div><output>00:00</output></div>`);
+    const am_pm   = projectDay(dayController);
+    /** @type HTMLDivElement */ const amDiv = am_pm[0];
+    /** @type HTMLDivElement */ const pmDiv = am_pm[1];
+    /** @type HTMLDivElement */ const weekDayElement = dom(`<div>${weekDay}</div>`)[0];
+    /** @type HTMLDivElement */ const totalElement   = dom(`<div><output>00:00</output></div>`)[0];
 
     // for consistency and a11y, make each title, name and label text unique for the weekDay
     [amDiv, pmDiv].flatMap(el => Array.from(el.querySelectorAll("input"))).forEach( input => {
@@ -53,7 +57,9 @@ const projectDayWithTotal = (dayController, weekDay) => {
         label.textContent = weekDay + " " + label.textContent
     );
 
-    dayController.onTotalChanged  ( mins => totalElement.firstElementChild.textContent = totalMinutesToTimeString(mins));
+    dayController.onTotalChanged  ( minutes =>
+        totalElement.firstElementChild.textContent = totalMinutesToTimeString(minutes)
+    );
 
     return [weekDayElement, amDiv, pmDiv, totalElement]
 };

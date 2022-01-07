@@ -35,7 +35,7 @@ asyncTest("dataflow/DFV (async)", async assert => { // promise must be set at mo
     const x = DataFlowVariable(async () => await y() * 3);
     const y = DataFlowVariable(() => {
         counter++;
-        return new Promise(ok => setTimeout(ok(3), 10));
+        return new Promise(ok => setTimeout( _ => ok(3), 10));
     });
 
     await x().then(  _ => assert.is(counter, 1));

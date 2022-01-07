@@ -7,12 +7,12 @@ asyncTest("rest/restClient (async)", assert =>
     // and thus we have to flip resolve/reject for the test result.
     new Promise( (resolve, reject) =>
         client('https://jsonplaceholder.typicode.com/todos/1')
-            .then(json => {
+            .then( _json => {
                 assert.is("expected to fail","because of same-origin mismatch");
                 reject();
             })
             .catch(err => {
-                assert.true(err.toString().startsWith("TypeError:"));
+                assert.isTrue(err.toString().startsWith("TypeError:"));
                 console.log("'Fetch API cannot load' is expected in the error log.");
                 resolve();
             } )

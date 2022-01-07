@@ -1,4 +1,4 @@
-import { TestSuite } from "../../kolibri/util/test.js";
+import { TestSuite }     from "../../kolibri/util/test.js";
 import { DayController } from "./dayController.js";
 
 const dayControllerSuite = TestSuite("examples/workday/dayController");
@@ -53,7 +53,7 @@ dayControllerSuite.add("maxHourValidity", assert => {
     assert.is(pm_start_valid, true);
     assert.is(pm_end_valid,   true);
 
-    dayCtrl.amStartCtrl.setValue(  4 * 60); // since we break the 12 hour rule, all are invalid
+    dayCtrl.amStartCtrl.setValue(  4 * 60); // since we break the 12-hour rule, all are invalid
     dayCtrl.pmEndCtrl  .setValue( 17 * 60 + 1); // 8:00 .. 12:00 + 13:00 .. 17:01
 
     assert.is(am_start_valid, false);

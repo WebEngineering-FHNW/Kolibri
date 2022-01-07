@@ -53,10 +53,10 @@ const presentationModelFromAttributeNames = attributeNames => {
 
 /**
  * @typedef ModelWorldType
- * @property { ( getQualifier:function():String, name:ObservableTypeString, observable:Observable<T> ) => void } update -
+ * @property { ( getQualifier:function():String, name:ObservableTypeString, observable: IObservable<T> ) => void } update -
  *              update the value of the named observableType for all attributes that have the same qualifier.
  *              Add the respective observable if it not yet known.
- * @property { (qualifier:String, newQualifier:String, observables:Object<String, Observable<T>>) => void} updateQualifier -
+ * @property { (qualifier:String, newQualifier:String, observables:Object<String, IObservable<T>>) => void} updateQualifier -
  *              handle the change when an attribute changes its qualifier such that all respective
  *              internal indexes need to be updated, their values are updated, and nullish newQualifier leads to removal.
  * @property { (qualifier:String) => T} readQualifierValue
@@ -72,9 +72,9 @@ const ModelWorld = () => {
     const data = {}; // key -> array of observables
 
     const readQualifierValue = qualifier => {
-        const obss = data[qualifier + "." + VALUE];
-        if (null == obss) { return undefined; }
-        return obss[0].getValue(); // there are no empty arrays
+        const observables = data[qualifier + "." + VALUE];
+        if (null == observables) { return undefined; }
+        return observables[0].getValue(); // there are no empty arrays
     };
 
     // handle the change of a value
@@ -138,11 +138,11 @@ const modelWorld = ModelWorld();
 const readQualifierValue = modelWorld.readQualifierValue; // specific export
 
 /**
- * Convenience constructor of an {@link Attribute} that builds it's initial value from already existing qualified values (if any)
+ * Convenience constructor of an {@link Attribute} that builds its initial value from already existing qualified values (if any)
  * instead of overriding possibly existing qualified values with the constructor value.
  * @constructor
  * @param { String } qualifier - mandatory. Nullish values make no sense here since one can use {@link Attribute}.
- * @return { AttributeType }
+ * @return { AttributeType<T> }
  * @impure since it changes the ModelWorld.
  * @example
  * const firstNameAttr = QualifiedAttribute("Person.4711.firstname"); // attr is set to existing values, if any.
@@ -234,7 +234,7 @@ const Attribute = (value, qualifier) => {
     const setConvertedValue = val => getObs(VALUE).setValue(convert(val));
 
     let validator        = undefined;  // the current validator in use, might change over time
-    let validateListener = undefined;  // the validate listener on the attribute, lazily initialized
+    let validateListener = undefined;  // the "validate" listener on the attribute, lazily initialized
     const setValidator = newValidator => {
         validator = newValidator;
         if (! validateListener && validator) {

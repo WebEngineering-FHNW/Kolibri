@@ -15,7 +15,7 @@ export {Observable, ObservableList}
 /**
  * IObservable<T> is the interface from the GoF Observable design pattern.
  * In this variant, we allow to register many observers but do not provide means to unregister.
- * Observers are not GC'ed before the observable itself is GC'ed.
+ * Observers are not garbage-collected before the observable itself is collected.
  * IObservables are intended to be used with the concept of "stable binding", i.e. with
  * listeners that do not change after setup.
  * @typedef IObservable<T>
@@ -77,8 +77,8 @@ const Observable = value => {
 
 /**
  * IObservableList<T> is the interface for lists that can be observed for add or delete operations.
- * In this variant, we allow to register and unregister many observers.
- * Observers that are still registered are not GC'ed before the observable list itself is GC'ed.
+ * In this variant, we allow registering and unregistering many observers.
+ * Observers that are still registered are not garbage collected before the observable list itself is collected.
  * @typedef IObservableList<T>
  * @impure   Observables change their inner decorated list and maintain two lists of observers that changes over time.  
  * @property { (observableListCallback) => void }  onAdd - register an observer that is called whenever an item is added.

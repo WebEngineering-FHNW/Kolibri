@@ -22,18 +22,18 @@ const DayModel = () => {
 
 /**
  * @typedef DayControllerType
- * @property { SimpleInputController<Number> }  amStartCtrl
- * @property { SimpleInputController<Number> }  amEndCtrl
- * @property { SimpleInputController<Number> }  pmStartCtrl
- * @property { SimpleInputController<Number> }  pmEndCtrl
- * @property { () => Number }                   getTotal        - the total minutes in this day, derived
+ * @property { SimpleInputControllerType<Number> }  amStartCtrl
+ * @property { SimpleInputControllerType<Number> }  amEndCtrl
+ * @property { SimpleInputControllerType<Number> }  pmStartCtrl
+ * @property { SimpleInputControllerType<Number> }  pmEndCtrl
+ * @property { () => Number }                       getTotal        - the total minutes in this day, derived
  * @property { (callback: onValueChangeCallback<Number>) => void } onTotalChanged - when total changes
  */
 
 /**
  * Creating a day controller made from four simple input controllers for the four time values (as numbers
  * meaning minutes since midnight).
- * The DayController enforces the business rules of min-max values, earliest start, latest end,
+ * The DayController enforces the business rules of min-max values, the earliest start, the latest end,
  * sequence, lunch breaks, and total time.
  * The rules for earliest start and latest end are left to the projector. This is questionable, but we do it
  * anyway just to show that sometimes the view already enforces constraints.
@@ -87,18 +87,18 @@ const DayController = () => {
  * Convert numbers to valid minutes after midnight
  * @pure
  * @private
- * @param  { Number } mins
+ * @param  { Number } minutes
  * @return { Number } - value between 0 and 24 * 60
  */
-const minMaxValuesConverter = mins => Math.max( 0, (Math.min(mins, 24 * 60)));
+const minMaxValuesConverter = minutes => Math.max( 0, (Math.min(minutes, 24 * 60)));
 
 /**
  * The lunch break must be at least 40 minutes. Otherwise, we set the end of the lunch break back, which might
  * trigger further value changes (e.g. because of the {@link sequenceRule}).
  * @private
  * @impure - might change the pm start value
- * @param  { SimpleInputController<Number> } amEndCtrl
- * @param  { SimpleInputController<Number> } pmStartCtrl
+ * @param  { SimpleInputControllerType<Number> } amEndCtrl
+ * @param  { SimpleInputControllerType<Number> } pmStartCtrl
  * @return { () => void } - the lunch break rule handler as a side-effecting function
  */
 const lunchBreakRule = (amEndCtrl, pmStartCtrl) => () => { // 40 min lunch break
@@ -115,8 +115,8 @@ const lunchBreakRule = (amEndCtrl, pmStartCtrl) => () => { // 40 min lunch break
  * If violated, we move the end value back.
  * @private
  * @impure - might change the value of the end input
- * @param  { SimpleInputController<Number> } startInputCtrl
- * @param  { SimpleInputController<Number> } endInputCtrl
+ * @param  { SimpleInputControllerType<Number> } startInputCtrl
+ * @param  { SimpleInputControllerType<Number> } endInputCtrl
  * @return { () => void } - the sequence rule handler as a side-effecting function
  */
 const sequenceRule = (startInputCtrl, endInputCtrl) => () => { // start must be <= end
@@ -136,7 +136,7 @@ const sequenceRule = (startInputCtrl, endInputCtrl) => () => { // start must be 
  * It is easy to get this wrong and overlooked when testing manually.
  * @private
  * @impure  - might change the validity of any input
- * @param   { Array<SimpleInputController<Number>> } timeControllers
+ * @param   { Array<SimpleInputControllerType<Number>> } timeControllers
  * @return  void
  */
 const checkValidityRules = timeControllers => {
@@ -145,7 +145,7 @@ const checkValidityRules = timeControllers => {
         timeControllers.forEach( ctrl => ctrl.setValid(false));
         return;
     }
-    // only if we are < 12 h, we check the individual validities
+    // only if we are < 12 h, we check the individual valid constraints
     timeControllers.forEach( ctrl =>
         ctrl.setValid(ctrl.getValue() >=  4 * 60
                    && ctrl.getValue() <= 22 * 60)
@@ -154,7 +154,7 @@ const checkValidityRules = timeControllers => {
 
 /**
  * Calculate the total number of minutes worked this day, given the inputs.
- * @param { Array<SimpleInputController<Number>> } timeControllers
+ * @param { Array<SimpleInputControllerType<Number>> } timeControllers
  * @return { Number }
  */
 const totalValue = timeControllers => {

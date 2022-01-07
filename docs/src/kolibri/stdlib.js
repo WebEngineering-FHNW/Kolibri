@@ -40,9 +40,9 @@ const id = x => x;
  * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
  * @haskell  a -> b -> a
  * @pure
- * @type     { (x:a) => (y:b) => a}
+ * @type     { (x:a) => (y:?b) => a}
  * @param    {a} x
- * @returns  { (y:b) => a } - a function that ignores its argument and returns the parameter x unchanged.
+ * @returns  { (y:?b) => a } - a function that ignores its argument and returns the parameter x unchanged.
  * @example
  * c(1)(undefined) === 1;
  * const getExpr = c(expr);
@@ -57,8 +57,8 @@ const c = x => _ => x;
  * It can be seen as a cached getter for the id function: {@link c}({@link id})
  * @haskell  b -> a -> a
  * @pure
- * @type     { (x:b) => (y:a) => a}
- * @param    {b} _ - the parameter is ignored
+ * @type     { (x:?b) => (y:a) => a}
+ * @param    {?b} _ - the parameter is ignored
  * @returns  { (y:a) => a } - a function that returns its argument {@link a}
  * @example
  * snd(undefined)(1) === 1;
@@ -182,7 +182,7 @@ const fst = c;
  * @returns  {b}
  */
 /**
- * The Left constructor of an Either type. An Either is either {@link Left} or {@link Right}.
+ * The Left constructor of an Either type. An "Either" is either {@link Left} or {@link Right}.
  * It is constructed with a value of type {@link a} and waits for two more functions f and g
  * as curried arguments.
  * When both are given, f(x) is called.
@@ -204,7 +204,7 @@ const fst = c;
 const Left  = x => f => _ => f(x);
 
 /**
- * The Right constructor of an Either type. An Either is either {@link Left} or {@link Right}.
+ * The Right constructor of an Either type. An "Either" is either {@link Left} or {@link Right}.
  * It is constructed with a value of type {@link b} and waits for two more functions f and g
  * as curried arguments.
  * When both are given, g(x) is called.

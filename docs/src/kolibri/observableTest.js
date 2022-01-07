@@ -47,7 +47,7 @@ observableSuite.add("edge case", assert => {
     //     out-of-order updates (very bad),
     //     doubled updates (not nice),
     //     missing intermediate updates (our choice here)
-    // We give up the invariant that all subscribers see all value changes
+    // We give up the invariant that all subscribers see all value changes,
     // but we can keep the invariant that all subscribers see the same last value change and
     // thus all subscribers agree on the same final value.
 
@@ -75,7 +75,7 @@ observableSuite.add("edge case", assert => {
 
     // first observer has seen all value changes
     assert.is(["start", "start", "start", "second", "second", "second_x"].eq(log1), true);
-    // the second observer might _not_ have seen all value changes but he sees
+    // the second observer might _not_ have seen all value changes, but he sees
     // at least the last proper value change !!!
     assert.is(["start", "start", "second", "second_x"].eq(log2), true);
 });

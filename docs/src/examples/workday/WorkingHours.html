@@ -99,8 +99,12 @@
     </p>
 
     <script>
+        const checkDisabled   = document.getElementById("checkDisabled");
+        const checkReadOnly   = document.getElementById("checkReadOnly");
+        const checkRequired   = document.getElementById("checkRequired");
+        const checkDarkTheme  = document.getElementById("checkDarkTheme");
         checkDisabled.onclick = _ => checkDisabled.checked
-                                     ? workingHoursInput.setAttribute("disabled", true)                  // one can disable a fieldset
+                                     ? workingHoursInput.setAttribute("disabled", "on")                  // one can disable a fieldset
                                      : workingHoursInput.removeAttribute("disabled");
 
         const inputs = () => workingHoursInput.querySelectorAll("input");

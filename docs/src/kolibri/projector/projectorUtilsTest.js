@@ -1,4 +1,4 @@
-import { TestSuite } from "../../kolibri/util/test.js";
+import { TestSuite } from "../util/test.js";
 
 import { timeStringToMinutes, totalMinutesToTimeString } from "./projectorUtils.js"
 

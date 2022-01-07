@@ -21,25 +21,25 @@ const addToTotal = num => total.setValue( num + total.getValue());
  * @template T
  * @property {Array<String>} messages -
  * @property {Array<Boolean>} results -
- * @property { (testResult: Boolean)     => void } true -
+ * @property { (testResult: Boolean)     => void } isTrue -
  * @property { (actual: T, expected: T)  => void } is   -
  */
 
 /**
  * A newly created Assert object is passed into the {@link test} callback function where it is used to
- * asserts test results against expectations and keep track of the results for later reporting.
+ * assert test results against expectations and keep track of the results for later reporting.
  * Follows GoF "Collecting Parameter Pattern".
  * @return { AssertType }
  * @constructor
  * @impure assembles test results.
  */
 const Assert = () => {
-    const results  = []; // [Bool], true if test passed, false otherwise
-    const messages = [];
+    /** @type Array<Boolean> */ const results  = []; // [Bool], true if test passed, false otherwise
+    /** @type Array<String> */  const messages = [];
     return {
         results,
         messages,
-        true: testResult => {
+        isTrue: testResult => {
             let message = "";
             if (!testResult) {
                 console.error("test failed");
@@ -115,13 +115,13 @@ const asyncTest = (name, asyncCallback) => {
  * @property { function(): void } run:                                - running and reporting the suite
  */
 /**
- * Tests are organised in test suites that contain test functions. Theses functions are added before the suite
+ * Tests are organised in test suites that contain test functions. These functions are added before the suite
  * itself is "run", which in turn executes the tests and reports the results.
  * @param  { String } suiteName
  * @return { TestSuiteType }
  * @constructor
  * @example
- * const suite = TestSuite("mysuite");
+ * const suite = TestSuite("mySuite");
  * suite.add("myName", assert => {
  *     assert.is(true, true);
  *  });
@@ -137,7 +137,7 @@ const TestSuite = suiteName => {
             tests.forEach( test => test(logic) (suiteAssert) );
             addToTotal(suiteAssert.results.length);
             if (suiteAssert.results.every( id )) { // whole suite was ok, report whole suite
-                report(suiteName, suiteAssert.results);
+                report(suiteName, suiteAssert.results, suiteAssert.messages);
             } else { // some test in suite failed, rerun tests for better error indication
                 tests.forEach( testInfo => test( testInfo(name), testInfo(logic) ) )
             }
@@ -146,7 +146,7 @@ const TestSuite = suiteName => {
 }
 
 /**
- * If all test results are ok, report a summary. Otherwise report the individual tests.
+ * If all test results are ok, report a summary. Otherwise, report the individual tests.
  * @param { String }         origin
  * @param { Array<Boolean> } results
  * @param { Array<String> }  messages
