@@ -47,10 +47,12 @@ let counter = 0;
 const projectInput = inputController => {
     const id = FORM_CLASS_NAME + "-id-" + (counter++);
     // create view
-    const [labelElement, inputElement] = dom(`
+    const elements = dom(`
         <label for="${id}"></label>
         <input type="${inputController.getType()}" id="${id}">
     `);
+    /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
+    /** @type {HTMLInputElement} */ const inputElement = elements[1]; // ... we would use array deconstruction
 
     // view and data binding can depend on the type
     if (inputController.getType() === "time") { // "hh:mm" in the vies vs minutes since midnight in the model
@@ -89,12 +91,13 @@ const projectInput = inputController => {
  */
 const projectForm = formController => {
     // create view
-    const [form] = dom(`
+    const elements = dom(`
 		<form>
 			<fieldset class="${FORM_CLASS_NAME}">
 			</fieldset>
 		</form>
     `);
+    /** @type { HTMLFormElement } */ const form = elements[0];
     const fieldset = form.children[0];
 
     formController.forEach(inputController => fieldset.append(...projectInput(inputController)));
@@ -102,12 +105,21 @@ const projectForm = formController => {
     return [form];
 }
 
+/**
+ * CSS snippet to append to the head style when using the form projector.
+ * @type { String }
+ * @example
+ * document.querySelector("head style").textContent += FORM_CSS;
+ */
 const FORM_CSS = `
     fieldset.${FORM_CLASS_NAME} {        
         padding: 2em;
         display: grid;
         grid-template-columns: max-content max-content;
         grid-row-gap:   .5em;
-        grid-column-gap: 2em;        
+        grid-column-gap: 2em;     
+        border-style:    none;
+        box-shadow:      0 4px  8px 0 rgb(0 0 0 / 20%), 
+                         0 6px 20px 0 rgb(0 0 0 / 19%);                          
     }
 `;

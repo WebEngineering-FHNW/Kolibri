@@ -16,7 +16,7 @@ const projectDay = dayController => {
 
     // create layout from a template and put the pieces in through replacement.
     // this is not the most efficient way, but it gives a good overview where things go.
-    const [amDiv, pmDiv] = dom(`
+    const elements = dom(`
         <div>
             <span id="am_start"></span>
             <span class="until">until</span>
@@ -29,6 +29,9 @@ const projectDay = dayController => {
             <span id="pm_end"></span>
         </div>  
     `);
+    /** @type {HTMLDivElement} */ const amDiv = elements[0];
+    /** @type {HTMLDivElement} */ const pmDiv = elements[1];
+
     amDiv.querySelector("#am_start").replaceWith(amStartViewLabel, amStartViewInput);
     amDiv.querySelector("#am_end")  .replaceWith(amEndViewLabel,   amEndViewInput);
     pmDiv.querySelector("#pm_start").replaceWith(pmStartViewLabel, pmStartViewInput);
