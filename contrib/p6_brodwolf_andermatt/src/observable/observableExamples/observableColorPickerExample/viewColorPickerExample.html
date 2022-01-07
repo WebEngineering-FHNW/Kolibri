@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Observable Color Picker</title>
+    <meta name="keywords" content="Lambda Calculus, JavaScript">
+    <meta name="description" content="A Color-Picker example with the Observable in pure function (lambda calculus),">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="miniCSSLib.css">
+</head>
+<body>
+
+<style>
+    body {
+        font-family: Consolas, 'courier new', serif;
+    }
+
+    .padding-large {
+        padding: 20px;
+        background-color: #f1f1f1;
+        overflow: hidden;
+    }
+
+    #resultColor {
+        height: 200px;
+    }
+
+    .unsubLabel {
+        background-color: bisque;
+        cursor: pointer;
+    }
+
+    .slider {
+        -webkit-appearance: none;
+        height: 15px;
+        border-radius: 5px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        cursor: pointer;
+    }
+</style>
+
+<div class="overflow-hidden">
+    <div class="padding-large w-full">
+        <h2>RGB Color-Picker</h2>
+        <br>
+        <div class="row">
+            <div class="col w-50" style="background-color: rgb(0, 0, 0);" id="resultColor">
+            </div>
+
+            <div class="col w-10">&nbsp;</div>
+            <div class="col w-40">
+                <div class="">
+                    <input id="rgbValue" type="text" class="pt-3 pb-3">
+                    <br>
+                    <br>
+                    <div id="hex" class="pt-3 pb-3"></div>
+                    <br>
+                    <div id="hsl" class="pt-3 pb-3"></div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row w-full">
+            <div class="col ">R:</div>
+            <input type="number" id="inputR" value="0" class="col w-10 mx-5">
+            <input type="range" id="rangeR" min="0" max="255" value="0" class="slider col w-80">
+        </div>
+        <br>
+        <div class="row w-full">
+            <div class="col ">G:</div>
+            <input type="number" id="inputG" value="0" class="col w-10 mx-5">
+            <input type="range" id="rangeG" min="0" max="255" value="0" class="slider col w-80">
+        </div>
+        <br>
+        <div class="row w-full">
+            <div class="col ">B:</div>
+            <input type="number" id="inputB" value="0" class="col w-10 mx-5">
+            <input type="range" id="rangeB" min="0" max="255" value="0" class="slider col w-80">
+        </div>
+    </div>
+</div>
+
+<script src="observableColorPickerExample.js" type="module"></script>
+
+</body>
+</html>

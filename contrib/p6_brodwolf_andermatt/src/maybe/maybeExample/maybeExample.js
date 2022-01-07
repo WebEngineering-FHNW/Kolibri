@@ -1,22 +1,20 @@
-import { maybe, maybeElement, maybeDiv, getOrDefault} from "../maybe.js";
-import {id} from "../../lambda-calculus-library/lambda-calculus.js";
+import {maybeDivision, getOrDefault, eitherElementsOrErrorsByFunction, eitherDomElement} from "../maybe.js";
+import {Box, fold, fmap} from "../../box/box.js";
+import {reduce} from "../../stack/stack.js";
+import {convertListMapToArray} from "../../listMap/listMap.js";
 
-const calcDiv = () => {
-    const fstNum = maybe(maybeElement('firstNumInput'))
-                            (() => console.error('firstNumInput doesnt exist'))
-                            (elem => Number(elem.value));
+// Either all the necessary Dom-Element exist or display all missed Element
+eitherElementsOrErrorsByFunction(eitherDomElement)('firstNumInput', 'secondNumInput', 'resultDivision', 'divisionBtn' )
+(err => document.body.innerHTML = Box(err)
+                                   (fmap)(reduce(acc => curr => acc + "<br>" + curr )("<h1>Error</h1>"))
+                                   (fold)(txt => `<div style="background: #ffcccb; padding: 10px; border-radius: 1rem">${txt}</div>`))
+(result => {
 
-    const sndNum = maybe(maybeElement('secondNumInput'))
-                            (() => console.error('secondNumInput doesnt exist'))
-                            (elem => Number(elem.value));
+    const [firstNumInput, secondNumInput, resultDivision, divisionBtn] = convertListMapToArray(result);
 
-    const result = maybe(maybeElement('result'))
-                            (() => console.error('result doesnt exist'))
-                            (id);
+    divisionBtn.onclick = () => {
+        const [fstNum, sndNum] = [firstNumInput, secondNumInput].map(e => Number(e.value))
+        resultDivision.textContent = getOrDefault(maybeDivision(fstNum)(sndNum))("Can't divide by zero")
+    }
 
-    result.innerText = getOrDefault(maybeDiv(fstNum)(sndNum))(0);
-}
-
-maybe(maybeElement('divisionBtn'))
-        (() => console.error('divisionBtn doesnt exist'))
-        (btn => btn.onclick = calcDiv);
+});

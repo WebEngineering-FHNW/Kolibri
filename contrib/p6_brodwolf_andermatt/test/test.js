@@ -1,8 +1,8 @@
-import {convertToJsBool, fst, snd} from "../src/lambda-calculus-library/lambda-calculus.js";
+import {jsBool, fst, snd} from "../src/lambda-calculus-library/lambda-calculus.js";
 import {emptyStack, filter, forEach, push, size} from "../src/stack/stack.js";
-import {jsnum} from '../src/lambda-calculus-library/church-numerals.js';
+import {jsNum} from '../src/lambda-calculus-library/church-numerals.js';
 
-export {TestSuite}
+export {TestSuite, BenchmarkTest}
 
 const Assert = () => {
     let counter = 1;
@@ -12,14 +12,16 @@ const Assert = () => {
         const result = (actual === expected);
         addTest(actual, expected, result);
     };
+    const truthy = actual =>
+        addTest(actual, true, actual);
 
     const churchNumberEquals = (actual, expected) => {
-        const result = (jsnum(actual) === jsnum(expected));
+        const result = (jsNum(actual) === jsNum(expected));
         addTest(actual, expected, result);
     };
 
     const churchBooleanEquals = (actual, expected) => {
-        const result = (convertToJsBool(actual) === convertToJsBool(expected));
+        const result = (jsBool(actual) === jsBool(expected));
         addTest(actual, expected, result);
     };
 
@@ -44,7 +46,6 @@ const Assert = () => {
         }
     };
 
-
     const pairEquals = (actual, expected) => {
         const p1Fst = actual(fst)
         const p1Snd = actual(snd)
@@ -56,13 +57,37 @@ const Assert = () => {
         addTest(actual, expected, result);
     }
 
+    const consoleEquals = consoleType => (methodUnderTest, ...expectedConsoleLogs) => {
+        const originalConsoleLogger = console[consoleType];
+        const logs = [];
+        console[consoleType] = log => logs.push(log.toString());
+        let callback;
+        try {
+            callback = methodUnderTest()
+        } catch (err) {
+            console.error(err);
+        } finally {
+            console[consoleType] = originalConsoleLogger;
+        }
+
+        arrayEquals(logs, expectedConsoleLogs);
+        return callback;
+    }
+
+    const consoleErrorEquals = consoleEquals('error')
+
+    const consoleLogEquals = consoleEquals('log')
+
     return {
         getOk: () => ok,
         equals: equals,
+        true: truthy,
         churchNumberEquals: churchNumberEquals,
         churchBooleanEquals: churchBooleanEquals,
         arrayEquals: arrayEquals,
-        pairEquals: pairEquals
+        pairEquals: pairEquals,
+        consoleErrorEquals: consoleErrorEquals,
+        consoleLogEquals: consoleLogEquals
     }
 };
 
@@ -95,31 +120,31 @@ const renderReport = (name, tests) => {
     let totalFailed = 0;
 
     const iterationF = (element, index) => {
-            const {origin, asserts} = element;
+        const {origin, asserts} = element;
 
-            const sizeOfAsserts = jsnum(size(asserts));
-            totalTests += sizeOfAsserts;
+        const sizeOfAsserts = jsNum(size(asserts));
+        totalTests += sizeOfAsserts;
 
-            const failed = filter(asserts)(testResult => !testResult.result);
-            const churchSizeOfFailed = size(failed);
-            const sizeOfFailed = jsnum(churchSizeOfFailed);
+        const failed = filter(testResult => !testResult.result)(asserts);
+        const churchSizeOfFailed = size(failed);
+        const sizeOfFailed = jsNum(churchSizeOfFailed);
 
-            const passed = sizeOfAsserts - sizeOfFailed;
+        const passed = sizeOfAsserts - sizeOfFailed;
 
-            totalPassed += passed;
-            totalFailed += sizeOfFailed;
+        totalPassed += passed;
+        totalFailed += sizeOfFailed;
 
-            let failMessage = "";
-            let passedLine = ` <span>${passed} / ${sizeOfAsserts}   </span>`;
+        let failMessage = "";
+        let passedLine = ` <span>${passed} / ${sizeOfAsserts}   </span>`;
 
-            const failedFunc = (element, index) => {
-                const {actual, expected, result, counter} = element;
-                failMessage += `<pre ><span class="dot red"></span> <b>Test Nr. ${counter}  failed!</b> <br>    Actual:   <b>${actual}</b> <br>    Expected: <b>${expected} </b></pre>`;
-            };
+        const failedFunc = (element, index) => {
+            const {actual, expected, result, counter} = element;
+            failMessage += `<pre ><span class="dot red"></span> <b>Test Nr. ${counter}  failed!</b> <br>    Actual:   <b>${actual}</b> <br>    Expected: <b>${expected} </b></pre>`;
+        };
 
-            forEach(failed)(failedFunc);
+        forEach(failed)(failedFunc);
 
-            outputHtml += `
+        outputHtml += `
             <tr>
                 <td> 
                     <span class="dot ${passed === sizeOfAsserts ? 'green' : 'red'}"></span>${origin} 
@@ -130,25 +155,25 @@ const renderReport = (name, tests) => {
             </tr>    
         `;
 
-            if (sizeOfFailed > 0) {
-                outputHtml += `
+        if (sizeOfFailed > 0) {
+            outputHtml += `
             <tr>
                 <td> 
                    <div class="failMessage">${failMessage} </div> 
                 </td>
             </tr>    
         `;
-            }
+        }
     };
 
     forEach(tests)(iterationF);
 
-    document.getElementById("totalTests").innerText = totalTests;
+    document.getElementById("totalTests").textContent = totalTests;
 
     const output = document.getElementById("output");
     output.insertAdjacentHTML("beforeend",
         `<fieldset style="border-color: ${totalFailed > 0 ? 'red' : 'green'}">
-                    <legend>${name}</legend>
+                    <legend><h3>${name}</h3></legend>
                         <table style="width: fit-content"> 
                             <tr>
                                 <th>Function</th>
@@ -162,3 +187,19 @@ const renderReport = (name, tests) => {
                 </fieldset>`
     );
 };
+
+const BenchmarkTest = mutName => methodUnderTest => {
+    const t0 = performance.now(); // Timer start
+
+    const result = methodUnderTest();
+
+    const t1 = performance.now(); // Timer stop
+
+    const milliseconds = t1 - t0;
+    const timeCondition = milliseconds >= 600;
+    const time = timeCondition ? milliseconds / 1000 : milliseconds;
+
+    console.log(`Call Method ${mutName} took ${time.toFixed(2)} ${timeCondition ? 'seconds' : 'milliseconds'}.`);
+
+    return result;
+}

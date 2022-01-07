@@ -1,9 +1,9 @@
 import { TestSuite } from "../test.js";
 import { calc, calculatorHandler, result, plus, subtraction, multiplication, add, multi, sub, pow, div, churchAdd, churchMulti, churchSub, churchPow} from "../../src/calculator/calculator.js";
-import {n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, jsnum, churchAddition, churchSubtraction, churchMultiplication} from "../../src/lambda-calculus-library/church-numerals.js";
+import {n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, jsNum, churchAddition, churchSubtraction, churchMultiplication} from "../../src/lambda-calculus-library/church-numerals.js";
 
 
-const calculatorOperatorTest = TestSuite("Calculator-Handler ");
+const calculatorOperatorTest = TestSuite("λ Calculation");
 
 calculatorOperatorTest.add("JS-Arithmetic-Operator", assert => {
     assert.equals( calculatorHandler(plus)(1)(2)(result), 3);
@@ -117,18 +117,18 @@ calculatorChurchNumeralsTest.add("churchPow", assert => {
 
 calculatorChurchNumeralsTest.add("church Calculation", assert => {
 
-    assert.equals( jsnum( calc(n2)(churchAdd)(n3)(churchMulti)(n2)(churchPow)(n2)(churchSub)(n1)(result)), 99 );
-    assert.equals( jsnum( calc(n5)(churchMulti)(n4)(churchSub)(n4)(churchAdd)(n9)(result)   ), 25 );
-    assert.equals( jsnum( calc(n5)(churchMulti)(n9)(churchAdd)(n4)(churchSub)(n7)(result)   ), 42 );
+    assert.equals( jsNum( calc(n2)(churchAdd)(n3)(churchMulti)(n2)(churchPow)(n2)(churchSub)(n1)(result)), 99 );
+    assert.equals( jsNum( calc(n5)(churchMulti)(n4)(churchSub)(n4)(churchAdd)(n9)(result)   ), 25 );
+    assert.equals( jsNum( calc(n5)(churchMulti)(n9)(churchAdd)(n4)(churchSub)(n7)(result)   ), 42 );
     assert.equals( calc(n5)(churchSub)(n5)(churchMulti)(n3)(churchAdd)(n1)(result)        , n1 );
-    assert.equals( jsnum(  calc(n5)(churchPow)(n5)(churchSub)(n9)(churchAdd)(  calc(n6)(churchMulti)(n7)(churchAdd)(n8)(result)  )( result) ), 3166   );
-    assert.equals(  jsnum( calc(n3)(churchPow)(n4)(churchAdd)(n9)(churchAdd)(n2)(churchMulti)(n5)(result) ), 460  );
+    assert.equals( jsNum(  calc(n5)(churchPow)(n5)(churchSub)(n9)(churchAdd)(  calc(n6)(churchMulti)(n7)(churchAdd)(n8)(result)  )( result) ), 3166   );
+    assert.equals(  jsNum( calc(n3)(churchPow)(n4)(churchAdd)(n9)(churchAdd)(n2)(churchMulti)(n5)(result) ), 460  );
 
     const testCalc1 = calc( calc(n5)(churchPow)(n2)(result) )(churchMulti)(n4)(result); // 100
     const testCalc2 = calc(n3)(churchPow)(n4)(churchAdd)(n9)(churchAdd)(n2)(churchAdd)(n8)(result); // 100
 
-    assert.equals(  jsnum( testCalc1), 100 );
-    assert.equals(  jsnum( testCalc2 ), 100  );
+    assert.equals(  jsNum( testCalc1), 100 );
+    assert.equals(  jsNum( testCalc2 ), 100  );
 
     assert.churchNumberEquals( testCalc1 , testCalc2  );
 });

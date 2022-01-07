@@ -1,13 +1,6 @@
-export {
-    calc, calculatorHandler, result, plus, subtraction, multiplication, add, multi, sub, pow, div, churchAdd, churchMulti, churchSub, churchPow
-}
-
-import { n0, n1, n2, n3, n4, n5, n6, n7, n8, n9,
-    succ, pred, phi, churchAddition, churchSubtraction,
-    churchMultiplication, churchPotency, is0, jsnum, eq, leq, gt
-} from '../lambda-calculus-library/church-numerals.js'
-
-import {id, T, B, C} from '../lambda-calculus-library/lambda-calculus.js'
+import { churchAddition, churchSubtraction, churchMultiplication, churchPotency } from '../lambda-calculus-library/church-numerals.js'
+import {id, T} from '../lambda-calculus-library/lambda-calculus.js'
+export {calc, calculatorHandler, result, plus, subtraction, multiplication, add, multi, sub, pow, div, churchAdd, churchMulti, churchSub, churchPow}
 
 /**
  * Generic Types
@@ -16,9 +9,7 @@ import {id, T, B, C} from '../lambda-calculus-library/lambda-calculus.js'
  * @typedef {number} jsNumber
  * @typedef {function} fn
  * @typedef {function} churchBoolean
- * @typedef {(function)} churchNumber
- * @typedef {(churchNumber|jsNumber)} jsChurchNumber
-
+ * @typedef {function} churchNumber
  */
 
 /** -----------------------------------------------------
@@ -29,7 +20,7 @@ import {id, T, B, C} from '../lambda-calculus-library/lambda-calculus.js'
 /**
  * operator -> jsChurchNumber -> jsChurchNumber -> fn -> fn( operator(jsChurchNumber)(jsChurchNumber) ) ; CalculatorOperator - handle the arithmetic-operator
  * @param {operator} op
- * @return { function(n:{jsChurchNumber}): function(k:{jsChurchNumber}): function(f:{fn}) : function} JS- or Chruch-Arithmetic-Operation
+ * @return { function(n:churchNumber|number): function(k:churchNumber|number): function(f:function) : function} JS- or Chruch-Arithmetic-Operation
  */
 const calculatorHandler = op => n => k => f => f(op(n)(k));
 
@@ -38,20 +29,20 @@ const calculatorHandler = op => n => k => f => f(op(n)(k));
  * @example
  * calc(n1)(add)(n2)(result) ==> n3
  *
- * @param {jsChurchNumber} number
+ * @param {churchNumber|number} number
  * @returns {operator} Operator
  */
 const calc = T;
 
 /**
- * result ; end the Calculator
+ * result ; end the Calculator and return the result
  * @example
  * calc(n1)(add)(n2)(result) ==> n3
  *
- * @type {function(a): I.props|*}
  * @return {churchNumber|number} ChurchNumber / JsNumber
  */
 const result = id;
+
 
 /** ----------------------------------------------------
  * -------------  Calculation with JS-Numbers ----------

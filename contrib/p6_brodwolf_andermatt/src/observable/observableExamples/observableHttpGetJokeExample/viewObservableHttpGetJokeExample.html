@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Observable Jokes</title>
+    <meta name="description" content="A Joke example with the Observable in pure function (lambda calculus), with async HttpGet and Box-Tool">
+    <meta name="keywords" content="Lambda Calculus, JavaScript, Joke, Observable, Http, Box">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+</head>
+<style>
+    body {
+        background-color: lightgrey;
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    button {
+        cursor: pointer;
+        padding: 5px;
+        margin: 5px;
+    }
+    button:focus {outline:0;}
+    .buttons {
+        background-color: #A0F6F6;
+        padding: 1rem;
+        border-width: 1px;
+        border-radius: 1rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05);
+    }
+    .buttonsRow {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    #jokeHistory {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        align-content: center;
+    }
+    legend, button {
+        background-color: white;
+        padding: 5px 10px;
+        border-radius: 1rem;
+        font-weight: 800;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+        0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+    fieldset {
+        border: 1px solid #7a7e7e;
+        border-radius: 1rem;
+        background-color: rgba(255, 255, 255, .7);
+        margin-top: 5px;
+    }
+    fieldset:first-child {
+        background-color: #fff;
+        box-shadow: 0 0 20px 8px #fff, 0 0 10px 10px #0ff;
+    }
+    p {
+        margin: 0;
+    }
+    h3{
+        margin: 5px;
+    }
+</style>
+<body>
+<div class="buttons">
+    <h3>Wanna get a joke? Click a Button</h3>
+    <p style="font-size: small; font-style: italic; color: #7a7e7e; padding-bottom: 10px;">We take no responsibility for the content of the generated Jokes.</p>
+    <div class="buttonsRow">
+        <button id="norrisBtn">Chuck Norris Joke</button>
+        <button id="nerdyBtn">Nerd Joke</button>
+        <button id="trumpBtn">Trump Tweet</button>
+    </div>
+</div>
+
+<div id="jokeHistory"></div>
+
+<script src="observableHttpGetJokeExample.js" type="module"></script>
+</body>
+</html>
