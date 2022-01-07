@@ -40,9 +40,9 @@ const id = x => x;
  * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
  * @haskell  a -> b -> a
  * @pure
- * @type     { (x:a) => () => a}
- * @param    {a} x
- * @returns  { () => a } - a function that ignores its argument and returns the parameter x unchanged.
+ * @type     { (x:a) => (...b) => a}
+ * @param    { a } x
+ * @returns  { (...b) => a } - a function that ignores its argument and returns the parameter x unchanged.
  * @example
  * c(1)(undefined) === 1;
  * const getExpr = c(expr);
@@ -57,8 +57,8 @@ const c = x => () => x;
  * It can be seen as a cached getter for the id function: {@link c}({@link id})
  * @haskell  b -> a -> a
  * @pure
- * @type     { (x:?b) => (y:a) => a}
- * @param    { ?b } _ - the parameter is ignored
+ * @type     { (...b) => (y:a) => a}
+ * @param    { ...b } _     - zero or one or many parameters are ignored
  * @returns  { (y:a) => a } - a function that returns its argument {@link a}
  * @example
  * snd(undefined)(1) === 1;

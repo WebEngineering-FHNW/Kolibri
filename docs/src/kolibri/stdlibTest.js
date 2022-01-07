@@ -27,7 +27,7 @@ stdlibSuite.add("fst", assert => {
 
 stdlibSuite.add("snd", assert => {
     assert.is(snd(undefined)(1), 1);
-    assert.is(snd()(1),          1); // this produces a jsdoc IDE warning that we cannot avoid. But it works.
+    assert.is(snd()(1),          1);
 });
 
 stdlibSuite.add("tuple3", assert => {
