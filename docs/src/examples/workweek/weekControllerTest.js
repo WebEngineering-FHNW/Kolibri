@@ -16,7 +16,7 @@ weekControllerSuite.add("initial", assert => {
     const dayController = DayController();
     controller.addDayController(dayController);
     assert.is(total, 2 * 8 * 60);
-    dayController.setAmStart(8 * 60 + 1);  // changing the day values
+    dayController.amStartCtrl.setValue(8 * 60 + 1);  // changing the day values
     assert.is(total, 2 * 8 * 60 -1);       // changes the total
 
 });

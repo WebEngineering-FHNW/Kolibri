@@ -4,12 +4,8 @@ import "./util/array.js"
 export {Observable, ObservableList}
 
 /**
- * @template T - the generic value type for an {@link IObservable<T>}.
- * @typedef {*} T - the generic value type is unconstrained.
- */
-
-/**
- * @callback onValueChangeCallback
+ * @callback onValueChangeCallback<T>
+ * @template T
  * @impure   this callback usually modifies the MVC view
  * @param {T} newValue   - the new value that is set by the change
  * @param {T} [oldValue] - the old value before the change. Can optionally be used by the callback.
@@ -26,7 +22,7 @@ export {Observable, ObservableList}
  * @impure   Observables change their inner state (value) and maintain a list of observers that changes over time.    
  * @property { ()  => T }   getValue - a function that returns the current value
  * @property { (T) => void} setValue - a function that sets a new value, calling all registered {@link onValueChangeCallback}s
- * @property { (onValueChangeCallback) => void } onChange -
+ * @property { (callback: onValueChangeCallback<T>) => void } onChange -
  *              a function that registers an {@link onValueChangeCallback} that will be called whenever the value changes.
  *              Immediately called back on registration.
  */
@@ -34,6 +30,7 @@ export {Observable, ObservableList}
 /**
  * Constructor for an IObservable<T>.
  * @pure
+ * @template T
  * @param {!T} value      - the initial value to set. Mandatory.
  * @returns IObservable<T>
  * @constructor

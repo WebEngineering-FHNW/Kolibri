@@ -5,6 +5,11 @@ import { projectDay }                from "../workday/simpleDayProjector.js";
 
 export { projectDayWithTotal, projectWeek }
 
+/**
+ * Create all the views and bindings for a week including a final row for the total.
+ * @param  { !WeekControllerType } weekController
+ * @return { Array<HTMLDivElement> }
+ */
 const projectWeek = weekController => {
     const allWeekElements = [];
     ["Mon", "Tue", "Wed", "Thu", "Fri"].forEach( day => {
@@ -26,6 +31,13 @@ const projectWeek = weekController => {
     return allWeekElements;
 }
 
+/**
+ * Create the views and bindings for a day within a week with a weekday indicator in the front and
+ * a total daily work time at the end.
+ * @param  { !DayControllerType } dayController
+ * @param  { !String } weekDay - string for the day of the week, must be unique within a week
+ * @return {[HTMLDivElement,HTMLDivElement,HTMLDivElement,HTMLDivElement]} - four DIVs for weekday, am, pm, and total
+ */
 const projectDayWithTotal = (dayController, weekDay) => {
 
     const [amDiv, pmDiv]   = projectDay(dayController);

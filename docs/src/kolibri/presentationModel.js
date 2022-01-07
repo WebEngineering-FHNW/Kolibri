@@ -11,11 +11,6 @@ export { Attribute, QualifiedAttribute,
          VALID, VALUE, EDITABLE, LABEL, NAME, TYPE }
 
 /**
- * @template T
- * @typedef {*} T - unconstrained generic type
- */
-
-/**
  * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'} ObservableTypeString
  * Feel free to extend this type with new unique type strings as needed for your application.
  */
@@ -29,7 +24,7 @@ export { Attribute, QualifiedAttribute,
 
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
- * @param { AttributeType } attribute
+ * @param { AttributeType<T> } attribute
  * @return T
  */
 const valueOf = attribute => attribute.getObs(VALUE).getValue();
@@ -155,15 +150,17 @@ const readQualifierValue = modelWorld.readQualifierValue; // specific export
 const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier), qualifier);
 
 /**
- * @callback Converter
- * @param  {*} value - the raw value that is to be converted
- * @return { T }     - the converted value
+ * @callback Converter<T>
+ * @template T
+ * @param    {*} value - the raw value that is to be converted
+ * @return   { T }     - the converted value
  * @example
  * dateAttribute.setConverter( date => date.toISOString() ); // external: Date, internal: String
  */
 
 /**
- * @callback Validator
+ * @callback Validator<T>
+ * @template T
  * @param    { T } value
  * @return   { Boolean } - whether the given value is considered valid.
  * @example
@@ -171,7 +168,8 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  */
 
 /**
- * @typedef { Object } AttributeType
+ * @typedef { Object } AttributeType<T>
+ * @template T
  * @property { (name:ObservableTypeString, initValue:T=null) => Observable<T>} getObs - returns the {@link Observable}
  *              for the given name and creates a new one if needed with the optional initValue.
  * @property { (name:ObservableTypeString) =>  Boolean } hasObs - true if an {@link Observable}
@@ -195,7 +193,7 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  * @param  { String } [qualifier]   - the optional qualifier. If provided and non-nullish it will put the attribute
  *          in the ModelWorld and all existing attributes with the same qualifier will be updated to the initial value.
  *          In case that the automatic update is to be omitted, consider using {@link QualifiedAttribute}.
- * @return { AttributeType }
+ * @return { AttributeType<T> }
  * @constructor
  * @impure since it changes the ModelWorld in case of a given non-nullish qualifier.
  * @example

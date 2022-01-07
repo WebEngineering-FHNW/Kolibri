@@ -3,17 +3,19 @@ import { projectInput} from "../../kolibri/projector/simpleForm/simpleFormProjec
 
 export { projectDay }
 
+/**
+ * Creating views and bindings for a day from projecting simple inputs.
+ * @param  { DayControllerType } dayController
+ * @return {[HTMLDivElement, HTMLDivElement]} - array of div elements for am and pm
+ */
 const projectDay = dayController => {
-    const [amStartCtrl, amEndCtrl, pmStartCtrl, pmEndCtrl] = dayController.timeController;
-    const [amStartViewLabel ,amStartViewInput] =  projectInput(amStartCtrl);
-    const [amEndViewLabel   ,amEndViewInput  ] =  projectInput(amEndCtrl);
-    const [pmStartViewLabel ,pmStartViewInput] =  projectInput(pmStartCtrl);
-    const [pmEndViewLabel   ,pmEndViewInput  ] =  projectInput(pmEndCtrl);
+    const [amStartViewLabel ,amStartViewInput] =  projectInput(dayController.amStartCtrl);
+    const [amEndViewLabel   ,amEndViewInput  ] =  projectInput(dayController.amEndCtrl);
+    const [pmStartViewLabel ,pmStartViewInput] =  projectInput(dayController.pmStartCtrl);
+    const [pmEndViewLabel   ,pmEndViewInput  ] =  projectInput(dayController.pmEndCtrl);
 
-    amStartViewInput.setAttribute("min","04:00");
-    pmEndViewInput  .setAttribute("max","22:00");
-
-    // create layout and put the pieces in
+    // create layout from a template and put the pieces in through replacement.
+    // this is not the most efficient way, but it gives a good overview where things go.
     const [amDiv, pmDiv] = dom(`
         <div>
             <span id="am_start"></span>

@@ -4,16 +4,17 @@ import {LABEL, NAME, TYPE, VALID, VALUE} from "../../presentationModel.js";
 export { SimpleInputController }
 
 /**
- * @typedef { object } SimpleInputControllerType
+ * @typedef { object } SimpleInputControllerType<T>
  * @template T
- * @property { ()  => T }           getValue
- * @property { (T) => void }        setValue
- * @property { ()  => String}       getType
- * @property { (Boolean) => void }  setValid
- * @property { (onValueChangeCallback) => void } onLabelChanged
- * @property { (onValueChangeCallback) => void } onValidChanged
- * @property { (onValueChangeCallback) => void } onValueChanged
- * @property { (onValueChangeCallback) => void } onNameChanged
+ * @property { ()  => T }                   getValue
+ * @property { (T) => void }                setValue
+ * @property { ()  => String}               getType
+ * @property { (valid: !Boolean) => void }  setValid
+ * @property { (converter: Converter<T>)                  => void } setConverter
+ * @property { (callback: onValueChangeCallback<String>) => void }  onLabelChanged
+ * @property { (callback: onValueChangeCallback<Boolean>) => void } onValidChanged
+ * @property { (callback: onValueChangeCallback<T>)       => void } onValueChanged
+ * @property { (callback: onValueChangeCallback<String>)  => void } onNameChanged
  */
 
 /**
@@ -24,7 +25,7 @@ export { SimpleInputController }
  * @constructor
  * @template T
  * @param  { InputAttributes } args
- * @return { SimpleInputControllerType }
+ * @return { SimpleInputControllerType<T> }
  * @example
  *     const controller = SimpleInputController({
          value:  "Dierk",
@@ -44,5 +45,6 @@ const SimpleInputController = args => {
         onValidChanged: singleAttr.getObs(VALID).onChange,
         onLabelChanged: singleAttr.getObs(LABEL).onChange,
         onNameChanged:  singleAttr.getObs(NAME) .onChange,
+        setConverter:   singleAttr.setConverter,
     };
 }

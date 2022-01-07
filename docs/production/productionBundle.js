@@ -629,12 +629,8 @@ const Scheduler = () => {
         addOk: task => add( ok => { task(); ok(); }) // convenience
     }
 };/**
- * @template T - the generic value type for an {@link IObservable<T>}.
- * @typedef {*} T - the generic value type is unconstrained.
- */
-
-/**
- * @callback onValueChangeCallback
+ * @callback onValueChangeCallback<T>
+ * @template T
  * @impure   this callback usually modifies the MVC view
  * @param {T} newValue   - the new value that is set by the change
  * @param {T} [oldValue] - the old value before the change. Can optionally be used by the callback.
@@ -651,7 +647,7 @@ const Scheduler = () => {
  * @impure   Observables change their inner state (value) and maintain a list of observers that changes over time.    
  * @property { ()  => T }   getValue - a function that returns the current value
  * @property { (T) => void} setValue - a function that sets a new value, calling all registered {@link onValueChangeCallback}s
- * @property { (onValueChangeCallback) => void } onChange -
+ * @property { (callback: onValueChangeCallback<T>) => void } onChange -
  *              a function that registers an {@link onValueChangeCallback} that will be called whenever the value changes.
  *              Immediately called back on registration.
  */
@@ -659,6 +655,7 @@ const Scheduler = () => {
 /**
  * Constructor for an IObservable<T>.
  * @pure
+ * @template T
  * @param {!T} value      - the initial value to set. Mandatory.
  * @returns IObservable<T>
  * @constructor
@@ -758,11 +755,6 @@ const ObservableList = list => {
  */
 
 /**
- * @template T
- * @typedef {*} T - unconstrained generic type
- */
-
-/**
  * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'} ObservableTypeString
  * Feel free to extend this type with new unique type strings as needed for your application.
  */
@@ -776,7 +768,7 @@ const ObservableList = list => {
 
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
- * @param { AttributeType } attribute
+ * @param { AttributeType<T> } attribute
  * @return T
  */
 const valueOf = attribute => attribute.getObs(VALUE).getValue();
@@ -902,15 +894,17 @@ const readQualifierValue = modelWorld.readQualifierValue; // specific export
 const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier), qualifier);
 
 /**
- * @callback Converter
- * @param  {*} value - the raw value that is to be converted
- * @return { T }     - the converted value
+ * @callback Converter<T>
+ * @template T
+ * @param    {*} value - the raw value that is to be converted
+ * @return   { T }     - the converted value
  * @example
  * dateAttribute.setConverter( date => date.toISOString() ); // external: Date, internal: String
  */
 
 /**
- * @callback Validator
+ * @callback Validator<T>
+ * @template T
  * @param    { T } value
  * @return   { Boolean } - whether the given value is considered valid.
  * @example
@@ -918,7 +912,8 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  */
 
 /**
- * @typedef { Object } AttributeType
+ * @typedef { Object } AttributeType<T>
+ * @template T
  * @property { (name:ObservableTypeString, initValue:T=null) => Observable<T>} getObs - returns the {@link Observable}
  *              for the given name and creates a new one if needed with the optional initValue.
  * @property { (name:ObservableTypeString) =>  Boolean } hasObs - true if an {@link Observable}
@@ -942,7 +937,7 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  * @param  { String } [qualifier]   - the optional qualifier. If provided and non-nullish it will put the attribute
  *          in the ModelWorld and all existing attributes with the same qualifier will be updated to the initial value.
  *          In case that the automatic update is to be omitted, consider using {@link QualifiedAttribute}.
- * @return { AttributeType }
+ * @return { AttributeType<T> }
  * @constructor
  * @impure since it changes the ModelWorld in case of a given non-nullish qualifier.
  * @example
@@ -993,9 +988,9 @@ const Attribute = (value, qualifier) => {
     };
 
     return { getObs, hasObs, setValidator, setConverter, setConvertedValue, getQualifier, setQualifier }
-};const release     = "0.1.37";
+};const release     = "0.1.38";
 
-const dateStamp   = "2022-01-06 T 18:57:28 MEZ";
+const dateStamp   = "2022-01-07 T 20:17:27 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
@@ -1067,16 +1062,17 @@ const SimpleInputModel = ({value, label, name, type="text"}) => {
 
     return singleAttr;
 };/**
- * @typedef { object } SimpleInputControllerType
+ * @typedef { object } SimpleInputControllerType<T>
  * @template T
- * @property { ()  => T }           getValue
- * @property { (T) => void }        setValue
- * @property { ()  => String}       getType
- * @property { (Boolean) => void }  setValid
- * @property { (onValueChangeCallback) => void } onLabelChanged
- * @property { (onValueChangeCallback) => void } onValidChanged
- * @property { (onValueChangeCallback) => void } onValueChanged
- * @property { (onValueChangeCallback) => void } onNameChanged
+ * @property { ()  => T }                   getValue
+ * @property { (T) => void }                setValue
+ * @property { ()  => String}               getType
+ * @property { (valid: !Boolean) => void }  setValid
+ * @property { (converter: Converter<T>)                  => void } setConverter
+ * @property { (callback: onValueChangeCallback<String>) => void }  onLabelChanged
+ * @property { (callback: onValueChangeCallback<Boolean>) => void } onValidChanged
+ * @property { (callback: onValueChangeCallback<T>)       => void } onValueChanged
+ * @property { (callback: onValueChangeCallback<String>)  => void } onNameChanged
  */
 
 /**
@@ -1087,7 +1083,7 @@ const SimpleInputModel = ({value, label, name, type="text"}) => {
  * @constructor
  * @template T
  * @param  { InputAttributes } args
- * @return { SimpleInputControllerType }
+ * @return { SimpleInputControllerType<T> }
  * @example
  *     const controller = SimpleInputController({
          value:  "Dierk",
@@ -1107,6 +1103,7 @@ const SimpleInputController = args => {
         onValidChanged: singleAttr.getObs(VALID).onChange,
         onLabelChanged: singleAttr.getObs(LABEL).onChange,
         onNameChanged:  singleAttr.getObs(NAME) .onChange,
+        setConverter:   singleAttr.setConverter,
     };
 };/**
  * @module projector/simpleForm/simpleFormProjector
@@ -1133,7 +1130,7 @@ const FORM_CLASS_NAME = "kolibri-simpleForm";
 /**
  * Internal mutable singleton state to produce unique id values for the label-input pairs.
  * @private
- * @type {number}
+ * @type { Number }
  */
 let counter = 0;
 
@@ -1141,9 +1138,10 @@ let counter = 0;
  * Projection function that creates a view for input purposes, binds the information that is available through
  * the inputController, and returns the generated views.
  * @constructor
+ * @template T
  * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
- * @param  { !SimpleInputControllerType } inputController
- * @return { Array<Element> }
+ * @param  { !SimpleInputControllerType<T> }  inputController
+ * @return { [HTMLLabelElement, HTMLInputElement] } - array of label element and input element
  * @example
  * const [labelElement, inputElement] = projectInput(controller);
  */
@@ -1181,12 +1179,12 @@ const projectInput = inputController => {
 /**
  * Projection function that creates a form view for input purposes with as many inputs as the formController
  * contains inputControllers, binds the information and returns the generated form view in an array.
- * Even though not strictly necessary, the return value is an array for the sake of consistency amoung
+ * Even though not strictly necessary, the return value is an array for the sake of consistency among
  * all view-generating functions.
  * @constructor
  * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
  * @param  { !SimpleFormControllerType } formController
- * @return { Array<Element> }
+ * @return { [HTMLFormElement] } - singleton array with form element
  * @example
  * const [form] = projectForm(controller);
  */

@@ -29,7 +29,7 @@ const FORM_CLASS_NAME = "kolibri-simpleForm";
 /**
  * Internal mutable singleton state to produce unique id values for the label-input pairs.
  * @private
- * @type {number}
+ * @type { Number }
  */
 let counter = 0;
 
@@ -37,9 +37,10 @@ let counter = 0;
  * Projection function that creates a view for input purposes, binds the information that is available through
  * the inputController, and returns the generated views.
  * @constructor
+ * @template T
  * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
- * @param  { !SimpleInputControllerType } inputController
- * @return { Array<Element> }
+ * @param  { !SimpleInputControllerType<T> }  inputController
+ * @return { [HTMLLabelElement, HTMLInputElement] } - array of label element and input element
  * @example
  * const [labelElement, inputElement] = projectInput(controller);
  */
@@ -77,12 +78,12 @@ const projectInput = inputController => {
 /**
  * Projection function that creates a form view for input purposes with as many inputs as the formController
  * contains inputControllers, binds the information and returns the generated form view in an array.
- * Even though not strictly necessary, the return value is an array for the sake of consistency amoung
+ * Even though not strictly necessary, the return value is an array for the sake of consistency among
  * all view-generating functions.
  * @constructor
  * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
  * @param  { !SimpleFormControllerType } formController
- * @return { Array<Element> }
+ * @return { [HTMLFormElement] } - singleton array with form element
  * @example
  * const [form] = projectForm(controller);
  */
