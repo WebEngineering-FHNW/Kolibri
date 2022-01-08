@@ -6,6 +6,7 @@ const root = document.querySelector("#out");
 
 const dimensions = "width: 40px; height:40px;";
 const stanza = ( colorName, color, cssName) => dom (`
+<!--suppress CssUnresolvedCustomProperty -->
     <p>${colorName}</p>    
     <p>${cssName}</p>
     <div style="${dimensions} background: ${color};"></div>

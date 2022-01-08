@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import { TestSuite }     from "../../kolibri/util/test.js";
 import { DayController } from "./dayController.js";
 

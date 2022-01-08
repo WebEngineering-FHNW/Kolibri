@@ -7,9 +7,9 @@ export {Observable, ObservableList}
  * @callback onValueChangeCallback<T>
  * @template T
  * @impure   this callback usually modifies the MVC view
- * @param {T} newValue   - the new value that is set by the change
- * @param {T} [oldValue] - the old value before the change. Can optionally be used by the callback.
- * @return void
+ * @param    {T} newValue   - the new value that is set by the change
+ * @param    {T} [oldValue] - the old value before the change. Can optionally be used by the callback.
+ * @return   void
  */
 
 /**
@@ -19,6 +19,7 @@ export {Observable, ObservableList}
  * IObservables are intended to be used with the concept of "stable binding", i.e. with
  * listeners that do not change after setup.
  * @typedef IObservable<T>
+ * @template T
  * @impure   Observables change their inner state (value) and maintain a list of observers that changes over time.    
  * @property { ()  => T }   getValue - a function that returns the current value
  * @property { (T) => void} setValue - a function that sets a new value, calling all registered {@link onValueChangeCallback}s
@@ -31,8 +32,8 @@ export {Observable, ObservableList}
  * Constructor for an IObservable<T>.
  * @pure
  * @template T
- * @param {!T} value      - the initial value to set. Mandatory.
- * @returns IObservable<T>
+ * @param    {!T} value      - the initial value to set. Mandatory.
+ * @returns  IObservable<T>
  * @constructor
  * @example
  * const obs = Observable("");
@@ -107,6 +108,7 @@ const ObservableList = list => {
     const delListeners = [];
     const removeAddListener    = addListener => addListeners.removeItem(addListener);
     const removeDeleteListener = delListener => delListeners.removeItem(delListener);
+    // noinspection JSUnusedGlobalSymbols
     return {
         onAdd: listener => addListeners.push(listener),
         onDel: listener => delListeners.push(listener),

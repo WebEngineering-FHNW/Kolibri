@@ -1,3 +1,5 @@
+// noinspection JSCheckFunctionSignatures,PointlessArithmeticExpressionJS
+
 import {TestSuite} from "./test.js";
 import "./array.js";
 

@@ -12,11 +12,11 @@ export { DayController }
  * to show the canonical structure of controllers that encapsulate a presentation model.
  * @private
  * @pure
- * @return {{total: AttributeType<Number>}} - an object that contains the total
+ * @return {{total: AttributeType<Number>}} - an object that contains the total working minutes for this day
  * @constructor
  */
 const DayModel = () => {
-    const total = Attribute(0); // total minutes in this day
+    /** @type AttributeType<Number> */ const total = Attribute(0); // total minutes in this day
     return { total };
 };
 
@@ -27,9 +27,8 @@ const DayModel = () => {
  * @property { SimpleInputControllerType<Number> }  pmStartCtrl
  * @property { SimpleInputControllerType<Number> }  pmEndCtrl
  * @property { () => Number }                       getTotal        - the total minutes in this day, derived
- * @property { (callback: onValueChangeCallback<Number>) => void } onTotalChanged - when total changes
+ * @property { (callback: !onValueChangeCallback<Number>) => void } onTotalChanged - when total changes
  */
-
 /**
  * Creating a day controller made from four simple input controllers for the four time values (as numbers
  * meaning minutes since midnight).
@@ -43,10 +42,11 @@ const DayModel = () => {
  */
 const DayController = () => {
     // value is minutes since midnight as Number
-    const amStartCtrl = SimpleInputController({value: 8 * 60 ,label: "AM Start", name: "am_start", type: "time" });
-    const amEndCtrl   = SimpleInputController({value:12 * 60 ,label: "AM End"  , name: "am_end"  , type: "time" });
-    const pmStartCtrl = SimpleInputController({value:13 * 60 ,label: "PM Start", name: "pm_start", type: "time" });
-    const pmEndCtrl   = SimpleInputController({value:17 * 60 ,label: "PM End"  , name: "pm_end"  , type: "time" });
+    /** @type SimpleInputControllerType<Number> */ const amStartCtrl = SimpleInputController({value: 8 * 60 ,label: "AM Start", name: "am_start", type: "time" });
+    /** @type SimpleInputControllerType<Number> */ const amEndCtrl   = SimpleInputController({value:12 * 60 ,label: "AM End"  , name: "am_end"  , type: "time" });
+    /** @type SimpleInputControllerType<Number> */ const pmStartCtrl = SimpleInputController({value:13 * 60 ,label: "PM Start", name: "pm_start", type: "time" });
+    /** @type SimpleInputControllerType<Number> */ const pmEndCtrl   = SimpleInputController({value:17 * 60 ,label: "PM End"  , name: "pm_end"  , type: "time" });
+
     const timeControllers = [amStartCtrl, amEndCtrl, pmStartCtrl, pmEndCtrl];
 
     timeControllers.forEach(ctrl => ctrl.setConverter(minMaxValuesConverter));
@@ -73,6 +73,8 @@ const DayController = () => {
          })
      );
 
+    // it appears that the type unification has some issues with VALUE and onValueChangedCallback types
+    // noinspection JSValidateTypes
     return {
         amStartCtrl ,
         amEndCtrl   ,

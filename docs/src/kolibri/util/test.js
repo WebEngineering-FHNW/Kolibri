@@ -160,6 +160,7 @@ const report = (origin, results, messages) => {
 
     if ( results.every( elem => elem) ) {
         write (`
+            <!--suppress ALL -->
             <div>${results.length}</div>
             <div>tests in </div> 
             <div>${origin}</div>
@@ -168,6 +169,7 @@ const report = (origin, results, messages) => {
         return;
     }
     write(`
+            <!--suppress ALL -->
             <div></div>
             <div>tests in </div> 
             <div>${origin}</div>
@@ -176,6 +178,7 @@ const report = (origin, results, messages) => {
     results.forEach((result, idx) => {
         if (result) return;
         write(`
+                <!--suppress ALL -->
                 <div></div>
                 <div>assertion </div> 
                 <div ${failedStyle}>#${idx+1}: ${messages[idx]}</div>

@@ -15,7 +15,7 @@ export { WeekController }
  * @constructor
  */
 const WeekModel = () => {
-    const total = Attribute(0); // total minutes in this week
+    /** @type AttributeType<Number> */ const total = Attribute(0); // total minutes in this week
     return { total };
 };
 

@@ -13,7 +13,7 @@ export { SimpleInputModel }
  */
 
 /**
- * Create a presentation model for the purpose of being used to bind against an single HTML Input in
+ * Create a presentation model for the purpose of being used to bind against a single HTML Input in
  * combinations with its pairing Label element.
  * For a single input, it only needs one attribute.
  * @constructor

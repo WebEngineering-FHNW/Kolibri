@@ -11,7 +11,7 @@ import {
 const pmSuite = TestSuite("presentationModel");
 
 pmSuite.add("attr-value", assert => {
-    const attr = Attribute("init");
+    /** @type AttributeType<String> */ const attr = Attribute("init");
     assert.isTrue(attr.hasObs(VALUE));
     assert.is(attr.hasObs(VALID), false);
     assert.is(attr.getObs(VALUE).getValue(), "init");
@@ -21,7 +21,7 @@ pmSuite.add("attr-value", assert => {
 });
 
 pmSuite.add("attr-convert", assert => {
-    const attr = Attribute("init");
+    /** @type AttributeType<String> */ const attr = Attribute("init");
     attr.setConverter(str => str.toUpperCase());
     assert.is(attr.getObs(VALUE).getValue(), "INIT"); // existing value is converted
     attr.setConvertedValue("xxx");               // specialized function: ...
@@ -31,7 +31,7 @@ pmSuite.add("attr-convert", assert => {
 });
 
 pmSuite.add("attr-valid", assert => {
-    const attr = Attribute("init");
+    /** @type AttributeType<String> */ const attr = Attribute("init");
     let   valid = undefined;
     attr.getObs(VALID, true).onChange(x => valid = x);
     assert.is(valid, true);
@@ -108,7 +108,9 @@ pmSuite.add("qualified", assert => {
 pmSuite.add("create-easy", assert => {
     const pm = presentationModelFromAttributeNames(["firstname", "lastname"]);
 
+    // noinspection JSIncompatibleTypesComparison
     assert.isTrue(pm.firstname != null);
+    // noinspection JSIncompatibleTypesComparison
     assert.isTrue(pm.lastname  != null);
     assert.is(valueOf(pm.lastname), null); // initial value is null;
     assert.is(pm.lastname.getObs(LABEL).getValue(), "lastname"); // default

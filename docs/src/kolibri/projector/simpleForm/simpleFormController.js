@@ -21,6 +21,7 @@ export { SimpleFormController }
        ]);
  */
 const SimpleFormController = inputAttributesArray => {
+    // noinspection UnnecessaryLocalVariableJS
     const inputControllers = inputAttributesArray.map(SimpleInputController);
     // set up any business rules (we do not have any, yet)
     return inputControllers ;

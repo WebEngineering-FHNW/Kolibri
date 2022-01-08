@@ -17,6 +17,7 @@ export { Attribute, QualifiedAttribute,
 
 /** @type ObservableTypeString */ const VALUE    = "value";
 /** @type ObservableTypeString */ const VALID    = "valid";
+// noinspection JSUnusedGlobalSymbols
 /** @type ObservableTypeString */ const EDITABLE = "editable";
 /** @type ObservableTypeString */ const LABEL    = "label";
 /** @type ObservableTypeString */ const NAME     = "name";
@@ -24,6 +25,7 @@ export { Attribute, QualifiedAttribute,
 
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
+ * @template T
  * @param { AttributeType<T> } attribute
  * @return T
  */
@@ -152,7 +154,7 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
 /**
  * @callback Converter<T>
  * @template T
- * @param    {*} value - the raw value that is to be converted
+ * @param    { * } value - the raw value that is to be converted
  * @return   { T }     - the converted value
  * @example
  * dateAttribute.setConverter( date => date.toISOString() ); // external: Date, internal: String
@@ -170,12 +172,15 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
 /**
  * @typedef { Object } AttributeType<T>
  * @template T
- * @property { (name:ObservableTypeString, initValue:T=null) => Observable<T>} getObs - returns the {@link Observable}
+ * @property { (name:ObservableTypeString, initValue:*=null) => IObservable} getObs - returns the {@link IObservable}
  *              for the given name and creates a new one if needed with the optional initValue.
+ *              The initValue is of type T for the VALUE observable can be different for others, e.g. the
+ *              VALID observable is of type Boolean.
  * @property { (name:ObservableTypeString) =>  Boolean } hasObs - true if an {@link Observable}
  *              for the given name has already been created, false otherwise.
- * @property { (value:T) => void } setConvertedValue - sets the value for the {@link VALUE} observable
- *              after piping the value through the optional converter
+ * @property { (value:*) => void } setConvertedValue - sets the value for the {@link VALUE} observable
+ *              after piping the value through the optional converter. The value is not of type T since
+ *              the converter might convert any type to T.
  * @property { (converter:!Converter) => void } setConverter - use specialized converter, default is {@link id},
  *              converters are not allowed to be nullish.
  *              There can only ever be at most one converter on an attribute.
@@ -201,7 +206,8 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  */
 const Attribute = (value, qualifier) => {
 
-    const observables = {}; // name -> observable
+    /** @type {Object.< String, IObservable >} */
+    const observables = {};
 
     const getQualifier = () => qualifier;
     const setQualifier = newQualifier => {
@@ -213,7 +219,8 @@ const Attribute = (value, qualifier) => {
     const hasObs = name => observables.hasOwnProperty(name);
 
     const makeObservable = (name, initValue) => {
-        const observable = Observable(initValue);
+        const observable = Observable(initValue); // we might observe more types than just T
+        // noinspection JSValidateTypes
         observables[name] = observable;
         observable.onChange( _ => modelWorld.update(getQualifier, name, observable) );
         return observable;

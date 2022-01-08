@@ -30,7 +30,7 @@ const arrayEq = arrayA => arrayB =>
 
 /**
  * From the {@link array}, remove the item at position "index". The arguments are given in curried style.
- * The index must be >= 0 and < array.length or nothing is removed and an empty array is returned.
+ * The index must be >= 0 and < `array.length` or nothing is removed and an empty array is returned.
  * @impure Since the given array is modified.
  * @function removeAt
  * @type    { (array:!Array<T>) => (index:!number) => Array<T> }
@@ -45,7 +45,7 @@ const removeAt = array => index => array.splice(index, 1);
 
 /**
  * From the {@link array}, remove the "item". The arguments are given in curried style.
- * In case that the item occurs multiple times in the array, only the first occurance is removed.
+ * In case that the item occurs multiple times in the array, only the first occurrence is removed.
  * @impure Since the given array is modified.
  * @function removeItem
  * @type    { (array:!Array<T>) => (item:!T) => Array<T> }

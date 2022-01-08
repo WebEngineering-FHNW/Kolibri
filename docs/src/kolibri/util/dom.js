@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 /**
  * @module util/dom
  * Helper functions to work with the DOM.
