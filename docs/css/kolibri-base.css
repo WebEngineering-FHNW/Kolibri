@@ -1,9 +1,9 @@
 /* make sure to keep in line with kolibriStyle.js */
 :root {
-    --kolibri-accent-color:  hsl(322, 73%, 52%);
-    --kolibri-output-color:  hsl(256, 82%, 55%);
-    --kolibri-ok-color:      hsl(104, 89%, 28%);
-    --kolibri-neutral-color: hsl(0,   0%,   74%);
+    --kolibri-accent-color:  hsl( 322, 73%, 52%);
+    --kolibri-output-color:  hsl( 256, 82%, 55%);
+    --kolibri-ok-color:      hsl( 104, 89%, 28%);
+    --kolibri-neutral-color: hsl(   0,  0%, 74%);
     --kolibri-shadow-color:  hsla(256, 82%, 55%, 0.2);
     --kolibri-box-shadow:    0 4px  8px 0 var(--kolibri-shadow-color),
                              0 6px 20px 0 var(--kolibri-shadow-color);
