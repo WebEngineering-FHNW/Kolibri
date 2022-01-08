@@ -9,12 +9,6 @@
             width: 48em;
             margin: auto;
         }
-        #out#out div.ok {
-            color: var(--kolibri-ok-color);
-        }
-        #out#out div.failed {
-            color: var(--kolibri-accent-color);
-        }
         #out {
             max-height: calc(100vh - 20em);
             overflow: scroll;
@@ -23,8 +17,7 @@
             grid-column-gap: 2em;
             grid-row-gap: .5em;
             padding: 2em;
-            box-shadow: 0 4px  8px 0 rgba(0, 0, 0, 0.2),
-                        0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            box-shadow: var(--kolibri-box-shadow);
         }
         #out div:nth-child(odd) {
             color: var(--kolibri-output-color);

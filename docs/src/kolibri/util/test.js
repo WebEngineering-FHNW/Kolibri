@@ -2,6 +2,8 @@
  * @module util/test
  * The test "framework", exports the Suite function plus a total of how many assertions have been tested
  */
+import {accentColor, okColor} from "../style/kolibriStyle.js";
+
 export { TestSuite, total, asyncTest }
 
 import { dom }        from "./dom.js";
@@ -153,12 +155,15 @@ const TestSuite = suiteName => {
  * @private
  */
 const report = (origin, results, messages) => {
+    const okStyle     = `style="color: ${okColor};"`;
+    const failedStyle = `style="color: ${accentColor};"`;
+
     if ( results.every( elem => elem) ) {
         write (`
             <div>${results.length}</div>
             <div>tests in </div> 
             <div>${origin}</div>
-            <div class="ok">ok</div> 
+            <div ${okStyle}">ok</div> 
         `);
         return;
     }
@@ -166,15 +171,15 @@ const report = (origin, results, messages) => {
             <div></div>
             <div>tests in </div> 
             <div>${origin}</div>
-            <div class="failed">failed</div> 
+            <div ${failedStyle}>failed</div> 
     `);
     results.forEach((result, idx) => {
         if (result) return;
         write(`
                 <div></div>
                 <div>assertion </div> 
-                <div class="failed">#${idx+1}: ${messages[idx]}</div>
-                <div class="failed">failed</div> 
+                <div ${failedStyle}>#${idx+1}: ${messages[idx]}</div>
+                <div ${failedStyle}>failed</div> 
         `);
     });
 }

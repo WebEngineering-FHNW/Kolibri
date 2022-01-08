@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+    <link rel="stylesheet" href="../../../css/kolibri-base.css">
+    <title>Style Overview</title>
+
+    <style>
+        body {
+            width: 48em;
+            margin: auto;
+        }
+        #out {
+            display: grid;
+            grid-template-columns: max-content max-content;
+            grid-column-gap: 1em;
+        }
+    </style>
+</head>
+<body>
+<h1>Kolibri Style Overview</h1>
+<p>
+    Kolibri comes with its default set of colors, shadows, fonts, and other style elements.
+    Any application that uses Kolibri can of course selectively override or totally ignore the default style.
+</p>
+<p>
+    The style is available in two ways: via
+    <a href="../../../css/kolibri-base.css">kolibri-base.css</a> and by using the style API as
+    provided by the
+    <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/style/kolibriStyle.js">
+        style module
+    </a>.
+    Sometimes, you might even want to combine both approaches, like the
+    <a href="https://webengineering-fhnw.github.io/Kolibri/src/allTests.html"
+    >live test report</a> does.
+</p>
+<p>
+    The list below serves as an overview and also allows checking visually whether both
+    approaches lead to the same result.
+</p>
+
+<div id="out">
+    <h2>API constants</h2>
+    <h2>CSS custom properties</h2>
+</div>
+
+<p>
+    <a href="../../../index.html">Home</a>
+</p>
+<script src="useStyles.js" type="module"></script>
+</body>
+</html>

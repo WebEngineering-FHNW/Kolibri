@@ -14,6 +14,7 @@
  */
 
 import { dom }                     from "../../util/dom.js";
+import { shadowCss }               from "../../style/kolibriStyle.js"
 import { timeStringToMinutes,
          totalMinutesToTimeString} from "../projectorUtils.js";
 
@@ -119,7 +120,6 @@ const FORM_CSS = `
         grid-row-gap:   .5em;
         grid-column-gap: 2em;     
         border-style:    none;
-        box-shadow:      0 4px  8px 0 rgb(0 0 0 / 20%), 
-                         0 6px 20px 0 rgb(0 0 0 / 19%);                          
+        box-shadow:      ${shadowCss}                          
     }
 `;
