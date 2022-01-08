@@ -33,16 +33,16 @@ const id = x => x;
  * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
  * @haskell  a -> b -> a
  * @pure
- * @type     { (x:a) => (y:b) => a}
- * @param    {a} x
- * @returns  { (y:b) => a } - a function that ignores its argument and returns the parameter x unchanged.
+ * @type     { (x:a) => (...b) => a}
+ * @param    { a } x
+ * @returns  { (...b) => a } - a function that ignores its argument and returns the parameter x unchanged.
  * @example
  * c(1)(undefined) === 1;
  * const getExpr = c(expr);
  * // expression might change here
  * getExpr() === expr;
  */
-const c = x => _ => x;
+const c = x => () => x;
 
 /**
  * A Function that returns the second of two curried arguments.
@@ -50,8 +50,8 @@ const c = x => _ => x;
  * It can be seen as a cached getter for the id function: {@link c}({@link id})
  * @haskell  b -> a -> a
  * @pure
- * @type     { (x:b) => (y:a) => a}
- * @param    {b} _ - the parameter is ignored
+ * @type     { (...b) => (y:a) => a}
+ * @param    { ...b } _     - zero or one or many parameters are ignored
  * @returns  { (y:a) => a } - a function that returns its argument {@link a}
  * @example
  * snd(undefined)(1) === 1;
@@ -175,7 +175,7 @@ const fst = c;
  * @returns  {b}
  */
 /**
- * The Left constructor of an Either type. An Either is either {@link Left} or {@link Right}.
+ * The Left constructor of an Either type. An "Either" is either {@link Left} or {@link Right}.
  * It is constructed with a value of type {@link a} and waits for two more functions f and g
  * as curried arguments.
  * When both are given, f(x) is called.
@@ -197,7 +197,7 @@ const fst = c;
 const Left  = x => f => _ => f(x);
 
 /**
- * The Right constructor of an Either type. An Either is either {@link Left} or {@link Right}.
+ * The Right constructor of an Either type. An "Either" is either {@link Left} or {@link Right}.
  * It is constructed with a value of type {@link b} and waits for two more functions f and g
  * as curried arguments.
  * When both are given, g(x) is called.
@@ -218,7 +218,7 @@ const Left  = x => f => _ => f(x);
 const Right = x => _ => g => g(x);
 
 /**
- * Nothing is the error case of the Maybe type. A "Maybe a" is either Nothing or "{@link Just} a".
+ * Nothing is the error case of the Maybe type. A "Maybe a" can be either Nothing or "{@link Just} a".
  * Nothing is immutable. Nothing is a singleton.
  * Nothing is used to get around missing null/undefined checks.
  * @haskell Nothing :: Maybe a
@@ -235,7 +235,7 @@ const Right = x => _ => g => g(x);
 const Nothing = Left (undefined);
 
 /**
- * Just is the success case of the Maybe type. A "Maybe a" is either {@link Nothing} or "Just a".
+ * Just is the success case of the Maybe type. A "Maybe a" can be either {@link Nothing} or "Just a".
  * Just values are immutable.
  * Just is used to get around missing null/undefined checks.
  * @haskell Just a :: Maybe a
@@ -541,6 +541,47 @@ const client = (url, method = 'GET', data = null) => {
             return Promise.reject(resp.status);
         })
 };/**
+ * @module kolibriStyle
+ * Common constants and facilities for a consistent look.
+ * Importing a different style should give you a custom look.
+ * Make sure to keep in line with kolibri-base.css
+ */
+
+/**
+ * Css string value for the given color. We keep values as HSL to allow easier manipulation.
+ * @param hue   - 0 to 360 degrees on the color wheel, where 0 is red, then yellow, green, cyan, blue, magenta.
+ * @param sat   - saturation 0 to 100, where 0 is greyscale.
+ * @param light - lightness, 0 is black and 100 is white.
+ * @return {`hsl(${string}, ${string}%, ${string}%)`}
+ * @example
+ * const fireTruckRed = hsl(0, 100, 50);
+ */
+const hsl  = (hue, sat, light)        => `hsl(${hue}, ${sat}%, ${light}%)`;
+
+/**
+ * Css string value for the given color. We keep values as HSL to allow easier manipulation.
+ * @param hue   - 0 to 360 degrees on the color wheel, where 0 is red, then yellow, green, cyan, blue, magenta.
+ * @param sat   - saturation 0 to 100, where 0 is greyscale.
+ * @param light - lightness, 0 is black and 100 is white.
+ * @param alpha - between 0 and 1, where 0 is fully transparent and 1 is opaque.
+ * @return {`hsl(${string}, ${string}%, ${string}%, ${string})`}
+ * @example
+ * const paleRose = hsla(0, 100, 50, 0.3);
+ */
+const hsla = (hue, sat, light, alpha) => `hsl(${hue}, ${sat}%, ${light}%, ${alpha})`;
+
+const accentColor  = hsl(322, 73, 52);
+const okColor      = hsl(104, 89, 28);
+const neutralColor = hsl(0,   0,  74);
+
+const outputColorValues = [256, 82, 55];
+const outputColor = hsl (...outputColorValues);
+const shadowColor = hsla(...outputColorValues, 0.2);
+
+const shadowCss = `        
+      0 4px  8px 0 ${shadowColor}, 
+      0 6px 20px 0 ${shadowColor};
+`;/**
  * @module dataflow - a dataflow abstraction that is not based on concurrency but on laziness and
  * can be used in an asynchronous fashion.
  */
@@ -640,7 +681,7 @@ const Scheduler = () => {
 /**
  * IObservable<T> is the interface from the GoF Observable design pattern.
  * In this variant, we allow to register many observers but do not provide means to unregister.
- * Observers are not GC'ed before the observable itself is GC'ed.
+ * Observers are not garbage-collected before the observable itself is collected.
  * IObservables are intended to be used with the concept of "stable binding", i.e. with
  * listeners that do not change after setup.
  * @typedef IObservable<T>
@@ -702,8 +743,8 @@ const Observable = value => {
 
 /**
  * IObservableList<T> is the interface for lists that can be observed for add or delete operations.
- * In this variant, we allow to register and unregister many observers.
- * Observers that are still registered are not GC'ed before the observable list itself is GC'ed.
+ * In this variant, we allow registering and unregistering many observers.
+ * Observers that are still registered are not garbage collected before the observable list itself is collected.
  * @typedef IObservableList<T>
  * @impure   Observables change their inner decorated list and maintain two lists of observers that changes over time.  
  * @property { (observableListCallback) => void }  onAdd - register an observer that is called whenever an item is added.
@@ -797,10 +838,10 @@ const presentationModelFromAttributeNames = attributeNames => {
 
 /**
  * @typedef ModelWorldType
- * @property { ( getQualifier:function():String, name:ObservableTypeString, observable:Observable<T> ) => void } update -
+ * @property { ( getQualifier:function():String, name:ObservableTypeString, observable: IObservable<T> ) => void } update -
  *              update the value of the named observableType for all attributes that have the same qualifier.
  *              Add the respective observable if it not yet known.
- * @property { (qualifier:String, newQualifier:String, observables:Object<String, Observable<T>>) => void} updateQualifier -
+ * @property { (qualifier:String, newQualifier:String, observables:Object<String, IObservable<T>>) => void} updateQualifier -
  *              handle the change when an attribute changes its qualifier such that all respective
  *              internal indexes need to be updated, their values are updated, and nullish newQualifier leads to removal.
  * @property { (qualifier:String) => T} readQualifierValue
@@ -816,9 +857,9 @@ const ModelWorld = () => {
     const data = {}; // key -> array of observables
 
     const readQualifierValue = qualifier => {
-        const obss = data[qualifier + "." + VALUE];
-        if (null == obss) { return undefined; }
-        return obss[0].getValue(); // there are no empty arrays
+        const observables = data[qualifier + "." + VALUE];
+        if (null == observables) { return undefined; }
+        return observables[0].getValue(); // there are no empty arrays
     };
 
     // handle the change of a value
@@ -882,11 +923,11 @@ const modelWorld = ModelWorld();
 const readQualifierValue = modelWorld.readQualifierValue; // specific export
 
 /**
- * Convenience constructor of an {@link Attribute} that builds it's initial value from already existing qualified values (if any)
+ * Convenience constructor of an {@link Attribute} that builds its initial value from already existing qualified values (if any)
  * instead of overriding possibly existing qualified values with the constructor value.
  * @constructor
  * @param { String } qualifier - mandatory. Nullish values make no sense here since one can use {@link Attribute}.
- * @return { AttributeType }
+ * @return { AttributeType<T> }
  * @impure since it changes the ModelWorld.
  * @example
  * const firstNameAttr = QualifiedAttribute("Person.4711.firstname"); // attr is set to existing values, if any.
@@ -978,7 +1019,7 @@ const Attribute = (value, qualifier) => {
     const setConvertedValue = val => getObs(VALUE).setValue(convert(val));
 
     let validator        = undefined;  // the current validator in use, might change over time
-    let validateListener = undefined;  // the validate listener on the attribute, lazily initialized
+    let validateListener = undefined;  // the "validate" listener on the attribute, lazily initialized
     const setValidator = newValidator => {
         validator = newValidator;
         if (! validateListener && validator) {
@@ -988,9 +1029,9 @@ const Attribute = (value, qualifier) => {
     };
 
     return { getObs, hasObs, setValidator, setConverter, setConvertedValue, getQualifier, setQualifier }
-};const release     = "0.1.39";
+};const release     = "0.1.40";
 
-const dateStamp   = "2022-01-07 T 20:57:41 MEZ";
+const dateStamp   = "2022-01-08 T 18:23:17 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
@@ -1220,8 +1261,7 @@ const FORM_CSS = `
         grid-row-gap:   .5em;
         grid-column-gap: 2em;     
         border-style:    none;
-        box-shadow:      0 4px  8px 0 rgb(0 0 0 / 20%), 
-                         0 6px 20px 0 rgb(0 0 0 / 19%);                          
+        box-shadow:      ${shadowCss}                          
     }
 `;/**
  * @typedef { Array<SimpleInputControllerType> } SimpleFormControllerType
