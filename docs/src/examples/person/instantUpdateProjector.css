@@ -39,15 +39,4 @@ input[type=text]:focus {
     position: relative;
     top: -1em;
 }
-.delete {
-    background-color:   transparent;
-    border:             none;
-    color:              var(--kolibri-accent-color);
-    font-size:          1.3em;
-}
-input.invalid {
-    color:              var(--kolibri-accent-color);
-}
-.selected {
-    box-shadow: 0 0 0.2em gold;
-}
+

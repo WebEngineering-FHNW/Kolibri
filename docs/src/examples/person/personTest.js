@@ -1,4 +1,6 @@
 
+// noinspection PointlessArithmeticExpressionJS
+
 import { ListController, SelectionController,  }         from './personController.js';
 import { MasterView, DetailView, Person, selectionMold } from './person.js';
 import { TestSuite }                                     from "../../kolibri/util/test.js";

@@ -30,28 +30,6 @@ fieldset:disabled {
     opacity: 0.5;
 }
 
-:invalid {
-    border-color: var(--kolibri-accent-color);
-}
-
-input:invalid {
-    border-color: transparent transparent var(--kolibri-accent-color) transparent;
-    position: relative;
-    overflow: visible;
-}
-
-input:invalid::before {
-    content: "";
-    position: absolute;
-    top: -.35ch;
-    left: -.75ch;
-    color: white;
-    background-color: var(--kolibri-accent-color);
-    width: 1ch;
-    height: 1ch;
-    border-radius: 50%;
-}
-
 output {
     color: var(--kolibri-output-color);
 }

@@ -1,11 +1,7 @@
-import {VALUE} from "../../kolibri/presentationModel.js";
-import {
-    projectInstantInput
-}                                                  from "../../kolibri/projector/simpleForm/simpleFormProjector.js";
-import {
-    SimpleAttributeInputController
-}                                                  from "../../kolibri/projector/simpleForm/simpleInputController.js";
-import {dom}                                       from "../../kolibri/util/dom.js";
+import { dom }                              from "../../kolibri/util/dom.js";
+import { VALUE }                            from "../../kolibri/presentationModel.js";
+import { projectInstantInput }              from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
+import { SimpleAttributeInputController }   from "../../kolibri/projector/simpleForm/simpleInputController.js";
 
 export { listItemProjector, selectListItemForModel, removeListItemForModel, formProjector,  masterClassName, pageCss }
 
@@ -63,7 +59,7 @@ const listItemProjector = (masterController, selectionController, model, attribu
     attributeNames.forEach( attributeName => {
 
         const inputController = SimpleAttributeInputController(model[attributeName]);
-        const [labelElement, inputElement] = projectInstantInput(inputController);
+        const [labelElement, inputElement] = projectInstantInput("ListItem", inputController);
         inputElement.onfocus = _ => selectionController.setSelectedModel(model);
         // id's have been dynamically generated, but we have to change that
         // (and keep the input.id and label.for consistency intact)
@@ -93,7 +89,7 @@ const formProjector = (detailController, detailCard, model, attributeNames) => {
     /** @type { HTMLFormElement } */ const form = elements[0];
     const div = form.children[0];
 
-    personInputControllers.forEach(inputController => div.append(...projectInstantInput(inputController)));
+    personInputControllers.forEach(inputController => div.append(...projectInstantInput(detailClassName,inputController)));
 
     model.detailed.getObs(VALUE).onChange( newValue => {
         if (newValue) {
@@ -110,7 +106,8 @@ const formProjector = (detailController, detailCard, model, attributeNames) => {
 const pageCss = `
     .${masterClassName} {
         display:        grid;
-        grid-column-gap: 0.5em;
+        grid-gap:       0.5em;
+        grid-row-gap:   0.5em;
         grid-template-columns: 1.7em auto auto; /* default: to be overridden dynamically */
         margin-bottom:  0.5em ;
     }
@@ -119,7 +116,7 @@ const pageCss = `
     }
     .${detailClassName} {
         display:        grid;
-        grid-column-gap: 0.5em;
+        grid-gap:       0.5em;
         grid-template-columns: 1fr 3fr;
         margin-bottom:  0.5em ;
     }
@@ -129,5 +126,14 @@ const pageCss = `
         transition-delay: 200ms;
         transform:      rotateX(-60deg);
         transform-origin: top center;
-    }
+    }    
+    .delete {
+        background-color:   transparent;
+        border:             none;
+        color:              var(--kolibri-accent-color);
+        font-size:          1.3em;
+    }    
+    button.selected {
+        background: var(--kolibri-select-color);
+    }    
 `;

@@ -1,5 +1,5 @@
-import { dom }         from "../../kolibri/util/dom.js";
-import { projectChangeInput} from "../../kolibri/projector/simpleForm/simpleFormProjector.js";
+import { dom }               from "../../kolibri/util/dom.js";
+import { projectChangeInput} from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
 
 export { projectDay }
 
@@ -9,10 +9,10 @@ export { projectDay }
  * @return {[HTMLDivElement, HTMLDivElement]} - array of div elements for am and pm
  */
 const projectDay = dayController => {
-    const [amStartViewLabel ,amStartViewInput] =  projectChangeInput(dayController.amStartCtrl);
-    const [amEndViewLabel   ,amEndViewInput  ] =  projectChangeInput(dayController.amEndCtrl);
-    const [pmStartViewLabel ,pmStartViewInput] =  projectChangeInput(dayController.pmStartCtrl);
-    const [pmEndViewLabel   ,pmEndViewInput  ] =  projectChangeInput(dayController.pmEndCtrl);
+    const [amStartViewLabel ,amStartViewInput] =  projectChangeInput("DAY", dayController.amStartCtrl);
+    const [amEndViewLabel   ,amEndViewInput  ] =  projectChangeInput("DAY", dayController.amEndCtrl);
+    const [pmStartViewLabel ,pmStartViewInput] =  projectChangeInput("DAY", dayController.pmStartCtrl);
+    const [pmEndViewLabel   ,pmEndViewInput  ] =  projectChangeInput("DAY", dayController.pmEndCtrl);
 
     // create layout from a template and put the pieces in through replacement.
     // this is not the most efficient way, but it gives a good overview where things go.

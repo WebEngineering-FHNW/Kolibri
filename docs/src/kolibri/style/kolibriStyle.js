@@ -5,7 +5,7 @@
  * Make sure to keep in line with kolibri-base.css
  */
 
-export { accentColor, okColor, neutralColor, outputColor, shadowColor, shadowCss }
+export { accentColor, okColor, neutralColor, selectColor, outputColor, shadowColor, shadowCss }
 
 /**
  * Css string value for the given color. We keep values as HSL to allow easier manipulation.
@@ -32,7 +32,8 @@ const hsla = (hue, sat, light, alpha) => `hsl(${hue}, ${sat}%, ${light}%, ${alph
 
 const accentColor  = hsl(322, 73, 52);
 const okColor      = hsl(104, 89, 28);
-const neutralColor = hsl(0,   0,  74);
+const neutralColor = hsl(  0,  0, 74);
+const selectColor  = hsl( 46, 90, 84);
 
 const outputColorValues = [256, 82, 55];
 const outputColor = hsl (...outputColorValues);

@@ -12,7 +12,8 @@ import '../src/kolibri/version.js';
 import '../src/kolibri/projector/projectorUtils.js';
 import '../src/kolibri/projector/simpleForm/simpleInputModel.js';
 import '../src/kolibri/projector/simpleForm/simpleInputController.js';
-import '../src/kolibri/projector/simpleForm/simpleFormProjector.js';
+import '../src/kolibri/projector/simpleForm/simpleInputProjector.js';
 import '../src/kolibri/projector/simpleForm/simpleFormController.js';
+import '../src/kolibri/projector/simpleForm/simpleFormProjector.js';
 
 

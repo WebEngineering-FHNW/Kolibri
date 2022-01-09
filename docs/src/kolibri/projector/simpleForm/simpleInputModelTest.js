@@ -15,7 +15,7 @@ simpleInputModelSuite.add("full", assert => {
     assert.is(model.hasObs(TYPE),  true);
     assert.is(model.hasObs(NAME),  true);
     assert.is(model.hasObs(LABEL), true);
-    assert.is(model.hasObs(VALID), false); // valid is not bound by default at construction time
+    assert.is(model.hasObs(VALID), true);
 });
 
 simpleInputModelSuite.add("slim", assert => {

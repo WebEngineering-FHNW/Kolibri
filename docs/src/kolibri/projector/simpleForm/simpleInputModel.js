@@ -1,4 +1,5 @@
-import {Attribute, LABEL, NAME, TYPE} from "../../presentationModel.js";
+import {Attribute, EDITABLE, LABEL, NAME, TYPE, VALID } from "../../presentationModel.js";
+import {TEXT}                                           from "../../util/dom.js";
 
 export { SimpleInputModel }
 
@@ -9,7 +10,7 @@ export { SimpleInputModel }
  * @property { !T } value      - mandatory value, will become the input value, defaults to undefined
  * @property { ?String } label - optional label, defaults to undefined
  * @property { ?String } name  - optional name that reflects the name attribute of an input element, used in forms
- * @property { "text"|"number"|"checkbox"|"time"|"date" } type - optional type, allowed values are
+ * @property { InputTypeString } type - optional type, allowed values are
  *              the values of the HTML Input element's "type" attribute. Defaults to "text".
  */
 
@@ -28,9 +29,11 @@ export { SimpleInputModel }
          type:   "text",
      });
  */
-const SimpleInputModel = ({value, label, name, type="text"}) => {
+const SimpleInputModel = ({value, label, name, type= TEXT}) => {
     const singleAttr = Attribute(value);
-    singleAttr.getObs(TYPE).setValue(type);
+    singleAttr.getObs(TYPE)    .setValue(type);
+    singleAttr.getObs(EDITABLE).setValue(true);
+    singleAttr.getObs(VALID)   .setValue(true);
     if (null != label) singleAttr.getObs(LABEL).setValue(label);
     if (null != name ) singleAttr.getObs(NAME) .setValue(name);
 

@@ -1,4 +1,4 @@
-import {Attribute, EDITABLE, LABEL, TYPE, VALUE} from "../../kolibri/presentationModel.js";
+import {Attribute, EDITABLE, LABEL, TYPE, VALUE, VALID } from "../../kolibri/presentationModel.js";
 import {
     formProjector,
     listItemProjector,
@@ -20,11 +20,13 @@ const Person = () => {                               // facade
     firstnameAttr.getObs(LABEL)     .setValue("First Name");
     firstnameAttr.getObs(TYPE)      .setValue("text");
     firstnameAttr.getObs(EDITABLE)  .setValue(true);
+    firstnameAttr.getObs(VALID)     .setValue(true);
 
     const lastnameAttr  = Attribute("Dow", `Person.${id}.lastname`);
     lastnameAttr.getObs(LABEL)      .setValue("Last Name");
     lastnameAttr.getObs(TYPE)       .setValue("text");
     lastnameAttr.getObs(EDITABLE)   .setValue(true);
+    lastnameAttr.getObs(VALID)      .setValue(true);
 
     // whether this person should appear in a detail view
     const detailedAttr  = Attribute(true, `Person.${id}.detailed`);
@@ -55,7 +57,7 @@ const MasterView = (listController, selectionController, rootElement) => {
 
     // binding
     listController.onModelAdd(renderRow);
-    listController.onModelRemove( (removedModel, removeMe) => {
+    listController.onModelRemove( removedModel => {
         removeListItemForModel(ALL_ATTRIBUTE_NAMES, rootElement)(removedModel);
         ALL_ATTRIBUTE_NAMES.forEach( name => removedModel[name].setQualifier(undefined)); // remove model attributes from model world
         selectionController.clearSelection();

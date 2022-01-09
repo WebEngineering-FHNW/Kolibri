@@ -99,8 +99,8 @@ const minMaxValuesConverter = minutes => Math.max( 0, (Math.min(minutes, 24 * 60
  * trigger further value changes (e.g. because of the {@link sequenceRule}).
  * @private
  * @impure - might change the pm start value
- * @param  { SimpleInputControllerType<Number> } amEndCtrl
- * @param  { SimpleInputControllerType<Number> } pmStartCtrl
+ * @param  {SimpleInputControllerType<Number>} amEndCtrl
+ * @param  {SimpleInputControllerType<Number>} pmStartCtrl
  * @return { () => void } - the lunch break rule handler as a side-effecting function
  */
 const lunchBreakRule = (amEndCtrl, pmStartCtrl) => () => { // 40 min lunch break
@@ -117,8 +117,8 @@ const lunchBreakRule = (amEndCtrl, pmStartCtrl) => () => { // 40 min lunch break
  * If violated, we move the end value back.
  * @private
  * @impure - might change the value of the end input
- * @param  { SimpleInputControllerType<Number> } startInputCtrl
- * @param  { SimpleInputControllerType<Number> } endInputCtrl
+ * @param  {SimpleInputControllerType<Number>} startInputCtrl
+ * @param  {SimpleInputControllerType<Number>} endInputCtrl
  * @return { () => void } - the sequence rule handler as a side-effecting function
  */
 const sequenceRule = (startInputCtrl, endInputCtrl) => () => { // start must be <= end
@@ -138,7 +138,7 @@ const sequenceRule = (startInputCtrl, endInputCtrl) => () => { // start must be 
  * It is easy to get this wrong and overlooked when testing manually.
  * @private
  * @impure  - might change the validity of any input
- * @param   { Array<SimpleInputControllerType<Number>> } timeControllers
+ * @param   {SimpleInputControllerType<Number>[]} timeControllers
  * @return  void
  */
 const checkValidityRules = timeControllers => {
@@ -156,7 +156,7 @@ const checkValidityRules = timeControllers => {
 
 /**
  * Calculate the total number of minutes worked this day, given the inputs.
- * @param { Array<SimpleInputControllerType<Number>> } timeControllers
+ * @param {SimpleInputControllerType<Number>[]} timeControllers
  * @return { Number }
  */
 const totalValue = timeControllers => {
