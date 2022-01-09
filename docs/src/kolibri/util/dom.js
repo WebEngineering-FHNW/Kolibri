@@ -4,7 +4,11 @@
  * @module util/dom
  * Helper functions to work with the DOM.
  */
-export {dom, fireEvent, fireChangeEvent, CLICK, INPUT, CHANGE}
+export {
+    dom, fireEvent, fireChangeEvent,
+    CLICK, INPUT, CHANGE,
+    TEXT, TIME, DATE, CHECKBOX, NUMBER
+}
 
 /**
  * Create DOM objects from an HTML string.
@@ -55,3 +59,12 @@ const fireEvent = (element, eventTypeString) => {
  * @param { HTMLElement } element - The "target" element that fires the event.
  */
 const fireChangeEvent = element => fireEvent(element, CHANGE);
+
+
+/** @typedef { "text"|"number"|"checkbox"|"time"|"date" } InputTypeString */
+
+/** @type InputTypeString */ const TEXT     = "text";
+/** @type InputTypeString */ const NUMBER   = "number";
+/** @type InputTypeString */ const CHECKBOX = "checkbox";
+/** @type InputTypeString */ const TIME     = "time";
+/** @type InputTypeString */ const DATE     = "date";

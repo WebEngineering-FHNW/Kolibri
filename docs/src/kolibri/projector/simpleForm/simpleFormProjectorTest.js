@@ -1,6 +1,6 @@
 import { TestSuite }                 from "../../util/test.js";
 import { fireChangeEvent }           from "../../util/dom.js";
-import { projectForm, projectInput } from "./simpleFormProjector.js";
+import { projectForm, projectChangeInput } from "./simpleFormProjector.js";
 import { SimpleInputController }     from "./simpleInputController.js";
 import { SimpleFormController }      from "./simpleFormController.js";
 
@@ -18,7 +18,7 @@ simpleFormProjectorSuite.add("binding", assert => {
         name:   "text",
         type:   "text",
     });
-    const [labelElement, inputElement] = projectInput(controller);
+    const [labelElement, inputElement] = projectChangeInput(controller);
 
     assert.is(labelElement.getAttribute("for"), inputElement.getAttribute("id"));
 
@@ -42,7 +42,7 @@ simpleFormProjectorSuite.add("checkbox", assert => {
         type:   "checkbox",
     });
 
-    const [labelElement, inputElement] = projectInput(controller);
+    const [labelElement, inputElement] = projectChangeInput(controller);
     assert.is(labelElement.getAttribute("for"), inputElement.getAttribute("id"));
 
     // initial checkbox value is false
@@ -74,7 +74,7 @@ simpleFormProjectorSuite.add("time", assert => {
         type:   "time",
     });
 
-    const [labelElement, inputElement] = projectInput(controller);
+    const [labelElement, inputElement] = projectChangeInput(controller);
     assert.is(labelElement.getAttribute("for"), inputElement.getAttribute("id"));
 
     // initial checkbox value is false

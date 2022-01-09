@@ -2,6 +2,7 @@ import {Attribute, LABEL, NAME, TYPE} from "../../presentationModel.js";
 
 export { SimpleInputModel }
 
+
 /**
  * @typedef { object } InputAttributes
  * @template T

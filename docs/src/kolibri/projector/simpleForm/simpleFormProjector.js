@@ -2,7 +2,7 @@
  * @module projector/simpleForm/simpleFormProjector
  *
  * Following the projector pattern, this module exports projection functions
- * ({@link projectInput} and {@link projectForm}) that create respective views
+ * ({@link projectChangeInput} and {@link projectForm}) that create respective views
  * and bind underlying models.
  * Following classical MVC, the binding is available solely through a controller.
  *
@@ -13,12 +13,14 @@
  * to the application while all business logic and their test cases remain untouched.
  */
 
-import { dom }                     from "../../util/dom.js";
+import {
+    CHANGE, dom, INPUT, TIME, CHECKBOX
+}                                  from "../../util/dom.js";
 import { shadowCss }               from "../../style/kolibriStyle.js"
 import { timeStringToMinutes,
          totalMinutesToTimeString} from "../projectorUtils.js";
 
-export { projectInput, projectForm, FORM_CSS }
+export { projectInstantInput, projectChangeInput, projectForm, FORM_CSS }
 
 /**
  * String that must be unique in CSS classes and DOM id prefixes throughout the application.
@@ -34,18 +36,8 @@ const FORM_CLASS_NAME = "kolibri-simpleForm";
  */
 let counter = 0;
 
-/**
- * Projection function that creates a view for input purposes, binds the information that is available through
- * the inputController, and returns the generated views.
- * @constructor
- * @template T
- * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
- * @param  { !SimpleInputControllerType<T> }  inputController
- * @return { [HTMLLabelElement, HTMLInputElement] } - array of label element and input element
- * @example
- * const [labelElement, inputElement] = projectInput(controller);
- */
-const projectInput = inputController => {
+
+const projectInput = eventType => inputController => {
     const id = FORM_CLASS_NAME + "-id-" + (counter++);
     // create view
     const elements = dom(`
@@ -56,15 +48,15 @@ const projectInput = inputController => {
     /** @type {HTMLInputElement} */ const inputElement = elements[1]; // ... we would use array deconstruction
 
     // view and data binding can depend on the type
-    if (inputController.getType() === "time") { // "hh:mm" in the vies vs minutes since midnight in the model
-        inputElement.onchange = _ => inputController.setValue(timeStringToMinutes(inputElement.value));
+    if (inputController.getType() === TIME) { // "hh:mm" in the vies vs minutes since midnight in the model
+        inputElement.addEventListener(eventType, _ => inputController.setValue(timeStringToMinutes(inputElement.value)));
         inputController.onValueChanged(val => inputElement.value = totalMinutesToTimeString(val));
     } else
-    if (inputController.getType() === "checkbox") { // "checked" attribute vs boolean in model
-        inputElement.onchange = _ => inputController.setValue(inputElement.checked);
+    if (inputController.getType() === CHECKBOX) { // "checked" attribute vs boolean in model
+        inputElement.addEventListener(eventType, _ => inputController.setValue(inputElement.checked));
         inputController.onValueChanged(val => inputElement.checked = val);
     } else {
-        inputElement.onchange = _ => inputController.setValue(inputElement.value);
+        inputElement.addEventListener(eventType, _ => inputController.setValue(inputElement.value));
         inputController.onValueChanged(val => inputElement.value = val);
     }
 
@@ -72,11 +64,44 @@ const projectInput = inputController => {
         labelElement.textContent = label;
         inputElement.setAttribute("title", label);
     });
-    inputController.onNameChanged  (name  => inputElement.setAttribute("name", name));
+    inputController.onNameChanged  (name  => inputElement.setAttribute("name", name || id));
     inputController.onValidChanged (valid => inputElement.setCustomValidity(valid ? "" : "invalid"));
+
+    inputController.onEditableChanged(isEditable => isEditable
+        ? inputElement.removeAttribute("readonly")
+        : inputElement.setAttribute("readonly", true));
 
     return [labelElement, inputElement];
 }
+
+/**
+ * Projection function that creates a view for input purposes, binds the information that is available through
+ * the inputController, and returns the generated views. Values are updated when the user changes the value.
+ * Depending on the control and how the browser handles it, this might require a user action to confirm the
+ * finalization of the value change like pressing the enter key or leaving the input field.
+ * @constructor
+ * @template T
+ * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
+ * @param  { !SimpleInputControllerType<T> }  inputController
+ * @return { [HTMLLabelElement, HTMLInputElement] } - array of label element and input element
+ * @example
+ * const [labelElement, inputElement] = projectChangeInput(controller);
+ */
+const projectChangeInput  = projectInput(CHANGE);
+
+/**
+ * Projection function that creates a view for input purposes, binds the information that is available through
+ * the inputController, and returns the generated views. Values are updated instantly without waiting for
+ * confirmation or finalization of the input.
+ * @constructor
+ * @template T
+ * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
+ * @param  { !SimpleInputControllerType<T> }  inputController
+ * @return { [HTMLLabelElement, HTMLInputElement] } - array of label element and input element
+ * @example
+ * const [labelElement, inputElement] = projectInstantInput(controller);
+ */
+const projectInstantInput = projectInput(INPUT);
 
 /**
  * Projection function that creates a form view for input purposes with as many inputs as the formController
@@ -101,7 +126,7 @@ const projectForm = formController => {
     /** @type { HTMLFormElement } */ const form = elements[0];
     const fieldset = form.children[0];
 
-    formController.forEach(inputController => fieldset.append(...projectInput(inputController)));
+    formController.forEach(inputController => fieldset.append(...projectChangeInput(inputController)));
 
     return [form];
 }
