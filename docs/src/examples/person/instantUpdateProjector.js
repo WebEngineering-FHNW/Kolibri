@@ -3,12 +3,17 @@ import { VALUE }                            from "../../kolibri/presentationMode
 import { projectInstantInput }              from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
 import { SimpleAttributeInputController }   from "../../kolibri/projector/simpleForm/simpleInputController.js";
 
-export { listItemProjector, selectListItemForModel, removeListItemForModel, formProjector,  masterClassName, pageCss }
+export { projectListItem, selectListItemForModel, removeListItemForModel, projectForm,  masterClassName, pageCss }
 
 const masterClassName = 'instant-update-master'; // should be unique for this projector
 const detailClassName = 'instant-update-detail';
 
-
+/**
+ *
+ * @param attributeName
+ * @param model
+ * @return {string}
+ */
 const elementId = (attributeName, model) =>
     (masterClassName + "-" + model[attributeName].getQualifier()).replaceAll("\.","-");
 
@@ -46,7 +51,7 @@ const removeListItemForModel = (attributeNames, root) => model => {
     });
 };
 
-const listItemProjector = (masterController, selectionController, model, attributeNames) => {
+const projectListItem = (masterController, selectionController, model, attributeNames) => {
 
     const deleteButton      = document.createElement("Button");
     deleteButton.setAttribute("class","delete");
@@ -74,8 +79,7 @@ const listItemProjector = (masterController, selectionController, model, attribu
 
 
 
-
-const formProjector = (detailController, detailCard, model, attributeNames) => {
+const projectForm = (detailController, detailCard, model, attributeNames) => {
 
     const personInputControllers = attributeNames.map( name => SimpleAttributeInputController(model[name]));
 

@@ -3,7 +3,7 @@
  */
 import { ObservableList, Observable }   from "../../kolibri/observable.js";
 import { EDITABLE, VALUE }              from "../../kolibri/presentationModel.js"
-import { reset, Person }                from "./person.js"
+import { Person, reset }                from "./person.js"
 
 export { ListController, SelectionController }
 
@@ -28,7 +28,7 @@ noSelection.lastname .setQualifier("Person.none.lastname");
 noSelection.detailed .setQualifier("Person.none.detailed");
 noSelection.firstname.getObs(EDITABLE).setValue(false); // the non-selection is not editable
 noSelection.lastname .getObs(EDITABLE).setValue(false);
-noSelection.detailed .getObs(VALUE).setValue(false);
+noSelection.detailed .getObs(VALUE).setValue(false);    // detail view can fold
 
 const SelectionController = model => {
 

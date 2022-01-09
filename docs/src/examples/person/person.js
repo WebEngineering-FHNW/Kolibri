@@ -1,21 +1,36 @@
 import {Attribute, EDITABLE, LABEL, TYPE, VALUE, VALID } from "../../kolibri/presentationModel.js";
-import {
-    formProjector,
-    listItemProjector,
-    masterClassName,
-    removeListItemForModel,
-    selectListItemForModel
-}                                                from "./instantUpdateProjector.js";
 
-export { MasterView, DetailView, Person, selectionMold, reset, ALL_ATTRIBUTE_NAMES }
+export { Person, reset, ALL_ATTRIBUTE_NAMES, selectionMold }
 
+/**
+ * Names of those attributes of a Person that are to appear on the UI.
+ * @type { String[] }
+ */
 const ALL_ATTRIBUTE_NAMES = ['firstname', 'lastname'];
 
+/**
+ * Internal, mutable, singleton state to make Person qualifiers unique.
+ * @private
+ */
 let idCounter = 0;
-const nextId = () => idCounter++;
 
+/**
+ * @typedef  PersonType
+ * @property { Attribute<String>}  firstname
+ * @property { Attribute<String>}  lastname
+ * @property { Attribute<Boolean>} detailed - whether this Person instance should be visible in a detail view
+ * @property { () => String }      toString
+ */
+
+/**
+ * Constructs a new Person instance with default values and sets up all necessary observables.
+ * There is a converter for the lastname to uppercase (just to show how such a thing is done), and
+ * there is a validator for the lastname to make sure it has at least 3 characters.
+ * @return { PersonType }
+ * @constructor
+ */
 const Person = () => {                               // facade
-    const id = nextId();
+    const id = idCounter++;
     const firstnameAttr = Attribute("John", `Person.${id}.firstname`);
     firstnameAttr.getObs(LABEL)     .setValue("First Name");
     firstnameAttr.getObs(TYPE)      .setValue("text");
@@ -28,7 +43,6 @@ const Person = () => {                               // facade
     lastnameAttr.getObs(EDITABLE)   .setValue(true);
     lastnameAttr.getObs(VALID)      .setValue(true);
 
-    // whether this person should appear in a detail view
     const detailedAttr  = Attribute(true, `Person.${id}.detailed`);
 
     lastnameAttr.setConverter( input => input.toUpperCase() );  // enable for playing around
@@ -42,29 +56,9 @@ const Person = () => {                               // facade
     }
 };
 
-// View-specific parts
-
-const MasterView = (listController, selectionController, rootElement) => {
-
-    const renderRow = person => {
-        const rowElements = listItemProjector(listController, selectionController, person, ALL_ATTRIBUTE_NAMES);
-        rootElement.append(...rowElements);
-        selectionController.setSelectedModel(person);
-    }
-
-    rootElement.classList.add(masterClassName);
-    rootElement.style['grid-template-columns'] = '1.7em repeat(' + ALL_ATTRIBUTE_NAMES.length + ', auto);';
-
-    // binding
-    listController.onModelAdd(renderRow);
-    listController.onModelRemove( removedModel => {
-        removeListItemForModel(ALL_ATTRIBUTE_NAMES, rootElement)(removedModel);
-        ALL_ATTRIBUTE_NAMES.forEach( name => removedModel[name].setQualifier(undefined)); // remove model attributes from model world
-        selectionController.clearSelection();
-    });
-    selectionController.onModelSelected(selectListItemForModel(ALL_ATTRIBUTE_NAMES, rootElement));
-};
-
+/**
+ * Remove the default values of a person.
+ */
 const reset = person => {
     ALL_ATTRIBUTE_NAMES.forEach( name => {
         person[name].setQualifier(undefined);
@@ -82,18 +76,3 @@ const reset = person => {
  * Some frameworks call this a "proxy".
  */
 const selectionMold = reset(Person()); // make a new empty Person model to start with
-
-const DetailView = (selectionController, detailCard) => {
-
-    const form = formProjector(selectionController, detailCard, selectionMold, ALL_ATTRIBUTE_NAMES); // only once, view is stable, binding is stable
-
-    selectionController.onModelSelected( selectedPersonModel =>
-        [...ALL_ATTRIBUTE_NAMES, "detailed"].forEach( name =>
-            selectionMold[name].setQualifier(selectedPersonModel[name].getQualifier())
-        )
-    );
-
-    selectionController.clearSelection();
-
-    return form;
-};

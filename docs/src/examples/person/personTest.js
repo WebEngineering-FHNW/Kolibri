@@ -1,23 +1,22 @@
 
 // noinspection PointlessArithmeticExpressionJS
 
-import { ListController, SelectionController,  }         from './personController.js';
-import { MasterView, DetailView, Person, selectionMold } from './person.js';
-import { TestSuite }                                     from "../../kolibri/util/test.js";
-import { fireEvent, INPUT}                               from "../../kolibri/util/dom.js";
+import { ListController, SelectionController,  } from './personController.js';
+import { Person, selectionMold }                 from './person.js';
+import { TestSuite }                             from "../../kolibri/util/test.js";
+import { fireEvent, INPUT}                       from "../../kolibri/util/dom.js";
+import {projectDetailView, projectMasterView}    from "./masterDetailProjector.js";
 
 const personSuite = TestSuite("example/person/person");
 
 personSuite.add("master add remove", assert => {
     // setup
-    const masterContainer       = document.createElement("div");
     const detailCard            = document.createElement("div");
     const masterController      = ListController(Person);
     const selectionController   = SelectionController(selectionMold);
-
     // create the sub-views, incl. binding
-    MasterView(masterController, selectionController, masterContainer);
-    DetailView(                  selectionController, detailCard);
+    const [masterContainer]     = projectMasterView(masterController, selectionController);
+    projectDetailView(selectionController, detailCard);
 
     const elementsPerRow = 1 + 2 * 2; // delete button plus 2 times label with input
 
@@ -39,15 +38,12 @@ personSuite.add("master add remove", assert => {
 
 personSuite.add("selections", assert => {
     // setup
-    const masterContainer       = document.createElement("div");
     const detailCard            = document.createElement("div");
     const masterController      = ListController(Person);
     const selectionController   = SelectionController(selectionMold);
-
     // create the sub-views, incl. binding
-
-    MasterView(masterController,  selectionController, masterContainer);
-    const [detail] = DetailView(    selectionController, detailCard);
+    const [masterContainer]     = projectMasterView(masterController, selectionController);
+    const [detail]              = projectDetailView(selectionController, detailCard);
 
     assert.is(masterContainer.querySelectorAll(".selected").length, 0);
     assert.is(detailCard.classList.contains("no-detail"), true);
@@ -79,13 +75,12 @@ personSuite.add("selections", assert => {
 // and the validator (min 3 chars, otherwise invalid)
 personSuite.add("multi-way editing", assert => {
     // setup
-    const masterContainer       = document.createElement("div");
     const detailCard            = document.createElement("div");
     const masterController      = ListController(Person);
     const selectionController   = SelectionController(selectionMold);
     // create the sub-views, incl. binding
-    MasterView(masterController,  selectionController, masterContainer);
-    const [detail] = DetailView(  selectionController, detailCard);
+    const [masterContainer]     = projectMasterView(masterController, selectionController);
+    const [detail]              = projectDetailView(selectionController, detailCard);
 
     masterController.addModel(); // make two models,
     masterController.addModel(); // select the second one

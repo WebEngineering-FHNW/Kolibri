@@ -1,16 +1,18 @@
 import { ListController, SelectionController }           from "./personController.js";
-import { MasterView, DetailView, Person, selectionMold } from './person.js';
+import { Person, selectionMold }                         from './person.js';
 
-import {pageCss}                                         from "./instantUpdateProjector.js";
+import { pageCss }                                       from "./instantUpdateProjector.js";
+import { projectDetailView, projectMasterView }          from "./masterDetailProjector.js";
 
 const listController      = ListController(Person);
 const selectionController = SelectionController(selectionMold);
 
 // create the sub-views, incl. binding
 
-MasterView(listController, selectionController, document.getElementById('masterContainer'));
+const master = projectMasterView(listController, selectionController, );
+document.getElementById('masterContainer').append(...master);
 
-const detailForm = DetailView(selectionController, document.getElementById('detailCard'));
+const detailForm = projectDetailView(selectionController, document.getElementById('detailCard'));
 document.getElementById('detailContainer').append(...detailForm);
 
 document.querySelector("head style").textContent += pageCss;
