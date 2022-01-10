@@ -1,3 +1,6 @@
+// It's unclear why IDEA has issues validating types and signatures in this file.
+// It appears that the type unification of generic types is to blame
+// noinspection JSCheckFunctionSignatures
 
 import { SimpleInputController } from "../../kolibri/projector/simpleForm/simpleInputController.js";
 import { Attribute, VALUE }      from "../../kolibri/presentationModel.js";
@@ -17,7 +20,6 @@ export { DayController }
  */
 const DayModel = () => {
     /** @type AttributeType<Number> */ const total = Attribute(0); // total minutes in this day
-    // noinspection JSValidateTypes
     return { total };
 };
 
@@ -74,7 +76,6 @@ const DayController = () => {
          })
      );
 
-    // it appears that the type unification has some issues with VALUE and onValueChangedCallback types
     // noinspection JSValidateTypes
     return {
         amStartCtrl ,

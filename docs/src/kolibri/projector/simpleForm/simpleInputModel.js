@@ -31,6 +31,7 @@ export { SimpleInputModel }
      });
  */
 const SimpleInputModel = ({value, label, name, type= TEXT}) => {
+    /** @type AttributeType<T> */
     const singleAttr = Attribute(value);
     singleAttr.getObs(TYPE)    .setValue(type);
     singleAttr.getObs(EDITABLE).setValue(true);
