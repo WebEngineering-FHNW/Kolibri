@@ -291,7 +291,7 @@ const arrayEq = arrayA => arrayB =>
 
 /**
  * From the {@link array}, remove the item at position "index". The arguments are given in curried style.
- * The index must be >= 0 and < array.length or nothing is removed and an empty array is returned.
+ * The index must be >= 0 and < `array.length` or nothing is removed and an empty array is returned.
  * @impure Since the given array is modified.
  * @function removeAt
  * @type    { (array:!Array<T>) => (index:!number) => Array<T> }
@@ -306,7 +306,7 @@ const removeAt = array => index => array.splice(index, 1);
 
 /**
  * From the {@link array}, remove the "item". The arguments are given in curried style.
- * In case that the item occurs multiple times in the array, only the first occurance is removed.
+ * In case that the item occurs multiple times in the array, only the first occurrence is removed.
  * @impure Since the given array is modified.
  * @function removeItem
  * @type    { (array:!Array<T>) => (item:!T) => Array<T> }
@@ -442,10 +442,7 @@ Number.prototype.times = function(callback){ return times(this)(callback); };
  * [1,2,3].sum();     // 6
  * ["1"].sum(Number); // 1
  */
-Array.prototype.sum = function(callback){ return sum(this)(callback); };/**
- * @module util/dom
- * Helper functions to work with the DOM.
- */
+Array.prototype.sum = function(callback){ return sum(this)(callback); };// noinspection JSUnusedGlobalSymbols
 
 /**
  * Create DOM objects from an HTML string.
@@ -495,7 +492,17 @@ const fireEvent = (element, eventTypeString) => {
  * Convenience function for {@link fireEvent} function with value "change".
  * @param { HTMLElement } element - The "target" element that fires the event.
  */
-const fireChangeEvent = element => fireEvent(element, CHANGE);/**
+const fireChangeEvent = element => fireEvent(element, CHANGE);
+
+
+/** @typedef { "text"|"number"|"checkbox"|"time"|"date"|"color" } InputTypeString */
+
+/** @type InputTypeString */ const TEXT     = "text";
+/** @type InputTypeString */ const NUMBER   = "number";
+/** @type InputTypeString */ const CHECKBOX = "checkbox";
+/** @type InputTypeString */ const TIME     = "time";
+/** @type InputTypeString */ const DATE     = "date";
+/** @type InputTypeString */ const COLOR    = "color";/**
  * Representing the client of an HTTP request.
  * @param { !String } url - the url to fetch as a string. Mandatory.
  * @param { "GET"|"PUT"|"POST"|"DELETE"|"HEAD"|"OPTION" } method - HTTP request method, default: "GET"
@@ -572,7 +579,8 @@ const hsla = (hue, sat, light, alpha) => `hsl(${hue}, ${sat}%, ${light}%, ${alph
 
 const accentColor  = hsl(322, 73, 52);
 const okColor      = hsl(104, 89, 28);
-const neutralColor = hsl(0,   0,  74);
+const neutralColor = hsl(  0,  0, 74);
+const selectColor  = hsl( 46, 90, 84);
 
 const outputColorValues = [256, 82, 55];
 const outputColor = hsl (...outputColorValues);
@@ -673,9 +681,9 @@ const Scheduler = () => {
  * @callback onValueChangeCallback<T>
  * @template T
  * @impure   this callback usually modifies the MVC view
- * @param {T} newValue   - the new value that is set by the change
- * @param {T} [oldValue] - the old value before the change. Can optionally be used by the callback.
- * @return void
+ * @param    {T} newValue   - the new value that is set by the change
+ * @param    {T} [oldValue] - the old value before the change. Can optionally be used by the callback.
+ * @return   void
  */
 
 /**
@@ -685,6 +693,7 @@ const Scheduler = () => {
  * IObservables are intended to be used with the concept of "stable binding", i.e. with
  * listeners that do not change after setup.
  * @typedef IObservable<T>
+ * @template T
  * @impure   Observables change their inner state (value) and maintain a list of observers that changes over time.    
  * @property { ()  => T }   getValue - a function that returns the current value
  * @property { (T) => void} setValue - a function that sets a new value, calling all registered {@link onValueChangeCallback}s
@@ -697,8 +706,8 @@ const Scheduler = () => {
  * Constructor for an IObservable<T>.
  * @pure
  * @template T
- * @param {!T} value      - the initial value to set. Mandatory.
- * @returns IObservable<T>
+ * @param    {!T} value      - the initial value to set. Mandatory.
+ * @returns  IObservable<T>
  * @constructor
  * @example
  * const obs = Observable("");
@@ -773,6 +782,7 @@ const ObservableList = list => {
     const delListeners = [];
     const removeAddListener    = addListener => addListeners.removeItem(addListener);
     const removeDeleteListener = delListener => delListeners.removeItem(delListener);
+    // noinspection JSUnusedGlobalSymbols
     return {
         onAdd: listener => addListeners.push(listener),
         onDel: listener => delListeners.push(listener),
@@ -802,6 +812,7 @@ const ObservableList = list => {
 
 /** @type ObservableTypeString */ const VALUE    = "value";
 /** @type ObservableTypeString */ const VALID    = "valid";
+// noinspection JSUnusedGlobalSymbols
 /** @type ObservableTypeString */ const EDITABLE = "editable";
 /** @type ObservableTypeString */ const LABEL    = "label";
 /** @type ObservableTypeString */ const NAME     = "name";
@@ -809,6 +820,7 @@ const ObservableList = list => {
 
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
+ * @template T
  * @param { AttributeType<T> } attribute
  * @return T
  */
@@ -937,7 +949,7 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
 /**
  * @callback Converter<T>
  * @template T
- * @param    {*} value - the raw value that is to be converted
+ * @param    { * } value - the raw value that is to be converted
  * @return   { T }     - the converted value
  * @example
  * dateAttribute.setConverter( date => date.toISOString() ); // external: Date, internal: String
@@ -955,12 +967,15 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
 /**
  * @typedef { Object } AttributeType<T>
  * @template T
- * @property { (name:ObservableTypeString, initValue:T=null) => Observable<T>} getObs - returns the {@link Observable}
+ * @property { (name:ObservableTypeString, initValue:*=null) => IObservable} getObs - returns the {@link IObservable}
  *              for the given name and creates a new one if needed with the optional initValue.
+ *              The initValue is of type T for the VALUE observable can be different for others, e.g. the
+ *              VALID observable is of type Boolean.
  * @property { (name:ObservableTypeString) =>  Boolean } hasObs - true if an {@link Observable}
  *              for the given name has already been created, false otherwise.
- * @property { (value:T) => void } setConvertedValue - sets the value for the {@link VALUE} observable
- *              after piping the value through the optional converter
+ * @property { (value:*) => void } setConvertedValue - sets the value for the {@link VALUE} observable
+ *              after piping the value through the optional converter. The value is not of type T since
+ *              the converter might convert any type to T.
  * @property { (converter:!Converter) => void } setConverter - use specialized converter, default is {@link id},
  *              converters are not allowed to be nullish.
  *              There can only ever be at most one converter on an attribute.
@@ -986,7 +1001,8 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  */
 const Attribute = (value, qualifier) => {
 
-    const observables = {}; // name -> observable
+    /** @type {Object.< String, IObservable >} */
+    const observables = {};
 
     const getQualifier = () => qualifier;
     const setQualifier = newQualifier => {
@@ -998,7 +1014,8 @@ const Attribute = (value, qualifier) => {
     const hasObs = name => observables.hasOwnProperty(name);
 
     const makeObservable = (name, initValue) => {
-        const observable = Observable(initValue);
+        const observable = Observable(initValue); // we might observe more types than just T
+        // noinspection JSValidateTypes
         observables[name] = observable;
         observable.onChange( _ => modelWorld.update(getQualifier, name, observable) );
         return observable;
@@ -1029,9 +1046,9 @@ const Attribute = (value, qualifier) => {
     };
 
     return { getObs, hasObs, setValidator, setConverter, setConvertedValue, getQualifier, setQualifier }
-};const release     = "0.1.40";
+};const release     = "0.1.41";
 
-const dateStamp   = "2022-01-08 T 18:23:17 MEZ";
+const dateStamp   = "2022-01-10 T 02:22:41 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
@@ -1076,15 +1093,16 @@ const totalMinutesToTimeString = totalMinutes => {
  * @property { !T } value      - mandatory value, will become the input value, defaults to undefined
  * @property { ?String } label - optional label, defaults to undefined
  * @property { ?String } name  - optional name that reflects the name attribute of an input element, used in forms
- * @property { "text"|"number"|"checkbox"|"time"|"date" } type - optional type, allowed values are
+ * @property { InputTypeString } type - optional type, allowed values are
  *              the values of the HTML Input element's "type" attribute. Defaults to "text".
  */
 
 /**
- * Create a presentation model for the purpose of being used to bind against an single HTML Input in
+ * Create a presentation model for the purpose of being used to bind against a single HTML Input in
  * combinations with its pairing Label element.
  * For a single input, it only needs one attribute.
  * @constructor
+ * @template T
  * @param  { InputAttributes }
  * @return { AttributeType<T> }
  * @example
@@ -1095,9 +1113,11 @@ const totalMinutesToTimeString = totalMinutes => {
          type:   "text",
      });
  */
-const SimpleInputModel = ({value, label, name, type="text"}) => {
+const SimpleInputModel = ({value, label, name, type= TEXT}) => {
     const singleAttr = Attribute(value);
-    singleAttr.getObs(TYPE).setValue(type);
+    singleAttr.getObs(TYPE)    .setValue(type);
+    singleAttr.getObs(EDITABLE).setValue(true);
+    singleAttr.getObs(VALID)   .setValue(true);
     if (null != label) singleAttr.getObs(LABEL).setValue(label);
     if (null != name ) singleAttr.getObs(NAME) .setValue(name);
 
@@ -1110,10 +1130,11 @@ const SimpleInputModel = ({value, label, name, type="text"}) => {
  * @property { ()  => String}               getType
  * @property { (valid: !Boolean) => void }  setValid
  * @property { (converter: Converter<T>)                  => void } setConverter
- * @property { (callback: onValueChangeCallback<String>) => void }  onLabelChanged
+ * @property { (callback: onValueChangeCallback<String>)  => void } onLabelChanged
  * @property { (callback: onValueChangeCallback<Boolean>) => void } onValidChanged
  * @property { (callback: onValueChangeCallback<T>)       => void } onValueChanged
  * @property { (callback: onValueChangeCallback<String>)  => void } onNameChanged
+ * @property { (callback: onValueChangeCallback<Boolean>) => void } onEditableChanged
  */
 
 /**
@@ -1133,24 +1154,151 @@ const SimpleInputModel = ({value, label, name, type="text"}) => {
          type:   "text",
      });
  */
-const SimpleInputController = args => {
-    const singleAttr = SimpleInputModel(args);
+const SimpleInputController = args => SimpleAttributeInputController(SimpleInputModel(args));
+
+const SimpleAttributeInputController = attribute => {
     return {
-        setValue:       singleAttr.setConvertedValue,
-        getValue:       singleAttr.getObs(VALUE).getValue,
-        setValid:       singleAttr.getObs(VALID).setValue,
-        getType:        singleAttr.getObs(TYPE) .getValue,
-        onValueChanged: singleAttr.getObs(VALUE).onChange,
-        onValidChanged: singleAttr.getObs(VALID).onChange,
-        onLabelChanged: singleAttr.getObs(LABEL).onChange,
-        onNameChanged:  singleAttr.getObs(NAME) .onChange,
-        setConverter:   singleAttr.setConverter,
+        setValue:           attribute.setConvertedValue,
+        getValue:           attribute.getObs(VALUE)     .getValue,
+        setValid:           attribute.getObs(VALID)     .setValue,
+        getType:            attribute.getObs(TYPE)      .getValue,
+        onValueChanged:     attribute.getObs(VALUE)     .onChange,
+        onValidChanged:     attribute.getObs(VALID)     .onChange,
+        onLabelChanged:     attribute.getObs(LABEL)     .onChange,
+        onNameChanged:      attribute.getObs(NAME)      .onChange,
+        onEditableChanged:  attribute.getObs(EDITABLE)  .onChange,
+        setConverter:       attribute.setConverter,
     };
+};/**
+ * @module projector/simpleForm/simpleInputProjector
+ *
+ * Following the projector pattern, this module exports projection functions
+ * ({@link projectChangeInput} and {@link projectInstantInput}) that create respective views
+ * and bind underlying models.
+ * Following classical MVC, the binding is available solely through a controller.
+ *
+ * Projectors are _compositional_. Projecting a form means projecting multiple inputs.
+ *
+ * Projectors are interchangeable. Any two projectors that export the same functions
+ * can be used in place of each other. This can provide a totally different "look & feel"
+ * to the application while all business logic and their test cases remain untouched.
+ */
+
+/**
+ * Internal mutable singleton state to produce unique id values for the label-input pairs.
+ * @private
+ * @type { Number }
+ */
+let counter = 0;
+
+/**
+ * Projection function that creates a view for input purposes, binds the information that is available through
+ * the inputController, and returns the generated views.
+ * @typedef InputProjector<T>
+ * @constructor
+ * @template T
+ * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
+ * @param  { String }                         formClassName   - context prefix that is used to make ids unique.
+ * @param  { !SimpleInputControllerType<T> }  inputController
+ * @return { [HTMLLabelElement, HTMLInputElement] } - array of label element and input element
+ */
+
+/**
+ * Implementation for the exported {@link projectInstantInput} and {@link projectChangeInput} function.
+ * @private
+ * @constructor
+ * @template T
+ * @param  { EventTypeString } eventType - the type of event that the input should listen to.
+ *                                         Usually {@link CHANGE} or {@link INPUT}.
+ * @return { InputProjector<T> }
+ */
+const projectInput = eventType => (formClassName, inputController) => {
+    if( ! inputController) console.error("x");
+    const id = formClassName + "-id-" + (counter++);
+    // create view
+    const elements = dom(`
+        <label for="${id}"></label>
+        <input type="${inputController.getType()}" id="${id}">
+    `);
+    /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
+    /** @type {HTMLInputElement} */ const inputElement = elements[1]; // ... we would use array deconstruction
+
+    // view and data binding can depend on the type
+    if (inputController.getType() === TIME) { // "hh:mm" in the vies vs minutes since midnight in the model
+        inputElement.addEventListener(eventType, _ => inputController.setValue(timeStringToMinutes(inputElement.value)));
+        inputController.onValueChanged(val => inputElement.value = totalMinutesToTimeString(val));
+    } else
+    if (inputController.getType() === CHECKBOX) { // "checked" attribute vs boolean in model
+        inputElement.addEventListener(eventType, _ => inputController.setValue(inputElement.checked));
+        inputController.onValueChanged(val => inputElement.checked = val);
+    } else {
+        inputElement.addEventListener(eventType, _ => inputController.setValue(inputElement.value));
+        inputController.onValueChanged(val => inputElement.value = val);
+    }
+
+    inputController.onLabelChanged (label => {
+        labelElement.textContent = label;
+        inputElement.setAttribute("title", label);
+    });
+    inputController.onNameChanged  (name  => inputElement.setAttribute("name", name || id));
+    inputController.onValidChanged (valid => inputElement.setCustomValidity(valid ? "" : "invalid"));
+
+    inputController.onEditableChanged(isEditable => isEditable
+        ? inputElement.removeAttribute("readonly")
+        : inputElement.setAttribute("readonly", "on"));
+
+    return [labelElement, inputElement];
+};
+
+/**
+ * An {@link InputProjector} that binds the input on value change.
+ * Depending on the control and how the browser handles it, this might require a user action to confirm the
+ * finalization of the value change like pressing the enter key or leaving the input field.
+ * @constant
+ * @template T
+ * @type { InputProjector<T> }
+ * @example
+ * const [labelElement, inputElement] = projectChangeInput(controller);
+ */
+const projectChangeInput  = projectInput(CHANGE);
+
+/**
+ * An {@link InputProjector} that binds the input on any change instantly.
+ * Depending on the control and how the browser handles it, this might result in each keystroke in a
+ * text field leading to instant update of the underlying model.
+ * @constant
+ * @template T
+ * @type { InputProjector<T> }
+ * @example
+ * const [labelElement, inputElement] = projectInstantInput(controller);
+ */
+const projectInstantInput = projectInput(INPUT);/**
+ * @typedef { Array<SimpleInputControllerType> } SimpleFormControllerType
+ */
+
+/**
+ * The SimpleFormController creates as many instances of {@link SimpleInputController} as needed for
+ * the inputs that are specified in the inputAttributesArray.
+ * Note that controllers are compositional by means of function (ctor) composition.
+ * @constructor
+ * @param  { Array<InputAttributes> } inputAttributesArray - Specification of the form to create and bind.
+ * @return { SimpleFormControllerType }
+ * @example
+ *     const controller = SimpleFormController([
+           { value: "Dierk", type: "text"   },
+           { value: 0,       type: "number" },
+       ]);
+ */
+const SimpleFormController = inputAttributesArray => {
+    // noinspection UnnecessaryLocalVariableJS
+    const inputControllers = inputAttributesArray.map(SimpleInputController);
+    // set up any business rules (we do not have any, yet)
+    return inputControllers ;
 };/**
  * @module projector/simpleForm/simpleFormProjector
  *
- * Following the projector pattern, this module exports projection functions
- * ({@link projectInput} and {@link projectForm}) that create respective views
+ * Following the projector pattern, this module exports the projection function
+ * {@link projectForm} that create respective views (and style)
  * and bind underlying models.
  * Following classical MVC, the binding is available solely through a controller.
  *
@@ -1167,57 +1315,6 @@ const SimpleInputController = args => {
  * @type {string}
  */
 const FORM_CLASS_NAME = "kolibri-simpleForm";
-
-/**
- * Internal mutable singleton state to produce unique id values for the label-input pairs.
- * @private
- * @type { Number }
- */
-let counter = 0;
-
-/**
- * Projection function that creates a view for input purposes, binds the information that is available through
- * the inputController, and returns the generated views.
- * @constructor
- * @template T
- * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
- * @param  { !SimpleInputControllerType<T> }  inputController
- * @return { [HTMLLabelElement, HTMLInputElement] } - array of label element and input element
- * @example
- * const [labelElement, inputElement] = projectInput(controller);
- */
-const projectInput = inputController => {
-    const id = FORM_CLASS_NAME + "-id-" + (counter++);
-    // create view
-    const elements = dom(`
-        <label for="${id}"></label>
-        <input type="${inputController.getType()}" id="${id}">
-    `);
-    /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
-    /** @type {HTMLInputElement} */ const inputElement = elements[1]; // ... we would use array deconstruction
-
-    // view and data binding can depend on the type
-    if (inputController.getType() === "time") { // "hh:mm" in the vies vs minutes since midnight in the model
-        inputElement.onchange = _ => inputController.setValue(timeStringToMinutes(inputElement.value));
-        inputController.onValueChanged(val => inputElement.value = totalMinutesToTimeString(val));
-    } else
-    if (inputController.getType() === "checkbox") { // "checked" attribute vs boolean in model
-        inputElement.onchange = _ => inputController.setValue(inputElement.checked);
-        inputController.onValueChanged(val => inputElement.checked = val);
-    } else {
-        inputElement.onchange = _ => inputController.setValue(inputElement.value);
-        inputController.onValueChanged(val => inputElement.value = val);
-    }
-
-    inputController.onLabelChanged (label => {
-        labelElement.textContent = label;
-        inputElement.setAttribute("title", label);
-    });
-    inputController.onNameChanged  (name  => inputElement.setAttribute("name", name));
-    inputController.onValidChanged (valid => inputElement.setCustomValidity(valid ? "" : "invalid"));
-
-    return [labelElement, inputElement];
-};
 
 /**
  * Projection function that creates a form view for input purposes with as many inputs as the formController
@@ -1242,7 +1339,7 @@ const projectForm = formController => {
     /** @type { HTMLFormElement } */ const form = elements[0];
     const fieldset = form.children[0];
 
-    formController.forEach(inputController => fieldset.append(...projectInput(inputController)));
+    formController.forEach(inputController => fieldset.append(...projectChangeInput(FORM_CLASS_NAME, inputController)));
 
     return [form];
 };
@@ -1263,25 +1360,4 @@ const FORM_CSS = `
         border-style:    none;
         box-shadow:      ${shadowCss}                          
     }
-`;/**
- * @typedef { Array<SimpleInputControllerType> } SimpleFormControllerType
- */
-
-/**
- * The SimpleFormController creates as many instances of {@link SimpleInputController} as needed for
- * the inputs that are specified in the inputAttributesArray.
- * Note that controllers are compositional by means of function (ctor) composition.
- * @constructor
- * @param  { Array<InputAttributes> } inputAttributesArray - Specification of the form to create and bind.
- * @return { SimpleFormControllerType }
- * @example
- *     const controller = SimpleFormController([
-           { value: "Dierk", type: "text"   },
-           { value: 0,       type: "number" },
-       ]);
- */
-const SimpleFormController = inputAttributesArray => {
-    const inputControllers = inputAttributesArray.map(SimpleInputController);
-    // set up any business rules (we do not have any, yet)
-    return inputControllers ;
-};// production classes for bundling and statistics
+`;// production classes for bundling and statistics
