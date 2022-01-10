@@ -6,7 +6,7 @@ body {
 .card {
     transition: all ease-in-out .5s;
     max-width:  40em;
-    margin:     1em auto 4em auto;
+    margin:     1em auto 2em auto;
     padding:    2em;
     box-shadow: var(--kolibri-box-shadow);
 }

@@ -55,7 +55,9 @@
             >simpleDayProjector</a>,
             which in turn relies on the generic
             <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleFormProjector.js"
-            >simpleFormProjector</a>.
+            >simpleFormProjector</a> that again delegates to
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleInputProjector.js"
+            >simpleInputProjector</a>.
         </p>
         <p> The visual appearance of an application needs to stay fresh and appealing.
             This is why it is so important that we can replace projectors very easily in the
@@ -107,6 +109,17 @@
             >weekControllerTest</a> does the equivalent for
             proper calculation of the actual total number of minutes as exposed on the controller API.
         </p>
+
+        <h2>Next Step</h2>
+        <p>
+            The "work week" has shown us how multiple inputs can coordinate to achieve a common goal.
+        </p>
+        <p> The next step is to make this coordination even more elaborate with multi-way editing in a
+            <a href="../person/MasterDetail.html">master-detail</a> view.
+        </p>
+
+        <p class="until"></p>
+
     </div>
 
     <script type="module" src="./starter.js"></script>
