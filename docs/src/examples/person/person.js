@@ -31,27 +31,31 @@ let idCounter = 0;
  */
 const Person = () => {                               // facade
     const id = idCounter++;
+    /** @type AttributeType<String> */
     const firstnameAttr = Attribute("John", `Person.${id}.firstname`);
     firstnameAttr.getObs(LABEL)     .setValue("First Name");
     firstnameAttr.getObs(TYPE)      .setValue("text");
     firstnameAttr.getObs(EDITABLE)  .setValue(true);
     firstnameAttr.getObs(VALID)     .setValue(true);
 
+    /** @type AttributeType<String> */
     const lastnameAttr  = Attribute("Dow", `Person.${id}.lastname`);
     lastnameAttr.getObs(LABEL)      .setValue("Last Name");
     lastnameAttr.getObs(TYPE)       .setValue("text");
     lastnameAttr.getObs(EDITABLE)   .setValue(true);
     lastnameAttr.getObs(VALID)      .setValue(true);
 
+    /** @type AttributeType<Boolean> */
     const detailedAttr  = Attribute(true, `Person.${id}.detailed`);
 
     lastnameAttr.setConverter( input => input.toUpperCase() );  // enable for playing around
     lastnameAttr.setValidator( input => input.length >= 3   );
 
+    // noinspection JSValidateTypes
     return {
-        firstname:          firstnameAttr,
-        lastname:           lastnameAttr,
-        detailed:           detailedAttr,
+        firstname:  firstnameAttr,
+        lastname:   lastnameAttr,
+        detailed:   detailedAttr,
         toString: () => firstnameAttr.getObs(VALUE).getValue() + " " + lastnameAttr.getObs(VALUE).getValue(),
     }
 };

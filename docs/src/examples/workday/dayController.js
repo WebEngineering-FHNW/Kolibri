@@ -17,6 +17,7 @@ export { DayController }
  */
 const DayModel = () => {
     /** @type AttributeType<Number> */ const total = Attribute(0); // total minutes in this day
+    // noinspection JSValidateTypes
     return { total };
 };
 

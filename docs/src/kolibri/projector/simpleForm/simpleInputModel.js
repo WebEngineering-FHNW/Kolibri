@@ -19,6 +19,7 @@ export { SimpleInputModel }
  * combinations with its pairing Label element.
  * For a single input, it only needs one attribute.
  * @constructor
+ * @template T
  * @param  { InputAttributes }
  * @return { AttributeType<T> }
  * @example

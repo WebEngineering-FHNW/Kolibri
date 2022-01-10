@@ -5,23 +5,56 @@ import { SimpleAttributeInputController }   from "../../kolibri/projector/simple
 
 export { projectListItem, selectListItemForModel, removeListItemForModel, projectForm,  masterClassName, pageCss }
 
-const masterClassName = 'instant-update-master'; // should be unique for this projector
+/**
+ * A name that serves multiple purposes as it allows setting up specific css styling by using a consistent
+ * style class name. It also facilitates creating unique identifiers within the generated views.
+ * It should be unique among all css class names that are used in the application.
+ * Future developers might want this information to be passed in from the outside to allow more flexibility.
+ * @type { String }
+ */
+const masterClassName = 'instant-update-master';
+
+/** @private */
 const detailClassName = 'instant-update-detail';
 
 /**
- *
- * @param attributeName
- * @param model
- * @return {string}
+ * Returns a unique id for the html element that is to represent the attribute such that we can create the
+ * element in a way that allows later retrieval when it needs to be removed.
+ * The resulting String should follow the constraints for properly formatted html ids, i.e. not dots allowed.
+ * @template T
+ * @private
+ * @pure
+ * @param  { String } attributeName
+ * @param  { T }      model
+ * @return { String }
  */
 const elementId = (attributeName, model) =>
     (masterClassName + "-" + model[attributeName].getQualifier()).replaceAll("\.","-");
 
+/**
+ * Returns a unique id for the html delete button that is to represent the model such that we can create the
+ * element in a way that allows later retrieval when it needs to be removed.
+ * The resulting String should follow the constraints for properly formatted html ids, i.e. not dots allowed.
+ * @template T
+ * @private
+ * @pure
+ * @param  { String[] } attributeNames
+ * @param  { T }        model
+ * @return { String }
+ */
 const deleteButtonId = (attributeNames, model) => {
     const representativeAttributeName = attributeNames[0];
     return (masterClassName + "-delete-" + model[representativeAttributeName].getQualifier()).replaceAll("\.","-");
 };
 
+/**
+ * When a selection changes, the change must become visible in the master view.
+ * The old selected model must be deselected, the new one selected.
+ * @template T
+ * @param { String[] }    attributeNames
+ * @param { HTMLElement } root
+ * @return { (newModel:T, oldModel:T) => void}
+ */
 const selectListItemForModel = (attributeNames, root) => (newModel, oldModel) => {
     const oldDeleteButton = root.querySelector("#" + deleteButtonId(attributeNames, oldModel));
     if (oldDeleteButton) {
@@ -33,6 +66,13 @@ const selectListItemForModel = (attributeNames, root) => (newModel, oldModel) =>
     }
 };
 
+/**
+ * When a model is removed from the master view, the respective view elements must be removed as well.
+ * @template T
+ * @param { String[] }    attributeNames
+ * @param { HTMLElement } root
+ * @return { (model:T) => void }
+ */
 const removeListItemForModel = (attributeNames, root) => model => {
     const deleteButton = root.querySelector("#" + deleteButtonId(attributeNames, model));
     if (deleteButton) {
@@ -51,12 +91,21 @@ const removeListItemForModel = (attributeNames, root) => model => {
     });
 };
 
-const projectListItem = (masterController, selectionController, model, attributeNames) => {
+/**
+ * Creating the views and bindings for an item in the list view, binding for instant value updates.
+ * @template T
+ * @param { ListControllerType<T> }         listController
+ * @param { SelectionControllerType<T> }    selectionController
+ * @param { T }                             model
+ * @param { String[] }                      attributeNames
+ * @return { HTMLElement[] }
+ */
+const projectListItem = (listController, selectionController, model, attributeNames) => {
 
     const deleteButton      = document.createElement("Button");
     deleteButton.setAttribute("class","delete");
     deleteButton.innerHTML  = "&times;";
-    deleteButton.onclick    = _ => masterController.removeModel(model);
+    deleteButton.onclick    = _ => listController.removeModel(model);
     deleteButton.id         = deleteButtonId(attributeNames, model);
 
     const elements          = [];
@@ -79,6 +128,15 @@ const projectListItem = (masterController, selectionController, model, attribute
 
 
 
+/**
+ * Creating the views and bindings for an item in the list view, binding for instant value updates.
+ * @template T
+ * @param { SelectionControllerType<T> }    detailController
+ * @param { HTMLElement }                   detailCard
+ * @param { T }                             model
+ * @param { String[] }                      attributeNames
+ * @return { HTMLFormElement[] }
+ */
 const projectForm = (detailController, detailCard, model, attributeNames) => {
 
     const personInputControllers = attributeNames.map( name => SimpleAttributeInputController(model[name]));
@@ -103,10 +161,15 @@ const projectForm = (detailController, detailCard, model, attributeNames) => {
         }
     })
 
-    return elements;
+    return [ form ];
 };
 
-
+/**
+ * CSS snippet to append to the head style when using the instant update projector.
+ * @type { String }
+ * @example
+ * document.querySelector("head style").textContent += pageCss;
+ */
 const pageCss = `
     .${masterClassName} {
         display:        grid;
