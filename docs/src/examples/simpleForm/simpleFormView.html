@@ -44,8 +44,11 @@
         </p>
         <p> Models, view, and bindings are totally generic and provided by Kolibri. The current generic
             <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleFormProjector.js"
-            >simpleFormProjector</a> covers
-            "simple" input types as available through the HTML Input element (no selects or multiple values).
+            >simpleFormProjector</a> creates a simple form with
+            simple input types. Each such type is created and bound by the generic
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleInputProjector.js"
+            >simpleInputProjector</a>.
+            "Simple" means types that the standard HTML Input element can handle (no selects or multiple values).
         </p>
         <p> The remaining non-generic thing to test is the general setup. We test this in
             <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/simpleForm/simpleFormViewTest.js"
