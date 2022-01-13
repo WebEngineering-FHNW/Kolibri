@@ -17,7 +17,6 @@ export { Attribute, QualifiedAttribute,
 
 /** @type ObservableTypeString */ const VALUE    = "value";
 /** @type ObservableTypeString */ const VALID    = "valid";
-// noinspection JSUnusedGlobalSymbols
 /** @type ObservableTypeString */ const EDITABLE = "editable";
 /** @type ObservableTypeString */ const LABEL    = "label";
 /** @type ObservableTypeString */ const NAME     = "name";
@@ -55,6 +54,7 @@ const presentationModelFromAttributeNames = attributeNames => {
 
 /**
  * @typedef ModelWorldType
+ * @template T
  * @property { ( getQualifier:function():String, name:ObservableTypeString, observable: IObservable<T> ) => void } update -
  *              update the value of the named observableType for all attributes that have the same qualifier.
  *              Add the respective observable if it not yet known.
@@ -143,6 +143,7 @@ const readQualifierValue = modelWorld.readQualifierValue; // specific export
  * Convenience constructor of an {@link Attribute} that builds its initial value from already existing qualified values (if any)
  * instead of overriding possibly existing qualified values with the constructor value.
  * @constructor
+ * @template T
  * @param { String } qualifier - mandatory. Nullish values make no sense here since one can use {@link Attribute}.
  * @return { AttributeType<T> }
  * @impure since it changes the ModelWorld.
@@ -152,7 +153,7 @@ const readQualifierValue = modelWorld.readQualifierValue; // specific export
 const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier), qualifier);
 
 /**
- * @callback Converter<T>
+ * @callback Converter
  * @template T
  * @param    { * } value - the raw value that is to be converted
  * @return   { T }     - the converted value
@@ -161,7 +162,7 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  */
 
 /**
- * @callback Validator<T>
+ * @callback Validator
  * @template T
  * @param    { T } value
  * @return   { Boolean } - whether the given value is considered valid.
@@ -170,7 +171,7 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  */
 
 /**
- * @typedef { Object } AttributeType<T>
+ * @typedef  AttributeType
  * @template T
  * @property { (name:ObservableTypeString, initValue:*=null) => IObservable} getObs - returns the {@link IObservable}
  *              for the given name and creates a new one if needed with the optional initValue.
@@ -194,6 +195,7 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  */
 /**
  * Constructor that creates a new attribute with a value and an optional qualifier.
+ * @template T
  * @param  { T } value              - the initial value
  * @param  { String } [qualifier]   - the optional qualifier. If provided and non-nullish it will put the attribute
  *          in the ModelWorld and all existing attributes with the same qualifier will be updated to the initial value.

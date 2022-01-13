@@ -6,14 +6,10 @@
 export { arrayEq, removeItem, removeAt, times, sum }
 
 /**
-* @template T
-* @typedef {*} T - generic type is unconstrained
-*/
-
-/**
  * A function that compares two arrays for equality by checking that they are of the same length and
  * all elements are pairwise equal with respect to the "===" operator. Arguments are given in curried style.
  * Arguments must not be null/undefined and must be of type {@link Array}.
+ * @template T
  * @pure
  * @complexity O(n)
  * @haskell  [a] -> [a] -> bool
@@ -33,6 +29,7 @@ const arrayEq = arrayA => arrayB =>
  * The index must be >= 0 and < `array.length` or nothing is removed and an empty array is returned.
  * @impure Since the given array is modified.
  * @function removeAt
+ * @template T
  * @type    { (array:!Array<T>) => (index:!number) => Array<T> }
  * @param   { !Array<T>} array - the array to remove from. Mandatory.
  * @returns { (index:!number) => Array<T> } - finally, the removed element is returned in a singleton array, or an empty array in case nothing was removed, see {@link splice}
@@ -48,6 +45,7 @@ const removeAt = array => index => array.splice(index, 1);
  * In case that the item occurs multiple times in the array, only the first occurrence is removed.
  * @impure Since the given array is modified.
  * @function removeItem
+ * @template T
  * @type    { (array:!Array<T>) => (item:!T) => Array<T> }
  * @param   { !Array<T>} array - the array to remove from. Mandatory.
  * @returns { (item:!T) => Array<T> } - finally, the removed element is returned in a singleton array or an empty array in case nothing was removed, see {@link splice}
@@ -67,6 +65,7 @@ const removeItem = array => item => {
 /**
  * @callback timesCallback
  * @param {!number} index
+ * @template T
  * @return {T}
  */
 
@@ -77,6 +76,7 @@ const removeItem = array => item => {
  * @impure if the callback is impure
  * @haskell  Int -> (Int -> a) -> [a]
  * @function times
+ * @template T
  * @type    { (soMany:!number) => (callback:?timesCallback) => Array<T> }
  * @param   { !number | string } soMany - how often to execute the callback. Negative values will be treated like 0. Mandatory.
  * @returns { (callback:?timesCallback) => Array<T> } - finally returns an array of the assembled callback results
@@ -95,6 +95,7 @@ const times = soMany => callback => {
 
 /**
  * @callback sumCallback
+ * @template T
  * @param {!T} item
  * @param {?number} index
  * @return {number}
@@ -107,6 +108,7 @@ const times = soMany => callback => {
  * @impure   if the callback is impure
  * @haskell  Num n => [a] -> (a -> n) -> n
  * @function times
+ * @template T
  * @type    { (array:!Array<T>) => (callback:?sumCallback) => number }
  * @param   { array:!Array<T> } array - the array to sum up. Mandatory.
  * @returns { (callback:?sumCallback) => number } - finally returns the sum

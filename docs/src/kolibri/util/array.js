@@ -9,15 +9,12 @@ import { arrayEq, removeItem, removeAt, times, sum } from "./arrayFunctions.js"
 export {
     // there is nothing to export since we only augment the prototypes
 }
-/**
-* @template T
-* @typedef {*} T - generic type is unconstrained
-*/
 
 /**
  * See {@link arrayEq}.
- * @param {Array<T>} array
- * @return {boolean}
+ * @template T
+ * @param  { Array<T> } array
+ * @return { Boolean  }
  * @example
  * [1].eq([1]); // true
  */
@@ -25,8 +22,9 @@ Array.prototype.eq = function(array) { return arrayEq(this)(array);}
 
 /**
  * See {@link removeAt}.
+ * @template T
  * @impure Modifies the array instance.
- * @param  { number } index
+ * @param  { Number } index
  * @return { Array<T> }
  * @example
  * [1,2,3].removeAt(0);
@@ -35,6 +33,7 @@ Array.prototype.removeAt = function(index){ return removeAt(this)(index); };
 
 /**
  * See {@link removeItem}.
+ * @template T
  * @impure Modifies the array instance.
  * @param  { T } item
  * @return { Array<T> }
@@ -45,6 +44,7 @@ Array.prototype.removeItem = function(item){ return removeItem(this)(item); };
 
 /**
  * See {@link times}.
+ * @template T
  * @param  { ?timesCallback } callback
  * @return { Array<T> }
  * @example
@@ -54,6 +54,7 @@ String.prototype.times = function(callback){ return times(this)(callback); };
 
 /**
  * See {@link times}.
+ * @template T
  * @param  { ?timesCallback } callback
  * @return { Array<T> }
  * @example

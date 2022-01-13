@@ -1,8 +1,17 @@
+/**
+ * @module examples/workweek/weekController
+ * API for a work week consisting or so-many work days.
+ * Collaborates with {@link DayController}.
+ */
+
 import {Attribute, VALUE} from "../../kolibri/presentationModel.js";
 import "../../kolibri/util/array.js"
 
 export { WeekController }
 
+/** @typedef  WeekModelType
+ *  @property { AttributeType<Number> } total - working minutes in this week
+ */
 /**
  * A presentation model for a work week that captures all information that the controller needs on top of
  * what he can delegate to other controllers. In this case there is only the total number of minutes that
@@ -11,12 +20,12 @@ export { WeekController }
  * to show the canonical structure of controllers that encapsulate a presentation model.
  * @private
  * @pure
- * @return {{total: AttributeType<Number>}} - an object that contains the total working minutes this week
+ * @return { WeekModelType }
  * @constructor
  */
 const WeekModel = () => {
     /** @type AttributeType<Number> */ const total = Attribute(0); // total minutes in this week
-    return { total };
+    return /** @type WeekModelType */ { total };
 };
 
 /**

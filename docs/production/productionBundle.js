@@ -267,14 +267,10 @@ const Just = Right;
  */
 
 /**
-* @template T
-* @typedef {*} T - generic type is unconstrained
-*/
-
-/**
  * A function that compares two arrays for equality by checking that they are of the same length and
  * all elements are pairwise equal with respect to the "===" operator. Arguments are given in curried style.
  * Arguments must not be null/undefined and must be of type {@link Array}.
+ * @template T
  * @pure
  * @complexity O(n)
  * @haskell  [a] -> [a] -> bool
@@ -294,6 +290,7 @@ const arrayEq = arrayA => arrayB =>
  * The index must be >= 0 and < `array.length` or nothing is removed and an empty array is returned.
  * @impure Since the given array is modified.
  * @function removeAt
+ * @template T
  * @type    { (array:!Array<T>) => (index:!number) => Array<T> }
  * @param   { !Array<T>} array - the array to remove from. Mandatory.
  * @returns { (index:!number) => Array<T> } - finally, the removed element is returned in a singleton array, or an empty array in case nothing was removed, see {@link splice}
@@ -309,6 +306,7 @@ const removeAt = array => index => array.splice(index, 1);
  * In case that the item occurs multiple times in the array, only the first occurrence is removed.
  * @impure Since the given array is modified.
  * @function removeItem
+ * @template T
  * @type    { (array:!Array<T>) => (item:!T) => Array<T> }
  * @param   { !Array<T>} array - the array to remove from. Mandatory.
  * @returns { (item:!T) => Array<T> } - finally, the removed element is returned in a singleton array or an empty array in case nothing was removed, see {@link splice}
@@ -328,6 +326,7 @@ const removeItem = array => item => {
 /**
  * @callback timesCallback
  * @param {!number} index
+ * @template T
  * @return {T}
  */
 
@@ -338,6 +337,7 @@ const removeItem = array => item => {
  * @impure if the callback is impure
  * @haskell  Int -> (Int -> a) -> [a]
  * @function times
+ * @template T
  * @type    { (soMany:!number) => (callback:?timesCallback) => Array<T> }
  * @param   { !number | string } soMany - how often to execute the callback. Negative values will be treated like 0. Mandatory.
  * @returns { (callback:?timesCallback) => Array<T> } - finally returns an array of the assembled callback results
@@ -356,6 +356,7 @@ const times = soMany => callback => {
 
 /**
  * @callback sumCallback
+ * @template T
  * @param {!T} item
  * @param {?number} index
  * @return {number}
@@ -368,6 +369,7 @@ const times = soMany => callback => {
  * @impure   if the callback is impure
  * @haskell  Num n => [a] -> (a -> n) -> n
  * @function times
+ * @template T
  * @type    { (array:!Array<T>) => (callback:?sumCallback) => number }
  * @param   { array:!Array<T> } array - the array to sum up. Mandatory.
  * @returns { (callback:?sumCallback) => number } - finally returns the sum
@@ -382,15 +384,12 @@ const sum = array => (callback = Number) =>
  * These functions live in their own module such that users of the library can keep their code clean
  * from prototype modifications if they prefer to do so.
  */
-/**
-* @template T
-* @typedef {*} T - generic type is unconstrained
-*/
 
 /**
  * See {@link arrayEq}.
- * @param {Array<T>} array
- * @return {boolean}
+ * @template T
+ * @param  { Array<T> } array
+ * @return { Boolean  }
  * @example
  * [1].eq([1]); // true
  */
@@ -398,8 +397,9 @@ Array.prototype.eq = function(array) { return arrayEq(this)(array);};
 
 /**
  * See {@link removeAt}.
+ * @template T
  * @impure Modifies the array instance.
- * @param  { number } index
+ * @param  { Number } index
  * @return { Array<T> }
  * @example
  * [1,2,3].removeAt(0);
@@ -408,6 +408,7 @@ Array.prototype.removeAt = function(index){ return removeAt(this)(index); };
 
 /**
  * See {@link removeItem}.
+ * @template T
  * @impure Modifies the array instance.
  * @param  { T } item
  * @return { Array<T> }
@@ -418,6 +419,7 @@ Array.prototype.removeItem = function(item){ return removeItem(this)(item); };
 
 /**
  * See {@link times}.
+ * @template T
  * @param  { ?timesCallback } callback
  * @return { Array<T> }
  * @example
@@ -427,6 +429,7 @@ String.prototype.times = function(callback){ return times(this)(callback); };
 
 /**
  * See {@link times}.
+ * @template T
  * @param  { ?timesCallback } callback
  * @return { Array<T> }
  * @example
@@ -603,6 +606,7 @@ const shadowCss = `
  * A dataflow abstraction that takes a function that specifies how to create a value and returns a
  * function that returns that value. The callback will be only called when needed and not more than once.
  * In other contexts known as "lazy" or "thunk".
+ * @template T
  * @param { !createValueCallback } createValue - will be called when needed and not more than once. Mandatory.
  * @return { () => T }
  * @constructor
@@ -739,6 +743,7 @@ const Observable = value => {
 
 /**
  * @callback observableListCallback
+ * @template T
  * @impure   this callback usually modifies the MVC view
  * @param {T} item - the item that has been added to or removed from the {@link IObservableList<T> }
  * @return void
@@ -746,6 +751,7 @@ const Observable = value => {
 
 /**
  * @callback predicateCallback
+ * @template T
  * @param {T} item - an item that is stored in the {@link IObservableList<T> }
  * @return boolean
  */
@@ -754,7 +760,8 @@ const Observable = value => {
  * IObservableList<T> is the interface for lists that can be observed for add or delete operations.
  * In this variant, we allow registering and unregistering many observers.
  * Observers that are still registered are not garbage collected before the observable list itself is collected.
- * @typedef IObservableList<T>
+ * @typedef IObservableList
+ * @template T
  * @impure   Observables change their inner decorated list and maintain two lists of observers that changes over time.  
  * @property { (observableListCallback) => void }  onAdd - register an observer that is called whenever an item is added.
  * @property { (observableListCallback) => void }  onDel - register an observer that is called whenever an item is added.
@@ -769,6 +776,7 @@ const Observable = value => {
 /**
  * Constructor for an IObservableList<T>.
  * @pure
+ * @template T
  * @param {!Array<T>} list - the inner list that is to be decorated with observability. Mandatory. See also GoF decorator pattern.
  * @returns IObservableList<T>
  * @constructor
@@ -812,7 +820,6 @@ const ObservableList = list => {
 
 /** @type ObservableTypeString */ const VALUE    = "value";
 /** @type ObservableTypeString */ const VALID    = "valid";
-// noinspection JSUnusedGlobalSymbols
 /** @type ObservableTypeString */ const EDITABLE = "editable";
 /** @type ObservableTypeString */ const LABEL    = "label";
 /** @type ObservableTypeString */ const NAME     = "name";
@@ -850,6 +857,7 @@ const presentationModelFromAttributeNames = attributeNames => {
 
 /**
  * @typedef ModelWorldType
+ * @template T
  * @property { ( getQualifier:function():String, name:ObservableTypeString, observable: IObservable<T> ) => void } update -
  *              update the value of the named observableType for all attributes that have the same qualifier.
  *              Add the respective observable if it not yet known.
@@ -938,6 +946,7 @@ const readQualifierValue = modelWorld.readQualifierValue; // specific export
  * Convenience constructor of an {@link Attribute} that builds its initial value from already existing qualified values (if any)
  * instead of overriding possibly existing qualified values with the constructor value.
  * @constructor
+ * @template T
  * @param { String } qualifier - mandatory. Nullish values make no sense here since one can use {@link Attribute}.
  * @return { AttributeType<T> }
  * @impure since it changes the ModelWorld.
@@ -947,7 +956,7 @@ const readQualifierValue = modelWorld.readQualifierValue; // specific export
 const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier), qualifier);
 
 /**
- * @callback Converter<T>
+ * @callback Converter
  * @template T
  * @param    { * } value - the raw value that is to be converted
  * @return   { T }     - the converted value
@@ -956,7 +965,7 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  */
 
 /**
- * @callback Validator<T>
+ * @callback Validator
  * @template T
  * @param    { T } value
  * @return   { Boolean } - whether the given value is considered valid.
@@ -965,7 +974,7 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  */
 
 /**
- * @typedef { Object } AttributeType<T>
+ * @typedef  AttributeType
  * @template T
  * @property { (name:ObservableTypeString, initValue:*=null) => IObservable} getObs - returns the {@link IObservable}
  *              for the given name and creates a new one if needed with the optional initValue.
@@ -989,6 +998,7 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  */
 /**
  * Constructor that creates a new attribute with a value and an optional qualifier.
+ * @template T
  * @param  { T } value              - the initial value
  * @param  { String } [qualifier]   - the optional qualifier. If provided and non-nullish it will put the attribute
  *          in the ModelWorld and all existing attributes with the same qualifier will be updated to the initial value.
@@ -1046,9 +1056,9 @@ const Attribute = (value, qualifier) => {
     };
 
     return { getObs, hasObs, setValidator, setConverter, setConvertedValue, getQualifier, setQualifier }
-};const release     = "0.1.41";
+};const release     = "0.1.42";
 
-const dateStamp   = "2022-01-10 T 02:22:41 MEZ";
+const dateStamp   = "2022-01-13 T 20:17:39 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 

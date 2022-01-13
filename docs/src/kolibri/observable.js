@@ -65,6 +65,7 @@ const Observable = value => {
 
 /**
  * @callback observableListCallback
+ * @template T
  * @impure   this callback usually modifies the MVC view
  * @param {T} item - the item that has been added to or removed from the {@link IObservableList<T> }
  * @return void
@@ -72,6 +73,7 @@ const Observable = value => {
 
 /**
  * @callback predicateCallback
+ * @template T
  * @param {T} item - an item that is stored in the {@link IObservableList<T> }
  * @return boolean
  */
@@ -80,7 +82,8 @@ const Observable = value => {
  * IObservableList<T> is the interface for lists that can be observed for add or delete operations.
  * In this variant, we allow registering and unregistering many observers.
  * Observers that are still registered are not garbage collected before the observable list itself is collected.
- * @typedef IObservableList<T>
+ * @typedef IObservableList
+ * @template T
  * @impure   Observables change their inner decorated list and maintain two lists of observers that changes over time.  
  * @property { (observableListCallback) => void }  onAdd - register an observer that is called whenever an item is added.
  * @property { (observableListCallback) => void }  onDel - register an observer that is called whenever an item is added.
@@ -95,6 +98,7 @@ const Observable = value => {
 /**
  * Constructor for an IObservableList<T>.
  * @pure
+ * @template T
  * @param {!Array<T>} list - the inner list that is to be decorated with observability. Mandatory. See also GoF decorator pattern.
  * @returns IObservableList<T>
  * @constructor

@@ -1,6 +1,8 @@
-// It's unclear why IDEA has issues validating types and signatures in this file.
-// It appears that the type unification of generic types is to blame
-// noinspection JSCheckFunctionSignatures
+/**
+ * @module examples/workday/dayController
+ * API and business rules for a workday, manages morning and afternoon working hours with constraints.
+ */
+
 
 import { SimpleInputController } from "../../kolibri/projector/simpleForm/simpleInputController.js";
 import { Attribute, VALUE }      from "../../kolibri/presentationModel.js";

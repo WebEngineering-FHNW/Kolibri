@@ -13,18 +13,27 @@ import { Observable } from "../observable.js";
 /**
  * The running total of executed test assertions.
  * @impure the reference does not change, but the contained value. Listeners will produce side effects like DOM changes.
- * @type {IObservable<T>}
+ * @type { IObservable<Number> }
  */
 const total = Observable(0);
+
+/** @type { (Number) => void } */
 const addToTotal = num => total.setValue( num + total.getValue());
 
+/** @typedef equalityCheckFunction
+ * @template V
+ * @function
+ * @param { V } actual
+ * @param { V } expected
+ * @return void
+ * */
+
 /**
- * @typedef {Object} AssertType
- * @template T
- * @property {Array<String>} messages -
- * @property {Array<Boolean>} results -
- * @property { (testResult: Boolean)     => void } isTrue -
- * @property { (actual: T, expected: T)  => void } is   -
+ * @typedef  {Object}         AssertType
+ * @property {Array<String>}  messages - stores all assertions messages, one for each entry in "results"
+ * @property {Array<Boolean>} results  - stores all assertion results
+ * @property { (Boolean)  => void }       isTrue - assert that expression is true, side effects "results" and "messages"
+ * @property { equalityCheckFunction } is     - assert that two expressions are equal, side effects "results" and "messages"
  */
 
 /**
