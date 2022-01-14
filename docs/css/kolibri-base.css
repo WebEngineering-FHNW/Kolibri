@@ -12,6 +12,8 @@
     font-family: "Roboto", "Poppins Regular", "Segoe UI", Arial, fallback, sans-serif;
     padding:    0;
     margin:     0;
+}
+*, *::before, *::after {
     box-sizing: border-box;
 }
 
