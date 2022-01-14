@@ -18,7 +18,7 @@ h1 {
 }
 input[type=text] {
     font-size:      1.1em;
-    color:          var(--kolibri-output-color);
+    color:          var(--kolibri-color-output);
     border-width:   0 0 1px 0;
 
     background-image:    linear-gradient(orange, orange);

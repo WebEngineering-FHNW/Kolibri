@@ -31,7 +31,7 @@ fieldset:disabled {
 }
 
 output {
-    color: var(--kolibri-output-color);
+    color: var(--kolibri-color-output);
 }
 
 .darkTheme {
@@ -39,11 +39,11 @@ output {
 }
 
 em {
-    color: var(--kolibri-accent-color);
+    color: var(--kolibri-color-accent);
 }
 
 .rules *:nth-child(even) {
-    color: var(--kolibri-accent-color);
+    color: var(--kolibri-color-accent);
 }
 
 header img {

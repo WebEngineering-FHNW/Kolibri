@@ -13,12 +13,12 @@ const stanza = ( colorName, color, cssName) => dom (`
     <div style="${dimensions} background: var(${cssName});"></div>
 `);
 
-root.append( ... stanza( "neutralColor", neutralColor ,"--kolibri-neutral-color"  ));
-root.append( ... stanza( "accentColor",  accentColor  ,"--kolibri-accent-color"  ));
-root.append( ... stanza( "okColor",      okColor      ,"--kolibri-ok-color"  ));
-root.append( ... stanza( "selectColor",  selectColor  ,"--kolibri-select-color"  ));
-root.append( ... stanza( "outputColor",  outputColor  ,"--kolibri-output-color"  ));
-root.append( ... stanza( "shadowColor",  shadowColor  ,"--kolibri-shadow-color"  ));
+root.append( ... stanza( "neutralColor", neutralColor ,"--kolibri-color-neutral"  ));
+root.append( ... stanza( "accentColor",  accentColor  ,"--kolibri-color-accent"  ));
+root.append( ... stanza( "okColor",      okColor      ,"--kolibri-color-ok"  ));
+root.append( ... stanza( "selectColor",  selectColor  ,"--kolibri-color-select"  ));
+root.append( ... stanza( "outputColor",  outputColor  ,"--kolibri-color-output"  ));
+root.append( ... stanza( "shadowColor",  shadowColor  ,"--kolibri-color-shadow"  ));
 root.append( ... dom (`
     <p>shadow</p>
     <p>--kolibri-box-shadow</p>

@@ -197,10 +197,10 @@ const pageCss = `
     .delete {
         background-color:   transparent;
         border:             none;
-        color:              var(--kolibri-accent-color);
+        color:              var(--kolibri-color-accent);
         font-size:          1.3em;
     }    
     button.selected {
-        background: var(--kolibri-select-color);
+        background: var(--kolibri-color-select);
     }    
 `;

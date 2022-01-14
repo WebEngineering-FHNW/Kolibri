@@ -1,13 +1,13 @@
 /* make sure to keep in line with kolibriStyle.js */
 :root {
-    --kolibri-accent-color:  hsl( 322, 73%, 52%);
-    --kolibri-output-color:  hsl( 256, 82%, 55%);
-    --kolibri-ok-color:      hsl( 104, 89%, 28%);
-    --kolibri-select-color:  hsl(  46, 90%, 84%);
-    --kolibri-neutral-color: hsl(   0,  0%, 74%);
-    --kolibri-shadow-color:  hsla(256, 82%, 55%, 0.2);
-    --kolibri-box-shadow:    0 4px  8px 0 var(--kolibri-shadow-color),
-                             0 6px 20px 0 var(--kolibri-shadow-color);
+    --kolibri-color-accent:  hsl( 322, 73%, 52%);
+    --kolibri-color-output:  hsl( 256, 82%, 55%);
+    --kolibri-color-ok:      hsl( 104, 89%, 28%);
+    --kolibri-color-select:  hsl(  46, 90%, 84%);
+    --kolibri-color-neutral: hsl(   0,  0%, 74%);
+    --kolibri-color-shadow:  hsla(256, 82%, 55%, 0.2);
+    --kolibri-box-shadow:    0 4px  8px 0 var(--kolibri-color-shadow),
+                             0 6px 20px 0 var(--kolibri-color-shadow);
 
     font-family: "Roboto", "Poppins Regular", "Segoe UI", Arial, fallback, sans-serif;
     padding:    0;
@@ -19,13 +19,13 @@
 
 /* --- default invalid handling --- */
 :invalid {
-    border-color: var(--kolibri-accent-color);
+    border-color: var(--kolibri-color-accent);
 }
 input[type=text]:invalid {
-    color: var(--kolibri-accent-color);
+    color: var(--kolibri-color-accent);
 }
 input:invalid {
-    border-color: transparent transparent var(--kolibri-accent-color) transparent;
+    border-color: transparent transparent var(--kolibri-color-accent) transparent;
     position: relative;
     overflow: visible;
 }
@@ -35,7 +35,7 @@ input:invalid::before {
     position:   absolute;
     top:        -.35ch;
     left:       -.75ch;
-    background-color: var(--kolibri-accent-color);
+    background-color: var(--kolibri-color-accent);
     width:      1ch;
     height:     1ch;
     border-radius: 50%;
