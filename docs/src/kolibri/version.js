@@ -1,8 +1,8 @@
 export { release, dateStamp, versionInfo, clientId }
 
-const release     = "0.1.42";
+const release     = "0.1.43";
 
-const dateStamp   = "2022-01-13 T 20:17:39 MEZ";
+const dateStamp   = "2022-01-14 T 18:52:17 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 

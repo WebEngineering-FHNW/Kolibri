@@ -21,23 +21,24 @@
 :invalid {
     border-color: var(--kolibri-color-accent);
 }
+input:invalid {
+    border-color: transparent transparent var(--kolibri-color-accent) transparent;
+}
 input[type=text]:invalid {
     color: var(--kolibri-color-accent);
 }
-input:invalid {
-    border-color: transparent transparent var(--kolibri-color-accent) transparent;
-    position: relative;
-    overflow: visible;
+/* we cannot use pseudo elements with input type text so we introduce an extra following span */
+label ~ span { /* the "holder" span for the input comes right after a label */
+    position: relative; /* such that we can position against it */
 }
-/* todo: why is the below not working with input[type=text] ? */
-input:invalid::before {
-    content:    "";
-    position:   absolute;
-    top:        -.35ch;
-    left:       -.75ch;
-    background-color: var(--kolibri-color-accent);
+label ~ span > input ~ span {
+    position: absolute; /* get it out of the stacking context */
+    top:        0;
+    left:       -1ch;
     width:      1ch;
     height:     1ch;
-    border-radius: 50%;
+}
+label ~ span > input:invalid ~ span {
+    background-image: radial-gradient(closest-side, var(--kolibri-color-accent) 0%, transparent 100%);
 }
 /* --- end default invalid handling --- */

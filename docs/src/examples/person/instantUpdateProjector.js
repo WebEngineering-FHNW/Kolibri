@@ -80,9 +80,9 @@ const removeListItemForModel = (attributeNames, root) => model => {
     }
     attributeNames.forEach( attributeName => {
         const id = elementId(attributeName, model);
-        const inputElement = root.querySelector("#"+id);
-        if ( inputElement) {                                                // remove all input elements of this row
-            inputElement.parentElement.removeChild(inputElement);
+        const spanElement = root.querySelector(`span[data-id=${id}]`);
+        if ( spanElement) {                                                // remove all input elements of this row
+            spanElement.parentElement.removeChild(spanElement);
         }
         const labelElement = root.querySelector(`label[for="${id}"]`);
         if (labelElement ){
@@ -113,14 +113,16 @@ const projectListItem = (listController, selectionController, model, attributeNa
     attributeNames.forEach( attributeName => {
 
         const inputController = SimpleAttributeInputController(model[attributeName]);
-        const [labelElement, inputElement] = projectInstantInput("ListItem", inputController);
+        const [labelElement, spanElement] = projectInstantInput("ListItem", inputController);
+        const inputElement = spanElement.querySelector("input");
         inputElement.onfocus = _ => selectionController.setSelectedModel(model);
         // id's have been dynamically generated, but we have to change that
         // (and keep the input.id and label.for consistency intact)
         const id = elementId(attributeName, model);
+        spanElement .setAttribute("data-id", id); // we will need that later when removing
         inputElement.setAttribute("id" ,id);
         labelElement.setAttribute("for",id);
-        elements.push(labelElement, inputElement);
+        elements.push(labelElement, spanElement);
     });
 
     return [ deleteButton, ...elements];

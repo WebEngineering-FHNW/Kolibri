@@ -58,6 +58,6 @@ header img {
     grid-template-columns: max-content max-content;
 }
 
-label ~ input[type=time] {
-    margin-left: .7em;
+label ~ span {
+    margin-left: 1em;
 }

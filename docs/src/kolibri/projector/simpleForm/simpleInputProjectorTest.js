@@ -17,9 +17,10 @@ simpleInputProjectorSuite.add("binding", assert => {
         name:   "text",
         type:   "text",
     });
-    const [labelElement, inputElement] = projectChangeInput("TEST", controller);
-
-    assert.is(labelElement.getAttribute("for"), inputElement.getAttribute("id"));
+    const [labelElement, spanElement] = projectChangeInput("TEST", controller);
+    const inputElement = spanElement.querySelector("input");
+    assert.is(labelElement.getAttribute("for"),     inputElement.getAttribute("id"));
+    assert.is(spanElement .getAttribute("data-id"), inputElement.getAttribute("id"));
 
     // test the binding
     inputElement.value = "new value";
@@ -41,7 +42,8 @@ simpleInputProjectorSuite.add("checkbox", assert => {
         type:   "checkbox",
     });
 
-    const [labelElement, inputElement] = projectChangeInput("TEST",controller);
+    const [labelElement, spanElement] = projectChangeInput("TEST", controller);
+    const inputElement = spanElement.querySelector("input");
     assert.is(labelElement.getAttribute("for"), inputElement.getAttribute("id"));
 
     // initial checkbox value is false
@@ -72,8 +74,8 @@ simpleInputProjectorSuite.add("time", assert => {
         name:   "time",
         type:   "time",
     });
-
-    const [labelElement, inputElement] = projectChangeInput("TEST", controller);
+    const [labelElement, spanElement] = projectChangeInput("TEST", controller);
+    const inputElement = spanElement.querySelector("input");
     assert.is(labelElement.getAttribute("for"), inputElement.getAttribute("id"));
 
     // initial checkbox value is false

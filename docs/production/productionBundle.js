@@ -1056,9 +1056,9 @@ const Attribute = (value, qualifier) => {
     };
 
     return { getObs, hasObs, setValidator, setConverter, setConvertedValue, getQualifier, setQualifier }
-};const release     = "0.1.42";
+};const release     = "0.1.43";
 
-const dateStamp   = "2022-01-13 T 20:17:39 MEZ";
+const dateStamp   = "2022-01-14 T 18:52:17 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
@@ -1228,10 +1228,14 @@ const projectInput = eventType => (formClassName, inputController) => {
     // create view
     const elements = dom(`
         <label for="${id}"></label>
-        <input type="${inputController.getType()}" id="${id}">
+        <span  data-id="${id}">
+            <input type="${inputController.getType()}" id="${id}">
+            <span></span>
+        </span>
     `);
     /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
-    /** @type {HTMLInputElement} */ const inputElement = elements[1]; // ... we would use array deconstruction
+    /** @type {HTMLSpanElement}  */ const spanElement  = elements[1]; // only for the sake of type casting, otherwise...
+    /** @type {HTMLInputElement} */ const inputElement = spanElement.firstElementChild; // ... we would use array deconstruction
 
     // view and data binding can depend on the type
     if (inputController.getType() === TIME) { // "hh:mm" in the vies vs minutes since midnight in the model
@@ -1257,7 +1261,7 @@ const projectInput = eventType => (formClassName, inputController) => {
         ? inputElement.removeAttribute("readonly")
         : inputElement.setAttribute("readonly", "on"));
 
-    return [labelElement, inputElement];
+    return [labelElement, spanElement];
 };
 
 /**
@@ -1268,7 +1272,7 @@ const projectInput = eventType => (formClassName, inputController) => {
  * @template T
  * @type { InputProjector<T> }
  * @example
- * const [labelElement, inputElement] = projectChangeInput(controller);
+ * const [labelElement, spanElement] = projectChangeInput(controller);
  */
 const projectChangeInput  = projectInput(CHANGE);
 
@@ -1280,7 +1284,7 @@ const projectChangeInput  = projectInput(CHANGE);
  * @template T
  * @type { InputProjector<T> }
  * @example
- * const [labelElement, inputElement] = projectInstantInput(controller);
+ * const [labelElement, spanElement] = projectInstantInput(controller);
  */
 const projectInstantInput = projectInput(INPUT);/**
  * @typedef { Array<SimpleInputControllerType> } SimpleFormControllerType
