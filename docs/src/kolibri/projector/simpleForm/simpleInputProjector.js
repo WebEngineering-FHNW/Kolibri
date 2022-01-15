@@ -57,7 +57,7 @@ const projectInput = eventType => (formClassName, inputController) => {
         <label for="${id}"></label>
         <span  data-id="${id}">
             <input type="${inputController.getType()}" id="${id}">
-            <span></span>
+            <span aria-hidden="true"></span>
         </span>
     `);
     /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
