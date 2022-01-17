@@ -1,4 +1,14 @@
+
+# Kolibri
+
+If you want to use Kolibri, please have a look at the  
+
 [Home Page](https://webengineering-fhnw.github.io/Kolibri/index.html)
+
+where you find how to "install" and use the Kolibri and how
+you become owner of the code without the need for any license.
+
+
 
 ## Notes for developers
 
