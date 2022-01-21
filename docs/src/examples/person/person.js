@@ -39,7 +39,7 @@ const Person = () => {                               // facade
     firstnameAttr.getObs(VALID)     .setValue(true);
 
     /** @type AttributeType<String> */
-    const lastnameAttr  = Attribute("Dow", `Person.${id}.lastname`);
+    const lastnameAttr  = Attribute("Doe", `Person.${id}.lastname`);
     lastnameAttr.getObs(LABEL)      .setValue("Last Name");
     lastnameAttr.getObs(TYPE)       .setValue("text");
     lastnameAttr.getObs(EDITABLE)   .setValue(true);

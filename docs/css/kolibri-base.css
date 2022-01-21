@@ -1,4 +1,26 @@
 /* make sure to keep in line with kolibriStyle.js */
+
+@font-face {
+    font-family: "RobotoSlab-Light";
+    src: local("RobotoSlab-Light"),
+         url("../font/Roboto_Slab/static/RobotoSlab-Light.ttf") format("truetype");
+}
+@font-face {
+    font-family: "RobotoSlab-Regular";
+    src: local("RobotoSlab-Bold"),
+         url("../font/Roboto_Slab/static/RobotoSlab-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Rubik-Light";
+    src: local("Rubik-Light"),
+         url("../font/Rubik/static/Rubik-Light.ttf") format("truetype");
+}
+@font-face {
+    font-family: "JetBrainsMono-VariableFont_wght";
+    src: local("JetBrainsMono-VariableFont_wght"),
+         url("../font/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf") format("truetype");
+}
+
 :root {
     --kolibri-color-accent:  hsl( 322, 73%, 52%);
     --kolibri-color-output:  hsl( 256, 82%, 55%);
@@ -8,13 +30,39 @@
     --kolibri-color-shadow:  hsla(256, 82%, 55%, 0.2);
     --kolibri-box-shadow:    0 4px  8px 0 var(--kolibri-color-shadow),
                              0 6px 20px 0 var(--kolibri-color-shadow);
-
-    font-family: ui-sans-serif,sans-serif;
     padding:    0;
     margin:     0;
 }
 *, *::before, *::after {
     box-sizing: border-box;
+}
+::selection {
+    background-color: var(--kolibri-color-select);
+}
+
+/* --- typography --- */
+
+:root {
+    --font-serif:       "RobotoSlab-Light",   serif;
+    --font-serif-bold:  "RobotoSlab-Regular", serif;
+    --font-sans-serif:  "Rubik-Light", ui-sans-serif, sans-serif;
+    --font-mono:        "JetBrainsMono-VariableFont_wght", monospace;
+
+    font-family: var(--font-serif);
+}
+header h1 {
+    color: var(--kolibri-color-output);
+    letter-spacing: 0.06em;
+}
+h1, h2, h3 {
+    font-family: var(--font-serif-bold);
+}
+p, li, div {
+    letter-spacing: 0.02em;
+}
+form, fieldset, label, input {
+    font-family: var(--font-sans-serif);
+    letter-spacing: 0.02em;
 }
 
 /* --- default invalid handling --- */

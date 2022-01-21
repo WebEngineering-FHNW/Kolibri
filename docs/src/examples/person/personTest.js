@@ -93,7 +93,7 @@ personSuite.add("multi-way editing", assert => {
     const detailLastnameInput = detailInputs[detailInputs.length-1];
     assert.isTrue(null != detailLastnameInput);
 
-    assert.is(detailLastnameInput.value, "DOW");                            // start value
+    assert.is(detailLastnameInput.value, "DOE");                            // start value
     assert.is(detailLastnameInput.value, secondPersonLastnameInput.value);
 
     detailLastnameInput.value = "other";

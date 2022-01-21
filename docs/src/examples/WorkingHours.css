@@ -1,9 +1,9 @@
 @import "../../css/kolibri-base.css";
 
 body {
-    max-width:        60em;
-    margin:           auto;
     background-color: white; /*only needed for chrome :-(*/
+    max-width: 42em;
+    margin:    3em auto 3em auto;
 }
 
 main {
