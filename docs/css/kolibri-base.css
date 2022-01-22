@@ -109,15 +109,16 @@ label + span > input:invalid + span {
 
 .kolibri-logo {
 	height:             342px;
-	width:              305px;
+	aspect-ratio:       1;
 	background-image:   url("../img/logo/logo.svg"); /* keep in one place */
 	background-repeat:  no-repeat;
+    background-size:    contain;
 }
 
-/* --- fun stuff --- */
+/* --- fun stuff with the logo --- */
 
 .kolibri-logo-anim {
-	animation:          kolibri_fly_in 2s ease 1s;
+	animation:          kolibri_fly_in 2s ease;
 }
 @keyframes kolibri_fly_in {
 	0% {
@@ -129,4 +130,31 @@ label + span > input:invalid + span {
 	100% {
 		transform:             scale(1.0) translateX(0)    rotate(  0deg) ;
 	}
+}
+@media (prefers-reduced-motion: reduce) {
+    .kolibri-logo-anim {
+        animation-duration: 0.01ms ;
+  }
+}
+
+/* --- a11y support: the "skip" link --- */
+
+a.skip-link { /* position top center */
+    position:     absolute;
+    z-index:      100;
+    top:          1em;
+    left:         50%;
+    transform:    translateX(-50%);
+}
+
+/* hide if not tabbed to
+   but in such a way that it still can be tabbed to */
+a.skip-link:not(:focus):not(:active) {
+    position:   absolute;
+    overflow:   hidden;
+    height:     1px;
+    width:      1px;
+    clip:       rect(0 0 0 0);
+    clip-path:  inset(50%);
+    white-space: nowrap;
 }
