@@ -46,10 +46,11 @@ em {
     color: var(--kolibri-color-accent);
 }
 
-header img {
+header div.kolibri-logo {
     position: absolute;
     top: 3em;
-    margin-left: 38em;
+    margin-left: 32em;
+    transform: scale(0.5);
 }
 
 .rules {

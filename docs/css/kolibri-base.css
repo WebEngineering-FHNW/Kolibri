@@ -54,6 +54,9 @@ header h1 {
     color: var(--kolibri-color-output);
     letter-spacing: 0.06em;
 }
+header .subtitle {
+    color: var(--kolibri-color-output);
+}
 h1, h2, h3 {
     font-family: var(--font-serif-bold);
 }
@@ -96,3 +99,34 @@ label + span > input:invalid + span {
     transition:       transform 0.5s ease-out;
 }
 /* --- end default invalid handling --- */
+
+
+/* --- logo handling -- */
+/* The information about where the actual logo file is, the format, etc. should
+   not be distributed over all the files but kept in one place.
+   Since the logo is decorative only, we avoid having to set fake "alt" attributes.
+ */
+
+.kolibri-logo {
+	height:             342px;
+	width:              305px;
+	background-image:   url("../img/logo/logo.svg"); /* keep in one place */
+	background-repeat:  no-repeat;
+}
+
+/* --- fun stuff --- */
+
+.kolibri-logo-anim {
+	animation:          kolibri_fly_in 2s ease 1s;
+}
+@keyframes kolibri_fly_in {
+	0% {
+		transform: scaleX(-1)  scale(0.4) translateX(400%) rotate(-30deg);
+	}
+	60% {
+		transform:             scale(0.6) translateX(300%) rotate(-30deg);
+	}
+	100% {
+		transform:             scale(1.0) translateX(0)    rotate(  0deg) ;
+	}
+}
