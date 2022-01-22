@@ -177,7 +177,8 @@ const pageCss = `
         display:        grid;
         grid-gap:       0.5em;
         grid-row-gap:   0.5em;
-        grid-template-columns: 1.7em auto auto; /* default: to be overridden dynamically */
+        grid-template-columns: 2em auto auto; /* default: to be overridden dynamically */        
+        align-items:    baseline;
         margin-bottom:  0.5em ;
     }
     .${masterClassName} label { /* labels are not shown in the master view but are in the dom for validity */
@@ -187,6 +188,7 @@ const pageCss = `
         display:        grid;
         grid-gap:       0.5em;
         grid-template-columns: 1fr 3fr;
+        align-items:    baseline;
         margin-bottom:  0.5em ;
     }
     .no-detail {
@@ -202,7 +204,19 @@ const pageCss = `
         color:              var(--kolibri-color-accent);
         font-size:          1.3em;
     }    
+    .card h1 {
+        font-family:        var(--font-sans-serif);
+        margin-top:         0;
+    }
     button.selected {
-        background: var(--kolibri-color-select);
+        position: relative;
     }    
+    button.selected::before {
+        content: '';
+        position: absolute;        
+        inset: 0 0 0 0;       
+        background: var(--kolibri-color-select);
+        transform: translateX(-100%);
+        clip-path: polygon(0 0, 100% 50%, 0 100%);
+    }
 `;

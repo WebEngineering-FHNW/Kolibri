@@ -60,7 +60,7 @@ h1, h2, h3 {
 p, li, div {
     letter-spacing: 0.02em;
 }
-form, fieldset, label, input {
+form, fieldset, label, input, button {
     font-family: var(--font-sans-serif);
     letter-spacing: 0.02em;
 }
