@@ -114,14 +114,14 @@ const projectListItem = (listController, selectionController, model, attributeNa
 
         const inputController = SimpleAttributeInputController(model[attributeName]);
         const [labelElement, spanElement] = projectInstantInput("ListItem", inputController);
-        const inputElement = spanElement.querySelector("input");
+        const inputElement   = spanElement.querySelector("input");
         inputElement.onfocus = _ => selectionController.setSelectedModel(model);
         // id's have been dynamically generated, but we have to change that
         // (and keep the input.id and label.for consistency intact)
         const id = elementId(attributeName, model);
-        spanElement .setAttribute("data-id", id); // we will need that later when removing
-        inputElement.setAttribute("id" ,id);
-        labelElement.setAttribute("for",id);
+        spanElement .setAttribute("data-id",    id); // we will need that later when removing
+        inputElement.setAttribute("id",         id);
+        labelElement.setAttribute("for",        id);
         elements.push(labelElement, spanElement);
     });
 
@@ -185,18 +185,18 @@ const pageCss = `
         display:        none;
     }
     .${detailClassName} {
-        display:        grid;
-        grid-gap:       0.5em;
+        display:            grid;
+        grid-gap:           0.5em;
         grid-template-columns: 1fr 3fr;
-        align-items:    baseline;
-        margin-bottom:  0.5em ;
+        align-items:        baseline;
+        margin-bottom:      0.5em ;
     }
     .no-detail {
-        opacity:        0.2;
-        transition:     transform ease-both 0.5s;
-        transition-delay: 200ms;
-        transform:      rotateX(-60deg);
-        transform-origin: top center;
+        opacity:            0.2;
+        transition:         transform ease-both 0.5s;
+        transition-delay:   200ms;
+        transform:          rotateX(-60deg);
+        transform-origin:   top center;
     }    
     .delete {
         background-color:   transparent;
@@ -209,14 +209,14 @@ const pageCss = `
         margin-top:         0;
     }
     button.selected {
-        position: relative;
+        position:           relative;
     }    
     button.selected::before {
-        content: '';
-        position: absolute;        
-        inset: 0 0 0 0;       
-        background: var(--kolibri-color-select);
-        transform: translateX(-100%);
-        clip-path: polygon(0 0, 100% 50%, 0 100%);
+        content:            '';
+        position:           absolute;        
+        inset:              0 0 0 0;       
+        background:         var(--kolibri-color-select);
+        transform:          translateX(-100%);
+        clip-path:          polygon(0 0, 100% 50%, 0 100%);
     }
 `;

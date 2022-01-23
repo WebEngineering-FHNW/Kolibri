@@ -47,16 +47,16 @@ em {
 }
 
 header div.kolibri-logo {
-    height:         171px;
+    height:         150px;
     position:       absolute;
-    top:            3em;
-    margin-left:    32em;
+    top:            6em;
+    margin-left:    39em;
 }
 
 .rules {
     display: grid;
     grid-column-gap: 2em;
-    grid-template-columns: max-content max-content;
+    grid-template-columns: auto max-content;
 }
 
 label ~ span {
