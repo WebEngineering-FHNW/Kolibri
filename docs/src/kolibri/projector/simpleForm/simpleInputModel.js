@@ -20,7 +20,7 @@ export { SimpleInputModel }
  * For a single input, it only needs one attribute.
  * @constructor
  * @template T
- * @param  { InputAttributes }
+ * @param  { InputAttributes<T> }
  * @return { AttributeType<T> }
  * @example
  *     const model = SimpleInputModel({

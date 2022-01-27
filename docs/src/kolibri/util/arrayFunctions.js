@@ -85,7 +85,7 @@ const removeItem = array => item => {
  * times(3)(i => console.log(i)); // logs 0, 1, 2
  * times(5)(x=>x*x); // returns [0, 1, 4, 9, 16]
  */
-const times = soMany => callback => {
+const times = soMany => (callback= undefined) => {
     const number = Number(soMany.valueOf());
     if (isNaN(number)) {
         throw new TypeError("Object '" + soMany + "' is not a valid number.");

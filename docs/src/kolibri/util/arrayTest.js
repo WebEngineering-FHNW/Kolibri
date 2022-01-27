@@ -1,4 +1,4 @@
-// noinspection JSCheckFunctionSignatures,PointlessArithmeticExpressionJS
+// noinspection PointlessArithmeticExpressionJS
 
 import {TestSuite} from "./test.js";
 import "./array.js";

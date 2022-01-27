@@ -51,8 +51,7 @@ const Person = () => {                               // facade
     lastnameAttr.setConverter( input => input.toUpperCase() );  // enable for playing around
     lastnameAttr.setValidator( input => input.length >= 3   );
 
-    // noinspection JSValidateTypes
-    return {
+    return /** @type PersonType */ {
         firstname:  firstnameAttr,
         lastname:   lastnameAttr,
         detailed:   detailedAttr,

@@ -108,10 +108,8 @@ pmSuite.add("qualified", assert => {
 pmSuite.add("create-easy", assert => {
     const pm = presentationModelFromAttributeNames(["firstname", "lastname"]);
 
-    // noinspection JSIncompatibleTypesComparison
-    assert.isTrue(pm.firstname != null);
-    // noinspection JSIncompatibleTypesComparison
-    assert.isTrue(pm.lastname  != null);
+    assert.isTrue(pm.firstname !== undefined);
+    assert.isTrue(pm.lastname  !== undefined);
     assert.is(valueOf(pm.lastname), null); // initial value is null;
     assert.is(pm.lastname.getObs(LABEL).getValue(), "lastname"); // default
 

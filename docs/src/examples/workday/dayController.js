@@ -78,8 +78,7 @@ const DayController = () => {
          })
      );
 
-    // noinspection JSValidateTypes
-    return {
+    return /** @type DayControllerType*/ {
         amStartCtrl ,
         amEndCtrl   ,
         pmStartCtrl ,
@@ -121,6 +120,7 @@ const lunchBreakRule = (amEndCtrl, pmStartCtrl) => () => { // 40 min lunch break
  * If violated, we move the end value back.
  * @private
  * @impure - might change the value of the end input
+ * @type { (startInputCtrl:SimpleInputControllerType<Number>,endInputCtrl:SimpleInputControllerType<Number>) => () => void }
  * @param  {SimpleInputControllerType<Number>} startInputCtrl
  * @param  {SimpleInputControllerType<Number>} endInputCtrl
  * @return { () => void } - the sequence rule handler as a side-effecting function

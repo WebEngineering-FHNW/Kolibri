@@ -94,8 +94,8 @@ const removeListItemForModel = (attributeNames, root) => model => {
 /**
  * Creating the views and bindings for an item in the list view, binding for instant value updates.
  * @template T
- * @param { ListControllerType<T> }         listController
- * @param { SelectionControllerType<T> }    selectionController
+ * @param {ListControllerType<T>}         listController
+ * @param {SelectionControllerType<T>}    selectionController
  * @param { T }                             model
  * @param { String[] }                      attributeNames
  * @return { HTMLElement[] }
@@ -133,7 +133,7 @@ const projectListItem = (listController, selectionController, model, attributeNa
 /**
  * Creating the views and bindings for an item in the list view, binding for instant value updates.
  * @template T
- * @param { SelectionControllerType<T> }    detailController
+ * @param {SelectionControllerType<T>}    detailController
  * @param { HTMLElement }                   detailCard
  * @param { T }                             model
  * @param { String[] }                      attributeNames

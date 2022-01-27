@@ -25,7 +25,7 @@ export { Attribute, QualifiedAttribute,
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
  * @template T
- * @param { AttributeType<T> } attribute
+ * @param {AttributeType<String>} attribute
  * @return T
  */
 const valueOf = attribute => attribute.getObs(VALUE).getValue();
@@ -49,7 +49,7 @@ const presentationModelFromAttributeNames = attributeNames => {
         attribute.getObs(LABEL).setValue(attributeName); // default: use the attribute name as the label
         result[attributeName] = attribute;
     });
-    return result;
+    return /** @type PresentationModel */result;
 };
 
 /**
@@ -222,7 +222,7 @@ const Attribute = (value, qualifier) => {
 
     const makeObservable = (name, initValue) => {
         const observable = Observable(initValue); // we might observe more types than just T
-        // noinspection JSValidateTypes
+
         observables[name] = observable;
         observable.onChange( _ => modelWorld.update(getQualifier, name, observable) );
         return observable;

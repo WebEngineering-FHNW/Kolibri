@@ -31,25 +31,22 @@ let counter = 0;
 /**
  * Projection function that creates a view for input purposes, binds the information that is available through
  * the inputController, and returns the generated views.
- * @typedef InputProjector<T>
- * @constructor
+ * @typedef { (formClassName:!String, inputController:!SimpleInputControllerType<T>)
+ *               => [HTMLLabelElement, HTMLInputElement]
+ *          } InputProjector<T>
  * @template T
  * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
- * @param  { String }                         formClassName   - context prefix that is used to make ids unique.
- * @param  { !SimpleInputControllerType<T> }  inputController
- * @return { [HTMLLabelElement, HTMLInputElement] } - array of label element and input element
  */
 
 /**
  * Implementation for the exported {@link projectInstantInput} and {@link projectChangeInput} function.
  * @private
- * @constructor
+ * @type { (eventType:EventTypeString) => InputProjector<T> }
  * @template T
- * @param  { EventTypeString } eventType - the type of event that the input should listen to.
- *                                         Usually {@link CHANGE} or {@link INPUT}.
- * @return { InputProjector<T> }
  */
-const projectInput = eventType => (formClassName, inputController) => {
+const projectInput =
+        eventType =>
+        (formClassName, inputController) => {
     if( ! inputController) console.error("x")
     const id = formClassName + "-id-" + (counter++);
     // create view
@@ -88,7 +85,7 @@ const projectInput = eventType => (formClassName, inputController) => {
         ? inputElement.removeAttribute("readonly")
         : inputElement.setAttribute("readonly", "on"));
 
-    return [labelElement, spanElement];
+    return /** @type { [HTMLLabelElement, HTMLInputElement] } */ elements;
 }
 
 /**

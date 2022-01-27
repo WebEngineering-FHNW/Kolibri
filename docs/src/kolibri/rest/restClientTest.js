@@ -6,7 +6,7 @@ asyncTest("rest/restClient (async)", assert =>
 
     client(window.location.href.replace("allTests.html","kolibri/rest/testData.json"))
         .then( todo => {
-            assert.is(todo.title, "delectus aut autem");
+            assert.is(todo['title'], "delectus aut autem");
         })
 );
 

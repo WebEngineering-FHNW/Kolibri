@@ -50,7 +50,7 @@ Array.prototype.removeItem = function(item){ return removeItem(this)(item); };
  * @example
  * "10".times(it => console.log(it));
  */
-String.prototype.times = function(callback){ return times(this)(callback); };
+String.prototype.times = function(callback = undefined){ return times(this)(callback); };
 
 /**
  * See {@link times}.
@@ -60,7 +60,7 @@ String.prototype.times = function(callback){ return times(this)(callback); };
  * @example
  * (5).times(x => x * x); // [0, 1, 4, 9, 16]
  */
-Number.prototype.times = function(callback){ return times(this)(callback); };
+Number.prototype.times = function(callback= undefined){ return times(this)(callback); };
 
 /**
  * See {@link sum}.
@@ -70,4 +70,4 @@ Number.prototype.times = function(callback){ return times(this)(callback); };
  * [1,2,3].sum();     // 6
  * ["1"].sum(Number); // 1
  */
-Array.prototype.sum = function(callback){ return sum(this)(callback); };
+Array.prototype.sum = function(callback = undefined){ return sum(this)(callback); };

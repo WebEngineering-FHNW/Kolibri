@@ -112,7 +112,7 @@ const ObservableList = list => {
     const delListeners = [];
     const removeAddListener    = addListener => addListeners.removeItem(addListener);
     const removeDeleteListener = delListener => delListeners.removeItem(delListener);
-    // noinspection JSUnusedGlobalSymbols
+
     return {
         onAdd: listener => addListeners.push(listener),
         onDel: listener => delListeners.push(listener),
