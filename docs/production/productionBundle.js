@@ -5,21 +5,11 @@
  */
 
 /**
- * Generic type names for the purpose of expressing the identity of an arbitrarily chosen "forall" type. See {@link id}.
- * @template a
- * @template b
- * @template c
- * @typedef {a} a
- * @typedef {b} b
- * @typedef {c} c
- */
-
-/**
  * Identity function, aka "I" in the SKI calculus or "Ibis" (or "Idiot") in the Smullyan bird metaphors.
  * The function is pure and runs in O(1). Function calls can be inlined.
+ * @template a
  * @haskell  a -> a
  * @pure
- * @type     { (x:a) => a }
  * @param    {a} x
  * @returns  {a} the parameter x unchanged.
  * @example
@@ -31,11 +21,11 @@ const id = x => x;
  * Constant function that captures and caches the argument and makes it available like a "getter".
  * Aka "konst", "fst" (the first of two curried parameters),
  * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
+ * @template a
+ * @template b
  * @haskell  a -> b -> a
  * @pure
  * @type     { (x:a) => (...b) => a}
- * @param    { a } x
- * @returns  { (...b) => a } - a function that ignores its argument and returns the parameter x unchanged.
  * @example
  * c(1)(undefined) === 1;
  * const getExpr = c(expr);
@@ -48,15 +38,15 @@ const c = x => () => x;
  * A Function that returns the second of two curried arguments.
  * "KI" in the SKI calculus, or "Kite" in the Smullyan bird metaphors.
  * It can be seen as a cached getter for the id function: {@link c}({@link id})
+ * @template a
+ * @template b
  * @haskell  b -> a -> a
  * @pure
- * @type     { (...b) => (y:a) => a}
- * @param    { ...b } _     - zero or one or many parameters are ignored
- * @returns  { (y:a) => a } - a function that returns its argument {@link a}
+ * @type     { (_:?b) => (y:a) => a}
  * @example
  * snd(undefined)(1) === 1;
  */
-const snd = _ => y => y;
+const snd = (_=undefined) => y => y;
 
 // --------- ADT section ---------
 
@@ -124,21 +114,21 @@ const Choice = n => { // number of constructors
 /**
  * A function that selects between two arguments that are given in curried style.
  * Only needed internally for the sake of proper JsDoc.
+ * @template a
+ * @template b
  * @callback pairSelector
  * @pure
  * @type     { (x:a) => (y:b) => (a|b)}
- * @param    {a} x
- * @returns  { (y:b) => (a|b) }
  */
 /**
  * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
  * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
  * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
+ * @template a
+ * @template b
  * @haskell a -> b -> (a -> b -> a|b) -> a|b
  * @pure    if the selector function is pure, which is usually is
  * @type    { (x:a) => (y:b) => (s:pairSelector) => (a|b) }
- * @param   {a} x - x and y as curried arguments
- * @return  { (y:b) => (s:pairSelector) => (a|b) }
  * @constructor
  * @example
  * const dierk = Pair("Dierk")("König");
@@ -150,11 +140,11 @@ const Pair = x => y => selector => selector(x)(y);
 /**
  * Select the first of two curried arguments for the use with {@link Pair}s.
  * An alternative name for {@link c}:
+ * @template a
+ * @template b
  * @haskell  a -> b -> a
  * @pure
  * @type     { (x:a) => (y:b) => a}
- * @param    {a} x
- * @returns  { (y:b) => a } - a function that ignores its argument and returns the parameter x unchanged.
  * @example
  * fst(1)(undefined) === 1;
  */
@@ -168,11 +158,11 @@ const fst = c;
 /**
  * A general function from whatever "a" to whatever "b".
  * Only needed internally for the sake of proper JsDoc.
- * @callback functionAtoB
+ * @template a
+ * @template b
+ * @typedef  functionAtoB<a,b>
  * @pure     supposed to be pure
  * @type     { (x:a) => b }
- * @param    {a} x
- * @returns  {b}
  */
 /**
  * The Left constructor of an Either type. An "Either" is either {@link Left} or {@link Right}.
@@ -181,12 +171,11 @@ const fst = c;
  * When both are given, f(x) is called.
  * The Left case of an Either type is usually (but not necessarily so) an error case.
  * Left values are immutable.
+ * @template a
+ * @template b
  * @haskell a -> (a -> b) -> c -> b
  * @pure    if functionAtoB is pure
- * @type    { (x:a) =>  (f:functionAtoB)  => (y:c) => b }
- * @param   {a} x
- * @return  { (f:functionAtoB)  => (y:c) => b }
- * @constructor
+ * @type    { (x:a) =>  (f:functionAtoB<a,b>)  => (y:*) => b }
  * @example
  * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
  * withFoo
@@ -203,12 +192,11 @@ const Left  = x => f => _ => f(x);
  * When both are given, g(x) is called.
  * The Right case of an Either type is usually (but not necessarily so) the good case.
  * Right values are immutable.
+ * @template a
+ * @template b
  * @haskell a -> c -> (a -> b) -> b
  * @pure    if functionAtoB is pure
- * @type    { (x:a) => (y:c) => (f:functionAtoB) => b }
- * @param   {a} x
- * @return  { (y:c) => (f:functionAtoB) => b  }
- * @constructor
+ * @type    { (x:a) => (y:*) => (f:functionAtoB<a,b>) => b }
  * @example
  * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
  * withFoo
@@ -221,11 +209,11 @@ const Right = x => _ => g => g(x);
  * Nothing is the error case of the Maybe type. A "Maybe a" can be either Nothing or "{@link Just} a".
  * Nothing is immutable. Nothing is a singleton.
  * Nothing is used to get around missing null/undefined checks.
+ * @template a
+ * @template b
  * @haskell Nothing :: Maybe a
  * @pure
- * @type    { (f:functionAtoB)  => (y:c) => b }
- * @param   { functionAtoB } f
- * @return  { (y:c) => b }
+ * @type    { (f:functionAtoB<a,b>)  => (y:*) => b }
  * @example
  * const mayFoo = (null == foo) ? Nothing : Just(foo);
  * mayFoo
@@ -238,11 +226,11 @@ const Nothing = Left (undefined);
  * Just is the success case of the Maybe type. A "Maybe a" can be either {@link Nothing} or "Just a".
  * Just values are immutable.
  * Just is used to get around missing null/undefined checks.
+ * @template a
+ * @template b
  * @haskell Just a :: Maybe a
  * @pure
- * @type    { (x:a) => (y:c) => (f:functionAtoB) => b }
- * @param   {a} x
- * @return  { (y:c) => (f:functionAtoB) => b  }
+ * @type    { (x:a) => (y:*) => (f:functionAtoB<a,b>) => b }
  * @example
  * const mayFoo = (null == foo) ? Nothing : Just(foo);
  * mayFoo
@@ -253,7 +241,7 @@ const Just = Right;
 
 // ----------- End of ADT section -----------
 
-// todo
+// to do
 // Eq typeclass, symmetry, reflexivity
 // booleanEq, pairEq, tupleEq, eitherEq, choiceEq, maybeEq, arrayEq
 
@@ -346,7 +334,7 @@ const removeItem = array => item => {
  * times(3)(i => console.log(i)); // logs 0, 1, 2
  * times(5)(x=>x*x); // returns [0, 1, 4, 9, 16]
  */
-const times = soMany => callback => {
+const times = soMany => (callback= undefined) => {
     const number = Number(soMany.valueOf());
     if (isNaN(number)) {
         throw new TypeError("Object '" + soMany + "' is not a valid number.");
@@ -425,7 +413,7 @@ Array.prototype.removeItem = function(item){ return removeItem(this)(item); };
  * @example
  * "10".times(it => console.log(it));
  */
-String.prototype.times = function(callback){ return times(this)(callback); };
+String.prototype.times = function(callback = undefined){ return times(this)(callback); };
 
 /**
  * See {@link times}.
@@ -435,7 +423,7 @@ String.prototype.times = function(callback){ return times(this)(callback); };
  * @example
  * (5).times(x => x * x); // [0, 1, 4, 9, 16]
  */
-Number.prototype.times = function(callback){ return times(this)(callback); };
+Number.prototype.times = function(callback= undefined){ return times(this)(callback); };
 
 /**
  * See {@link sum}.
@@ -445,7 +433,7 @@ Number.prototype.times = function(callback){ return times(this)(callback); };
  * [1,2,3].sum();     // 6
  * ["1"].sum(Number); // 1
  */
-Array.prototype.sum = function(callback){ return sum(this)(callback); };// noinspection JSUnusedGlobalSymbols
+Array.prototype.sum = function(callback = undefined){ return sum(this)(callback); };// noinspection JSUnusedGlobalSymbols
 
 /**
  * Create DOM objects from an HTML string.
@@ -790,7 +778,7 @@ const ObservableList = list => {
     const delListeners = [];
     const removeAddListener    = addListener => addListeners.removeItem(addListener);
     const removeDeleteListener = delListener => delListeners.removeItem(delListener);
-    // noinspection JSUnusedGlobalSymbols
+
     return {
         onAdd: listener => addListeners.push(listener),
         onDel: listener => delListeners.push(listener),
@@ -828,7 +816,7 @@ const ObservableList = list => {
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
  * @template T
- * @param { AttributeType<T> } attribute
+ * @param {AttributeType<String>} attribute
  * @return T
  */
 const valueOf = attribute => attribute.getObs(VALUE).getValue();
@@ -852,7 +840,7 @@ const presentationModelFromAttributeNames = attributeNames => {
         attribute.getObs(LABEL).setValue(attributeName); // default: use the attribute name as the label
         result[attributeName] = attribute;
     });
-    return result;
+    return /** @type PresentationModel */result;
 };
 
 /**
@@ -1025,7 +1013,7 @@ const Attribute = (value, qualifier) => {
 
     const makeObservable = (name, initValue) => {
         const observable = Observable(initValue); // we might observe more types than just T
-        // noinspection JSValidateTypes
+
         observables[name] = observable;
         observable.onChange( _ => modelWorld.update(getQualifier, name, observable) );
         return observable;
@@ -1056,9 +1044,9 @@ const Attribute = (value, qualifier) => {
     };
 
     return { getObs, hasObs, setValidator, setConverter, setConvertedValue, getQualifier, setQualifier }
-};const release     = "0.1.43";
+};const release     = "0.1.44";
 
-const dateStamp   = "2022-01-14 T 18:52:17 MEZ";
+const dateStamp   = "2022-01-28 T 00:37:30 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
@@ -1067,6 +1055,8 @@ const stamp       = () => Math.random().toString(36).slice(2).padEnd(11,"X").sli
 /**
  * A constant random string of 22 lowercase characters/digits, probability: 1 of 36 ** 22 > 1.7e+34,
  * generated at construction time.
+ * The typical use case is to identify the client in a team application / multi-user environment
+ * such that value changes can be properly attributed and conflicts can be avoided.
  * @type { String }
  */
 const clientId    = stamp() + stamp();/**
@@ -1113,7 +1103,7 @@ const totalMinutesToTimeString = totalMinutes => {
  * For a single input, it only needs one attribute.
  * @constructor
  * @template T
- * @param  { InputAttributes }
+ * @param  { InputAttributes<T> }
  * @return { AttributeType<T> }
  * @example
  *     const model = SimpleInputModel({
@@ -1204,25 +1194,22 @@ let counter = 0;
 /**
  * Projection function that creates a view for input purposes, binds the information that is available through
  * the inputController, and returns the generated views.
- * @typedef InputProjector<T>
- * @constructor
+ * @typedef { (formClassName:!String, inputController:!SimpleInputControllerType<T>)
+ *               => [HTMLLabelElement, HTMLInputElement]
+ *          } InputProjector<T>
  * @template T
  * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
- * @param  { String }                         formClassName   - context prefix that is used to make ids unique.
- * @param  { !SimpleInputControllerType<T> }  inputController
- * @return { [HTMLLabelElement, HTMLInputElement] } - array of label element and input element
  */
 
 /**
  * Implementation for the exported {@link projectInstantInput} and {@link projectChangeInput} function.
  * @private
- * @constructor
+ * @type { (eventType:EventTypeString) => InputProjector<T> }
  * @template T
- * @param  { EventTypeString } eventType - the type of event that the input should listen to.
- *                                         Usually {@link CHANGE} or {@link INPUT}.
- * @return { InputProjector<T> }
  */
-const projectInput = eventType => (formClassName, inputController) => {
+const projectInput =
+        eventType =>
+        (formClassName, inputController) => {
     if( ! inputController) console.error("x");
     const id = formClassName + "-id-" + (counter++);
     // create view
@@ -1230,7 +1217,7 @@ const projectInput = eventType => (formClassName, inputController) => {
         <label for="${id}"></label>
         <span  data-id="${id}">
             <input type="${inputController.getType()}" id="${id}">
-            <span></span>
+            <span aria-hidden="true"></span>
         </span>
     `);
     /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
@@ -1261,7 +1248,7 @@ const projectInput = eventType => (formClassName, inputController) => {
         ? inputElement.removeAttribute("readonly")
         : inputElement.setAttribute("readonly", "on"));
 
-    return [labelElement, spanElement];
+    return /** @type { [HTMLLabelElement, HTMLInputElement] } */ elements;
 };
 
 /**
