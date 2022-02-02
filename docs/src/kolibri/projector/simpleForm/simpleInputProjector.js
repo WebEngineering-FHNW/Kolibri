@@ -47,7 +47,10 @@ let counter = 0;
 const projectInput =
         eventType =>
         (formClassName, inputController) => {
-    if( ! inputController) console.error("x")
+    if( ! inputController) {
+        console.error("no inputController in input projector."); // be defensive
+        return;
+    }
     const id = formClassName + "-id-" + (counter++);
     // create view
     const elements = dom(`
