@@ -1,3 +1,21 @@
+
+export { Observable, ObservableList }
+
+/**
+ * Observable module
+ * @module Observable * 
+ * @typedef {function(value): object} Observable
+ */
+
+/**
+ * Manages the observability of a value and informs all listener as soon as the calue gets changed
+ * @param {*} value - The value this Observable should listen to and notify whenever it changes
+ * @returns {{
+ *  onChange: function(callback): void,
+ *  getValue: function(): *,
+ *  setValue: function(newValue): void
+ * }}
+ */
 const Observable = value => {
   const listeners = []
   return {
@@ -15,6 +33,19 @@ const Observable = value => {
   }
 }
 
+/**
+ * 
+ * @param {*[]} list - A list of listeners
+ * @returns {{
+ *  onAdd: function(listener): number,
+ *  onDel: function(listener): number,
+ *  add: function(item): item,
+ *  del: function(item): void,
+ *  removeDeleteListener: function(delListeners),
+ *  count: function(): number,
+ *  countIf: function(pred): number
+ * }}
+ */
 const ObservableList = list => {
   const addListeners = []
   const delListeners = []
@@ -40,5 +71,3 @@ const ObservableList = list => {
     countIf: pred => list.reduce((sum, item) => pred(item) ? sum + 1 : sum, 0)
   }
 }
-
-export { Observable, ObservableList }

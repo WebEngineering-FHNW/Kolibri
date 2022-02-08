@@ -1,22 +1,12 @@
-import { FirstFormController, FirstFormView } from './firstForm.js'
-import { SecondFormController, SecondFormView } from './secondForm.js'
+import { FormController, FormView } from './formController.js'
 
 
-// First Form
-const firstFormController = FirstFormController()
+// Setting up a form would look like this
 
-const firstRootElement = document.getElementById('form')
+const formController = FormController()
 
-FirstFormView(firstFormController, firstRootElement)
+const firstV2RootElement = document.getElementById('formV2')
 
-firstFormController.addForm()
+FormView(formController, firstV2RootElement)
 
-
-// Second Form
-const secondFormController = SecondFormController()
-
-const secondRootElement = document.getElementById('form2')
-
-SecondFormView(secondFormController, secondRootElement)
-
-secondFormController.addForm()
+formController.addForm()

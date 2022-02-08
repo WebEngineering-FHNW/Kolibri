@@ -1,27 +1,28 @@
 import { registerNotificationProjector } from '../../subprojectors/notificationProjector.js'
+import { toggleColor } from '../../utils/toggleColor.js'
 
-export { initNotificationElements }
+export { setupNotificationElements }
 
-const initNotificationElements = (register, emailInputElement) => {
+
+/**
+ * Grabs all the notification elements from various projectors and binds them to their specific attributes and event listeners using additional helper functions.
+ * @param {object} register - Holds all attributes of the register model
+ * @param {HTMLElement} emailInputElement - the email input element
+ * @returns {{
+ *  emailValidityNotificiation: HTMLElement,
+ *  confirmPwMatchNotification: HTMLElement
+ * }} - various notification elements
+ */
+const setupNotificationElements = (register, emailInputElement) => {
 
   const emailValidityNotificiation = registerNotificationProjector(
-    register, 
     { 
       onNotificationChange: register.onEmailValidNotificationChanged, 
       getNotification:      register.getEmailValidNotification 
     }
   )
 
-  const passwordStrengthNotification = registerNotificationProjector(
-    register, 
-    { 
-      onNotificationChange: register.onPwStrengthNotificationChanged, 
-      getNotification:      register.getPwStrengthNotification 
-    }
-  )
-
   const confirmPwMatchNotification = registerNotificationProjector(
-    register, 
     { 
       onNotificationChange: register.onConfirmPwMatchNotificationChanged, 
       getNotification:      register.getConfirmPwMatchNotification
@@ -30,17 +31,20 @@ const initNotificationElements = (register, emailInputElement) => {
 
   setupEmailValidityNotification(register, emailInputElement)
 
-  setupPasswordStrengthNotification(register)
-
   setupConfirmPwMatchNotification(register, confirmPwMatchNotification)
 
   return {
     emailValidityNotificiation,
-    passwordStrengthNotification,
     confirmPwMatchNotification
   }
 }
 
+
+/**
+ * Checks whether the email input element is valid everytime it loses focus and sets the message to the EmailValidNotification Attribute accordingly.
+ * @param {object} register - Holds all attributes of the register model
+ * @param {HTMLElement} emailInputElement - Needed in order to set the event listener
+ */
 const setupEmailValidityNotification = (register, emailInputElement) => {
   emailInputElement.onchange = () => {
     if(!register.getEmail()) return register.setEmailValidNotification('')
@@ -48,27 +52,14 @@ const setupEmailValidityNotification = (register, emailInputElement) => {
       ? register.setEmailValidNotification('Malformed Email')
       : register.setEmailValidNotification('')
   }
-
-  register.onEmailValidityChanged( valid => {
-    if(valid) return register.setEmailValidNotification('')
-  })
 }
 
-const setupPasswordStrengthNotification = register => {
-  register.onPasswordChanged(() => {
-    const pwStrength = register.getPwStrength()
-    const notificationMessage = pwStrength === 0
-      ? 'Hint: Type the strongest password you can'
-      : pwStrength < 5
-        ? `Missing ${5-pwStrength} more criteria`
-        : pwStrength === 5
-          ? 'Add a personal touch for stronger password'
-          : "You're password is now strong enough!"
 
-    register.setPwStrengthNotification(notificationMessage)
-  })
-}
-
+/**
+ * Updates the confirmPwMatchNotification element's classes and attributes whenever the user types in the confirm password input field.
+ * @param {object} register - Holds all attributes of the register model
+ * @param {HTMLElement} confirmPwMatchNotification - The paragraph element used to notify the user whether the confirm password he typed in matches or not
+ */
 const setupConfirmPwMatchNotification = (register, confirmPwMatchNotification) => {
   register.onConfirmPasswordChanged( () => {
     if(!register.getConfirmPassword()) return register.setConfirmPwMatchNotification('')

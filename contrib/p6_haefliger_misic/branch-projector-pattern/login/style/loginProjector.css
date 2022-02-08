@@ -1,0 +1,82 @@
+
+
+/* Login container */
+#login {
+  background-color: var(--background);
+  width: 28rem;
+  text-align: left;
+  margin: 0 auto;
+  margin-top: 4rem;
+  padding: 3rem;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+
+
+/* Email input + Email validity notification */
+#emailInputContainer {
+  position: relative;
+}
+
+input[type="email"] + p {
+  position: absolute;
+  top: calc(100% + 0.15rem);
+
+  font-size: var(--font-small);
+  font-weight: var(--font-bold);
+
+  color: var(--error);
+}
+
+
+
+/* Password Input Container + Show button + Forgot Password link */
+#passwordInputContainer {
+  display: flex;
+}
+
+/* Forgot Password link */
+#passwordInputContainer + a {
+  display: block;
+  margin-top: 0.3rem;
+  margin-bottom: 2.5rem;
+
+  cursor: pointer;
+
+  font-size: var(--font-small);
+  font-weight: var(--font-bold);
+
+  color: var(--primary);
+}
+
+/* Show button */
+input[type="button"].secondary {
+  float: right; 
+  width: 6rem;
+  margin-left: 0.8rem;
+}
+
+
+
+/* Login Notification */
+#loginNotification:empty {
+  display: none;
+}
+
+#loginNotification {
+  padding: 1rem;
+  border-radius: 2.5px;
+  margin-top: 1.5rem;
+  margin-bottom: -1rem;
+
+  font-size: var(--font-medium);
+  font-weight: var(--font-regular);
+
+  background-color: var(--error);
+  color: var(--text-contrast);
+}
+
+#loginNotification.success {
+  background-color: var(--success);
+}

@@ -4,8 +4,31 @@ import { registerProjector } from "./mainProjector/registerProjector.js"
 
 export { RegisterController, RegisterView }
 
+
+/**
+ * The Register Controller, which encapsulates the Model
+ * @typedef {function(service): object} RegisterController
+ * @returns {{
+ *  onRegisterAdd: function(): number,
+ *  addRegister: function(): void
+ * }}
+ */
 const RegisterController = () => {
   
+  /**
+   * Holds all the Attributes of the Register component and makes them partially externally available
+   * @typedef {object} register
+   * @property {Attribute} emailAttr - Emailadress
+   * @property {Attribute} pwAttr - Password
+   * @property {Attribute} confirmPwAttr - confirm Password
+   * @property {Attribute} formAttr - Indicates whether the form is valid or not
+   * @property {Attribute} showPwBtnAttr - Indicates whether pasword is shown or not
+   * @property {Attribute} emailValidNotificationAttr - Notification that shows feedback if email is valid or not
+   * @property {Attribute} confirmPwMatchNotificationAttr - Notification that notifies user whether is confirm password input matches with his password input or not
+   * @property {Attribute} pwStrenghtAttr - Indicates strength of the entered password
+   * @property {Attribute} patternsAttr - ALl patterns that a password has to match in order to be valid
+   * @returns {object} - Register Model
+   */
   const Register = () => {
 
     const emailAttr = Attribute('')
@@ -14,7 +37,6 @@ const RegisterController = () => {
     const formAttr = Attribute('')
     const showPwBtnAttr = Attribute(false)
     const emailValidNotificationAttr = Attribute('')
-    const passwordStrengthNotificationAttr = Attribute('')
     const confirmPwMatchNotificationAttr = Attribute('')
     const pwStrenghtAttr = Attribute(0)
     const patternsAttr = Attribute([
@@ -39,13 +61,8 @@ const RegisterController = () => {
         isFulfilled: false
       },
       {
-        name: '6 Characters',
+        name: '6 characters',
         regex: /^.{6,}/,
-        isFulfilled: false
-      },
-      {
-        name: '8 Characters',
-        regex: /^.{8,}/,
         isFulfilled: false
       },
     ])
@@ -82,12 +99,14 @@ const RegisterController = () => {
           ))
       })
 
+      confirmPwAttr.setValidator( input => input === pwAttr.getObs(VALUE).getValue())
+
       const amountOfFulfilledPatterns = patternsAttr.getObs(VALUE).getValue().filter(pattern => pattern.isFulfilled).length
 
       pwStrenghtAttr.getObs(VALUE).setValue(amountOfFulfilledPatterns)
 
 
-      return amountOfFulfilledPatterns === 6
+      return amountOfFulfilledPatterns === patternsAttr.getObs(VALUE).getValue().length
     })
 
     return {
@@ -104,24 +123,15 @@ const RegisterController = () => {
       getPasswordValidity:                  pwAttr.getObs(VALID).getValue,
       setPasswordValidity:                  pwAttr.getObs(VALID).setValue,
       onPasswordValidityChanged:            pwAttr.getObs(VALID).onChange,
-      getPwVisibility:                      pwAttr.getObs(VISIBILITY).getValue,
-      setPwVisibility:                      pwAttr.getObs(VISIBILITY).setValue,
-      onPwVisibilityChanged:                pwAttr.getObs(VISIBILITY).onChange,
       getConfirmPassword:                   confirmPwAttr.getObs(VALUE).getValue,
       setConfirmPassword:                   confirmPwAttr.getObs(VALUE).setValue,
       onConfirmPasswordChanged:             confirmPwAttr.getObs(VALUE).onChange,
-      getConfirmPwVisibility:               confirmPwAttr.getObs(VISIBILITY).getValue,
-      setConfirmPwVisibility:               confirmPwAttr.getObs(VISIBILITY).setValue,
-      onConfirmPwVisibilityChanged:         confirmPwAttr.getObs(VISIBILITY).onChange,
       getShowPw:                            showPwBtnAttr.getObs(VALUE).getValue,
       setShowPw:                            showPwBtnAttr.getObs(VALUE).setValue,
       onShowPwChanged:                      showPwBtnAttr.getObs(VALUE).onChange,
       getEmailValidNotification:            emailValidNotificationAttr.getObs(VALUE).getValue,
       setEmailValidNotification:            emailValidNotificationAttr.getObs(VALUE).setValue,
       onEmailValidNotificationChanged:      emailValidNotificationAttr.getObs(VALUE).onChange,
-      getPwStrengthNotification:            passwordStrengthNotificationAttr.getObs(VALUE).getValue,
-      setPwStrengthNotification:            passwordStrengthNotificationAttr.getObs(VALUE).setValue,
-      onPwStrengthNotificationChanged:      passwordStrengthNotificationAttr.getObs(VALUE).onChange,
       getConfirmPwMatchNotification:        confirmPwMatchNotificationAttr.getObs(VALUE).getValue,
       setConfirmPwMatchNotification:        confirmPwMatchNotificationAttr.getObs(VALUE).setValue,
       onConfirmPwMatchNotificationChanged:  confirmPwMatchNotificationAttr.getObs(VALUE).onChange,
@@ -136,6 +146,10 @@ const RegisterController = () => {
 
   const registerModel = ObservableList([])
 
+  /**
+   * Adds a new Register to the login model
+   * @returns {object} - The register model and its externally avalaible attribute functions
+   */
   const addRegister = () => {
     const newRegister = Register()
     registerModel.add(newRegister)
@@ -149,6 +163,11 @@ const RegisterController = () => {
   
 }
 
+/**
+ * Renders the register component as soon as a new register is being added
+ * @param {RegisterController} RegisterController 
+ * @param {HTMLElement} rootElement - The root element which will contain the whole Register component
+ */
 const RegisterView = (RegisterController, rootElement) => {
   
   const render = register => registerProjector(RegisterController, rootElement, register)

@@ -1,7 +1,7 @@
-import { LoginView, LoginController } from '../login/login.js'
-import { loginService } from './services/loginServiceDev.js'
-import { fireEvent } from '../test/testUtils/events.js'
-import { Suite } from "../test/test.js"
+import { LoginView, LoginController } from '../login.js'
+import { loginService } from '../services/loginServiceDev.js'
+import { fireEvent } from '../../test/testUtils/events.js'
+import { Suite } from "../../test/test.js"
 
 
 // Setup context
@@ -99,14 +99,15 @@ loginSuite.add('User gets notified when login attempt has failed', assert => {
 
 
   const emailInput = loginContainer.querySelector('#email')
-  console.log(emailInput.value)
 
-  fireEvent(emailInput, 'input')
+  fireEvent(emailInput, 'change')
   fireEvent(loginContainer.querySelector('#password'), 'input')
 
-  const loginBtn = loginContainer.querySelectorAll('button')[1]
+  const loginBtn = loginContainer.querySelector('input[type="submit"]')
 
   loginBtn.click()
+
+  Login.setLoginSuccess(false)
 
   assert.is(Login.getEmail(), 'some@mail.com')
   assert.is(Login.getPassword(), 'somePassword')
@@ -121,12 +122,14 @@ loginSuite.add('User gets notified when login attempt was successful', assert =>
   Login.setEmail('example@mail.com')
   Login.setPassword('P4$$word')
 
-  fireEvent(loginContainer.querySelector('#email'), 'input')
+  fireEvent(loginContainer.querySelector('#email'), 'change')
   fireEvent(loginContainer.querySelector('#password'), 'input')
 
-  const loginBtn = loginContainer.querySelectorAll('button')[1]
+  const loginBtn = loginContainer.querySelector('input[type="submit"]')
 
   loginBtn.click()
+
+  Login.setLoginSuccess(true)
 
   assert.is(Login.getEmail(), 'example@mail.com')
   assert.is(Login.getPassword(), 'P4$$word')

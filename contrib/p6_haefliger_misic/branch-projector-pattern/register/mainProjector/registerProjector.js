@@ -1,14 +1,27 @@
 import { registerButtonProjector }  from '../subprojectors/buttonProjector.js'
+import { registerTitleProjector } from '../subprojectors/titleProjector.js'
+import { containerProjector } from '../../utilProjectors/containerProjector.js'
 
-import { initInputElements }        from './initialisers/initInputElements.js'
-import { initShowButtons }          from './initialisers/initShowButtons.js'
-import { initNotificationElements } from './initialisers/initNotificationElements.js'
-import { initStrengthLines }        from './initialisers/initStrengthLines.js'
-import { initCriterias }            from './initialisers/initCriterias.js'
+import { setupInputElements }        from './setups/setupInputElements.js'
+import { setupShowButtons }          from './setups/setupShowButtons.js'
+import { setupNotificationElements } from './setups/setupNotificationElements.js'
+import { setupStrengthLines }        from './setups/setupStrengthLines.js'
+import { setupCriteria }            from './setups/setupCriteria.js'
 
 export { registerProjector }
 
+
+/**
+ * The main Projector which uses all sub projectors in this module and ties them together into a single UI
+ * @param {RegisterController} registerController
+ * @param {HTMLElement} rootElement - The root element which will be populated with the entire Register component
+ * @param {object} register - Holds all attributes of the register model 
+ */
 const registerProjector = (registerController, rootElement, register) => {
+
+  // -------------Title-------------
+  const titleElement = registerTitleProjector()
+
 
   // -------------Register Button-------------
   const registerButton = registerButtonProjector(register)
@@ -22,48 +35,56 @@ const registerProjector = (registerController, rootElement, register) => {
     passwordLabelElement,
     confirmPasswordInputElement,
     confirmPasswordLabelElement,
-  } = initInputElements(register)
+  } = setupInputElements(register)
 
 
   // -------------Show Password Buttons-------------
   const {
     showPasswordButton,
     showConfirmPasswordButton
-  } = initShowButtons(register, passwordInputElement, confirmPasswordInputElement)
+  } = setupShowButtons(register, passwordInputElement, confirmPasswordInputElement)
 
 
   // -------------Notifications-------------
   const {
     emailValidityNotificiation,
-    passwordStrengthNotification,
     confirmPwMatchNotification
-  } = initNotificationElements(register, emailInputElement)
+  } = setupNotificationElements(register, emailInputElement)
 
 
   // -------------Strength Lines-------------
-  const strengthLinesContainer = initStrengthLines(register, rootElement)
+  const strengthLinesContainer = setupStrengthLines(register, rootElement)
 
 
-  // -------------Criterias-------------
-  const criteriaContainer = initCriterias(register, rootElement)
+  // -------------Criteria-------------
+  const criteriaContainer = setupCriteria(register, rootElement)
+
+
+  // -------------Container Elements-------------
+  const emailInputContainer = containerProjector([emailInputElement, emailValidityNotificiation], 'emailInputContainer')
+
+  const passwordInputContainer = containerProjector([passwordInputElement, showPasswordButton], 'passwordInputContainer')
+
+  const confirmPasswordInputContainer = containerProjector([confirmPasswordInputElement, showConfirmPasswordButton], 'confirmPasswordInputContainer')
+
+  const confirmPasswordContainer = containerProjector([confirmPasswordInputContainer, confirmPwMatchNotification], 'confirmPasswordContainer')
+
+
+  // -------------Form Element-------------
+  const formElement = document.createElement('form')
 
 
   // -------------Setting up the HTML-------------
-  rootElement.appendChild(emailLabelElement)
-  rootElement.appendChild(emailInputElement)
-  rootElement.appendChild(emailValidityNotificiation)
-  rootElement.appendChild(document.createElement('br'))
-  rootElement.appendChild(passwordLabelElement)
-  rootElement.appendChild(passwordInputElement)
-  rootElement.appendChild(showPasswordButton)
-  rootElement.appendChild(strengthLinesContainer)
-  rootElement.appendChild(passwordStrengthNotification)
-  rootElement.appendChild(criteriaContainer)  
-  rootElement.appendChild(document.createElement('br'))
-  rootElement.appendChild(confirmPasswordLabelElement)
-  rootElement.appendChild(confirmPasswordInputElement)
-  rootElement.appendChild(showConfirmPasswordButton)
-  rootElement.appendChild(confirmPwMatchNotification)
-  rootElement.appendChild(document.createElement('br'))
-  rootElement.appendChild(registerButton)
+  rootElement.appendChild(titleElement)
+  rootElement.appendChild(formElement)
+
+  formElement.appendChild(emailLabelElement)
+  formElement.appendChild(emailInputContainer)
+  formElement.appendChild(passwordLabelElement)
+  formElement.appendChild(passwordInputContainer)
+  formElement.appendChild(strengthLinesContainer)
+  formElement.appendChild(criteriaContainer)
+  formElement.appendChild(confirmPasswordLabelElement)
+  formElement.appendChild(confirmPasswordContainer)
+  formElement.appendChild(registerButton)
 }

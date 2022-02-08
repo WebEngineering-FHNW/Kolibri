@@ -1,0 +1,183 @@
+
+
+/* Register container */
+#register {
+  background-color: var(--background);
+  width: 28rem;
+  text-align: left;
+  margin: 0 auto;
+  margin-top: 4rem;
+  padding: 3rem;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+
+
+/* Email input + Email validity notification */
+#emailInputContainer {
+  position: relative;
+}
+
+input[type="email"] + p {
+  position: absolute;
+  top: calc(100% + 0.15rem);
+
+  font-size: var(--font-small);
+  font-weight: var(--font-bold);
+
+  color: var(--error);
+}
+
+
+
+/* Password Input Container + Show button + Forgot Password link */
+#passwordInputContainer {
+  display: flex;
+}
+
+#confirmPasswordInputContainer {
+  display: flex;
+}
+
+/* Show button */
+input[type="button"].secondary {
+  float: right; 
+  width: 6rem;
+  margin-left: 0.8rem;
+}
+
+
+
+/* Strength Lines */
+.strength-lines {
+  display: flex;
+  height: 0.2rem;
+  margin: 0.5rem 0;
+}
+
+#strengthlines-box {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  column-gap: 0.3rem;
+  width: 100%;
+}
+
+/* Has the same size like the show buttons, used to better align strength lines with the width of the input field */
+#placeholder {
+  float: right;
+  width: 6rem;
+  margin-left: 0.8rem;
+}
+
+.line {
+  background: var(--input-hover);
+  border-radius: 2px;
+
+  transition: all 0.4s ease-in-out;
+}
+
+
+
+/* Confirm Password match notification */
+#confirmPasswordContainer {
+  position: relative;
+}
+
+#confirmPasswordInputContainer + p {
+  position: absolute;
+  top: calc(100% + 0.15rem);
+
+  font-size: var(--font-small);
+  font-weight: var(--font-bold);
+}
+
+
+
+/* Password Criteria */
+.pw-criteria {
+  font-size: var(--font-small);
+  display: flex;
+  flex-direction: column;
+}
+
+.pw-criteria p {
+  margin-bottom: 0.2rem;
+  display: flex;
+  align-items: center;
+
+  transition: var(--transition-slow);
+}
+
+.pw-criteria p:last-child {
+  margin-bottom: 0rem;
+}
+
+.pw-criteria p div {
+  transition: var(--transition-slow);
+}
+
+
+
+/* Register Button */
+input[type="submit"] {
+  margin-top: 2.5rem;
+}
+
+
+
+/* Color Classes */
+.line-bg-default {
+  background: var(--input-hover);
+}
+
+.line-bg-red {
+  background: var(--error);
+}
+
+.line-bg-orange {
+  background: var(--warning);
+}
+
+.line-bg-green {
+  background: var(--success);
+}
+
+.default {
+  color: var(--input-hover);
+}
+
+.red {
+  color: var(--error);
+}
+
+.green {
+  color: var(--success);
+}
+
+.cross-default {
+  background-image: url('../../styles/kolibri/icons/cross-default.png');
+  background-repeat: no-repeat;
+  background-size: 10px;
+  width: 10px;
+  height: 10px;
+  margin-right: 0.3rem;
+}
+
+.cross-error {
+  background-image: url('../../styles/kolibri/icons/cross-error.png');
+  background-repeat: no-repeat;
+  background-size: 10px;
+  width: 10px;
+  height: 10px;
+  margin-right: 0.3rem;
+}
+
+.tick-success {
+  background-image: url('../../styles/kolibri/icons/tick-success.png');
+  background-repeat: no-repeat;
+  background-size: 10px;
+  width: 10px;
+  height: 10px;
+  margin-right: 0.3rem;
+}
