@@ -14,9 +14,9 @@ export { projectMasterView, projectDetailView }
  * Create the master view, bind against the controllers, and return the view.
  * @impure - since we change the state of the controller. The DOM remains unchanged.
  * @template T
- * @param {ListControllerType<T>}      listController
+ * @param { ListControllerType<T> }      listController
  * @param { SelectionControllerType<T> } selectionController
- * @return {[HTMLDivElement]}            - master view
+ * @return { [HTMLDivElement] }          - master view
  */
 const projectMasterView = (listController, selectionController) => {
 
@@ -50,7 +50,7 @@ const projectMasterView = (listController, selectionController) => {
  * @impure - since we change the state of the controller. The DOM remains unchanged.
  * @param  { SelectionControllerType<T> } selectionController
  * @param  { HTMLElement }                detailCard - element that holds the detail view and can be folded away
- * @return {[HTMLFormElement]}            - master view
+ * @return { [HTMLFormElement] }          - master view
  */
 const projectDetailView = (selectionController, detailCard) => {
 
