@@ -91,12 +91,15 @@ observableSuite.add("list", assert => {
     list.add(1);
     assert.is(addCount, 1);
     assert.is(list.count(), 1);
+    assert.is(list.countIf( item => item === 1), 1);
+    assert.is(list.countIf( item => item === 0), 0);
     assert.is(raw.length, 1);
 
     list.onDel( item => delCount += item);
     list.del(1);
     assert.is(delCount, 1);
     assert.is(list.count(), 0);
+    assert.is(list.countIf( _ => true), 0);
     assert.is(raw.length, 0);
 
 });
