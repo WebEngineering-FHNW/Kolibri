@@ -47,10 +47,10 @@ const DayModel = () => {
  */
 const DayController = () => {
     // value is minutes since midnight as Number
-    /** @type SimpleInputControllerType<Number> */ const amStartCtrl = SimpleInputController({value: 8 * 60 ,label: "AM Start", name: "am_start", type: "time" });
-    /** @type SimpleInputControllerType<Number> */ const amEndCtrl   = SimpleInputController({value:12 * 60 ,label: "AM End"  , name: "am_end"  , type: "time" });
-    /** @type SimpleInputControllerType<Number> */ const pmStartCtrl = SimpleInputController({value:13 * 60 ,label: "PM Start", name: "pm_start", type: "time" });
-    /** @type SimpleInputControllerType<Number> */ const pmEndCtrl   = SimpleInputController({value:17 * 60 ,label: "PM End"  , name: "pm_end"  , type: "time" });
+    /** @type {SimpleInputControllerType<Number>} */ const amStartCtrl = SimpleInputController({value: 8 * 60 ,label: "AM Start", name: "am_start", type: "time" });
+    /** @type {SimpleInputControllerType<Number>} */ const amEndCtrl   = SimpleInputController({value:12 * 60 ,label: "AM End"  , name: "am_end"  , type: "time" });
+    /** @type {SimpleInputControllerType<Number>} */ const pmStartCtrl = SimpleInputController({value:13 * 60 ,label: "PM Start", name: "pm_start", type: "time" });
+    /** @type {SimpleInputControllerType<Number>} */ const pmEndCtrl   = SimpleInputController({value:17 * 60 ,label: "PM End"  , name: "pm_end"  , type: "time" });
 
     const timeControllers = [amStartCtrl, amEndCtrl, pmStartCtrl, pmEndCtrl];
 
