@@ -29,11 +29,11 @@ const addToTotal = num => total.setValue( num + total.getValue());
  * */
 
 /**
- * @typedef  {Object}         AssertType
- * @property {Array<String>}  messages - stores all assertions messages, one for each entry in "results"
- * @property {Array<Boolean>} results  - stores all assertion results
- * @property { (Boolean)  => void }       isTrue - assert that expression is true, side effects "results" and "messages"
- * @property { equalityCheckFunction } is     - assert that two expressions are equal, side effects "results" and "messages"
+ * @typedef  { Object }  AssertType
+ * @property { Array<String> }         messages - stores all assertions messages, one for each entry in "results"
+ * @property { Array<Boolean> }        results  - stores all assertion results
+ * @property { (Boolean)  => void }    isTrue   - assert that expression is true, side effects "results" and "messages"
+ * @property { equalityCheckFunction } is       - assert that two expressions are equal, side effects "results" and "messages"
  */
 
 /**
