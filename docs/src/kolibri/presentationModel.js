@@ -221,8 +221,9 @@ const Attribute = (value, qualifier) => {
     const hasObs = name => observables.hasOwnProperty(name);
 
     const makeObservable = (name, initValue) => {
-        const observable = Observable(initValue); // we might observe more types than just T
+        const observable = Observable(initValue); // we might observe more types than just T, for example VALID: Boolean
 
+        // noinspection JSValidateTypes // issue with T as generic parameter for the observed value and other observed types
         observables[name] = observable;
         observable.onChange( _ => modelWorld.update(getQualifier, name, observable) );
         return observable;

@@ -10,6 +10,11 @@ import { Attribute, VALUE }      from "../../kolibri/presentationModel.js";
 export { DayController }
 
 /**
+ * @typedef DayModelType
+ * @property { AttributeType<Number> } total -the total working minutes for this day
+ */
+
+/**
  * A presentation model for a work day that captures all information that the controller needs on top of
  * what he can delegate to other controllers. In this case there is only the total number of minutes that
  * derives from the start-end times.
@@ -17,12 +22,12 @@ export { DayController }
  * to show the canonical structure of controllers that encapsulate a presentation model.
  * @private
  * @pure
- * @return {{total: AttributeType<Number>}} - an object that contains the total working minutes for this day
+ * @return { DayModelType }
  * @constructor
  */
 const DayModel = () => {
-    /** @type AttributeType<Number> */ const total = Attribute(0); // total minutes in this day
-    return { total };
+    const total = Attribute(0); // total minutes in this day
+    return /** @type {DayModelType} */ { total };
 };
 
 /**
