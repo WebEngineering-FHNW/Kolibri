@@ -6,7 +6,7 @@
 
 export {
     id, c, snd,
-    Tuple, Choice,
+    Tuple, Choice, EagerTuple,
     Pair, fst,
     Left, Right, Nothing, Just
 }
@@ -96,6 +96,22 @@ const Tuple = n => {
         ...Array.from( {length:n}, (it, idx) => values => values[idx] )
     ];
 };
+
+/**
+ * Experimental Variant of {@link Tuple} that does not work with curried params in the ctor but
+ * with a destructured array.
+ * It is a little less safe (esp. null/undefined-safe) when less params are passed to the ctor as announced in "n".
+ */
+const EagerTuple = n => {
+    if (n < 1) throw new Error("Tuple must have first argument n > 0");
+    const ctor = (...args )=> accessor => accessor(...args);
+    const accessorN = i => (...argsArray) => argsArray[i];
+    return [
+         ctor,
+        ...Array.from( {length:n}, (it, idx) => accessorN(idx) )
+    ];
+};
+
 
 /**
  * A Choice selects between n distinct values, each of which can only be accessed if a

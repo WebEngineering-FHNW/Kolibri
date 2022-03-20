@@ -1,6 +1,6 @@
 import {TestSuite} from "./util/test.js";
 
-import {c, Choice, fst, id, Just, Left, Nothing, Pair, Right, snd, Tuple} from "./stdlib.js";
+import {c, Choice, fst, id, Just, Left, Nothing, Pair, Right, snd, Tuple, EagerTuple} from "./stdlib.js";
 
 const stdlibSuite = TestSuite("stdlib");
 
@@ -33,6 +33,15 @@ stdlibSuite.add("snd", assert => {
 stdlibSuite.add("tuple3", assert => {
     const [Person, firstname, lastname, age] = Tuple(3);
     const dierk = Person("Dierk")("König")(50);
+    assert.is(dierk(firstname), "Dierk");
+    assert.is(dierk(lastname),  "König");
+    assert.is(dierk(age),       50);
+
+});
+
+stdlibSuite.add("tuple3N", assert => {
+    const [Person, firstname, lastname, age] = EagerTuple(3);
+    const dierk = Person("Dierk","König",50);
     assert.is(dierk(firstname), "Dierk");
     assert.is(dierk(lastname),  "König");
     assert.is(dierk(age),       50);
