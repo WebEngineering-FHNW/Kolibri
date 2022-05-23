@@ -53,9 +53,10 @@ observableSuite.add("edge case", assert => {
 
     const obs = Observable("start");
 
-    let log1 = [];
-    let allowChange = false;
-    let log2 = [];
+    const log1 = [];
+    const log2 = [];
+    let   allowChange = false;
+
     obs.onChange((val, oldVal) => { // first subscriber changes obs value itself when notified: tricky edge case
         log1.push(oldVal, val);
         if (allowChange) {
@@ -63,9 +64,7 @@ observableSuite.add("edge case", assert => {
             obs.setValue(val + "_x");
         }
     });
-    obs.onChange((val,oldVal) => {
-        log2.push(oldVal, val);
-    });
+    obs.onChange((val,oldVal) => log2.push(oldVal, val));
 
     assert.is(["start", "start"].eq(log1), true);
     assert.is(["start", "start"].eq(log2), true);
@@ -91,8 +90,8 @@ observableSuite.add("list", assert => {
     list.add(1);
     assert.is(addCount, 1);
     assert.is(list.count(), 1);
-    assert.is(list.countIf( item => item === 1), 1);
-    assert.is(list.countIf( item => item === 0), 0);
+    assert.is(list.countIf( item => 1 === item), 1);
+    assert.is(list.countIf( item => 0 === item), 0);
     assert.is(raw.length, 1);
 
     list.onDel( item => delCount += item);
