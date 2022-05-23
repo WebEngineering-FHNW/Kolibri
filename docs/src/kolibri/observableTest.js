@@ -9,6 +9,7 @@ observableSuite.add("value", assert => {
 
     const obs = Observable("");
 
+
 //  initial state
     assert.is(obs.getValue(),  "");
 
@@ -16,10 +17,10 @@ observableSuite.add("value", assert => {
     let found;
     obs.onChange(val => found = val);
     obs.setValue("firstValue");
-    assert.is(found,  "firstValue");
+    assert.is(found, "firstValue");
 
 //  value is updated
-    assert.is(obs.getValue(),  "firstValue");
+    assert.is(obs.getValue(), "firstValue");
 
 
 //  Attributes are isolated, no "new" needed
@@ -32,8 +33,8 @@ observableSuite.add("value", assert => {
     let secondFound;
     secondAttribute.onChange(val => secondFound = val);
     secondAttribute.setValue("secondValue");
-    assert.is(found,  "firstValue");
-    assert.is(secondFound,  "secondValue");
+    assert.is(found,       "firstValue");
+    assert.is(secondFound, "secondValue");
 
 //  value is updated
     assert.is(secondAttribute.getValue(),  "secondValue");

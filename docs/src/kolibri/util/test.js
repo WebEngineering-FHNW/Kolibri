@@ -21,10 +21,10 @@ const total = Observable(0);
 const addToTotal = num => total.setValue( num + total.getValue());
 
 /** @typedef equalityCheckFunction
- * @template V
+ * @template T
  * @function
- * @param { V } actual
- * @param { V } expected
+ * @param { T } actual
+ * @param { T } expected
  * @return void
  * */
 
@@ -33,7 +33,9 @@ const addToTotal = num => total.setValue( num + total.getValue());
  * @property { Array<String> }         messages - stores all assertions messages, one for each entry in "results"
  * @property { Array<Boolean> }        results  - stores all assertion results
  * @property { (Boolean)  => void }    isTrue   - assert that expression is true, side effects "results" and "messages"
- * @property { equalityCheckFunction } is       - assert that two expressions are equal, side effects "results" and "messages"
+ * @property { equalityCheckFunction } is       - assert that two expressions are equal,
+ *                                                side effects "results" and "messages", and
+ *                                                logs an error to the console incl. stack trace in case of failure.
  */
 
 /**
@@ -70,7 +72,7 @@ const Assert = () => {
             messages.push(message);
         }
     }
-}
+};
 
 /**
  * @private data type to capture the test to-be-run. A triple of ctor and two getter functions.
@@ -93,7 +95,7 @@ const test = (name, callback) => {
     const assert = Assert();
     callback(assert);
     report(name, assert.results, assert.messages)
-}
+};
 
 /**
  * @callback AsyncTestCallback
@@ -117,7 +119,7 @@ const asyncTest = (name, asyncCallback) => {
             report(name, assert.results, assert.messages);
             addToTotal(assert.results.length);
         });
-}
+};
 
 /**
  * @typedef { Object } TestSuiteType
@@ -154,7 +156,7 @@ const TestSuite = suiteName => {
             }
         }
     };
-}
+};
 
 /**
  * If all test results are ok, report a summary. Otherwise, report the individual tests.
@@ -194,14 +196,12 @@ const report = (origin, results, messages) => {
                 <div ${failedStyle}>failed</div> 
         `);
     });
-}
+};
 
 /**
  * Write the formatted test results in the holding report HTML page.
  * @param { !String } html - HTML string of the to-be-appended DOM
  * @private
  */
-const write = html =>  {
-    out.append(...dom(html));
-}
+const write = html => out.append(...dom(html));
 
