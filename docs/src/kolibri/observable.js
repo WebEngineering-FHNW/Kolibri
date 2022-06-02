@@ -33,14 +33,13 @@ export {Observable, ObservableList}
  * @pure
  * @template T
  * @param    {!T} value      - the initial value to set. Mandatory.
- * @returns  IObservable<T>
+ * @returns  { IObservable<T> }
  * @constructor
  * @example
  * const obs = Observable("");
  * obs.onChange(val => console.log(val));
  * obs.setValue("some other value");
  */
-
 const Observable = value => {
     const listeners = [];
     return {
