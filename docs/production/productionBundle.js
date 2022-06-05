@@ -874,7 +874,7 @@ const ModelWorld = () => {
         const qualifier = getQualifier(); // lazy get
         if (null == qualifier) { return; }
         const key = qualifier + "." + name; // example: "Person.4711.firstname" "VALID" -> "Person.4711.firstname.VALID"
-        let candidates = data[key];
+        const candidates = data[key];
         if (null == candidates) {
             data[key] = [observable]; // nothing to notify
             return;
@@ -910,7 +910,8 @@ const ModelWorld = () => {
                 const newKey = newQualifier + "." + name;
                 let newCandidates = data[newKey];
                 if (null == newCandidates) {
-                    newCandidates = data[newKey] = [];
+                    data[newKey]  = [];
+                    newCandidates = [];
                 }
                 if (newCandidates.length > 0) {         // there are existing observables that's values we need to take over
                     observable.setValue(newCandidates[0].getValue());
@@ -1011,10 +1012,12 @@ const Attribute = (value, qualifier) => {
     const hasObs = name => observables.hasOwnProperty(name);
 
     const makeObservable = (name, initValue) => {
+
         const observable = Observable(initValue); // we might observe more types than just T, for example VALID: Boolean
 
         // noinspection JSValidateTypes // issue with T as generic parameter for the observed value and other observed types
         observables[name] = observable;
+        // noinspection JSCheckFunctionSignatures
         observable.onChange( _ => modelWorld.update(getQualifier, name, observable) );
         return observable;
     };
@@ -1044,9 +1047,9 @@ const Attribute = (value, qualifier) => {
     };
 
     return { getObs, hasObs, setValidator, setConverter, setConvertedValue, getQualifier, setQualifier }
-};const release     = "0.1.46";
+};const release     = "0.1.47";
 
-const dateStamp   = "2022-06-02 T 21:19:36 MESZ";
+const dateStamp   = "2022-06-05 T 12:47:47 MESZ";
 
 const versionInfo = release + " at " + dateStamp;
 
@@ -1121,7 +1124,8 @@ const SimpleInputModel = ({value, label, name, type= TEXT}) => {
     if (null != label) singleAttr.getObs(LABEL).setValue(label);
     if (null != name ) singleAttr.getObs(NAME) .setValue(name);
 
-    return singleAttr;
+
+    return /** AttributeType<T> */ singleAttr;
 };/**
  * @typedef { object } SimpleInputControllerType<T>
  * @template T
@@ -1156,20 +1160,18 @@ const SimpleInputModel = ({value, label, name, type= TEXT}) => {
  */
 const SimpleInputController = args => SimpleAttributeInputController(SimpleInputModel(args));
 
-const SimpleAttributeInputController = attribute => {
-    return {
-        setValue:           attribute.setConvertedValue,
-        getValue:           attribute.getObs(VALUE)     .getValue,
-        setValid:           attribute.getObs(VALID)     .setValue,
-        getType:            attribute.getObs(TYPE)      .getValue,
-        onValueChanged:     attribute.getObs(VALUE)     .onChange,
-        onValidChanged:     attribute.getObs(VALID)     .onChange,
-        onLabelChanged:     attribute.getObs(LABEL)     .onChange,
-        onNameChanged:      attribute.getObs(NAME)      .onChange,
-        onEditableChanged:  attribute.getObs(EDITABLE)  .onChange,
-        setConverter:       attribute.setConverter,
-    };
-};/**
+const SimpleAttributeInputController = attribute => ( {
+    setValue:          attribute.setConvertedValue,
+    getValue:          attribute.getObs(VALUE).getValue,
+    setValid:          attribute.getObs(VALID).setValue,
+    getType:           attribute.getObs(TYPE).getValue,
+    onValueChanged:    attribute.getObs(VALUE).onChange,
+    onValidChanged:    attribute.getObs(VALID).onChange,
+    onLabelChanged:    attribute.getObs(LABEL).onChange,
+    onNameChanged:     attribute.getObs(NAME).onChange,
+    onEditableChanged: attribute.getObs(EDITABLE).onChange,
+    setConverter:      attribute.setConverter,
+} );/**
  * @module projector/simpleForm/simpleInputProjector
  *
  * Following the projector pattern, this module exports projection functions
