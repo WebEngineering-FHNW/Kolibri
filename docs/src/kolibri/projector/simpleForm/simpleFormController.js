@@ -25,4 +25,4 @@ const SimpleFormController = inputAttributesArray => {
     const inputControllers = inputAttributesArray.map(SimpleInputController);
     // set up any business rules (we do not have any, yet)
     return inputControllers ;
-}
+};

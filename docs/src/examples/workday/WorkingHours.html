@@ -109,11 +109,11 @@
 
         const inputs = () => workingHoursInput.querySelectorAll("input");
         checkReadOnly.onclick = _ => checkReadOnly.checked
-                                     ? inputs().forEach(input => input.setAttribute("readonly", true))     // only inputs can be set to readonly
+                                     ? inputs().forEach(input => input.setAttribute("readonly", "on"))  // only inputs can be set to readonly
                                      : inputs().forEach(input => input.removeAttribute("readonly"));
 
         checkRequired.onclick = _ => checkRequired.checked
-                                     ? inputs().forEach(input => input.setAttribute("required", true))
+                                     ? inputs().forEach(input => input.setAttribute("required", "on"))
                                      : inputs().forEach(input => input.removeAttribute("required"));
 
         checkDarkTheme.onclick = _ => checkDarkTheme.checked

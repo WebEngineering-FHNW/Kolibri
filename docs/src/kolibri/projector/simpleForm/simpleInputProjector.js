@@ -89,7 +89,7 @@ const projectInput =
         : inputElement.setAttribute("readonly", "on"));
 
     return /** @type { [HTMLLabelElement, HTMLInputElement] } */ elements;
-}
+};
 
 /**
  * An {@link InputProjector} that binds the input on value change.

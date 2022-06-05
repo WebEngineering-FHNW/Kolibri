@@ -699,14 +699,13 @@ const Scheduler = () => {
  * @pure
  * @template T
  * @param    {!T} value      - the initial value to set. Mandatory.
- * @returns  IObservable<T>
+ * @returns  { IObservable<T> }
  * @constructor
  * @example
  * const obs = Observable("");
  * obs.onChange(val => console.log(val));
  * obs.setValue("some other value");
  */
-
 const Observable = value => {
     const listeners = [];
     return {
@@ -1012,8 +1011,9 @@ const Attribute = (value, qualifier) => {
     const hasObs = name => observables.hasOwnProperty(name);
 
     const makeObservable = (name, initValue) => {
-        const observable = Observable(initValue); // we might observe more types than just T
+        const observable = Observable(initValue); // we might observe more types than just T, for example VALID: Boolean
 
+        // noinspection JSValidateTypes // issue with T as generic parameter for the observed value and other observed types
         observables[name] = observable;
         observable.onChange( _ => modelWorld.update(getQualifier, name, observable) );
         return observable;
@@ -1044,9 +1044,9 @@ const Attribute = (value, qualifier) => {
     };
 
     return { getObs, hasObs, setValidator, setConverter, setConvertedValue, getQualifier, setQualifier }
-};const release     = "0.1.44";
+};const release     = "0.1.46";
 
-const dateStamp   = "2022-01-28 T 00:37:30 MEZ";
+const dateStamp   = "2022-06-02 T 21:19:36 MESZ";
 
 const versionInfo = release + " at " + dateStamp;
 
@@ -1210,7 +1210,10 @@ let counter = 0;
 const projectInput =
         eventType =>
         (formClassName, inputController) => {
-    if( ! inputController) console.error("x");
+    if( ! inputController) {
+        console.error("no inputController in input projector."); // be defensive
+        return;
+    }
     const id = formClassName + "-id-" + (counter++);
     // create view
     const elements = dom(`

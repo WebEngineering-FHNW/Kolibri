@@ -52,7 +52,7 @@ const dom = innerString => {
 const fireEvent = (element, eventTypeString) => {
     const event = new Event(eventTypeString);
     element.dispatchEvent(event);
-}
+};
 
 /**
  * Convenience function for {@link fireEvent} function with value "change".
