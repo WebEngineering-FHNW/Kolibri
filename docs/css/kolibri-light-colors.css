@@ -123,39 +123,39 @@
 
 
     /* --- monochrome --- */
+    --kb-color-rgb-black:          #14141B;
     --kb-color-rgb-bg-dark:        #262338;
     --kb-color-rgb-body:           #4E4B66;
-    --kb-color-rgb-black:          #14141B;
     --kb-color-rgb-label:          #6E7191;
-    --kb-color-rgb-plachold:       #A0A3BD;
+    --kb-color-rgb-placeholder:    #A0A3BD;
     --kb-color-rgb-line:           #D9DBE9;
-    --kb-color-rgb-input:          #EFF0F6;
-    --kb-color-rgb-bg-light:       #F7F7FC;
+    --kb-color-rgb-bg-light:       #EFF0F6;
+    --kb-color-rgb-white:          #F7F7FC;
 
+    --kb-color-hsl-black:          hsl(240, 15%,  9%);
     --kb-color-hsl-bg-dark:        hsl(249, 23%, 18%);
     --kb-color-hsl-body:           hsl(247, 15%, 35%);
-    --kb-color-hsl-black:          hsl(240, 15%,  9%);
     --kb-color-hsl-label:          hsl(235, 14%, 50%);
-    --kb-color-hsl-plachold:       hsl(234, 18%, 68%);
+    --kb-color-hsl-placeholder:    hsl(234, 18%, 68%);
     --kb-color-hsl-line:           hsl(233, 27%, 88%);
-    --kb-color-hsl-input:          hsl(231, 28%, 95%);
-    --kb-color-hsl-bg-light:       hsl(240, 45%, 98%);
+    --kb-color-hsl-bg-light:       hsl(231, 28%, 95%);
+    --kb-color-hsl-white:          hsl(240, 45%, 98%);
 
 
     /* --- transparent - dark --- */
-    --kb-color-rgba-balck-95:      rgba(20, 20, 43, 0.95);
-    --kb-color-rgba-balck-75:      rgba(20, 20, 43, 0.75);
-    --kb-color-rgba-balck-65:      rgba(20, 20, 43, 0.65);
-    --kb-color-rgba-balck-40:      rgba(20, 20, 43, 0.40);
-    --kb-color-rgba-balck-25:      rgba(20, 20, 43, 0.25);
-    --kb-color-rgba-balck-10:      rgba(20, 20, 43, 0.10);
+    --kb-color-rgba-black-95:      rgba(20, 20, 43, 0.95);
+    --kb-color-rgba-black-75:      rgba(20, 20, 43, 0.75);
+    --kb-color-rgba-black-65:      rgba(20, 20, 43, 0.65);
+    --kb-color-rgba-black-40:      rgba(20, 20, 43, 0.40);
+    --kb-color-rgba-black-25:      rgba(20, 20, 43, 0.25);
+    --kb-color-rgba-black-10:      rgba(20, 20, 43, 0.10);
 
-    --kb-color-hsla-balck-95:      hsla(241, 37%, 12%, 0.95);
-    --kb-color-hsla-balck-75:      hsla(241, 37%, 12%, 0.75);
-    --kb-color-hsla-balck-65:      hsla(241, 37%, 12%, 0.65);
-    --kb-color-hsla-balck-40:      hsla(241, 37%, 12%, 0.40);
-    --kb-color-hsla-balck-25:      hsla(241, 37%, 12%, 0.25);
-    --kb-color-hsla-balck-10:      hsla(241, 37%, 12%, 0.10);
+    --kb-color-hsla-black-95:      hsla(241, 37%, 12%, 0.95);
+    --kb-color-hsla-black-75:      hsla(241, 37%, 12%, 0.75);
+    --kb-color-hsla-black-65:      hsla(241, 37%, 12%, 0.65);
+    --kb-color-hsla-black-40:      hsla(241, 37%, 12%, 0.40);
+    --kb-color-hsla-black-25:      hsla(241, 37%, 12%, 0.25);
+    --kb-color-hsla-black-10:      hsla(241, 37%, 12%, 0.10);
 
 
     /* --- transparent - white --- */

@@ -26,10 +26,10 @@
 :root {
 
     /* --- typography --- */
-    --kb-font-rubik-light-light:     "Rubik-Light",    ui-sans-serfi, serif;
-    --kb-font-rubik-light-medium:    "Rubik-Medium",   ui-sans-serfi, serif;
-    --kb-font-rubik-light-regular:   "Rubik-Regular",  ui-sans-serfi, serif;
-    --kb-font-rubik-light-semibold:  "Rubik-SemiBold", ui-sans-serfi, serif;
+    --kb-font-rubik-light-light:     "Rubik-Light",    ui-sans-serif, serif;
+    --kb-font-rubik-light-medium:    "Rubik-Medium",   ui-sans-serif, serif;
+    --kb-font-rubik-light-regular:   "Rubik-Regular",  ui-sans-serif, serif;
+    --kb-font-rubik-light-semibold:  "Rubik-SemiBold", ui-sans-serif, serif;
 
     /* --- font-sizes --- */
     --font-size-h1:         6.0rem;
