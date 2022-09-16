@@ -1,0 +1,28 @@
+:root{
+
+    --kb-rem-spacer-1:      0.3rem;
+    --kb-rem-spacer-2:      0.5rem;
+    --kb-rem-spacer-3:      0.8rem;
+    --kb-rem-spacer-4:      1.0rem;
+    --kb-rem-spacer-5:      1.3rem;
+    --kb-rem-spacer-6:      1.5rem;
+    --kb-rem-spacer-7:      1.8rem;
+    --kb-rem-spacer-8:      2.0rem;
+    --kb-rem-spacer-9:      2.2rem;
+    --kb-rem-spacer-10:     2.5rem;
+    --kb-rem-spacer-12:     3.0rem;
+
+
+    --kb-px-spacer-1:       4px;
+    --kb-px-spacer-2:       8px;
+    --kb-px-spacer-3:       12px;
+    --kb-px-spacer-4:       16px;
+    --kb-px-spacer-5:       20px;
+    --kb-px-spacer-6:       24px;
+    --kb-px-spacer-7:       28px;
+    --kb-px-spacer-8:       32px;
+    --kb-px-spacer-9:       36px;
+    --kb-px-spacer-10:      40px;
+    --kb-px-spacer-12:      48px;
+
+}
