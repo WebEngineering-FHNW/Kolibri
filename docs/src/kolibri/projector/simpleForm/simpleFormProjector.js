@@ -46,7 +46,8 @@ const projectForm = formController => {
 			</fieldset>
 		</form>
     `);
-    /** @type { HTMLFormElement } */ const form = elements[0];
+    /** @type { HTMLFormElement } */
+    const form = elements[0];
     const fieldset = form.children[0];
 
     formController.forEach( inputController =>

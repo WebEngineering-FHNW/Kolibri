@@ -11,6 +11,7 @@ import { toSeq }         from "../sequence/util/helpers.js";
 export {
     dom, fireEvent, fireChangeEvent,
     CLICK, INPUT, CHANGE,
+    TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR, TEXTBTN, ICONBTN, LEADINGICONBTN, TRAILINGICONBTN
     TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR,
     select
 }
@@ -68,14 +69,21 @@ const fireEvent = (element, eventTypeString) => {
 const fireChangeEvent = element => fireEvent(element, CHANGE);
 
 
-/** @typedef { "text"|"number"|"checkbox"|"time"|"date"|"color" } InputTypeString */
+/** @typedef { "text"|"number"|"checkbox"|"time"|"date"|"color"} InputTypeString */
 
-/** @type InputTypeString */ const TEXT     = "text";
-/** @type InputTypeString */ const NUMBER   = "number";
-/** @type InputTypeString */ const CHECKBOX = "checkbox";
-/** @type InputTypeString */ const TIME     = "time";
-/** @type InputTypeString */ const DATE     = "date";
-/** @type InputTypeString */ const COLOR    = "color";
+/** @type InputTypeString */ const TEXT         = "text";
+/** @type InputTypeString */ const NUMBER       = "number";
+/** @type InputTypeString */ const CHECKBOX     = "checkbox";
+/** @type InputTypeString */ const TIME         = "time";
+/** @type InputTypeString */ const DATE         = "date";
+/** @type InputTypeString */ const COLOR        = "color";
+
+
+/** @typedef { "text"|"icon"|"leadingIcon"|"trailingIcon"} ButtonTypeString */
+/** @type ButtonTypeString */ const TEXTBTN         = "textBtn";
+/** @type ButtonTypeString */ const ICONBTN         = "iconBtn";
+/** @type ButtonTypeString */ const LEADINGICONBTN  = "leadingIconBtn";
+/** @type ButtonTypeString */ const TRAILINGICONBTN = "trailingIconBtn";
 
 /**
  * Utility function that works like {@link Element.querySelectorAll} but logs a descriptive warning when

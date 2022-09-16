@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>primaryButtonView</title>
+</head>
+<style>
+
+    h2{
+        /* Kolibri-Serif/H2 */
+        font-family: 'Rubik';
+        font-style: normal;
+        font-weight: 300;
+        font-size: 60px;
+        line-height: 76px;
+        /* or 127% */
+
+        display: flex;
+        align-items: center;
+        letter-spacing: -0.5px;
+    }
+
+    body {
+        max-width: 42em;
+        margin: 3em auto 3em auto;
+    }
+    .simple-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 24px 24px;
+    }
+
+</style>
+<body>
+
+    <h2>Primary Button</h2>
+    <section class="simple-grid" id="primary-buttons">
+
+    </section>
+    <div class="simple-grid">
+        <button>default</button>
+        <button>hover</button>
+        <button>focus</button>
+        <button>pressed</button>
+        <button>disabled</button>
+        <button>success</button>
+        <button>error</button>
+        <button>processing</button>
+    </div>
+
+    <script src="./starter.js" type="module"></script>
+
+</body>
+</html>
