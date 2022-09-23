@@ -10,8 +10,8 @@ const execute = loggingFunction => callback => msg => {
   loggingFunction(msg);
   callback(msg);
   return True;
-}
+};
 
-let loggerOn = True;
+let loggerOn = False;
 const disableLogger = () => loggerOn = False;
 const enableLogger  = () => loggerOn = True;
