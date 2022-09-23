@@ -1,92 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title> All Tests </title>
-
+    <link rel="shortcut icon" type="image/png" href="../../../docs/img/logo/logo-60x54.png"/>
+    <link rel="stylesheet"                     href="../../../docs/css/kolibri-base.css">
     <style>
         body {
-            font-family: Monaco, monospace, arial;
-            margin: 0;
-            padding: 0;
+            width: 48em;
+            margin: auto;
         }
-
-        .centerDiv {
-            width: 80%;
-            min-width: 50%;
-            margin: 0 auto;
+        #out {
+            max-height: calc(100vh - 20em);
+            overflow: scroll;
+            display: grid;
+            grid-template-columns: repeat(4, max-content);
+            grid-column-gap: 2em;
+            grid-row-gap: .5em;
+            padding: 2em;
+            box-shadow: var(--kolibri-box-shadow);
         }
-
-        .dot {
-            height: 5px;
-            width: 5px;
-            border-radius: 50%;
-            display: inline-block;
-            margin: 2px 3px 2px 2px;
+        #out div:nth-child(odd) {
+            color: var(--kolibri-color-output);
         }
-
-        .red {
-            background-color: #ff7329;
+        #out div:nth-child(4n-3) {
+            justify-self: end;
         }
-
-        .green {
-            background-color: #45c110;
-            border-width: 8px;
-
+        #grossTotal {
+            color: var(--kolibri-color-output);
         }
-
-        .testContainer p {
-            margin: 1px;
-            font-size: 0.9em;
+        footer {
+            position: fixed;
+            bottom:     0;
+            left:       0;
+            right:      0;
+            text-align: center;
+            color:      white;
+            background: var(--kolibri-color-neutral);
+            padding:    0.5em;
+        ;
         }
-
-        h4, h3 {
-            margin: 0;
-        }
-        h4{
-            padding-top: 15px;
-        }
-
-        legend {
-            font-size: 1.2em;
-            font-style: italic;
-        }
-
-        fieldset {
-            padding: 15px;
-            margin: 30px;
-            border-style: solid;
-        }
-
-        th {
-            text-align: left;
-        }
-
-        th:nth-child(2), td:nth-child(2) {
-            padding-left: 55px;
-            padding-top: 5px;
-        }
-
-        .failMessage {
-            padding-left: 25px;
-        }
-
     </style>
 </head>
 <body>
+<h1>Test Report</h1>
+<div id="out"></div>
 
-<div class="centerDiv">
-    <h1>All Tests (Total:<span id="totalTests"></span>)</h1>
-    <div id="output"></div>
-</div>
+<p id="grossTotal">Check console for possible errors.</p>
 
-<script src="lambda-calculus-library/lambda-calculus-test.js" type="module"></script>
-<script src="lambda-calculus-library/church-numerals-test.js" type="module"></script>
-<script src="calculator/calculator-test.js" type="module"></script>
-<script src="stack/stack-test.js" type="module"></script>
-<script src="listMap/listMap-test.js" type="module"></script>
-<script src="observable/observable-test.js" type="module"></script>
-<script src="maybe/maybe-test.js" type="module"></script>
-<script src="box/box-test.js" type="module"></script>
+<footer></footer>
+<script src="./allTestsSuite.js" type="module"></script>
 
 </body>
 </html>
