@@ -1,13 +1,12 @@
 export {Logger, enableLogger, disableLogger}
 import {LazyIf, Then, Else, True, False } from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
 
-const Logger = loggingFunction => callback => msg =>
+const Logger = callback => msg =>
   LazyIf( loggerOn )
-    (Then( () => execute(loggingFunction)(callback)(msg)  ))
-    (Else( () => False                                    ));
+    (Then( () => execute(callback)(msg)  ))
+    (Else( () => False                   ));
 
-const execute = loggingFunction => callback => msg => {
-  loggingFunction(msg);
+const execute = callback => msg => {
   callback(msg);
   return True;
 };
