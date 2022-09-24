@@ -14,12 +14,13 @@ import {LazyIf, Then, Else, True, False } from "../../../p6_brodwolf_andermatt/s
  */
 const Logger = callback => msg => state =>
   LazyIf( convertToChurchBool(state) )
-    (Then( () => execute(callback)(msg)  ))
+    (Then( () => callback(msg)  ))
     (Else( () => False                   ));
 
+/**
+ * Converts a js boolean to a church boolean
+ *
+ * @param state the boolean to convert
+ * @returns {churchBoolean}
+ */
 const convertToChurchBool = state => state ? True : False;
-
-const execute = callback => msg => {
-  callback(msg);
-  return True;
-};
