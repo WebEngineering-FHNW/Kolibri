@@ -1,54 +1,51 @@
 import {TestSuite} from "../../../../docs/src/kolibri/util/test.js";
-import {Logger, enableLogger, disableLogger} from "../../src/logger/logger.js";
+import {Logger} from "../../src/logger/logger.js";
 
 const loggerSuite = TestSuite("Logger");
-
-loggerSuite.add("test logger default state", assert => {
-  let realMsg = '';
-  const write = msg => realMsg = msg;
-  const logMessage = 'hello world';
-  const log = Logger(write);
-  log(logMessage);
-  assert.is(realMsg, '');
-});
 
 loggerSuite.add("test simple logging", assert => {
   let realMsg = '';
   const write = msg => realMsg = msg;
   const logMessage = 'hello world';
   const log = Logger(write);
-  enableLogger();
-  log(logMessage);
-  assert.is(realMsg, logMessage);
+  log(logMessage)(true);
+  assert.is(realMsg, 'hello world');
 });
 
 loggerSuite.add("test enabling logging", assert => {
-  disableLogger();
+  let loggerEnabled = false;
   let realMsg = '';
-  const write = msg => {
-    realMsg = msg;
-  };
-
   const logMessage = 'hello world';
+
+  const write = msg => realMsg = msg;
   const log = Logger(write);
-  // logging should be disbaled
-  log(logMessage);
+
+  // logging should be disabled
+  log(logMessage)(loggerEnabled);
   assert.is(realMsg, '');
-  enableLogger();
-  log(logMessage);
+
+  // logging should be enabled
+  loggerEnabled = true;
+  log(logMessage)(loggerEnabled);
   assert.is(realMsg, logMessage);
 });
 
 loggerSuite.add("test disabling logging", assert => {
-  disableLogger();
+  let loggerEnabled = true;
   let realMsg = '';
-  const write = msg => {
-    realMsg = msg;
-  };
   const logMessage = 'hello world';
+
+  const write = msg => realMsg = msg;
   const log = Logger(write);
-  // logging should be disbaled
-  log(logMessage);
+
+  // logging should be enabled
+  log(logMessage)(loggerEnabled);
+  assert.is(realMsg, logMessage);
+
+  // logging should be disabled
+  loggerEnabled = false;
+  realMsg = '';
+  log(logMessage)(loggerEnabled);
   assert.is(realMsg, '');
 });
 
