@@ -1,10 +1,16 @@
-import {Logger, enableLogger, disableLogger} from "./logger.js";
+import {Logger} from "./logger.js";
+
+let state = true;
 
 const action = () => {
-  log("action");
-
+  log("action")(state);
 }
 
-const log = Logger(msg => console.error(msg))(_ => 0);
+const onOff = () => {
+  state = !state;
+}
+
+const log = Logger(msg => console.log(msg));
 
 document.getElementById("action").onclick = action;
+document.getElementById("onOff").onclick = onOff;
