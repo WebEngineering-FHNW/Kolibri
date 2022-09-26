@@ -1,19 +1,20 @@
-import {Logger} from "./logger.js";
+import {DebugLogger, LOG_NOTHING, LOG_TRACE} from "./logger.js";
 
-let state = false;
+let state = LOG_NOTHING;
 
-const loggerActivated = () => state;
-
+const activated = () => state;
 
 const action = () => {
-  log("action");
+  debug("action");
 };
 
 const onOff = () => {
-  state = !state;
+  state = LOG_TRACE;
 };
 
-const log = Logger(loggerActivated)(msg => console.log(msg));
+const debug = DebugLogger(activated)(msg => {
+  console.log(msg)
+});
 
 document.getElementById("action").onclick = action;
 document.getElementById("onOff").onclick = onOff;
