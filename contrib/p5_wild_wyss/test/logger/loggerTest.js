@@ -7,8 +7,8 @@ loggerSuite.add("test simple logging", assert => {
   let realMsg = '';
   const write = msg => realMsg = msg;
   const logMessage = 'hello world';
-  const log = Logger(write);
-  log(logMessage)(true);
+  const log = Logger(() => true)(write);
+  log(logMessage);
   assert.is(realMsg, 'hello world');
 });
 
@@ -18,15 +18,15 @@ loggerSuite.add("test enabling logging", assert => {
   const logMessage = 'hello world';
 
   const write = msg => realMsg = msg;
-  const log = Logger(write);
+  const log = Logger(() => loggerEnabled)(write);
 
   // logging should be disabled
-  log(logMessage)(loggerEnabled);
+  log(logMessage);
   assert.is(realMsg, '');
 
   // logging should be enabled
   loggerEnabled = true;
-  log(logMessage)(loggerEnabled);
+  log(logMessage);
   assert.is(realMsg, logMessage);
 });
 
@@ -36,10 +36,10 @@ loggerSuite.add("test disabling logging", assert => {
   const logMessage = 'hello world';
 
   const write = msg => realMsg = msg;
-  const log = Logger(write);
+  const log = Logger(() => loggerEnabled)(write);
 
   // logging should be enabled
-  log(logMessage)(loggerEnabled);
+  log(logMessage);
   assert.is(realMsg, logMessage);
 
   // logging should be disabled
