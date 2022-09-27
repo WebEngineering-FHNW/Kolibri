@@ -45,7 +45,7 @@ loggerSuite.add("test disabling logging", assert => {
   // logging should be disabled
   logLevel = LOG_NOTHING;
   realMsg = '';
-  debug(logMessage)(logLevel);
+  debug(logMessage);
   assert.is(realMsg, '');
 });
 
