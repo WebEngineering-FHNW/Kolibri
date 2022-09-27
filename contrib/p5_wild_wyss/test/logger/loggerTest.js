@@ -1,5 +1,5 @@
 import {TestSuite} from "../../../../docs/src/kolibri/util/test.js";
-import {DebugLogger, LOG_DEBUG, LOG_FATAL, LOG_NOTHING, LOG_TRACE, LOG_WARN} from "../../src/logger/logger.js";
+import {DebugLogger, LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN} from "../../src/logger/logger.js";
 
 const loggerSuite = TestSuite("Logger");
 
