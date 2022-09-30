@@ -28,7 +28,7 @@ import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calcu
  * @param {function} activeLogLevel the currently active log level
  * @param {function} callback caused by a logger call
  * @param {String} msg the processed msg
- * @return { function(x:String): function(y:boolean): {f: { y x }} }
+ * @return TODO
  * @example
  * const log = Logger(msg => console.log(msg));
  * log("action")(true);
