@@ -25,12 +25,22 @@ import {
 import {leq, n0, n1, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/church-numerals.js";
 
 /**
+ * @callback AppendType
+ * @param { !String } message
+ * @return { churchBoolean }
+ */
+
+/**
+ * @callback activeLogLevel
+ */
+
+/**
  * The Logger function yields a custom configured log function.
  *
- * @param {function} levelOfLogger level of the logger itself
- * @param {function} activeLogLevel the currently active log level
- * @param {function} callback caused by a logger call
- * @param {String} msg the processed msg
+ * @param {function} levelOfLogger - level of the logger itself
+ * @param { activeLogLevel} activeLogLevel - the currently active log level
+ * @param { AppendType } callback - caused by a logger call
+ * @param {String} msg - the processed msg
  * @return TODO
  * @example
  * const log = Logger(msg => console.log(msg));
@@ -38,8 +48,8 @@ import {leq, n0, n1, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-c
  */
 const Logger = levelOfLogger => activeLogLevel => callback => msg => {
   LazyIf(leq(activeLogLevel()(fst))(levelOfLogger(fst)))
-  (Then(() => callback(levelOfLogger(snd) + ": " + msg)))
-  (Else(() => False));
+    (Then(() => callback(levelOfLogger(snd) + ": " + msg)))
+    (Else(() => False));
 };
 
 /**
