@@ -24,21 +24,19 @@ import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calcu
 /**
  * The Logger function yields a custom configured log function.
  *
- * @param {function} logLevel caused by a logger call
- * @param {function} activated caused by a logger call
+ * @param {function} levelOfLogger level of the logger itself
+ * @param {function} activeLogLevel the currently active log level
  * @param {function} callback caused by a logger call
  * @param {String} msg the processed msg
- * @param {boolean} state the logger's on/off state
  * @return { function(x:String): function(y:boolean): {f: { y x }} }
  * @example
  * const log = Logger(msg => console.log(msg));
  * log("action")(true);
  */
-const Logger = logLevel => activated => callback => msg =>{
-  LazyIf( leq( activated() )( logLevel ) )
-        ( Then(() => callback(msg) ) )
-        ( Else(() => False ) );
-
+const Logger = levelOfLogger => activeLogLevel => callback => msg => {
+  LazyIf(leq(activeLogLevel())(levelOfLogger))
+  (Then(() => callback(msg)))
+  (Else(() => False));
 };
 
 /**
@@ -69,13 +67,13 @@ const LOG_DEBUG = succ(LOG_TRACE);
  * The logging level "info"
  * @returns { LogLevel }
  */
-const LOG_INFO  = succ(LOG_DEBUG);
+const LOG_INFO = succ(LOG_DEBUG);
 
 /**
  * The logging level "warn"
  * @returns { LogLevel }
  */
-const LOG_WARN  = succ(LOG_INFO);
+const LOG_WARN = succ(LOG_INFO);
 
 /**
  * The logging level "error"
@@ -128,7 +126,7 @@ const DebugLogger = Logger(LOG_DEBUG);
  * const warn = WarnLogger(console.log);
  * warn("a message to log to console");
  */
-const WarnLogger  = Logger(LOG_WARN);
+const WarnLogger = Logger(LOG_WARN);
 
 /**
  * Creates a new Logger at log level "LOG_ERROR"
