@@ -1,5 +1,5 @@
 import {LOG_NOTHING, LOG_TRACE} from "../logger.js";
-import {debug, warn, error, setActiveLogLevel} from "./loggerConfig.js";
+import {debug, warn,  error, setActiveLogLevel} from "./loggerConfig.js";
 
 const action = () => {
   debug("action");

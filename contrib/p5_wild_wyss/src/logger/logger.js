@@ -18,6 +18,9 @@ import {
   False,
   LazyIf,
   Then,
+  pair,
+  fst,
+  snd,
 } from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
 import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/church-numerals.js";
 
@@ -34,8 +37,8 @@ import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calcu
  * log("action")(true);
  */
 const Logger = levelOfLogger => activeLogLevel => callback => msg => {
-  LazyIf(leq(activeLogLevel())(levelOfLogger))
-  (Then(() => callback(msg)))
+  LazyIf(leq(activeLogLevel())(levelOfLogger(fst)))
+  (Then(() => callback(levelOfLogger(snd) + msg)))
   (Else(() => False));
 };
 
@@ -48,51 +51,52 @@ const Logger = levelOfLogger => activeLogLevel => callback => msg => {
 
 /**
  * Defines log levels
- * @typedef  {churchNumber} LogLevel
+ * @typedef  {pair(churchNumber)(String)} LogLevel
  * */
 
 /**
  * The logging level "trace"
  * @return { LogLevel }
  */
-const LOG_TRACE = n0;
+
+const LOG_TRACE = pair(n0)("TRACE");
 
 /**
  * The logging level "debug"
  * @returns { LogLevel }
  */
-const LOG_DEBUG = succ(LOG_TRACE);
+const LOG_DEBUG = pair(succ(LOG_TRACE(fst)))("DEBUG");
 
 /**
  * The logging level "info"
  * @returns { LogLevel }
  */
-const LOG_INFO = succ(LOG_DEBUG);
+const LOG_INFO = pair(succ(LOG_DEBUG(fst)))("INFO");
 
 /**
  * The logging level "warn"
  * @returns { LogLevel }
  */
-const LOG_WARN = succ(LOG_INFO);
+const LOG_WARN = pair(succ(LOG_INFO(fst)))("WARN");
 
 /**
  * The logging level "error"
  * @returns { LogLevel }
  */
-const LOG_ERROR = succ(LOG_WARN);
+const LOG_ERROR = pair(succ(LOG_WARN(fst)))("ERROR");
 
 /**
  * The logging level "fatal"
  * @returns { LogLevel }
  */
-const LOG_FATAL = succ(LOG_ERROR);
+const LOG_FATAL = pair(succ(LOG_ERROR(fst)))("FATAL");
 
 /**
  * The logging level "nothing".
  * Disables the logging level completely.
  * @returns { LogLevel }
  */
-const LOG_NOTHING = n9;
+const LOG_NOTHING = pair(n9)("");
 
 
 /**

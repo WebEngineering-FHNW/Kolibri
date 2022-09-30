@@ -1,6 +1,6 @@
 export {debug, warn, error, setActiveLogLevel}
 
-import {DebugLogger, ErrorLogger, LOG_DEBUG, LOG_ERROR, LOG_NOTHING, LOG_TRACE, WarnLogger} from "../logger.js";
+import {DebugLogger, ErrorLogger, LOG_ERROR, WarnLogger} from "../logger.js";
 
 /**
  * state of the currently activated loglevel
