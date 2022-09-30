@@ -9,7 +9,7 @@ loggerSuite.add("test simple logging", assert => {
   const logMessage = 'hello world';
   const debug = DebugLogger(() => LOG_DEBUG)(write);
   debug(logMessage);
-  assert.is(realMsg, 'hello world');
+  assert.is(realMsg, 'DEBUG: hello world');
 });
 
 loggerSuite.add("test enabling logging", assert => {
@@ -27,7 +27,7 @@ loggerSuite.add("test enabling logging", assert => {
   // logging should be enabled
   logLevel = LOG_DEBUG;
   debug(logMessage);
-  assert.is(realMsg, logMessage);
+  assert.is(realMsg, "DEBUG: " +logMessage);
 });
 
 loggerSuite.add("test disabling logging", assert => {
@@ -40,7 +40,7 @@ loggerSuite.add("test disabling logging", assert => {
 
   // logging should be enabled
   debug(logMessage);
-  assert.is(realMsg, logMessage);
+  assert.is(realMsg, "DEBUG: " + logMessage);
 
   // logging should be disabled
   logLevel = LOG_NOTHING;
@@ -57,7 +57,7 @@ loggerSuite.add("log lower logging level, should log", assert => {
 
   // loglevel debug should also be logged, when LOG_TRACE is enabled
   debug(logMessage);
-  assert.is(realMsg, logMessage);
+  assert.is(realMsg, "DEBUG: " + logMessage);
 });
 
 loggerSuite.add("log higher logging level, should not log", assert => {
@@ -66,10 +66,9 @@ loggerSuite.add("log higher logging level, should not log", assert => {
   const logMessage = 'hello world';
   const debug = DebugLogger(() => logLevel)(msg => realMsg = msg);
 
-  // loglevel debug should not log when LOG_FATAL is enabled
+  // loglevel debug should not log when LOG_WARN is enabled
   debug(logMessage);
   assert.is(realMsg, '');
 });
-
 
 loggerSuite.run();
