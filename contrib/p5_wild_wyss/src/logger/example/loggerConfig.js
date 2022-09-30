@@ -1,6 +1,6 @@
-export {debug, warn, error, setActiveLogLevel}
+export {debug, warn,trace, error, setActiveLogLevel}
 
-import {DebugLogger, ErrorLogger, LOG_ERROR, WarnLogger} from "../logger.js";
+import {DebugLogger, ErrorLogger, LOG_ERROR, TraceLogger, WarnLogger} from "../logger.js";
 
 /**
  * state of the currently activated loglevel
@@ -39,3 +39,5 @@ const warn = WarnLogger(activeLogLevel)(msg => console.warn(msg));
  * @type {Logger}
  */
 const error = ErrorLogger(activeLogLevel)(msg => console.error(msg));
+
+const trace = TraceLogger(activeLogLevel)(msg => console.error(msg));

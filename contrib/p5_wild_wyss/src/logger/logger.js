@@ -22,7 +22,7 @@ import {
   fst,
   snd,
 } from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
-import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/church-numerals.js";
+import {leq, n0, n1, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/church-numerals.js";
 
 /**
  * The Logger function yields a custom configured log function.
@@ -37,8 +37,8 @@ import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calcu
  * log("action")(true);
  */
 const Logger = levelOfLogger => activeLogLevel => callback => msg => {
-  LazyIf(leq(activeLogLevel())(levelOfLogger(fst)))
-  (Then(() => callback(levelOfLogger(snd) + msg)))
+  LazyIf(leq(activeLogLevel()(fst))(levelOfLogger(fst)))
+  (Then(() => callback(levelOfLogger(snd) + ": " + msg)))
   (Else(() => False));
 };
 
