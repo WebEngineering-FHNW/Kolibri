@@ -16,13 +16,13 @@ export {
 import {
   Else,
   False,
-  LazyIf,
-  Then,
-  pair,
   fst,
+  LazyIf,
+  pair,
   snd,
+  Then,
 } from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
-import {leq, n0, n1, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/church-numerals.js";
+import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/church-numerals.js";
 
 /**
  * @callback AppendType
