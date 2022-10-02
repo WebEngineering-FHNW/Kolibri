@@ -1,21 +1,21 @@
 export {debug, warn,trace, error, setActiveLogLevel}
 
-import {DebugLogger, ErrorLogger, LOG_ERROR, TraceLogger, WarnLogger} from "../logger.js";
+import {debugLogger, errorLogger, traceLogger, warnLogger, LOG_ERROR} from "../logger.js";
 
 /**
  * state of the currently activated loglevel
- * @return { () => LogLevel }
+ * @return { () => logLevel }
  */
 let logLevel = LOG_ERROR;
 
 /**
- * Returns the current loglevel
- * @returns {LogLevel}
+ * Returns the current logLevel
+ * @returns {logLevel}
  */
 const activeLogLevel = () => logLevel;
 
 /**
- * sets a new LogLevel
+ * sets a new logLevel
  * @param newLogLevel
  * @example
  * setActiveLogLevel(LOG_DEBUG);
@@ -25,19 +25,19 @@ const setActiveLogLevel = newLogLevel => logLevel = newLogLevel;
 
 /**
  * the function to log debug logs in this application
- * @type {Logger}
+ * @type {logger}
  */
-const debug = DebugLogger(activeLogLevel)(msg => console.log(msg));
+const debug = debugLogger(activeLogLevel)(msg => console.log(msg));
 
 /**
  * the function to log warn logs in this application
- * @type {Logger}
+ * @type {logger}
  */
-const warn = WarnLogger(activeLogLevel)(msg => console.warn(msg));
+const warn = warnLogger(activeLogLevel)(msg => console.warn(msg));
 /**
  * the function to log error logs in this application
- * @type {Logger}
+ * @type {logger}
  */
-const error = ErrorLogger(activeLogLevel)(msg => console.error(msg));
+const error = errorLogger(activeLogLevel)(msg => console.error(msg));
 
-const trace = TraceLogger(activeLogLevel)(msg => console.error(msg));
+const trace = traceLogger(activeLogLevel)(msg => console.error(msg));
