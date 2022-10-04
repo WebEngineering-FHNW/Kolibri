@@ -1,10 +1,13 @@
 import {LOG_NOTHING, LOG_TRACE} from "../logger.js";
-import {debug, warn,  error, setActiveLogLevel} from "./loggerConfig.js";
+import {Appender} from "../appender/stringAppender.js";
+
+const {debug, warn,  error, setActiveLogLevel, reset, getAppenderString} = Appender();
 
 const action = () => {
   debug("action");
   warn("warning");
   error("error");
+  console.log(getAppenderString())
 };
 
 document.getElementById("action").onclick = action;

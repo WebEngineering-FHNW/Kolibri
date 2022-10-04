@@ -8,6 +8,7 @@ export {
   LOG_NOTHING,
   traceLogger,
   debugLogger,
+  infoLogger,
   warnLogger,
   errorLogger,
   fatalLogger
@@ -125,6 +126,14 @@ const traceLogger = logger(LOG_TRACE);
  * debug("a message to log to console");
  */
 const debugLogger = logger(LOG_DEBUG);
+
+/**
+ * Creates a new logger at log level "LOG_DEBUG"
+ * @example
+ * const debug = debugLogger(console.log);
+ * debug("a message to log to console");
+ */
+const infoLogger = logger(LOG_INFO);
 
 /**
  * Creates a new logger at log level "LOG_WARN"
