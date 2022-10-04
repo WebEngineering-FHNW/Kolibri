@@ -25,61 +25,64 @@ import {
 import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/church-numerals.js";
 
 /**
+ * A function where the log messages should be appended
  * @callback AppendType
  * @param { !String } message
  * @return { churchBoolean }
- */
-
-/**
- * EXTERNAL CODE: sdtlib.js l-Nr.:121
- * A function that selects between two arguments that are given in curried style.
- * Only needed internally for the sake of proper JsDoc.
- * @template a
- * @template b
- * @callback pairSelector
- * @pure
- * @type     { (x:a) => (y:b) => (a|b)}
- */
-
-/**
- * The logger function yields a custom configured log function.
- *
- * @template a
- * @template b
- * @template c
- * @template d
- * @template e
- * @haskell (a -> b -> c|d) -> (a -> b -> c|d) -> (c -> e) -> c -> e
- * @haskell (K|KI -> String|churchNumber) -> (K|KI -> String|churchNumber) -> (String -> churchBoolean) -> String -> churchBoolean
- * @pure if function callback is pure
- * @type    { (pairSelector ) => (pairSelector) => (AppendType) => (s:String) => void }
  * @example
- * const log = logger(msg => console.log(msg));
- * log("action")(true);
+ * const append = msg => {
+ *  console.log(msg);
+ *  return True;
+ * }
  */
-const logger = levelOfLogger => activeLogLevel => callback => msg => {
+
+
+/**
+ * The currently active loglevel for this application.
+ * @callback ActiveLogLevel
+ * @return { pair<churchNumber, String>}
+ * @example
+ * const activeLogLevel () => LOG_NOTHING;
+ */
+
+/**
+ * Like a tuple in Haskell.
+ * Get elements using {@link fst}, {@link snd}.
+ * @template a
+ * @template b
+ * @typedef levelPair<a,b>
+ * @type {(x:a) => (y:b) => function(pairSelector) }
+ */
+
+/**
+ * A LogLevel consists of a {@link churchNumber} indicating the level
+ * and a {@link String} giving the level a name.
+ * @alias LogLevel
+ * @returns {levelPair<churchNumber, String>}
+ */
+
+/**
+ * Yields a custom configured log function.
+ * Processes all log-actions which have a {@link LogLevel} equals or beneath
+ * the {@link LogLevel} returned by the function "activeLogLevel"
+ *
+ * @pure if the parameter "callback" of type {@link AppendType} is pure
+ * @type    { (a:pair<churchNumber, String>) => (ActiveLogLevel) => (AppendType) => (String) => churchBoolean }
+ * @private
+ * @example
+ * const log = logger(LOG_DEBUG)(() => LOG_DEBUG)(console.log);
+ * log("Andri Wild");
+ * // logs "Andri Wild" to console
+ */
+const logger = levelOfLogger => activeLogLevel => callback => msg =>
   LazyIf(leq(activeLogLevel()(fst))(levelOfLogger(fst)))
   (Then(() => callback(levelOfLogger(snd) + ": " + msg)))
   (Else(() => False));
-};
-
-/**
- * A logging function that logs the given message.
- * @typedef logger
- * @param { !string } msg - the message to log
- * @returns { void }
- */
-
-/**
- * Defines log levels
- * @typedef { (x:a) => (y:b) => (s:pairSelector) => (a|b) } LogLevel
- * */
 
 /**
  * The logging level "trace"
- * @return { LogLevel }
+ * @returns { LogLevel }
  */
-
 const LOG_TRACE = pair(n0)("TRACE");
 
 /**
@@ -122,8 +125,6 @@ const LOG_NOTHING = pair(n9)("");
 
 /**
  * Creates a new logger at log level "LOG_TRACE"
- * @param {!((msg: string) => void)} loggingCallback - whenever a new message is logged, this function gets called
- * @returns { logger }
  * @example
  * const trace = traceLogger(console.log);
  * trace("a message to log to console");
@@ -132,8 +133,6 @@ const traceLogger = logger(LOG_TRACE);
 
 /**
  * Creates a new logger at log level "LOG_DEBUG"
- * @param {!((msg: string) => void)} loggingCallback - whenever a new message is logged, this function gets called
- * @returns { logger }
  * @example
  * const debug = debugLogger(console.log);
  * debug("a message to log to console");
@@ -142,8 +141,6 @@ const debugLogger = logger(LOG_DEBUG);
 
 /**
  * Creates a new logger at log level "LOG_WARN"
- * @param {!((msg: string) => void)} loggingCallback - whenever a new message is logged, this function gets called
- * @returns { logger }
  * @example
  * const warn = warnLogger(console.log);
  * warn("a message to log to console");
@@ -152,8 +149,6 @@ const warnLogger = logger(LOG_WARN);
 
 /**
  * Creates a new logger at log level "LOG_ERROR"
- * @param {!((msg: string) => void)} loggingCallback - whenever a new message is logged, this function gets called
- * @returns { logger }
  * @example
  * const error = errorLogger(console.log);
  * error("a message to log to console");
@@ -162,8 +157,6 @@ const errorLogger = logger(LOG_ERROR);
 
 /**
  * Creates a new logger at log level "LOG_FATAL"
- * @param {!((msg: string) => void)} loggingCallback - whenever a new message is logged, this function gets called
- * @returns { logger }
  * @example
  * const fatal = fatalLogger(console.log);
  * fatal("a message to log to console");
