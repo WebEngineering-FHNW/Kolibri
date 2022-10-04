@@ -36,29 +36,17 @@ import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calcu
  * }
  */
 
+/**
+ * @typedef LogLevel
+ * @type { (pairSelector) => churchNumber | String }
+ */
 
 /**
  * The currently active loglevel for this application.
  * @callback ActiveLogLevel
  * @return { pair<churchNumber, String>}
  * @example
- * const activeLogLevel () => LOG_NOTHING;
- */
-
-/**
- * Like a tuple in Haskell.
- * Get elements using {@link fst}, {@link snd}.
- * @template a
- * @template b
- * @typedef levelPair<a,b>
- * @type {(x:a) => (y:b) => function(pairSelector) }
- */
-
-/**
- * A LogLevel consists of a {@link churchNumber} indicating the level
- * and a {@link String} giving the level a name.
- * @alias LogLevel
- * @returns {levelPair<churchNumber, String>}
+ * const activeLogLevel = () => LOG_NOTHING;
  */
 
 /**
@@ -67,7 +55,7 @@ import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calcu
  * the {@link LogLevel} returned by the function "activeLogLevel"
  *
  * @pure if the parameter "callback" of type {@link AppendType} is pure
- * @type    { (a:pair<churchNumber, String>) => (ActiveLogLevel) => (AppendType) => (String) => churchBoolean }
+ * @type    { (LogLevel) => (ActiveLogLevel) => (AppendType) => (String) => churchBoolean }
  * @private
  * @example
  * const log = logger(LOG_DEBUG)(() => LOG_DEBUG)(console.log);
@@ -121,7 +109,6 @@ const LOG_FATAL = pair(succ(LOG_ERROR(fst)))("FATAL");
  * @returns { LogLevel }
  */
 const LOG_NOTHING = pair(n9)("");
-
 
 /**
  * Creates a new logger at log level "LOG_TRACE"
