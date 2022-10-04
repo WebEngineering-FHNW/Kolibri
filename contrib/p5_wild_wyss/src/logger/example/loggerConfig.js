@@ -4,19 +4,20 @@ import {debugLogger, errorLogger, traceLogger, warnLogger, LOG_ERROR} from "../l
 
 /**
  * state of the currently activated loglevel
- * @return { () => logLevel }
+ * @type {LogLevel}
  */
 let logLevel = LOG_ERROR;
 
 /**
  * Returns the current logLevel
- * @returns {logLevel}
+ * @returns {LogLevel}
  */
 const activeLogLevel = () => logLevel;
 
 /**
  * sets a new logLevel
- * @param newLogLevel
+ * @param {LogLevel} newLogLevel
+ * @returns {LogLevel}
  * @example
  * setActiveLogLevel(LOG_DEBUG);
  * setActiveLogLevel(LOG_ERROR);
@@ -24,20 +25,24 @@ const activeLogLevel = () => logLevel;
 const setActiveLogLevel = newLogLevel => logLevel = newLogLevel;
 
 /**
+ * the function to log trace logs in this application
+ * @type {function(String): churchBoolean}
+ */
+const trace = traceLogger(activeLogLevel)(msg => console.error(msg));
+
+/**
  * the function to log debug logs in this application
- * @type {logger}
+ * @type {function(String): churchBoolean}
  */
 const debug = debugLogger(activeLogLevel)(msg => console.log(msg));
 
 /**
  * the function to log warn logs in this application
- * @type {logger}
+ * @type {function(String): churchBoolean}
  */
 const warn = warnLogger(activeLogLevel)(msg => console.warn(msg));
 /**
  * the function to log error logs in this application
- * @type {logger}
+ * @type {function(String): churchBoolean}
  */
 const error = errorLogger(activeLogLevel)(msg => console.error(msg));
-
-const trace = traceLogger(activeLogLevel)(msg => console.error(msg));
