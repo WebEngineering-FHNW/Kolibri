@@ -4,7 +4,7 @@ import {debugLogger, errorLogger, fatalLogger, infoLogger, LOG_ERROR, traceLogge
 export {Appender}
 
 /**
- * Provides console appenders.
+ * Provides console appender.
  * @param {MsgFormatter} msgFormatter - an optional formatting function which formats each log message.
  * @returns {AppenderType}
  * @constructor

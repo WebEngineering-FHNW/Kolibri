@@ -1,8 +1,8 @@
 import {LOG_NOTHING, LOG_TRACE} from "../logger.js";
-import {Appender} from "../appender/consoleAppender.js";
+import {Appender} from "../appender/countAppender.js";
 
 /**
- * Creats a custom log message using the given parameters.
+ * Creates a custom log message using the given parameters.
  * @type {MsgFormatter}
  */
 const formatLogMsg = logLevel => logMessage => {
@@ -10,12 +10,13 @@ const formatLogMsg = logLevel => logMessage => {
   return `[${logLevel}] ${date}: ${logMessage}`;
 };
 
-const { debug, warn, error, setActiveLogLevel } = Appender(formatLogMsg);
+const { trace, debug, warn, error, setActiveLogLevel, getAppenderValue } = Appender(formatLogMsg);
 
 const action = () => {
   debug("action");
-  warn("warning");
-  error("error");
+  // warn("warning");
+  // error("error");
+  console.log(getAppenderValue())
 };
 
 document.getElementById("action").onclick = action;

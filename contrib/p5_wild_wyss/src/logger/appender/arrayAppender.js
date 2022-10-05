@@ -3,8 +3,8 @@ import {id, True} from "../../../../p6_brodwolf_andermatt/src/lambda-calculus-li
 import {traceLogger, debugLogger, infoLogger, warnLogger, errorLogger, fatalLogger, LOG_ERROR} from "../logger.js";
 
 /**
- * Concat all log messages into a single array.
- * Use {@link getAppenderValue} to get the latest value
+ * Pushes all log messages into an array.
+ * Use {@link getAppenderValue} to get the latest array content
  * and use {@link reset} to clear the array.
  * @returns {AppenderType}
  * @constructor

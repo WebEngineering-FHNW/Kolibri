@@ -3,8 +3,6 @@ export {Appender}
 import { id} from "../../../../../docs/src/kolibri/stdlib.js";
 import { Appender as ArrayAppender } from "./arrayAppender.js";
 
-
-
 /**
  * Concat all log messages into a single string.
  * Use {@link getAppenderValue} to get the latest value
