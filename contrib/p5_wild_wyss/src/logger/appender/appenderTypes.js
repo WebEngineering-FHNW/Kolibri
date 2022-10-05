@@ -1,6 +1,8 @@
 /**
+ * Provides log functions for a specific appender
  * @interface
  * @typedef AppenderType
+ * @param { MsgFormatter } formatter - a function to format the log message before logging.
  * @property { LogType } trace
  * @property { LogType } debug
  * @property { LogType } info
@@ -12,6 +14,7 @@
 
 
 /**
+ * Logs the given message.
  * @typedef LogType
  * @param { String } message
  * @returns { churchBoolean }

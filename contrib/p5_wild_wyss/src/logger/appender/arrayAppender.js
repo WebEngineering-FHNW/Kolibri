@@ -1,5 +1,5 @@
 export {Appender}
-import {True} from "../../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
+import {id, True} from "../../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
 import {traceLogger, debugLogger, infoLogger, warnLogger, errorLogger, fatalLogger, LOG_ERROR} from "../logger.js";
 
 /**
@@ -9,9 +9,17 @@ import {traceLogger, debugLogger, infoLogger, warnLogger, errorLogger, fatalLogg
  * @returns {AppenderType}
  * @constructor
  */
-const Appender = () => {
-  return { trace, debug, info, warn, error, fatal, setActiveLogLevel, reset, getAppenderArray: getAppenderValue };
-};
+const Appender = (msgFormatter = _ => id) => ({
+  trace: trace(msgFormatter),
+  debug: debug(msgFormatter),
+  info: info(msgFormatter),
+  warn: warn(msgFormatter),
+  error: error(msgFormatter),
+  fatal: fatal(msgFormatter),
+  setActiveLogLevel,
+  reset,
+  getAppenderArray: getAppenderValue
+});
 
 /**
  * Collects all log messages by storing them in the array.
@@ -62,40 +70,40 @@ const setActiveLogLevel = newLogLevel => logLevel = newLogLevel;
 const appenderCallback = msg => {
   appenderArray.push(msg);
   return True;
-}
+};
 
 /**
  * the function to log trace logs in this application
- * @type {LogType}
+ * @type {(MsgFormatter)  => LogType}
  */
 const trace = traceLogger(activeLogLevel)(appenderCallback);
 
 /**
  * the function to log debug logs in this application
- * @type {LogType}
+ * @type {(MsgFormatter)  => LogType}
  */
 const debug = debugLogger(activeLogLevel)(appenderCallback);
 
 /**
  * the function to log debug logs in this application
- * @type {LogType}
+ * @type {(MsgFormatter)  => LogType}
  */
 const info = infoLogger(activeLogLevel)(appenderCallback);
 
 /**
  * the function to log warn logs in this application
- * @type {LogType}
+ * @type {(MsgFormatter)  => LogType}
  */
 const warn = warnLogger(activeLogLevel)(appenderCallback);
 
 /**
  * the function to log error logs in this application
- * @type {LogType}
+ * @type {(MsgFormatter)  => LogType}
  */
 const error = errorLogger(activeLogLevel)(appenderCallback);
 
 /**
  * the function to log error logs in this application
- * @type {LogType}
+ * @type {(MsgFormatter)  => LogType}
  */
 const fatal = fatalLogger(activeLogLevel)(appenderCallback);
