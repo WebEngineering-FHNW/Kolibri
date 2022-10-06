@@ -14,8 +14,8 @@ const { trace, debug, warn, error, setActiveLogLevel, getAppenderValue } = Appen
 
 const action = () => {
   debug("action");
-  // warn("warning");
-  // error("error");
+  warn("warning");
+  error("error");
   console.log(getAppenderValue())
 };
 

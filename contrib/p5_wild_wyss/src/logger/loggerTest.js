@@ -76,4 +76,17 @@ loggerSuite.add("log higher logging level, should not log", assert => {
   assert.is(realMsg, '');
 });
 
+const levelFormatter = lvl => msg => {
+  return `[${lvl}] ${msg}`;
+}
+loggerSuite.add("test debug tag formatted log message", assert => {
+  const logLevel = LOG_DEBUG;
+  let realMsg = '';
+  const logMessage = 'hello world';
+  const debug = debugLogger(() => logLevel)(msg => realMsg = msg)(levelFormatter);
+
+  debug(logMessage);
+  assert.is(realMsg, '[DEBUG] hello world');
+});
+
 loggerSuite.run();

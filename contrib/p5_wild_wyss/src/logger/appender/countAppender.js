@@ -73,7 +73,7 @@ const getAppenderValue = () => statistic;
 
 const appenderCallback = type => callback => msg => {
   statistic[type] = statistic[type] + 1;
-  callback(msg);
+  callback(` (${statistic[type]}) ` + msg);
   return True;
 };
 
