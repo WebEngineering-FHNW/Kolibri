@@ -1,14 +1,13 @@
 import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
-import {debugLogger, LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN} from "../logger.js";
+import {LOG_DEBUG} from "../logger.js";
 import {id} from "../../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js"
 import {Appender} from "./arrayAppender.js";
 
 const formatter = _ => id;
 const convertToJsBool = b => b(true)(false);
 
-const { trace, debug, warn, error, setActiveLogLevel, getAppenderArray, reset } = Appender(formatter);
+const { debug, setActiveLogLevel, getAppenderArray, reset } = Appender(formatter);
 setActiveLogLevel(LOG_DEBUG);
-
 
 const loggerSuite = TestSuite("Logger Appender");
 
