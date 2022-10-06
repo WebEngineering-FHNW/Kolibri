@@ -1,21 +1,40 @@
 import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
 import {debugLogger, LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN} from "../logger.js";
 import {id} from "../../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js"
+import {Appender} from "./arrayAppender.js";
 
 const formatter = _ => id;
+const convertToJsBool = b => b(true)(false);
 
-const loggerSuite = TestSuite("Appender");
-loggerSuite.add("test simple logging", assert => {
-  let realMsg = '';
-  const write = msg => {
-    realMsg = msg
-  };
-  console.log("TEST")
-  const logMessage = 'hello world';
-  const debug = debugLogger(() => LOG_DEBUG)(write)(formatter);
-  debug(logMessage);
+const { trace, debug, warn, error, setActiveLogLevel, getAppenderArray, reset } = Appender(formatter);
+setActiveLogLevel(LOG_DEBUG);
 
-  assert.is(realMsg, 'hello world');
+
+const loggerSuite = TestSuite("Logger Appender");
+
+loggerSuite.add("test add debug value to array appender", assert => {
+  const result = debug("debug");
+  assert.is(convertToJsBool(result), true );
+  assert.is(getAppenderArray()[0], "debug")
+  reset();
+});
+
+loggerSuite.add("test add tow value to array appender", assert => {
+  const result1 = debug("first");
+  const result2 = debug("second");
+  assert.is(convertToJsBool(result1), true );
+  assert.is(convertToJsBool(result2), true );
+  assert.is(getAppenderArray()[0], "first")
+  assert.is(getAppenderArray()[1], "second")
+  reset();
+});
+
+loggerSuite.add("test reset array appender", assert => {
+  const result1 = debug("first");
+  assert.is(convertToJsBool(result1), true );
+  assert.is(getAppenderArray()[0], "first")
+  reset();
+  assert.isTrue(getAppenderArray().length === 0)
 });
 
 loggerSuite.run();
