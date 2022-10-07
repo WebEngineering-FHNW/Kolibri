@@ -6,7 +6,7 @@ import {Appender} from "./arrayAppender.js";
 const formatter = _ => id;
 const convertToJsBool = b => b(true)(false);
 
-const { debug, setActiveLogLevel, getAppenderArray, reset } = Appender(formatter);
+const { debug, setActiveLogLevel, getAppenderValue, reset } = Appender(formatter);
 setActiveLogLevel(LOG_DEBUG);
 
 const loggerSuite = TestSuite("Logger Appender");
@@ -14,7 +14,7 @@ const loggerSuite = TestSuite("Logger Appender");
 loggerSuite.add("test add debug value to array appender", assert => {
   const result = debug("debug");
   assert.is(convertToJsBool(result), true );
-  assert.is(getAppenderArray()[0], "debug")
+  assert.is(getAppenderValue()[0], "debug");
   reset();
 });
 
@@ -23,17 +23,17 @@ loggerSuite.add("test add tow value to array appender", assert => {
   const result2 = debug("second");
   assert.is(convertToJsBool(result1), true );
   assert.is(convertToJsBool(result2), true );
-  assert.is(getAppenderArray()[0], "first")
-  assert.is(getAppenderArray()[1], "second")
+  assert.is(getAppenderValue()[0], "first");
+  assert.is(getAppenderValue()[1], "second");
   reset();
 });
 
 loggerSuite.add("test reset array appender", assert => {
   const result1 = debug("first");
   assert.is(convertToJsBool(result1), true );
-  assert.is(getAppenderArray()[0], "first")
+  assert.is(getAppenderValue()[0], "first");
   reset();
-  assert.isTrue(getAppenderArray().length === 0)
+  assert.isTrue(0 === getAppenderValue().length);
 });
 
 loggerSuite.run();

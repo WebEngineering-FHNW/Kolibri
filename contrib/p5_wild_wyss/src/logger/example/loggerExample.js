@@ -6,7 +6,7 @@ import {Appender} from "../appender/countAppender.js";
  * @type {MsgFormatter}
  */
 const formatLogMsg = logLevel => logMessage => {
-  const date = new Date();
+  const date = new Date().toISOString();
   return `[${logLevel}] ${date}: ${logMessage}`;
 };
 

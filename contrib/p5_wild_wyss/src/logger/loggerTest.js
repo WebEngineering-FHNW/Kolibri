@@ -9,7 +9,7 @@ const loggerSuite = TestSuite("Logger");
 loggerSuite.add("test simple logging", assert => {
   let realMsg = '';
   const write = msg => {
-    realMsg = msg
+    realMsg = msg;
     return True;
   };
   const logMessage = 'hello world';
@@ -107,7 +107,7 @@ loggerSuite.add("log higher logging level, should not log", assert => {
 
 const levelFormatter = lvl => msg => {
   return `[${lvl}] ${msg}`;
-}
+};
 
 loggerSuite.add("test debug tag formatted log message", assert => {
   const logLevel = LOG_DEBUG;
