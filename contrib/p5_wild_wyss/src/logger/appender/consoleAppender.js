@@ -42,7 +42,9 @@ const activeLogLevel = () => logLevel;
  */
 const setActiveLogLevel = newLogLevel => logLevel = newLogLevel;
 
-
+/**
+ * @type { (Consumer) => (String) => churchBoolean }
+ */
 const appenderCallback = callback => msg => {
   callback(msg);
   return True;

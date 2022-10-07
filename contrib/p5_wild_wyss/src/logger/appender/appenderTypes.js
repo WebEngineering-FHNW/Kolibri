@@ -12,10 +12,16 @@
  * @property { (LogLevel) => LogLevel } setActiveLogLevel
  */
 
-
 /**
  * Logs the given message.
  * @typedef LogType
  * @param { String } message
  * @returns { churchBoolean }
+ */
+
+/**
+ * @callback Consumer
+ * @param String
+ * @returns void
+ *
  */
