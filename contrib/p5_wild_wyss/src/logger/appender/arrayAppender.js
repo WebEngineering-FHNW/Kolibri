@@ -18,7 +18,7 @@ const Appender = (msgFormatter = _ => id) => ({
   fatal: fatal(msgFormatter),
   setActiveLogLevel,
   reset,
-  getAppenderArray: getAppenderValue
+  getAppenderValue,
 });
 
 /**

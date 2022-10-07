@@ -16,7 +16,6 @@ const action = () => {
   debug("action");
   warn("warning");
   error("error");
-  console.log(getAppenderValue())
 };
 
 document.getElementById("action").onclick = action;
