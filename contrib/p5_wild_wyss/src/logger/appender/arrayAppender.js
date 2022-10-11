@@ -1,5 +1,5 @@
 export {Appender}
-import {True} from "../../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
+import {True} from "../lamdaCalculus.js";
 
 /**
  * Pushes all log messages into an array.
