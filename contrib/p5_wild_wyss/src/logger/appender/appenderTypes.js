@@ -15,7 +15,7 @@
 /**
  * Logs the given message.
  * @typedef LogType
- * @param { String } message
+ * @param { LogMe } message
  * @returns { churchBoolean }
  */
 

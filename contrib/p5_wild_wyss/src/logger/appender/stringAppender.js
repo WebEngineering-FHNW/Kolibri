@@ -11,7 +11,7 @@ import { Appender as ArrayAppender } from "./arrayAppender.js";
  * @constructor
  */
 const Appender = (formatLogMsg = _ => id) => {
-  const {  trace, debug, info, warn, error, fatal, setActiveLogLevel, reset, getAppenderArray  } = ArrayAppender(formatLogMsg);
+  const {  trace, debug, info, warn, error, fatal, setActiveLogLevel, reset, getAppenderArray= getAppenderValue  } = ArrayAppender(formatLogMsg);
   /**
    *
    * @returns {string} - The current value of the appender string

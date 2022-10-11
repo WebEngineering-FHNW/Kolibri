@@ -59,6 +59,15 @@ import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calcu
  */
 
 /**
+ * @callback Producer
+ * @returns String
+ */
+
+/**
+ * @typedef {String | Producer} LogMe
+ */
+
+/**
  * Yields a custom configured log function.
  * Processes all log-actions which have a {@link LogLevel} equals or beneath
  * the {@link LogLevel} returned by the function "activeLogLevel".
@@ -66,16 +75,16 @@ import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calcu
  * The result of the callback function {@link MsgFormatter} will be logged using the given {@link AppendType}.
  *
  * @pure if the parameters "callback" of type {@link AppendType} and msgFormatter of type {@link MsgFormatter} are pure.
- * @type    { (LogLevel) => (ActiveLogLevel) => (AppendType) => (MsgFormatter) => (String) => churchBoolean }
+ * @type    { (LogLevel) => (ActiveLogLevel) => (AppendType) => (MsgFormatter) => (LogMe) => churchBoolean }
  * @private
  * @example
- * const log = logger(LOG_DEBUG)(() => LOG_DEBUG)(console.log)((_ => id);
+ * const log = logger(LOG_DEBUG)(() => LOG_DEBUG)(console.log)(_ => id);
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
 const logger = levelOfLogger => activeLogLevel => callback => msgFormatter => msg =>
   LazyIf(leq(activeLogLevel()(fst))(levelOfLogger(fst)))
-    (Then(() => callback(msgFormatter(levelOfLogger(snd))(msg))))
+    (Then(() => callback(msgFormatter(levelOfLogger(snd))(msg instanceof Function ? msg() : msg))))
     (Else(() => False));
 
 /**

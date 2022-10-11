@@ -10,12 +10,12 @@ import {traceLogger, debugLogger, infoLogger, warnLogger, errorLogger, fatalLogg
  * @constructor
  */
 const Appender = (msgFormatter = _ => id) => ({
-  trace: trace(msgFormatter),
-  debug: debug(msgFormatter),
-  info: info(msgFormatter),
-  warn: warn(msgFormatter),
-  error: error(msgFormatter),
-  fatal: fatal(msgFormatter),
+  trace:  trace (msgFormatter),
+  debug:  debug (msgFormatter),
+  info:   info  (msgFormatter),
+  warn:   warn  (msgFormatter),
+  error:  error (msgFormatter),
+  fatal:  fatal (msgFormatter),
   setActiveLogLevel,
   reset,
   getAppenderValue,
