@@ -1,5 +1,5 @@
 import "../src/logger/loggerTest.js";
-import "../src/logger/appender/appenderTest.js"
+import "../src/logger/appender/arrayAppenderTest.js"
 
 import { total } from "../../../docs/src/kolibri/util/test.js";
 import { versionInfo } from "../../../docs/src/kolibri/version.js";

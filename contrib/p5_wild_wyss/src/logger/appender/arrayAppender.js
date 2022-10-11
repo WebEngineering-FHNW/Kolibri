@@ -16,6 +16,7 @@ const Appender = () => ({
   error,
   fatal,
   getValue,
+  reset,
 });
 
 /**
