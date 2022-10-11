@@ -1,3 +1,5 @@
+import {toChurchBoolean} from "./lamdaCalculus";
+
 export {
   LOG_TRACE,
   LOG_DEBUG,
@@ -94,7 +96,6 @@ const logger = levelOfLogger => context => activeLogLevel => callback => msgForm
     (Then(() => callback(msgFormatter(levelOfLogger(snd))(msg instanceof Function ? msg() : msg))))
     (Else(() => False));
 
-const toChurchBoolean = value => value ? True : False;
 const logLevelActivated = activeLogLevel => levelOfLogger => leq(activeLogLevel()(fst))(levelOfLogger(fst));
 const contextActivated = context => toChurchBoolean(context.startsWith(globalContext));
 

@@ -1,23 +1,21 @@
 export {Appender}
-
-import { id} from "../../../../../docs/src/kolibri/stdlib.js";
-import { Appender as ArrayAppender } from "./arrayAppender.js";
+import {Appender as ArrayAppender} from "./arrayAppender.js";
 
 /**
  * Concat all log messages into a single string.
- * Use {@link getAppenderValue} to get the latest value
+ * Use {@link getValue} to get the latest value
  * and use {@link reset} to clear the string.
- * @returns {AppenderType}
+ * @returns {AppenderType<String>}
  * @constructor
  */
-const Appender = (formatLogMsg = _ => id) => {
-  const {  trace, debug, info, warn, error, fatal, setActiveLogLevel, reset, getAppenderArray= getAppenderValue  } = ArrayAppender(formatLogMsg);
+const Appender = () => {
+  const {  trace, debug, info, warn, error, fatal, getValue : getArrayValue, reset } = ArrayAppender();
   /**
    *
-   * @returns {string} - The current value of the appender string
+   * @returns {String} - The current value of the appender string
    */
-  const getAppenderValue = delimiter => getAppenderArray().join(delimiter);
+  const getValue = delimiter => getArrayValue().join(delimiter);
 
-  return {trace, debug, info, warn, error, fatal, setActiveLogLevel, reset, getAppenderValue};
+  return {trace, debug, info, warn, error, fatal, getValue, reset};
 };
 

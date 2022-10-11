@@ -3,7 +3,6 @@ import {debugLogger, LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN} from "./logger
 import {id, True} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js"
 
 const formatter = _ => id;
-const convertToJsBool = b => b(true)(false);
 
 const loggerSuite = TestSuite("Logger");
 loggerSuite.add("test simple logging", assert => {

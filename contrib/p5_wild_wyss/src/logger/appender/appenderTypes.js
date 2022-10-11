@@ -1,6 +1,6 @@
 /**
  * Provides log functions for a specific appender
- * @interface
+ * @template a
  * @typedef AppenderType
  * @property { LogType } trace
  * @property { LogType } debug
@@ -8,7 +8,7 @@
  * @property { LogType } warn
  * @property { LogType } error
  * @property { LogType } fatal
- * @property { () => String } getValue
+ * @property { function(String=): a } getValue
  */
 
 /**

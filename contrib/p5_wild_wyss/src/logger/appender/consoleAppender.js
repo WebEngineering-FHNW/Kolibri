@@ -1,10 +1,9 @@
-import {True} from "../../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
-
 export {Appender}
+import {True} from "../../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
 
 /**
  * Provides console appender.
- * @returns {AppenderType}
+ * @returns {AppenderType<void>}
  * @constructor
  */
 const Appender = () => ({

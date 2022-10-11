@@ -1,24 +1,21 @@
 export {Appender}
-import {id, True} from "../../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
-import {traceLogger, debugLogger, infoLogger, warnLogger, errorLogger, fatalLogger, LOG_ERROR} from "../logger.js";
+import {True} from "../../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
 
 /**
  * Pushes all log messages into an array.
- * Use {@link getAppenderValue} to get the latest array content
+ * Use {@link getValue} to get the latest array content
  * and use {@link reset} to clear the array.
- * @returns {AppenderType}
+ * @returns {AppenderType<Array<String>>}
  * @constructor
  */
-const Appender = (msgFormatter = _ => id) => ({
-  trace:  trace (msgFormatter),
-  debug:  debug (msgFormatter),
-  info:   info  (msgFormatter),
-  warn:   warn  (msgFormatter),
-  error:  error (msgFormatter),
-  fatal:  fatal (msgFormatter),
-  setActiveLogLevel,
-  reset,
-  getAppenderValue,
+const Appender = () => ({
+  trace,
+  debug,
+  info,
+  warn,
+  error,
+  fatal,
+  getValue,
 });
 
 /**
@@ -42,30 +39,7 @@ const reset = () => {
  *
  * @returns {Array<String>} - The current value of the appender string
  */
-const getAppenderValue = () => appenderArray;
-
-/**
- * state of the currently activated loglevel
- * @type {LogLevel}
- * @private
- */
-let logLevel = LOG_ERROR;
-
-/**
- * Returns the current logLevel
- * @returns {LogLevel}
- */
-const activeLogLevel = () => logLevel;
-
-/**
- * sets a new logLevel
- * @param {LogLevel} newLogLevel
- * @returns {LogLevel}
- * @example
- * setActiveLogLevel(LOG_DEBUG);
- * setActiveLogLevel(LOG_ERROR);
- */
-const setActiveLogLevel = newLogLevel => logLevel = newLogLevel;
+const getValue = () => appenderArray;
 
 const appenderCallback = msg => {
   appenderArray.push(msg);
@@ -76,34 +50,34 @@ const appenderCallback = msg => {
  * the function to log trace logs in this application
  * @type {(MsgFormatter)  => LogType}
  */
-const trace = traceLogger(activeLogLevel)(appenderCallback);
+const trace = appenderCallback;
 
 /**
  * the function to log debug logs in this application
  * @type {(MsgFormatter)  => LogType}
  */
-const debug = debugLogger(activeLogLevel)(appenderCallback);
+const debug = appenderCallback;
 
 /**
  * the function to log debug logs in this application
  * @type {(MsgFormatter)  => LogType}
  */
-const info = infoLogger(activeLogLevel)(appenderCallback);
+const info = appenderCallback;
 
 /**
  * the function to log warn logs in this application
  * @type {(MsgFormatter)  => LogType}
  */
-const warn = warnLogger(activeLogLevel)(appenderCallback);
+const warn = appenderCallback;
 
 /**
  * the function to log error logs in this application
  * @type {(MsgFormatter)  => LogType}
  */
-const error = errorLogger(activeLogLevel)(appenderCallback);
+const error = appenderCallback;
 
 /**
  * the function to log error logs in this application
  * @type {(MsgFormatter)  => LogType}
  */
-const fatal = fatalLogger(activeLogLevel)(appenderCallback);
+const fatal = appenderCallback;

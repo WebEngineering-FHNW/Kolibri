@@ -13,15 +13,11 @@ const formatLogMsg = logLevel => logMessage => {
 };
 
 let level = LOG_DEBUG;
-
-
 setGlobalContext("ch.fhnw.logger");
 
-const { debug, warn, error } = LogFactory("ch.fhnw.logger")(() => level)(Appender())(_ => id);
-const { debug : debug2, warn2, error2 } = LogFactory("ch.fhnw.bug")(() => level)(Appender())(_ => id);
 
-const id = x => x;
-const lazy = x => () => x;
+
+const { debug, warn, error } = LogFactory("ch.fhnw.logger")(() => level)(Appender())(_ => id);
 
 const action = () => {
   debug("action");
@@ -29,7 +25,6 @@ const action = () => {
   warn("warning");
   error("error");
 
-  debug2("helo");
 };
 
 document.getElementById("action").onclick = action;
