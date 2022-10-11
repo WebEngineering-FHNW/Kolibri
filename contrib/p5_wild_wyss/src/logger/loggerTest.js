@@ -1,126 +1,138 @@
 import {TestSuite} from "../../../../docs/src/kolibri/util/test.js";
-import {debugLogger, LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN} from "./logger.js";
-import {id, True} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js"
+import {debugLogger, LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN, setGlobalContext} from "./logger.js";
+import {convertToJsBool, id, lazy, True} from "./lamdaCalculus.js";
 
-const formatter = _ => id;
+setGlobalContext("ch.fhnw.test");
 
-const loggerSuite = TestSuite("Logger");
-loggerSuite.add("test simple logging", assert => {
+const beforeStart = () => {
+  const logMessage = 'hello world';
   let realMsg = '';
   const write = msg => {
     realMsg = msg;
     return True;
   };
-  const logMessage = 'hello world';
-  const debug = debugLogger(() => LOG_DEBUG)(write)(formatter);
+  const getRealMsg = () => realMsg;
+  const resetRealMsg = () => realMsg = '';
+  return {logMessage, getRealMsg, resetRealMsg, write  }
+};
+
+const loggerSuite = TestSuite("Logger");
+
+loggerSuite.add("test simple logging", assert => {
+  const {logMessage, getRealMsg, write} = beforeStart();
+  const debug = debugLogger("ch.fhnw.test")(() => LOG_DEBUG)(write)(_ => id);
   const result = debug(logMessage);
 
   assert.isTrue(convertToJsBool(result));
-  assert.is(realMsg, 'hello world');
+  assert.is(getRealMsg(), 'hello world');
 });
 
 loggerSuite.add("test enabling logging", assert => {
+  const {logMessage, getRealMsg, write} = beforeStart();
   let logLevel = LOG_NOTHING;
-  let realMsg = '';
-  const logMessage = 'hello world';
-
-  const write = msg => {
-    realMsg = msg;
-    return True;
-  };
-  const debug = debugLogger(() => logLevel)(write)(formatter);
+  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(write)(_ => id);
 
   // logging should be disabled
   const result1 = debug(logMessage);
-  assert.is(realMsg, '');
+  assert.is(getRealMsg(), '');
   assert.isTrue(!convertToJsBool(result1));
 
   // logging should be enabled
   logLevel = LOG_DEBUG;
   const result2 = debug(logMessage);
   assert.isTrue(convertToJsBool(result2));
-  assert.is(realMsg, logMessage);
+  assert.is(getRealMsg(), logMessage);
 });
 
 loggerSuite.add("test disabling logging", assert => {
+  const {logMessage, getRealMsg, resetRealMsg, write} = beforeStart();
   let logLevel = LOG_DEBUG;
-  let realMsg = '';
-  const logMessage = 'hello world';
 
-  const write = msg => {
-    realMsg = msg;
-    return True;
-  };
-
-  const debug = debugLogger(() => logLevel)(write)(formatter);
+  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(write)(_ => id);
 
   // logging should be enabled
   const result1 = debug(logMessage);
-  assert.is(realMsg, logMessage);
+  assert.is(getRealMsg(), logMessage);
   assert.isTrue(convertToJsBool(result1));
-
 
   // logging should be disabled
   logLevel = LOG_NOTHING;
-  realMsg = '';
+  resetRealMsg();
   const result2 = debug(logMessage);
   assert.isTrue(!convertToJsBool(result2));
-  assert.is(realMsg, '');
+  assert.is(getRealMsg(), '');
 });
 
 loggerSuite.add("log lower logging level, should log", assert => {
+  const {logMessage, getRealMsg, write} = beforeStart();
+
   const logLevel = LOG_TRACE;
-  let realMsg = '';
-  const logMessage = 'hello world';
-
-  const write = msg => {
-    realMsg = msg;
-    return True;
-  };
-
-  const debug = debugLogger(() => logLevel)(write)(formatter);
+  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(write)(_ => id);
 
   // loglevel debug should also be logged, when LOG_TRACE is enabled
   const result = debug(logMessage);
   assert.isTrue(convertToJsBool(result));
-  assert.is(realMsg, logMessage);
+  assert.is(getRealMsg(), logMessage);
 });
 
 loggerSuite.add("log higher logging level, should not log", assert => {
+  const {logMessage, getRealMsg, write} = beforeStart();
   const logLevel = LOG_WARN;
-  let realMsg = '';
-  const logMessage = 'hello world';
-
-  const write = msg => {
-    realMsg = msg;
-    return True;
-  };
-
-  const debug = debugLogger(() => logLevel)(write)(formatter);
+  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(write)(_ => id);
 
   // loglevel debug should not log when LOG_WARN is enabled
   const result = debug(logMessage);
   assert.isTrue(!convertToJsBool(result));
-  assert.is(realMsg, '');
+  assert.is(getRealMsg(), '');
 });
 
-const levelFormatter = lvl => msg => {
-  return `[${lvl}] ${msg}`;
-};
-
 loggerSuite.add("test debug tag formatted log message", assert => {
+  const {logMessage, getRealMsg, write} = beforeStart();
+  const levelFormatter = lvl => msg => `[${lvl}] ${msg}`;
   const logLevel = LOG_DEBUG;
-  let realMsg = '';
-  const logMessage = 'hello world';
-  const write = msg => {
-    realMsg = msg;
-    return True;
-  };
-  const debug = debugLogger(() => logLevel)(write)(levelFormatter);
+
+  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(write)(levelFormatter);
 
   const result = debug(logMessage);
   assert.isTrue(convertToJsBool(result));
-  assert.is(realMsg, '[DEBUG] hello world');
+  assert.is(getRealMsg(), '[DEBUG] hello world');
 });
+
+loggerSuite.add("test context, logger should not log", assert => {
+  const {logMessage, getRealMsg, write} = beforeStart();
+  const logLevel = LOG_DEBUG;
+  const debug = debugLogger("ch.fhnw")(() => logLevel)(write)(_ => id);
+
+  const result = debug(logMessage);
+  assert.isTrue(!convertToJsBool(result));
+  assert.is(getRealMsg(), '');
+});
+
+loggerSuite.add("test context, logger should log", assert => {
+  const {logMessage, getRealMsg, write} = beforeStart();
+  const logLevel = LOG_DEBUG;
+  const debug = debugLogger("ch.fhnw.test.specific.tag")(() => logLevel)(write)(_ => id);
+
+  const result = debug(logMessage);
+  assert.isTrue(convertToJsBool(result));
+  assert.is(getRealMsg(), 'hello world');
+});
+
+loggerSuite.add("test lazy evaluation", assert => {
+  const {logMessage, getRealMsg, write} = beforeStart();
+  const logLevel = LOG_NOTHING;
+
+  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(write)(_ => id);
+
+  const complexCalculation = () => 'Such a big workload';
+  const result = debug(complexCalculation);
+
+  assert.isTrue(convertToJsBool(result));
+  assert.is(getRealMsg(), 'Such a big workload');
+
+
+
+});
+
 
 loggerSuite.run();

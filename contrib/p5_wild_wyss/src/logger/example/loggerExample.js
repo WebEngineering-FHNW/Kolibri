@@ -1,6 +1,7 @@
 import {LOG_DEBUG, LOG_INFO, LOG_NOTHING, LOG_TRACE, setGlobalContext} from "../logger.js";
-import {Appender} from "../appender/consoleAppender.js";
+import {Appender} from "../appender/arrayAppender.js";
 import {LogFactory} from "../logFactory.js";
+import {lazy, id} from "../lamdaCalculus.js";
 
 
 /**
@@ -14,10 +15,9 @@ const formatLogMsg = logLevel => logMessage => {
 
 let level = LOG_DEBUG;
 setGlobalContext("ch.fhnw.logger");
+const app = Appender();
 
-
-
-const { debug, warn, error } = LogFactory("ch.fhnw.logger")(() => level)(Appender())(_ => id);
+const { debug, warn, error } = LogFactory("ch.fhnw.logger")(() => level)(app)(formatLogMsg);
 
 const action = () => {
   debug("action");
@@ -25,6 +25,7 @@ const action = () => {
   warn("warning");
   error("error");
 
+  console.log("test: " + app.getValue())
 };
 
 document.getElementById("action").onclick = action;

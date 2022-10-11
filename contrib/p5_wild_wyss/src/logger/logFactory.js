@@ -17,5 +17,4 @@ const LogFactory = context => activeLogLevel => appender => msgFormatter => ({
       warn:   warnLogger  (context)(activeLogLevel)(appender.warn) (msgFormatter),
       error:  errorLogger (context)(activeLogLevel)(appender.error)(msgFormatter),
       fatal:  fatalLogger (context)(activeLogLevel)(appender.fatal)(msgFormatter),
-
 });

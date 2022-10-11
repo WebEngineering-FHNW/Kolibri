@@ -1,4 +1,14 @@
-import {toChurchBoolean} from "./lamdaCalculus";
+import {False, toChurchBoolean} from "./lamdaCalculus.js";
+import {
+  and,
+  Else,
+  fst,
+  LazyIf,
+  pair,
+  snd,
+  Then
+} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
+import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/church-numerals.js";
 
 export {
   LOG_TRACE,
@@ -16,19 +26,6 @@ export {
   fatalLogger,
   setGlobalContext,
 }
-
-import {
-  Else,
-  False,
-  True,
-  fst,
-  LazyIf,
-  pair,
-  snd,
-  Then,
-    and
-} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
-import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/church-numerals.js";
 
 /**
  * A function where the log messages should be appended
