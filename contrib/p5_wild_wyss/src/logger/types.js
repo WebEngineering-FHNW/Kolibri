@@ -14,7 +14,7 @@
  */
 
 /**
- * A Loglevel is a {@link pair}, which consists of a {@link churchNumber } interpreted as level
+ * A Loglevel is a {@link Pair}, which consists of a {@link churchNumber } interpreted as level
  * and a {@link String} interpreted as label.
  * Given a {@link pairSelector}, either the level or the label can be selected.
  *

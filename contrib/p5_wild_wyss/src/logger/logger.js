@@ -1,14 +1,5 @@
-import {False, toChurchBoolean} from "./lamdaCalculus.js";
-import {
-  and,
-  Else,
-  fst,
-  LazyIf,
-  pair,
-  snd,
-  Then
-} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/lambda-calculus.js";
-import {leq, n0, n9, succ} from "../../../p6_brodwolf_andermatt/src/lambda-calculus-library/church-numerals.js";
+import {Pair, snd, fst} from "../../../../docs/src/kolibri/stdlib.js"
+import {n0, n1, n2, n3, n4, n5, n9, LazyIf, Else, Then, and, False, toChurchBoolean, leq} from "./lamdaCalculus.js";
 
 export {
   LOG_TRACE,
@@ -47,6 +38,7 @@ let globalContext = "";
  */
 const setGlobalContext = context => globalContext = context;
 
+
 /**
  * Yields a custom configured log function.
  * Processes all log-actions which have a {@link LogLevelType} equals or beneath
@@ -58,7 +50,7 @@ const setGlobalContext = context => globalContext = context;
  * The result of the callback function {@link MsgFormatType} will be logged using the given {@link append}.
  *
  * @function
- * @pure if the parameters "callback" of type {@link append} and msgFormatter of type {@link MsgFormatType} are pure.
+ * @pure if the parameters "append" of type {@link append} and msgFormatter of type {@link MsgFormatType} are pure.
  * @type    { (LogLevelType) => (String) => (activeLogLevel) => (append) => (MsgFormatType) => (LogMeType) => churchBoolean }
  * @private
  * @example
@@ -66,9 +58,13 @@ const setGlobalContext = context => globalContext = context;
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
-const logger = levelOfLogger => context => activeLogLevel => callback => msgFormatter => msg =>
-  LazyIf(and(logLevelActivated(activeLogLevel)(levelOfLogger))(contextActivated(context)))
-    (Then(() => callback(msgFormatter(levelOfLogger(snd))(msg instanceof Function ? msg() : msg))))
+const logger = levelOfLogger => context => activeLogLevel => append => msgFormatter => msg =>
+  LazyIf(
+      messageShouldBeLogged(activeLogLevel)(levelOfLogger)(context)
+    )
+    (Then(() =>
+      append(msgFormatter(levelOfLogger(snd))(msg instanceof Function ? msg() : msg)))
+    )
     (Else(() => False));
 
 /**
@@ -89,47 +85,57 @@ const logLevelActivated = activeLogLevel => levelOfLogger => leq(activeLogLevel(
 const contextActivated = context => toChurchBoolean(context.startsWith(globalContext));
 
 /**
+ * Decides if a message fulfills the conditions to be logged.
+ * @function
+ * @type { (LogLevelType) => (LogLevelType) => (String) => churchBoolean }
+ */
+const messageShouldBeLogged = activeLogLevel =>levelOfLogger => context =>
+  and
+    (logLevelActivated(activeLogLevel)(levelOfLogger))
+    (contextActivated(context));
+
+/**
  * The logging level "trace"
  * @returns { LogLevelType }
  */
-const LOG_TRACE = pair(n0)("TRACE");
+const LOG_TRACE = Pair(n0)("TRACE");
 
 /**
  * The logging level "debug"
  * @returns { LogLevelType }
  */
-const LOG_DEBUG = pair(succ(LOG_TRACE(fst)))("DEBUG");
+const LOG_DEBUG = Pair(n1)("DEBUG");
 
 /**
  * The logging level "info"
  * @returns { LogLevelType }
  */
-const LOG_INFO = pair(succ(LOG_DEBUG(fst)))("INFO");
+const LOG_INFO = Pair(n2)("INFO");
 
 /**
  * The logging level "warn"
  * @returns { LogLevelType }
  */
-const LOG_WARN = pair(succ(LOG_INFO(fst)))("WARN");
+const LOG_WARN = Pair(n3)("WARN");
 
 /**
  * The logging level "error"
  * @returns { LogLevelType }
  */
-const LOG_ERROR = pair(succ(LOG_WARN(fst)))("ERROR");
+const LOG_ERROR = Pair(n4)("ERROR");
 
 /**
  * The logging level "fatal"
  * @returns { LogLevelType }
  */
-const LOG_FATAL = pair(succ(LOG_ERROR(fst)))("FATAL");
+const LOG_FATAL = Pair(n5)("FATAL");
 
 /**
  * The logging level "nothing".
  * Disables the logging level completely.
  * @returns { LogLevelType }
  */
-const LOG_NOTHING = pair(n9)("");
+const LOG_NOTHING = Pair(n9)("");
 
 /**
  * Creates a new logger at log level {@link LOG_TRACE}.
