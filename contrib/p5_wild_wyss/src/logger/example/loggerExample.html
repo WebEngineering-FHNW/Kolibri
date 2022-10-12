@@ -98,8 +98,13 @@
     <div>
         <input type="text" id="context-logger" value="ch.fhnw.sample.logger" disabled>
     </div>
-    <div>
-        <label for="context-global">Global Logger Context:</label>
+    <div >
+        <label class="tooltip" for="context-global">
+            Global Logger Context:
+            <span class="tooltip-content">The global context enables or disables logger with a matching context.
+                If the global context is more specific than a logger context, the logger's messages will not be processed.
+            </span>
+        </label>
     </div>
     <div>
         <input type="text" id="context-global" value="ch.fhnw">

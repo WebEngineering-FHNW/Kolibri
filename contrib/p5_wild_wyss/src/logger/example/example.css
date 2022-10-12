@@ -26,15 +26,9 @@
 
 .tooltip {
     cursor: help;
-}
-.tooltip .tooltip-content {
-    font-weight: normal;
-    border-radius: 4px;
-}
-
-.tooltip {
     position: relative;
 }
+
 .tooltip .tooltip-content {
     display: none;
     position: absolute;
@@ -43,6 +37,7 @@
     color: #eee;
     padding: 12px;
     min-width: 140px;
+    border-radius: 4px;
 }
 .tooltip:hover .tooltip-content {
     display: block;
