@@ -3,6 +3,7 @@ import {True} from "../lamdaCalculus.js";
 
 /**
  * Provides console appender.
+ * Using this appender you are able to log to the console.
  * @returns {AppenderType<void>}
  * @constructor
  */
@@ -13,13 +14,18 @@ const Appender = () => ({
   warn,
   error,
   fatal,
-  getValue,
+  getValue
 });
 
-const getValue = undefined;
+/**
+ * This appender has no result
+ * @function
+ * @returns {void}
+ */
+const getValue = () => {};
 
 /**
- * @type { (Consumer) => (String) => churchBoolean }
+ * @type { (consume) => append }
  */
 const appenderCallback = callback => msg => {
   callback(msg);
@@ -28,36 +34,36 @@ const appenderCallback = callback => msg => {
 
 /**
  * the function to log trace logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {append}
  */
 const trace = appenderCallback(console.trace);
 
 /**
  * the function to log debug logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {append}
  */
 const debug = appenderCallback(console.debug);
 
 /**
  * the function to log debug logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {append}
  */
 const info = appenderCallback(console.info);
 
 /**
  * the function to log warn logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {append}
  */
 const warn = appenderCallback(console.warn);
 
 /**
  * the function to log error logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {append}
  */
 const error = appenderCallback(console.error);
 
 /**
  * the function to log error logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {append}
  */
 const fatal = appenderCallback(console.error);

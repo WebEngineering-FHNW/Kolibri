@@ -1,12 +1,12 @@
-import {LOG_DEBUG, LOG_INFO, LOG_NOTHING, LOG_TRACE, setGlobalContext} from "../logger.js";
+import {LOG_DEBUG, LOG_NOTHING, LOG_TRACE, setGlobalContext} from "../logger.js";
 import {Appender} from "../appender/arrayAppender.js";
 import {LogFactory} from "../logFactory.js";
-import {lazy, id} from "../lamdaCalculus.js";
+import {lazy } from "../lamdaCalculus.js";
 
 
 /**
  * Creates a custom log message using the given parameters.
- * @type {MsgFormatter} TODO
+ * @type {MsgFormatType} TODO
  */
 const formatLogMsg = logLevel => logMessage => {
   const date = new Date().toISOString();

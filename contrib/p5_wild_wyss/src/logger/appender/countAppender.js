@@ -38,7 +38,7 @@ const reset = () => {
 const getValue = () => statistic;
 
 /**
- * @type { (String) => (Consumer) => (String) => churchBoolean }
+ * @type { (String) => (consume) => (String) => churchBoolean }
  */
 const appenderCallback = type => callback => msg => {
   statistic[type] = statistic[type] + 1;
@@ -48,36 +48,36 @@ const appenderCallback = type => callback => msg => {
 
 /**
  * the function to log trace logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {(MsgFormatType)  => append}
  */
 const trace = appenderCallback("trace")(console.trace);
 
 /**
  * the function to log debug logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {(MsgFormatType)  => append}
  */
 const debug = appenderCallback("debug")(console.debug);
 
 /**
  * the function to log debug logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {(MsgFormatType)  => append}
  */
 const info = appenderCallback("info")(console.info);
 
 /**
  * the function to log warn logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {(MsgFormatType)  => append}
  */
 const warn = appenderCallback("warn")(console.warn);
 
 /**
  * the function to log error logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {(MsgFormatType)  => append}
  */
 const error = appenderCallback("error")(console.error);
 
 /**
  * the function to log error logs in this application
- * @type {(MsgFormatter)  => LogType}
+ * @type {(MsgFormatType)  => append}
  */
 const fatal = appenderCallback("fatal")(console.error);
