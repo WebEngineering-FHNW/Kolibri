@@ -38,7 +38,6 @@ let globalContext = "";
  */
 const setGlobalContext = context => globalContext = context;
 
-
 /**
  * Yields a custom configured log function.
  * Processes all log-actions which have a {@link LogLevelType} equals or beneath
@@ -63,9 +62,20 @@ const logger = levelOfLogger => context => activeLogLevel => append => msgFormat
       messageShouldBeLogged(activeLogLevel)(levelOfLogger)(context)
     )
     (Then(() =>
-      append(msgFormatter(levelOfLogger(snd))(msg instanceof Function ? msg() : msg)))
+      append(msgFormatter(context)(levelOfLogger(snd))(evaluateMessage(msg))))
     )
     (Else(() => False));
+
+/**
+ * Decides if a message fulfills the conditions to be logged.
+ * @function
+ * @type { (LogLevelType) => (LogLevelType) => (String) => churchBoolean }
+ * @private
+ */
+const messageShouldBeLogged = activeLogLevel =>levelOfLogger => context =>
+  and
+  (logLevelActivated(activeLogLevel)(levelOfLogger))
+  (contextActivated(context));
 
 /**
  * Returns {@link True} if the first {@link LogLevelType} parameter is smaller than the second {@link LogLevelType} parameter.
@@ -85,14 +95,14 @@ const logLevelActivated = activeLogLevel => levelOfLogger => leq(activeLogLevel(
 const contextActivated = context => toChurchBoolean(context.startsWith(globalContext));
 
 /**
- * Decides if a message fulfills the conditions to be logged.
- * @function
- * @type { (LogLevelType) => (LogLevelType) => (String) => churchBoolean }
+ * if the param "msg" is a function, it's result will be returned.
+ * Otherwise, the parameter itself will be returned.
+ * @param { !LogMeType} msg - the message to evaluate
+ * @returns { String } the evaluated message
+ * @private
  */
-const messageShouldBeLogged = activeLogLevel =>levelOfLogger => context =>
-  and
-    (logLevelActivated(activeLogLevel)(levelOfLogger))
-    (contextActivated(context));
+const evaluateMessage = msg => msg instanceof Function ? msg() : msg;
+
 
 /**
  * The logging level "trace"

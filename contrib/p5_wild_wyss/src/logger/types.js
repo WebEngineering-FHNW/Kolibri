@@ -10,7 +10,7 @@
  * @callback MsgFormatType
  * @function
  * @pure
- * @type { (logLevel: String) => (logMessage: String) => String}
+ * @type { (context: String) => (logLevel: String) => (logMessage: String) => String}
  */
 
 /**

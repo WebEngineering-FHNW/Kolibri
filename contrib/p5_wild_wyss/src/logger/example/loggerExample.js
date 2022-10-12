@@ -19,9 +19,9 @@ import {LogFactory} from "../logFactory.js";
  * Creates a custom log message using the given parameters.
  * @type {MsgFormatType}
  */
-const formatLogMsg = logLevel => logMessage => {
+const formatLogMsg = context => logLevel => logMessage => {
   const date = new Date().toISOString();
-  return `[${logLevel}] ${date}: ${logMessage}`;
+  return `${context}: [${logLevel}] ${date}: ${logMessage}`;
 };
 
 setGlobalContext("ch.fhnw");
