@@ -46,7 +46,7 @@
  */
 
 /**
- * An object which consists of fucntions of type {@link log}.
+ * An object which consists of functions of type {@link log}.
  * @typedef LoggerType
  * @property { log } trace - a function which logs a {@link LogMeType} on level {@link LOG_TRACE}
  * @property { log } debug - a function which logs a {@link LogMeType} on level {@link LOG_DEBUG}
