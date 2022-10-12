@@ -1,3 +1,5 @@
+@import "../../../../../docs/css/kolibri-base.css";
+
 .container {
     display: inline-grid;
     grid-template-columns: 1fr 1fr;
@@ -8,6 +10,40 @@
     grid-column-end: span 2;
 }
 
+.delimiter {
+    margin-left: 1rem;
+    color:grey;
+}
+
+.delimiter > Input {
+    width: 30px;
+    color: grey;
+}
+
 .twoColumnItems > Button {
     margin: 3rem 0.5rem 0.5rem 1rem;
+}
+
+.tooltip {
+    cursor: help;
+}
+.tooltip .tooltip-content {
+    font-weight: normal;
+    border-radius: 4px;
+}
+
+.tooltip {
+    position: relative;
+}
+.tooltip .tooltip-content {
+    display: none;
+    position: absolute;
+    left: 0;
+    background: var(--kolibri-color-output);
+    color: #eee;
+    padding: 12px;
+    min-width: 140px;
+}
+.tooltip:hover .tooltip-content {
+    display: block;
 }

@@ -32,6 +32,7 @@ const formatLogMsg = logLevel => logMessage => {
 };
 
 setGlobalContext("ch.fhnw");
+let delimiter = document.getElementById("delimiter").value;
 
 const consoleLogger = LogFactory("ch.fhnw.sample.logger")(() => currentLogLevel)(consoleAppender)(formatLogMsg);
 const stringLogger  = LogFactory("ch.fhnw.sample.logger")(() => currentLogLevel)(stringAppender) (formatLogMsg);
@@ -50,7 +51,7 @@ const log = lvl => {
     if(activeAppender.getValue() instanceof Object) {
       document.getElementById("log-output").value = JSON.stringify(activeAppender.getValue());
     } else  {
-      document.getElementById("log-output").value = activeAppender.getValue("\n");
+      document.getElementById("log-output").value = activeAppender.getValue(delimiter.toString());
     }
   }
 };
@@ -99,8 +100,11 @@ const updateLogger = () => {
   return [currentLogger, currentAppender];
 };
 
-document.getElementById("context-global").addEventListener("input", event =>{
-  setGlobalContext(event.target.value);
+document.getElementById("context-global").addEventListener("input", event =>
+  setGlobalContext(event.target.value)
+);
+document.getElementById("delimiter").addEventListener("input", event => {
+  delimiter = event.target.value;
 });
 
 
