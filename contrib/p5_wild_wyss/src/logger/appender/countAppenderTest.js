@@ -2,16 +2,7 @@ import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
 import {Appender} from "./countAppender.js";
 import {convertToJsBool} from "../lamdaCalculus.js";
 
-const {
-  trace,
-  debug,
-  info,
-  warn,
-  error,
-  fatal,
-  getValue,
-  reset,
-} = Appender();
+const { trace, debug, info, warn, error, fatal, getValue, reset } = Appender();
 
 const loggerSuite = TestSuite("Count Appender");
 

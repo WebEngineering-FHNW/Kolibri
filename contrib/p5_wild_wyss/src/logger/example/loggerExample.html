@@ -4,13 +4,108 @@
     <meta charset="UTF-8">
     <title>Logger Example</title>
     <link rel="shortcut icon" type="image/png" href="../../../../../docs/img/logo/logo-60x54.png"/>
-    <link rel="stylesheet"                     href="../../../../../docs/css/kolibri-base.css">
+    <link rel="stylesheet" href="../../../../../docs/css/kolibri-base.css">
+    <link rel="stylesheet" href="./example.css">
 </head>
 <body>
+<header>
+    <h1>Logger Example Page</h1>
+</header>
 
-<button id="trace">Log Level to trace</button>
-<button id="disable">Disable logging</button>
-<button id="action">Log</button>
+<div class="container">
+
+    <fieldset>
+        <legend>Select a Global Log Level</legend>
+        <div>
+            <input type="radio" id="log-level-trace" name="log-level" value="trace" checked>
+            <label for="log-level-trace">Trace</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-debug" name="log-level" value="debug">
+            <label for="log-level-debug">Debug</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-info" name="log-level" value="info">
+            <label for="log-level-info">Info</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-warn" name="log-level" value="info">
+            <label for="log-level-warn">Warn</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-error" name="log-level" value="info">
+            <label for="log-level-error">Error</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-fatal" name="log-level" value="info">
+            <label for="log-level-fatal">Fatal</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-nothing" name="log-level" value="info">
+            <label for="log-level-nothing">Nothing</label>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Select an Appender</legend>
+        <div>
+            <input type="radio" id="appender-console" name="appender" value="console" checked>
+            <label for="appender-console">Console</label>
+        </div>
+        <div>
+            <input type="radio" id="appender-string" name="appender" value="string">
+            <label for="appender-string">String</label>
+        </div>
+        <div>
+            <input type="radio" id="appender-array" name="appender" value="array">
+            <label for="appender-array">Array</label>
+        </div>
+        <div>
+            <input type="radio" id="appender-count" name="appender" value="count">
+            <label for="appender-count">Count</label>
+        </div>
+    </fieldset>
+
+    <div>
+        <label for="context-logger">Logger context:</label>
+    </div>
+    <div>
+        <input type="text" id="context-logger" value="ch.fhnw.sample.logger" disabled>
+    </div>
+    <div>
+        <label for="context-global">Global Logger Context:</label>
+    </div>
+    <div>
+        <input type="text" id="context-global" value="ch.fhnw">
+    </div>
+    <div>
+        <label for="log-msg">Message: </label>
+    </div>
+    <div>
+        <input type="text" id="log-msg" value="Log Message">
+    </div>
+
+    <div class="twoColumnItems">
+        <button style="color:black" id="btn-trace">Trace</button>
+        <button style="color:green" id="btn-debug">Debug</button>
+        <button style="color:blue" id="btn-info"> Info</button>
+        <button style="color:orange" id="btn-warn"> Warn</button>
+        <button style="color:red" id="btn-error">Error</button>
+        <button style="color:blueviolet" id="btn-fatal">Fatal</button>
+    </div>
+
+    <div class="twoColumnItems">
+        <div>
+            <label for="log-output">Log Output:</label>
+        </div>
+        <div>
+            <textarea id="log-output" name="output-area" rows="5" cols="60"></textarea>
+        </div>
+        <div>
+            <button id="btn-reset">Reset all Loggers</button>
+        </div>
+    </div>
+</div>
 
 <script src="loggerExample.js" type="module"></script>
 

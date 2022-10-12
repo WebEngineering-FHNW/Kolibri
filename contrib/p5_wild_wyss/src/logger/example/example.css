@@ -1,0 +1,13 @@
+.container {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0.5rem;
+}
+
+.twoColumnItems {
+    grid-column-end: span 2;
+}
+
+.twoColumnItems > Button {
+    margin: 3rem 0.5rem 0.5rem 1rem;
+}
