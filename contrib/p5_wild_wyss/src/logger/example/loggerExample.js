@@ -17,7 +17,7 @@ import {LogFactory} from "../logFactory.js";
 
 /**
  * Creates a custom log message using the given parameters.
- * @type {MsgFormatter}
+ * @type {MsgFormatType}
  */
 const formatLogMsg = logLevel => logMessage => {
   const date = new Date().toISOString();
@@ -87,11 +87,10 @@ const log = lvl => {
   }
 };
 
-const updateLevel = () => {
+const updateLevel = () =>
   levelList.forEach((el, idx) => {
     if (el.checked) currentLogLevel = logLevels[idx];
   });
-};
 
 const updateLogger = () => {
   let currentLogger = loggers[0];
