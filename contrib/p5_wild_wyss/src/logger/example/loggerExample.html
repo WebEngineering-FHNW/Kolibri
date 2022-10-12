@@ -50,19 +50,45 @@
         <legend>Select an Appender</legend>
         <div>
             <input type="radio" id="appender-console" name="appender" value="console" checked>
-            <label for="appender-console">Console</label>
+            <label class="tooltip" for="appender-console">
+                Console
+                <span class="tooltip-content">
+                    A Console Appender logs messages to the browsers console.
+                </span>
+            </label>
         </div>
         <div>
             <input type="radio" id="appender-string" name="appender" value="string">
-            <label for="appender-string">String</label>
+            <label class="tooltip" for="appender-string">
+                String
+                <span class="tooltip-content">A String Appender manages all log statement as string
+                        stored in its state. With the getValue() method, each log message will be returned
+                        concatenated with a passed delimiter.
+                </span>
+            </label>
+            <span class="delimiter">
+                <label for="delimiter">Delimiter:</label>
+                <input type="text" id="delimiter" value=" - ">
+            </span>
         </div>
         <div>
             <input type="radio" id="appender-array" name="appender" value="array">
-            <label for="appender-array">Array</label>
+            <label class="tooltip" for="appender-array">
+                Array
+                <span class="tooltip-content">An Array Appender manages log statement as string in an array.
+                    With the getValue() method, an array will be returned.
+                </span>
+            </label>
         </div>
         <div>
             <input type="radio" id="appender-count" name="appender" value="count">
-            <label for="appender-count">Count</label>
+            <label class="tooltip" for="appender-count">
+                Count
+                <span class="tooltip-content">A Count Appender logs messages to the browsers console.
+                    Simultaneously, a statistic is kept by the appender state. With the getValue() method,
+                    the statistic will be returned as an Object.
+                </span>
+            </label>
         </div>
     </fieldset>
 
@@ -72,8 +98,13 @@
     <div>
         <input type="text" id="context-logger" value="ch.fhnw.sample.logger" disabled>
     </div>
-    <div>
-        <label for="context-global">Global Logger Context:</label>
+    <div >
+        <label class="tooltip" for="context-global">
+            Global Logger Context:
+            <span class="tooltip-content">The global context enables or disables logger with a matching context.
+                If the global context is more specific than a logger context, the logger's messages will not be processed.
+            </span>
+        </label>
     </div>
     <div>
         <input type="text" id="context-global" value="ch.fhnw">

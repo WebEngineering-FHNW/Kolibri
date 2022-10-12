@@ -15,16 +15,9 @@ import {Appender as ConsoleAppender} from "../appender/consoleAppender.js";
 import {Appender as CountAppender} from "../appender/countAppender.js";
 import {LogFactory} from "../logFactory.js";
 
-const logLevels = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
-
-const consoleAppender = ConsoleAppender();
-const stringAppender  = StringAppender();
-const arrayAppender   = ArrayAppender();
-const countAppender   = CountAppender();
-
 /**
  * Creates a custom log message using the given parameters.
- * @type {MsgFormatType} TODO
+ * @type {MsgFormatter}
  */
 const formatLogMsg = logLevel => logMessage => {
   const date = new Date().toISOString();
@@ -33,27 +26,25 @@ const formatLogMsg = logLevel => logMessage => {
 
 setGlobalContext("ch.fhnw");
 
+const consoleAppender = ConsoleAppender();
+const stringAppender  = StringAppender();
+const arrayAppender   = ArrayAppender();
+const countAppender   = CountAppender();
+
+const appenderList  = document.getElementsByName("appender");
+const levelList     = document.getElementsByName("log-level");
+const output        = document.getElementById("log-output");
+let delimiter       = document.getElementById("delimiter").value;
+let currentLogLevel = LOG_DEBUG;
+
 const consoleLogger = LogFactory("ch.fhnw.sample.logger")(() => currentLogLevel)(consoleAppender)(formatLogMsg);
 const stringLogger  = LogFactory("ch.fhnw.sample.logger")(() => currentLogLevel)(stringAppender) (formatLogMsg);
 const arrayLogger   = LogFactory("ch.fhnw.sample.logger")(() => currentLogLevel)(arrayAppender)  (formatLogMsg);
 const countLogger   = LogFactory("ch.fhnw.sample.logger")(() => currentLogLevel)(countAppender)  (formatLogMsg);
 
-const loggers = [consoleLogger, stringLogger, arrayLogger, countLogger];
-const appender = [consoleAppender, stringAppender, arrayAppender, countAppender];
-
-const log = lvl => {
-  updateLevel();
-  const [logger, activeAppender] = updateLogger();
-  const msg = document.getElementById("log-msg").value;
-  logger[lvl](msg);
-  if(activeAppender.getValue instanceof Function){
-    if(activeAppender.getValue() instanceof Object) {
-      document.getElementById("log-output").value = JSON.stringify(activeAppender.getValue());
-    } else  {
-      document.getElementById("log-output").value = activeAppender.getValue("\n");
-    }
-  }
-};
+const logLevels = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
+const loggers   = [consoleLogger,   stringLogger,   arrayLogger,   countLogger];
+const appender  = [consoleAppender, stringAppender, arrayAppender, countAppender];
 
 const traceAction = () => log("trace");
 const debugAction = () => log("debug");
@@ -66,6 +57,7 @@ const reset = () => appender.forEach(el => {
     document.getElementById("log-output").value = "";
   });
 
+
 document.getElementById("btn-trace").onclick =  traceAction;
 document.getElementById("btn-debug").onclick =  debugAction;
 document.getElementById("btn-info").onclick  =  infoAction;
@@ -73,34 +65,42 @@ document.getElementById("btn-warn").onclick  =  warnAction;
 document.getElementById("btn-error").onclick =  errorAction;
 document.getElementById("btn-fatal").onclick =  fatalAction;
 document.getElementById("btn-reset").onclick =  reset;
+document.getElementById("context-global").addEventListener("input", event =>
+    setGlobalContext(event.target.value)
+);
+document.getElementById("delimiter").addEventListener("input", event => {
+  delimiter = event.target.value;
+});
 
-let currentLogLevel = LOG_DEBUG;
+
+const log = lvl => {
+  updateLevel();
+  const [logger, activeAppender] = updateLogger();
+  const msg = document.getElementById("log-msg").value;
+  logger[lvl](msg);
+  if(activeAppender.getValue instanceof Function){
+    if(activeAppender.getValue() instanceof Object) {
+      output.value = JSON.stringify(activeAppender.getValue());
+    } else  {
+      output.value = activeAppender.getValue(delimiter.toString());
+    }
+  }
+};
 
 const updateLevel = () => {
-  const levelList = document.getElementsByName("log-level");
   levelList.forEach((el, idx) => {
-    if (el.checked) {
-      currentLogLevel = logLevels[idx];
-    }
+    if (el.checked) currentLogLevel = logLevels[idx];
   });
 };
 
 const updateLogger = () => {
   let currentLogger = loggers[0];
   let currentAppender = appender[0];
-  const appenderList = document.getElementsByName("appender");
   appenderList.forEach((el, idx) => {
     if (el.checked) {
       currentLogger = loggers[idx];
       currentAppender = appender[idx];
-      // console.log("set current appender to: " + idx)
     }
   });
   return [currentLogger, currentAppender];
 };
-
-document.getElementById("context-global").addEventListener("input", event =>{
-  setGlobalContext(event.target.value);
-});
-
-
