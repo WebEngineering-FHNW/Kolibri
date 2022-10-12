@@ -1,0 +1,17 @@
+.RadioContainer {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.InputSection {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+}
+
+.InputSection > div {
+    margin-right: 1rem;
+}
+
+.ButtonRow {
+    margin: 1rem;
+}
