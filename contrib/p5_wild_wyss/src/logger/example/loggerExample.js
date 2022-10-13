@@ -15,6 +15,9 @@ import {Appender as ConsoleAppender} from "../appender/consoleAppender.js";
 import {Appender as CountAppender} from "../appender/countAppender.js";
 import {LogFactory} from "../logFactory.js";
 
+const LOGGER_CONTEXT = "ch.fhnw.sample.logger";
+const INITIAL_GLOBAL_CONTEXT = "ch.fhnw";
+
 /**
  * Creates a custom log message using the given parameters.
  * @type {MsgFormatType}
@@ -24,7 +27,7 @@ const formatLogMsg = context => logLevel => logMessage => {
   return `${context}: [${logLevel}] ${date}: ${logMessage}`;
 };
 
-setGlobalContext("ch.fhnw");
+setGlobalContext(INITIAL_GLOBAL_CONTEXT);
 
 const consoleAppender = ConsoleAppender();
 const stringAppender  = StringAppender();
@@ -37,10 +40,10 @@ const output        = document.getElementById("log-output");
 let delimiter       = document.getElementById("delimiter").value;
 let currentLogLevel = LOG_DEBUG;
 
-const consoleLogger = LogFactory("ch.fhnw.sample.logger")(() => currentLogLevel)(consoleAppender)(formatLogMsg);
-const stringLogger  = LogFactory("ch.fhnw.sample.logger")(() => currentLogLevel)(stringAppender) (formatLogMsg);
-const arrayLogger   = LogFactory("ch.fhnw.sample.logger")(() => currentLogLevel)(arrayAppender)  (formatLogMsg);
-const countLogger   = LogFactory("ch.fhnw.sample.logger")(() => currentLogLevel)(countAppender)  (formatLogMsg);
+const consoleLogger = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(consoleAppender)(formatLogMsg);
+const stringLogger  = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(stringAppender) (formatLogMsg);
+const arrayLogger   = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(arrayAppender)  (formatLogMsg);
+const countLogger   = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(countAppender)  (formatLogMsg);
 
 const logLevels = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
 const loggers   = [consoleLogger,   stringLogger,   arrayLogger,   countLogger];
@@ -56,7 +59,6 @@ const reset = () => appender.forEach(el => {
     if(el.reset instanceof Function) el.reset();
     document.getElementById("log-output").value = "";
   });
-
 
 document.getElementById("btn-trace").onclick =  traceAction;
 document.getElementById("btn-debug").onclick =  debugAction;
