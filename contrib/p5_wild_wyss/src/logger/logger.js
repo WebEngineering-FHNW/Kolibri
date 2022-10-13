@@ -57,12 +57,12 @@ const setGlobalContext = context => globalContext = context;
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
-const logger = levelOfLogger => context => activeLogLevel => append => msgFormatter => msg =>
+const logger = levelOfLogger => context => activeLogLevel => append => formatMsg => msg =>
   LazyIf(
       messageShouldBeLogged(activeLogLevel)(levelOfLogger)(context)
     )
     (Then(() =>
-      append(msgFormatter(context)(levelOfLogger(snd))(evaluateMessage(msg))))
+      append(formatMsg(context)(levelOfLogger(snd))(evaluateMessage(msg))))
     )
     (Else(() => False));
 
