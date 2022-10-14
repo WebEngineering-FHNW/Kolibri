@@ -132,28 +132,28 @@ loggerSuite.add("test context, logger should log", assert => {
 
 loggerSuite.add("test lazy evaluation, logger should log", assert => {
   const logLevel = LOG_DEBUG;
-  const apply = f => {
-    f();
+  const apply = message => {
+    receivedMsg = message;
     return True;
   };
   let receivedMsg = "";
   const debug = debugLogger("ch.fhnw.test")(() => logLevel)(apply)(_ => _ => id);
 
-  const result = debug(lazy(() => receivedMsg = "hello world"));
+  const result = debug(lazy("hello world"));
   assert.isTrue(convertToJsBool(result));
   assert.is(receivedMsg, 'hello world');
 });
 
 loggerSuite.add("test lazy evaluation, logger should not log and function should not be evaluated", assert => {
   const logLevel = LOG_NOTHING;
-  const apply = f => {
-    f();
+  const apply = message => {
+    receivedMsg = message;
     return True;
   };
   let receivedMsg = "";
   const debug = debugLogger("ch.fhnw.test")(() => logLevel)(apply)(_ => _ => id);
 
-  const result = debug(lazy(() => receivedMsg = "hello world"));
+  const result = debug(lazy("hello world"));
   assert.isTrue(!convertToJsBool(result));
   assert.is(receivedMsg, '');
 });
