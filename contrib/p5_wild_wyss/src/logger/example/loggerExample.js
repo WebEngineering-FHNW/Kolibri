@@ -15,17 +15,8 @@ import {Appender as ConsoleAppender}  from "../appender/consoleAppender.js";
 import {Appender as CountAppender}    from "../appender/countAppender.js";
 import {LogFactory}                   from "../logFactory.js";
 
-const LOGGER_CONTEXT = "ch.fhnw.sample.logger";
-const INITIAL_GLOBAL_CONTEXT = "ch.fhnw";
-
-/**
- * Creates a custom log message using the given parameters.
- * @type {MsgFormatType}
- */
-const formatLogMsg = context => logLevel => logMessage => {
-  const date = new Date().toISOString();
-  return `${context}: [${logLevel}] ${date}: ${logMessage}`;
-};
+const LOGGER_CONTEXT          = "ch.fhnw.sample.logger";
+const INITIAL_GLOBAL_CONTEXT  = "ch.fhnw";
 
 setGlobalContext(INITIAL_GLOBAL_CONTEXT);
 
@@ -34,27 +25,32 @@ const stringAppender  = StringAppender();
 const arrayAppender   = ArrayAppender();
 const countAppender   = CountAppender();
 
-const appenderList  = document.getElementsByName("appender");
-const levelList     = document.getElementsByName("log-level");
-const output        = document.getElementById("log-output");
-let delimiter       = document.getElementById("delimiter").value;
-let currentLogLevel = LOG_DEBUG;
+const appenderList    = document.getElementsByName("appender");
+const levelList       = document.getElementsByName("log-level");
+const output          = document.getElementById("log-output");
+let delimiter         = document.getElementById("delimiter").value;
+let currentLogLevel   = LOG_DEBUG;
 
-const consoleLogger = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(consoleAppender)(formatLogMsg);
-const stringLogger  = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(stringAppender) (formatLogMsg);
-const arrayLogger   = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(arrayAppender)  (formatLogMsg);
-const countLogger   = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(countAppender)  (formatLogMsg);
+const formatLogMsg = context => logLevel => logMessage => {
+  const date = new Date().toISOString();
+  return `${context}: [${logLevel}] ${date}: ${logMessage}`;
+};
 
-const logLevels = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
-const loggers   = [consoleLogger,   stringLogger,   arrayLogger,   countLogger];
-const appender  = [consoleAppender, stringAppender, arrayAppender, countAppender];
+const consoleLogger   = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(consoleAppender)(formatLogMsg);
+const stringLogger    = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(stringAppender) (formatLogMsg);
+const arrayLogger     = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(arrayAppender)  (formatLogMsg);
+const countLogger     = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(countAppender)  (formatLogMsg);
 
-const traceAction = () => log("trace");
-const debugAction = () => log("debug");
-const infoAction  = () => log("info");
-const warnAction  = () => log("warn");
-const errorAction = () => log("error");
-const fatalAction = () => log("fatal");
+const logLevels       = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
+const loggers         = [consoleLogger,   stringLogger,   arrayLogger,   countLogger];
+const appender        = [consoleAppender, stringAppender, arrayAppender, countAppender];
+
+const traceAction     = () => log("trace");
+const debugAction     = () => log("debug");
+const infoAction      = () => log("info");
+const warnAction      = () => log("warn");
+const errorAction     = () => log("error");
+const fatalAction     = () => log("fatal");
 
 const reset = () => appender.forEach(el => {
     if(el.reset instanceof Function) el.reset();
@@ -68,12 +64,14 @@ document.getElementById("btn-warn").onclick  =  warnAction;
 document.getElementById("btn-error").onclick =  errorAction;
 document.getElementById("btn-fatal").onclick =  fatalAction;
 document.getElementById("btn-reset").onclick =  reset;
+
 document.getElementById("context-global").addEventListener("input", event =>
     setGlobalContext(event.target.value)
 );
-document.getElementById("delimiter").addEventListener("input", event => {
-  delimiter = event.target.value;
-});
+
+document.getElementById("delimiter").addEventListener("input", event =>
+    delimiter = event.target.value
+);
 
 
 const log = lvl => {
