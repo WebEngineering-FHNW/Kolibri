@@ -9,11 +9,11 @@ import {
   setGlobalContext
 } from "../logger.js";
 
-import {Appender as ArrayAppender} from "../appender/arrayAppender.js";
-import {Appender as StringAppender} from "../appender/stringAppender.js";
-import {Appender as ConsoleAppender} from "../appender/consoleAppender.js";
-import {Appender as CountAppender} from "../appender/countAppender.js";
-import {LogFactory} from "../logFactory.js";
+import {Appender as ArrayAppender}    from "../appender/arrayAppender.js";
+import {Appender as StringAppender}   from "../appender/stringAppender.js";
+import {Appender as ConsoleAppender}  from "../appender/consoleAppender.js";
+import {Appender as CountAppender}    from "../appender/countAppender.js";
+import {LogFactory}                   from "../logFactory.js";
 
 const LOGGER_CONTEXT = "ch.fhnw.sample.logger";
 const INITIAL_GLOBAL_CONTEXT = "ch.fhnw";
@@ -55,6 +55,7 @@ const infoAction  = () => log("info");
 const warnAction  = () => log("warn");
 const errorAction = () => log("error");
 const fatalAction = () => log("fatal");
+
 const reset = () => appender.forEach(el => {
     if(el.reset instanceof Function) el.reset();
     document.getElementById("log-output").value = "";
