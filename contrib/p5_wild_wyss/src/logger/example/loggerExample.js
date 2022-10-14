@@ -79,7 +79,7 @@ const log = lvl => {
   const [logger, activeAppender] = updateLogger();
   const msg = document.getElementById("log-msg").value;
   logger[lvl](msg);
-  if(activeAppender.getValue instanceof Function){
+  if(activeAppender.getValue() !== undefined){
     if(activeAppender.getValue() instanceof Object) {
       output.value = JSON.stringify(activeAppender.getValue());
     } else  {
