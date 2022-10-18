@@ -36,12 +36,12 @@
  * @typedef AppenderType
  * @template T - the result type of the getValue function. If the appender has no result, {@link void} should be used.
  * @template b - a delimiter to separate the individual appended messages.
- * @property { append } trace - Defines the appending strategy for the {@link LOG_TRACE}-level messages.
- * @property { append } debug - Defines the appending strategy for the {@link LOG_DEBUG}-level messages.
- * @property { append } info - Defines the appending strategy for the {@link LOG_INFO}-level messages.
- * @property { append } warn - Defines the appending strategy for the {@link LOG_WARN}-level messages.
- * @property { append } error - Defines the appending strategy for the {@link LOG_ERROR}-level messages.
- * @property { append } fatal - Defines the appending strategy for the {@link LOG_FATAL}-level messages.
+ * @property { AppendCallback } trace - Defines the appending strategy for the {@link LOG_TRACE}-level messages.
+ * @property { AppendCallback } debug - Defines the appending strategy for the {@link LOG_DEBUG}-level messages.
+ * @property { AppendCallback } info - Defines the appending strategy for the {@link LOG_INFO}-level messages.
+ * @property { AppendCallback } warn - Defines the appending strategy for the {@link LOG_WARN}-level messages.
+ * @property { AppendCallback } error - Defines the appending strategy for the {@link LOG_ERROR}-level messages.
+ * @property { AppendCallback } fatal - Defines the appending strategy for the {@link LOG_FATAL}-level messages.
  * @property { function(String=): *} getValue - Some appender may produce a result, that can be collected using getValue.
  */
 
@@ -56,6 +56,11 @@
  * @property { log } fatal - a function which logs a {@link LogMeType} on level {@link LOG_FATAL}
  */
 
+/**
+ * The church number is the priority and the string it's text representation.
+ * @typedef { pair<churchNumber, String> } PriorityType
+ */
+
 // callbacks
 
 /**
@@ -63,22 +68,19 @@
  * @callback log
  * @param { LogMeType }
  * @returns churchBoolean - {@link True} if the logging was successful
- * @example
  *
  */
 
 /**
  * The currently active loglevel for this application.
- * @callback activeLogLevel
- * @return { pair<churchNumber, String>}
- * @example
- * const activeLogLevel = () => LOG_NOTHING;
+ * @callback PrioritySupplier
+ * @return { PriorityType }
  */
 
 /**
  * A callback which appends log messages in a desired way.
  * If the message has been appended successfully, {@link True} is returned.
- * @callback append
+ * @callback AppendCallback
  * @param { !String } message
  * @impure since appending a message always has side effects.
  * @returns { churchBoolean }
@@ -93,14 +95,13 @@
  * A callback which takes no arguments and returns an {@link a}
  * @template a
  * @callback produce
- * @returns a
+ * @returns {a}
  */
 
 /**
- * A callback which takes one argument and does something with it. (Usually this leads in a side effect)
- * @template a
+ * A callback which takes one argument and does something. (Usually this leads in a side effect)
  * @callback consume
  * @impure
- * @param a
+ * @param {*}
  * @returns void
  */

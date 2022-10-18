@@ -41,49 +41,61 @@ const setGlobalContext = context => globalContext = context;
 /**
  * Yields a custom configured log function.
  * Processes all log-actions which have a {@link LogLevelType} equals or beneath
- * the {@link LogLevelType} returned by the function "activeLogLevel".
+ * the {@link LogLevelType} returned by the function "loggingLevel".
  *
  * Furthermore, each log statement has a context. The log message will only be logged, if the globalContext
  * (set with {@link setGlobalContext}) has the same prefix as the log message's context.
  *
- * The result of the callback function {@link MsgFormatType} will be logged using the given {@link append}.
+ * The result of the callback function {@link MsgFormatType} will be logged using the given {@link AppendCallback}.
+ *
+ * What's the difference between loggerLevel vs loggingLevel:
+ * loggerLevel is the level of the respective logger
+ * loggingLevel is the level at which logging is currently taking place.
  *
  * @function
- * @pure if the parameters "append" of type {@link append} and msgFormatter of type {@link MsgFormatType} are pure.
- * @type    { (LogLevelType) => (String) => (activeLogLevel) => (append) => (MsgFormatType) => (LogMeType) => churchBoolean }
+ * @pure if the parameters "append" of type {@link AppendCallback} and msgFormatter of type {@link MsgFormatType} are pure.
+ * @type    {
+ *               (loggerLevel:      LogLevelType)
+ *            => (context:          String)
+ *            => (loggingLevel:     PrioritySupplier)
+ *            => (append:           AppendCallback)
+ *            => (formatMsg:        MsgFormatType)
+ *            => (msg:              LogMeType)
+ *            => churchBoolean
+ *          }
  * @private
  * @example
- * const log = logger(LOG_DEBUG)("ch.fhnw")(() => LOG_DEBUG)(console.log)(_ => id);
+ * const log = logger(LOG_DEBUG)("ch.fhnw")(() => LOG_DEBUG)(console.log)(_ => _ => id);
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
-const logger = levelOfLogger => context => activeLogLevel => append => formatMsg => msg =>
+const logger = loggerLevel => context => loggingLevel => append => formatMsg => msg =>
   LazyIf(
-      messageShouldBeLogged(activeLogLevel)(levelOfLogger)(context)
+      messageShouldBeLogged(loggingLevel)(loggerLevel)(context)
     )
     (Then(() =>
-      append(formatMsg(context)(levelOfLogger(snd))(evaluateMessage(msg))))
+      append(formatMsg(context)(loggerLevel(snd))(evaluateMessage(msg))))
     )
     (Else(() => False));
 
 /**
  * Decides if a message fulfills the conditions to be logged.
  * @function
- * @type { (LogLevelType) => (LogLevelType) => (String) => churchBoolean }
+ * @type { (loggingLevel: LogLevelType) => (loggerLevel: LogLevelType) => (context: String) => churchBoolean }
  * @private
  */
-const messageShouldBeLogged = activeLogLevel =>levelOfLogger => context =>
+const messageShouldBeLogged = loggingLevel => loggerLevel => context =>
   and
-  (logLevelActivated(activeLogLevel)(levelOfLogger))
+  (logLevelActivated(loggingLevel)(loggerLevel))
   (contextActivated(context));
 
 /**
  * Returns {@link True} if the first {@link LogLevelType} parameter is smaller than the second {@link LogLevelType} parameter.
  * @function
- * @type { (LogLevelType) => (LogLevelType) => churchBoolean}
+ * @type { (loggingLevel: LogLevelType) => (loggerLevel: LogLevelType) => churchBoolean}
  * @private
  */
-const logLevelActivated = activeLogLevel => levelOfLogger => leq(activeLogLevel()(fst))(levelOfLogger(fst));
+const logLevelActivated = loggingLevel => loggerLevel => leq(loggingLevel()(fst))(loggerLevel(fst));
 
 /**
  * Returns {@link True} if the {@link globalContext} is a prefix of the given {@link String} parameter.

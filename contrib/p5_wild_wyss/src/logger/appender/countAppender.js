@@ -48,36 +48,36 @@ const appenderCallback = type => callback => msg => {
 
 /**
  * the function to append trace logs in this application
- * @type { append }
+ * @type { AppendCallback }
  */
 const trace = appenderCallback("trace")(console.trace);
 
 /**
  * the function to append debug logs in this application
- * @type { append }
+ * @type { AppendCallback }
  */
 const debug = appenderCallback("debug")(console.debug);
 
 /**
  * the function to append info logs in this application
- * @type { append }
+ * @type { AppendCallback }
  */
 const info = appenderCallback("info")(console.info);
 
 /**
  * the function to append warn logs in this application
- * @type { append }
+ * @type { AppendCallback }
  */
 const warn = appenderCallback("warn")(console.warn);
 
 /**
  * the function to append error logs in this application
- * @type { append }
+ * @type { AppendCallback }
  */
 const error = appenderCallback("error")(console.error);
 
 /**
  * the function to append fatal logs in this application
- * @type { append }
+ * @type { AppendCallback }
  */
 const fatal = appenderCallback("fatal")(console.error);

@@ -137,7 +137,7 @@ loggerSuite.add("test lazy evaluation, logger should log", assert => {
     return True;
   };
   let receivedMsg = "";
-  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(apply)(_ => _ => id);
+  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(apply)(() => () => id);
 
   const result = debug(lazy("hello world"));
   assert.isTrue(convertToJsBool(result));

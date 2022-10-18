@@ -1,6 +1,6 @@
 import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
 import {Appender} from "./arrayAppender.js";
-import {convertToJsBool} from "../lamdaCalculus.js";
+import {convertToJsBool, True} from "../lamdaCalculus.js";
 
 const { trace, debug, info, warn, error, fatal, getValue, reset } = Appender();
 
@@ -8,7 +8,7 @@ const loggerSuite = TestSuite("Array Appender");
 
 loggerSuite.add("test add debug value to array appender", assert => {
   const result = debug("debug");
-  assert.is(convertToJsBool(result), true );
+  assert.is(result, True);
   assert.is(getValue()[0], "debug");
   reset();
 });
