@@ -25,7 +25,7 @@
 /**
  * LogMe represents a log message.
  * To log a simple message, just use a {@link String}.
- * If the log message is based on some calculations, you should consider to use a {@link produce},
+ * If the log message is based on some calculations, you should consider to use a {@link Producer},
  * because the message can be lazy evaluated.
  * @typedef {String | Producer<String>} LogMeType
  */
@@ -94,13 +94,13 @@
 /**
  * A callback which takes no arguments and returns an {@link a}
  * @template a
- * @callback produce
+ * @callback Producer
  * @returns {a}
  */
 
 /**
  * A callback which takes one argument and does something. (Usually this leads in a side effect)
- * @callback consume
+ * @callback Consumer
  * @impure
  * @param {*}
  * @returns void

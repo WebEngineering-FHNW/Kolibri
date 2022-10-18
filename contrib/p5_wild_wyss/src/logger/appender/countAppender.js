@@ -38,7 +38,7 @@ const reset = () => {
 const getValue = () => statistic;
 
 /**
- * @type { (String) => (consume) => (String) => churchBoolean }
+ * @type { (String) => (Consumer) => (String) => churchBoolean }
  */
 const appenderCallback = type => callback => msg => {
   statistic[type] = statistic[type] + 1;

@@ -123,7 +123,7 @@ loggerSuite.add("test context, logger should not log", assert => {
 loggerSuite.add("test context, logger should log", assert => {
   const {logMessage, getRealMsg, write} = beforeStart();
   const logLevel = LOG_DEBUG;
-  const debug = debugLogger("ch.fhnw.test.specific.tag")(() => logLevel)(write)(_ => _ => id);
+  const debug = debugLogger("ch.fhnw.test.specific.tag")(() => logLevel)(write)(_ => _2 => id);
 
   const result = debug(logMessage);
   assert.isTrue(convertToJsBool(result));
