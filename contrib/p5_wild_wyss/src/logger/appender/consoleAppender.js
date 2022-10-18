@@ -25,7 +25,7 @@ const Appender = () => ({
 const getValue = () => {};
 
 /**
- * @type { (consume) => AppendCallback }
+ * @type { (Consumer) => AppendCallback }
  */
 const appenderCallback = callback => msg => {
   callback(msg);
