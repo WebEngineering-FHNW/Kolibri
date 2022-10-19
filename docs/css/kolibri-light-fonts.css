@@ -1,0 +1,57 @@
+
+@font-face {
+    font-family: "Rubik-Light";
+    src: local("Rubik-Light"),
+    url("../font/Rubik/static/Rubik-Light.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Rubik-Medium";
+    src: local("Rubik-Medium"),
+    url("../font/Rubik/static/Rubik-Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Rubik-Regular";
+    src: local("Rubik-Regular"),
+    url("../font/Rubik/static/Rubik-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Rubik-SemiBold";
+    src: local("Rubik-SemiBold"),
+    url("../font/Rubik/static/Rubik-SemiBold.ttf") format("truetype");
+}
+
+:root {
+
+    /* --- typography --- */
+    --kb-font-rubik-light-light:     "Rubik-Light",    ui-sans-serif, serif;
+    --kb-font-rubik-light-medium:    "Rubik-Medium",   ui-sans-serif, serif;
+    --kb-font-rubik-light-regular:   "Rubik-Regular",  ui-sans-serif, serif;
+    --kb-font-rubik-light-semibold:  "Rubik-SemiBold", ui-sans-serif, serif;
+
+    /* --- font-sizes --- */
+    --font-size-h1:         6.0rem;
+    --font-size-h2:         3.75rem;
+    --font-size-h3:         3.0rem;
+    --font-size-h4:         2.0rem;
+    --font-size-h5:         1.5rem;
+    --font-size-h6:         1.0rem;
+
+    --font-size-textL:      1.25rem;
+    --font-size-textM:      1.0rem;
+    --font-size-textS:      0.875rem;
+    --font-size-textXS:     0.75rem;
+
+    --font-size-linkL:      1.25rem;
+    --font-size-linkM:      1.125rem;
+    --font-size-linkS:      1.0rem;
+    --font-size-linkXS:     0.875rem;
+
+    --font-size-caption:    0.875rem;
+    --font-size-overline:   0.625rem;
+
+
+}
+
