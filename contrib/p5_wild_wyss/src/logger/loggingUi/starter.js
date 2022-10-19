@@ -3,7 +3,7 @@ import {LogUiController}            from "./controller.js";
 import {Appender as LogUiAppender}  from "../appender/observableAppender.js";
 import {
   LogMessagesContainerView,
-  LogLevelControlView,
+  LogLevelFilterControlView,
   LogContextView,
   LogMessageSearchView,
 }   from "./logView.js";
@@ -14,7 +14,7 @@ const controller  = LogUiController(model);
 
 LogContextView          (document.getElementById("globalContext"),      controller);
 LogMessageSearchView    (document.getElementById("searchBar"),          controller);
-LogLevelControlView     (document.getElementById("logLevelButtons"),    controller);
+LogLevelFilterControlView     (document.getElementById("logLevelButtons"),    controller);
 LogMessagesContainerView (document.getElementById("logMessageContainer"),controller);
 
 

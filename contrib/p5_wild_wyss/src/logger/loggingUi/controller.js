@@ -7,6 +7,9 @@ const LogUiController = model => {
   };
 
 
+
+
+
   return {
     onFilterChange,
 
