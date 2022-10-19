@@ -1,15 +1,22 @@
-import {Appender} from "../../appender/observableAppender";
-import {LogFactory} from "../../logFactory";
-import {LOG_INFO} from "../../logger";
-import {LogUiController} from "../controller";
-import {LogUiModel} from "../logUiModel";
-import {LogMessagesContainerView} from "../logView";
+export { createLogUi}
 
-const appender = Appender();
-
-const logger = LogFactory("ch.fhnw")(() => LOG_INFO)(appender)(_1 => _2 => id);
+import {Appender} from "../../appender/observableAppender.js";
+import {LogUiController} from "../controller.js";
+import {LogUiModel} from "../logUiModel.js";
+import {LogMessagesContainerView} from "../logView.js";
 
 
-const model = LogUiModel(appender);
-const controller = LogUiController(model);
-const logView = LogMessagesContainerView(rootElement, controller);
+const createLogUi = rootElement => {
+
+  const logMessagesContainerViewRoot = document.createElement("DIV");
+
+
+  const appender = Appender();
+
+  const model = LogUiModel(appender);
+  const controller = LogUiController(model);
+
+  LogMessagesContainerView(logMessagesContainerViewRoot, controller);
+
+  rootElement.appendChild(logMessagesContainerViewRoot);
+};

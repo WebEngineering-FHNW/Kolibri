@@ -6,10 +6,20 @@
     <link href="logUi.css" rel="stylesheet">
 </head>
 <body>
-    <label for="globalContext">Global Context</label>
-    <input id="globalContext" type="text">
-    <div id="loglevel-buttons"></div>
-    <div class="logTextArea" id="logger-ui"></div>
+
+    <div id="globalContext">
+        <label for="contextInput">Global Context</label>
+        <input id="contextInput" type="text">
+    </div>
+
+    <div id="searchBar">
+        <label for="search">Search</label>
+        <input id="search" type="text">
+    </div>
+
+    <div id="logLevelButtons"></div>
+
+    <div class="logMessageContainer" id="logger-ui"></div>
 
     <script src="./starter.js" type="module"></script>
 </body>

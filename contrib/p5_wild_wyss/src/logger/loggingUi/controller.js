@@ -14,13 +14,8 @@ const LogUiController = model => {
     setActiveLogLevel:      model.setActiveLogLevel,
     getActiveLogLevel:      model.getActiveLogLevel,
 
-    onChangeGlobalContext:  model.onChangeGlobalContext,
-    setGlobalContext:       model.setGlobalContext,
-    getGlobalContext:       model.getGlobalContext,
-
-    // addInactiveLogLevel: model.addInactiveLogLevel,
-    // delInactiveLogLevel: model.delInactiveLogLevel,
-    // onLogLevelChange: model.onLogLevelChange,
+    getMessages:            model.getMessages,
+    onMessagesChange:       model.onMessagesChange,
   }
 };
 

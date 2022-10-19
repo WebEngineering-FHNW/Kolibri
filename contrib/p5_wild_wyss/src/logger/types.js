@@ -48,12 +48,12 @@
 /**
  * An object which consists of functions of type {@link log}.
  * @typedef LoggerType
- * @property { log } trace - a function which logs a {@link LogMeType} on level {@link LOG_TRACE}
- * @property { log } debug - a function which logs a {@link LogMeType} on level {@link LOG_DEBUG}
- * @property { log } info - a function which logs a {@link LogMeType} on level {@link LOG_INFO}
- * @property { log } warn - a function which logs a {@link LogMeType} on level {@link LOG_WARN}
- * @property { log } error - a function which logs a {@link LogMeType} on level {@link LOG_ERROR}
- * @property { log } fatal - a function which logs a {@link LogMeType} on level {@link LOG_FATAL}
+ * @property { log } trace  - a function which logs a {@link LogMeType} on level {@link LOG_TRACE}
+ * @property { log } debug  - a function which logs a {@link LogMeType} on level {@link LOG_DEBUG}
+ * @property { log } info   - a function which logs a {@link LogMeType} on level {@link LOG_INFO}
+ * @property { log } warn   - a function which logs a {@link LogMeType} on level {@link LOG_WARN}
+ * @property { log } error  - a function which logs a {@link LogMeType} on level {@link LOG_ERROR}
+ * @property { log } fatal  - a function which logs a {@link LogMeType} on level {@link LOG_FATAL}
  */
 
 /**
@@ -95,13 +95,14 @@
  * A callback which takes no arguments and returns an {@link a}
  * @template a
  * @callback Producer
- * @returns {a}
+ * @returns { a }
  */
 
 /**
  * A callback which takes one argument and does something. (Usually this leads in a side effect)
+ * @template a
  * @callback Consumer
  * @impure
- * @param {*}
+ * @param { a } value
  * @returns void
  */
