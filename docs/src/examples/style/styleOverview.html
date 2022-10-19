@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
     <link rel="stylesheet" href="../../../css/kolibri-base.css">
+    <link rel="stylesheet" href="../../../css/kolibri-light-colors.css">
     <title>Style Overview</title>
 
     <style>
@@ -15,6 +16,10 @@
             display:    grid;
             grid-template-columns: max-content max-content;
             grid-column-gap: 1em;
+        }
+        .flow {
+            display: flex;
+            gap: 1em;
         }
         div.kolibri-logo-svg {
             height:         250px;
@@ -47,13 +52,15 @@
 <body>
 <h1>Kolibri Style Overview</h1>
 <p>
-    Kolibri comes with its default set of colors, shadows, fonts, and other style elements.
+    Kolibri comes with its default set of colors, shadows, fonts, and other style elements that make up its
+    design system (see <a href="https://www.figma.com/file/8Yq9C2CFomC1Uv6qlzfGri/Kolibri-(α)?node-id=82%3A1326">figma</a>).
     Any application that uses Kolibri can of course selectively override or totally ignore the default style.
 </p>
 <p>
     The style is available in two ways: via
-    <a href="../../../css/kolibri-base.css">kolibri-base.css</a> and by using the style API as
-    provided by the
+    <a href="../../../css/kolibri-base.css">kolibri-base.css</a> /
+    <a href="../../../css/kolibri-light-colors.css">kolibri-light-colors.css</a>
+    and by using the style API as provided by the
     <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/style/kolibriStyle.js">
         style module
     </a>.
@@ -99,7 +106,6 @@
     <a href="../../../index.html">Home</a>
 </p>
 
-<div class="darkTheme"></div>
 <script src="useStyles.js" type="module"></script>
 <script>
     const logoDiv = document.querySelector("div.kolibri-logo-svg");
