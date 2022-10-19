@@ -1,22 +1,36 @@
 export {LogUiModel}
+import {Appender} from "../appender/observableAppender";
+import {Observable} from "../../../../p6_haefliger_misic/branch-projector-pattern/observable/observable.js";
 
-import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN} from "../logger";
+const LogUiModel = _ => {
 
-const LogUiModel = appender => {
+  const inactiveLogLevels = Observable({trace: false, debug: false, info: false, warn: false, error: false, fatal: false});
+  const globalContext     = Observable("ch.");
+  const messages          = Observable([""]); // TODO use Stack
 
-  const logLevelPool = [LOG_TRACE, LOG_INFO, LOG_DEBUG, LOG_WARN, LOG_ERROR, LOG_FATAL];
-
-  const inactiveLogLevels = ObservableList([]);
-
-  const onLogLevelChange = callback => {
-    inactiveLogLevels.onAdd(callback);
-    inactiveLogLevels.onDel(callback);
+  const callback = msg => {
+    messages.setValue([msg, ...messages.getValue()]);
   };
 
+  const appender = Appender(callback);
+
+  // const onLogLevelChange = callback => {
+  //   inactiveLogLevels.onAdd(callback);
+  //   inactiveLogLevels.onDel(callback);
+  // };
+
   return {
-    addInactiveLogLevel: inactiveLogLevels.add,
-    delInactiveLogLevel: inactiveLogLevels.del,
-    onLogLevelChange,
+    onChangeActiveLogLevel: inactiveLogLevels.onChange,
+    setActiveLogLevel:      inactiveLogLevels.setValue,
+    getActiveLogLevel:      inactiveLogLevels.getValue,
+
+    onChangeGlobalContext:  globalContext.onChange,
+    setGlobalContext:       globalContext.setValue,
+    getGlobalContext:       globalContext.getValue,
+
+    // addInactiveLogLevel: inactiveLogLevels.add,
+    // delInactiveLogLevel: inactiveLogLevels.del,
+    // onLogLevelChange,
   }
 
 };
