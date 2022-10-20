@@ -17,6 +17,14 @@
             grid-template-columns: max-content max-content;
             grid-column-gap: 1em;
         }
+        .drop-size {
+            width: 40px;
+            height:40px;
+        }
+        .drop-shape {
+            border-radius: 50% 15% 50% 50%;
+            transform: rotate(-45deg) ;
+        }
         .flow {
             display: flex;
             gap: 1em;
@@ -120,5 +128,8 @@
         resetFlatterClasses();
     }
 </script>
+
+<!--empty div just to use the classes once and avoid inspection warnings-->
+<div class="drop-size drop-shape flow"></div>
 </body>
 </html>

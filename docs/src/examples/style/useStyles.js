@@ -11,13 +11,12 @@ import {
 
 const root = document.querySelector("#out");
 
-const dimensions = "width: 40px; height:40px;";
 const stanza = ( colorName, color, cssName) => dom (`
 <!--suppress CssUnresolvedCustomProperty -->
     <p>${colorName}</p>    
     <p>${cssName}</p>
-    <div style="${dimensions} background: ${color};"></div>
-    <div style="${dimensions} background: var(${cssName});"></div>
+    <div class="drop-size drop-shape" style="background: ${color};"></div>
+    <div class="drop-size drop-shape" style="background: var(${cssName});"></div>
 `);
 
 const stanza2= ( colorName, color, cssName) => dom (`
@@ -25,10 +24,10 @@ const stanza2= ( colorName, color, cssName) => dom (`
     <p>${colorName}</p>    
     <p>${"--kb-rgb-" + cssName}, ${"--kb-hsla-" + cssName}</p>
 
-    <div style="${dimensions} background: ${color};"></div>
+    <div class="drop-size drop-shape" style="background: ${color};"></div>
     <div class="flow">
-        <div style="${dimensions} background: var(${"--kb-rgb-"  + cssName});"></div>
-        <div style="${dimensions} background: var(${"--kb-hsla-" + cssName});"></div>
+        <div class="drop-size drop-shape" style="background: var(${"--kb-rgb-"  + cssName});"></div>
+        <div class="drop-size drop-shape" style="background: var(${"--kb-hsla-" + cssName});"></div>
     </div>
 `);
 
@@ -41,8 +40,8 @@ root.append( ... stanza( "shadowColor",  shadowColor  ,"--kolibri-color-shadow" 
 root.append( ... dom (`
     <p>shadow</p>
     <p>--kolibri-box-shadow</p>
-    <div style="${dimensions} box-shadow: ${shadowCss}"></div>
-    <div style="${dimensions} box-shadow: var(--kolibri-box-shadow)"></div>
+    <div class="drop-size" style="box-shadow: ${shadowCss}"></div>
+    <div class="drop-size" style="box-shadow: var(--kolibri-box-shadow)"></div>
 `));
 
 
