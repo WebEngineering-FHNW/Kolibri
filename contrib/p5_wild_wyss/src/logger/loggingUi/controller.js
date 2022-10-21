@@ -1,5 +1,6 @@
 export {LogUiController}
 import {fst, snd, Pair} from "../lamdaCalculus.js";
+import {setGlobalContext} from "../logger.js";
 
 const LogUiController = model => {
 
@@ -18,9 +19,6 @@ const LogUiController = model => {
     model.setActiveLogLevel(allLogLevels);
   };
 
-
-
-
   return {
     onFilterChange,
     onChangeActiveLogLevel:  model.onChangeActiveLogLevel,
@@ -32,6 +30,8 @@ const LogUiController = model => {
 
     onTextFilterChange:      model.onTextFilterChange,
     setTextFilter:           model.setTextFilter,
+
+    setGlobalContext: setGlobalContext
   }
 };
 

@@ -26,9 +26,7 @@ const TextFilterView = (rootElement, controller) => {
   const input = document.createElement("INPUT");
   input.setAttribute("id", "filterInput");
 
-  input.addEventListener("input", _ => {
-    controller.setTextFilter(input.value);
-  });
+  input.oninput = _ => controller.setTextFilter(input.value);
 
   rootElement.append(label, input);
 
@@ -38,31 +36,24 @@ const TextFilterView = (rootElement, controller) => {
 
   controller.onTextFilterChange(render);
 
-
 };
-
 
 
 const LogLevelFilterControlView = (rootElement, controller) => {
   const render = checkBoxPair => {
     const logLevelLabel = checkBoxPair(fst)(snd);
-    const   checked = checkBoxPair(snd);
-    const checkbox  = document.createElement("INPUT");
-    const label     = document.createElement("LABEL");
+    const checked = checkBoxPair(snd);
+    const checkbox = document.createElement("INPUT");
+    const label = document.createElement("LABEL");
     label.innerHTML = logLevelLabel;
     label.setAttribute("for", logLevelLabel);
     checkbox.setAttribute("id", logLevelLabel);
     checkbox.type = "checkbox";
     checkbox.checked = checked;
-    rootElement.appendChild(checkbox);
-    rootElement.appendChild(label);
+    rootElement.append(checkbox, label);
 
-    checkbox.onchange = _ => {
-      controller.flipLogLevel(checkBoxPair);
-    };
+    checkbox.onchange = _ => controller.flipLogLevel(checkBoxPair);
   };
-
-
 
 
   controller.onChangeActiveLogLevel(levels => {
@@ -71,8 +62,17 @@ const LogLevelFilterControlView = (rootElement, controller) => {
   })
 };
 
-const LogContextView = (inputElement, controller) => {
+const LogContextView = (rootElement, controller) => {
+  const label = document.createElement("LABEL");
+  label.innerHTML = "Global Context ";
+  label.setAttribute("for", "globalContext");
 
+  const input = document.createElement("INPUT");
+  input.setAttribute("id", "globalContext");
+
+  rootElement.append(label, input);
+
+  input.oninput = _ => controller.setGlobalContext(input.value);
 };
 
 
