@@ -21,37 +21,31 @@ const LogMessageSearchView = (rootElement, controller) => {
 
 
 const LogLevelFilterControlView = (rootElement, controller) => {
-  const checkboxes = [];
-  [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL]
-      .forEach(level => checkboxes[level(snd)] = true);
-
-  const render = (key, value) => {
+  const render = checkBoxPair => {
+    const logLevelLabel = checkBoxPair(fst)(snd);
+    const   checked = checkBoxPair(snd);
     const checkbox  = document.createElement("INPUT");
     const label     = document.createElement("LABEL");
-    label.innerHTML = key;
-    label.setAttribute("for", key);
-    checkbox.setAttribute("id", key);
+    label.innerHTML = logLevelLabel;
+    label.setAttribute("for", logLevelLabel);
+    checkbox.setAttribute("id", logLevelLabel);
     checkbox.type = "checkbox";
-    checkbox.checked = value;
+    checkbox.checked = checked;
     rootElement.appendChild(checkbox);
     rootElement.appendChild(label);
-    controller.setActiveLogLevel(checkboxes);
 
     checkbox.onchange = _ => {
-      const currentValue = {...controller.getActiveLogLevel() };
-      currentValue[key] = !currentValue[key];
-      controller.setActiveLogLevel(currentValue);
+      controller.flipLogLevel(checkBoxPair);
     };
-
-    controller.onChangeActiveLogLevel( checkboxStates =>
-        checkbox.checked = checkboxStates[key]
-    );
   };
 
-  for (const [key, value] of Object.entries(checkboxes)) {
-    render(key, value)
-  }
 
+
+
+  controller.onChangeActiveLogLevel(levels => {
+    rootElement.innerHTML = '';
+    levels.forEach(checkBoxPair => render(checkBoxPair))
+  })
 };
 
 const LogContextView = (inputElement, controller) => {

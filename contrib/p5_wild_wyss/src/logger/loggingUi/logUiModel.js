@@ -1,7 +1,10 @@
+import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN} from "../logger.js";
+
 export {LogUiModel}
 import {Observable} from "../../../../../docs/src/kolibri/observable.js";
 import {filter} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import {fst, snd} from "../lamdaCalculus.js";
+import {Pair,snd, fst} from "../../../../../docs/src/kolibri/stdlib.js"
+
 
 /**
  *
@@ -10,21 +13,30 @@ import {fst, snd} from "../lamdaCalculus.js";
  * @constructor
  */
 const LogUiModel = appender => {
-  const logLevelFilterItems = Observable([]);
+  const logLevelFilterStates =
+    Observable(
+      [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL]
+      .map(level => Pair(level)(true)));
+
   const callbacks = [];
 
   const onFilteredMessagesChange = item => callbacks.push(item);
 
 
+  /**
+   *
+   * @param {LogLevelType} pair
+   * @return {boolean}
+   */
   const predicate = pair => {
-    const type = pair(fst);
-    const level =  type(snd);
+    const logLevel = pair(fst);
+    const levelLabel =  logLevel(snd);
 
-    const activeLogLevels = Object.entries(logLevelFilterItems.getValue())
-        .filter(e => true === e[1])
-        .map(e => e[0]);
+    const activeLogLevels = logLevelFilterStates.getValue()
+      .filter(level => true === level(snd))
+      .map(level => level(fst)(snd));
 
-      return activeLogLevels.includes(level);
+      return activeLogLevels.includes(levelLabel);
   };
 
   const applyFilter = () => {
@@ -37,15 +49,16 @@ const LogUiModel = appender => {
     callbacks.forEach(cb => cb(filtered));
   });
 
-  logLevelFilterItems.onChange( _ => {
+  logLevelFilterStates.onChange( _ => {
     const filtered = applyFilter();
     callbacks.forEach(cb => cb(filtered))
   });
 
   return {
-    onChangeActiveLogLevel: logLevelFilterItems.onChange,
-    setActiveLogLevel:      logLevelFilterItems.setValue,
-    getActiveLogLevel:      logLevelFilterItems.getValue,
+    onChangeActiveLogLevel: logLevelFilterStates.onChange,
+    getAvailableLogLevels:  logLevelFilterStates.getValue,
+    setActiveLogLevel:      logLevelFilterStates.setValue,
+    getActiveLogLevel:      logLevelFilterStates.getValue,
 
     onMessagesChange:       onFilteredMessagesChange,
   }
