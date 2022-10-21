@@ -1,9 +1,17 @@
-import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN} from "../logger.js";
 
-export {LogUiModel}
-import {Observable} from "../../../../../docs/src/kolibri/observable.js";
-import {filter} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import {Pair,snd, fst} from "../../../../../docs/src/kolibri/stdlib.js"
+export { LogUiModel }
+
+import { Observable }   from "../../../../../docs/src/kolibri/observable.js";
+import { filter }       from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import { Pair }         from "../../../../../docs/src/kolibri/stdlib.js"
+import {
+  LOG_DEBUG,
+  LOG_ERROR,
+  LOG_FATAL,
+  LOG_INFO,
+  LOG_TRACE,
+  LOG_WARN
+} from "../logger.js";
 
 /**
  *
@@ -23,33 +31,11 @@ const LogUiModel = appender => {
 
   const onFilteredMessagesChange = item => callbacks.push(item);
 
-  const predicate = levelMessagePair => {
-    const logLevel = levelMessagePair(fst);
-
-    const levelLabel =  logLevel(snd);
-
-    const activeLogLevels = logLevelFilterStates.getValue()
-      .filter(level => true === level(snd))
-      .map(level => level(fst)(snd));
-
-    return activeLogLevels.includes(levelLabel) && messageIncludes(levelMessagePair(snd));
-  };
-
-  const messageIncludes = text => {
-    const textOfInterest = filterText.getValue().toLowerCase();
-    const logMessage = text.toLowerCase();
-    return logMessage.includes(textOfInterest);
-  };
-
-  const notifyListeners = () => {
+  const filterAndNotify = predicate => {
     const stack = appender.getValue().getValue();
     const filtered =  filter(predicate)(stack);
     callbacks.forEach(cb => cb(filtered));
   };
-
-  appender.getValue().onChange(notifyListeners);
-
-  logLevelFilterStates.onChange(notifyListeners);
 
   return {
     onChangeActiveLogLevel: logLevelFilterStates.onChange,
@@ -59,8 +45,11 @@ const LogUiModel = appender => {
 
     onTextFilterChange:     filterText.onChange,
     setTextFilter:          filterText.setValue,
+    getTextFilter:          filterText.getValue,
 
+    filterAndNotify:        filterAndNotify,
     onMessagesChange:       onFilteredMessagesChange,
+    onNewLogMessage:        appender.getValue().onChange
   }
 
 };
