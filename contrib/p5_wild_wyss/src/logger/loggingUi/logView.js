@@ -20,7 +20,7 @@ const LogMessagesContainerView = (rootElement, controller) => {
 
 const TextFilterView = (rootElement, controller) => {
   const label = document.createElement("LABEL");
-  label.innerHTML = "Filter";
+  label.innerHTML = "Filter ";
   label.setAttribute("for", "filterInput");
 
   const input = document.createElement("INPUT");
