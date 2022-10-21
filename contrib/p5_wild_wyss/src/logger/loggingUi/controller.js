@@ -1,13 +1,15 @@
 export {LogUiController}
+
 import {fst, snd, Pair} from "../lamdaCalculus.js";
 import {setGlobalContext} from "../logger.js";
 
+/**
+ *
+ * @param model
+ * @return {*}
+ * @constructor
+ */
 const LogUiController = model => {
-
-  const onFilterChange = callback => {
-    callback([]);
-  };
-
 
   const flipLogLevel = logLevelPair => {
     const allLogLevels = model.getAvailableLogLevels()
@@ -20,18 +22,16 @@ const LogUiController = model => {
   };
 
   return {
-    onFilterChange,
-    onChangeActiveLogLevel:  model.onChangeActiveLogLevel,
-    flipLogLevel:            flipLogLevel,
-    getActiveLogLevel:       model.getActiveLogLevel,
-    getAvailableLogLevels:   model.getAvailableLogLevels,
-    getMessages:             model.getMessages,
-    onMessagesChange:        model.onMessagesChange,
+    onChangeActiveLogLevel: model.onChangeActiveLogLevel,
 
-    onTextFilterChange:      model.onTextFilterChange,
-    setTextFilter:           model.setTextFilter,
+    getMessages:            model.getMessages,
+    onMessagesChange:       model.onMessagesChange,
 
-    setGlobalContext: setGlobalContext
+    onTextFilterChange:     model.onTextFilterChange,
+    setTextFilter:          model.setTextFilter,
+
+    setGlobalContext:       setGlobalContext,
+    flipLogLevel:           flipLogLevel
   }
 };
 

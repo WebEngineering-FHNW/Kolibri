@@ -5,7 +5,6 @@ import {Observable} from "../../../../../docs/src/kolibri/observable.js";
 import {filter} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import {Pair,snd, fst} from "../../../../../docs/src/kolibri/stdlib.js"
 
-
 /**
  *
  * @param { AppenderType<Observable<stack>> } appender
@@ -24,16 +23,8 @@ const LogUiModel = appender => {
 
   const onFilteredMessagesChange = item => callbacks.push(item);
 
-  /**
-   *
-   * @param {Pair<LogLevelType, String>} pair
-   * @return {boolean}
-   */
-  const predicate = pair => {
-    /**
-     * @type {LogLevelType}
-     */
-    const logLevel = pair(fst);
+  const predicate = levelMessagePair => {
+    const logLevel = levelMessagePair(fst);
 
     const levelLabel =  logLevel(snd);
 
@@ -41,7 +32,7 @@ const LogUiModel = appender => {
       .filter(level => true === level(snd))
       .map(level => level(fst)(snd));
 
-    return activeLogLevels.includes(levelLabel) && messageIncludes(pair(snd));
+    return activeLogLevels.includes(levelLabel) && messageIncludes(levelMessagePair(snd));
   };
 
   const messageIncludes = text => {
@@ -50,26 +41,21 @@ const LogUiModel = appender => {
     return logMessage.includes(textOfInterest);
   };
 
-  const applyFilter = () => {
+  const notifyListeners = () => {
     const stack = appender.getValue().getValue();
-    return filter(predicate)(stack)
+    const filtered =  filter(predicate)(stack);
+    callbacks.forEach(cb => cb(filtered));
   };
 
-  appender.getValue().onChange( _ => {
-    const filtered = applyFilter();
-    callbacks.forEach(cb => cb(filtered));
-  });
+  appender.getValue().onChange(notifyListeners);
 
-  logLevelFilterStates.onChange( _ => {
-    const filtered = applyFilter();
-    callbacks.forEach(cb => cb(filtered))
-  });
+  logLevelFilterStates.onChange(notifyListeners);
 
   return {
     onChangeActiveLogLevel: logLevelFilterStates.onChange,
-    getAvailableLogLevels:  logLevelFilterStates.getValue,
     setActiveLogLevel:      logLevelFilterStates.setValue,
-    getActiveLogLevel:      logLevelFilterStates.getValue,
+
+    getAvailableLogLevels:  logLevelFilterStates.getValue,
 
     onTextFilterChange:     filterText.onChange,
     setTextFilter:          filterText.setValue,
