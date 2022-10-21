@@ -18,25 +18,36 @@ const LogUiModel = appender => {
       [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL]
       .map(level => Pair(level)(true)));
 
+  const filterText = Observable("");
+
   const callbacks = [];
 
   const onFilteredMessagesChange = item => callbacks.push(item);
 
-
   /**
    *
-   * @param {LogLevelType} pair
+   * @param {Pair<LogLevelType, String>} pair
    * @return {boolean}
    */
   const predicate = pair => {
+    /**
+     * @type {LogLevelType}
+     */
     const logLevel = pair(fst);
+
     const levelLabel =  logLevel(snd);
 
     const activeLogLevels = logLevelFilterStates.getValue()
       .filter(level => true === level(snd))
       .map(level => level(fst)(snd));
 
-      return activeLogLevels.includes(levelLabel);
+    return activeLogLevels.includes(levelLabel) && messageIncludes(pair(snd));
+  };
+
+  const messageIncludes = text => {
+    const textOfInterest = filterText.getValue().toLowerCase();
+    const logMessage = text.toLowerCase();
+    return logMessage.includes(textOfInterest);
   };
 
   const applyFilter = () => {
@@ -59,6 +70,9 @@ const LogUiModel = appender => {
     getAvailableLogLevels:  logLevelFilterStates.getValue,
     setActiveLogLevel:      logLevelFilterStates.setValue,
     getActiveLogLevel:      logLevelFilterStates.getValue,
+
+    onTextFilterChange:     filterText.onChange,
+    setTextFilter:          filterText.setValue,
 
     onMessagesChange:       onFilteredMessagesChange,
   }

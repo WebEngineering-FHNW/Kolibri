@@ -1,8 +1,7 @@
-import {pop, forEach} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import {snd, fst} from "../../../../../docs/src/kolibri/stdlib.js"
-import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN} from "../logger.js";
+import {forEach} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import {fst, snd} from "../../../../../docs/src/kolibri/stdlib.js"
 
-export {LogMessagesContainerView, LogLevelFilterControlView, LogContextView, LogMessageSearchView }
+export {LogMessagesContainerView, LogLevelFilterControlView, LogContextView, TextFilterView }
 
 
 const LogMessagesContainerView = (rootElement, controller) => {
@@ -13,8 +12,32 @@ const LogMessagesContainerView = (rootElement, controller) => {
   controller.onMessagesChange(render);
 };
 
+//
+// const FilterView = (rootElement, controller)=>{
+//   const textFilter = TextFilterView(rootElement, controller);
+//   const checkBoxds = Che
+// };
 
-const LogMessageSearchView = (rootElement, controller) => {
+const TextFilterView = (rootElement, controller) => {
+  const label = document.createElement("LABEL");
+  label.innerHTML = "Filter";
+  label.setAttribute("for", "filterInput");
+
+  const input = document.createElement("INPUT");
+  input.setAttribute("id", "filterInput");
+
+  input.addEventListener("input", _ => {
+    controller.setTextFilter(input.value);
+  });
+
+  rootElement.append(label, input);
+
+  const render = text => {
+    input.value = text;
+  };
+
+  controller.onTextFilterChange(render);
+
 
 };
 

@@ -29,6 +29,9 @@ const LogUiController = model => {
     getAvailableLogLevels:   model.getAvailableLogLevels,
     getMessages:             model.getMessages,
     onMessagesChange:        model.onMessagesChange,
+
+    onTextFilterChange:      model.onTextFilterChange,
+    setTextFilter:           model.setTextFilter,
   }
 };
 
