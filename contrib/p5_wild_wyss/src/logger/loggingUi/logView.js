@@ -1,4 +1,4 @@
-import {pop} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import {pop, forEach} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import {snd, fst} from "../../../../../docs/src/kolibri/stdlib.js"
 import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN} from "../logger.js";
 
@@ -21,7 +21,7 @@ const LogMessageSearchView = (rootElement, controller) => {
 
 
 const LogLevelFilterControlView = (rootElement, controller) => {
-  const checkboxes = {};
+  const checkboxes = [];
   [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL]
       .forEach(level => checkboxes[level(snd)] = true);
 
@@ -60,10 +60,15 @@ const LogContextView = (inputElement, controller) => {
 
 
 const logMessage = (rootElement, stack) => {
+  rootElement.innerHTML = "";
 
-  const tuple = pop(stack)(snd);
-  const message = tuple(snd);
-  const pre = document.createElement("PRE");
-  pre.innerHTML = message;
-  rootElement.appendChild(pre);
+  const createPreElement = (tuple, _) => {
+    const message = tuple(snd);
+    const pre = document.createElement("PRE");
+    pre.innerHTML = message;
+    rootElement.appendChild(pre);
+  };
+
+  forEach(stack)(createPreElement);
+
 };

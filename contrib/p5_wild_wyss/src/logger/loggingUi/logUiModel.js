@@ -3,7 +3,6 @@ import {Observable} from "../../../../../docs/src/kolibri/observable.js";
 import {filter} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import {fst, snd} from "../lamdaCalculus.js";
 
-
 /**
  *
  * @param { AppenderType<Observable<stack>> } appender
@@ -11,7 +10,7 @@ import {fst, snd} from "../lamdaCalculus.js";
  * @constructor
  */
 const LogUiModel = appender => {
-  const logLevelFilter = Observable({});
+  const logLevelFilterItems = Observable([]);
   const callbacks = [];
 
   const onFilteredMessagesChange = item => callbacks.push(item);
@@ -21,11 +20,11 @@ const LogUiModel = appender => {
     const type = pair(fst);
     const level =  type(snd);
 
-    const activeLoglevels = Object.entries(logLevelFilter.getValue())
+    const activeLogLevels = Object.entries(logLevelFilterItems.getValue())
         .filter(e => true === e[1])
         .map(e => e[0]);
 
-      return activeLoglevels.includes(level);
+      return activeLogLevels.includes(level);
   };
 
   const applyFilter = () => {
@@ -33,24 +32,20 @@ const LogUiModel = appender => {
     return filter(predicate)(stack)
   };
 
-
-
   appender.getValue().onChange( _ => {
     const filtered = applyFilter();
     callbacks.forEach(cb => cb(filtered));
   });
 
-  logLevelFilter.onChange( _ => {
+  logLevelFilterItems.onChange( _ => {
     const filtered = applyFilter();
     callbacks.forEach(cb => cb(filtered))
   });
 
-
-
   return {
-    onChangeActiveLogLevel: logLevelFilter.onChange,
-    setActiveLogLevel:      logLevelFilter.setValue,
-    getActiveLogLevel:      logLevelFilter.getValue,
+    onChangeActiveLogLevel: logLevelFilterItems.onChange,
+    setActiveLogLevel:      logLevelFilterItems.setValue,
+    getActiveLogLevel:      logLevelFilterItems.getValue,
 
     onMessagesChange:       onFilteredMessagesChange,
   }

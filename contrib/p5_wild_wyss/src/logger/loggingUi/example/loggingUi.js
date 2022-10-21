@@ -16,7 +16,7 @@ const createLogUi = rootElement => {
   const model = LogUiModel(appender);
   const controller = LogUiController(model);
 
-  LogLevelFilterControlView(logMessagesContainerViewRoot, controller);
+  LogLevelFilterControlView(logLevelFilterControlView, controller);
   LogMessagesContainerView(logMessagesContainerViewRoot, controller);
 
   rootElement.appendChild(logLevelFilterControlView);
