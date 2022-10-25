@@ -29,7 +29,7 @@ loggerSuite.add("The whole stack should be retrieved when observing", assert => 
   const result2 = trace("trace");
   assert.is(result2, True);
   assert.is(head(logStack)(snd), "trace");
-  // The stack should contain at least two elements
+  // The stack should contain two elements
   assert.is(size(logStack)(x => x + 1)(0), 2);
   reset();
 });
@@ -39,9 +39,11 @@ loggerSuite.add("The reset function should clear the stack", assert => {
   let logStack;
   obs.onChange((newVal, _) =>  logStack = newVal);
   debug("debug");
-  reset();
+  const lastStack = reset();
   // does the stack contain no elements after reset?
   assert.is(size(logStack)(x => x + 1)(0), 0);
+  // Is the previous log messge in the stack returned by reset?
+  assert.is(head(lastStack)(snd), "debug")
 });
 
 loggerSuite.run();
