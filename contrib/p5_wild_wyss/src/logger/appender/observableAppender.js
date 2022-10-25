@@ -9,7 +9,7 @@ import {Pair} from "../../../../../docs/src/kolibri/stdlib.js"
 /**
  * Provides console appender.
  * Using this appender you are able to log to the console.
- * @returns {AppenderType.<stack>}
+ * @returns {AppenderType<IObservable<stack>>}
  * @constructor
  */
 const Appender = () => ({
@@ -23,18 +23,27 @@ const Appender = () => ({
   reset
 });
 
-const logObservable = Observable(emptyStack);
 /**
- * This appender has no result
+ *
+ * @type {IObservable<stack>}
+ */
+const logObservable = Observable(emptyStack);
+
+/**
+ * This appender returns an observable containing a stack
  * @function
  * @returns {IObservable<stack>}
  */
 const getValue = () => logObservable;
-
+/**
+ *
+ * @return {IObservable<stack>}
+ */
 const reset = () => {
   const lastValue = logObservable.getValue();
   logObservable.setValue(emptyStack);
-  return lastValue
+  // copy observable
+  return Observable(lastValue);
 };
 
 /**

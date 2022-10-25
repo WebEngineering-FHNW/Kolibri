@@ -39,7 +39,7 @@ loggerSuite.add("The reset function should clear the stack", assert => {
   let logStack;
   obs.onChange((newVal, _) =>  logStack = newVal);
   debug("debug");
-  const lastStack = reset();
+  const lastStack = reset().getValue();
   // does the stack contain no elements after reset?
   assert.is(size(logStack)(x => x + 1)(0), 0);
   // Is the previous log messge in the stack returned by reset?

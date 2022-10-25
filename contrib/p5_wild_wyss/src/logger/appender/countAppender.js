@@ -25,10 +25,11 @@ let statistic = { trace: 0, debug: 0, info: 0, warn: 0, error: 0, fatal: 0};
 
 /**
  * Resets the values of all level to zero.
- * @type {{warn: number, trace: number, debug: number, error: number, info: number, fatal: number}}
+ * @return {{warn: number, trace: number, debug: number, error: number, info: number, fatal: number}}
  */
 const reset = () => {
   statistic = {trace: 0, debug: 0, info: 0, warn: 0, error: 0, fatal: 0};
+  return statistic
 };
 
 /**
