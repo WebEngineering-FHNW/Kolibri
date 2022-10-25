@@ -13,7 +13,7 @@ import {
  * Constructs logger for each log levels using the given parameters.
  * @type       {
  *                (context: String) =>
- *                (loggingLevel: LogLevelType) =>
+ *                (loggingLevel: PrioritySupplier) =>
  *                (appender: AppenderType) =>
  *                (msgFormatter: MsgFormatType) =>
  *                LoggerType

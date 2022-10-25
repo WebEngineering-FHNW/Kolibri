@@ -56,10 +56,6 @@
  * @property { log } fatal  - a function which logs a {@link LogMeType} on level {@link LOG_FATAL}
  */
 
-/**
- * The church number is the priority and the string it's text representation.
- * @typedef { pair<churchNumber, String> } PriorityType
- */
 
 // callbacks
 
@@ -74,7 +70,7 @@
 /**
  * The currently active loglevel for this application.
  * @callback PrioritySupplier
- * @return { PriorityType }
+ * @return { LogLevelType }
  */
 
 /**
