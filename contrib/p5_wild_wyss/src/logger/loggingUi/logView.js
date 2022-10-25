@@ -1,91 +1,49 @@
-import {forEach} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import {fst, snd} from "../../../../../docs/src/kolibri/stdlib.js"
+export {
+  LogMessagesView,
+  LogContextView,
+  FilterView,
+}
 
-export {LogMessagesContainerView, LogLevelFilterControlView, LogContextView, TextFilterView }
+import {
+  levelFilterProjector,
+  logMessagesProjector,
+  textFilterProjector,
+} from "./logUiProjector.js";
 
 
-const LogMessagesContainerView = (rootElement, controller) => {
+const LogMessagesView = (rootElement, controller) => {
 
   const render = messages =>
-    logMessage(rootElement, messages);
+    logMessagesProjector(rootElement, messages);
 
   controller.onMessagesChange(render);
 };
 
-//
-// const FilterView = (rootElement, controller)=>{
-//   const textFilter = TextFilterView(rootElement, controller);
-//   const checkBoxds = Che
-// };
 
-const TextFilterView = (rootElement, controller) => {
-  const label = document.createElement("LABEL");
-  label.innerHTML = "Filter ";
-  label.setAttribute("for", "filterInput");
+const FilterView = (rootElement, controller) => {
 
-  const input = document.createElement("INPUT");
-  input.setAttribute("id", "filterInput");
-
-  input.oninput = _ => controller.setTextFilter(input.value);
-
-  rootElement.append(label, input);
-
-  const render = text => {
-    input.value = text;
-  };
-
-  controller.onTextFilterChange(render);
-
-};
-
-
-const LogLevelFilterControlView = (rootElement, controller) => {
-  const render = checkBoxPair => {
-    const logLevelLabel = checkBoxPair(fst)(snd);
-    const checked = checkBoxPair(snd);
-    const checkbox = document.createElement("INPUT");
-    const label = document.createElement("LABEL");
-    label.innerHTML = logLevelLabel;
-    label.setAttribute("for", logLevelLabel);
-    checkbox.setAttribute("id", logLevelLabel);
-    checkbox.type = "checkbox";
-    checkbox.checked = checked;
-    rootElement.append(checkbox, label);
-
-    checkbox.onchange = _ => controller.flipLogLevel(checkBoxPair);
-  };
-
+  const checkboxRoot    = document.createElement("DIV");
+  const textFilterRoot  = textFilterProjector(controller);
 
   controller.onChangeActiveLogLevel(levels => {
-    rootElement.innerHTML = '';
-    levels.forEach(checkBoxPair => render(checkBoxPair))
-  })
+    checkboxRoot.innerHTML = '';
+    levels.forEach(checkBoxPair =>
+        checkboxRoot.append(levelFilterProjector(controller, checkBoxPair))
+    );
+  });
+
+  rootElement.append(textFilterRoot, checkboxRoot);
 };
 
 const LogContextView = (rootElement, controller) => {
-  const label = document.createElement("LABEL");
-  label.innerHTML = "Global Context ";
-  label.setAttribute("for", "globalContext");
+  const label       = document.createElement("LABEL");
+  const input       = document.createElement("INPUT");
 
-  const input = document.createElement("INPUT");
+  label.innerHTML   = "Global Context ";
+  label.setAttribute("for", "globalContext");
   input.setAttribute("id", "globalContext");
 
   rootElement.append(label, input);
 
   input.oninput = _ => controller.setGlobalContext(input.value);
-};
-
-
-const logMessage = (rootElement, stack) => {
-  rootElement.innerHTML = "";
-
-  const createPreElement = (tuple, _) => {
-    const message = tuple(snd);
-    const pre = document.createElement("PRE");
-    pre.innerHTML = message;
-    rootElement.appendChild(pre);
-  };
-
-  forEach(stack)(createPreElement);
-
 };

@@ -1,9 +1,13 @@
 export { createLogUi}
 
-import {Appender} from "../../appender/observableAppender.js";
-import {LogUiController} from "../controller.js";
-import {LogUiModel} from "../logUiModel.js";
-import {LogContextView, LogLevelFilterControlView, LogMessagesContainerView, TextFilterView} from "../logView.js";
+import { Appender }         from "../../appender/observableAppender.js";
+import { LogUiController }  from "../controller.js";
+import { LogUiModel }       from "../logUiModel.js";
+import {
+  LogContextView,
+  LogMessagesView,
+  FilterView
+} from "../logView.js";
 
 
 const createLogUi = rootElement => {
@@ -13,15 +17,13 @@ const createLogUi = rootElement => {
   const logLevelFilterControlRoot = document.createElement("DIV");
   const logMessagesContainerRoot  = document.createElement("DIV");
 
-  const appender = Appender();
-
-  const model = LogUiModel(appender);
-  const controller = LogUiController(model);
+  const appender    = Appender();
+  const model       = LogUiModel(appender);
+  const controller  = LogUiController(model);
 
   LogContextView(globalContextRoot, controller);
-  TextFilterView(textFilterRoot, controller);
-  LogLevelFilterControlView(logLevelFilterControlRoot, controller);
-  LogMessagesContainerView(logMessagesContainerRoot, controller);
+  FilterView(textFilterRoot, controller);
+  LogMessagesView(logMessagesContainerRoot, controller);
 
   rootElement.append(
       globalContextRoot,
