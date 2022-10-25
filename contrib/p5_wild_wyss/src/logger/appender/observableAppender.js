@@ -19,7 +19,8 @@ const Appender = () => ({
   warn,
   error,
   fatal,
-  getValue
+  getValue,
+  reset
 });
 
 const logObservable = Observable(emptyStack);
@@ -29,6 +30,11 @@ const logObservable = Observable(emptyStack);
  * @returns {IObservable<stack>}
  */
 const getValue = () => logObservable;
+
+const reset = () => {
+  logObservable.setValue(emptyStack);
+  return True;
+};
 
 /**
  * @type { (PrioritySupplier) => (String) => churchBoolean }

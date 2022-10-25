@@ -43,6 +43,7 @@
  * @property { AppendCallback } error - Defines the appending strategy for the {@link LOG_ERROR}-level messages.
  * @property { AppendCallback } fatal - Defines the appending strategy for the {@link LOG_FATAL}-level messages.
  * @property { function(String=): *} getValue - Some appender may produce a result, that can be collected using getValue.
+ * @property { () => churchBoolean} getValue - Some appender may produce a result, that can be collected using getValue.
  */
 
 /**
