@@ -11,9 +11,17 @@
  * @property { (Consumer) => void }           onTextFilterChange
  * @property { (String) => void }             setTextFilter
  * @property { () => String }                 getTextFilter
- * @property { (Predicate) => void }          filterAndNotify
  * @property { (Consumer) => void }           onMessagesChange
  * @property { (Consumer) => void }           onNewLogMessage
+ * @property { (Consumer) => void }           filterAndNotify
  */
 
-
+/**
+ * @typedef LogUiController
+ * @property { (Consumer) => void }           onChangeActiveLogLevel
+ * @property { (Consumer) => void }           onMessagesChange
+ * @property { (Consumer) => void }           onTextFilterChange
+ * @property { (String) => void }             setTextFilter
+ * @property { (String) => void }             setGlobalContext
+ * @property { (LogLevelFilterType) => void } flipLogLevel
+ */

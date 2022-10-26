@@ -5,24 +5,37 @@ import { setGlobalContext } from "../logger.js";
 
 /**
  *
- * @param model
- * @return {*}
+ * @param   { LogUiModelType } model
+ * @return  { LogUiController }
  * @constructor
  */
 const LogUiController = model => {
 
+  /**
+   * Set a new state of a given {@link LogLevelType}.
+   * @param { LogLevelFilterType } logLevelToFlip
+   */
   const flipLogLevel = logLevelToFlip => {
     const allLogLevels = updateLogLevelState(logLevelToFlip);
     model.setActiveLogLevel(allLogLevels);
   };
 
-  const updateLogLevelState = logLevelToFlip => model.getAvailableLogLevels()
-      .map(logLevel =>
-          logLevel(fst) === logLevelToFlip(fst)
+  /**
+   * Changes the state of a given {@link LogLevelType}.
+   * @param { LogLevelFilterType } logLevelToFlip
+   */
+  const updateLogLevelState = logLevelToFlip =>
+      model.getAvailableLogLevels().map(
+          logLevel => logLevel(fst) === logLevelToFlip(fst)
               ? Pair(logLevel(fst))(!logLevel(snd))
               : logLevel
       );
 
+  /**
+   * Checks whether a message matches the set filter.
+   * @param   { (pairSelector) => LogLevelType | String } levelMessagePair
+   * @return  { boolean }
+   */
   const filter = levelMessagePair => {
     const logLevel          = levelMessagePair(fst);
     const levelLabel        = logLevel(snd);
@@ -34,6 +47,11 @@ const LogUiController = model => {
       && messageIncludes(levelMessagePair(snd));
   };
 
+  /**
+   * Checks if a given text occurs in a log message.
+   * @param   { String } text
+   * @return  { boolean }
+   */
   const messageIncludes = text => {
     const textOfInterest  = model.getTextFilter().toLowerCase();
     const logMessage      = text.toLowerCase();
@@ -47,14 +65,13 @@ const LogUiController = model => {
   return {
     onChangeActiveLogLevel: model.onChangeActiveLogLevel,
 
-    getMessages:            model.getMessages,
     onMessagesChange:       model.onMessagesChange,
 
     onTextFilterChange:     model.onTextFilterChange,
     setTextFilter:          model.setTextFilter,
 
-    setGlobalContext:       setGlobalContext,
-    flipLogLevel:           flipLogLevel
+    setGlobalContext,
+    flipLogLevel,
   }
 };
 

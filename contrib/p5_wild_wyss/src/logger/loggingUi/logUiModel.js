@@ -38,7 +38,7 @@ const LogUiModel = appender => {
 
   /**
    * Filters the stacks messages and notifies all listeners.
-   * @param { Predicate } predicate
+   * @param { (pairSelector) => LogLevelType | String } predicate
    */
   const filterAndNotify = predicate => {
     const stack     = appender.getValue().getValue();
@@ -56,9 +56,10 @@ const LogUiModel = appender => {
     setTextFilter:          filterText.setValue,
     getTextFilter:          filterText.getValue,
 
-    filterAndNotify:        filterAndNotify,
     onMessagesChange:       onFilteredMessagesChange,
-    onNewLogMessage:        appender.getValue().onChange
+    onNewLogMessage:        appender.getValue().onChange,
+
+    filterAndNotify,
   }
 
 };
