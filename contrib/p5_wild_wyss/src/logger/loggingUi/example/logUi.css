@@ -23,16 +23,13 @@
 }
 
 input[type="text"] {
-
     box-sizing: border-box;
-
     /* Auto layout */
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 16px;
     gap: 12px;
-
     /* Kolibri-Light/Monochrome/--kb-color-label */
     border: 0.75px solid #6E7191;
     border-radius: 4px;
@@ -64,6 +61,7 @@ span:active {
 }
 
 span:hover {
+    cursor: pointer;
     transform: scale(1.1);
 }
 
