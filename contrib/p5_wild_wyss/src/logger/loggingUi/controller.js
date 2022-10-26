@@ -4,6 +4,7 @@ import { fst, snd, Pair }   from "../lamdaCalculus.js";
 import { setGlobalContext } from "../logger.js";
 
 /**
+ * Processes the actions from the user interface and manages the model.
  *
  * @param   { LogUiModelType } model
  * @return  { LogUiController }

@@ -16,7 +16,7 @@ import {
 /**
  * The model manages the data held in the observable.
  *
- * @param { AppenderType<Observable<stack>> } appender
+ * @param { AppenderType<IObservable<stack>> } appender
  * @return { LogUiModelType }
  * @constructor
  */

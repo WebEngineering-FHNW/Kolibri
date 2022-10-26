@@ -10,7 +10,11 @@ import {
   LogLevelControlView,
 } from "../logView.js";
 
-
+/**
+ * Creates the log ui on a given html element.
+ *
+ * @param { HTMLElement } rootElement
+ */
 const createLogUi = rootElement => {
 
   const style                     = document.createElement("STYLE");
