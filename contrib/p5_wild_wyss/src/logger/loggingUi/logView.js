@@ -12,14 +12,38 @@ import {
   textFilterProjector,
 } from "./logUiProjector.js";
 
-const LogMessagesView = (rootElement, controller) => {
 
-  const render = messages =>
-    logMessagesProjector(rootElement, messages);
-
-  controller.onMessagesChange(render);
+/**
+ * The view to manipulate the global logger context.
+ *
+ * @param { HTMLElement }     rootElement
+ * @param { LogUiController } controller
+ * @constructor
+ */
+const LogContextView = (rootElement, controller) => {
+  const [label, input] = contextInputProjector(controller);
+  rootElement.append(label, input);
 };
 
+/**
+ * The view to enter a text for filtering log messages.
+ *
+ * @param { HTMLElement }     rootElement
+ * @param { LogUiController } controller
+ * @constructor
+ */
+const TextFilterView = (rootElement, controller) => {
+  const [label, input] = textFilterProjector(controller);
+  rootElement.append(label, input);
+};
+
+/**
+ * The view to select the active log levels.
+ *
+ * @param { HTMLElement }     rootElement
+ * @param { LogUiController } controller
+ * @constructor
+ */
 const LogLevelControlView = (rootElement, controller) => {
 
   const render = levels => {
@@ -29,12 +53,17 @@ const LogLevelControlView = (rootElement, controller) => {
   controller.onChangeActiveLogLevel(render);
 };
 
-const TextFilterView = (rootElement, controller) => {
-  const [label, input] = textFilterProjector(controller);
-  rootElement.append(label, input);
-};
+/**
+ * The view to show the log messages.
+ *
+ * @param { HTMLElement }     rootElement
+ * @param { LogUiController } controller
+ * @constructor
+ */
+const LogMessagesView = (rootElement, controller) => {
 
-const LogContextView = (rootElement, controller) => {
-  const [label, input] = contextInputProjector(controller);
-  rootElement.append(label, input);
+  const render = messages =>
+      logMessagesProjector(rootElement, messages);
+
+  controller.onMessagesChange(render);
 };
