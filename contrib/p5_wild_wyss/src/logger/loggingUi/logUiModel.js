@@ -14,9 +14,10 @@ import {
 } from "../logger.js";
 
 /**
+ * The model manages the data held in the observable.
  *
  * @param { AppenderType<Observable<stack>> } appender
- * @return {*}
+ * @return { LogUiModelType }
  * @constructor
  */
 const LogUiModel = appender => {
@@ -28,8 +29,17 @@ const LogUiModel = appender => {
 
   const messageListeners = [];
 
-  const onFilteredMessagesChange = item => messageListeners.push(item);
+  /**
+   * Adds a callback listener to the list.
+   * Callbacks will be called by changing the filter.
+   * @param   { Consumer } listener
+   */
+  const onFilteredMessagesChange = listener => messageListeners.push(listener);
 
+  /**
+   * Filters the stacks messages and notifies all listeners.
+   * @param { Predicate } predicate
+   */
   const filterAndNotify = predicate => {
     const stack     = appender.getValue().getValue();
     const filtered  =  filter(predicate)(stack);

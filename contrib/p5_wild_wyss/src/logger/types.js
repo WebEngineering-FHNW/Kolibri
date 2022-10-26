@@ -106,3 +106,10 @@
  * @param { a } value
  * @returns void
  */
+
+/**
+ * A callback which takes no arguments and returns an {@link a}
+ * @template a
+ * @callback Predicate
+ * @returns { boolean }
+ */
