@@ -9,13 +9,17 @@ import {Appender as ArrayAppender} from "./arrayAppender.js";
  * @constructor
  */
 const Appender = () => {
-  const {  trace, debug, info, warn, error, fatal, getValue : getArrayValue, reset } = ArrayAppender();
+  const {  trace, debug, info, warn, error, fatal, getValue : getArrayValue, reset: resetArray } = ArrayAppender();
   /**
    *
    * @returns {String} - The current value of the appender string
    */
   const getValue = delimiter => getArrayValue().join(delimiter);
-
+  const reset = () => {
+    const lastValue = getValue("");
+    resetArray();
+    return lastValue;
+  };
   return {trace, debug, info, warn, error, fatal, getValue, reset};
 };
 

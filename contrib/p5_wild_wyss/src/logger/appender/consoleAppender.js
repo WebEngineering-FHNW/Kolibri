@@ -14,7 +14,8 @@ const Appender = () => ({
   warn,
   error,
   fatal,
-  getValue
+  getValue: voidy,
+  reset: voidy
 });
 
 /**
@@ -22,7 +23,7 @@ const Appender = () => ({
  * @function
  * @returns {void}
  */
-const getValue = () => {};
+const voidy = () => {};
 
 /**
  * @type { (Consumer) => AppendCallback }

@@ -33,16 +33,16 @@
 /**
  * Provides appender for loglevel types  "trace", "debug", "info", "warn", "error" & "fatal".
  * Some appender may have a result, that can be collected using the getValue function.
- * @typedef AppenderType
- * @template T - the result type of the getValue function. If the appender has no result, {@link void} should be used.
- * @template b - a delimiter to separate the individual appended messages.
+ * @typedef { object } AppenderType
+ * @template MyTemplate
  * @property { AppendCallback } trace - Defines the appending strategy for the {@link LOG_TRACE}-level messages.
  * @property { AppendCallback } debug - Defines the appending strategy for the {@link LOG_DEBUG}-level messages.
  * @property { AppendCallback } info - Defines the appending strategy for the {@link LOG_INFO}-level messages.
  * @property { AppendCallback } warn - Defines the appending strategy for the {@link LOG_WARN}-level messages.
  * @property { AppendCallback } error - Defines the appending strategy for the {@link LOG_ERROR}-level messages.
  * @property { AppendCallback } fatal - Defines the appending strategy for the {@link LOG_FATAL}-level messages.
- * @property { function(String=): *} getValue - Some appender may produce a result, that can be collected using getValue.
+ * @property { function(String=): MyTemplate} getValue - Some appender may produce a result, that can be collected using getValue.
+ * @property { function(): MyTemplate } reset - Clean up the appender result. The next call of getValue returns the default value.
  */
 
 /**
@@ -56,10 +56,6 @@
  * @property { log } fatal  - a function which logs a {@link LogMeType} on level {@link LOG_FATAL}
  */
 
-/**
- * The church number is the priority and the string it's text representation.
- * @typedef { pair<churchNumber, String> } PriorityType
- */
 
 // callbacks
 
@@ -74,7 +70,7 @@
 /**
  * The currently active loglevel for this application.
  * @callback PrioritySupplier
- * @return { PriorityType }
+ * @return { LogLevelType }
  */
 
 /**
