@@ -1,0 +1,82 @@
+@import "../../../../../../docs/css/kolibri-base.css";
+
+.twoColumnItem {
+    grid-column-end: span 2;
+}
+
+.controls {
+    display: inline-flex;
+    justify-content: center;
+    margin: 0.5rem 0 0.5rem 0;
+}
+
+.messageArea {
+    background: var(--kolibri-color-shadow);
+    padding: 1rem;
+    border-radius: 4px;
+    overflow: scroll;
+    height: 70vh;
+}
+
+.logMessage {
+    white-space: pre-wrap;
+}
+
+input[type="text"] {
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 16px;
+    gap: 12px;
+
+    /* Kolibri-Light/Monochrome/--kb-color-label */
+    border: 0.75px solid #6E7191;
+    border-radius: 4px;
+}
+
+.textLabel {
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 16px;
+    gap: 12px;
+}
+
+span {
+    display: inline-flex;
+    justify-content: center;
+    font-size: 0.9em;
+    color: white;
+    background: var(--kolibri-color-output);
+    margin: 5px;
+    border-radius: 100px;
+    padding: 10px;
+    transition: 0.2s;
+}
+
+span:active {
+    background: var(--kolibri-color-shadow);
+}
+
+span:hover {
+    transform: scale(1.1);
+}
+
+span input[type=checkbox]{
+    height: 0;
+    width: 0;
+    visibility: hidden;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.checkedSpan {
+    background: var(--kolibri-color-neutral);
+    color: var(--kolibri-color-output);
+}

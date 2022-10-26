@@ -20,21 +20,20 @@ import {
  * @constructor
  */
 const LogUiModel = appender => {
-  const logLevelFilterStates =
-    Observable(
-      [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL]
-      .map(level => Pair(level)(true)));
+
+  const levels = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL];
+  const logLevelFilterStates = Observable( levels.map(level => Pair(level)(true)));
 
   const filterText = Observable("");
 
-  const callbacks = [];
+  const messageListeners = [];
 
-  const onFilteredMessagesChange = item => callbacks.push(item);
+  const onFilteredMessagesChange = item => messageListeners.push(item);
 
   const filterAndNotify = predicate => {
-    const stack = appender.getValue().getValue();
-    const filtered =  filter(predicate)(stack);
-    callbacks.forEach(cb => cb(filtered));
+    const stack     = appender.getValue().getValue();
+    const filtered  =  filter(predicate)(stack);
+    messageListeners.forEach(cb => cb(filtered));
   };
 
   return {

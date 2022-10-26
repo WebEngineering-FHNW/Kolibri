@@ -6,29 +6,47 @@ import { LogUiModel }       from "../logUiModel.js";
 import {
   LogContextView,
   LogMessagesView,
-  FilterView
+  TextFilterView,
+  LogLevelControlView,
 } from "../logView.js";
 
 
 const createLogUi = rootElement => {
 
-  const globalContextRoot         = document.createElement("DIV");
-  const textFilterRoot            = document.createElement("DIV");
+  const style                     = document.createElement("STYLE");
   const logLevelFilterControlRoot = document.createElement("DIV");
   const logMessagesContainerRoot  = document.createElement("DIV");
+
+  rootElement.classList.add("hasBorder");
+
+  logLevelFilterControlRoot.classList.add ("twoColumnItem");
+  logLevelFilterControlRoot.classList.add ("controls");
+  logMessagesContainerRoot.classList.add  ("twoColumnItem");
+  logMessagesContainerRoot.classList.add  ("messageArea");
+
 
   const appender    = Appender();
   const model       = LogUiModel(appender);
   const controller  = LogUiController(model);
 
-  LogContextView(globalContextRoot, controller);
-  FilterView(textFilterRoot, controller);
-  LogMessagesView(logMessagesContainerRoot, controller);
+  Styles(style);
+
+  LogContextView(rootElement, controller);
+  TextFilterView(rootElement, controller);
+  LogLevelControlView (logLevelFilterControlRoot, controller);
+  LogMessagesView     (logMessagesContainerRoot, controller);
 
   rootElement.append(
-      globalContextRoot,
-      textFilterRoot,
+      style,
       logLevelFilterControlRoot,
       logMessagesContainerRoot
   );
+};
+
+const Styles = style => {
+
+  style.innerHTML = `
+    @import "./logUi.css";
+  `
+
 };

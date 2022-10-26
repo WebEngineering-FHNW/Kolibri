@@ -1,15 +1,16 @@
 export {
   LogMessagesView,
   LogContextView,
-  FilterView,
+  TextFilterView,
+  LogLevelControlView,
 }
 
 import {
+  contextInputProjector,
   levelFilterProjector,
   logMessagesProjector,
   textFilterProjector,
 } from "./logUiProjector.js";
-
 
 const LogMessagesView = (rootElement, controller) => {
 
@@ -19,31 +20,21 @@ const LogMessagesView = (rootElement, controller) => {
   controller.onMessagesChange(render);
 };
 
+const LogLevelControlView = (rootElement, controller) => {
 
-const FilterView = (rootElement, controller) => {
+  const render = levels => {
+    levelFilterProjector(rootElement, controller, levels);
+  };
 
-  const checkboxRoot    = document.createElement("DIV");
-  const textFilterRoot  = textFilterProjector(controller);
+  controller.onChangeActiveLogLevel(render);
+};
 
-  controller.onChangeActiveLogLevel(levels => {
-    checkboxRoot.innerHTML = '';
-    levels.forEach(checkBoxPair =>
-        checkboxRoot.append(levelFilterProjector(controller, checkBoxPair))
-    );
-  });
-
-  rootElement.append(textFilterRoot, checkboxRoot);
+const TextFilterView = (rootElement, controller) => {
+  const [label, input] = textFilterProjector(controller);
+  rootElement.append(label, input);
 };
 
 const LogContextView = (rootElement, controller) => {
-  const label       = document.createElement("LABEL");
-  const input       = document.createElement("INPUT");
-
-  label.innerHTML   = "Global Context ";
-  label.setAttribute("for", "globalContext");
-  input.setAttribute("id", "globalContext");
-
+  const [label, input] = contextInputProjector(controller);
   rootElement.append(label, input);
-
-  input.oninput = _ => controller.setGlobalContext(input.value);
 };

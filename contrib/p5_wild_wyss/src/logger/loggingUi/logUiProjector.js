@@ -2,6 +2,7 @@ export {
   logMessagesProjector,
   textFilterProjector,
   levelFilterProjector,
+  contextInputProjector,
 }
 
 import { fst, snd }   from "../../../../../docs/src/kolibri/stdlib.js";
@@ -12,50 +13,93 @@ const logMessagesProjector = (rootElement, stack) => {
 
   const createPreElement = (tuple, _) => {
     const line      = document.createElement("PRE");
+    line.classList.add("logMessage");
     line.innerHTML  = tuple(snd);
     rootElement.appendChild(line);
+    rootElement.scrollTo(0, rootElement.scrollHeight);
+
   };
 
   forEach(stack)(createPreElement);
 };
 
-
-const textFilterProjector = controller => {
-  const rootElement   = document.createElement("DIV");
-  const input         = document.createElement("INPUT");
-  const label         = document.createElement("LABEL");
-
-  label.innerHTML     = "Filter ";
-  label.setAttribute("for", "filterInput");
-  input.setAttribute("id", "filterInput");
-
-  input.oninput = _ => controller.setTextFilter(input.value);
-
-  rootElement.append(label, input);
-
-  controller.onTextFilterChange(text => input.value = text);
-
-  return rootElement;
+/**
+ *
+ * @param { String }  type
+ * @param { String }  labelText
+ * @param { String }  id
+ * @param { String }  placeholder
+ * @return {HTMLCollection}
+ */
+const createLabeledInputElement = (type, labelText, id, placeholder) => {
+    const labelClass = "text" === type ? "textLabel" : "";
+    const template = document.createElement('DIV'); // only for parsing
+    template.innerHTML = `
+        <label class="${labelClass}" for="${id}">${labelText}</label>
+        <input id=${id} type="${type}" placeholder="${placeholder}">
+    `;
+    return template.children;
 };
 
+const textFilterProjector = controller => {
 
-const levelFilterProjector = (controller, checkBoxPair) => {
+  const [label, input] = createLabeledInputElement(
+      "text",
+      "Filter",
+      "textLabelId",
+      "Filter log messages"
+  );
+  input.oninput = _ => controller.setTextFilter(input.value);
+  controller.onTextFilterChange(text => input.value = text);
+  return [label, input];
+};
+
+const contextInputProjector = controller => {
+
+  const [label, input] = createLabeledInputElement(
+      "text",
+      "Global Context",
+      "globalContextId",
+      "ch.fhnw"
+  );
+  input.oninput = _ => controller.setGlobalContext(input.value);
+  return [label, input];
+};
+
+const levelFilterProjector = (rootElement, controller, levels) => {
+  rootElement.innerHTML = '';
+  levels.forEach(checkBoxPair =>
+      rootElement.append(labeledCheckbox(controller, checkBoxPair))
+  );
+};
+
+/**
+ *
+ * @param { } controller
+ * @param checkBoxPair
+ * @return {HTMLElement}
+ */
+const labeledCheckbox = (controller, checkBoxPair) => {
   const checkboxRoot  = document.createElement("SPAN");
-  const label         = document.createElement("LABEL");
-  const checkbox      = document.createElement("INPUT");
+  const checkboxLabel = checkBoxPair(fst)(snd);
 
-  const logLevelLabel = checkBoxPair(fst)(snd);
-  const checked       = checkBoxPair(snd);
+  const [label, checkbox] = createLabeledInputElement(
+      "checkbox",
+      checkboxLabel,
+      checkboxLabel,
+      ""
+  );
+  label.setAttribute("style", "pointer-events: none;");
 
-  label.innerHTML     = logLevelLabel;
-  checkbox.type       = "checkbox";
-  checkbox.checked    = checked;
-  checkbox.setAttribute("id", logLevelLabel);
-  label.setAttribute("for", logLevelLabel);
+  checkbox.checked = checkBoxPair(snd);
+  checkBoxPair(snd)
+      ? checkboxRoot.classList.remove("checkedSpan")
+      : checkboxRoot.classList.add("checkedSpan");
 
   checkboxRoot.append(checkbox, label);
-
-  checkbox.onchange = _ => controller.flipLogLevel(checkBoxPair);
+  checkboxRoot.onclick = _ => {
+    controller.flipLogLevel(checkBoxPair);
+  };
 
   return checkboxRoot;
 };

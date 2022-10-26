@@ -11,15 +11,17 @@ import { setGlobalContext } from "../logger.js";
  */
 const LogUiController = model => {
 
-  const flipLogLevel = logLevelPair => {
-    const allLogLevels = model.getAvailableLogLevels()
-      .map(logLevel =>
-        logLevel(fst) === logLevelPair(fst)
-          ? Pair(logLevel(fst))(!logLevel(snd))
-          : logLevel
-      );
+  const flipLogLevel = logLevelToFlip => {
+    const allLogLevels = updateLogLevelState(logLevelToFlip);
     model.setActiveLogLevel(allLogLevels);
   };
+
+  const updateLogLevelState = logLevelToFlip => model.getAvailableLogLevels()
+      .map(logLevel =>
+          logLevel(fst) === logLevelToFlip(fst)
+              ? Pair(logLevel(fst))(!logLevel(snd))
+              : logLevel
+      );
 
   const filter = levelMessagePair => {
     const logLevel          = levelMessagePair(fst);

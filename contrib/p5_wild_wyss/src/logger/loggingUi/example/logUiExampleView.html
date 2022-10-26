@@ -2,11 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Ui Logger Example Page</title>
+    <link rel="shortcut icon" type="image/png" href="../../../../../../docs/img/logo/logo-60x54.png"/>
+    <link rel="stylesheet" href="../../../../../../docs/css/kolibri-base.css">
+    <style>
+        #container {
+            display: inline-grid;
+            grid-template-columns: 0.5fr 1fr;
+            grid-gap: 0.5rem;
+            width: 100%;
+        }
+
+        .sidebar {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 600px;
+            background: white;
+            padding: 20px;
+            transition: 0.3s;
+            border-left: 3px solid var(--kolibri-color-shadow);
+        }
+
+        .sidebar .toggleButton {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            border-radius: 3px 0 0 3px;
+            width: 2rem;
+            height: 2rem;
+            top: 2rem;
+            left: -2rem;
+            border: 3px solid var(--kolibri-color-shadow);
+            border-right: none;
+        }
+
+
+        .arrow {
+            border: solid var(--kolibri-color-output);
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 5px;
+            width: 5px;
+            height: 5px;
+            transition: 0.5s;
+            transform: rotate(-45deg);
+        }
+
+        .sidebar .toggleButton:hover {
+            cursor: pointer;
+        }
+
+        .left {
+            transition: 0.5s;
+            transform: rotate(135deg);
+
+        }
+
+        div h2 {
+            display: flex;
+            justify-content: center;
+        }
+
+        .sidebar.hidden {
+            right: -605px;
+        }
+    </style>
 </head>
 <body>
 
-  <div id="container"></div>
+    <div class="sidebar" id="sidebar" >
+        <div><h2>Ui Logger</h2></div>
+
+        <div class="toggleButton" onclick="move()"><div class="arrow" id="arrow"></div></div>
+        <div id="container">
+
+        </div>
+    </div>
+
+    <script>
+        const move = () => {
+          const container   = document.getElementById("sidebar");
+          const arrow       = document.getElementById("arrow");
+          container.classList.toggle("hidden");
+          arrow.classList.toggle("left");
+
+        };
+    </script>
 
     <script src="example.js" type="module"></script>
 

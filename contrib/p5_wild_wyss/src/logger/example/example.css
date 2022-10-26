@@ -1,4 +1,4 @@
-@import "../../../../../docs/css/kolibri-base.css";
+
 
 .container {
     display: inline-grid;
@@ -6,7 +6,7 @@
     grid-gap: 0.5rem;
 }
 
-.twoColumnItems {
+.twoColumnItem {
     grid-column-end: span 2;
 }
 
@@ -20,7 +20,7 @@
     color: grey;
 }
 
-.twoColumnItems > Button {
+.twoColumnItem > Button {
     margin: 3rem 0.5rem 0.5rem 1rem;
 }
 
