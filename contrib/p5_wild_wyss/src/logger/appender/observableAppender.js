@@ -1,10 +1,17 @@
 export { Appender }
 
-import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN} from "../logger.js";
-import {True} from "../lamdaCalculus.js";
-import {Observable} from "../../../../../docs/src/kolibri/observable.js";
-import {emptyStack, push} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import {Pair} from "../../../../../docs/src/kolibri/stdlib.js"
+import { True }               from "../lamdaCalculus.js";
+import { Observable }         from "../../../../../docs/src/kolibri/observable.js";
+import { emptyStack, push }   from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import { Pair }               from "../../../../../docs/src/kolibri/stdlib.js"
+import {
+  LOG_DEBUG,
+  LOG_ERROR,
+  LOG_FATAL,
+  LOG_INFO,
+  LOG_TRACE,
+  LOG_WARN
+} from "../logger.js";
 
 /**
  * Provides console appender.
