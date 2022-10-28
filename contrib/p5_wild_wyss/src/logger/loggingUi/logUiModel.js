@@ -32,7 +32,7 @@ const LogUiModel = appender => {
   /**
    * Adds a callback listener to the list.
    * Callbacks will be called by changing the filter.
-   * @param   { Consumer } listener
+   * @param { Consumer } listener
    */
   const onFilteredMessagesChange = listener => messageListeners.push(listener);
 
@@ -58,6 +58,7 @@ const LogUiModel = appender => {
 
     onMessagesChange:       onFilteredMessagesChange,
     onNewLogMessage:        appender.getValue().onChange,
+    resetLogMessages:       appender.reset,
 
     filterAndNotify,
   }

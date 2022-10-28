@@ -15,6 +15,7 @@
     padding: 1rem;
     border-radius: 4px;
     overflow: scroll;
+    /*TODO*/
     height: 70vh;
 }
 
@@ -77,4 +78,28 @@ span input[type=checkbox]{
 .checkedSpan {
     background: var(--kolibri-color-neutral);
     color: var(--kolibri-color-output);
+}
+
+.resetButton  {
+    /* Auto layout */
+    display: inline-flex;
+    position: sticky;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 16px;
+    gap: 16px;
+
+    width: 70px;
+    height: 40px;
+    left: 450px;
+    top: 5px;
+
+    /* Kolibri-Light/Danger/--kb-danger-accent */
+    background: #E11161;
+    border-radius: 10px;
+    font-size: 0.9em;
+    color: white;
+
+    cursor: pointer;
 }

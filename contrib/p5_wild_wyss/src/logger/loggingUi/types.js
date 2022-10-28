@@ -13,6 +13,7 @@
  * @property { () => String }                 getTextFilter
  * @property { (Consumer) => void }           onMessagesChange
  * @property { (Consumer) => void }           onNewLogMessage
+ * @property { () => IObservable }            resetLogMessages
  * @property { (Consumer) => void }           filterAndNotify
  */
 
@@ -20,6 +21,7 @@
  * @typedef LogUiController
  * @property { (Consumer) => void }           onChangeActiveLogLevel
  * @property { (Consumer) => void }           onMessagesChange
+ * @property { () => IObservable }            resetLogMessages
  * @property { (Consumer) => void }           onTextFilterChange
  * @property { (String) => void }             setTextFilter
  * @property { (String) => void }             setGlobalContext

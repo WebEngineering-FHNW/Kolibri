@@ -11,11 +11,17 @@ import { forEach }    from "../../../../p6_brodwolf_andermatt/src/stack/stack.js
 /**
  * Projects the filtered log messages to the ui.
  *
- * @param { HTMLElement } rootElement
- * @param { stack }       stack
+ * @param { HTMLElement }     rootElement
+ * @param { LogUiController } controller
+ * @param { stack }           stack
  */
-const logMessagesProjector = (rootElement, stack) => {
-  rootElement.innerHTML   = "";
+const logMessagesProjector = (rootElement, controller, stack) => {
+  rootElement.innerHTML   = `
+    <button id="resetButton" class="resetButton">
+        RESET
+    </button>
+  `;
+  document.getElementById("resetButton").onclick = () => controller.resetLogMessages();
 
   const createPreElement  = (tuple, _) => {
     const line            = document.createElement("PRE");
@@ -25,6 +31,7 @@ const logMessagesProjector = (rootElement, stack) => {
     rootElement.scrollTo(0, rootElement.scrollHeight);
 
   };
+
   forEach(stack)(createPreElement);
 };
 

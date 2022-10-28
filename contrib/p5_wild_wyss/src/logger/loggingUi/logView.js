@@ -63,7 +63,7 @@ const LogLevelControlView = (rootElement, controller) => {
 const LogMessagesView = (rootElement, controller) => {
 
   const render = messages =>
-      logMessagesProjector(rootElement, messages);
+      logMessagesProjector(rootElement, controller, messages);
 
   controller.onMessagesChange(render);
 };

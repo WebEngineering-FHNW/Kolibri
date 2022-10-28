@@ -67,6 +67,7 @@ const LogUiController = model => {
     onChangeActiveLogLevel: model.onChangeActiveLogLevel,
 
     onMessagesChange:       model.onMessagesChange,
+    resetLogMessages:       model.resetLogMessages,
 
     onTextFilterChange:     model.onTextFilterChange,
     setTextFilter:          model.setTextFilter,
