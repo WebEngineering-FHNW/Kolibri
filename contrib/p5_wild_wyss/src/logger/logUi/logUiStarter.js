@@ -1,14 +1,14 @@
 export { createLogUi}
 
-import { Appender }         from "../../appender/observableAppender.js";
-import { LogUiController }  from "../logUiController.js";
-import { LogUiModel }       from "../logUiModel.js";
+import { Appender }         from "../appender/observableAppender.js";
+import { LogUiController }  from "./logUiController.js";
+import { LogUiModel }       from "./logUiModel.js";
 import {
   LogContextView,
   LogMessagesView,
   TextFilterView,
   LogLevelControlView,
-} from "../logView.js";
+} from "./logView.js";
 
 /**
  * Creates the log ui on a given html element.
