@@ -19,7 +19,7 @@ createLogUi(container);
 
 setInterval(() => {
   const loggers = [logger.trace, logger.debug, logger.info, logger.warn, logger.error, logger.fatal, logger2.trace, logger2.info, logger2. debug, logger2.warn, logger2.error, logger2.fatal];
-  const msg = ["hello world", "Tobias", "Andri", "IP5", "#biersaufen 🏍"];
+  const msg = ["hello world", "Tobias Wyss", "Andri Wild", "IP5", "wild animals",  "into the wild", "#biersaufen 🏍"];
   loggers[Math.floor(Math.random() * loggers.length)](msg[Math.floor(Math.random()* msg.length)]);
 
 }, 500);
