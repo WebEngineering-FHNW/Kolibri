@@ -1,4 +1,3 @@
-
 export { LogUiModel }
 
 import { Observable }   from "../../../../../docs/src/kolibri/observable.js";
@@ -62,5 +61,4 @@ const LogUiModel = appender => {
 
     filterAndNotify,
   }
-
 };

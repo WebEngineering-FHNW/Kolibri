@@ -21,13 +21,10 @@ const createLogUi = rootElement => {
   const logLevelFilterControlRoot = document.createElement("DIV");
   const logMessagesContainerRoot  = document.createElement("DIV");
 
-  rootElement.classList.add("hasBorder");
-
   logLevelFilterControlRoot.classList.add ("twoColumnItem");
   logLevelFilterControlRoot.classList.add ("controls");
   logMessagesContainerRoot.classList.add  ("twoColumnItem");
   logMessagesContainerRoot.classList.add  ("messageArea");
-
 
   const appender    = Appender();
   const model       = LogUiModel(appender);
@@ -52,5 +49,4 @@ const Styles = style => {
   style.innerHTML = `
     @import "./logUi.css";
   `
-
 };

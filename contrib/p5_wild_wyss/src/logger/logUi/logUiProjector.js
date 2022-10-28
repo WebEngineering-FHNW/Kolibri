@@ -11,9 +11,9 @@ import { forEach }    from "../../../../p6_brodwolf_andermatt/src/stack/stack.js
 /**
  * Projects the filtered log messages to the ui.
  *
- * @param { HTMLElement }     rootElement
+ * @param { HTMLElement }         rootElement
  * @param { LogUiControllerType } controller
- * @param { stack }           stack
+ * @param { stack }               stack
  */
 const logMessagesProjector = (rootElement, controller, stack) => {
   const highlightMessage = (logMessage, searchText) =>
@@ -38,9 +38,7 @@ const logMessagesProjector = (rootElement, controller, stack) => {
   };
 
   forEach(stack)(createPreElement);
-
 };
-
 
 /**
  * Creates a label and an associated input element
@@ -103,7 +101,7 @@ const contextInputProjector = controller => {
  * Projects toggle buttons for each log level to the ui.
  *
  * @param { HTMLElement }           rootElement
- * @param { LogUiControllerType }       controller
+ * @param { LogUiControllerType }   controller
  * @param { [LogLevelFilterType] }  levels
  */
 const levelFilterProjector = (rootElement, controller, levels) => {
@@ -116,7 +114,7 @@ const levelFilterProjector = (rootElement, controller, levels) => {
 /**
  * Creates a toggle button and an associated label.
  *
- * @param   { LogUiControllerType}      controller
+ * @param   { LogUiControllerType}  controller
  * @param   { LogLevelFilterType }  checkBoxPair
  * @return  { HTMLElement } - span which includes a label and a checkbox
  */
