@@ -45,7 +45,7 @@ input[type="text"] {
     gap: 12px;
 }
 
-span {
+.loglevelButton {
     display: inline-flex;
     justify-content: center;
     font-size: 0.9em;
@@ -57,16 +57,16 @@ span {
     transition: 0.2s;
 }
 
-span:active {
+.loglevelButton:active {
     background: var(--kolibri-color-shadow);
 }
 
-span:hover {
+.loglevelButton:hover {
     cursor: pointer;
     transform: scale(1.1);
 }
 
-span input[type=checkbox]{
+.loglevelButton input[type=checkbox]{
     height: 0;
     width: 0;
     visibility: hidden;
@@ -103,3 +103,9 @@ span input[type=checkbox]{
 
     cursor: pointer;
 }
+
+.highlighted {
+    background: yellow;
+    font-weight: bold;
+}
+

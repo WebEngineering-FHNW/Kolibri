@@ -1,9 +1,9 @@
-import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
-import {LogUiModel} from "./logUiModel.js";
-import {Appender} from "../appender/observableAppender.js";
-import {LogUiController} from "./logUiController.js";
-import { emptyStack, pop }   from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import { fst, snd, Pair }   from "../lamdaCalculus.js";
+import { TestSuite }        from "../../../../../docs/src/kolibri/util/test.js";
+import { LogUiModel }       from "./logUiModel.js";
+import { Appender }         from "../appender/observableAppender.js";
+import { LogUiController }  from "./logUiController.js";
+import { pop }              from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import { snd }              from "../lamdaCalculus.js";
 
 /**
  *
@@ -111,6 +111,5 @@ loggerSuite.add("test filter message by log level", assert => {
 
   cleanUp(controller);
 });
-
 
 loggerSuite.run();

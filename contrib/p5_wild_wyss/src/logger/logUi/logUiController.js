@@ -71,6 +71,7 @@ const LogUiController = model => {
 
     onTextFilterChange:     model.onTextFilterChange,
     setTextFilter:          model.setTextFilter,
+    getTextFilter:          model.getTextFilter,
 
     setGlobalContext,
     flipLogLevel,

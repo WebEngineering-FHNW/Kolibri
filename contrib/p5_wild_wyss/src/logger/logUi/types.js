@@ -24,6 +24,7 @@
  * @property { () => IObservable<stack> }         resetLogMessages
  * @property { (Consumer) => void }               onTextFilterChange
  * @property { (String) => void }                 setTextFilter
+ * @property { () => String }                     getTextFilter
  * @property { (String) => void }                 setGlobalContext
  * @property { (LogLevelFilterType) => void }     flipLogLevel
  */

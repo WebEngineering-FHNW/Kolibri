@@ -24,16 +24,20 @@ const logMessagesProjector = (rootElement, controller, stack) => {
   document.getElementById("resetButton").onclick = () => controller.resetLogMessages();
 
   const createPreElement  = (tuple, _) => {
+
     const line            = document.createElement("PRE");
-    line.innerHTML        = tuple(snd);
+    line.innerHTML        = highlightMessage(tuple(snd),controller.getTextFilter());
     line.classList.add("logMessage");
+    line.classList.add(tuple(fst)(snd));
     rootElement.appendChild(line);
     rootElement.scrollTo(0, rootElement.scrollHeight);
-
   };
 
   forEach(stack)(createPreElement);
 };
+
+const highlightMessage = (logMessage, searchText) =>
+    logMessage.replaceAll( searchText, `<span class="highlighted">${searchText}</span>`);
 
 /**
  * Creates a label and an associated input element
@@ -116,6 +120,7 @@ const levelFilterProjector = (rootElement, controller, levels) => {
 const labeledCheckbox = (controller, checkBoxPair) => {
   const checkboxRoot  = document.createElement("SPAN");
   const checkboxLabel = checkBoxPair(fst)(snd);
+  checkboxRoot.classList.add("loglevelButton");
 
   const [label, checkbox] = createLabeledInputElement(
       "checkbox",
