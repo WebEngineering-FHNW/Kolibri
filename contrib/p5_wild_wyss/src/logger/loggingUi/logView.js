@@ -17,7 +17,7 @@ import {
  * The view to manipulate the global logger context.
  *
  * @param { HTMLElement }     rootElement
- * @param { LogUiController } controller
+ * @param { LogUiControllerType } controller
  * @constructor
  */
 const LogContextView = (rootElement, controller) => {
@@ -29,7 +29,7 @@ const LogContextView = (rootElement, controller) => {
  * The view to enter a text for filtering log messages.
  *
  * @param { HTMLElement }     rootElement
- * @param { LogUiController } controller
+ * @param { LogUiControllerType } controller
  * @constructor
  */
 const TextFilterView = (rootElement, controller) => {
@@ -41,14 +41,13 @@ const TextFilterView = (rootElement, controller) => {
  * The view to select the active log levels.
  *
  * @param { HTMLElement }     rootElement
- * @param { LogUiController } controller
+ * @param { LogUiControllerType } controller
  * @constructor
  */
 const LogLevelControlView = (rootElement, controller) => {
 
-  const render = levels => {
+  const render = levels =>
     levelFilterProjector(rootElement, controller, levels);
-  };
 
   controller.onChangeActiveLogLevel(render);
 };
@@ -57,7 +56,7 @@ const LogLevelControlView = (rootElement, controller) => {
  * The view to show the log messages.
  *
  * @param { HTMLElement }     rootElement
- * @param { LogUiController } controller
+ * @param { LogUiControllerType } controller
  * @constructor
  */
 const LogMessagesView = (rootElement, controller) => {

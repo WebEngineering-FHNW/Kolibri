@@ -38,7 +38,7 @@ const createLogUi = rootElement => {
   LogContextView(rootElement, controller);
   TextFilterView(rootElement, controller);
   LogLevelControlView (logLevelFilterControlRoot, controller);
-  LogMessagesView     (logMessagesContainerRoot, controller);
+  LogMessagesView     (logMessagesContainerRoot,  controller);
 
   rootElement.append(
       style,

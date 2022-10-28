@@ -7,7 +7,7 @@ import { setGlobalContext } from "../logger.js";
  * Processes the actions from the user interface and manages the model.
  *
  * @param   { LogUiModelType } model
- * @return  { LogUiController }
+ * @return  { LogUiControllerType }
  * @constructor
  */
 const LogUiController = model => {

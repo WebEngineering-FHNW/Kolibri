@@ -12,7 +12,7 @@ import { forEach }    from "../../../../p6_brodwolf_andermatt/src/stack/stack.js
  * Projects the filtered log messages to the ui.
  *
  * @param { HTMLElement }     rootElement
- * @param { LogUiController } controller
+ * @param { LogUiControllerType } controller
  * @param { stack }           stack
  */
 const logMessagesProjector = (rootElement, controller, stack) => {
@@ -39,7 +39,7 @@ const logMessagesProjector = (rootElement, controller, stack) => {
  * Creates a label and an associated input element
  * parameterized by passing parameters.
  *
- * @param   { String }  type
+ * @param   { String }  type - the type of the input (eg. text)
  * @param   { String }  labelText
  * @param   { String }  id
  * @param   { String }  placeholder
@@ -58,7 +58,7 @@ const createLabeledInputElement = (type, labelText, id, placeholder) => {
 /**
  * Projects a filter input field to the ui.
  *
- * @param   { LogUiController }  controller
+ * @param   { LogUiControllerType }  controller
  * @return  { [Element,Element] } - label & input Element
  */
 const textFilterProjector = controller => {
@@ -77,7 +77,7 @@ const textFilterProjector = controller => {
 /**
  * Projects a global context input field to the ui.
  *
- * @param   { LogUiController }  controller
+ * @param   { LogUiControllerType }  controller
  * @return  { [Element,Element] } - label & input Element
  */
 const contextInputProjector = controller => {
@@ -96,7 +96,7 @@ const contextInputProjector = controller => {
  * Projects toggle buttons for each log level to the ui.
  *
  * @param { HTMLElement }           rootElement
- * @param { LogUiController }       controller
+ * @param { LogUiControllerType }       controller
  * @param { [LogLevelFilterType] }  levels
  */
 const levelFilterProjector = (rootElement, controller, levels) => {
@@ -109,7 +109,7 @@ const levelFilterProjector = (rootElement, controller, levels) => {
 /**
  * Creates a toggle button and an associated label.
  *
- * @param   { LogUiController}      controller
+ * @param   { LogUiControllerType}      controller
  * @param   { LogLevelFilterType }  checkBoxPair
  * @return  { HTMLElement } - span which includes a label and a checkbox
  */
