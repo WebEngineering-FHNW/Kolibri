@@ -110,3 +110,19 @@ input[type="text"] {
     font-weight: bold;
 }
 
+.WARN {
+    background: #FFE5AE;
+}
+
+.ERROR {
+    background: #FFABE8;
+}
+
+.FATAL {
+    background: rgba(20, 20, 43, 0.4);
+    color: white;
+}
+
+.FATAL .highlighted {
+    color: black;
+}
