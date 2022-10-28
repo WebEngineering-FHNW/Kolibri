@@ -16,6 +16,10 @@ import { forEach }    from "../../../../p6_brodwolf_andermatt/src/stack/stack.js
  * @param { stack }           stack
  */
 const logMessagesProjector = (rootElement, controller, stack) => {
+  const highlightMessage = (logMessage, searchText) =>
+    logMessage.replaceAll(new RegExp(searchText,"gi"),
+        matched => `<span class="highlighted">${matched}</span>`);
+
   rootElement.innerHTML   = `
     <button id="resetButton" class="resetButton">
         RESET
@@ -34,10 +38,9 @@ const logMessagesProjector = (rootElement, controller, stack) => {
   };
 
   forEach(stack)(createPreElement);
+
 };
 
-const highlightMessage = (logMessage, searchText) =>
-    logMessage.replaceAll( searchText, `<span class="highlighted">${searchText}</span>`);
 
 /**
  * Creates a label and an associated input element

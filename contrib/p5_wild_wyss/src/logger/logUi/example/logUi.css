@@ -98,6 +98,7 @@ input[type="text"] {
     /* Kolibri-Light/Danger/--kb-danger-accent */
     background: #E11161;
     border-radius: 10px;
+    /*border: 1px solid white;*/
     font-size: 0.9em;
     color: white;
 
