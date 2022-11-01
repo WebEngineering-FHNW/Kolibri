@@ -3,17 +3,15 @@ import { LogUiModel }       from "./logUiModel.js";
 import { Appender }         from "../appender/observableAppender.js";
 import { LogUiController }  from "./logUiController.js";
 import { pop }              from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import { snd }              from "../lamdaCalculus.js";
+import { snd, fst }              from "../lamdaCalculus.js";
 
 /**
  *
- * @return {{controller: LogUiControllerType, model: LogUiModelType, appender: AppenderType<IObservable<stack>>}}
+ * @return {{controller: LogUiControllerType, appender: AppenderType<IObservable<stack>>, model: LogUiModelType}}
  */
 const beforeStart = () => {
-  const appender = Appender();
-  const model = LogUiModel(appender);
-  const controller = LogUiController(model);
-  return {model, controller, appender};
+  const controller = LogUiController();
+  return {controller, appender: Appender(), model: LogUiModel()};
 };
 
 /**
@@ -29,10 +27,15 @@ loggerSuite.add("test flip log level", assert => {
   const {model, controller} = beforeStart();
   const levelsBeforeSwitch = model.getAvailableLogLevels();
 
+  let levelsAfterSwitch = [];
+
+  const activeLogLevelListener = levels => levelsAfterSwitch = levels;
+
+  controller.onChangeActiveLogLevel(activeLogLevelListener);
   controller.flipLogLevel(levelsBeforeSwitch[0]);
-  assert.is(levelsBeforeSwitch[0](snd), true);
-  const levelsAfterSwitch = model.getAvailableLogLevels();
   assert.is(levelsAfterSwitch[0](snd), false);
+  controller.flipLogLevel(levelsBeforeSwitch[0]);
+  assert.is(levelsAfterSwitch[0](snd), true);
 
   cleanUp(controller);
 });

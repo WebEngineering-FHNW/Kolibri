@@ -1,6 +1,6 @@
 import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
 import {Appender} from "./observableAppender.js";
-import {snd, True} from "../lamdaCalculus.js";
+import {snd, True, jsNum} from "../lamdaCalculus.js";
 import {head, size} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 
 
@@ -15,7 +15,7 @@ loggerSuite.add("test add debug log to observable appender", assert => {
   assert.is(result, True);
   assert.is(head(logStack)(snd), "debug"); // TODO: Dokumentation von head anpassen (Rückgabetyp)
   // does the stack contain exactly one element?
-  assert.is(size(logStack)(x => x + 1)(0), 1); // TODO: replace function (churchToNumber)
+  assert.is(jsNum(size(logStack)), 1); // TODO: replace function (churchToNumber)
   reset();
 });
 

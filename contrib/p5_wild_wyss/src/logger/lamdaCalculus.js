@@ -1,5 +1,5 @@
 
-export {Pair, snd, fst, LazyIf, Then, Else, True, False, and, id, lazy, toChurchBoolean, convertToJsBool, n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, succ, leq, eq}
+export {Pair, snd, fst, LazyIf, Then, Else, True, False, and, id, lazy, toChurchBoolean, convertToJsBool, n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, succ, leq, eq, jsNum}
 import { fst, snd } from "../../../../docs/src/kolibri/stdlib.js";
 
 const lazy = x => () => x;
@@ -180,3 +180,18 @@ const pred = n => n(phi)(Pair(n0)(n0))(fst);
  * @return {function(k:churchNumber): churchNumber } Church-Number
  */
 const churchSubtraction = n => k => k(pred)(n);
+
+
+/**
+ * converts a church number to a js number
+ *
+ * @function
+ * @param   {churchNumber} n
+ * @returns {number} js number of n
+ * @example
+ * jsNum(n0) === 0
+ * jsNum(n1) === 1
+ * jsNum(n2) === 2
+ * jsNum(n3) === 3
+ */
+const jsNum = n => n(x => x + 1)(0);
