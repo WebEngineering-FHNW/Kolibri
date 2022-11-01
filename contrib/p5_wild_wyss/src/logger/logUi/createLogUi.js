@@ -1,14 +1,10 @@
-export { createLogUi}
+import {contextInputProjector, textFilterProjector} from "./logUiProjector.js";
+import {Appender} from "../appender/observableAppender.js";
+import {LogUiController} from "./logUiController.js";
+import {LogUiModel} from "./logUiModel.js";
+import {projectLogLevelControls, LogMessagesView,} from "./logView.js";
 
-import { Appender }         from "../appender/observableAppender.js";
-import { LogUiController }  from "./logUiController.js";
-import { LogUiModel }       from "./logUiModel.js";
-import {
-  LogContextView,
-  LogMessagesView,
-  TextFilterView,
-  LogLevelControlView,
-} from "./logView.js";
+export { createLogUi}
 
 /**
  * Creates the log ui on a given html element.
@@ -17,36 +13,37 @@ import {
  */
 const createLogUi = rootElement => {
 
-  const style                     = document.createElement("STYLE");
-  const logLevelFilterControlRoot = document.createElement("DIV");
-  const logMessagesContainerRoot  = document.createElement("DIV");
+  const styleRoot                 = document.createElement("STYLE");
+  const loggerLevelFilterRoot     = document.createElement("DIV");
+  const logMessagesContainerRoot  = document.createElement("DIV"); // TODO: loggerMessagesContainerRoot?
 
-  logLevelFilterControlRoot.classList.add ("twoColumnItem");
-  logLevelFilterControlRoot.classList.add ("controls");
+  loggerLevelFilterRoot.classList.add ("twoColumnItem");
+  loggerLevelFilterRoot.classList.add ("controls");
   logMessagesContainerRoot.classList.add  ("twoColumnItem");
   logMessagesContainerRoot.classList.add  ("messageArea");
 
   const appender    = Appender();
   const model       = LogUiModel(appender);
-  const controller  = LogUiController(model);
+  const controller  = LogUiController(model); // TODO: Model in Controller
+  // LogUiController(LogUiModel);
 
-  Styles(style);
+  styles(styleRoot);
 
-  LogContextView(rootElement, controller);
-  TextFilterView(rootElement, controller);
-  LogLevelControlView (logLevelFilterControlRoot, controller);
+  rootElement.append(...contextInputProjector(controller));
+  rootElement.append(...textFilterProjector(controller));
+  projectLogLevelControls (loggerLevelFilterRoot, controller);
   LogMessagesView     (logMessagesContainerRoot,  controller);
 
   rootElement.append(
-      style,
-      logLevelFilterControlRoot,
+      styleRoot,
+      loggerLevelFilterRoot,
       logMessagesContainerRoot
   );
 };
 
-const Styles = style => {
+const styles = styleElement => {
 
-  style.innerHTML = `
+  styleElement.innerHTML = `
     @import "./logUi.css";
   `
 };

@@ -22,4 +22,4 @@ setInterval(() => {
   const msg = ["hello world", "Tobias Wyss", "Andri Wild", "IP5", "wild animals",  "into the wild", "#biersaufen 🏍"];
   loggers[Math.floor(Math.random() * loggers.length)](msg[Math.floor(Math.random()* msg.length)]);
 
-}, 500);
+}, 2000);

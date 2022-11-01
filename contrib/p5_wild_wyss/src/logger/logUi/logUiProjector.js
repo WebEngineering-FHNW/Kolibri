@@ -100,45 +100,44 @@ const contextInputProjector = controller => {
 /**
  * Projects toggle buttons for each log level to the ui.
  *
- * @param { HTMLElement }           rootElement
  * @param { LogUiControllerType }   controller
  * @param { [LogLevelFilterType] }  levels
  */
-const levelFilterProjector = (rootElement, controller, levels) => {
-  rootElement.innerHTML = '';
-  levels.forEach(checkBoxPair =>
-      rootElement.append(labeledCheckbox(controller, checkBoxPair))
-  );
-};
+const levelFilterProjector = (controller, levels) =>
+    levels.map(projectLevelToggleControl(controller));
 
 /**
  * Creates a toggle button and an associated label.
+ * Returns a control whether the log entries of this {@link LogLevelType} are displayed or not.
  *
- * @param   { LogUiControllerType}  controller
- * @param   { LogLevelFilterType }  checkBoxPair
- * @return  { HTMLElement } - span which includes a label and a checkbox
+ * @type {
+ *  (controller   :LogUiControllerType) =>
+ *  (checkBoxPair :LogLevelFilterType)  =>
+ *  HTMLSpanElement
+ * }
  */
-const labeledCheckbox = (controller, checkBoxPair) => {
-  const checkboxRoot  = document.createElement("SPAN");
+const projectLevelToggleControl = controller => checkBoxPair => {
+  const toggleControlRoot  = document.createElement("SPAN"); // TODO remove
   const checkboxLabel = checkBoxPair(fst)(snd);
-  checkboxRoot.classList.add("loglevelButton");
+  toggleControlRoot.classList.add("loglevelButton");
 
+  // TODO : better id
   const [label, checkbox] = createLabeledInputElement(
       "checkbox",
       checkboxLabel,
       checkboxLabel,
       ""
   );
-  label.setAttribute("style", "pointer-events: none;");
+  label.setAttribute("style", "pointer-events: none;"); // TODO remove
 
   checkbox.checked = checkBoxPair(snd);
   checkBoxPair(snd)
-      ? checkboxRoot.classList.remove ("checkedSpan")
-      : checkboxRoot.classList.add    ("checkedSpan");
+      ? toggleControlRoot.classList.remove ("checkedSpan")
+      : toggleControlRoot.classList.add    ("checkedSpan");
 
-  checkboxRoot.append(checkbox, label);
-  checkboxRoot.onclick = _ =>
+  toggleControlRoot.append(checkbox, label);
+  toggleControlRoot.onclick = _ => // TODO : event.onchange
     controller.flipLogLevel(checkBoxPair);
 
-  return checkboxRoot;
+  return /**@type {HTMLSpanElement} */toggleControlRoot;
 };

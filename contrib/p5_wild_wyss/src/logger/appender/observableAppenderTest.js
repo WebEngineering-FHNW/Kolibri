@@ -10,12 +10,12 @@ const { trace, debug, getValue, reset } = Appender();
 loggerSuite.add("test add debug log to observable appender", assert => {
   const obs = getValue();
   let logStack;
-  obs.onChange((newVal, _) =>  logStack = newVal);
+  obs.onChange(newStack => logStack = newStack);
   const result = debug("debug");
   assert.is(result, True);
-  assert.is(head(logStack)(snd), "debug");
+  assert.is(head(logStack)(snd), "debug"); // TODO: Dokumentation von head anpassen (Rückgabetyp)
   // does the stack contain exactly one element?
-  assert.is(size(logStack)(x => x + 1)(0), 1);
+  assert.is(size(logStack)(x => x + 1)(0), 1); // TODO: replace function (churchToNumber)
   reset();
 });
 
