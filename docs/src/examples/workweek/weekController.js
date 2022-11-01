@@ -50,7 +50,7 @@ const WeekController = () => {
     const addDayController = dayController => {
         dayControllers.push(dayController);
         dayController.onTotalChanged(updateWeekTotal);
-    }
+    };
 
     return {
         addDayController,

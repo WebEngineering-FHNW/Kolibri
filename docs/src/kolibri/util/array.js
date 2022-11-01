@@ -18,7 +18,7 @@ export {
  * @example
  * [1].eq([1]); // true
  */
-Array.prototype.eq = function(array) { return arrayEq(this)(array);}
+Array.prototype.eq = function(array) { return arrayEq(this)(array);};
 
 /**
  * See {@link removeAt}.

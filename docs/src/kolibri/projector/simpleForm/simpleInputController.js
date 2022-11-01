@@ -37,17 +37,15 @@ export { SimpleInputController, SimpleAttributeInputController }
  */
 const SimpleInputController = args => SimpleAttributeInputController(SimpleInputModel(args));
 
-const SimpleAttributeInputController = attribute => {
-    return {
-        setValue:           attribute.setConvertedValue,
-        getValue:           attribute.getObs(VALUE)     .getValue,
-        setValid:           attribute.getObs(VALID)     .setValue,
-        getType:            attribute.getObs(TYPE)      .getValue,
-        onValueChanged:     attribute.getObs(VALUE)     .onChange,
-        onValidChanged:     attribute.getObs(VALID)     .onChange,
-        onLabelChanged:     attribute.getObs(LABEL)     .onChange,
-        onNameChanged:      attribute.getObs(NAME)      .onChange,
-        onEditableChanged:  attribute.getObs(EDITABLE)  .onChange,
-        setConverter:       attribute.setConverter,
-    };
-}
+const SimpleAttributeInputController = attribute => ( {
+    setValue:          attribute.setConvertedValue,
+    getValue:          attribute.getObs(VALUE).getValue,
+    setValid:          attribute.getObs(VALID).setValue,
+    getType:           attribute.getObs(TYPE).getValue,
+    onValueChanged:    attribute.getObs(VALUE).onChange,
+    onValidChanged:    attribute.getObs(VALID).onChange,
+    onLabelChanged:    attribute.getObs(LABEL).onChange,
+    onNameChanged:     attribute.getObs(NAME).onChange,
+    onEditableChanged: attribute.getObs(EDITABLE).onChange,
+    setConverter:      attribute.setConverter,
+} );

@@ -161,7 +161,7 @@ const projectForm = (detailController, detailCard, model, attributeNames) => {
         } else {
             detailCard.classList.add("no-detail");
         }
-    })
+    });
 
     return [ form ];
 };

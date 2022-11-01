@@ -1,0 +1,77 @@
+<profile version="1.0">
+  <description>Inspection Profile that makes JS code appears as it had types</description>
+  <option name="myName" value="JS-TypeSystem" />
+  <inspection_tool class="AssignmentToForLoopParameterJS" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="BlockStatementJS" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="ChainedEqualityJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="ConditionalExpressionWithIdenticalBranchesJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="ConstantOnRHSOfComparisonJS" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="CyclomaticComplexityJS" enabled="true" level="WARNING" enabled_by_default="true">
+    <option name="m_limit" value="10" />
+  </inspection_tool>
+  <inspection_tool class="DefaultNotLastCaseInSwitchJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="DivideByZeroJS" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="DuplicateConditionJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="ES6CheckImport" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="ES6ConvertLetToConst" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="ES6ConvertModuleExportToExport" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="ES6ConvertRequireIntoImport" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="ES6ConvertToForOf" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="ES6ConvertVarToLetConst" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="ES6MissingAwait" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="ES6PossiblyAsyncFunction" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="ES6RedundantAwait" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="ES6TopLevelAwaitExpression" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="ForLoopReplaceableByWhileJS" enabled="true" level="WARNING" enabled_by_default="true">
+    <option name="m_ignoreLoopsWithoutConditions" value="false" />
+  </inspection_tool>
+  <inspection_tool class="IfStatementWithIdenticalBranchesJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="IfStatementWithTooManyBranchesJS" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <option name="m_limit" value="3" />
+  </inspection_tool>
+  <inspection_tool class="JSAccessibilityCheck" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSArrowFunctionBracesCanBeRemoved" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="JSBitwiseOperatorUsage" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="JSCheckFunctionSignatures" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSClosureCompilerSyntax" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSCommentMatchesSignature" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSDeclarationsAtScopeStart" enabled="true" level="ERROR" enabled_by_default="true">
+    <option name="myMakeSingleVarStatement" value="true" />
+  </inspection_tool>
+  <inspection_tool class="JSDeprecatedSymbols" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="JSDuplicatedDeclaration" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSFileReferences" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSFunctionExpressionToArrowFunction" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="JSIncompatibleTypesComparison" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="JSLastCommaInArrayLiteral" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="JSLastCommaInObjectLiteral" enabled="false" level="WARNING" enabled_by_default="false" />
+  <inspection_tool class="JSObjectNullOrUndefined" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSPotentiallyInvalidUsageOfClassThis" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSPotentiallyInvalidUsageOfThis" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSRemoveUnnecessaryParentheses" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  <inspection_tool class="JSUndeclaredVariable" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSUnresolvedFunction" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSUnresolvedVariable" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSValidateJSDoc" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="JSValidateTypes" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="NestedAssignmentJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="NpmUsedModulesInstalled" enabled="true" level="ERROR" enabled_by_default="true" />
+  <inspection_tool class="OverlyComplexBooleanExpressionJS" enabled="true" level="WARNING" enabled_by_default="true">
+    <option name="m_limit" value="3" />
+  </inspection_tool>
+  <inspection_tool class="ParametersPerFunctionJS" enabled="true" level="WARNING" enabled_by_default="true">
+    <option name="m_limit" value="5" />
+  </inspection_tool>
+  <inspection_tool class="PointlessArithmeticExpressionJS" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  <inspection_tool class="StatementsPerFunctionJS" enabled="true" level="WARNING" enabled_by_default="true">
+    <option name="m_limit" value="30" />
+  </inspection_tool>
+  <inspection_tool class="ThreeNegationsPerFunctionJS" enabled="true" level="WARNING" enabled_by_default="true" />
+  <inspection_tool class="UnnecessaryLocalVariableJS" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <option name="m_ignoreImmediatelyReturnedVariables" value="false" />
+    <option name="m_ignoreAnnotatedVariables" value="false" />
+  </inspection_tool>
+  <inspection_tool class="UnterminatedStatementJS" enabled="true" level="WARNING" enabled_by_default="true">
+    <option name="ignoreSemicolonAtEndOfBlock" value="true" />
+  </inspection_tool>
+</profile>

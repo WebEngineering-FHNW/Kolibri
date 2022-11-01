@@ -15,7 +15,7 @@ const start = () => {
     ];
     const controller = SimpleFormController(formStructure);
     return projectForm(controller);
-}
+};
 
 // keep document-specific info out of the start function such that it is easier to test without
 // side-effecting the execution environment

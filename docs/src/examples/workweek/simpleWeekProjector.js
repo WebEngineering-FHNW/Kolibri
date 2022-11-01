@@ -31,7 +31,7 @@ const projectWeek = weekController => {
 
     allWeekElements.push(x1, x2, x3, totalElement);
     return allWeekElements;
-}
+};
 
 /**
  * Create the views and bindings for a day within a week with a weekday indicator in the front and

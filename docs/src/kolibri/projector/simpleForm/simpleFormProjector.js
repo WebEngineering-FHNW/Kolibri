@@ -52,7 +52,7 @@ const projectForm = formController => {
     formController.forEach(inputController => fieldset.append(...projectChangeInput(FORM_CLASS_NAME, inputController)));
 
     return [form];
-}
+};
 
 /**
  * CSS snippet to append to the head style when using the form projector.

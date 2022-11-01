@@ -1,0 +1,236 @@
+:root {
+
+    /* --- purple --- */
+    --kb-color-rgb-purple-800:     #310082;
+    --kb-color-rgb-purple-700:     #4300B3;
+    --kb-color-rgb-purple-600:     #5F0FDF;
+    --kb-color-rgb-purple-500:     #6000FF;
+    --kb-color-rgb-purple-400:     #7D2FFF;
+    --kb-color-rgb-purple-300:     #A57AFF;
+    --kb-color-rgb-purple-200:     #BFBEFC;
+    --kb-color-rgb-purple-100:     #EBECFE;
+
+    --kb-color-hsl-purple-800:     hsl(263, 100%, 25%);
+    --kb-color-hsl-purple-700:     hsl(262, 100%, 35%);
+    --kb-color-hsl-purple-600:     hsl(263,  87%, 47%);
+    --kb-color-hsl-purple-500:     hsl(263, 100%, 50%);
+    --kb-color-hsl-purple-400:     hsl(263, 100%, 59%);
+    --kb-color-hsl-purple-300:     hsl(259, 100%, 74%);
+    --kb-color-hsl-purple-200:     hsl(241,  91%, 87%);
+    --kb-color-hsl-purple-100:     hsl(237,  90%, 96%);
+
+
+    /* --- lavender --- */
+    --kb-color-rgb-lavender-800:   #3A0055;
+    --kb-color-rgb-lavender-700:   #6C00AE;
+    --kb-color-rgb-lavender-600:   #9317EC;
+    --kb-color-rgb-lavender-500:   #AA33FF;
+    --kb-color-rgb-lavender-400:   #B374FF;
+    --kb-color-rgb-lavender-300:   #B78CFF;
+    --kb-color-rgb-lavender-200:   #C4B6FF;
+    --kb-color-rgb-lavender-100:   #E5EFFF;
+
+    --kb-color-hsl-lavender-800:   hsl(281, 100%, 17%);
+    --kb-color-hsl-lavender-700:   hsl(277, 100%, 34%);
+    --kb-color-hsl-lavender-600:   hsl(275,  85%, 51%);
+    --kb-color-hsl-lavender-500:   hsl(275, 100%, 60%);
+    --kb-color-hsl-lavender-400:   hsl(267, 100%, 73%);
+    --kb-color-hsl-lavender-300:   hsl(262, 100%, 77%);
+    --kb-color-hsl-lavender-200:   hsl(252, 100%, 86%);
+    --kb-color-hsl-lavender-100:   hsl(217, 100%, 95%);
+
+
+    /* --- blue --- */
+    --kb-color-rgb-blue-800:       #020080;
+    --kb-color-rgb-blue-700:       #1A17AA;
+    --kb-color-rgb-blue-600:       #0400C9;
+    --kb-color-rgb-blue-500:       #1E19FF;
+    --kb-color-rgb-blue-400:       #6C69FF;
+    --kb-color-rgb-blue-300:       #4F66FF;
+    --kb-color-rgb-blue-200:       #BACDFF;
+    --kb-color-rgb-blue-100:       #E6E5FF;
+
+    --kb-color-hsl-blue-800:       hsl(241, 100%, 25%);
+    --kb-color-hsl-blue-700:       hsl(241,  76%, 38%);
+    --kb-color-hsl-blue-600:       hsl(241, 100%, 39%);
+    --kb-color-hsl-blue-500:       hsl(241, 100%, 55%);
+    --kb-color-hsl-blue-400:       hsl(241, 100%, 71%);
+    --kb-color-hsl-blue-300:       hsl(232, 100%, 65%);
+    --kb-color-hsl-blue-200:       hsl(223, 100%, 86%);
+    --kb-color-hsl-blue-100:       hsl(242, 100%, 95%);
+
+
+    /* --- green --- */
+    --kb-color-rgb-green-800:      #07540A;
+    --kb-color-rgb-green-700:      #067306;
+    --kb-color-rgb-green-600:      #009B00;
+    --kb-color-rgb-green-500:      #18BB0C;
+    --kb-color-rgb-green-400:      #7DF75A;
+    --kb-color-rgb-green-300:      #A6F787;
+    --kb-color-rgb-green-200:      #CBFFAE;
+    --kb-color-rgb-green-100:      #EAF9DE;
+
+    --kb-color-hsl-green-800:      hsl(122,  85%, 18%);
+    --kb-color-hsl-green-700:      hsl(120,  90%, 24%);
+    --kb-color-hsl-green-600:      hsl(120, 100%, 30%);
+    --kb-color-hsl-green-500:      hsl(116,  88%, 39%);
+    --kb-color-hsl-green-400:      hsl(107,  91%, 66%);
+    --kb-color-hsl-green-300:      hsl(103,  88%, 75%);
+    --kb-color-hsl-green-200:      hsl( 99, 100%, 84%);
+    --kb-color-hsl-green-100:      hsl( 93,  69%, 92%);
+
+
+    /* --- yellow --- */
+    --kb-color-rgb-yellow-800:     #493918;
+    --kb-color-rgb-yellow-700:     #785D26;
+    --kb-color-rgb-yellow-600:     #946300;
+    --kb-color-rgb-yellow-500:     #F6AD1B;
+    --kb-color-rgb-yellow-400:     #FFC852;
+    --kb-color-rgb-yellow-300:     #FFDB8E;
+    --kb-color-rgb-yellow-200:     #FFE5AE;
+    --kb-color-rgb-yellow-100:     #FFF6E2;
+
+    --kb-color-hsl-yellow-800:     hsl(40,  51%, 19%);
+    --kb-color-hsl-yellow-700:     hsl(40,  52%, 31%);
+    --kb-color-hsl-yellow-600:     hsl(40, 100%, 29%);
+    --kb-color-hsl-yellow-500:     hsl(40,  92%, 54%);
+    --kb-color-hsl-yellow-400:     hsl(41, 100%, 66%);
+    --kb-color-hsl-yellow-300:     hsl(41, 100%, 78%);
+    --kb-color-hsl-yellow-200:     hsl(41, 100%, 84%);
+    --kb-color-hsl-yellow-100:     hsl(41, 100%, 94%);
+
+
+    /* --- pink --- */
+    --kb-color-rgb-pink-900:       #9E0038;
+    --kb-color-rgb-pink-800:       #940061;
+    --kb-color-rgb-pink-700:       #BE0066;
+    --kb-color-rgb-pink-600:       #D50069;
+    --kb-color-rgb-pink-500:       #FF2CA5;
+    --kb-color-rgb-pink-400:       #FE0070;
+    --kb-color-rgb-pink-300:       #FF2CA5;
+    --kb-color-rgb-pink-200:       #FFABE8;
+    --kb-color-rgb-pink-100:       #FFECFC;
+
+    --kb-color-hsl-pink-900:       hsl(339, 100%, 31%);
+    --kb-color-hsl-pink-800:       hsl(321, 100%, 29%);
+    --kb-color-hsl-pink-700:       hsl(328, 100%, 37%);
+    --kb-color-hsl-pink-600:       hsl(330, 100%, 42%);
+    --kb-color-hsl-pink-500:       hsl(326, 100%, 59%);
+    --kb-color-hsl-pink-400:       hsl(334, 100%, 50%);
+    --kb-color-hsl-pink-300:       hsl(326, 100%, 59%);
+    --kb-color-hsl-pink-200:       hsl(316, 100%, 84%);
+    --kb-color-hsl-pink-100:       hsl(309, 100%, 96%);
+
+
+    /* --- monochrome --- */
+    --kb-color-rgb-black:          #14141B;
+    --kb-color-rgb-bg-dark:        #262338;
+    --kb-color-rgb-body:           #4E4B66;
+    --kb-color-rgb-label:          #6E7191;
+    --kb-color-rgb-placeholder:    #A0A3BD;
+    --kb-color-rgb-line:           #D9DBE9;
+    --kb-color-rgb-bg-light:       #EFF0F6;
+    --kb-color-rgb-white:          #F7F7FC;
+
+    --kb-color-hsl-black:          hsl(240, 15%,  9%);
+    --kb-color-hsl-bg-dark:        hsl(249, 23%, 18%);
+    --kb-color-hsl-body:           hsl(247, 15%, 35%);
+    --kb-color-hsl-label:          hsl(235, 14%, 50%);
+    --kb-color-hsl-placeholder:    hsl(234, 18%, 68%);
+    --kb-color-hsl-line:           hsl(233, 27%, 88%);
+    --kb-color-hsl-bg-light:       hsl(231, 28%, 95%);
+    --kb-color-hsl-white:          hsl(240, 45%, 98%);
+
+
+    /* --- transparent - dark --- */
+    --kb-color-rgba-black-95:      rgba(20, 20, 43, 0.95);
+    --kb-color-rgba-black-75:      rgba(20, 20, 43, 0.75);
+    --kb-color-rgba-black-65:      rgba(20, 20, 43, 0.65);
+    --kb-color-rgba-black-40:      rgba(20, 20, 43, 0.40);
+    --kb-color-rgba-black-25:      rgba(20, 20, 43, 0.25);
+    --kb-color-rgba-black-10:      rgba(20, 20, 43, 0.10);
+
+    --kb-color-hsla-black-95:      hsla(241, 37%, 12%, 0.95);
+    --kb-color-hsla-black-75:      hsla(241, 37%, 12%, 0.75);
+    --kb-color-hsla-black-65:      hsla(241, 37%, 12%, 0.65);
+    --kb-color-hsla-black-40:      hsla(241, 37%, 12%, 0.40);
+    --kb-color-hsla-black-25:      hsla(241, 37%, 12%, 0.25);
+    --kb-color-hsla-black-10:      hsla(241, 37%, 12%, 0.10);
+
+
+    /* --- transparent - white --- */
+    --kb-color-rgba-white-95:      rgba(239, 240, 246, 0.95);
+    --kb-color-rgba-white-75:      rgba(239, 240, 246, 0.75);
+    --kb-color-rgba-white-65:      rgba(239, 240, 246, 0.65);
+    --kb-color-rgba-white-40:      rgba(239, 240, 246, 0.40);
+    --kb-color-rgba-white-25:      rgba(239, 240, 246, 0.25);
+    --kb-color-rgba-white-10:      rgba(239, 240, 246, 0.10);
+
+    --kb-color-hsla-white-95:      hsla(231, 28%, 95%, 0.95);
+    --kb-color-hsla-white-75:      hsla(231, 28%, 95%, 0.75);
+    --kb-color-hsla-white-65:      hsla(231, 28%, 95%, 0.65);
+    --kb-color-hsla-white-40:      hsla(231, 28%, 95%, 0.40);
+    --kb-color-hsla-white-25:      hsla(231, 28%, 95%, 0.25);
+    --kb-color-hsla-white-10:      hsla(231, 28%, 95%, 0.10);
+
+
+    /* --- primary --- */
+    --kb-rgb-primary-dark:         var(--kb-color-rgb-purple-700);
+    --kb-rgb-primary-accent:       var(--kb-color-rgb-purple-500);
+    --kb-rgb-primary-light:        var(--kb-color-rgb-purple-200);
+    --kb-rgb-primary-bg:           var(--kb-color-rgb-purple-100);
+    --kb-hsla-primary-dark:        var(--kb-color-hsl-purple-700);
+    --kb-hsla-primary-accent:      var(--kb-color-hsl-purple-500);
+    --kb-hsla-primary-light:       var(--kb-color-hsl-purple-200);
+    --kb-hsla-primary-bg:          var(--kb-color-hsl-purple-100);
+
+
+    /* --- secondary --- */
+    --kb-rgb-secondary-dark:       var(--kb-color-rgb-blue-800);
+    --kb-rgb-secondary-accent:     var(--kb-color-rgb-blue-500);
+    --kb-rgb-secondary-light:      var(--kb-color-rgb-blue-200);
+    --kb-rgb-secondary-bg:         var(--kb-color-rgb-blue-100);
+    --kb-hsla-secondary-dark:      var(--kb-color-hsl-blue-800);
+    --kb-hsla-secondary-accent:    var(--kb-color-hsl-blue-500);
+    --kb-hsla-secondary-light:     var(--kb-color-hsl-blue-200);
+    --kb-hsla-secondary-bg:        var(--kb-color-hsl-blue-100);
+
+
+    /* --- success --- */
+    --kb-rgb-success-dark:         var(--kb-color-rgb-green-800);
+    --kb-rgb-success-accent:       var(--kb-color-rgb-green-500);
+    --kb-rgb-success-light:        var(--kb-color-rgb-green-200);
+    --kb-rgb-success-bg:           var(--kb-color-rgb-green-100);
+    --kb-hsla-success-dark:        var(--kb-color-hsl-green-800);
+    --kb-hsla-success-accent:      var(--kb-color-hsl-green-500);
+    --kb-hsla-success-light:       var(--kb-color-hsl-green-200);
+    --kb-hsla-success-bg:          var(--kb-color-hsl-green-100);
+
+
+    /* --- warning --- */
+    --kb-rgb-warning-dark:         var(--kb-color-rgb-yellow-600);
+    --kb-rgb-warning-accent:       var(--kb-color-rgb-yellow-500);
+    --kb-rgb-warning-light:        var(--kb-color-rgb-yellow-200);
+    --kb-rgb-warning-bg:           var(--kb-color-rgb-yellow-100);
+    --kb-hsla-warning-dark:        var(--kb-color-hsl-yellow-600);
+    --kb-hsla-warning-accent:      var(--kb-color-hsl-yellow-500);
+    --kb-hsla-warning-light:       var(--kb-color-hsl-yellow-200);
+    --kb-hsla-warning-bg:          var(--kb-color-hsl-yellow-100);
+
+
+    /* --- danger --- */
+    --kb-rgb-danger-dark:          var(--kb-color-rgb-pink-900);
+    --kb-rgb-danger-accent:        var(--kb-color-rgb-pink-500);
+    --kb-rgb-danger-light:         var(--kb-color-rgb-pink-200);
+    --kb-rgb-danger-bg:            var(--kb-color-rgb-pink-100);
+    --kb-hsla-danger-dark:         var(--kb-color-hsl-pink-900);
+    --kb-hsla-danger-accent:       var(--kb-color-hsl-pink-500);
+    --kb-hsla-danger-light:        var(--kb-color-hsl-pink-200);
+    --kb-hsla-danger-bg:           var(--kb-color-hsl-pink-100);
+
+
+    /* --- gradient - kolibri --- */
+    --kb-gradient-rgb-primary:     linear-gradient(145deg,
+                                    var(--kb-color-rgb-purple-500) 100%);
+                                    var(--kb-color-rgb-pink-500)   0%,
+}

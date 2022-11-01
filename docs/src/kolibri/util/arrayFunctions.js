@@ -22,7 +22,7 @@ export { arrayEq, removeItem, removeAt, times, sum }
  * arrayEq ([1]) ([2]) === false;
  */
 const arrayEq = arrayA => arrayB =>
-    arrayA.length === arrayB.length && arrayA.every( (it, idx) => it === arrayB[idx])
+    arrayA.length === arrayB.length && arrayA.every( (it, idx) => it === arrayB[idx]);
 
 /**
  * From the {@link array}, remove the item at position "index". The arguments are given in curried style.
