@@ -7,7 +7,7 @@ const appender = Appender();
 
 const formatLogMsg = context => logLevel => logMessage => {
   const date = new Date().toISOString();
-  return `${context}: [${logLevel}] ${date}: ${logMessage}`;
+  return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
 };
 
 const logger =  LogFactory("ch.fhnw")     (() => LOG_TRACE)(appender)(formatLogMsg);
