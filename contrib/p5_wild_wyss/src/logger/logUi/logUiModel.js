@@ -1,5 +1,6 @@
 export { LogUiModel }
 
+import { Appender }     from "../appender/observableAppender.js";
 import { Observable }   from "../../../../../docs/src/kolibri/observable.js";
 import { filter }       from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import { Pair }         from "../../../../../docs/src/kolibri/stdlib.js"
@@ -15,11 +16,12 @@ import {
 /**
  * The model manages the data held in the observable.
  *
- * @param { AppenderType<IObservable<stack>> } appender
  * @return { LogUiModelType }
  * @constructor
  */
-const LogUiModel = appender => {
+const LogUiModel = () => {
+
+  const appender = Appender();
 
   const levels = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL];
   const logLevelFilterStates = Observable( levels.map(level => Pair(level)(true)));

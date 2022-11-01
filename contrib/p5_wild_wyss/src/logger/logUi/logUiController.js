@@ -1,3 +1,5 @@
+import {LogUiModel} from "./logUiModel.js";
+
 export { LogUiController }
 
 import { fst, snd, Pair }   from "../lamdaCalculus.js";
@@ -6,11 +8,12 @@ import { setGlobalContext } from "../logger.js";
 /**
  * Processes the actions from the user interface and manages the model.
  *
- * @param   { LogUiModelType } model
  * @return  { LogUiControllerType }
  * @constructor
  */
-const LogUiController = model => {
+const LogUiController = () => {
+
+  const model = LogUiModel();
 
   /**
    * Set a new state of a given {@link LogLevelType}.

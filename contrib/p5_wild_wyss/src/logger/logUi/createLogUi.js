@@ -13,18 +13,16 @@ export { createLogUi}
  */
 const createLogUi = rootElement => {
 
-  const styleRoot                 = document.createElement("STYLE");
-  const loggerLevelFilterRoot     = document.createElement("DIV");
-  const logMessagesContainerRoot  = document.createElement("DIV"); // TODO: loggerMessagesContainerRoot?
+  const styleRoot                   = document.createElement("STYLE");
+  const loggerLevelFilterRoot       = document.createElement("DIV");
+  const loggerMessageContainerRoot  = document.createElement("DIV");
 
-  loggerLevelFilterRoot.classList.add ("twoColumnItem");
-  loggerLevelFilterRoot.classList.add ("controls");
-  logMessagesContainerRoot.classList.add  ("twoColumnItem");
-  logMessagesContainerRoot.classList.add  ("messageArea");
+  loggerLevelFilterRoot     .classList.add("twoColumnItem");
+  loggerLevelFilterRoot     .classList.add("controls");
+  loggerMessageContainerRoot.classList.add("twoColumnItem");
+  loggerMessageContainerRoot.classList.add("messageArea");
 
-  const appender    = Appender();
-  const model       = LogUiModel(appender);
-  const controller  = LogUiController(model); // TODO: Model in Controller
+  const controller  = LogUiController(); // TODO: Model in Controller
   // LogUiController(LogUiModel);
 
   styles(styleRoot);
@@ -32,12 +30,12 @@ const createLogUi = rootElement => {
   rootElement.append(...contextInputProjector(controller));
   rootElement.append(...textFilterProjector(controller));
   projectLogLevelControls (loggerLevelFilterRoot, controller);
-  LogMessagesView     (logMessagesContainerRoot,  controller);
+  LogMessagesView     (loggerMessageContainerRoot,  controller);
 
   rootElement.append(
       styleRoot,
       loggerLevelFilterRoot,
-      logMessagesContainerRoot
+      loggerMessageContainerRoot
   );
 };
 
