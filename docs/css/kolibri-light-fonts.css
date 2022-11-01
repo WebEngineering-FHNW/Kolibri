@@ -1,4 +1,11 @@
-
+/**
+This file is a one-to-one implementation of the design system
+todo:
+Rubik as default,
+another one for longer text (serif)
+- line-height?, letter-spacing?, running text font size 1.2em
+one for code examples
+ */
 @font-face {
     font-family: "Rubik-Light";
     src: local("Rubik-Light"),
