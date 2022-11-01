@@ -1,5 +1,11 @@
 /* make sure to keep in line with kolibriStyle.js */
 
+@import "./kolibri-light-fonts.css";
+
+@import "./kolibri-light-palette.css"; /* must choose the palette to make the colors work */
+@import "./kolibri-colors.css";
+
+/* todo: this has to go */
 @font-face {
     font-family: "RobotoSlab-Light";
     src: local("RobotoSlab-Light"),
@@ -22,12 +28,12 @@
 }
 
 :root {
-    --kolibri-color-accent:  hsl( 322, 73%, 52%);
-    --kolibri-color-output:  hsl( 256, 82%, 55%);
-    --kolibri-color-ok:      hsl( 104, 89%, 28%);
-    --kolibri-color-select:  hsl(  46, 90%, 84%);
-    --kolibri-color-neutral: hsl(   0,  0%, 74%);
-    --kolibri-color-shadow:  hsla(256, 82%, 55%, 0.2);
+    --kolibri-color-accent:  var(--kb-hsla-danger-accent);
+    --kolibri-color-output:  var(--kb-hsla-secondary-dark);
+    --kolibri-color-ok:      var(--kb-hsla-success-accent);
+    --kolibri-color-select:  var(--kb-color-hsl-yellow-400); /* make custom use of the palette */
+    --kolibri-color-neutral: var(--kb-color-hsla-black-40);
+    --kolibri-color-shadow:  var(--kb-color-hsl-lavender-200);
     --kolibri-box-shadow:    0 4px  8px 0 var(--kolibri-color-shadow),
                              0 6px 20px 0 var(--kolibri-color-shadow);
     padding:    0;

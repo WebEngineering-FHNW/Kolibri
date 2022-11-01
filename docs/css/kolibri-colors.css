@@ -1,0 +1,68 @@
+/*@import "./kolibri-light-palette.css";*/
+
+/**
+ The semantic colors. Users must choose a palette to make this work. See kolibri-base.css.
+ */
+
+:root {
+
+    /* --- primary --- */
+    --kb-rgb-primary-dark:         var(--kb-color-rgb-purple-700);
+    --kb-rgb-primary-accent:       var(--kb-color-rgb-purple-500);
+    --kb-rgb-primary-light:        var(--kb-color-rgb-purple-200);
+    --kb-rgb-primary-bg:           var(--kb-color-rgb-purple-100);
+    --kb-hsla-primary-dark:        var(--kb-color-hsl-purple-700);
+    --kb-hsla-primary-accent:      var(--kb-color-hsl-purple-500);
+    --kb-hsla-primary-light:       var(--kb-color-hsl-purple-200);
+    --kb-hsla-primary-bg:          var(--kb-color-hsl-purple-100);
+
+
+    /* --- secondary --- */
+    --kb-rgb-secondary-dark:       var(--kb-color-rgb-blue-800);
+    --kb-rgb-secondary-accent:     var(--kb-color-rgb-blue-500);
+    --kb-rgb-secondary-light:      var(--kb-color-rgb-blue-200);
+    --kb-rgb-secondary-bg:         var(--kb-color-rgb-blue-100);
+    --kb-hsla-secondary-dark:      var(--kb-color-hsl-blue-800);
+    --kb-hsla-secondary-accent:    var(--kb-color-hsl-blue-500);
+    --kb-hsla-secondary-light:     var(--kb-color-hsl-blue-200);
+    --kb-hsla-secondary-bg:        var(--kb-color-hsl-blue-100);
+
+
+    /* --- success --- */
+    --kb-rgb-success-dark:         var(--kb-color-rgb-green-800);
+    --kb-rgb-success-accent:       var(--kb-color-rgb-green-500);
+    --kb-rgb-success-light:        var(--kb-color-rgb-green-200);
+    --kb-rgb-success-bg:           var(--kb-color-rgb-green-100);
+    --kb-hsla-success-dark:        var(--kb-color-hsl-green-800);
+    --kb-hsla-success-accent:      var(--kb-color-hsl-green-500);
+    --kb-hsla-success-light:       var(--kb-color-hsl-green-200);
+    --kb-hsla-success-bg:          var(--kb-color-hsl-green-100);
+
+
+    /* --- warning --- */
+    --kb-rgb-warning-dark:         var(--kb-color-rgb-yellow-600);
+    --kb-rgb-warning-accent:       var(--kb-color-rgb-yellow-500);
+    --kb-rgb-warning-light:        var(--kb-color-rgb-yellow-200);
+    --kb-rgb-warning-bg:           var(--kb-color-rgb-yellow-100);
+    --kb-hsla-warning-dark:        var(--kb-color-hsl-yellow-600);
+    --kb-hsla-warning-accent:      var(--kb-color-hsl-yellow-500);
+    --kb-hsla-warning-light:       var(--kb-color-hsl-yellow-200);
+    --kb-hsla-warning-bg:          var(--kb-color-hsl-yellow-100);
+
+
+    /* --- danger --- */
+    --kb-rgb-danger-dark:          var(--kb-color-rgb-pink-900);
+    --kb-rgb-danger-accent:        var(--kb-color-rgb-pink-500);
+    --kb-rgb-danger-light:         var(--kb-color-rgb-pink-200);
+    --kb-rgb-danger-bg:            var(--kb-color-rgb-pink-100);
+    --kb-hsla-danger-dark:         var(--kb-color-hsl-pink-900);
+    --kb-hsla-danger-accent:       var(--kb-color-hsl-pink-500);
+    --kb-hsla-danger-light:        var(--kb-color-hsl-pink-200);
+    --kb-hsla-danger-bg:           var(--kb-color-hsl-pink-100);
+
+
+    /* --- gradient - kolibri --- */
+    --kb-gradient-rgb-primary:     linear-gradient(145deg,
+                                    var(--kb-color-rgb-purple-500) 100%);
+                                    var(--kb-color-rgb-pink-500)   0%,
+}
