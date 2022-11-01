@@ -15,7 +15,7 @@ loggerSuite.add("test add debug log to observable appender", assert => {
   assert.is(result, True);
   assert.is(head(logStack)(snd), "debug"); // TODO: Dokumentation von head anpassen (Rückgabetyp)
   // does the stack contain exactly one element?
-  assert.is(jsNum(size(logStack)), 1); // TODO: replace function (churchToNumber)
+  assert.is(jsNum(size(logStack)), 1);
   reset();
 });
 

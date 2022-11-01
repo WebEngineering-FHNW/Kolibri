@@ -22,7 +22,7 @@ const createLogUi = rootElement => {
   loggerMessageContainerRoot.classList.add("twoColumnItem");
   loggerMessageContainerRoot.classList.add("messageArea");
 
-  const controller  = LogUiController(); // TODO: Model in Controller
+  const controller  = LogUiController();
   // LogUiController(LogUiModel);
 
   styles(styleRoot);
