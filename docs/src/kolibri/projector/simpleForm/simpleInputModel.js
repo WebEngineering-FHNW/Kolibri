@@ -39,4 +39,5 @@ const SimpleInputModel = ({value, label, name, type= TEXT}) => {
     if (null != name ) singleAttr.getObs(NAME) .setValue(name);
 
     return singleAttr;
-}
+
+};
