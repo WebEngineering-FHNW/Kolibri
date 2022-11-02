@@ -40,33 +40,9 @@
             transition: 0.2s;
         }
 
-        .arrow {
-            background: var(--kolibri-color-output);
-            clip-path: polygon(
-                    75% 10%,
-                    50% 50%,
-                    75% 90%,
-                    50% 90%,
-                    25% 50%,
-                    50% 10%
-            );
-            transition: 0.5s;
-            width: 80%;
-            height: 80%;
-        }
-
         .sidebar .toggleButton:hover {
             cursor: pointer;
-        }
-
-        .arrowLeft {
-            transition: 0.5s;
-            transform: rotate(180deg);
-        }
-
-        div h2 {
-            display: flex;
-            justify-content: center;
+            transform: scale(1.1);
         }
 
         .sidebar .toggleButton.open {
@@ -77,24 +53,42 @@
         .sidebar.hidden {
             right: 0;
         }
+
+        img {
+            height: 100%;
+        }
+
+        img.buttonCLose {
+            transition: 0.7s;
+            transform: scaleX(-1);
+        }
+
+        div h2 {
+            display: flex;
+            justify-content: center;
+        }
+
+
     </style>
 </head>
 <body>
 
     <div class="sidebar" id="sidebar" >
         <div><h2>Ui Logger</h2></div>
-        <div class="toggleButton" id="btn" onclick="move()"><div class="arrow" id="arrow"></div></div>
+        <div class="toggleButton" id="btn" onclick="move()">
+            <img src="../../../../../../docs/img/logo/logo.svg" alt="kolibri-logo" id="sliderButton" />
+        </div>
         <div id="container"></div>
     </div>
 
     <script>
         const move = () => {
-          const container   = document.getElementById("sidebar");
-          const arrow       = document.getElementById("arrow");
-          const btn         = document.getElementById("btn");
-          container .classList.toggle("hidden");
-          arrow     .classList.toggle("arrowLeft");
-          btn       .classList.toggle("open");
+          const sliderButton    = document.getElementById("sliderButton");
+          const container       = document.getElementById("sidebar");
+          const btn             = document.getElementById("btn");
+          sliderButton          .classList.toggle("buttonCLose");
+          container             .classList.toggle("hidden");
+          btn                   .classList.toggle("open");
         };
     </script>
 
