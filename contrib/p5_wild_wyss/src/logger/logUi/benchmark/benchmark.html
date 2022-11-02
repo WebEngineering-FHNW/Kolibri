@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+
+  (() => {
+
+    const worker = new Worker("benchmark.js");
+    worker.onmessage = e =>  document.writeln(e.data);
+
+  })();
+</script>
+
+</body>
+</html>
