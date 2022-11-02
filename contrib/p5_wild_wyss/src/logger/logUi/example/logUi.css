@@ -49,6 +49,7 @@ input[type="text"] {
     display: inline-flex;
     justify-content: center;
     font-size: 0.9em;
+    font-weight: bold;
     color: white;
     background: var(--kolibri-color-output);
     margin: 5px;
@@ -100,6 +101,7 @@ input[type="text"] {
     border-radius: 10px;
     /*border: 1px solid white;*/
     font-size: 0.9em;
+    font-weight: bold;
     color: white;
 
     cursor: pointer;
