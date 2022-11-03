@@ -6,13 +6,6 @@
     <link rel="shortcut icon" type="image/png" href="../../../../../../docs/img/logo/logo-60x54.png"/>
     <link rel="stylesheet" href="../../../../../../docs/css/kolibri-base.css">
     <style>
-        #container {
-            display: inline-grid;
-            grid-template-columns: 0.5fr 1fr;
-            grid-gap: 0.5rem;
-            width: 100%;
-        }
-
         .sidebar {
             position: absolute;
             background: white;
@@ -56,6 +49,7 @@
 
         img {
             height: 100%;
+            transition: 0.7s;
         }
 
         img.buttonCLose {
@@ -68,11 +62,9 @@
             justify-content: center;
         }
 
-
     </style>
 </head>
 <body>
-
     <div class="sidebar" id="sidebar" >
         <div><h2>Ui Logger</h2></div>
         <div class="toggleButton" id="btn" onclick="move()">
@@ -84,10 +76,10 @@
     <script>
         const move = () => {
           const sliderButton    = document.getElementById("sliderButton");
-          const container       = document.getElementById("sidebar");
+          const sidebar         = document.getElementById("sidebar");
           const btn             = document.getElementById("btn");
           sliderButton          .classList.toggle("buttonCLose");
-          container             .classList.toggle("hidden");
+          sidebar               .classList.toggle("hidden");
           btn                   .classList.toggle("open");
         };
     </script>

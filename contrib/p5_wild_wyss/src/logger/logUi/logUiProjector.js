@@ -3,6 +3,7 @@ export {
   textFilterProjector,
   levelFilterProjector,
   contextInputProjector,
+  loggingInputProjector,
 }
 
 import { fst, snd }   from "../../../../../docs/src/kolibri/stdlib.js";
@@ -94,6 +95,23 @@ const contextInputProjector = controller => {
       "ch.fhnw"
   );
   input.oninput = _ => controller.setGlobalContext(input.value);
+  return [label, input];
+};
+/**
+ * Projects a global context input field to the ui.
+ *
+ * @param   { LogUiControllerType }  controller
+ * @return  { [Element,Element] } - label & input Element
+ */
+const loggingInputProjector = controller => {
+
+  const [label, input] = createLabeledInputElement(
+      "text",
+      "Logging Level",
+      "loggingLevelId",
+      ""
+  );
+  // input.oninput = _ => controller.setGlobalContext(input.value);
   return [label, input];
 };
 
