@@ -1,10 +1,18 @@
-import {contextInputProjector, textFilterProjector, loggingInputProjector } from "./logUiProjector.js";
-import {LogUiController} from "./logUiController.js";
-import {LogMessagesView, projectLogLevelControls,} from "./logView.js";
-import {shadowCss} from "../../../../../docs/src/kolibri/style/kolibriStyle.js";
-import {dom} from "../../../../../docs/src/kolibri/util/dom.js"
-
 export { createLogUi }
+
+import { dom }              from "../../../../../docs/src/kolibri/util/dom.js"
+import { shadowCss }        from "../../../../../docs/src/kolibri/style/kolibriStyle.js";
+import { LogUiController }  from "./logUiController.js";
+import {
+  LogMessagesView,
+  projectLogLevelControls
+} from "./logView.js";
+import {
+  contextInputProjector,
+  textFilterProjector,
+  loggingInputProjector
+} from "./logUiProjector.js";
+
 
 /**
  * Creates the log ui on a given html element.
@@ -26,14 +34,12 @@ const createLogUi = rootElement => {
   `);
 
   const controller  = LogUiController();
-
-  configSection.append(...contextInputProjector(controller));
-  configSection.append(...loggingInputProjector(controller));
-  filterSection.append(...textFilterProjector(controller));
-
-  projectLogLevelControls (loggerLevelFilterRoot, controller);
+  projectLogLevelControls (loggerLevelFilterRoot,       controller);
   LogMessagesView         (loggerMessageContainerRoot,  controller);
 
+  configSection.append(...contextInputProjector (controller));
+  configSection.append(...loggingInputProjector (controller));
+  filterSection.append(...textFilterProjector   (controller));
   filterSection.append(loggerLevelFilterRoot);
 
   const styleRoot = document.createElement("STYLE");

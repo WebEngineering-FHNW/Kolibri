@@ -8,7 +8,6 @@ import {
   logMessagesProjector,
 } from "./logUiProjector.js";
 
-
 /**
  * The view to select the active log levels.
  *

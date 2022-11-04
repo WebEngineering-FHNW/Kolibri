@@ -140,7 +140,7 @@ input[type="text"] {
 }
 
 .WARN {
-    background: #FFE5AE;
+    background: var(--kb-color-hsl-yellow-200);
 }
 
 .ERROR {

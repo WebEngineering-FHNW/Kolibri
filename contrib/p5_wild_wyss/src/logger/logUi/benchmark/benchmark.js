@@ -1,6 +1,5 @@
 
 console.log("start");
-const results = [];
 
 const value = [];
 
@@ -17,9 +16,6 @@ for (let i = 0; i < 1000; i++) {
   }
   const end = self.performance.now();
   self.postMessage(end-start);
-
 }
-
-
 
 console.log("end");
