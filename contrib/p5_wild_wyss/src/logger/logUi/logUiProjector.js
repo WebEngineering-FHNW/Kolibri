@@ -3,6 +3,7 @@ export {
   textFilterProjector,
   levelFilterProjector,
   contextInputProjector,
+  loggingInputProjector,
 }
 
 import { fst, snd }   from "../../../../../docs/src/kolibri/stdlib.js";
@@ -96,6 +97,23 @@ const contextInputProjector = controller => {
   input.oninput = _ => controller.setGlobalContext(input.value);
   return [label, input];
 };
+/**
+ * Projects a global context input field to the ui.
+ *
+ * @param   { LogUiControllerType }  controller
+ * @return  { [Element,Element] } - label & input Element
+ */
+const loggingInputProjector = controller => {
+
+  const [label, input] = createLabeledInputElement(
+      "text",
+      "Logging Level",
+      "loggingLevelId",
+      ""
+  );
+  // input.oninput = _ => controller.setGlobalContext(input.value);
+  return [label, input];
+};
 
 /**
  * Projects toggle buttons for each log level to the ui.
@@ -113,31 +131,27 @@ const levelFilterProjector = (controller, levels) =>
  * @type {
  *  (controller   :LogUiControllerType) =>
  *  (checkBoxPair :LogLevelFilterType)  =>
- *  HTMLSpanElement
+ *  HTMLLabelElement
  * }
  */
 const projectLevelToggleControl = controller => checkBoxPair => {
-  const toggleControlRoot  = document.createElement("SPAN"); // TODO remove
-  const checkboxLabel = checkBoxPair(fst)(snd);
-  toggleControlRoot.classList.add("loglevelButton");
+  const labelText = checkBoxPair(fst)(snd);
 
-  // TODO : better id
   const [label, checkbox] = createLabeledInputElement(
       "checkbox",
-      checkboxLabel,
-      checkboxLabel,
+      labelText,
+      "#toggleBtnId" + labelText,
       ""
   );
-  label.setAttribute("style", "pointer-events: none;"); // TODO remove
+  label.classList.add("loglevelButton");
 
   checkbox.checked = checkBoxPair(snd);
   checkBoxPair(snd)
-      ? toggleControlRoot.classList.remove ("checkedSpan")
-      : toggleControlRoot.classList.add    ("checkedSpan");
+      ? label.classList.remove ("checkedSpan")
+      : label.classList.add    ("checkedSpan");
 
-  toggleControlRoot.append(checkbox, label);
-  toggleControlRoot.onclick = _ => // TODO : event.onchange
+  label.onclick = _ => // TODO : event.onchange
     controller.flipLogLevel(checkBoxPair);
 
-  return /**@type {HTMLSpanElement} */toggleControlRoot;
+  return /**@type {HTMLLabelElement} */label;
 };
