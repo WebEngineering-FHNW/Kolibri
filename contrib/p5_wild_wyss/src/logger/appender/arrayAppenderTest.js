@@ -56,23 +56,30 @@ loggerSuite.add("test add all kind of levels to array appender", assert => {
 });
 
 
-loggerSuite.add("test default appender limit implementation", assert =>{
+loggerSuite.add("test default appender overflow implementation", assert =>{
   const { trace, getValue, reset } = Appender(1);
   const result = trace("Tobias Wyss");
-  assert.is(getValue().length, 0);
+  assert.is(getValue().length, 1);
   assert.is(result, True);
+  const result2 = trace("Tobias Wyss");
+  assert.is(getValue().length, 1);
+  assert.is(result2, True);
   reset();
 });
 
 loggerSuite.add("test custom limit implementation", assert =>{
+  const msg1 = "Tobias Wyss";
+  const msg2 = "Andri Wild";
   let value = [];
   const onLimitReached = array => {
     value = array;
     return [];
   };
   const { trace, reset } = Appender(1, onLimitReached);
-  trace("Tobias Wyss");
+  trace(msg1);
+  trace(msg2);
   assert.is(value.length, 1);
+  assert.is(getValue()[0], msg2);
   reset();
 });
 

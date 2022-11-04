@@ -1,5 +1,5 @@
 
-export {Pair, snd, fst, LazyIf, Then, Else, True, False, and, id, lazy, toChurchBoolean, convertToJsBool, n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, succ, leq, eq, jsNum}
+export {Pair, snd, fst, LazyIf, Then, Else, True, False, not, and, id, lazy, toChurchBoolean, convertToJsBool, n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, succ, leq, eq, jsNum}
 import { fst, snd } from "../../../../docs/src/kolibri/stdlib.js";
 
 const lazy = x => () => x;
@@ -85,6 +85,14 @@ const True = K;
  * @returns {function(q:churchBoolean): churchBoolean}  True or False
  */
 const and = p => q => p(q)(False);
+
+/**
+ * @function
+ * @param p {churchBoolean}
+ * @returns churchBoolean
+ */
+const not = p => p(False)(True);
+
 
 /**
  * Syntactic sugar for creating an If-Then-Else-Construct for lazy Evaluation - it avoid that JavaScript eagerly evaluate both cases (then and else)
