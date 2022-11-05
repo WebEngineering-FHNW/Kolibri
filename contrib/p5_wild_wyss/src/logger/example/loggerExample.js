@@ -6,7 +6,8 @@ import {
   LOG_NOTHING,
   LOG_TRACE,
   LOG_WARN,
-  setGlobalContext
+  setGlobalContext,
+  setLoggingLevel,
 } from "../logger.js";
 
 import {Appender as ArrayAppender}    from "../appender/arrayAppender.js";
@@ -29,17 +30,16 @@ const appenderList    = document.getElementsByName("appender");
 const levelList       = document.getElementsByName("log-level");
 const output          = document.getElementById("log-output");
 let delimiter         = document.getElementById("delimiter").value;
-let currentLogLevel   = LOG_DEBUG;
 
 const formatLogMsg = context => logLevel => logMessage => {
   const date = new Date().toISOString();
   return `${context}: [${logLevel}] ${date}: ${logMessage}`;
 };
 
-const consoleLogger   = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(consoleAppender)(formatLogMsg);
-const stringLogger    = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(stringAppender) (formatLogMsg);
-const arrayLogger     = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(arrayAppender)  (formatLogMsg);
-const countLogger     = LogFactory(LOGGER_CONTEXT)(() => currentLogLevel)(countAppender)  (formatLogMsg);
+const consoleLogger   = LogFactory(LOGGER_CONTEXT)(consoleAppender)(formatLogMsg);
+const stringLogger    = LogFactory(LOGGER_CONTEXT)(stringAppender) (formatLogMsg);
+const arrayLogger     = LogFactory(LOGGER_CONTEXT)(arrayAppender)  (formatLogMsg);
+const countLogger     = LogFactory(LOGGER_CONTEXT)(countAppender)  (formatLogMsg);
 
 const logLevels       = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
 const loggers         = [consoleLogger,   stringLogger,   arrayLogger,   countLogger];
@@ -59,8 +59,8 @@ const reset = () => appender.forEach(el => {
 
 document.getElementById("btn-trace").onclick =  traceAction;
 document.getElementById("btn-debug").onclick =  debugAction;
-document.getElementById("btn-info").onclick  =  infoAction;
-document.getElementById("btn-warn").onclick  =  warnAction;
+document.getElementById("btn-info") .onclick =  infoAction;
+document.getElementById("btn-warn") .onclick =  warnAction;
 document.getElementById("btn-error").onclick =  errorAction;
 document.getElementById("btn-fatal").onclick =  fatalAction;
 document.getElementById("btn-reset").onclick =  reset;
@@ -90,7 +90,7 @@ const log = lvl => {
 
 const updateLevel = () =>
   levelList.forEach((el, idx) => {
-    if (el.checked) currentLogLevel = logLevels[idx];
+    if (el.checked) setLoggingLevel(logLevels[idx]);
   });
 
 const updateLogger = () => {

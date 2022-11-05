@@ -1,6 +1,14 @@
-import {TestSuite} from "../../../../docs/src/kolibri/util/test.js";
-import {debugLogger, LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN, setGlobalContext} from "./logger.js";
-import {convertToJsBool, id, lazy, True} from "./lamdaCalculus.js";
+import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
+import { convertToJsBool, id, lazy, True } from "./lamdaCalculus.js";
+import {
+  debugLogger,
+  LOG_DEBUG,
+  LOG_NOTHING,
+  LOG_TRACE,
+  LOG_WARN,
+  setGlobalContext,
+  setLoggingLevel,
+} from "./logger.js";
 
 setGlobalContext("ch.fhnw.test");
 
@@ -20,7 +28,8 @@ const loggerSuite = TestSuite("Logger");
 
 loggerSuite.add("test simple logging", assert => {
   const {logMessage, getRealMsg, write} = beforeStart();
-  const debug = debugLogger("ch.fhnw.test")(() => LOG_DEBUG)(write)(_ => _ => id);
+  setLoggingLevel(LOG_DEBUG);
+  const debug = debugLogger("ch.fhnw.test")(write)(_ => _ => id);
   const result = debug(logMessage);
 
   assert.isTrue(convertToJsBool(result));
@@ -29,8 +38,8 @@ loggerSuite.add("test simple logging", assert => {
 
 loggerSuite.add("test enabling logging", assert => {
   const {logMessage, getRealMsg, write} = beforeStart();
-  let logLevel = LOG_NOTHING;
-  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(write)(_ => _ => id);
+  setLoggingLevel(LOG_NOTHING);
+  const debug = debugLogger("ch.fhnw.test")(write)(_ => _ => id);
 
   // logging should be disabled
   const result1 = debug(logMessage);
@@ -38,7 +47,7 @@ loggerSuite.add("test enabling logging", assert => {
   assert.isTrue(!convertToJsBool(result1));
 
   // logging should be enabled
-  logLevel = LOG_DEBUG;
+  setLoggingLevel(LOG_DEBUG);
   const result2 = debug(logMessage);
   assert.isTrue(convertToJsBool(result2));
   assert.is(getRealMsg(), logMessage);
@@ -46,9 +55,8 @@ loggerSuite.add("test enabling logging", assert => {
 
 loggerSuite.add("test disabling logging", assert => {
   const {logMessage, getRealMsg, resetRealMsg, write} = beforeStart();
-  let logLevel = LOG_DEBUG;
-
-  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(write)(_ => _ => id);
+  setLoggingLevel(LOG_DEBUG);
+  const debug = debugLogger("ch.fhnw.test")(write)(_ => _ => id);
 
   // logging should be enabled
   const result1 = debug(logMessage);
@@ -56,7 +64,7 @@ loggerSuite.add("test disabling logging", assert => {
   assert.isTrue(convertToJsBool(result1));
 
   // logging should be disabled
-  logLevel = LOG_NOTHING;
+  setLoggingLevel(LOG_NOTHING);
   resetRealMsg();
   const result2 = debug(logMessage);
   assert.isTrue(!convertToJsBool(result2));
@@ -66,8 +74,8 @@ loggerSuite.add("test disabling logging", assert => {
 loggerSuite.add("log lower logging level, should log", assert => {
   const {logMessage, getRealMsg, write} = beforeStart();
 
-  const logLevel = LOG_TRACE;
-  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(write)(_ => _ => id);
+  setLoggingLevel(LOG_TRACE);
+  const debug = debugLogger("ch.fhnw.test")(write)(_ => _ => id);
 
   // loglevel debug should also be logged, when LOG_TRACE is enabled
   const result = debug(logMessage);
@@ -77,8 +85,9 @@ loggerSuite.add("log lower logging level, should log", assert => {
 
 loggerSuite.add("log higher logging level, should not log", assert => {
   const {logMessage, getRealMsg, write} = beforeStart();
-  const logLevel = LOG_WARN;
-  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(write)(_ => _ => id);
+
+  setLoggingLevel(LOG_WARN);
+  const debug = debugLogger("ch.fhnw.test")(write)(_ => _ => id);
 
   // loglevel debug should not log when LOG_WARN is enabled
   const result = debug(logMessage);
@@ -89,9 +98,9 @@ loggerSuite.add("log higher logging level, should not log", assert => {
 loggerSuite.add("test debug tag formatted log message", assert => {
   const {logMessage, getRealMsg, write} = beforeStart();
   const levelFormatter = _ => lvl => msg => `[${lvl}] ${msg}`;
-  const logLevel = LOG_DEBUG;
 
-  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(write)(levelFormatter);
+  setLoggingLevel(LOG_DEBUG);
+  const debug = debugLogger("ch.fhnw.test")(write)(levelFormatter);
 
   const result = debug(logMessage);
   assert.isTrue(convertToJsBool(result));
@@ -101,9 +110,9 @@ loggerSuite.add("test debug tag formatted log message", assert => {
 loggerSuite.add("test context tag formatted log message", assert => {
   const {logMessage, getRealMsg, write} = beforeStart();
   const levelFormatter = ctx => _ => msg => `${ctx}: ${msg}`;
-  const logLevel = LOG_DEBUG;
+  setLoggingLevel(LOG_DEBUG);
   const context = "ch.fhnw.test";
-  const debug = debugLogger(context)(() => logLevel)(write)(levelFormatter);
+  const debug = debugLogger(context)(write)(levelFormatter);
 
   const result = debug(logMessage);
   assert.isTrue(convertToJsBool(result));
@@ -112,8 +121,8 @@ loggerSuite.add("test context tag formatted log message", assert => {
 
 loggerSuite.add("test context, logger should not log", assert => {
   const {logMessage, getRealMsg, write} = beforeStart();
-  const logLevel = LOG_DEBUG;
-  const debug = debugLogger("ch.fhnw")(() => logLevel)(write)(_ => _ => id);
+  setLoggingLevel(LOG_DEBUG);
+  const debug = debugLogger("ch.fhnw")(write)(_ => _ => id);
 
   const result = debug(logMessage);
   assert.isTrue(!convertToJsBool(result));
@@ -122,8 +131,8 @@ loggerSuite.add("test context, logger should not log", assert => {
 
 loggerSuite.add("test context, logger should log", assert => {
   const {logMessage, getRealMsg, write} = beforeStart();
-  const logLevel = LOG_DEBUG;
-  const debug = debugLogger("ch.fhnw.test.specific.tag")(() => logLevel)(write)(_ => _2 => id);
+  setLoggingLevel(LOG_DEBUG);
+  const debug = debugLogger("ch.fhnw.test.specific.tag")(write)(_ => _2 => id);
 
   const result = debug(logMessage);
   assert.isTrue(convertToJsBool(result));
@@ -131,13 +140,13 @@ loggerSuite.add("test context, logger should log", assert => {
 });
 
 loggerSuite.add("test lazy evaluation, logger should log", assert => {
-  const logLevel = LOG_DEBUG;
   const apply = message => {
     receivedMsg = message;
     return True;
   };
   let receivedMsg = "";
-  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(apply)(() => () => id);
+  setLoggingLevel(LOG_DEBUG);
+  const debug = debugLogger("ch.fhnw.test")(apply)(() => () => id);
 
   const result = debug(lazy("hello world"));
   assert.isTrue(convertToJsBool(result));
@@ -145,13 +154,13 @@ loggerSuite.add("test lazy evaluation, logger should log", assert => {
 });
 
 loggerSuite.add("test lazy evaluation, logger should not log and function should not be evaluated", assert => {
-  const logLevel = LOG_NOTHING;
   const apply = message => {
     receivedMsg = message;
     return True;
   };
   let receivedMsg = "";
-  const debug = debugLogger("ch.fhnw.test")(() => logLevel)(apply)(_ => _ => id);
+  setLoggingLevel(LOG_NOTHING);
+  const debug = debugLogger("ch.fhnw.test")(apply)(_ => _ => id);
 
   const result = debug(lazy("hello world"));
   assert.isTrue(!convertToJsBool(result));

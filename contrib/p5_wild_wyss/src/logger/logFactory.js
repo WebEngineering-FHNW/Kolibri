@@ -13,7 +13,6 @@ import {
  * Constructs logger for each log levels using the given parameters.
  * @type       {
  *                (context: String) =>
- *                (loggingLevel: PrioritySupplier) =>
  *                (appender: AppenderType) =>
  *                (msgFormatter: MsgFormatType) =>
  *                LoggerType
@@ -25,11 +24,11 @@ import {
  * trace("Tobias Wyss") // a log message appended on the loglevel {@link LOG_TRACE}
  * debug("Andri Wild") // a log message appended on the loglevel {@link LOG_DEBUG}
  */
-const LogFactory = context => loggingLevel => appender => msgFormatter => ({
-      trace:  traceLogger (context)(loggingLevel)(appender.trace)(msgFormatter),
-      debug:  debugLogger (context)(loggingLevel)(appender.debug)(msgFormatter),
-      info:   infoLogger  (context)(loggingLevel)(appender.info) (msgFormatter),
-      warn:   warnLogger  (context)(loggingLevel)(appender.warn) (msgFormatter),
-      error:  errorLogger (context)(loggingLevel)(appender.error)(msgFormatter),
-      fatal:  fatalLogger (context)(loggingLevel)(appender.fatal)(msgFormatter),
+const LogFactory = context => appender => msgFormatter => ({
+      trace:  traceLogger (context)(appender.trace)(msgFormatter),
+      debug:  debugLogger (context)(appender.debug)(msgFormatter),
+      info:   infoLogger  (context)(appender.info) (msgFormatter),
+      warn:   warnLogger  (context)(appender.warn) (msgFormatter),
+      error:  errorLogger (context)(appender.error)(msgFormatter),
+      fatal:  fatalLogger (context)(appender.fatal)(msgFormatter),
 });

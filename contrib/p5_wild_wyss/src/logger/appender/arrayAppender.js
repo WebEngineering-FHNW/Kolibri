@@ -1,5 +1,5 @@
 export {Appender}
-import {False, True, LazyIf, Then, Else, not} from "../lamdaCalculus.js";
+import {False, True, LazyIf, Then, Else, not, id} from "../lamdaCalculus.js";
 
 const MAX_ARRAY_ELEMENTS  = Number.MAX_SAFE_INTEGER - 1;
 const SAFE_REMOVE_COUNT   = 2;

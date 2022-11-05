@@ -16,6 +16,7 @@ export {
   errorLogger,
   fatalLogger,
   setGlobalContext,
+  setLoggingLevel,
 }
 
 /**
@@ -57,7 +58,6 @@ const setGlobalContext = context => globalContext = context;
  * @type    {
  *               (loggerLevel:      LogLevelType)
  *            => (context:          String)
- *            => (loggingLevel:     PrioritySupplier)
  *            => (append:           AppendCallback)
  *            => (formatMsg:        MsgFormatType)
  *            => (msg:              LogMeType)
@@ -65,13 +65,13 @@ const setGlobalContext = context => globalContext = context;
  *          }
  * @private
  * @example
- * const log = logger(LOG_DEBUG)("ch.fhnw")(() => LOG_DEBUG)(console.log)(_ => _ => id);
+ * const log = logger(LOG_DEBUG)("ch.fhnw")(console.log)(_ => _ => id);
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
-const logger = loggerLevel => context => loggingLevel => append => formatMsg => msg =>
+const logger = loggerLevel => context => append => formatMsg => msg =>
   LazyIf(
-      messageShouldBeLogged(loggingLevel)(loggerLevel)(context)
+      messageShouldBeLogged(loggerLevel)(context)
     )
     (Then(() =>
       append(formatMsg(context)(loggerLevel(snd))(evaluateMessage(msg))))
@@ -81,21 +81,20 @@ const logger = loggerLevel => context => loggingLevel => append => formatMsg => 
 /**
  * Decides if a message fulfills the conditions to be logged.
  * @function
- * @type { (loggingLevel: LogLevelType) => (loggerLevel: LogLevelType) => (context: String) => churchBoolean }
+ * @type { (loggerLevel: LogLevelType) => (context: String) => churchBoolean }
  * @private
  */
-const messageShouldBeLogged = loggingLevel => loggerLevel => context =>
-  and
-  (logLevelActivated(loggingLevel)(loggerLevel))
-  (contextActivated(context));
+const messageShouldBeLogged = loggerLevel => context =>
+  and (logLevelActivated(loggerLevel))
+      (contextActivated (context)    );
 
 /**
  * Returns {@link True} if the first {@link LogLevelType} parameter is smaller than the second {@link LogLevelType} parameter.
  * @function
- * @type { (loggingLevel: LogLevelType) => (loggerLevel: LogLevelType) => churchBoolean}
+ * @type { (loggerLevel: LogLevelType) => churchBoolean }
  * @private
  */
-const logLevelActivated = loggingLevel => loggerLevel => leq(loggingLevel()(fst))(loggerLevel(fst));
+const logLevelActivated = loggerLevel => leq(loggingLevel(fst))(loggerLevel(fst));
 
 /**
  * Returns {@link True} if the {@link globalContext} is a prefix of the given {@link String} parameter.
@@ -212,3 +211,6 @@ const errorLogger = logger(LOG_ERROR);
  * // writes "a message to log to console" to the console
  */
 const fatalLogger = logger(LOG_FATAL);
+
+let loggingLevel = LOG_DEBUG;
+const setLoggingLevel = level => loggingLevel = level;

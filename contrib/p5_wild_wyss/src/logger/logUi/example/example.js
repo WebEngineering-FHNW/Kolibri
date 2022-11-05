@@ -10,8 +10,8 @@ const formatLogMsg = context => logLevel => logMessage => {
   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
 };
 
-const logger =  LogFactory("ch.fhnw")     (() => LOG_TRACE)(appender)(formatLogMsg);
-const logger2 = LogFactory("ch.fhnw.ip5") (() => LOG_TRACE)(appender)(formatLogMsg);
+const logger =  LogFactory("ch.fhnw")    (appender)(formatLogMsg);
+const logger2 = LogFactory("ch.fhnw.ip5")(appender)(formatLogMsg);
 
 const container = document.getElementById("container");
 
