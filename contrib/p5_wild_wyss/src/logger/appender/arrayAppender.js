@@ -1,7 +1,8 @@
 export {Appender}
 import {False, True, LazyIf, Then, Else, not} from "../lamdaCalculus.js";
 
-const MAX_ARRAY_ELEMENTS = 100000000000000;
+const MAX_ARRAY_ELEMENTS  = Number.MAX_SAFE_INTEGER - 1;
+const SAFE_REMOVE_COUNT   = 2;
 
 /**
  * This is the default function that gets called when the defined limit has been reached.
@@ -9,7 +10,7 @@ const MAX_ARRAY_ELEMENTS = 100000000000000;
  * @returns String[]
  * @constructor
  */
-const ON_LIMIT_REACHED  = _ => [];
+const ON_LIMIT_REACHED  = _ => []; // TODO default strategy (remove the oldest 1/3 of array)
 
 /**
  * Pushes all log messages into an array.
@@ -17,37 +18,37 @@ const ON_LIMIT_REACHED  = _ => [];
  * and use {@link reset} to clear the array.
  * @type appenderCtor<String[]>
  */
-const Appender = (limit = MAX_ARRAY_ELEMENTS, onLimitReached = ON_LIMIT_REACHED) => ({
+const Appender = (limit = MAX_ARRAY_ELEMENTS, onOverflow = ON_LIMIT_REACHED) => ({
   /**
    * the function to append trace logs in this application
    * @type {AppendCallback}
    */
-  trace:    appenderCallback(limit)(onLimitReached),
+  trace:    appenderCallback(limit)(onOverflow),
   /**
    * the function to append debug logs in this application
    * @type {AppendCallback}
    */
-  debug:    appenderCallback(limit)(onLimitReached),
+  debug:    appenderCallback(limit)(onOverflow),
   /**
    * the function to append info logs in this application
    * @type {AppendCallback}
    */
-  info:     appenderCallback(limit)(onLimitReached),
+  info:     appenderCallback(limit)(onOverflow),
   /**
    * the function to append warn logs in this application
    * @type {AppendCallback}
    */
-  warn:     appenderCallback(limit)(onLimitReached),
+  warn:     appenderCallback(limit)(onOverflow),
   /**
    * the function to append error logs in this application
    * @type {AppendCallback}
    */
-  error:    appenderCallback(limit)(onLimitReached),
+  error:    appenderCallback(limit)(onOverflow),
   /**
    * the function to append fatal logs in this application
    * @type {AppendCallback}
    */
-  fatal:    appenderCallback(limit)(onLimitReached),
+  fatal:    appenderCallback(limit)(onOverflow),
   getValue: getValue,
   reset:    reset,
 });
@@ -84,13 +85,11 @@ const getValue = () => appenderArray;
  *        }
  */
 const appenderCallback = limit => onOverflow => msg =>
-  LazyIf(
-    full(limit)
-  )
-  // if the array is full, call the overflow function and add the new value afterwards.
-  (Then(() => append(msg)(limit)(onOverflow)))
-  // in any other case just append the new message.
-  (Else(() => append(msg)(limit)(          )));
+  LazyIf(full(limit))
+    // if the array is full, call the overflow function and add the new value afterwards.
+    (Then(() => append(msg)(limit)(onOverflow)))
+    // in any other case just append the new message.
+    (Else(() => append(msg)(limit)(    id      )));
 
 /**
  * Returns {@link True} if the appender array equals the limit.
@@ -105,15 +104,15 @@ const full = limit =>
 /**
  * Appends the given message to the array & runs an optional callback afterwards.
  * @type  {
- *          (msg: String) =>
- *          (limit: number) =>
- *          (callback: unaryOperation<String[]>) =>
+ *          (msg: String!) =>
+ *          (limit: number!) =>
+ *          (callback: unaryOperation<String[]>!) =>
  *          churchBoolean
  *        }
  */
-const append = msg => limit => (callback = undefined) => {
-   if (callback instanceof Function) appenderArray = callback(appenderArray);
+const append = msg => limit => callback => {
+   appenderArray = callback(appenderArray);
    const arrayHasSpace = not(full(limit));
-   if(arrayHasSpace(true)(false)) appenderArray.push(msg);
+   if(arrayHasSpace(true)(false)) appenderArray.push(msg); // TODO: log error (apply default and log error - testing)
    return arrayHasSpace;
 };
