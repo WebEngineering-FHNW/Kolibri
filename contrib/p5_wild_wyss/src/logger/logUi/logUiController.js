@@ -71,6 +71,10 @@ const LogUiController = () => {
     return logMessage.includes(textOfInterest);
   };
 
+  /**
+   * Sets the active logging level according to its string representation.
+   * @param { String } levelString
+   */
   const setLoggingLevelByString = levelString => {
     const newLoggingLevel = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL]
       .filter(lvl => lvl(snd) === levelString);

@@ -109,7 +109,7 @@ const contextInputProjector = controller => {
   return [label, input];
 };
 /**
- * Projects a global context input field to the ui.
+ * Projects a select to change the active log level.
  *
  * @param   { LogUiControllerType }  controller
  * @return  { [Element,Element] } - label & input Element
