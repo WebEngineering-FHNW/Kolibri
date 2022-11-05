@@ -13,10 +13,10 @@ export {
   textFilterProjector,
   levelFilterProjector,
   contextInputProjector,
-  loggingInputProjector,
+  loggingSelectProjector,
 }
 
-import { dom }              from "../../../../../docs/src/kolibri/util/dom.js"
+import { dom }        from "../../../../../docs/src/kolibri/util/dom.js"
 import { fst, snd }   from "../../../../../docs/src/kolibri/stdlib.js";
 import { forEach }    from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 
@@ -114,18 +114,18 @@ const contextInputProjector = controller => {
  * @param   { LogUiControllerType }  controller
  * @return  { [Element,Element] } - label & input Element
  */
-const loggingInputProjector = controller => {
+const loggingSelectProjector = controller => {
 
   const [label, select] = dom(`
-       <label for="loggingLevels">Logging Level</label>
+       <label class="textLabel" for="loggingLevels">Logging Level</label>
       <select name="levels" id="loggingLevels">
-        <option value="${LOG_TRACE(snd)}"  >${LOG_TRACE(snd)}  </option>
-        <option value="${LOG_DEBUG(snd)}"  >${LOG_DEBUG(snd)}  </option>
-        <option value="${LOG_INFO(snd)}"   >${LOG_INFO(snd)}   </option>
-        <option value="${LOG_WARN(snd)}"   >${LOG_WARN(snd)}   </option>
-        <option value="${LOG_ERROR(snd)}"  >${LOG_ERROR(snd)}  </option>
-        <option value="${LOG_FATAL(snd)}"  >${LOG_FATAL(snd)}  </option>
-        <option value="${LOG_NOTHING(snd)}">${LOG_NOTHING(snd)}</option>
+        <option          value="${LOG_TRACE(snd)}"  > ${LOG_TRACE(snd)}  </option>
+        <option selected value="${LOG_DEBUG(snd)}"  > ${LOG_DEBUG(snd)}  </option>
+        <option          value="${LOG_INFO(snd)}"   > ${LOG_INFO(snd)}   </option>
+        <option          value="${LOG_WARN(snd)}"   > ${LOG_WARN(snd)}   </option>
+        <option          value="${LOG_ERROR(snd)}"  > ${LOG_ERROR(snd)}  </option>
+        <option          value="${LOG_FATAL(snd)}"  > ${LOG_FATAL(snd)}  </option>
+        <option          value="${LOG_NOTHING(snd)}"> ${LOG_NOTHING(snd)}</option>
       </select> 
   `);
 
@@ -171,5 +171,5 @@ const projectLevelToggleControl = controller => checkBoxPair => {
   label.onclick = _ => // TODO : event.onchange
     controller.flipLogLevel(checkBoxPair);
 
-  return /**@type {HTMLLabelElement} */label;
+  return /**@type { HTMLLabelElement } */label;
 };

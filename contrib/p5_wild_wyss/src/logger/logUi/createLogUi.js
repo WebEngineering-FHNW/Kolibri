@@ -10,7 +10,7 @@ import {
 import {
   contextInputProjector,
   textFilterProjector,
-  loggingInputProjector
+  loggingSelectProjector
 } from "./logUiProjector.js";
 
 
@@ -37,9 +37,9 @@ const createLogUi = rootElement => {
   projectLogLevelControls (loggerLevelFilterRoot,       controller);
   LogMessagesView         (loggerMessageContainerRoot,  controller);
 
-  configSection.append(...contextInputProjector (controller));
-  configSection.append(...loggingInputProjector (controller));
-  filterSection.append(...textFilterProjector   (controller));
+  configSection.append(...contextInputProjector  (controller));
+  configSection.append(...loggingSelectProjector (controller));
+  filterSection.append(...textFilterProjector    (controller));
   filterSection.append(loggerLevelFilterRoot);
 
   const styleRoot = document.createElement("STYLE");

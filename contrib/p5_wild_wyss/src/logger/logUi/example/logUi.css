@@ -11,7 +11,6 @@
 
 .controlArea {
     padding: 2rem;
-
 }
 
 .config {
@@ -50,7 +49,7 @@
     white-space: pre-wrap;
 }
 
-input[type="text"] {
+input[type="text"], input[type="select"] {
     box-sizing: border-box;
     /* Auto layout */
     display: flex;
@@ -59,7 +58,7 @@ input[type="text"] {
     padding: 16px;
     gap: 12px;
     /* Kolibri-Light/Monochrome/--kb-color-label */
-    border: 0.75px solid #6E7191;
+    border: 0.75px solid var(--kb-color-rgb-purple-300);
     border-radius: 4px;
 }
 
@@ -135,7 +134,7 @@ input[type="text"] {
 }
 
 .highlighted {
-    background: yellow;
+    background: var(--kb-color-hsl-yellow-500);
     font-weight: bold;
 }
 
@@ -144,11 +143,11 @@ input[type="text"] {
 }
 
 .ERROR {
-    background: #FFABE8;
+    background: var(--kb-color-rgb-pink-200);
 }
 
 .FATAL {
-    background: rgba(20, 20, 43, 0.4);
+    background: var(--kb-color-rgb-label);
     font-weight: bold;
     color: white;
 }

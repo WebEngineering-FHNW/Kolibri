@@ -77,7 +77,7 @@ const LogUiController = () => {
    */
   const setLoggingLevelByString = levelString => {
     const newLoggingLevel = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL]
-      .filter(lvl => lvl(snd) === levelString);
+        .filter(lvl => lvl === levelString);
       setLoggingLevel(newLoggingLevel[0])
   };
 
