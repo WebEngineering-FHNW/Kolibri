@@ -1,5 +1,5 @@
-import {Pair, snd, fst} from "../../../../docs/src/kolibri/stdlib.js"
-import {n0, n1, n2, n3, n4, n5, n9, LazyIf, Else, Then, and, False, toChurchBoolean, leq} from "./lamdaCalculus.js";
+import { Pair, snd, fst } from "../../../../docs/src/kolibri/stdlib.js"
+import { n0, n1, n2, n3, n4, n5, n9, LazyIf, Else, Then, and, False, toChurchBoolean, leq } from "./lamdaCalculus.js";
 
 export {
   LOG_TRACE,
@@ -136,7 +136,7 @@ const LOG_FATAL = Pair(n5)("FATAL");
  * Disables the logging level completely.
  * @returns { LogLevelType }
  */
-const LOG_NOTHING = Pair(n9)("");
+const LOG_NOTHING = Pair(n9)("NOTHING");
 
 /**
  * Creates a new logger at log level {@link LOG_TRACE}.
@@ -216,6 +216,7 @@ const setGlobalContext = context => globalContext = context;
  * This is a state.
  * The currently activated logging level.
  * Only messages whose have at least this log level are logged.
+ * Default log level is {@link LOG_DEBUG}.
  * @type { LogLevelType }
  * @private
  */

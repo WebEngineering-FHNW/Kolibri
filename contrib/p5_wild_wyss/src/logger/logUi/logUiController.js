@@ -3,7 +3,16 @@ import {LogUiModel} from "./logUiModel.js";
 export { LogUiController }
 
 import { fst, snd, Pair }   from "../lamdaCalculus.js";
-import { setGlobalContext } from "../logger.js";
+import {
+  LOG_DEBUG,
+  LOG_ERROR,
+  LOG_FATAL,
+  LOG_INFO,
+  LOG_TRACE,
+  LOG_WARN,
+  setGlobalContext,
+  setLoggingLevel
+} from "../logger.js";
 
 /**
  * Processes the actions from the user interface and manages the model.
@@ -62,6 +71,12 @@ const LogUiController = () => {
     return logMessage.includes(textOfInterest);
   };
 
+  const setLoggingLevelByString = levelString => {
+    const newLoggingLevel = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL]
+      .filter(lvl => lvl(snd) === levelString);
+      setLoggingLevel(newLoggingLevel[0])
+  };
+
   model.onNewLogMessage(        () => model.filterAndNotify(filter));
   model.onChangeActiveLogLevel( () => model.filterAndNotify(filter));
   model.onTextFilterChange(     () => model.filterAndNotify(filter));
@@ -77,6 +92,7 @@ const LogUiController = () => {
     getTextFilter:          model.getTextFilter,
 
     setGlobalContext,
+    setLoggingLevelByString,
     flipLogLevel,
   }
 };
