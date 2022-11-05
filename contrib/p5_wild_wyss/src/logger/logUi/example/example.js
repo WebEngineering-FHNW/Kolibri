@@ -1,5 +1,4 @@
 import { LogFactory }   from "../../logFactory.js";
-import { LOG_TRACE }    from "../../logger.js";
 import { Appender }     from "../../appender/observableAppender.js";
 import { createLogUi }  from "../createLogUi.js";
 

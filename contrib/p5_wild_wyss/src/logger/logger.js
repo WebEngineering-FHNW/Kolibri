@@ -20,26 +20,6 @@ export {
 }
 
 /**
- * This is a state.
- * The currently activated log context.
- * Only messages whose context have this prefix are logged.
- * @type {string}
- * @private
- */
-let globalContext = "";
-
-/**
- * This function can be used to define a global context for the logging framework.
- * Messages will only be logged, if the current context is more specific than the global context.
- * @param { String } context - the newly set context to log
- * @example
- * setGlobalContext("ch.fhnw");
- * // global logger context is now set to "ch.fhnw"
- * // messages with the context "ch.fhnw*" will be logged, all other messages will be ignored.
- */
-const setGlobalContext = context => globalContext = context;
-
-/**
  * Yields a custom configured log function.
  * Processes all log-actions which have a {@link LogLevelType} equals or beneath
  * the {@link LogLevelType} returned by the function "loggingLevel".
@@ -212,5 +192,40 @@ const errorLogger = logger(LOG_ERROR);
  */
 const fatalLogger = logger(LOG_FATAL);
 
+/**
+ * This is a state.
+ * The currently activated log context.
+ * Only messages whose context have this prefix are logged.
+ * @type {string}
+ * @private
+ */
+let globalContext = "";
+
+/**
+ * This function can be used to define a global context for the logging framework.
+ * Messages will only be logged, if the current context is more specific than the global context.
+ * @param { String } context - the newly set context to log
+ * @example
+ * setGlobalContext("ch.fhnw");
+ * // global logger context is now set to "ch.fhnw"
+ * // messages with the context "ch.fhnw*" will be logged, all other messages will be ignored.
+ */
+const setGlobalContext = context => globalContext = context;
+
+/**
+ * This is a state.
+ * The currently activated logging level.
+ * Only messages whose have at least this log level are logged.
+ * @type { LogLevelType }
+ * @private
+ */
 let loggingLevel = LOG_DEBUG;
+
+/**
+ * This function can be used to set the global logging level for the logging framework.
+ * Only messages whose have at least the set log level are logged.
+ * @param { LogLevelType } level
+ * @example
+ * setLoggingLevel(LOG_DEBUG);
+ */
 const setLoggingLevel = level => loggingLevel = level;
