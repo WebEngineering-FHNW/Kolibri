@@ -16,8 +16,7 @@ import {
 /**
  * Provides console appender.
  * Using this appender you are able to log to the console.
- * @returns {AppenderType<IObservable<stack>>}
- * @constructor
+ * @type    { appenderCtor.<IObservable<stack>> }
  */
 const Appender = () => ({
   trace,

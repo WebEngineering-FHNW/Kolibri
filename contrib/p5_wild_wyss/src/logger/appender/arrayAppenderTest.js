@@ -1,6 +1,6 @@
 import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
 import {Appender} from "./arrayAppender.js";
-import {convertToJsBool, True, False, id} from "../lamdaCalculus.js";
+import {convertToJsBool, id, True} from "../lamdaCalculus.js";
 
 const {trace, debug, info, warn, error, fatal, getValue, reset} = Appender();
 

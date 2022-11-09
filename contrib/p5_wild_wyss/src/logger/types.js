@@ -60,10 +60,10 @@
 
 /**
  * Constructs a new appender, which can be used with the logger.
- * @typedef appenderCtor
+ * @callback appenderCtor
  * @template Template
- * @param { number                   }  limit           - the max amount of log messages to keep.
- * @param { unaryOperation<Template> }  onLimitReached  - This function is called, as soon as the
+ * @param { !Number                   } limit             - the max amount of log messages to keep.
+ * @param { !unaryOperation<Template> } onLimitReached  - This function is called, as soon as the
  *      defined limit of log messages is reached. You obtain the current appender
  *      value. Return a new value which will be used as the new value of this appender.
  *      If this parameter is not set, then all log messages until now will be discarded.
