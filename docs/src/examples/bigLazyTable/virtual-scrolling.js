@@ -1,4 +1,5 @@
 import {Observable} from '../../kolibri/observable.js';
+import {dom} from '../../kolibri/util/dom.js'
 
 /**
  * @module examples/bigLazyTable/virtual-scrolling
@@ -68,23 +69,29 @@ const VirtualScrollController = (containerHeightPx, rowHeightPx, data) => {
 
 /**
  * VirtualScrollView
- * @param {Node} container // todo: it is nicer when projectors return the created view - just to make sure they do not mess with the container
- * @param {VirtualScrollControllerType} virtualScrollController
- *  @param {function} rowTemplate - function which renders a row and returns an element
+ * @param {VirtualScrollControllerType}       virtualScrollController
+ * @param { ()       => HTMLTableRowElement } headTemplate - function which returns a thead content
+ * @param { (item:*) => HTMLTableRowElement } rowTemplate - function which renders a row and returns an element
+ * @returns {Array<HTMLDivElement>} the created and bound frame that holds the scrollable content
  */
-const VirtualScrollView = (container, virtualScrollController, rowTemplate) => {
+const VirtualScrollView = (virtualScrollController, headTemplate, rowTemplate) => {
 
-    const scrollFrame          = document.createElement('DIV'); // surrounds and holds the scrollable content
-    scrollFrame.style.overflow = 'auto';                        // scroll when needed
+    const [scrollFrame] = dom(`
+        <DIV id="scrollFrame" style="overflow: auto;">
+            <DIV id="fairWay" style="min-height: ${virtualScrollController.getVirtualHeightPx()}px;">
+                <TABLE >
+                    <THEAD></THEAD>
+                    <TBODY></TBODY>
+                </TABLE>
+            </DIV>
+        </DIV>
+    `);
+    scrollFrame.querySelector("thead").appendChild(headTemplate());
 
-    // the virtual "field" on which any content is placed. It is mostly used to indirectly set the scroll handle height.
-    const fairWay = document.createElement('DIV');
-    fairWay.style.setProperty("min-height", `${virtualScrollController.getVirtualHeightPx()}px`);  
+    const table = scrollFrame.querySelector("table");
+    const thead = table.querySelector("thead");
 
-    const placedContent = document.createElement('DIV'); // make this content appear as if it was scrolled.
-    fairWay.appendChild(placedContent);
-    scrollFrame.appendChild(fairWay);
-    container.appendChild(scrollFrame);
+    const placedContent = scrollFrame.querySelector("tbody"); // make this content appear as if it was scrolled.
 
     /**
      * transforms scrolling container after rerendering the list
@@ -93,42 +100,56 @@ const VirtualScrollView = (container, virtualScrollController, rowTemplate) => {
     const shiftNodes = (scrollingContainer) => scrollingContainer.style.transform = `translateY(${virtualScrollController.getScrollOffsetYPx()}px)`;
 
     /**
-     * Renders the list
-     * @param {number} scrollTop
+     * Renders the list initially
+     * @param {number} scrollTop - the position in pixels of the scrollable area that is currently displayed at the top of the scrollable frame
      */
     const renderList = (scrollTop) => {
         virtualScrollController.setCurrentFirstVirtualItem(scrollTop);
-        //Clear container
-        placedContent.replaceChildren();
-        virtualScrollController.getDataWindow()
-                               .map(element => rowTemplate(element)) // todo: 2 functions for create and update
-                               .forEach((row) => {
-                                   placedContent.appendChild(row);
-                               });
-        shiftNodes(placedContent);
+
+        placedContent.replaceChildren();          // clear container
+        virtualScrollController
+            .getDataWindow()
+            .map(item => rowTemplate(item)) // todo: 2 functions for create and update
+            .forEach(row => placedContent.appendChild(row));
+        shiftNodes(table);
     };
 
-    virtualScrollController.onListScrollTopChanged(renderList);
+    const updateList = (scrollTop) => {
+        virtualScrollController.setCurrentFirstVirtualItem(scrollTop);
+
+        const window = virtualScrollController.getDataWindow();
+        let i = 0;
+        for (const tr of placedContent.querySelectorAll("tr")) {
+            tr.children[0].textContent = window[i].id;
+            tr.children[1].textContent = window[i].title;
+            i++;
+        }
+        shiftNodes(placedContent);
+        thead.style.transform = `translateY(${scrollTop}px)`;
+    };
+
+    virtualScrollController.onListScrollTopChanged(updateList);
     renderList(virtualScrollController.getListScrollTop());
 
     //add event listener to container scroll and rerender list when its triggered
-    scrollFrame.addEventListener('scroll', scrollEvent => {
-        virtualScrollController.setListScrollTop(scrollEvent.target.scrollTop);
-    });
+    scrollFrame.addEventListener('scroll',
+                                 scrollEvent => virtualScrollController.setListScrollTop(scrollEvent.target.scrollTop));
+
+    return [scrollFrame];
 };
 
 /**
  * View for the row counter
  * @param {VirtualScrollControllerType} virtualScrollController
- * @param {Node} container
+ * @returns {Array<HTMLSpanElement>} the created and bound span that displays the row count
  */
-const RowCounterView = (virtualScrollController, container) => {
-    //add row counter
+const RowCounterView = (virtualScrollController) => {
+    /** @type {HTMLSpanElement} */
     const rowCount = document.createElement('SPAN');
-    container.appendChild(rowCount);
     const changeContainer = () => {
         rowCount.innerText = `${virtualScrollController.getDataWindowStartIndex()} - ${virtualScrollController.getDataWindowEndIndex()} / ${virtualScrollController.getDataRowCount()}`;
     };
     changeContainer();
     virtualScrollController.onListScrollTopChanged(changeContainer);
+    return [rowCount];
 };

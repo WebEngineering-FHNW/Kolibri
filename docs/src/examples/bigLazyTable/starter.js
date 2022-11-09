@@ -1,23 +1,46 @@
 import {VirtualScrollController, VirtualScrollView, RowCounterView} from './virtual-scrolling.js';
+import {dom} from '../../kolibri/util/dom.js'
 
 /**
  * initialize virtual scrolling
  * @param {*} data for the list
- * @param {*} container where the list gets rendered
+ * @param {HTMLElement} container where the list gets rendered
  */
 const initVirtualScrolling = (data, container) => {
-    //row template
-    const rowTemplate             = (item) => {
-        const li         = document.createElement('LI');
-        const text       = document.createElement('SPAN');
-        text.textContent = `${item.id}. ${item.title}`;
-        li.appendChild(text);
-        return li;
+    
+    const headTemplate = () => {
+        // without TABLE, the TR does not get created.
+        const [table] = dom (`                
+            <TABLE>
+                <THEAD>
+                    <TR>
+                        <TH>Nr.</TH>
+                        <TH>Name</TH>
+                    </TR>       
+                </THEAD>
+             </TABLE>
+        `);
+        return /** @type { HTMLTableRowElement } */ table.querySelector("tr");
     };
+    
+    const rowTemplate = item => {
+        // without TABLE, the TR does not get created.
+        const [table] = dom(`
+            <TABLE>
+                <TR>
+                    <TD>${item.id}</TD>
+                    <TD>${item.title}</TD>
+                </TR>
+            </TABLE>
+        `);
+        return /** @type { HTMLTableRowElement } */ table.querySelector("tr");
+    };
+    
+    
     //Init Virtual Scroll
     const virtualScrollController = VirtualScrollController(container.clientHeight, 18, data);
-    VirtualScrollView(container, virtualScrollController, rowTemplate);
-    RowCounterView(virtualScrollController, container);
+    container.append(...VirtualScrollView(virtualScrollController, headTemplate, rowTemplate));
+    container.append(...RowCounterView(virtualScrollController));
 };
 
 const data = length => {
@@ -28,6 +51,6 @@ const data = length => {
 };
 
 const listcontainer = document.getElementById('listContainer');
-initVirtualScrolling(data(100_000_000), listcontainer); // max 1_864_134 in chrome and safari, FF even less
+initVirtualScrolling(data(100), listcontainer); // max 1_864_134 in chrome and safari, FF even less
 
 
