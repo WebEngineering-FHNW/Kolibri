@@ -22,11 +22,11 @@
     type:   "text",
   });
 
-    const [label, input] = projectDebounceInput("Wyss", controller);
+    const [label, input] = projectDebounceInput("Wyss", controller, 200);
 
-    const el = document.getElementById("input");
-    const button = document.getElementById("btn");
-    const output = document.getElementById("out");
+    const el        = document.getElementById("input");
+    const button    = document.getElementById("btn");
+    const output    = document.getElementById("out");
     el.append(label,input);
 
     button.onclick = () => controller.setValue("Wild");

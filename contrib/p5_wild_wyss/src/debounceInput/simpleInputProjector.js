@@ -33,7 +33,7 @@ let counter = 0;
 /**
  * Projection function that creates a view for input purposes, binds the information that is available through
  * the inputController, and returns the generated views.
- * @typedef { (formClassName:!String, inputController:!SimpleInputControllerType<T>)
+ * @typedef { (formClassName:!String, inputController:!SimpleInputControllerType<T>, timeout:Number)
  *               => [HTMLLabelElement, HTMLInputElement]
  *          } InputProjector<T>
  * @template T
@@ -46,7 +46,7 @@ let counter = 0;
  * @type { (eventType:EventTypeString) => InputProjector<T> }
  * @template T
  */
-const projectInput = (eventType, debounce = false) => (formClassName, inputController) => {
+const projectInput = (eventType) => (formClassName, inputController, timeout = 0) => {
     if( ! inputController) {
         console.error("no inputController in input projector."); // be defensive
         return;
@@ -73,7 +73,7 @@ const projectInput = (eventType, debounce = false) => (formClassName, inputContr
         inputElement.addEventListener(eventType, _ => inputController.setValue(inputElement.checked));
         inputController.onValueChanged(val => inputElement.checked = val);
     } else {
-        if(debounce) {
+        if(timeout !== 0) {
             let timeout;
             inputElement.addEventListener(eventType, _event => {
                 if(timeout !== undefined) clearTimeout(timeout);
@@ -126,5 +126,14 @@ const projectChangeInput  = projectInput(CHANGE);
  */
 const projectInstantInput = projectInput(INPUT);
 
-
-const projectDebounceInput = projectInput(INPUT, true);
+/**
+ * An {@link InputProjector} that binds the input on any change with a given delay.
+ * Each keystroke triggers the defined timeout. If the timeout is still pending while a key is pressed,
+ * it is reset and starts from beginning. After the timeout expires, the underlying model is updated.
+ * @constant
+ * @template T
+ * @type { InputProjector<T> }
+ * @example
+ * const [labelElement, spanElement] = projectDebounceInput(controller, 200);
+ */
+const projectDebounceInput = projectInput(INPUT);
