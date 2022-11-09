@@ -16,7 +16,9 @@ export {
   errorLogger,
   fatalLogger,
   setGlobalContext,
+  getGlobalContext,
   setLoggingLevel,
+  getLoggingLevel,
 }
 
 /**
@@ -213,6 +215,12 @@ let globalContext = "";
 const setGlobalContext = context => globalContext = context;
 
 /**
+ *
+ * @return { String } - the current global context
+ */
+const getGlobalContext = () => globalContext;
+
+/**
  * This is a state.
  * The currently activated logging level.
  * Only messages whose have at least this log level are logged.
@@ -230,3 +238,9 @@ let loggingLevel = LOG_DEBUG;
  * setLoggingLevel(LOG_DEBUG);
  */
 const setLoggingLevel = level => loggingLevel = level;
+
+/**
+ *
+ * @return { LogLevelType } - the current logging level
+ */
+const getLoggingLevel = () => loggingLevel;

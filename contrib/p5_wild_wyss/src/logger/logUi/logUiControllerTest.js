@@ -1,9 +1,11 @@
-import { TestSuite }        from "../../../../../docs/src/kolibri/util/test.js";
-import { LogUiModel }       from "./logUiModel.js";
-import { Appender }         from "../appender/observableAppender.js";
+import {getLoggingLevel, LOG_DEBUG, setLoggingLevel} from "../logger.js";
 import { LogUiController }  from "./logUiController.js";
+import { LogUiModel }       from "./logUiModel.js";
+import { TestSuite }        from "../../../../../docs/src/kolibri/util/test.js";
+import { Appender }         from "../appender/observableAppender.js";
 import { pop }              from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import { snd, fst }              from "../lamdaCalculus.js";
+import { snd }              from "../lamdaCalculus.js";
+
 
 /**
  *
@@ -19,7 +21,10 @@ const beforeStart = () => {
  * @param { LogUiControllerType } controller
  * @return {*}
  */
-const cleanUp = controller => controller.resetLogMessages();
+const cleanUp = controller => {
+  setLoggingLevel(LOG_DEBUG);
+  controller.resetLogMessages();
+}
 
 const loggerSuite = TestSuite("LogUiController");
 
@@ -111,6 +116,22 @@ loggerSuite.add("test filter message by log level", assert => {
   controller.flipLogLevel(debugLevel);
   // Now debug level is enabled again, so the last logged message should be on top of the stack
   assert.is(message(snd), logMessage2);
+
+  cleanUp(controller);
+});
+
+loggerSuite.add("test set global logging level by string", assert => {
+  const { controller } = beforeStart();
+
+  let loggingLevel = "DEBUG";
+  controller.setLoggingLevelByString(loggingLevel);
+  let currentLoggingLevel = getLoggingLevel();
+  assert.is(loggingLevel, currentLoggingLevel(snd))
+
+  loggingLevel = "ERROR";
+  controller.setLoggingLevelByString(loggingLevel);
+  currentLoggingLevel = getLoggingLevel();
+  assert.is(loggingLevel, currentLoggingLevel(snd))
 
   cleanUp(controller);
 });

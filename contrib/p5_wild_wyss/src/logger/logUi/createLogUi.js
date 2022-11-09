@@ -3,6 +3,9 @@ export { createLogUi }
 import { dom }              from "../../../../../docs/src/kolibri/util/dom.js"
 import { shadowCss }        from "../../../../../docs/src/kolibri/style/kolibriStyle.js";
 import { LogUiController }  from "./logUiController.js";
+import {projectDebounceInput} from "./../../debounceInput/simpleInputProjector.js";
+import {SimpleInputController} from "../../../../../docs/src/kolibri/projector/simpleForm/simpleInputController.js";
+
 import {
   LogMessagesView,
   projectLogLevelControls

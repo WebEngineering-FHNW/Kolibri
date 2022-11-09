@@ -117,16 +117,16 @@ const contextInputProjector = controller => {
 const loggingSelectProjector = controller => {
 
   const [label, select] = dom(`
-       <label class="textLabel" for="loggingLevels">Logging Level</label>
-      <select name="levels" id="loggingLevels">
-        <option          value="${LOG_TRACE(snd)}"  > ${LOG_TRACE(snd)}  </option>
-        <option selected value="${LOG_DEBUG(snd)}"  > ${LOG_DEBUG(snd)}  </option>
-        <option          value="${LOG_INFO(snd)}"   > ${LOG_INFO(snd)}   </option>
-        <option          value="${LOG_WARN(snd)}"   > ${LOG_WARN(snd)}   </option>
-        <option          value="${LOG_ERROR(snd)}"  > ${LOG_ERROR(snd)}  </option>
-        <option          value="${LOG_FATAL(snd)}"  > ${LOG_FATAL(snd)}  </option>
-        <option          value="${LOG_NOTHING(snd)}"> ${LOG_NOTHING(snd)}</option>
-      </select> 
+          <label class="textLabel" for="loggingLevels">Logging Level</label>
+          <select name="levels" id="loggingLevels">
+            <option          value="${LOG_TRACE(snd)}"  > ${LOG_TRACE(snd)}  </option>
+            <option selected value="${LOG_DEBUG(snd)}"  > ${LOG_DEBUG(snd)}  </option>
+            <option          value="${LOG_INFO(snd)}"   > ${LOG_INFO(snd)}   </option>
+            <option          value="${LOG_WARN(snd)}"   > ${LOG_WARN(snd)}   </option>
+            <option          value="${LOG_ERROR(snd)}"  > ${LOG_ERROR(snd)}  </option>
+            <option          value="${LOG_FATAL(snd)}"  > ${LOG_FATAL(snd)}  </option>
+            <option          value="${LOG_NOTHING(snd)}"> ${LOG_NOTHING(snd)}</option>
+          </select> 
   `);
 
   select.onchange = _event => controller.setLoggingLevelByString(select.value);
@@ -168,7 +168,7 @@ const projectLevelToggleControl = controller => checkBoxPair => {
       ? label.classList.remove ("checkedSpan")
       : label.classList.add    ("checkedSpan");
 
-  label.onclick = _ => // TODO : event.onchange
+  label.onclick = _ =>
     controller.flipLogLevel(checkBoxPair);
 
   return /**@type { HTMLLabelElement } */label;
