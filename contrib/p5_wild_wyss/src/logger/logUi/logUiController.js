@@ -1,7 +1,6 @@
-import {LogUiModel} from "./logUiModel.js";
-
 export { LogUiController }
 
+import { LogUiModel }       from "./logUiModel.js";
 import { fst, snd, Pair }   from "../lamdaCalculus.js";
 import {
   LOG_DEBUG,
@@ -77,7 +76,10 @@ const LogUiController = () => {
    */
   const setLoggingLevelByString = levelString => {
     const newLoggingLevel = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL]
-        .filter(lvl => lvl(snd) === levelString);
+        .filter(lvl => {
+          const lvlString =  /** @type String */ lvl(snd);
+          return lvlString === levelString;
+        });
       setLoggingLevel(newLoggingLevel[0])
   };
 
