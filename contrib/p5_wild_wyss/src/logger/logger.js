@@ -1,5 +1,5 @@
 import { Pair, snd, fst } from "../../../../docs/src/kolibri/stdlib.js"
-import { n0, n1, n2, n3, n4, n5, n9, LazyIf, Else, Then, and, False, toChurchBoolean, leq } from "./lamdaCalculus.js";
+import { n0, n1, n2, n3, n4, n5, n9, LazyIf, Else, Then, and, False, True, toChurchBoolean, leq } from "./lamdaCalculus.js";
 
 export {
   LOG_TRACE,
@@ -20,7 +20,6 @@ export {
   setLoggingLevel,
   getLoggingLevel,
 }
-
 /**
  * Yields a custom configured log function.
  * Processes all log-actions which have a {@link LogLevelType} equals or beneath
@@ -39,8 +38,8 @@ export {
  * @pure if the parameters "append" of type {@link AppendCallback} and msgFormatter of type {@link MsgFormatType} are pure.
  * @type    {
  *               (loggerLevel:      LogLevelType)
+ *            => (append:           AppendCallback[])
  *            => (context:          String)
- *            => (append:           AppendCallback)
  *            => (formatMsg:        MsgFormatType)
  *            => (msg:              LogMeType)
  *            => churchBoolean
@@ -51,12 +50,13 @@ export {
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
-const logger = loggerLevel => context => append => formatMsg => msg =>
-  LazyIf(
+
+const logger = loggerLevel => append => context => formatMsg => msg =>
+LazyIf(
       messageShouldBeLogged(loggerLevel)(context)
     )
     (Then(() =>
-      append(formatMsg(context)(loggerLevel(snd))(evaluateMessage(msg))))
+      append.map(app => app(formatMsg(context)(loggerLevel(snd))(evaluateMessage(msg)))).reduce( (acc, cur) => and(acc)(cur), True))
     )
     (Else(() => False));
 
@@ -147,7 +147,8 @@ const LOG_NOTHING = Pair(n9)("NOTHING");
  * trace("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const traceLogger = logger(LOG_TRACE);
+const traceLogger = (activeAppenderCallback) =>
+    logger(LOG_TRACE)(activeAppenderCallback().map(app => app.trace));
 
 /**
  * Creates a new logger at log level {@link LOG_DEBUG}.
@@ -156,7 +157,8 @@ const traceLogger = logger(LOG_TRACE);
  * debug("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const debugLogger = logger(LOG_DEBUG);
+const debugLogger = (activeAppenderCallback) =>
+    logger(LOG_DEBUG)(activeAppenderCallback().map(app => app.debug));
 
 /**
  * Creates a new logger at log level {@link LOG_INFO}.
@@ -165,7 +167,8 @@ const debugLogger = logger(LOG_DEBUG);
  * debug("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const infoLogger = logger(LOG_INFO);
+const infoLogger = (activeAppenderCallback) =>
+    logger(LOG_INFO)(activeAppenderCallback().map(app => app.info));
 
 /**
  * Creates a new logger at log level {@link LOG_WARN}.
@@ -174,7 +177,8 @@ const infoLogger = logger(LOG_INFO);
  * warn("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const warnLogger = logger(LOG_WARN);
+const warnLogger = (activeAppenderCallback) =>
+    logger(LOG_WARN)(activeAppenderCallback().map(app => app.warn));
 
 /**
  * Creates a new logger at log level {@link LOG_ERROR}.
@@ -183,7 +187,8 @@ const warnLogger = logger(LOG_WARN);
  * error("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const errorLogger = logger(LOG_ERROR);
+const errorLogger = (activeAppenderCallback) =>
+    logger(LOG_ERROR)(activeAppenderCallback().map(app => app.error));
 
 /**
  * Creates a new logger at log level {@link LOG_FATAL}.
@@ -192,7 +197,8 @@ const errorLogger = logger(LOG_ERROR);
  * fatal("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const fatalLogger = logger(LOG_FATAL);
+const fatalLogger = (activeAppenderCallback) =>
+    logger(LOG_FATAL)(activeAppenderCallback().map(app => app.fatal));
 
 /**
  * This is a state.

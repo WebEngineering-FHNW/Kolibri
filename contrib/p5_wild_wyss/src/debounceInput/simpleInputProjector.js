@@ -21,8 +21,6 @@ import { timeStringToMinutes,
 
 export { projectInstantInput, projectChangeInput, projectDebounceInput }
 
-const DEBOUNCE_TIMEOUT_MS = 200;
-
 /**
  * Internal mutable singleton state to produce unique id values for the label-input pairs.
  * @private
@@ -74,12 +72,12 @@ const projectInput = (eventType) => (formClassName, inputController, timeout = 0
         inputController.onValueChanged(val => inputElement.checked = val);
     } else {
         if(timeout !== 0) {
-            let timeout;
+            let timeoutId;
             inputElement.addEventListener(eventType, _event => {
-                if(timeout !== undefined) clearTimeout(timeout);
-                timeout = setTimeout( _timestamp =>
+                if(timeoutId !== undefined) clearTimeout(timeoutId);
+                timeoutId = setTimeout( _timestamp =>
                     inputController.setValue(inputElement.value),
-                    DEBOUNCE_TIMEOUT_MS
+                    timeout
                 );
             });
         } else {

@@ -9,8 +9,8 @@ const formatLogMsg = context => logLevel => logMessage => {
   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
 };
 
-const logger =  LogFactory("ch.fhnw")    (appender)(formatLogMsg);
-const logger2 = LogFactory("ch.fhnw.ip5")(appender)(formatLogMsg);
+const logger =  LogFactory(() => [appender])("ch.fhnw")    (formatLogMsg);
+const logger2 = LogFactory(() => [appender])("ch.fhnw.ip5")(formatLogMsg);
 
 const container = document.getElementById("container");
 
