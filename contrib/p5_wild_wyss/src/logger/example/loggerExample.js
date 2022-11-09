@@ -10,11 +10,10 @@ import {
   setLoggingLevel,
 } from "../logger.js";
 
-import {Appender as ArrayAppender}    from "../appender/arrayAppender.js";
-import {Appender as StringAppender}   from "../appender/stringAppender.js";
-import {Appender as ConsoleAppender}  from "../appender/consoleAppender.js";
-import {Appender as CountAppender}    from "../appender/countAppender.js";
-import {LogFactory}                   from "../logFactory.js";
+import { Appender as ArrayAppender }    from "../appender/arrayAppender.js";
+import { Appender as ConsoleAppender }  from "../appender/consoleAppender.js";
+import { Appender as CountAppender }    from "../appender/countAppender.js";
+import { LogFactory }                   from "../logFactory.js";
 
 const LOGGER_CONTEXT          = "ch.fhnw.sample.logger";
 const INITIAL_GLOBAL_CONTEXT  = "ch.fhnw";
@@ -22,7 +21,6 @@ const INITIAL_GLOBAL_CONTEXT  = "ch.fhnw";
 setGlobalContext(INITIAL_GLOBAL_CONTEXT);
 
 const consoleAppender = ConsoleAppender();
-const stringAppender  = StringAppender();
 const arrayAppender   = ArrayAppender();
 const countAppender   = CountAppender();
 
@@ -37,13 +35,12 @@ const formatLogMsg = context => logLevel => logMessage => {
 };
 
 const consoleLogger   = LogFactory(LOGGER_CONTEXT)(consoleAppender)(formatLogMsg);
-const stringLogger    = LogFactory(LOGGER_CONTEXT)(stringAppender) (formatLogMsg);
 const arrayLogger     = LogFactory(LOGGER_CONTEXT)(arrayAppender)  (formatLogMsg);
 const countLogger     = LogFactory(LOGGER_CONTEXT)(countAppender)  (formatLogMsg);
 
 const logLevels       = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
-const loggers         = [consoleLogger,   stringLogger,   arrayLogger,   countLogger];
-const appender        = [consoleAppender, stringAppender, arrayAppender, countAppender];
+const loggers         = [consoleLogger,   arrayLogger,   countLogger];
+const appender        = [consoleAppender, arrayAppender, countAppender];
 
 const traceAction     = () => log("trace");
 const debugAction     = () => log("debug");
