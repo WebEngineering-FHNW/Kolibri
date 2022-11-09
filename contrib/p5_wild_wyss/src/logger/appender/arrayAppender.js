@@ -7,8 +7,6 @@ const OVERFLOW_LOG_MESSAGE  =
   "LOG ERROR: Despite running the chosen eviction strategy, the array was full! The first third of the log messages have been deleted!";
 
 /**
- * This is the default function that gets called when the defined limit has been reached.
- * It will remove the first third of the array, but at least as many elements as defined by {@link MIN_ARRAY_LENGTH.}
  * @param {String[]} currentValue
  * @returns String[]
  * @pure
@@ -24,7 +22,7 @@ const DEFAULT_CACHE_EVICTION_STRATEGY  = currentValue => {
  * Pushes all log messages into an array.
  * Use {@link getValue} to get the latest array content
  * and use {@link reset} to clear the array.
- * @type  { appenderCtor<String[]> }
+ * @type  { appenderCtor.<String[]> }
  */
 const Appender = (limit = MAX_ARRAY_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
   const calculatedLimit = MIN_ARRAY_LENGTH < limit ? limit: MIN_ARRAY_LENGTH;

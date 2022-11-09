@@ -1,8 +1,8 @@
 export { Appender }
 
-import { True }               from "../lamdaCalculus.js";
+import {False, True, jsNum, LazyIf, Then, Else, id} from "../lamdaCalculus.js";
 import { Observable }         from "../../../../../docs/src/kolibri/observable.js";
-import { emptyStack, push }   from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import { emptyStack, push, size }   from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import { Pair }               from "../../../../../docs/src/kolibri/stdlib.js"
 import {
   LOG_DEBUG,
@@ -13,27 +13,50 @@ import {
   LOG_WARN
 } from "../logger.js";
 
+const MAX_STACK_ELEMENTS = Number.MAX_SAFE_INTEGER -1;
+const MIN_STACK_SIZE = 2;
+
+const OVERFLOW_LOG_MESSAGE  =
+  "LOG ERROR: Despite running the chosen eviction strategy, the array was full! The first third of the log messages have been deleted!";
+
 /**
- * Provides console appender.
- * Using this appender you are able to log to the console.
- * @type    { appenderCtor.<IObservable<stack>> }
+ * This is the default function that gets called when the defined limit has been reached.
+ * It will empty the whole stack.
+ * @param   { IObservable<stack> } currentValue
+ * @returns { IObservable<stack> }
  */
-const Appender = () => ({
-  trace,
-  debug,
-  info,
-  warn,
-  error,
-  fatal,
-  getValue,
-  reset
-});
+const DEFAULT_CACHE_EVICTION_STRATEGY =  currentValue => {
+  // clear stack
+  currentValue.setValue(emptyStack);
+  return currentValue;
+};
+
+/**
+ * Provides an observable appender.
+ * Use {@link getValue} to get the observable and register yourself on changes
+ * and use {@link reset} to clear the array.
+ * @type  { appenderCtor.<IObservable<stack>> }
+ */
+const Appender = (limit = MAX_STACK_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
+  // make sure, the stack is not defined too small.
+  const calculatedLimit = MIN_STACK_SIZE < limit ? limit: MIN_STACK_SIZE;
+  return {
+    trace:  trace(calculatedLimit)(cacheEvictionStrategy),
+    debug:  debug(calculatedLimit)(cacheEvictionStrategy),
+    info:   info(calculatedLimit)(cacheEvictionStrategy),
+    warn:   warn(calculatedLimit)(cacheEvictionStrategy),
+    error:  error(calculatedLimit)(cacheEvictionStrategy),
+    fatal:  fatal(calculatedLimit)(cacheEvictionStrategy),
+    getValue,
+    reset
+  };
+};
 
 /**
  *
  * @type {IObservable<stack>}
  */
-const logObservable = Observable(emptyStack);
+let logObservable = Observable(emptyStack);
 
 /**
  * This appender returns an observable containing a stack
@@ -41,6 +64,7 @@ const logObservable = Observable(emptyStack);
  * @returns {IObservable<stack>}
  */
 const getValue = () => logObservable;
+
 /**
  *
  * @return {IObservable<stack>}
@@ -52,48 +76,100 @@ const reset = () => {
   return Observable(lastValue);
 };
 
+
+
 /**
- * @type { (PrioritySupplier) => (String) => churchBoolean }
+ * Appends the next log message to the stack.
+ * @type {
+ *          (type: PrioritySupplier)  =>
+ *          (number)                  =>
+ *          (onOverflow: *)           =>
+ *          (msg: String)             =>
+ *          churchBoolean
+ *      }
  */
-const appenderCallback = type => msg => {
-  const p = Pair(type)(msg);
-  const newStack = push(logObservable.getValue())(p);
-  logObservable.setValue(newStack);
-  return True;
-};
+const appenderCallback = type => limit => onOverflow => msg =>
+  LazyIf(full(limit))
+    // if the stack is full, call the overflow function and add the new value afterwards.
+    (Then(() => append(type)(msg)(limit)(onOverflow)))
+    // in any other case just append the new message.
+    (Else(() => append(type)(msg)(limit)(id)));
+
 
 /**
  * the function to append trace logs in this application
- * @type { AppendCallback }
  */
 const trace = appenderCallback(LOG_TRACE);
 
 /**
  * the function to append debug logs in this application
- * @type { AppendCallback }
  */
 const debug = appenderCallback(LOG_DEBUG);
 
 /**
  * the function to append info logs in this application
- * @type { AppendCallback }
  */
 const info = appenderCallback(LOG_INFO);
 
 /**
  * the function to append warn logs in this application
- * @type { AppendCallback }
  */
 const warn = appenderCallback(LOG_WARN);
 
 /**
  * the function to append error logs in this application
- * @type { AppendCallback }
  */
 const error = appenderCallback(LOG_ERROR);
 
 /**
  * the function to append fatal logs in this application
- * @type { AppendCallback }
  */
 const fatal = appenderCallback(LOG_FATAL);
+
+
+/**
+ * Returns {@link True} if the stack equals the limit.
+ * @param { number } limit
+ * @returns churchBoolean
+ * @private
+ */
+const full = limit =>
+  limit === jsNum(size(logObservable.getValue())) ? True: False;
+
+/**
+ * Appends the given message to the stack.
+ * If the stack size equals the param limit, the stack will be evicted using the defined eviction strategy.
+ * @type {
+ *        (type: PrioritySupplier) =>
+ *        (msg: String) =>
+ *        (limit: Number) =>
+ *        (evictionStrategy: unaryOperation.<IObservable.<stack>>) =>
+ *        churchBoolean
+ * }
+ */
+const append = type => msg => limit => evictionStrategy => {
+  // evict the stack using the given evictionStrategy
+  logObservable = evictionStrategy(logObservable);
+  LazyIf(full(limit))
+    (Then(()=>{
+      // if the stack is full, despite using the set eviction strategy, use the default eviction strategy to make space.
+      logObservable = DEFAULT_CACHE_EVICTION_STRATEGY(logObservable);
+      logObservable.setValue(createNewStack(LOG_ERROR)(OVERFLOW_LOG_MESSAGE));
+      logObservable.setValue(createNewStack(type)(msg));
+    }))
+    (Else(()=>{
+      logObservable.setValue(createNewStack(type)(msg));
+    }));
+  return True;
+};
+
+/**
+ * creates a new stack on top of the observablestack
+ * @type {
+ *   (type: PrioritySupplier) =>
+ *   (msg: String) =>
+ *   stack
+ * }
+ */
+const createNewStack = type => msg =>
+  push(logObservable.getValue())(Pair(type)(msg));

@@ -1,6 +1,5 @@
 import "../src/logger/loggerTest.js";
 import "../src/logger/appender/arrayAppenderTest.js"
-import "../src/logger/appender/stringAppenderTest.js"
 import "../src/logger/appender/countAppenderTest.js"
 import "../src/logger/appender/consoleAppenderTest.js"
 import "../src/logger/appender/observableAppenderTest.js"

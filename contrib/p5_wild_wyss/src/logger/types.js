@@ -68,7 +68,6 @@
  *      value. Return a new value which will be used as the new value of this appender.
  *      If this parameter is not set, then all log messages until now will be discarded.
  * @returns {AppenderType<Template>}
- * @function
  * @constructor
  */
 
@@ -91,7 +90,7 @@
  */
 
 /**
- * The currently active loglevel for this application.
+ * The currently active logging level for this application.
  * @callback PrioritySupplier
  * @return { LogLevelType }
  */
