@@ -1,57 +1,68 @@
 export {Appender}
-import {False, True, LazyIf, Then, Else, not, id} from "../lamdaCalculus.js";
+import {False, True, LazyIf, Then, Else, id} from "../lamdaCalculus.js";
 
-const MAX_ARRAY_ELEMENTS  = Number.MAX_SAFE_INTEGER - 1;
-const SAFE_REMOVE_COUNT   = 2;
+const MAX_ARRAY_ELEMENTS    = Number.MAX_SAFE_INTEGER - 1;
+const MIN_ARRAY_LENGTH      = 2;
+const OVERFLOW_LOG_MESSAGE  =
+  "LOG ERROR: Despite running the chosen eviction strategy, the array was full! The first third of the log messages have been deleted!";
 
 /**
  * This is the default function that gets called when the defined limit has been reached.
- * @param {String[]} _
+ * It will remove the first third of the array, but at least as many elements as defined by {@link MIN_ARRAY_LENGTH.}
+ * @param {String[]} currentValue
  * @returns String[]
- * @constructor
+ * @pure
  */
-const ON_LIMIT_REACHED  = _ => []; // TODO default strategy (remove the oldest 1/3 of array)
+const DEFAULT_CACHE_EVICTION_STRATEGY  = currentValue => {
+  const oneThirdIndex = Math.round(currentValue.length / 3);
+  // if oneThird is smaller than the minimum of the array length, slice the whole array.
+  const deleteUntilIndex = oneThirdIndex > MIN_ARRAY_LENGTH ? oneThirdIndex: MIN_ARRAY_LENGTH;
+  return currentValue.slice(deleteUntilIndex);
+};
 
 /**
  * Pushes all log messages into an array.
  * Use {@link getValue} to get the latest array content
  * and use {@link reset} to clear the array.
- * @type appenderCtor<String[]>
+ * @type  { appenderCtor<String[]> }
  */
-const Appender = (limit = MAX_ARRAY_ELEMENTS, onOverflow = ON_LIMIT_REACHED) => ({
-  /**
-   * the function to append trace logs in this application
-   * @type {AppendCallback}
-   */
-  trace:    appenderCallback(limit)(onOverflow),
-  /**
-   * the function to append debug logs in this application
-   * @type {AppendCallback}
-   */
-  debug:    appenderCallback(limit)(onOverflow),
-  /**
-   * the function to append info logs in this application
-   * @type {AppendCallback}
-   */
-  info:     appenderCallback(limit)(onOverflow),
-  /**
-   * the function to append warn logs in this application
-   * @type {AppendCallback}
-   */
-  warn:     appenderCallback(limit)(onOverflow),
-  /**
-   * the function to append error logs in this application
-   * @type {AppendCallback}
-   */
-  error:    appenderCallback(limit)(onOverflow),
-  /**
-   * the function to append fatal logs in this application
-   * @type {AppendCallback}
-   */
-  fatal:    appenderCallback(limit)(onOverflow),
-  getValue: getValue,
-  reset:    reset,
-});
+const Appender = (limit = MAX_ARRAY_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
+  const calculatedLimit = MIN_ARRAY_LENGTH < limit ? limit: MIN_ARRAY_LENGTH;
+  return {
+    /**
+     * the function to append trace logs in this application
+     * @type {AppendCallback}
+     */
+    trace: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+    /**
+     * the function to append debug logs in this application
+     * @type {AppendCallback}
+     */
+    debug: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+    /**
+     * the function to append info logs in this application
+     * @type {AppendCallback}
+     */
+    info: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+    /**
+     * the function to append warn logs in this application
+     * @type {AppendCallback}
+     */
+    warn: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+    /**
+     * the function to append error logs in this application
+     * @type {AppendCallback}
+     */
+    error: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+    /**
+     * the function to append fatal logs in this application
+     * @type {AppendCallback}
+     */
+    fatal: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+    getValue: getValue,
+    reset: reset,
+  };
+};
 
 /**
  * Collects all log messages by storing them in the array.
@@ -89,7 +100,7 @@ const appenderCallback = limit => onOverflow => msg =>
     // if the array is full, call the overflow function and add the new value afterwards.
     (Then(() => append(msg)(limit)(onOverflow)))
     // in any other case just append the new message.
-    (Else(() => append(msg)(limit)(    id      )));
+    (Else(() => append(msg)(limit)(    id    )));
 
 /**
  * Returns {@link True} if the appender array equals the limit.
@@ -102,17 +113,25 @@ const full = limit =>
 
 
 /**
- * Appends the given message to the array & runs an optional callback afterwards.
+ * Appends the given message to the array.
+ * If the array lenght equals the param limit, the array cache will be evicted using the defined eviction strategy.
  * @type  {
  *          (msg: String!) =>
  *          (limit: number!) =>
- *          (callback: unaryOperation<String[]>!) =>
+ *          (evictionStrategy: unaryOperation<String[]>!) =>
  *          churchBoolean
  *        }
  */
-const append = msg => limit => callback => {
-   appenderArray = callback(appenderArray);
-   const arrayHasSpace = not(full(limit));
-   if(arrayHasSpace(true)(false)) appenderArray.push(msg); // TODO: log error (apply default and log error - testing)
-   return arrayHasSpace;
+const append = msg => limit => evictionStrategy => {
+  // evict the array using the given evictionStrategy
+  appenderArray = evictionStrategy(appenderArray);
+  LazyIf(full(limit))
+    (Then(() => {
+      // if array is full, despite using the set eviction strategy, use the default eviction strategy to make space.
+      appenderArray = DEFAULT_CACHE_EVICTION_STRATEGY(appenderArray);
+      appenderArray.push(OVERFLOW_LOG_MESSAGE);
+      appenderArray.push(msg)
+    }))
+    (Else( () => appenderArray.push(msg)));
+  return True;
 };
