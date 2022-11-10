@@ -28,8 +28,8 @@ const initVirtualScrolling = (data, container) => {
         const [table] = dom(`
             <TABLE>
                 <TR>
-                    <TD>${item?.id}</TD>
-                    <TD>${item?.title}</TD>
+                    <TD>${item ? item.id :   "n/a" }</TD>
+                    <TD>${item ? item.title: "n/a" }</TD>
                 </TR>
             </TABLE>
         `);
@@ -54,8 +54,9 @@ const data = length => {
     return {length, getWindow}
 };
 
-const listcontainer = document.getElementById('listContainer');
-initVirtualScrolling(data(50), listcontainer); // max 1_864_134 in chrome and safari, FF even less
-// initVirtualScrolling(data(100_000_000), listcontainer); // max 1_864_134 in chrome and safari, FF even less
+const tableContainer = document.getElementById('tableContainer');
+// initVirtualScrolling(data(50), tableContainer); // max 1_864_134 in chrome and safari, FF even less
+initVirtualScrolling(data(1_000_00), tableContainer);
+// initVirtualScrolling(data(100_000_000), tableContainer);
 
 

@@ -37,14 +37,23 @@ const VirtualScrollController = data => {
     let dataWindowStartIndex = 0;
     let scrollOffsetYPx      = 0;
 
+    const updateScrollOffset = (scrollTop) => {
+        scrollOffsetYPx  = rowHeightPx * dataWindowStartIndex;
+        if (scrollTop >  headerRowHeightPx) {      // we have to move beyond the header space ...
+            scrollOffsetYPx += headerRowHeightPx;
+        } else {                                   // ... unless when the position is smaller than the header height
+            scrollOffsetYPx = scrollTop;
+        }
+    };
+
     /** Re-Dimensioning based on changes in one of the dimensions */
     const reDim = () => {
-        virtualHeightPx = dataRowCount * rowHeightPx;
+        virtualHeightPx = headerRowHeightPx + dataRowCount * rowHeightPx;
         factor          = Math.min(1.0, MAX_SCROLL_TOP / virtualHeightPx);
         virtualHeightPx *= factor;
         rowHeightPx     *= factor;
         dataWindowSize  = Math.floor( (containerHeightPx - headerRowHeightPx) / rowHeightPx);
-        scrollOffsetYPx = rowHeightPx * dataWindowStartIndex;
+        updateScrollOffset(0);
     };
     reDim();
 
@@ -54,19 +63,18 @@ const VirtualScrollController = data => {
      */
     const setCurrentFirstVirtualItem = (scrollTop) => {
         scrollTop = Math.min(scrollTop, MAX_SCROLL_TOP);
-        dataWindowStartIndex = Math.round(scrollTop / rowHeightPx) ;
+        dataWindowStartIndex = Math.round((scrollTop - headerRowHeightPx) / rowHeightPx) ;
         dataWindowStartIndex = Math.max(0, dataWindowStartIndex);
-        if (dataRowCount - dataWindowStartIndex < dataWindowSize) {
-            dataWindowStartIndex = dataRowCount - dataWindowSize;
+        if (dataRowCount - dataWindowStartIndex < dataWindowSize) { // reaching the end
+            dataWindowStartIndex = dataRowCount - dataWindowSize + 1;
         }
-        scrollOffsetYPx  = rowHeightPx * dataWindowStartIndex;
+        updateScrollOffset(scrollTop);
     };
 
     return {
         getVirtualHeightPx:         () => virtualHeightPx,
-        getDataWindowSize:          () => dataWindowSize,
         getDataWindowStartIndex:    () => dataWindowStartIndex,
-        getDataWindowEndIndex:      () => dataWindowStartIndex + dataWindowSize,
+        getDataWindowEndIndex:      () => dataWindowStartIndex + dataWindowSize - 1,
         getDataRowCount:            () => dataRowCount,
         getDataWindow:              () => data.getWindow(dataWindowStartIndex, dataWindowSize),
         setRowHeightPx:             px => { rowHeightPx       = px; reDim(); },
@@ -87,23 +95,24 @@ const VirtualScrollController = data => {
  * @param { ()       => HTMLTableRowElement } headTemplate - function which returns a thead content
  * @param { (item:*) => HTMLTableRowElement } rowTemplate - function which renders a row and returns an element
  * @param { ( tds:HTMLCollection, item:*) => void } rowFill - function that fills the table data of the row with a data item
- * @returns {Array<HTMLDivElement>} the created and bound frame that holds the scrollable content
+ * @returns void - returns nothing since we have to side effect the container
  */
 const VirtualScrollView = (virtualScrollController, container, headTemplate, rowTemplate, rowFill) => {
 
-    const view = dom(`
+    const [scrollFrame] = dom(`
         <DIV id="scrollFrame" style="overflow: auto;">
             <DIV id="fairWay" style="min-height: ${virtualScrollController.getVirtualHeightPx()}px;">
-                <TABLE >
-                    <THEAD></THEAD>
+                <TABLE style="border-collapse: collapse;border-spacing: 0;">
                     <TBODY></TBODY>
+                    <THEAD></THEAD>
                 </TABLE>
             </DIV>
         </DIV>
     `);
+    // ATTN! It is on purpose that THEAD comes _after_ TBODY !!!
+    // This ensures that the header is always painted on top of any data rows that might
+    // spill over at the end display of data sets with > 2 Mio entries when rounding errors for the offset kick in.
 
-    /** @type {HTMLDivElement} */
-    const scrollFrame = view[0];
     container.appendChild(scrollFrame);             // we need to do this early to get the bounding rect dimensions
     const table = scrollFrame.querySelector("table");
     const thead = table.querySelector("thead");
@@ -156,11 +165,9 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
     updateTable(virtualScrollController.getListScrollTop());
     virtualScrollController.onListScrollTopChanged(updateTable);
 
-    //add event listener to container scroll and rerender list when its triggered
-    scrollFrame.addEventListener('scroll',
-                                 _ => virtualScrollController.setListScrollTop(scrollFrame.scrollTop));
+    //add event listener to container scroll and update table content when triggered
+    scrollFrame.addEventListener('scroll', _ => virtualScrollController.setListScrollTop(scrollFrame.scrollTop));
 
-    return [scrollFrame];
 };
 
 /**
