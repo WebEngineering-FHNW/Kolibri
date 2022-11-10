@@ -35,11 +35,15 @@ const initVirtualScrolling = (data, container) => {
         `);
         return /** @type { HTMLTableRowElement } */ table.querySelector("tr");
     };
-    
+
+    const rowFill = ([idTd, titleTd], item) => {
+        idTd   .textContent = item?.id;
+        titleTd.textContent = item?.title;
+    };
     
     //Init Virtual Scroll
     const virtualScrollController = VirtualScrollController(data);
-    VirtualScrollView(virtualScrollController, container, headTemplate, rowTemplate);
+    VirtualScrollView(virtualScrollController, container, headTemplate, rowTemplate, rowFill);
     container.append(...RowCounterView(virtualScrollController));
 };
 

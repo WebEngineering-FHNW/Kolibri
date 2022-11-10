@@ -86,9 +86,10 @@ const VirtualScrollController = data => {
  * @param { HTMLElement}                      container
  * @param { ()       => HTMLTableRowElement } headTemplate - function which returns a thead content
  * @param { (item:*) => HTMLTableRowElement } rowTemplate - function which renders a row and returns an element
+ * @param { ( tds:HTMLCollection, item:*) => void } rowFill - function that fills the table data of the row with a data item
  * @returns {Array<HTMLDivElement>} the created and bound frame that holds the scrollable content
  */
-const VirtualScrollView = (virtualScrollController, container, headTemplate, rowTemplate) => {
+const VirtualScrollView = (virtualScrollController, container, headTemplate, rowTemplate, rowFill) => {
 
     const view = dom(`
         <DIV id="scrollFrame" style="overflow: auto;">
@@ -144,8 +145,7 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
         const window = virtualScrollController.getDataWindow();
         let i = 0;
         for (const tr of tbody.querySelectorAll("tr")) {
-            tr.children[0].textContent = window[i].id;
-            tr.children[1].textContent = window[i].title;
+            rowFill(tr.children, window[i]);
             i++;
         }
         shiftNodes(tbody);
