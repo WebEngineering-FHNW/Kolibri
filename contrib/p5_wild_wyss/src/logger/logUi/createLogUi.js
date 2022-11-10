@@ -51,7 +51,7 @@ const createLogUi = rootElement => {
   const filterController = SimpleInputController({
     value: "",
     label: "Global Context",
-    name: "context",
+    name: "Filter",
     type: "text",
   });
 
@@ -60,7 +60,7 @@ const createLogUi = rootElement => {
 
   configSection.append(...projectDebounceInput  ("context", simpleController, 200));
   configSection.append(...loggingSelectProjector (controller));
-  filterSection.append(...projectDebounceInput  ("context", filterController, 200));
+  filterSection.append(...projectDebounceInput  ("filter", filterController, 200));
   filterSection.append(loggerLevelFilterRoot);
 
   const styleRoot = document.createElement("STYLE");

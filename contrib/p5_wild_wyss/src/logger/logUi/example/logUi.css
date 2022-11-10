@@ -11,6 +11,7 @@
 
 .controlArea {
     padding: 2rem;
+    align-items: center;
 }
 
 .config {
@@ -60,6 +61,11 @@ input[type="text"], input[type="select"] {
     /* Kolibri-Light/Monochrome/--kb-color-label */
     border: 0.75px solid var(--kb-color-rgb-purple-300);
     border-radius: 4px;
+    width: 100%;
+}
+
+input[type="select"] {
+    background-color: var(--kolibri-color-output);
 }
 
 .textLabel {
