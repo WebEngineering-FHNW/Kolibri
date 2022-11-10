@@ -1,11 +1,14 @@
-import {getLoggingLevel, LOG_DEBUG, setLoggingLevel} from "../logger.js";
 import { LogUiController }  from "./logUiController.js";
 import { LogUiModel }       from "./logUiModel.js";
 import { TestSuite }        from "../../../../../docs/src/kolibri/util/test.js";
 import { Appender }         from "../appender/observableAppender.js";
 import { pop }              from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import { snd }              from "../lamdaCalculus.js";
-
+import {
+  getLoggingLevel,
+  LOG_DEBUG,
+  setLoggingLevel,
+} from "../logger.js";
 
 /**
  *
@@ -19,13 +22,15 @@ import { snd }              from "../lamdaCalculus.js";
  */
 const beforeStart = () => {
   const controller = LogUiController();
-  return {controller, appender: Appender(), model: LogUiModel()};
+  const appender = Appender();
+  appender.reset(); // clear the state of the appender since it is a singleton
+  return { controller, appender, model: LogUiModel() };
 };
 
 /**
  *
- * @param { LogUiControllerType } controller
- * @return {*}
+ * @param   { LogUiControllerType } controller
+ * @return  { * }
  */
 const cleanUp = controller => {
   setLoggingLevel(LOG_DEBUG);
@@ -35,7 +40,7 @@ const cleanUp = controller => {
 const loggerSuite = TestSuite("LogUiController");
 
 loggerSuite.add("test flip log level", assert => {
-  const {model, controller} = beforeStart();
+  const { model, controller } = beforeStart();
   const levelsBeforeSwitch = model.getAvailableLogLevels();
 
   let levelsAfterSwitch = [];
@@ -52,9 +57,7 @@ loggerSuite.add("test flip log level", assert => {
 });
 
 loggerSuite.add("test on new log message", assert => {
-
-  const {controller, appender} = beforeStart();
-
+  const { controller, appender } = beforeStart();
   const logMessage = "Tobias Wyss";
 
   let message = "";
@@ -70,8 +73,7 @@ loggerSuite.add("test on new log message", assert => {
 });
 
 loggerSuite.add("test filter message by text", assert => {
-
-  const {controller, appender} = beforeStart();
+  const { controller, appender } = beforeStart();
 
   const logMessage1 = "Tobias Wyss";
   const logMessage2 = "Andri Wild";
@@ -99,8 +101,7 @@ loggerSuite.add("test filter message by text", assert => {
 });
 
 loggerSuite.add("test filter message by log level", assert => {
-
-  const {model, controller, appender} = beforeStart();
+  const { model, controller, appender } = beforeStart();
 
   const logMessage1 = "Tobias Wyss";
   const logMessage2 = "Andri Wild";

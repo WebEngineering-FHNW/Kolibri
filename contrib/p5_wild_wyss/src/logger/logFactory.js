@@ -19,7 +19,7 @@ import {
  *             }
  * @constructor
  * @example
- * import {Appender} from "consoleAppender.js"
+ * import { Appender } from "consoleAppender.js"
  * const { trace, debug } = LogFactory(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
  * trace("Tobias Wyss") // a log message appended on the loglevel {@link LOG_TRACE}
  * debug("Andri Wild") // a log message appended on the loglevel {@link LOG_DEBUG}

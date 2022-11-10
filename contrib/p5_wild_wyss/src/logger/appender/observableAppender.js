@@ -16,7 +16,7 @@ import {
 /**
  * Provides console appender.
  * Using this appender you are able to log to the console.
- * @type    { appenderCtor.<IObservable<stack>> }
+ * @type { appenderCtor.<IObservable<stack>> }
  */
 const Appender = () => ({
   trace,
@@ -31,19 +31,19 @@ const Appender = () => ({
 
 /**
  *
- * @type {IObservable<stack>}
+ * @type { IObservable<stack> }
  */
 const logObservable = Observable(emptyStack);
 
 /**
  * This appender returns an observable containing a stack
  * @function
- * @returns {IObservable<stack>}
+ * @returns { IObservable<stack> }
  */
 const getValue = () => logObservable;
 /**
  *
- * @return {IObservable<stack>}
+ * @return { IObservable<stack> }
  */
 const reset = () => {
   const lastValue = logObservable.getValue();

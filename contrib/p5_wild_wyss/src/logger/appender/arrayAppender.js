@@ -1,5 +1,6 @@
-export {Appender}
-import {False, True, LazyIf, Then, Else, id} from "../lamdaCalculus.js";
+export { Appender }
+
+import { False, True, LazyIf, Then, Else, id } from "../lamdaCalculus.js";
 
 const MAX_ARRAY_ELEMENTS    = Number.MAX_SAFE_INTEGER - 1;
 const MIN_ARRAY_LENGTH      = 2;
@@ -31,32 +32,32 @@ const Appender = (limit = MAX_ARRAY_ELEMENTS, cacheEvictionStrategy = DEFAULT_CA
   return {
     /**
      * the function to append trace logs in this application
-     * @type {AppendCallback}
+     * @type { AppendCallback }
      */
     trace: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
     /**
      * the function to append debug logs in this application
-     * @type {AppendCallback}
+     * @type { AppendCallback }
      */
     debug: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
     /**
      * the function to append info logs in this application
-     * @type {AppendCallback}
+     * @type { AppendCallback }
      */
     info: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
     /**
      * the function to append warn logs in this application
-     * @type {AppendCallback}
+     * @type { AppendCallback }
      */
     warn: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
     /**
      * the function to append error logs in this application
-     * @type {AppendCallback}
+     * @type { AppendCallback }
      */
     error: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
     /**
      * the function to append fatal logs in this application
-     * @type {AppendCallback}
+     * @type { AppendCallback }
      */
     fatal: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
     getValue: getValue,

@@ -1,5 +1,5 @@
 import { TestSuite }                  from "../../../../docs/src/kolibri/util/test.js";
-import { convertToJsBool, id, lazy }  from "./lamdaCalculus.js";
+import { id, lazy, True, False }      from "./lamdaCalculus.js";
 import { Appender }                   from "./appender/arrayAppender.js";
 import { Appender as CountAppender }  from "./appender/countAppender.js";
 
@@ -33,7 +33,7 @@ loggerSuite.add("test simple logging", assert => {
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_ => _ => id);
   const result = debug(logMessage);
 
-  assert.isTrue(convertToJsBool(result));
+  assert.is(result, True);
   assert.is(appender.getValue()[0], 'hello world');
 });
 
@@ -45,12 +45,12 @@ loggerSuite.add("test enabling logging", assert => {
   // logging should be disabled
   const result1 = debug(logMessage);
   assert.is(appender.getValue().length, 0);
-  assert.isTrue(!convertToJsBool(result1));
+  assert.is(result1, False);
 
   // logging should be enabled
   setLoggingLevel(LOG_DEBUG);
   const result2 = debug(logMessage);
-  assert.isTrue(convertToJsBool(result2));
+  assert.is(result2, True);
   assert.is(appender.getValue()[0], logMessage);
 });
 
@@ -62,13 +62,13 @@ loggerSuite.add("test disabling logging", assert => {
   // logging should be enabled
   const result1 = debug(logMessage);
   assert.is(appender.getValue()[0], logMessage);
-  assert.isTrue(convertToJsBool(result1));
+  assert.is(result1, True);
 
   // logging should be disabled
   setLoggingLevel(LOG_NOTHING);
   appender.reset();
   const result2 = debug(logMessage);
-  assert.isTrue(!convertToJsBool(result2));
+  assert.is(result2, False);
   assert.is(appender.getValue().length, 0);
 });
 
@@ -80,7 +80,7 @@ loggerSuite.add("log lower logging level, should log", assert => {
 
   // loglevel debug should also be logged, when LOG_TRACE is enabled
   const result = debug(logMessage);
-  assert.isTrue(convertToJsBool(result));
+  assert.is(result, True);
   assert.is(appender.getValue()[0], logMessage);
 });
 
@@ -92,7 +92,7 @@ loggerSuite.add("log higher logging level, should not log", assert => {
 
   // loglevel debug should not log when LOG_WARN is enabled
   const result = debug(logMessage);
-  assert.isTrue(!convertToJsBool(result));
+  assert.is(result, False);
   assert.is(appender.getValue().length, 0);
 });
 
@@ -104,7 +104,7 @@ loggerSuite.add("test debug tag formatted log message", assert => {
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(levelFormatter);
 
   const result = debug(logMessage);
-  assert.isTrue(convertToJsBool(result));
+  assert.is(result, True);
   assert.is(appender.getValue()[0], "[DEBUG] hello world");
 });
 
@@ -116,7 +116,7 @@ loggerSuite.add("test context tag formatted log message", assert => {
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(levelFormatter);
 
   const result = debug(logMessage);
-  assert.isTrue(convertToJsBool(result));
+  assert.is(result, True);
   assert.is(appender.getValue()[0], `${context}: hello world`);
 });
 
@@ -127,7 +127,7 @@ loggerSuite.add("test context, logger should not log", assert => {
   const debug = debugLogger(getActiveAppender)("ch.fhnw")(_ => _ => id);
 
   const result = debug(logMessage);
-  assert.isTrue(!convertToJsBool(result));
+  assert.is(result, False);
   assert.is(appender.getValue().length, 0);
 });
 
@@ -137,7 +137,7 @@ loggerSuite.add("test context, logger should log", assert => {
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test.specific.tag")(_ => _2 => id);
 
   const result = debug(logMessage);
-  assert.isTrue(convertToJsBool(result));
+  assert.is(result, True);
   assert.is(appender.getValue()[0], 'hello world');
 });
 
@@ -148,7 +148,7 @@ loggerSuite.add("test lazy evaluation, logger should log", assert => {
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(() => () => id);
 
   const result = debug(lazy("hello world"));
-  assert.isTrue(convertToJsBool(result));
+  assert.is(result, True);
   assert.is(appender.getValue()[0], 'hello world');
 });
 
@@ -159,7 +159,7 @@ loggerSuite.add("test lazy evaluation, logger should not log and function should
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_ => _ => id);
 
   const result = debug(lazy("hello world"));
-  assert.isTrue(!convertToJsBool(result));
+  assert.is(result, False);
   assert.is(appender.getValue().length, 0);
 });
 
@@ -171,7 +171,7 @@ loggerSuite.add("test log to multiple appender", assert => {
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_ => _ => id);
 
   const result = debug("Tobias Wyss");
-  assert.isTrue(convertToJsBool(result));
+  assert.is(result, True);
   assert.is(appender.getValue().length, 1);
   assert.is(countAppender.getValue().debug, 1);
 });

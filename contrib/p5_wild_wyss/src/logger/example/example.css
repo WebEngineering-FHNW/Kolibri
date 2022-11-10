@@ -8,16 +8,6 @@
     grid-column-end: span 2;
 }
 
-.delimiter {
-    margin-left: 1rem;
-    color:grey;
-}
-
-.delimiter > Input {
-    width: 30px;
-    color: grey;
-}
-
 .twoColumnItem > Button {
     margin: 3rem 0.5rem 0.5rem 1rem;
 }

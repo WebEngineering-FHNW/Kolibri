@@ -1,5 +1,10 @@
 import { Pair, snd, fst } from "../../../../docs/src/kolibri/stdlib.js"
-import { n0, n1, n2, n3, n4, n5, n9, LazyIf, Else, Then, and, False, True, toChurchBoolean, leq } from "./lamdaCalculus.js";
+import {
+  n0, n1, n2, n3, n4, n5, n9,
+  LazyIf, Else, Then, and, leq,
+  False, True,
+  toChurchBoolean,
+} from "./lamdaCalculus.js";
 
 export {
   LOG_TRACE,
@@ -81,8 +86,8 @@ const logLevelActivated = loggerLevel => leq(loggingLevel(fst))(loggerLevel(fst)
 /**
  * Returns {@link True} if the {@link globalContext} is a prefix of the given {@link String} parameter.
  * @function
- * @param { String } context
- * @return { churchBoolean }
+ * @param   { String } context
+ * @return  { churchBoolean }
  * @private
  */
 const contextActivated = context => toChurchBoolean(context.startsWith(globalContext));
@@ -90,7 +95,7 @@ const contextActivated = context => toChurchBoolean(context.startsWith(globalCon
 /**
  * if the param "msg" is a function, it's result will be returned.
  * Otherwise, the parameter itself will be returned.
- * @param { !LogMeType} msg - the message to evaluate
+ * @param   { !LogMeType} msg - the message to evaluate
  * @returns { String } the evaluated message
  * @private
  */
@@ -204,7 +209,7 @@ const fatalLogger = (activeAppenderCallback) =>
  * This is a state.
  * The currently activated log context.
  * Only messages whose context have this prefix are logged.
- * @type {string}
+ * @type { String }
  * @private
  */
 let globalContext = "";
