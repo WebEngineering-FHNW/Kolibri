@@ -1,5 +1,5 @@
 import {Observable} from '../../kolibri/observable.js';
-import {dom} from '../../kolibri/util/dom.js'
+import {dom}        from '../../kolibri/util/dom.js';
 
 /**
  * @module examples/bigLazyTable/virtual-scrolling
@@ -14,29 +14,39 @@ export {VirtualScrollController, VirtualScrollView, RowCounterView};
 /**
  * @typedef VirtualScrollController
  * @template T
- * @param {Number} containerHeightPx
- * @param {Number} rowHeightPx
- * @param {Array<T>} data       - the data of the list, no expected to change at runtime (ATM)
- * @returns {VirtualScrollControllerType}
+ * @param   { Array<T> } data       - the data of the list, no expected to change at runtime (ATM)
+ * @returns { VirtualScrollControllerType }
  */
-const VirtualScrollController = (containerHeightPx, rowHeightPx, data) => {
+const VirtualScrollController = data => {
 
     const dataRowCount        = data.length;
-    const dataWindowSize      = Math.floor(containerHeightPx / rowHeightPx) ;
     const scrollTopObservable = Observable(0);
-    
+
+    let rowHeightPx           =  20;   // initial values, to be changed through reDim()
+    let headerRowHeightPx     =  20;
+    let containerHeightPx     = 100;
+    let dataWindowSize        =   0;
+
     // There is an upper limit for the scrollTop values (maybe because of the max height of the scrollable element).
     // This leads to max 1.8 Mio entries that can be scrolled to.
     // We address this by scaling down the scrollable area and the rowHeight in the calculations by a factor.
     const MAX_SCROLL_TOP = 20_000_000; // 33_554_136; // chrome, safari; FF is unclear
 
-    let virtualHeightPx = dataRowCount * rowHeightPx;
-    const factor = Math.min(1.0, MAX_SCROLL_TOP / virtualHeightPx);
-    virtualHeightPx *= factor;
-    rowHeightPx     *= factor;
-    
+    let virtualHeightPx      = 0;
+    let factor               = 1;
     let dataWindowStartIndex = 0;
-    let scrollOffsetYPx      = rowHeightPx * dataWindowStartIndex;
+    let scrollOffsetYPx      = 0;
+
+    /** Re-Dimensioning based on changes in one of the dimensions */
+    const reDim = () => {
+        virtualHeightPx = dataRowCount * rowHeightPx;
+        factor          = Math.min(1.0, MAX_SCROLL_TOP / virtualHeightPx);
+        virtualHeightPx *= factor;
+        rowHeightPx     *= factor;
+        dataWindowSize  = Math.floor( (containerHeightPx - headerRowHeightPx) / rowHeightPx);
+        scrollOffsetYPx = rowHeightPx * dataWindowStartIndex;
+    };
+    reDim();
 
     /**
      * Method calculates the first rendered item and return the index
@@ -49,7 +59,7 @@ const VirtualScrollController = (containerHeightPx, rowHeightPx, data) => {
         if (dataRowCount - dataWindowStartIndex < dataWindowSize) {
             dataWindowStartIndex = dataRowCount - dataWindowSize;
         }
-        scrollOffsetYPx      = rowHeightPx * dataWindowStartIndex;
+        scrollOffsetYPx  = rowHeightPx * dataWindowStartIndex;
     };
 
     return {
@@ -59,6 +69,9 @@ const VirtualScrollController = (containerHeightPx, rowHeightPx, data) => {
         getDataWindowEndIndex:      () => dataWindowStartIndex + dataWindowSize,
         getDataRowCount:            () => dataRowCount,
         getDataWindow:              () => data.getWindow(dataWindowStartIndex, dataWindowSize),
+        setRowHeightPx:             px => { rowHeightPx       = px; reDim(); },
+        setHeaderRowHeightPx:       px => { headerRowHeightPx = px; reDim(); },
+        setContainerHeightPx:       px => { containerHeightPx = px; reDim(); },
         setCurrentFirstVirtualItem: setCurrentFirstVirtualItem,
         getScrollOffsetYPx:         () => scrollOffsetYPx,
         setListScrollTop:           scrollTopObservable.setValue,
@@ -70,13 +83,14 @@ const VirtualScrollController = (containerHeightPx, rowHeightPx, data) => {
 /**
  * VirtualScrollView
  * @param {VirtualScrollControllerType}       virtualScrollController
+ * @param { HTMLElement}                      container
  * @param { ()       => HTMLTableRowElement } headTemplate - function which returns a thead content
  * @param { (item:*) => HTMLTableRowElement } rowTemplate - function which renders a row and returns an element
  * @returns {Array<HTMLDivElement>} the created and bound frame that holds the scrollable content
  */
-const VirtualScrollView = (virtualScrollController, headTemplate, rowTemplate) => {
+const VirtualScrollView = (virtualScrollController, container, headTemplate, rowTemplate) => {
 
-    const [scrollFrame] = dom(`
+    const view = dom(`
         <DIV id="scrollFrame" style="overflow: auto;">
             <DIV id="fairWay" style="min-height: ${virtualScrollController.getVirtualHeightPx()}px;">
                 <TABLE >
@@ -86,54 +100,65 @@ const VirtualScrollView = (virtualScrollController, headTemplate, rowTemplate) =
             </DIV>
         </DIV>
     `);
-    scrollFrame.querySelector("thead").appendChild(headTemplate());
 
+    /** @type {HTMLDivElement} */
+    const scrollFrame = view[0];
+    container.appendChild(scrollFrame);             // we need to do this early to get the bounding rect dimensions
     const table = scrollFrame.querySelector("table");
     const thead = table.querySelector("thead");
+    const tbody = table.querySelector("tbody");
 
-    const placedContent = scrollFrame.querySelector("tbody"); // make this content appear as if it was scrolled.
-
-    /**
-     * transforms scrolling container after rerendering the list
-     * @param {*} scrollingContainer
-     */
-    const shiftNodes = (scrollingContainer) => scrollingContainer.style.transform = `translateY(${virtualScrollController.getScrollOffsetYPx()}px)`;
+    const headerRow = headTemplate();
+    thead.appendChild(headerRow);
+    const testRow = rowTemplate(null);// make sure that null return an empty/default template
+    tbody.appendChild(testRow);
 
     /**
-     * Renders the list initially
-     * @param {number} scrollTop - the position in pixels of the scrollable area that is currently displayed at the top of the scrollable frame
+     * move the content to their translation position on the fairway
+     * @param { HTMLElement } contentElement
      */
-    const renderList = (scrollTop) => {
-        virtualScrollController.setCurrentFirstVirtualItem(scrollTop);
+    const shiftNodes = contentElement => contentElement.style.transform = `translateY(${virtualScrollController.getScrollOffsetYPx()}px)`;
 
-        placedContent.replaceChildren();          // clear container
+    /**
+     * Renders the list initially and determines the dimensions for calculating
+     */
+    const renderTable = () => {
+        virtualScrollController.setContainerHeightPx(container.getBoundingClientRect().height);
+        virtualScrollController.setHeaderRowHeightPx(headerRow.getBoundingClientRect().height);
+        virtualScrollController.setRowHeightPx      (testRow  .getBoundingClientRect().height);
+        tbody.replaceChildren(); // remove test row
+
         virtualScrollController
             .getDataWindow()
-            .map(item => rowTemplate(item)) // todo: 2 functions for create and update
-            .forEach(row => placedContent.appendChild(row));
-        shiftNodes(table);
+            .map(item => rowTemplate(item))
+            .forEach(tr => tbody.appendChild(tr));
     };
 
-    const updateList = (scrollTop) => {
+    /**
+     * Update the values that are to be displayed and move the views to their translation target on the fairway.
+     * @param {number} scrollTop - the position in pixels of the scrollable area that is currently displayed at the top of the scrollable frame
+     */
+    const updateTable = (scrollTop) => {
         virtualScrollController.setCurrentFirstVirtualItem(scrollTop);
 
         const window = virtualScrollController.getDataWindow();
         let i = 0;
-        for (const tr of placedContent.querySelectorAll("tr")) {
+        for (const tr of tbody.querySelectorAll("tr")) {
             tr.children[0].textContent = window[i].id;
             tr.children[1].textContent = window[i].title;
             i++;
         }
-        shiftNodes(placedContent);
-        thead.style.transform = `translateY(${scrollTop}px)`;
+        shiftNodes(tbody);
+        thead.style.transform = `translateY(${scrollTop}px)`; // fix the header at the top of the visible fairway
     };
 
-    virtualScrollController.onListScrollTopChanged(updateList);
-    renderList(virtualScrollController.getListScrollTop());
+    renderTable();
+    updateTable(virtualScrollController.getListScrollTop());
+    virtualScrollController.onListScrollTopChanged(updateTable);
 
     //add event listener to container scroll and rerender list when its triggered
     scrollFrame.addEventListener('scroll',
-                                 scrollEvent => virtualScrollController.setListScrollTop(scrollEvent.target.scrollTop));
+                                 _ => virtualScrollController.setListScrollTop(scrollFrame.scrollTop));
 
     return [scrollFrame];
 };
@@ -147,7 +172,7 @@ const RowCounterView = (virtualScrollController) => {
     /** @type {HTMLSpanElement} */
     const rowCount = document.createElement('SPAN');
     const changeContainer = () => {
-        rowCount.innerText = `${virtualScrollController.getDataWindowStartIndex()} - ${virtualScrollController.getDataWindowEndIndex()} / ${virtualScrollController.getDataRowCount()}`;
+        rowCount.textContent = `${virtualScrollController.getDataWindowStartIndex()} - ${virtualScrollController.getDataWindowEndIndex()} / ${virtualScrollController.getDataRowCount()}`;
     };
     changeContainer();
     virtualScrollController.onListScrollTopChanged(changeContainer);

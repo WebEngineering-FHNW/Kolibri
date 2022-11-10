@@ -4,13 +4,22 @@
     <title>Virtual Scrolling</title>
     <style>
       .scroll-container {
-        height: 300px;
+        height: 600px;
         display: flex;
         flex-direction: column;
         gap: 1em;
       }
       #scrollFrame {
-          border: 1px solid grey;
+          align-self: self-start;
+          box-shadow: 0 0 10px -2px rebeccapurple;
+      }
+      th {
+          background-color: rebeccapurple;
+          color: white;
+          padding: 1em 2em;
+      }
+      td {
+          padding-left: 1em;
       }
     </style>
     

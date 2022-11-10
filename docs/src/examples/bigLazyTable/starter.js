@@ -28,8 +28,8 @@ const initVirtualScrolling = (data, container) => {
         const [table] = dom(`
             <TABLE>
                 <TR>
-                    <TD>${item.id}</TD>
-                    <TD>${item.title}</TD>
+                    <TD>${item?.id}</TD>
+                    <TD>${item?.title}</TD>
                 </TR>
             </TABLE>
         `);
@@ -38,8 +38,8 @@ const initVirtualScrolling = (data, container) => {
     
     
     //Init Virtual Scroll
-    const virtualScrollController = VirtualScrollController(container.clientHeight, 18, data);
-    container.append(...VirtualScrollView(virtualScrollController, headTemplate, rowTemplate));
+    const virtualScrollController = VirtualScrollController(data);
+    VirtualScrollView(virtualScrollController, container, headTemplate, rowTemplate);
     container.append(...RowCounterView(virtualScrollController));
 };
 
@@ -51,6 +51,7 @@ const data = length => {
 };
 
 const listcontainer = document.getElementById('listContainer');
-initVirtualScrolling(data(100), listcontainer); // max 1_864_134 in chrome and safari, FF even less
+initVirtualScrolling(data(50), listcontainer); // max 1_864_134 in chrome and safari, FF even less
+// initVirtualScrolling(data(100_000_000), listcontainer); // max 1_864_134 in chrome and safari, FF even less
 
 
