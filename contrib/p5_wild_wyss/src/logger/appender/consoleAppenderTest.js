@@ -13,12 +13,12 @@ loggerSuite.add("test add all kind of levels to console appender", assert => {
   const resultWarn   = warn("warn");
   const resultError  = error("error");
   const resultFatal  = fatal("fatal");
-  assert.is(convertToJsBool(resultTrace),  true);
-  assert.is(convertToJsBool(resultDebug),  true);
-  assert.is(convertToJsBool(resultInfo),   true);
-  assert.is(convertToJsBool(resultWarn),   true);
-  assert.is(convertToJsBool(resultError),  true);
-  assert.is(convertToJsBool(resultFatal),  true);
+  assert.isTrue(convertToJsBool(resultTrace));
+  assert.isTrue(convertToJsBool(resultDebug));
+  assert.isTrue(convertToJsBool(resultInfo));
+  assert.isTrue(convertToJsBool(resultWarn));
+  assert.isTrue(convertToJsBool(resultError));
+  assert.isTrue(convertToJsBool(resultFatal));
 });
 
 loggerSuite.run();

@@ -9,7 +9,13 @@ import { snd }              from "../lamdaCalculus.js";
 
 /**
  *
- * @return {{controller: LogUiControllerType, appender: AppenderType<IObservable<stack>>, model: LogUiModelType}}
+ * @return {
+ *    {
+ *      controller: LogUiControllerType,
+ *      appender: AppenderType<IObservable<stack>>,
+ *      model: LogUiModelType
+ *    }
+ *  }
  */
 const beforeStart = () => {
   const controller = LogUiController();
@@ -38,9 +44,9 @@ loggerSuite.add("test flip log level", assert => {
 
   controller.onChangeActiveLogLevel(activeLogLevelListener);
   controller.flipLogLevel(levelsBeforeSwitch[0]);
-  assert.is(levelsAfterSwitch[0](snd), false);
+  assert.isTrue(!levelsAfterSwitch[0](snd));
   controller.flipLogLevel(levelsBeforeSwitch[0]);
-  assert.is(levelsAfterSwitch[0](snd), true);
+  assert.isTrue(levelsAfterSwitch[0](snd));
 
   cleanUp(controller);
 });

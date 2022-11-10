@@ -1,5 +1,8 @@
-import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
-import { convertToJsBool, id, lazy } from "./lamdaCalculus.js";
+import { TestSuite }                  from "../../../../docs/src/kolibri/util/test.js";
+import { convertToJsBool, id, lazy }  from "./lamdaCalculus.js";
+import { Appender }                   from "./appender/arrayAppender.js";
+import { Appender as CountAppender }  from "./appender/countAppender.js";
+
 import {
   debugLogger,
   LOG_DEBUG,
@@ -9,16 +12,17 @@ import {
   setGlobalContext,
   setLoggingLevel,
 } from "./logger.js";
-import {Appender} from "./appender/arrayAppender.js";
 
 setGlobalContext("ch.fhnw.test");
 
 const beforeStart = () => {
-  const logMessage = 'hello world';
-  const appender = Appender();
+  const logMessage  = 'hello world';
+  const appender    = Appender();
   appender.reset();
+  setGlobalContext("ch.fhnw.test");
+  setLoggingLevel(LOG_DEBUG);
   const getActiveAppender = () => [appender]
-  return {logMessage, getActiveAppender, appender }
+  return { logMessage, getActiveAppender, appender }
 };
 
 const loggerSuite = TestSuite("Logger");
@@ -101,7 +105,7 @@ loggerSuite.add("test debug tag formatted log message", assert => {
 
   const result = debug(logMessage);
   assert.isTrue(convertToJsBool(result));
-  assert.is(appender.getValue()[0], '[DEBUG] hello world');
+  assert.is(appender.getValue()[0], "[DEBUG] hello world");
 });
 
 loggerSuite.add("test context tag formatted log message", assert => {
@@ -119,6 +123,7 @@ loggerSuite.add("test context tag formatted log message", assert => {
 loggerSuite.add("test context, logger should not log", assert => {
   const { logMessage, appender, getActiveAppender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
+  setGlobalContext("ch.fhnw.test")
   const debug = debugLogger(getActiveAppender)("ch.fhnw")(_ => _ => id);
 
   const result = debug(logMessage);
@@ -156,6 +161,19 @@ loggerSuite.add("test lazy evaluation, logger should not log and function should
   const result = debug(lazy("hello world"));
   assert.isTrue(!convertToJsBool(result));
   assert.is(appender.getValue().length, 0);
+});
+
+loggerSuite.add("test log to multiple appender", assert => {
+  const { appender } = beforeStart();
+  const countAppender = CountAppender();
+  const getActiveAppender = () => [appender, countAppender];
+
+  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_ => _ => id);
+
+  const result = debug("Tobias Wyss");
+  assert.isTrue(convertToJsBool(result));
+  assert.is(appender.getValue().length, 1);
+  assert.is(countAppender.getValue().debug, 1);
 });
 
 loggerSuite.run();

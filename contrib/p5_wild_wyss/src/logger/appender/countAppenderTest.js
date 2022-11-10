@@ -8,7 +8,7 @@ const loggerSuite = TestSuite("Count Appender");
 
 loggerSuite.add("test add debug value to count appender", assert => {
   const result = debug("debug");
-  assert.is(convertToJsBool(result), true );
+  assert.isTrue(convertToJsBool(result));
   assert.is(getValue().debug, 1);
   reset();
 });
@@ -16,15 +16,15 @@ loggerSuite.add("test add debug value to count appender", assert => {
 loggerSuite.add("test add two values to count appender", assert => {
   const result1 = debug("first");
   const result2 = debug("second");
-  assert.is(convertToJsBool(result1), true );
-  assert.is(convertToJsBool(result2), true );
+  assert.isTrue(convertToJsBool(result1));
+  assert.isTrue(convertToJsBool(result2));
   assert.is(getValue().debug, 2);
   reset();
 });
 
 loggerSuite.add("test reset count appender", assert => {
   const result1 = debug("first");
-  assert.is(convertToJsBool(result1), true );
+  assert.isTrue(convertToJsBool(result1));
   assert.is(getValue().debug, 1);
   reset();
   assert.isTrue(0 === getValue().debug );
@@ -37,12 +37,12 @@ loggerSuite.add("test add all kind of levels to count appender", assert => {
   const warnResult   = warn("warn");
   const errorResult  = error("error");
   const fatalResult  = fatal("fatal");
-  assert.is(convertToJsBool(traceResult),  true);
-  assert.is(convertToJsBool(debugResult),  true);
-  assert.is(convertToJsBool(infoResult),   true);
-  assert.is(convertToJsBool(warnResult),   true);
-  assert.is(convertToJsBool(errorResult),  true);
-  assert.is(convertToJsBool(fatalResult),  true);
+  assert.isTrue(convertToJsBool(traceResult));
+  assert.isTrue(convertToJsBool(debugResult));
+  assert.isTrue(convertToJsBool(infoResult));
+  assert.isTrue(convertToJsBool(warnResult));
+  assert.isTrue(convertToJsBool(errorResult));
+  assert.isTrue(convertToJsBool(fatalResult));
   assert.is(getValue().trace,  1);
   assert.is(getValue().debug,  1);
   assert.is(getValue().info,   1);
