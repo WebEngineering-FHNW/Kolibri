@@ -43,7 +43,7 @@ const DEFAULT_CACHE_EVICTION_STRATEGY =  currentValue => {
  * Provides an observable appender.
  * Use {@link getValue} to get the observable and register yourself on changes
  * and use {@link reset} to clear the array.
- * @type  { appenderCtor.<IObservable<stack>> }
+ * @type  { AppenderCtor.<IObservable<stack>> }
  */
 const Appender = (limit = MAX_STACK_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
   // make sure, the stack is not defined too small.
@@ -149,7 +149,7 @@ const full = limit =>
  *        (type: PrioritySupplier) =>
  *        (msg: String) =>
  *        (limit: Number) =>
- *        (evictionStrategy: unaryOperation.<IObservable.<stack>>) =>
+ *        (evictionStrategy: UnaryOperation.<IObservable.<stack>>) =>
  *        churchBoolean
  * }
  */

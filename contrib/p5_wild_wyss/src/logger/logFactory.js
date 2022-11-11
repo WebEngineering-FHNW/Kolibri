@@ -14,7 +14,7 @@ import {
  * @type       {
  *                (context: String) =>
  *                (appender: AppenderType[]) =>
- *                (formatMsg: formatLogMessage) =>
+ *                (formatMsg: FormatLogMessage) =>
  *                LoggerType
  *             }
  * @constructor

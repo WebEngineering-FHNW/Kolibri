@@ -19,7 +19,7 @@
 
 /**
  * @typedef LogUiControllerType
- * @property { function(Consumer<>): void}    onChangeActiveLogLevel
+ * @property { function(Consumer<>): void }   onChangeActiveLogLevel
  * @property { (Consumer) => void }           onMessagesChange
  * @property { () => IObservable<stack> }     resetLogMessages
  * @property { (Consumer) => void }           onTextFilterChange
