@@ -1,8 +1,20 @@
 export { Appender }
 
-import {False, True, jsNum, LazyIf, Then, Else, id} from "../lamdaCalculus.js";
+import {
+  False,
+  True,
+  jsNum,
+  LazyIf,
+  Then,
+  Else,
+  id
+}                         from "../lamdaCalculus.js";
 import { Observable }         from "../../../../../docs/src/kolibri/observable.js";
-import { emptyStack, push, size }   from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import {
+  emptyStack,
+  push,
+  size
+}   from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import { Pair }               from "../../../../../docs/src/kolibri/stdlib.js"
 import {
   LOG_DEBUG,

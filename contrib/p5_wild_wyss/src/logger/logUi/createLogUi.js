@@ -1,20 +1,13 @@
 export { createLogUi }
 
-import { dom }              from "../../../../../docs/src/kolibri/util/dom.js"
-import { shadowCss }        from "../../../../../docs/src/kolibri/style/kolibriStyle.js";
-import { LogUiController }  from "./logUiController.js";
-import {projectDebounceInput} from "./../../debounceInput/simpleInputProjector.js";
-import {SimpleInputController} from "../../../../../docs/src/kolibri/projector/simpleForm/simpleInputController.js";
-
-import {
-  LogMessagesView,
-  projectLogLevelControls
-} from "./logView.js";
-import {
-  contextInputProjector,
-  textFilterProjector,
-  loggingSelectProjector
-} from "./logUiProjector.js";
+import { dom }                    from "../../../../../docs/src/kolibri/util/dom.js"
+import { shadowCss }              from "../../../../../docs/src/kolibri/style/kolibriStyle.js";
+import { LogUiController }        from "./logUiController.js";
+import { setGlobalContext }       from "../logger.js";
+import { projectDebounceInput }   from "./../../debounceInput/simpleInputProjector.js";
+import { SimpleInputController }  from "../../../../../docs/src/kolibri/projector/simpleForm/simpleInputController.js";
+import { loggingSelectProjector } from "./logUiProjector.js";
+import { LogMessagesView, projectLogLevelControls } from "./logView.js";
 
 
 /**
@@ -40,9 +33,25 @@ const createLogUi = rootElement => {
   projectLogLevelControls (loggerLevelFilterRoot,       controller);
   LogMessagesView         (loggerMessageContainerRoot,  controller);
 
-  configSection.append(...contextInputProjector  (controller));
-  configSection.append(...loggingSelectProjector (controller));
-  filterSection.append(...textFilterProjector    (controller));
+  const simpleController = SimpleInputController({
+    value:  "",
+    label:  "Global Context",
+    name:   "context",
+    type:   "text",
+  });
+  const filterController = SimpleInputController({
+    value:  "",
+    label:  "Filter",
+    name:   "Filter",
+    type:   "text",
+  });
+
+  simpleController.onValueChanged(value => setGlobalContext(value));
+  filterController.onValueChanged(value => controller.setTextFilter(value));
+
+  configSection.append(...projectDebounceInput  ("context", simpleController, 200));
+  configSection.append(...loggingSelectProjector(controller));
+  filterSection.append(...projectDebounceInput  ("filter", filterController, 200));
   filterSection.append(loggerLevelFilterRoot);
 
   const styleRoot = document.createElement("STYLE");

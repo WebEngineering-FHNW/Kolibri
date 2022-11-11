@@ -1,14 +1,15 @@
-import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
-import {Appender} from "./arrayAppender.js";
-import {convertToJsBool, id, True} from "../lamdaCalculus.js";
+import { TestSuite }  from "../../../../../docs/src/kolibri/util/test.js";
+import { Appender }   from "./arrayAppender.js";
+import { id, True }   from "../lamdaCalculus.js";
 
-const {trace, debug, info, warn, error, fatal, getValue, reset} = Appender();
+const { trace, debug, info, warn, error, fatal, getValue, reset } = Appender();
+
+reset(); // clear the state of the appender since it is a singleton
 
 const msg1 = "Tobias Wyss";
 const msg2 = "Andri Wild";
 
 const loggerSuite = TestSuite("Array Appender");
-
 
 loggerSuite.add("test add debug value to array appender", assert => {
   const result = debug("debug");
@@ -20,8 +21,8 @@ loggerSuite.add("test add debug value to array appender", assert => {
 loggerSuite.add("test add two values to array appender", assert => {
   const result1 = debug("first");
   const result2 = debug("second");
-  assert.is(convertToJsBool(result1), true);
-  assert.is(convertToJsBool(result2), true);
+  assert.is(result1, True);
+  assert.is(result2, True);
   assert.is(getValue()[0], "first");
   assert.is(getValue()[1], "second");
   assert.is(getValue().length, 2);
@@ -30,7 +31,7 @@ loggerSuite.add("test add two values to array appender", assert => {
 
 loggerSuite.add("test reset array appender", assert => {
   const result1 = debug("first");
-  assert.is(convertToJsBool(result1), true);
+  assert.is(result1, True);
   assert.is(getValue()[0], "first");
   reset();
   assert.isTrue(0 === getValue().length);
@@ -43,12 +44,12 @@ loggerSuite.add("test add all kind of levels to array appender", assert => {
   const resultWarnLog = warn("warn");
   const resultErrorLog = error("error");
   const resultFatalLog = fatal("fatal");
-  assert.is(convertToJsBool(resultTraceLog), true);
-  assert.is(convertToJsBool(resultDebugLog), true);
-  assert.is(convertToJsBool(resultInfoLog), true);
-  assert.is(convertToJsBool(resultWarnLog), true);
-  assert.is(convertToJsBool(resultErrorLog), true);
-  assert.is(convertToJsBool(resultFatalLog), true);
+  assert.is(resultTraceLog, True);
+  assert.is(resultDebugLog, True);
+  assert.is(resultInfoLog,  True);
+  assert.is(resultWarnLog,  True);
+  assert.is(resultErrorLog, True);
+  assert.is(resultFatalLog, True);
   assert.is(getValue()[0], "debug");
   assert.is(getValue()[1], "trace");
   assert.is(getValue()[2], "info");
@@ -104,7 +105,7 @@ loggerSuite.add(
     // should trigger default eviction strategy on next log statement
     trace(msg2);
     assert.is(getValue().length, 2);
-    assert.is(getValue()[0].startsWith("LOG ERROR:"), true);
+    assert.isTrue(getValue()[0].startsWith("LOG ERROR:"));
     assert.is(getValue()[1], msg2);
     reset();
   });

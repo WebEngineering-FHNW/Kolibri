@@ -11,6 +11,7 @@
 
 .controlArea {
     padding: 2rem;
+    align-items: center;
 }
 
 .config {
@@ -39,10 +40,8 @@
 .messageArea {
     background: var(--kolibri-color-shadow);
     padding: 1rem;
-    /*border-radius: 4px;*/
     overflow: scroll;
-    /*TODO*/
-    height: 70vh;
+    height: 100vh;
 }
 
 .logMessage {
@@ -58,8 +57,14 @@ input[type="text"], input[type="select"] {
     padding: 16px;
     gap: 12px;
     /* Kolibri-Light/Monochrome/--kb-color-label */
-    border: 0.75px solid var(--kb-color-rgb-purple-300);
+    border: 1px solid var(--kb-color-rgb-purple-300);
     border-radius: 4px;
+    width: 100%;
+}
+
+input[type="select"] {
+    background-color: var(--kolibri-color-output);
+    alignment: left;
 }
 
 .textLabel {
@@ -102,7 +107,7 @@ input[type="text"], input[type="select"] {
     padding: 0;
 }
 
-.checkedSpan {
+.checkedToggleButton {
     background: var(--kolibri-color-neutral);
     color: var(--kolibri-color-output);
 }

@@ -58,20 +58,6 @@
             </label>
         </div>
         <div>
-            <input type="radio" id="appender-string" name="appender" value="string">
-            <label class="tooltip" for="appender-string">
-                String
-                <span class="tooltip-content">A String Appender manages all log statement as string
-                        stored in its state. With the <em>getValue()</em> method, each log message will be returned
-                        concatenated with a passed delimiter.
-                </span>
-            </label>
-            <span class="delimiter">
-                <label for="delimiter">Delimiter:</label>
-                <input type="text" id="delimiter" value=" - ">
-            </span>
-        </div>
-        <div>
             <input type="radio" id="appender-array" name="appender" value="array">
             <label class="tooltip" for="appender-array">
                 Array
@@ -116,12 +102,12 @@
     </div>
 
     <div class="twoColumnItem">
-        <button style="color:black" id="btn-trace">Trace</button>
-        <button style="color:green" id="btn-debug">Debug</button>
-        <button style="color:blue" id="btn-info"> Info</button>
-        <button style="color:orange" id="btn-warn"> Warn</button>
-        <button style="color:red" id="btn-error">Error</button>
-        <button style="color:blueviolet" id="btn-fatal">Fatal</button>
+        <button style="color:black"         id="btn-trace">Trace</button>
+        <button style="color:green"         id="btn-debug">Debug</button>
+        <button style="color:blue"          id="btn-info"> Info</button>
+        <button style="color:orange"        id="btn-warn"> Warn</button>
+        <button style="color:red"           id="btn-error">Error</button>
+        <button style="color:blueviolet"    id="btn-fatal">Fatal</button>
     </div>
 
     <div class="twoColumnItem">

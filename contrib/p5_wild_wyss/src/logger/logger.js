@@ -1,5 +1,10 @@
 import { Pair, snd, fst } from "../../../../docs/src/kolibri/stdlib.js"
-import { n0, n1, n2, n3, n4, n5, n9, LazyIf, Else, Then, and, False, toChurchBoolean, leq } from "./lamdaCalculus.js";
+import {
+  n0, n1, n2, n3, n4, n5, n9,
+  LazyIf, Else, Then, and, leq,
+  False, True,
+  toChurchBoolean,
+} from "./lamdaCalculus.js";
 
 export {
   LOG_TRACE,
@@ -20,7 +25,6 @@ export {
   setLoggingLevel,
   getLoggingLevel,
 }
-
 /**
  * Yields a custom configured log function.
  * Processes all log-actions which have a {@link LogLevelType} equals or beneath
@@ -29,34 +33,35 @@ export {
  * Furthermore, each log statement has a context. The log message will only be logged, if the globalContext
  * (set with {@link setGlobalContext}) has the same prefix as the log message's context.
  *
- * The result of the callback function {@link MsgFormatType} will be logged using the given {@link AppendCallback}.
+ * The result of the callback function {@link MsgFormatType} will be logged using the given {@link AppendCallback AppendCallbacks}.
  *
  * What's the difference between loggerLevel vs loggingLevel:
  * loggerLevel is the level of the respective logger
  * loggingLevel is the level at which logging is currently taking place.
  *
  * @function
- * @pure if the parameters "append" of type {@link AppendCallback} and msgFormatter of type {@link MsgFormatType} are pure.
+ * @pure if the parameters "appender" of type {@link AppendCallback[]} and msgFormatter of type {@link MsgFormatType} are pure.
  * @type    {
  *               (loggerLevel:      LogLevelType)
+ *            => (append:           AppendCallback[])
  *            => (context:          String)
- *            => (append:           AppendCallback)
  *            => (formatMsg:        MsgFormatType)
  *            => (msg:              LogMeType)
  *            => churchBoolean
  *          }
  * @private
  * @example
- * const log = logger(LOG_DEBUG)("ch.fhnw")(console.log)(_ => _ => id);
+ * const log = logger(LOG_DEBUG)(() => [Appender()])("ch.fhnw")(_ => _ => id);
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
-const logger = loggerLevel => context => append => formatMsg => msg =>
-  LazyIf(
+
+const logger = loggerLevel => appender => context => formatMsg => msg =>
+LazyIf(
       messageShouldBeLogged(loggerLevel)(context)
     )
     (Then(() =>
-      append(formatMsg(context)(loggerLevel(snd))(evaluateMessage(msg))))
+      appender.map(app => app(formatMsg(context)(loggerLevel(snd))(evaluateMessage(msg)))).reduce( (acc, cur) => and(acc)(cur), True))
     )
     (Else(() => False));
 
@@ -81,8 +86,8 @@ const logLevelActivated = loggerLevel => leq(loggingLevel(fst))(loggerLevel(fst)
 /**
  * Returns {@link True} if the {@link globalContext} is a prefix of the given {@link String} parameter.
  * @function
- * @param { String } context
- * @return { churchBoolean }
+ * @param   { String } context
+ * @return  { churchBoolean }
  * @private
  */
 const contextActivated = context => toChurchBoolean(context.startsWith(globalContext));
@@ -90,7 +95,7 @@ const contextActivated = context => toChurchBoolean(context.startsWith(globalCon
 /**
  * if the param "msg" is a function, it's result will be returned.
  * Otherwise, the parameter itself will be returned.
- * @param { !LogMeType} msg - the message to evaluate
+ * @param   { !LogMeType} msg - the message to evaluate
  * @returns { String } the evaluated message
  * @private
  */
@@ -143,62 +148,68 @@ const LOG_NOTHING = Pair(n9)("NOTHING");
 /**
  * Creates a new logger at log level {@link LOG_TRACE}.
  * @example
- * const trace = traceLogger("ch.fhnw")(() => LOG_TRACE)(console.log)(_ => id);
+ * const trace = traceLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
  * trace("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const traceLogger = logger(LOG_TRACE);
+const traceLogger = (activeAppenderCallback) =>
+    logger(LOG_TRACE)(activeAppenderCallback().map(app => app.trace));
 
 /**
  * Creates a new logger at log level {@link LOG_DEBUG}.
  * @example
- * const debug = debugLogger("ch.fhnw")(() => LOG_DEBUG)(console.log)(_ => id);
+ * const debug = debugLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
  * debug("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const debugLogger = logger(LOG_DEBUG);
+const debugLogger = (activeAppenderCallback) =>
+    logger(LOG_DEBUG)(activeAppenderCallback().map(app => app.debug));
 
 /**
  * Creates a new logger at log level {@link LOG_INFO}.
  * @example
- * const debug = debugLogger("ch.fhnw")(() => LOG_INFO)(console.log)(_ => id);
+ * const debug = debugLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
  * debug("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const infoLogger = logger(LOG_INFO);
+const infoLogger = (activeAppenderCallback) =>
+    logger(LOG_INFO)(activeAppenderCallback().map(app => app.info));
 
 /**
  * Creates a new logger at log level {@link LOG_WARN}.
  * @example
- * const warn = warnLogger("ch.fhnw")(() => LOG_WARN)(console.log)(_ => id);
+ * const warn = warnLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
  * warn("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const warnLogger = logger(LOG_WARN);
+const warnLogger = (activeAppenderCallback) =>
+    logger(LOG_WARN)(activeAppenderCallback().map(app => app.warn));
 
 /**
  * Creates a new logger at log level {@link LOG_ERROR}.
  * @example
- * const error = errorLogger("ch.fhnw")(() => LOG_ERROR)(console.log)(_ => id);
+ * const error = errorLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
  * error("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const errorLogger = logger(LOG_ERROR);
+const errorLogger = (activeAppenderCallback) =>
+    logger(LOG_ERROR)(activeAppenderCallback().map(app => app.error));
 
 /**
  * Creates a new logger at log level {@link LOG_FATAL}.
  * @example
- * const fatal = fatalLogger("ch.fhnw")(() => LOG_FATAL)(console.log)(_ => id);
+ * const fatal = fatalLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
  * fatal("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const fatalLogger = logger(LOG_FATAL);
+const fatalLogger = (activeAppenderCallback) =>
+    logger(LOG_FATAL)(activeAppenderCallback().map(app => app.fatal));
 
 /**
  * This is a state.
  * The currently activated log context.
  * Only messages whose context have this prefix are logged.
- * @type {string}
+ * @type { String }
  * @private
  */
 let globalContext = "";
@@ -215,7 +226,7 @@ let globalContext = "";
 const setGlobalContext = context => globalContext = context;
 
 /**
- *
+ * Getter for the global Context.
  * @return { String } - the current global context
  */
 const getGlobalContext = () => globalContext;
@@ -240,7 +251,7 @@ let loggingLevel = LOG_DEBUG;
 const setLoggingLevel = level => loggingLevel = level;
 
 /**
- *
+ * Getter for the loggingLevel.
  * @return { LogLevelType } - the current logging level
  */
 const getLoggingLevel = () => loggingLevel;

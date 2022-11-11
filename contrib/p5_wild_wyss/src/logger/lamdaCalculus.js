@@ -1,5 +1,8 @@
+export { Pair, snd, fst, LazyIf, Then, Else, True, False, not, and, id, lazy,
+  toChurchBoolean, convertToJsBool, n0, n1, n2, n3, n4, n5, n6, n7, n8, n9,
+  succ, leq, eq, jsNum
+}
 
-export {Pair, snd, fst, LazyIf, Then, Else, True, False, not, and, id, lazy, toChurchBoolean, convertToJsBool, n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, succ, leq, eq, jsNum}
 import { fst, snd } from "../../../../docs/src/kolibri/stdlib.js";
 
 const lazy = x => () => x;

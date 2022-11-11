@@ -1,3 +1,12 @@
+export {
+  logMessagesProjector,
+  levelFilterProjector,
+  loggingSelectProjector,
+}
+
+import { dom }        from "../../../../../docs/src/kolibri/util/dom.js"
+import { fst, snd }   from "../../../../../docs/src/kolibri/stdlib.js";
+import { forEach }    from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import {
   LOG_TRACE,
   LOG_DEBUG,
@@ -8,18 +17,6 @@ import {
   LOG_NOTHING,
 } from "../logger.js";
 
-export {
-  logMessagesProjector,
-  textFilterProjector,
-  levelFilterProjector,
-  contextInputProjector,
-  loggingSelectProjector,
-}
-
-import { dom }        from "../../../../../docs/src/kolibri/util/dom.js"
-import { fst, snd }   from "../../../../../docs/src/kolibri/stdlib.js";
-import { forEach }    from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-
 /**
  * Projects the filtered log messages to the ui.
  *
@@ -29,7 +26,7 @@ import { forEach }    from "../../../../p6_brodwolf_andermatt/src/stack/stack.js
  */
 const logMessagesProjector = (rootElement, controller, stack) => {
   const highlightMessage = (logMessage, searchText) =>
-    logMessage.replaceAll(new RegExp(searchText,"gi"),
+    logMessage.replaceAll(new RegExp(searchText, "gi"),
         matched => `<span class="highlighted">${matched}</span>`);
 
   rootElement.innerHTML   = `
@@ -73,42 +70,6 @@ const createLabeledInputElement = (type, labelText, id, placeholder) => {
 };
 
 /**
- * Projects a filter input field to the ui.
- *
- * @param   { LogUiControllerType }  controller
- * @return  { [Element,Element] } - label & input Element
- */
-const textFilterProjector = controller => {
-
-  const [label, input] = createLabeledInputElement(
-      "text",
-      "Filter",
-      "textLabelId",
-      "Filter log messages"
-  );
-  input.oninput = _ => controller.setTextFilter(input.value);
-  controller.onTextFilterChange(text => input.value = text);
-  return [label, input];
-};
-
-/**
- * Projects a global context input field to the ui.
- *
- * @param   { LogUiControllerType }  controller
- * @return  { [Element,Element] } - label & input Element
- */
-const contextInputProjector = controller => {
-
-  const [label, input] = createLabeledInputElement(
-      "text",
-      "Global Context",
-      "globalContextId",
-      "ch.fhnw"
-  );
-  input.oninput = _ => controller.setGlobalContext(input.value);
-  return [label, input];
-};
-/**
  * Projects a select to change the active log level.
  *
  * @param   { LogUiControllerType }  controller
@@ -117,7 +78,7 @@ const contextInputProjector = controller => {
 const loggingSelectProjector = controller => {
 
   const [label, select] = dom(`
-          <label class="textLabel" for="loggingLevels">Logging Level</label>
+          <label for="loggingLevels">Logging Level</label>
           <select name="levels" id="loggingLevels">
             <option          value="${LOG_TRACE(snd)}"  > ${LOG_TRACE(snd)}  </option>
             <option selected value="${LOG_DEBUG(snd)}"  > ${LOG_DEBUG(snd)}  </option>
@@ -165,8 +126,8 @@ const projectLevelToggleControl = controller => checkBoxPair => {
 
   checkbox.checked = checkBoxPair(snd);
   checkBoxPair(snd)
-      ? label.classList.remove ("checkedSpan")
-      : label.classList.add    ("checkedSpan");
+      ? label.classList.remove ("checkedToggleButton")
+      : label.classList.add    ("checkedToggleButton");
 
   label.onclick = _ =>
     controller.flipLogLevel(checkBoxPair);
