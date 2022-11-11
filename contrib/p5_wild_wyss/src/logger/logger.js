@@ -44,7 +44,7 @@ export {
  * @pure if the parameters "appender" of type {@link AppendCallback[]} and msgFormatter of type {@link MsgFormatType} are pure.
  * @type    {
  *               (loggerLevel:      LogLevelType)
- *            => (append:           AppendCallback[])
+ *            => (appendCallbacks:     AppendCallback[])
  *            => (context:          String)
  *            => (formatMsg:        MsgFormatType)
  *            => (msg:              LogMeType)
@@ -56,12 +56,14 @@ export {
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
-const logger = loggerLevel => appender => context => formatMsg => msg =>
+const logger = loggerLevel => appendCallbacks => context => formatMsg => msg =>
 LazyIf(
       messageShouldBeLogged(loggerLevel)(context)
     )
     (Then(() =>
-      appender.map(app => app(formatMsg(context)(loggerLevel(snd))(evaluateMessage(msg)))).reduce( (acc, cur) => and(acc)(cur), True))
+      appendCallbacks
+        .map(     append      => append(formatMsg(context)(loggerLevel(snd))(evaluateMessage(msg))))
+        .reduce(  (acc, cur)  => and(acc)(cur), True))
     )
     (Else(() => False));
 
