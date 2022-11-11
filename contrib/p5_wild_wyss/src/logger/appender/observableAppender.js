@@ -1,5 +1,8 @@
 export { Appender }
 
+import { Pair }                   from "../../../../../docs/src/kolibri/stdlib.js"
+import { Observable }             from "../../../../../docs/src/kolibri/observable.js";
+import { emptyStack, push, size } from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import {
   False,
   True,
@@ -7,26 +10,19 @@ import {
   LazyIf,
   Then,
   Else,
-  id
-}                         from "../lamdaCalculus.js";
-import { Observable }         from "../../../../../docs/src/kolibri/observable.js";
-import {
-  emptyStack,
-  push,
-  size
-}   from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import { Pair }               from "../../../../../docs/src/kolibri/stdlib.js"
+  id,
+} from "../lamdaCalculus.js";
 import {
   LOG_DEBUG,
   LOG_ERROR,
   LOG_FATAL,
   LOG_INFO,
   LOG_TRACE,
-  LOG_WARN
+  LOG_WARN,
 } from "../logger.js";
 
-const MAX_STACK_ELEMENTS = Number.MAX_SAFE_INTEGER -1;
-const MIN_STACK_SIZE = 2;
+const MAX_STACK_ELEMENTS    = Number.MAX_SAFE_INTEGER -1;
+const MIN_STACK_SIZE        = 2;
 
 const OVERFLOW_LOG_MESSAGE  =
   "LOG ERROR: Despite running the chosen eviction strategy, the array was full! The first third of the log messages have been deleted!";
@@ -55,8 +51,8 @@ const Appender = (limit = MAX_STACK_ELEMENTS, cacheEvictionStrategy = DEFAULT_CA
   return {
     trace:  trace(calculatedLimit)(cacheEvictionStrategy),
     debug:  debug(calculatedLimit)(cacheEvictionStrategy),
-    info:   info(calculatedLimit)(cacheEvictionStrategy),
-    warn:   warn(calculatedLimit)(cacheEvictionStrategy),
+    info:   info(calculatedLimit) (cacheEvictionStrategy),
+    warn:   warn(calculatedLimit) (cacheEvictionStrategy),
     error:  error(calculatedLimit)(cacheEvictionStrategy),
     fatal:  fatal(calculatedLimit)(cacheEvictionStrategy),
     getValue,
@@ -66,20 +62,20 @@ const Appender = (limit = MAX_STACK_ELEMENTS, cacheEvictionStrategy = DEFAULT_CA
 
 /**
  *
- * @type {IObservable<stack>}
+ * @type { IObservable<stack> }
  */
 let logObservable = Observable(emptyStack);
 
 /**
  * This appender returns an observable containing a stack
  * @function
- * @returns {IObservable<stack>}
+ * @returns { IObservable<stack> }
  */
 const getValue = () => logObservable;
 
 /**
  *
- * @return {IObservable<stack>}
+ * @return { IObservable<stack> }
  */
 const reset = () => {
   const lastValue = logObservable.getValue();
@@ -87,8 +83,6 @@ const reset = () => {
   // copy observable
   return Observable(lastValue);
 };
-
-
 
 /**
  * Appends the next log message to the stack.
@@ -176,7 +170,7 @@ const append = type => msg => limit => evictionStrategy => {
 };
 
 /**
- * creates a new stack on top of the observablestack
+ * creates a new stack on top of the observable-stack
  * @type {
  *   (type: PrioritySupplier) =>
  *   (msg: String) =>
