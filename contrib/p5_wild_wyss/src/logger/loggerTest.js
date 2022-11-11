@@ -2,7 +2,6 @@ import { TestSuite }                  from "../../../../docs/src/kolibri/util/te
 import { id, lazy, True, False }      from "./lamdaCalculus.js";
 import { Appender }                   from "./appender/arrayAppender.js";
 import { Appender as CountAppender }  from "./appender/countAppender.js";
-
 import {
   debugLogger,
   LOG_DEBUG,
@@ -30,7 +29,7 @@ const loggerSuite = TestSuite("Logger");
 loggerSuite.add("test simple logging", assert => {
   const { logMessage, getActiveAppender, appender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
-  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_ => _ => id);
+  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
   const result = debug(logMessage);
 
   assert.is(result, True);
@@ -40,7 +39,7 @@ loggerSuite.add("test simple logging", assert => {
 loggerSuite.add("test enabling logging", assert => {
   const { logMessage, getActiveAppender, appender } = beforeStart();
   setLoggingLevel(LOG_NOTHING);
-  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_ => _ => id);
+  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
   // logging should be disabled
   const result1 = debug(logMessage);
@@ -57,7 +56,7 @@ loggerSuite.add("test enabling logging", assert => {
 loggerSuite.add("test disabling logging", assert => {
   const {logMessage, appender, getActiveAppender} = beforeStart();
   setLoggingLevel(LOG_DEBUG);
-  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_ => _ => id);
+  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
   // logging should be enabled
   const result1 = debug(logMessage);
@@ -76,7 +75,7 @@ loggerSuite.add("log lower logging level, should log", assert => {
   const { logMessage, appender, getActiveAppender } = beforeStart();
 
   setLoggingLevel(LOG_TRACE);
-  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_ => _ => id);
+  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
   // loglevel debug should also be logged, when LOG_TRACE is enabled
   const result = debug(logMessage);
@@ -88,7 +87,7 @@ loggerSuite.add("log higher logging level, should not log", assert => {
   const { logMessage, appender, getActiveAppender } = beforeStart();
 
   setLoggingLevel(LOG_WARN);
-  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_ => _ => id);
+  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
   // loglevel debug should not log when LOG_WARN is enabled
   const result = debug(logMessage);
@@ -124,7 +123,7 @@ loggerSuite.add("test context, logger should not log", assert => {
   const { logMessage, appender, getActiveAppender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
   setGlobalContext("ch.fhnw.test")
-  const debug = debugLogger(getActiveAppender)("ch.fhnw")(_ => _ => id);
+  const debug = debugLogger(getActiveAppender)("ch.fhnw")(_context => _level => id);
 
   const result = debug(logMessage);
   assert.is(result, False);
@@ -134,7 +133,7 @@ loggerSuite.add("test context, logger should not log", assert => {
 loggerSuite.add("test context, logger should log", assert => {
   const {logMessage, appender, getActiveAppender} = beforeStart();
   setLoggingLevel(LOG_DEBUG);
-  const debug = debugLogger(getActiveAppender)("ch.fhnw.test.specific.tag")(_ => _2 => id);
+  const debug = debugLogger(getActiveAppender)("ch.fhnw.test.specific.tag")(_context => _level => id);
 
   const result = debug(logMessage);
   assert.is(result, True);
@@ -145,7 +144,7 @@ loggerSuite.add("test lazy evaluation, logger should log", assert => {
   const { appender, getActiveAppender} = beforeStart();
 
   setLoggingLevel(LOG_DEBUG);
-  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(() => () => id);
+  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
   const result = debug(lazy("hello world"));
   assert.is(result, True);
@@ -156,7 +155,7 @@ loggerSuite.add("test lazy evaluation, logger should not log and function should
   const { appender, getActiveAppender} = beforeStart();
 
   setLoggingLevel(LOG_NOTHING);
-  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_ => _ => id);
+  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
   const result = debug(lazy("hello world"));
   assert.is(result, False);
@@ -168,7 +167,7 @@ loggerSuite.add("test log to multiple appender", assert => {
   const countAppender = CountAppender();
   const getActiveAppender = () => [appender, countAppender];
 
-  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_ => _ => id);
+  const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
   const result = debug("Tobias Wyss");
   assert.is(result, True);

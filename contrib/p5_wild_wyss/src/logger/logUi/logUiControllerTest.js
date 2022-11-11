@@ -1,9 +1,9 @@
-import { LogUiController }  from "./logUiController.js";
-import { LogUiModel }       from "./logUiModel.js";
-import { TestSuite }        from "../../../../../docs/src/kolibri/util/test.js";
-import { Appender }         from "../appender/observableAppender.js";
-import { pop }              from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import { snd }              from "../lamdaCalculus.js";
+import { pop }              from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import { Appender }         from "../appender/observableAppender.js";
+import { TestSuite }        from "../../../../../docs/src/kolibri/util/test.js";
+import { LogUiModel }       from "./logUiModel.js";
+import { LogUiController }  from "./logUiController.js";
 import {
   getLoggingLevel,
   LOG_DEBUG,

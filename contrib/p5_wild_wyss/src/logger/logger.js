@@ -51,7 +51,7 @@ export {
  *          }
  * @private
  * @example
- * const log = logger(LOG_DEBUG)(() => [Appender()])("ch.fhnw")(_ => _ => id);
+ * const log = logger(LOG_DEBUG)(() => [Appender()])("ch.fhnw")(_context => _level => id);
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
@@ -148,7 +148,7 @@ const LOG_NOTHING = Pair(n9)("NOTHING");
 /**
  * Creates a new logger at log level {@link LOG_TRACE}.
  * @example
- * const trace = traceLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
+ * const trace = traceLogger(() => [Appender()])("ch.fhnw")(_context => _level => id);
  * trace("a message to log to console");
  * // writes "a message to log to console" to the console
  */
@@ -158,7 +158,7 @@ const traceLogger = (activeAppenderCallback) =>
 /**
  * Creates a new logger at log level {@link LOG_DEBUG}.
  * @example
- * const debug = debugLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
+ * const debug = debugLogger(() => [Appender()])("ch.fhnw")(_context => _level => id);
  * debug("a message to log to console");
  * // writes "a message to log to console" to the console
  */
@@ -168,7 +168,7 @@ const debugLogger = (activeAppenderCallback) =>
 /**
  * Creates a new logger at log level {@link LOG_INFO}.
  * @example
- * const debug = debugLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
+ * const debug = debugLogger(() => [Appender()])("ch.fhnw")(_context => _level => id);
  * debug("a message to log to console");
  * // writes "a message to log to console" to the console
  */
@@ -178,7 +178,7 @@ const infoLogger = (activeAppenderCallback) =>
 /**
  * Creates a new logger at log level {@link LOG_WARN}.
  * @example
- * const warn = warnLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
+ * const warn = warnLogger(() => [Appender()])("ch.fhnw")(_context => _level => id);
  * warn("a message to log to console");
  * // writes "a message to log to console" to the console
  */
@@ -188,7 +188,7 @@ const warnLogger = (activeAppenderCallback) =>
 /**
  * Creates a new logger at log level {@link LOG_ERROR}.
  * @example
- * const error = errorLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
+ * const error = errorLogger(() => [Appender()])("ch.fhnw")(_context => _level => id);
  * error("a message to log to console");
  * // writes "a message to log to console" to the console
  */
@@ -198,7 +198,7 @@ const errorLogger = (activeAppenderCallback) =>
 /**
  * Creates a new logger at log level {@link LOG_FATAL}.
  * @example
- * const fatal = fatalLogger(() => [Appender()])("ch.fhnw")(_1 => _2 => id);
+ * const fatal = fatalLogger(() => [Appender()])("ch.fhnw")(_context => _level => id);
  * fatal("a message to log to console");
  * // writes "a message to log to console" to the console
  */
