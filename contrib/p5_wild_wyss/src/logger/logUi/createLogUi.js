@@ -68,6 +68,6 @@ const createLogUi = rootElement => {
 const styles = styleElement => {
 
   styleElement.innerHTML = `
-    @import "./logUi.css";
+      @import "../logUi.css";
   `
 };

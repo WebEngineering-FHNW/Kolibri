@@ -1,6 +1,6 @@
-@import "../../../../../../docs/css/kolibri-base.css";
-@import "../../../../../../docs/css/kolibri-light-colors.css";
-@import "../../../../../../docs/css/kolibri-light-fonts.css";
+@import "../../../../../docs/css/kolibri-base.css";
+@import "../../../../../docs/css/kolibri-light-colors.css";
+@import "../../../../../docs/css/kolibri-light-fonts.css";
 
 .container {
     display: flex;
