@@ -25,6 +25,7 @@ export {
   setLoggingLevel,
   getLoggingLevel,
 }
+
 /**
  * Yields a custom configured log function.
  * Processes all log-actions which have a {@link LogLevelType} equals or beneath
@@ -55,7 +56,6 @@ export {
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
-
 const logger = loggerLevel => appender => context => formatMsg => msg =>
 LazyIf(
       messageShouldBeLogged(loggerLevel)(context)

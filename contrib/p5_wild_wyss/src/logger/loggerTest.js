@@ -12,32 +12,32 @@ import {
   setLoggingLevel,
 } from "./logger.js";
 
+const logMessage  = "hello world";
 setGlobalContext("ch.fhnw.test");
 
 const beforeStart = () => {
-  const logMessage  = 'hello world';
   const appender    = Appender();
   appender.reset();
   setGlobalContext("ch.fhnw.test");
   setLoggingLevel(LOG_DEBUG);
   const getActiveAppender = () => [appender]
-  return { logMessage, getActiveAppender, appender }
+  return { getActiveAppender, appender }
 };
 
 const loggerSuite = TestSuite("Logger");
 
 loggerSuite.add("test simple logging", assert => {
-  const { logMessage, getActiveAppender, appender } = beforeStart();
+  const { getActiveAppender, appender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
   const result = debug(logMessage);
 
   assert.is(result, True);
-  assert.is(appender.getValue()[0], 'hello world');
+  assert.is(appender.getValue()[0], logMessage);
 });
 
 loggerSuite.add("test enabling logging", assert => {
-  const { logMessage, getActiveAppender, appender } = beforeStart();
+  const { getActiveAppender, appender } = beforeStart();
   setLoggingLevel(LOG_NOTHING);
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
@@ -54,7 +54,7 @@ loggerSuite.add("test enabling logging", assert => {
 });
 
 loggerSuite.add("test disabling logging", assert => {
-  const {logMessage, appender, getActiveAppender} = beforeStart();
+  const { appender, getActiveAppender} = beforeStart();
   setLoggingLevel(LOG_DEBUG);
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
@@ -72,7 +72,7 @@ loggerSuite.add("test disabling logging", assert => {
 });
 
 loggerSuite.add("log lower logging level, should log", assert => {
-  const { logMessage, appender, getActiveAppender } = beforeStart();
+  const { appender, getActiveAppender } = beforeStart();
 
   setLoggingLevel(LOG_TRACE);
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
@@ -84,7 +84,7 @@ loggerSuite.add("log lower logging level, should log", assert => {
 });
 
 loggerSuite.add("log higher logging level, should not log", assert => {
-  const { logMessage, appender, getActiveAppender } = beforeStart();
+  const { appender, getActiveAppender } = beforeStart();
 
   setLoggingLevel(LOG_WARN);
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
@@ -96,7 +96,7 @@ loggerSuite.add("log higher logging level, should not log", assert => {
 });
 
 loggerSuite.add("test debug tag formatted log message", assert => {
-  const { logMessage, appender, getActiveAppender } = beforeStart();
+  const { appender, getActiveAppender } = beforeStart();
   const levelFormatter = _ => lvl => msg => `[${lvl}] ${msg}`;
 
   setLoggingLevel(LOG_DEBUG);
@@ -104,11 +104,11 @@ loggerSuite.add("test debug tag formatted log message", assert => {
 
   const result = debug(logMessage);
   assert.is(result, True);
-  assert.is(appender.getValue()[0], "[DEBUG] hello world");
+  assert.is(appender.getValue()[0], `[DEBUG] ${logMessage}`);
 });
 
 loggerSuite.add("test context tag formatted log message", assert => {
-  const { logMessage, appender, getActiveAppender } = beforeStart();
+  const { appender, getActiveAppender } = beforeStart();
   const levelFormatter = ctx => _ => msg => `${ctx}: ${msg}`;
   setLoggingLevel(LOG_DEBUG);
   const context = "ch.fhnw.test";
@@ -116,11 +116,11 @@ loggerSuite.add("test context tag formatted log message", assert => {
 
   const result = debug(logMessage);
   assert.is(result, True);
-  assert.is(appender.getValue()[0], `${context}: hello world`);
+  assert.is(appender.getValue()[0], `${context}: ${logMessage}`);
 });
 
 loggerSuite.add("test context, logger should not log", assert => {
-  const { logMessage, appender, getActiveAppender } = beforeStart();
+  const { appender, getActiveAppender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
   setGlobalContext("ch.fhnw.test")
   const debug = debugLogger(getActiveAppender)("ch.fhnw")(_context => _level => id);
@@ -131,47 +131,47 @@ loggerSuite.add("test context, logger should not log", assert => {
 });
 
 loggerSuite.add("test context, logger should log", assert => {
-  const {logMessage, appender, getActiveAppender} = beforeStart();
+  const { appender, getActiveAppender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test.specific.tag")(_context => _level => id);
 
   const result = debug(logMessage);
   assert.is(result, True);
-  assert.is(appender.getValue()[0], 'hello world');
+  assert.is(appender.getValue()[0], logMessage);
 });
 
 loggerSuite.add("test lazy evaluation, logger should log", assert => {
-  const { appender, getActiveAppender} = beforeStart();
+  const { appender, getActiveAppender } = beforeStart();
 
   setLoggingLevel(LOG_DEBUG);
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
-  const result = debug(lazy("hello world"));
+  const result = debug(lazy(logMessage));
   assert.is(result, True);
-  assert.is(appender.getValue()[0], 'hello world');
+  assert.is(appender.getValue()[0], logMessage);
 });
 
 loggerSuite.add("test lazy evaluation, logger should not log and function should not be evaluated", assert => {
-  const { appender, getActiveAppender} = beforeStart();
+  const { appender, getActiveAppender } = beforeStart();
 
   setLoggingLevel(LOG_NOTHING);
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
-  const result = debug(lazy("hello world"));
+  const result = debug(lazy(logMessage));
   assert.is(result, False);
   assert.is(appender.getValue().length, 0);
 });
 
 loggerSuite.add("test log to multiple appender", assert => {
-  const { appender } = beforeStart();
-  const countAppender = CountAppender();
+  const { appender }      = beforeStart();
+  const countAppender     = CountAppender();
   const getActiveAppender = () => [appender, countAppender];
 
   const debug = debugLogger(getActiveAppender)("ch.fhnw.test")(_context => _level => id);
 
-  const result = debug("Tobias Wyss");
+  const result = debug(logMessage);
   assert.is(result, True);
-  assert.is(appender.getValue().length, 1);
+  assert.is(appender.getValue()[0], logMessage);
   assert.is(countAppender.getValue().debug, 1);
 });
 
