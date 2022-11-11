@@ -6,14 +6,6 @@
 // typedefs
 
 /**
- * A function that takes logging arguments and creates a formatted string.
- * @callback MsgFormatType
- * @function
- * @pure
- * @type { (context: String) => (logLevel: String) => (logMessage: String) => String}
- */
-
-/**
  * A Loglevel is a {@link Pair}, which consists of a {@link churchNumber } interpreted as level
  * and a {@link String} interpreted as label.
  * Given a {@link pairSelector}, either the level or the label can be selected.
@@ -72,6 +64,14 @@
  */
 
 // callbacks
+
+/**
+ * A function that takes logging arguments and creates a formatted string.
+ * @callback formatLogMessage
+ * @function
+ * @pure
+ * @type { (context: String) => (logLevel: String) => (logMessage: String) => String}
+ */
 
 /**
  * A unary operation on the given parameter.
