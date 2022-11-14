@@ -12,7 +12,6 @@ import {
 /**
  * Constructs logger for each log levels using the given parameters.
  * @type       {
- *                (appender: AppenderType[]) =>
  *                (context: String) =>
  *                (formatMsg: FormatLogMessage) =>
  *                LoggerType
@@ -24,11 +23,11 @@ import {
  * trace("Tobias Wyss") // a log message appended on the loglevel {@link LOG_TRACE}
  * debug("Andri Wild") // a log message appended on the loglevel {@link LOG_DEBUG}
  */
-const LogFactory = activeAppenderCallback => context => formatMsg => ({
-      trace:  traceLogger (activeAppenderCallback)(context)(formatMsg),
-      debug:  debugLogger (activeAppenderCallback)(context)(formatMsg),
-      info:   infoLogger  (activeAppenderCallback)(context)(formatMsg),
-      warn:   warnLogger  (activeAppenderCallback)(context)(formatMsg),
-      error:  errorLogger (activeAppenderCallback)(context)(formatMsg),
-      fatal:  fatalLogger (activeAppenderCallback)(context)(formatMsg),
+const LogFactory = context => formatMsg => ({
+      trace:  traceLogger (context)(formatMsg),
+      debug:  debugLogger (context)(formatMsg),
+      info:   infoLogger  (context)(formatMsg),
+      warn:   warnLogger  (context)(formatMsg),
+      error:  errorLogger (context)(formatMsg),
+      fatal:  fatalLogger (context)(formatMsg),
 });

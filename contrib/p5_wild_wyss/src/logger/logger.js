@@ -6,6 +6,8 @@ import {
   toChurchBoolean,
 } from "./lamdaCalculus.js";
 
+import { removeItem } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+
 export {
   LOG_TRACE,
   LOG_DEBUG,
@@ -24,6 +26,9 @@ export {
   getGlobalContext,
   setLoggingLevel,
   getLoggingLevel,
+  addToAppenderList,
+  removeFromAppenderList,
+  getAppenderList,
 }
 
 /**
@@ -34,7 +39,7 @@ export {
  * Furthermore, each log statement has a context. The log message will only be logged, if the globalContext
  * (set with {@link setGlobalContext}) has the same prefix as the log message's context.
  *
- * The result of the callback function {@link MsgFormatType} will be logged using the given {@link AppendCallback AppendCallbacks}.
+ * The result of the callback function {@link FormatLogMessage} will be logged using the given {@link AppendCallback AppendCallbacks}.
  *
  * What's the difference between loggerLevel vs loggingLevel:
  * loggerLevel is the level of the respective logger
@@ -154,8 +159,8 @@ const LOG_NOTHING = Pair(n9)("NOTHING");
  * trace("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const traceLogger = (activeAppenderCallback) =>
-    logger(LOG_TRACE)(activeAppenderCallback().map(app => app.trace));
+const traceLogger = () =>
+    logger(LOG_TRACE)(appenderList.map(app => app.trace));
 
 /**
  * Creates a new logger at log level {@link LOG_DEBUG}.
@@ -164,8 +169,8 @@ const traceLogger = (activeAppenderCallback) =>
  * debug("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const debugLogger = (activeAppenderCallback) =>
-    logger(LOG_DEBUG)(activeAppenderCallback().map(app => app.debug));
+const debugLogger = () =>
+    logger(LOG_DEBUG)(appenderList.map(app => app.debug));
 
 /**
  * Creates a new logger at log level {@link LOG_INFO}.
@@ -174,8 +179,8 @@ const debugLogger = (activeAppenderCallback) =>
  * debug("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const infoLogger = (activeAppenderCallback) =>
-    logger(LOG_INFO)(activeAppenderCallback().map(app => app.info));
+const infoLogger = () =>
+    logger(LOG_INFO)(appenderList.map(app => app.info));
 
 /**
  * Creates a new logger at log level {@link LOG_WARN}.
@@ -184,8 +189,8 @@ const infoLogger = (activeAppenderCallback) =>
  * warn("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const warnLogger = (activeAppenderCallback) =>
-    logger(LOG_WARN)(activeAppenderCallback().map(app => app.warn));
+const warnLogger = () =>
+    logger(LOG_WARN)(appenderList.map(app => app.warn));
 
 /**
  * Creates a new logger at log level {@link LOG_ERROR}.
@@ -194,8 +199,8 @@ const warnLogger = (activeAppenderCallback) =>
  * error("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const errorLogger = (activeAppenderCallback) =>
-    logger(LOG_ERROR)(activeAppenderCallback().map(app => app.error));
+const errorLogger = () =>
+    logger(LOG_ERROR)(appenderList.map(app => app.error));
 
 /**
  * Creates a new logger at log level {@link LOG_FATAL}.
@@ -204,8 +209,8 @@ const errorLogger = (activeAppenderCallback) =>
  * fatal("a message to log to console");
  * // writes "a message to log to console" to the console
  */
-const fatalLogger = (activeAppenderCallback) =>
-    logger(LOG_FATAL)(activeAppenderCallback().map(app => app.fatal));
+const fatalLogger = () =>
+    logger(LOG_FATAL)(appenderList.map(app => app.fatal));
 
 /**
  * This is a state.
@@ -257,3 +262,23 @@ const setLoggingLevel = level => loggingLevel = level;
  * @return { LogLevelType } - the current logging level
  */
 const getLoggingLevel = () => loggingLevel;
+
+
+/**
+ * @type { AppenderType[] }
+ */
+const appenderList = [];
+
+const addToAppenderList = newAppender => appenderList.push(newAppender);
+
+/**
+ *
+ * @param   { AppenderType } item
+ * @returns { AppenderType[] }
+ */
+const removeFromAppenderList = item => {
+  // correct type is not recognized here.
+  return /** @type { AppenderType[] }*/ removeItem(appenderList)(item);
+};
+
+const getAppenderList = () => [...appenderList];

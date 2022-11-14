@@ -8,6 +8,9 @@ import {
   LOG_WARN,
   setGlobalContext,
   setLoggingLevel,
+  addToAppenderList,
+  removeFromAppenderList,
+  getAppenderList
 } from "../logger.js";
 
 import { Appender as ArrayAppender }    from "../appender/arrayAppender.js";
@@ -33,12 +36,8 @@ const formatLogMsg = context => logLevel => logMessage => {
   return `${context}: [${logLevel}] ${date}: ${logMessage}`;
 };
 
-const consoleLogger   = LogFactory(() => [consoleAppender]) (LOGGER_CONTEXT)(formatLogMsg);
-const arrayLogger     = LogFactory(() => [arrayAppender])   (LOGGER_CONTEXT)(formatLogMsg);
-const countLogger     = LogFactory(() => [countAppender])   (LOGGER_CONTEXT)(formatLogMsg);
-
+const logger          = LogFactory(LOGGER_CONTEXT)(formatLogMsg);
 const logLevels       = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
-const loggers         = [consoleLogger,   arrayLogger,   countLogger];
 const appender        = [consoleAppender, arrayAppender, countAppender];
 
 const traceAction     = () => log("trace");
@@ -67,10 +66,11 @@ document.getElementById("context-global").addEventListener("input", event =>
 
 const log = lvl => {
   updateLevel();
-  const [logger, activeAppender] = updateLogger();
+  const activeAppender  = updateLogger();
   const msg = document.getElementById("log-msg").value;
   logger[lvl](msg);
-  if(activeAppender.getValue() !== undefined){
+  console.log(getAppenderList());
+  if (activeAppender.getValue !== undefined){
     output.value = JSON.stringify(activeAppender.getValue());
   }
 };
@@ -81,13 +81,12 @@ const updateLevel = () =>
   });
 
 const updateLogger = () => {
-  let currentLogger = loggers[0];
-  let currentAppender = appender[0];
+  const currentAppender = getAppenderList();
+  currentAppender.forEach(appender => removeFromAppenderList(appender));
   appenderList.forEach((el, idx) => {
     if (el.checked) {
-      currentLogger = loggers[idx];
-      currentAppender = appender[idx];
+      addToAppenderList(appender[idx]);
     }
   });
-  return [currentLogger, currentAppender];
+  return getAppenderList();
 };
