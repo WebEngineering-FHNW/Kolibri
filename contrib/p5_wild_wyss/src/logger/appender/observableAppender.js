@@ -43,7 +43,12 @@ const DEFAULT_CACHE_EVICTION_STRATEGY =  currentValue => {
  * Provides an observable appender.
  * Use {@link getValue} to get the observable and register yourself on changes
  * and use {@link reset} to clear the array.
- * @type  { AppenderCtor.<IObservable<stack>> }
+ * @param { Number                             } limit           - the max amount of log messages to keep.
+ * @param { UnaryOperation<IObservable<stack>> } cacheEvictionStrategy  - This function is called, as soon as the
+ *      defined limit of log messages is reached. You obtain the current appender
+ *      value. Return a new value which will be used as the new value of this appender.
+ *      If this parameter is not set, then all log messages until now will be discarded.
+ * @returns { AppenderType.<IObservable<stack>> }
  */
 const Appender = (limit = MAX_STACK_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
   // make sure, the stack is not defined too small.

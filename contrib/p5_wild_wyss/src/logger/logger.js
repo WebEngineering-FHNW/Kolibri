@@ -41,12 +41,12 @@ export {
  * loggingLevel is the level at which logging is currently taking place.
  *
  * @function
- * @pure if the parameters "appender" of type {@link AppendCallback[]} and msgFormatter of type {@link MsgFormatType} are pure.
+ * @pure if the parameters "appender" of type {@link AppendCallback[]} and msgFormatter of type {@link FormatLogMessage} are pure.
  * @type    {
  *               (loggerLevel:      LogLevelType)
- *            => (appendCallbacks:     AppendCallback[])
+ *            => (appendCallbacks:  AppendCallback[])
  *            => (context:          String)
- *            => (formatMsg:        MsgFormatType)
+ *            => (formatMsg:        FormatLogMessage)
  *            => (msg:              LogMeType)
  *            => churchBoolean
  *          }
@@ -63,7 +63,7 @@ LazyIf(
     (Then(() =>
       appendCallbacks
         .map(     append      => append(formatMsg(context)(loggerLevel(snd))(evaluateMessage(msg))))
-        .reduce(  (acc, cur)  => and(acc)(cur), True))
+        .reduce(  (acc, cur)  => and(acc)(cur), True)) // every() for array of churchBooleans
     )
     (Else(() => False));
 

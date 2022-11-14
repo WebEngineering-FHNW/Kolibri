@@ -12,8 +12,8 @@ import {
 /**
  * Constructs logger for each log levels using the given parameters.
  * @type       {
- *                (context: String) =>
  *                (appender: AppenderType[]) =>
+ *                (context: String) =>
  *                (formatMsg: FormatLogMessage) =>
  *                LoggerType
  *             }
