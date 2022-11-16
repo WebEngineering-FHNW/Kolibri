@@ -9,11 +9,11 @@ export {Range}
 const sort = (a, b) => {
   if (a < b) return [a,b];
   else return [b,a];
-}
+};
 
 /**
  *
- * @param   { Number } stepIsNegative
+ * @param   { Boolean } stepIsNegative
  * @param   { Number } next
  * @param   { Number } end
  * @return  { boolean }
@@ -29,7 +29,7 @@ const hasReachedEnd = (stepIsNegative, next, end) =>
  * @return  { [Number, Number] }
  */
 const initBoundaries = (from, to, stepIsNegative) => {
-  let [min, max] = sort(from, to);
+  const [min, max] = sort(from, to);
   let next = min;
   let end  = max;
   if (stepIsNegative) {
@@ -37,7 +37,7 @@ const initBoundaries = (from, to, stepIsNegative) => {
     end = min;
   }
   return [next, end];
-}
+};
 
 /**
  *
@@ -59,7 +59,7 @@ const initBoundaries = (from, to, stepIsNegative) => {
  *  const [three, four, five]     = Range(5, 3);
  */
 const Range = (from, to = 0, step = 1) => {
-  const stepIsNegative  = step < 0;
+  const stepIsNegative  = 0 > step;
   let   done            = false;
   let   [next, end]     = initBoundaries(from, to, stepIsNegative);
 
@@ -81,4 +81,4 @@ const Range = (from, to = 0, step = 1) => {
       return this;
     },
   };
-}
+};

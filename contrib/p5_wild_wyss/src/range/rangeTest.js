@@ -8,20 +8,20 @@ const testRange = (from, to, step, range, assert) => {
 
   for (let expected = from; expected <= to; expected += step) {
     const { done, value } = range.next();
-    assert.is(value, expected)
+    assert.is(value, expected);
     assert.isTrue(!done)
   }
   assert.isTrue(range.next().done)
-}
+};
 
 const testRangeNegativeStepSize = (from, to, step, range, assert) => {
   for (let expected = from; expected >= to; expected += step) {
     const { done, value } = range.next();
-    assert.is(value, expected)
+    assert.is(value, expected);
     assert.isTrue(!done)
   }
   assert.isTrue(range.next().done)
-}
+};
 
 loggerSuite.add("test simple Range(3)", assert => {
   testRange(0, 3, 1, Range(3), assert)
@@ -57,23 +57,20 @@ loggerSuite.add("test use range twice", assert => {
 
 loggerSuite.add("test use range twice", assert => {
   for (const value of Range(10)) {
-    if(value < 4) continue;
-    if(value > 4) break;
+    if(4 > value) continue;
+    if(4 < value) break;
     assert.is(value, 4);
   }
 });
 
-loggerSuite.add("test negative Range(4,6,-2)", assert => {
-  testRangeNegativeStepSize(6, 4, -2, Range(4, 6, -2), assert)
-});
+loggerSuite.add("test negative Range(4,6,-2)", assert =>
+  testRangeNegativeStepSize(6, 4, -2, Range(4, 6, -2), assert));
 
-loggerSuite.add("test negative Range(6,4,-2)", assert => {
-  testRangeNegativeStepSize(6, 2, -2, Range(6, 2, -2), assert)
-});
+loggerSuite.add("test negative Range(6,4,-2)", assert =>
+  testRangeNegativeStepSize(6, 2, -2, Range(6, 2, -2), assert));
 
-loggerSuite.add("test negative Range(0, -2, -1)", assert => {
-  testRangeNegativeStepSize(0, -2, -1, Range(0, -2, -1), assert)
-});
+loggerSuite.add("test negative Range(0, -2, -1)", assert =>
+  testRangeNegativeStepSize(0, -2, -1, Range(0, -2, -1), assert));
 
 loggerSuite.run();
 
