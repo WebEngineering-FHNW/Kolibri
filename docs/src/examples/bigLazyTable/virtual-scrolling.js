@@ -9,17 +9,39 @@ export {VirtualScrollController, VirtualScrollView, RowCounterView};
 
 /**
  * @typedef VirtualScrollControllerType
+ * @property { Promise<Array> } getDataWindow
+ * @property { Promise<Array> } getDataWindow
+ * @property { () => Number}   getVirtualHeightPx
+ * @property { () => Number}   getDataWindowStartIndex
+ * @property { () => Number}   getDataWindowEndIndex
+ * @property { () => Number}   getDataRowCount
+ * @property { () => Promise<Array> }   getDataWindow
+ * @property { (Number) => void }   setRowHeightPx
+ * @property { (Number) => void }   setHeaderRowHeightPx
+ * @property { (Number) => void }   setContainerHeightPx
+ * @property { (Number) => void }   setCurrentFirstVirtualItem
+ * @property { () => Number}   getScrollOffsetYPx
+ * @property { (Number) => void }   setListScrollTop
+ * @property { () => Number}   getListScrollTop
+ * @property { (callback: onValueChangeCallback<Number>) => void }   onListScrollTopChanged
+ */
+
+/**
+ * @typedef DataService
+ * @template _T_
+ * @property { (beginIndex:Number, size:Number) => Promise<Array<_T_>> } getWindow
+ * @property { Number } length
  */
 
 /**
  * @typedef VirtualScrollController
  * @template T
- * @param   { Array<T> } data       - the data of the list, no expected to change at runtime (ATM)
+ * @param   { DataService } dataService       - the data of the list, not expected to change at runtime (ATM)
  * @returns { VirtualScrollControllerType }
  */
-const VirtualScrollController = data => {
+const VirtualScrollController = dataService => {
 
-    const dataRowCount        = data.length;
+    const dataRowCount        = dataService.length;
     const scrollTopObservable = Observable(0);
 
     let rowHeightPx           =  20;   // initial values, to be changed through reDim()
@@ -76,7 +98,7 @@ const VirtualScrollController = data => {
         getDataWindowStartIndex:    () => dataWindowStartIndex,
         getDataWindowEndIndex:      () => dataWindowStartIndex + dataWindowSize - 1,
         getDataRowCount:            () => dataRowCount,
-        getDataWindow:              () => data.getWindow(dataWindowStartIndex, dataWindowSize),
+        getDataWindow:              () => dataService.getWindow(dataWindowStartIndex, dataWindowSize),
         setRowHeightPx:             px => { rowHeightPx       = px; reDim(); },
         setHeaderRowHeightPx:       px => { headerRowHeightPx = px; reDim(); },
         setContainerHeightPx:       px => { containerHeightPx = px; reDim(); },
@@ -140,8 +162,10 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
 
         virtualScrollController
             .getDataWindow()
-            .map(item => rowTemplate(item))
-            .forEach(tr => tbody.appendChild(tr));
+            .then ( window =>
+                window.map(item => rowTemplate(item))
+                      .forEach(tr => tbody.appendChild(tr))
+            )
     };
 
     /**
@@ -150,13 +174,17 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
      */
     const updateTable = (scrollTop) => {
         virtualScrollController.setCurrentFirstVirtualItem(scrollTop);
-
-        const window = virtualScrollController.getDataWindow();
-        let i = 0;
-        for (const tr of tbody.querySelectorAll("tr")) {
-            rowFill(tr.children, window[i]);
-            i++;
-        }
+        tbody.classList.add("loading");
+        virtualScrollController
+            .getDataWindow()
+            .then( window => {
+                let i = 0;
+                for (const tr of tbody.querySelectorAll("tr")) {
+                    rowFill(tr.children, window[i]);
+                    i++;
+                }
+                tbody.classList.remove("loading");
+            });
         shiftNodes(tbody);
         thead.style.transform = `translateY(${scrollTop}px)`; // fix the header at the top of the visible fairway
     };

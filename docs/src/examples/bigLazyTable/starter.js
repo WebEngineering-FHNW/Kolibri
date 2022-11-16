@@ -5,10 +5,10 @@ export { start };
 
 /**
  * initialize virtual scrolling
- * @param {*} data for the list
- * @param {HTMLElement} container where the list gets rendered
+ * @param { DataService } dataService - for the list
+ * @param { HTMLElement } container   - where the list gets rendered
  */
-const initVirtualScrolling = (data, container) => {
+const initVirtualScrolling = (dataService, container) => {
     
     const headTemplate = () => {
         // without TABLE, the TR does not get created.
@@ -44,7 +44,7 @@ const initVirtualScrolling = (data, container) => {
     };
     
     //Init Virtual Scroll
-    const virtualScrollController = VirtualScrollController(data);
+    const virtualScrollController = VirtualScrollController(dataService);
     VirtualScrollView(virtualScrollController, container, headTemplate, rowTemplate, rowFill);
     container.append(...RowCounterView(virtualScrollController));
 };
@@ -56,10 +56,38 @@ const data = length => {
     return {length, getWindow}
 };
 
-const dataSource = data(50);
-// const dataSource = data(1_000_00); // max real size: 1_864_134 in chrome and safari, FF even less
-// const dataSource = data(100_000_00);
+/**
+ * @constructor
+ * @param length
+ * @return { DataService }
+ */
+const EagerDataService = length => {
+    const rawData   = data(length);
+    const getWindow = (beginIndex, size) =>
+        new Promise( (resolve, reject) => resolve(rawData.getWindow(beginIndex, size)) );
+    return {length, getWindow}
+};
 
-const start = tableContainer => initVirtualScrolling(dataSource, tableContainer);
+/**
+ * @constructor
+ * @param length
+ * @return { DataService }
+ */
+const LazyDataService = length => {
+    const rawData   = data(length);
+    const getWindow = (beginIndex, size) =>
+        new Promise( (resolve, reject) =>
+             setTimeout( () => resolve(rawData.getWindow(beginIndex, size)), 1000) );
+    return {length, getWindow}
+};
+
+// uncomment below to try various combinations
+const serviceCtor = LazyDataService;
+// const serviceCtor = EagerDataService;
+// const dataService = serviceCtor(50);
+// const dataService = serviceCtor(1_000_00); // max real size: 1_864_134 in chrome and safari, FF even less
+const dataService = serviceCtor(100_000_00);
+
+const start = tableContainer => initVirtualScrolling(dataService, tableContainer);
 
 
