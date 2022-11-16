@@ -26,7 +26,11 @@
 </head>
 <body>
   <div id="tableContainer" class="scroll-container"></div>
-  <script type="module" src="starter.js"></script>
+  <script type="module" >
+      import {start} from "./starter.js";
+      const tableContainer = document.getElementById("tableContainer");
+      start(tableContainer);
+  </script>
 
 </body>
 </html>

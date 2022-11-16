@@ -1,6 +1,8 @@
 import {VirtualScrollController, VirtualScrollView, RowCounterView} from './virtual-scrolling.js';
 import {dom} from '../../kolibri/util/dom.js'
 
+export { start };
+
 /**
  * initialize virtual scrolling
  * @param {*} data for the list
@@ -54,9 +56,10 @@ const data = length => {
     return {length, getWindow}
 };
 
-const tableContainer = document.getElementById('tableContainer');
-// initVirtualScrolling(data(50), tableContainer); // max 1_864_134 in chrome and safari, FF even less
-initVirtualScrolling(data(1_000_00), tableContainer);
-// initVirtualScrolling(data(100_000_000), tableContainer);
+const dataSource = data(50);
+// const dataSource = data(1_000_00); // max real size: 1_864_134 in chrome and safari, FF even less
+// const dataSource = data(100_000_00);
+
+const start = tableContainer => initVirtualScrolling(dataSource, tableContainer);
 
 
