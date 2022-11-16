@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+  <div id="out"></div>
+
+  <script>
+    function* range() {
+      let num = 0;
+      while(true) yield num++;
+    }
+
+    const it = range();
+    console.log(it)
+
+    document.writeln( it.next().value )
+    document.writeln( it.next().value )
+    document.writeln( it.next().value )
+
+    document.writeln("</br>");
+
+    const range2 = {
+      [Symbol.iterator]() {
+        let i = 0;
+        return {
+          next() {
+            i++;
+            if(i === 4) return {done: true, value: i};
+            return { done: false, value: i };
+          },
+        };
+      },
+    };
+    document.writeln(...range2)
+    document.writeln("</br>");
+    for(const bla of range2){
+      document.write(bla)
+    }
+
+    document.writeln("</br>");
+
+    function range3(a ,b) {
+
+      return {
+        [Symbol.iterator]() {
+          let i = a;
+          return {
+            next() {
+              if (i >= b) return { done: true, value: i };
+              return { done: false, value: i++ };
+            },
+            return() {
+              return { done: true };
+            },
+          };
+        },
+      };
+    }
+
+
+    document.write([...range3(1,5)].toString())
+    document.writeln("</br>");
+
+
+    for (const value of range3(3,8)){
+      document.write(value)
+
+    }
+
+
+  </script>
+
+</body>
+</html>
