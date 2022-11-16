@@ -39,7 +39,7 @@ const initVirtualScrolling = (dataService, container) => {
     };
 
     const rowFill = ([idTd, titleTd], item) => {
-        idTd   .textContent = item?.id ? new Intl.NumberFormat('de-CH').format(item.id) : "";
+        idTd   .textContent = item?.id != null ? new Intl.NumberFormat('de-CH').format(item.id) : "";
         titleTd.textContent = item?.title;
     };
     
