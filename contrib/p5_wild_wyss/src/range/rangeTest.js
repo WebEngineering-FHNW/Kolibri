@@ -23,13 +23,11 @@ const testRangeNegativeStepSize = (from, to, step, range, assert) => {
   assert.isTrue(range.next().done)
 };
 
-loggerSuite.add("test simple Range(3)", assert => {
-  testRange(0, 3, 1, Range(3), assert)
-});
+loggerSuite.add("test simple Range(3)", assert =>
+  testRange(0, 3, 1, Range(3), assert));
 
-loggerSuite.add("test simple Range(2,3)", assert => {
-  testRange(2, 3, 1, Range(2,3), assert)
-});
+loggerSuite.add("test simple Range(2,3)", assert =>
+  testRange(2, 3, 1, Range(2, 3), assert));
 
 loggerSuite.add("test simple Range(3,2,1)", assert => {
   testRange(2, 3, 1, Range(3,2,1), assert)
@@ -76,3 +74,6 @@ loggerSuite.run();
 
 // negRange.forEach(console.log); // forEach does not exist on JS Iterator until now
 // negRange.forEach(console.log); // never shown
+
+
+
