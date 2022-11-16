@@ -206,8 +206,12 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
 const RowCounterView = (virtualScrollController) => {
     /** @type {HTMLSpanElement} */
     const rowCount = document.createElement('SPAN');
+    const format = new Intl.NumberFormat('de-CH').format;
     const changeContainer = () => {
-        rowCount.textContent = `${virtualScrollController.getDataWindowStartIndex()} - ${virtualScrollController.getDataWindowEndIndex()} / ${virtualScrollController.getDataRowCount()}`;
+        rowCount.textContent = `
+            ${format(virtualScrollController.getDataWindowStartIndex())} - 
+            ${format(virtualScrollController.getDataWindowEndIndex())} / 
+            ${format(virtualScrollController.getDataRowCount())}`;
     };
     changeContainer();
     virtualScrollController.onListScrollTopChanged(changeContainer);

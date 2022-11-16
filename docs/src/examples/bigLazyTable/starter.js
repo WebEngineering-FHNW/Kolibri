@@ -1,5 +1,5 @@
-import {VirtualScrollController, VirtualScrollView, RowCounterView} from './virtual-scrolling.js';
-import {dom} from '../../kolibri/util/dom.js'
+import {RowCounterView, VirtualScrollController, VirtualScrollView} from './virtual-scrolling.js';
+import {dom}                                                        from '../../kolibri/util/dom.js';
 
 export { start };
 
@@ -39,7 +39,7 @@ const initVirtualScrolling = (dataService, container) => {
     };
 
     const rowFill = ([idTd, titleTd], item) => {
-        idTd   .textContent = item?.id;
+        idTd   .textContent = item?.id ? new Intl.NumberFormat('de-CH').format(item.id) : "";
         titleTd.textContent = item?.title;
     };
     
@@ -84,10 +84,8 @@ const LazyDataService = length => {
 // uncomment below to try various combinations
 const serviceCtor = LazyDataService;
 // const serviceCtor = EagerDataService;
-// const dataService = serviceCtor(50);
-// const dataService = serviceCtor(1_000_00); // max real size: 1_864_134 in chrome and safari, FF even less
-const dataService = serviceCtor(100_000_00);
+const dataService = serviceCtor(50);
+// const dataService = serviceCtor(1_000_000); // max real size: 1_864_134 in chrome and safari, FF even less
+// const dataService = serviceCtor(10_000_000);
 
 const start = tableContainer => initVirtualScrolling(dataService, tableContainer);
-
-
