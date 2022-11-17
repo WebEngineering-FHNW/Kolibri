@@ -140,6 +140,7 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
     const table = scrollFrame.querySelector("table");
     const thead = table.querySelector("thead");
     const tbody = table.querySelector("tbody");
+    let   tableRows = undefined;                    // lazy init
 
     const headerRow = headTemplate();
     thead.appendChild(headerRow);
@@ -166,10 +167,10 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
 
         return virtualScrollController
             .getDataWindow()
-            .then ( window =>
-                window.map(item => rowTemplate(item))
-                      .forEach(tr => tbody.appendChild(tr))
-            )
+            .then ( window => {
+                tableRows = window.map(item => rowTemplate(item));
+                tableRows.forEach(tr => tbody.appendChild(tr))
+            });
     };
 
     const scheduler = ForgetfulScheduler();
@@ -187,10 +188,10 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
                 .getDataWindow()
                 .then( window => {
                     let i = 0;
-                    for (const tr of tbody.querySelectorAll("tr")) {
+                    tableRows.forEach( tr => {
                         rowFill(tr.children, window[i]);
                         i++;
-                    }
+                    });
                     tbody.classList.remove("loading");
                     done();
                 });
