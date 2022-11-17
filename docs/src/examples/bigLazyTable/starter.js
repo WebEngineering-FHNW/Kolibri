@@ -64,7 +64,7 @@ const data = length => {
 const EagerDataService = length => {
     const rawData   = data(length);
     const getWindow = (beginIndex, size) =>
-        new Promise( (resolve, reject) => resolve(rawData.getWindow(beginIndex, size)) );
+        new Promise( (resolve, _reject) => resolve(rawData.getWindow(beginIndex, size)) );
     return {length, getWindow}
 };
 
@@ -76,7 +76,7 @@ const EagerDataService = length => {
 const LazyDataService = length => {
     const rawData   = data(length);
     const getWindow = (beginIndex, size) =>
-        new Promise( (resolve, reject) =>
+        new Promise( (resolve, _reject) =>
              setTimeout( () => resolve(rawData.getWindow(beginIndex, size)), 1000) );
     return {length, getWindow}
 };
@@ -84,8 +84,8 @@ const LazyDataService = length => {
 // uncomment below to try various combinations
 const serviceCtor = LazyDataService;
 // const serviceCtor = EagerDataService;
-const dataService = serviceCtor(50);
+// const dataService = serviceCtor(50);
 // const dataService = serviceCtor(1_000_000); // max real size: 1_864_134 in chrome and safari, FF even less
-// const dataService = serviceCtor(10_000_000);
+const dataService = serviceCtor(10_000_000);
 
 const start = tableContainer => initVirtualScrolling(dataService, tableContainer);

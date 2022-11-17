@@ -1,5 +1,6 @@
-import {Observable} from '../../kolibri/observable.js';
-import {dom}        from '../../kolibri/util/dom.js';
+import { Observable }          from '../../kolibri/observable.js';
+import { dom }                 from '../../kolibri/util/dom.js';
+import { ForgetfulScheduler }  from "./lastWins.js";
 
 /**
  * @module examples/bigLazyTable/virtual-scrolling
@@ -152,7 +153,10 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
     const shiftNodes = contentElement => contentElement.style.transform = `translateY(${virtualScrollController.getScrollOffsetYPx()}px)`;
 
     /**
-     * Renders the list initially and determines the dimensions for calculating
+     * Renders the list initially and determines the dimensions for calculating.
+     * For this we need the data window and since we only get this in an async fashion, we can
+     * only proceed asynchronously.
+     * @return { Promise<void> } - continue asynchronously
      */
     const renderTable = () => {
         virtualScrollController.setContainerHeightPx(container.getBoundingClientRect().height);
@@ -160,7 +164,7 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
         virtualScrollController.setRowHeightPx      (testRow  .getBoundingClientRect().height);
         tbody.replaceChildren(); // remove test row
 
-        virtualScrollController
+        return virtualScrollController
             .getDataWindow()
             .then ( window =>
                 window.map(item => rowTemplate(item))
@@ -168,33 +172,42 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
             )
     };
 
+    const scheduler = ForgetfulScheduler();
+
     /**
      * Update the values that are to be displayed and move the views to their translation target on the fairway.
-     * @param {number} scrollTop - the position in pixels of the scrollable area that is currently displayed at the top of the scrollable frame
+     * @param { Number } scrollTop - the position in pixels of the scrollable area that is currently displayed at the top of the scrollable frame
      */
     const updateTable = (scrollTop) => {
         virtualScrollController.setCurrentFirstVirtualItem(scrollTop);
-        tbody.classList.add("loading");
-        virtualScrollController
-            .getDataWindow()
-            .then( window => {
-                let i = 0;
-                for (const tr of tbody.querySelectorAll("tr")) {
-                    rowFill(tr.children, window[i]);
-                    i++;
-                }
-                tbody.classList.remove("loading");
-            });
+
+        scheduler.add( done => {
+            tbody.classList.add("loading");
+            virtualScrollController
+                .getDataWindow()
+                .then( window => {
+                    let i = 0;
+                    for (const tr of tbody.querySelectorAll("tr")) {
+                        rowFill(tr.children, window[i]);
+                        i++;
+                    }
+                    tbody.classList.remove("loading");
+                    done();
+                });
+        });
+
         shiftNodes(tbody);
         thead.style.transform = `translateY(${scrollTop}px)`; // fix the header at the top of the visible fairway
+
     };
 
-    renderTable();
-    updateTable(virtualScrollController.getListScrollTop());
-    virtualScrollController.onListScrollTopChanged(updateTable);
+    renderTable().then(() => {
+       updateTable(virtualScrollController.getListScrollTop());
+       virtualScrollController.onListScrollTopChanged(updateTable);
 
-    //add event listener to container scroll and update table content when triggered
-    scrollFrame.addEventListener('scroll', _ => virtualScrollController.setListScrollTop(scrollFrame.scrollTop));
+       //add event listener to container scroll and update table content when triggered
+       scrollFrame.addEventListener('scroll', _ => virtualScrollController.setListScrollTop(scrollFrame.scrollTop));
+    });
 
 };
 
