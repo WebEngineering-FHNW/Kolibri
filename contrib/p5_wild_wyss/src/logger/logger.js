@@ -67,8 +67,11 @@ const logger = loggerLevel  => context => formatMsg => msg =>
   )
   (Then(() =>
         appenderList
-            .map(appender =>
-                appender[loggerLevel(snd).toLowerCase()](formatMsg(context)(loggerLevel(snd))(evaluateMessage(msg))))
+            .map(appender => {
+              const levelName = loggerLevel(snd);
+              const levelCallback = appender[levelName.toLowerCase()];
+              return levelCallback(formatMsg(context)(levelName)(evaluateMessage(msg)))
+            })
             .reduce((acc, cur) => and(acc)(cur), True)) // every() for array of churchBooleans
   )
   (Else(() => False));
