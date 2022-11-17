@@ -32,9 +32,6 @@ const appenderList    = document.getElementsByName("appender");
 const levelList       = document.getElementsByName("log-level");
 const output          = document.getElementById   ("log-output");
 
-addToAppenderList(arrayAppender)
-addToAppenderList(consoleAppender)
-
 const formatLogMsg = context => logLevel => logMessage => {
   const date = new Date().toISOString();
   return `${context}: [${logLevel}] ${date}: ${logMessage}`;
@@ -43,8 +40,6 @@ const formatLogMsg = context => logLevel => logMessage => {
 const logger          = LogFactory(LOGGER_CONTEXT)(formatLogMsg);
 const logLevels       = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
 const appender        = [consoleAppender, arrayAppender, countAppender];
-addToAppenderList(arrayAppender)
-addToAppenderList(consoleAppender)
 
 
 const reset = () => appender.forEach(el => {
