@@ -231,7 +231,7 @@ const addToAppenderList = (...newAppender) => newAppender.forEach(app => appende
  */
 const removeFromAppenderList = item => {
   // correct type is not recognized here.
-  return /** @type { AppenderType[] }*/ removeItem(appenderList)(item);
+  return /** @type { AppenderType[] }*/ [...removeItem(appenderList)(item)];
 };
 
 /**
