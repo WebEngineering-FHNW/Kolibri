@@ -18,6 +18,7 @@ const initVirtualScrolling = (dataService, container) => {
                     <TR>
                         <TH>Nr.</TH>
                         <TH>Name</TH>
+                        <TH>Color</TH>
                     </TR>       
                 </THEAD>
              </TABLE>
@@ -32,15 +33,17 @@ const initVirtualScrolling = (dataService, container) => {
                 <TR>
                     <TD>${item ? item.id :   "n/a" }</TD>
                     <TD>${item ? item.title: "n/a" }</TD>
+                    <TD><div style="height:1em;width:5em;background-color: ${item ? item.color: 'black' };"></div></TD>
                 </TR>
             </TABLE>
         `);
         return /** @type { HTMLTableRowElement } */ table.querySelector("tr");
     };
 
-    const rowFill = ([idTd, titleTd], item) => {
+    const rowFill = ([idTd, titleTd, colorTd], item) => {
         idTd   .textContent = item?.id != null ? new Intl.NumberFormat('de-CH').format(item.id) : "";
         titleTd.textContent = item?.title;
+        colorTd.firstElementChild.style['background-color'] = item ? item.color: 'black';
     };
     
     //Init Virtual Scroll
@@ -50,9 +53,14 @@ const initVirtualScrolling = (dataService, container) => {
 };
 
 const data = length => {
+    const names = "Dierk Fabian Dieter Gerrit Andres".split(" ");
     const getWindow= (beginIndex, size) =>
         Array.from( {length: beginIndex + size > length ? length - beginIndex : size }, // like "slice"
-                    (_,idx) => ({id:beginIndex + idx, title:"foo"}));
+                    (_,idx) => ({
+                        id:beginIndex + idx,
+                        title: names[(beginIndex + idx) % names.length],
+                        color: `hsl( ${(beginIndex + idx)}deg, ${100 * (beginIndex + idx) / length }%, 50%)`
+                    }));
     return {length, getWindow}
 };
 
@@ -77,7 +85,7 @@ const LazyDataService = length => {
     const rawData   = data(length);
     const getWindow = (beginIndex, size) =>
         new Promise( (resolve, _reject) =>
-             setTimeout( () => resolve(rawData.getWindow(beginIndex, size)), 1000) );
+             setTimeout( () => resolve(rawData.getWindow(beginIndex, size)), 100) );
     return {length, getWindow}
 };
 
@@ -85,7 +93,7 @@ const LazyDataService = length => {
 const serviceCtor = LazyDataService;
 // const serviceCtor = EagerDataService;
 // const dataService = serviceCtor(50);
-// const dataService = serviceCtor(1_000_000); // max real size: 1_864_134 in chrome and safari, FF even less
-const dataService = serviceCtor(10_000_000);
+const dataService = serviceCtor(1_000_000); // max real size: 1_864_134 in chrome and safari, FF even less
+// const dataService = serviceCtor(10_000_000);
 
 const start = tableContainer => initVirtualScrolling(dataService, tableContainer);

@@ -202,9 +202,17 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
 
     };
 
+    let timeout = undefined;
+    const deferred = holdMs => callback => args => {          // consider moving this into Kolibri core
+        if (timeout !== undefined) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout( _time => callback(args), holdMs);
+    };
+
     renderTable().then(() => {
        updateTable(virtualScrollController.getListScrollTop());
-       virtualScrollController.onListScrollTopChanged(updateTable);
+       virtualScrollController.onListScrollTopChanged(deferred(50)(updateTable));
 
        //add event listener to container scroll and update table content when triggered
        scrollFrame.addEventListener('scroll', _ => virtualScrollController.setListScrollTop(scrollFrame.scrollTop));
