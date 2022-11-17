@@ -174,6 +174,28 @@ loggerSuite.add("test log to multiple appender", assert => {
   assert.is(result, True);
   assert.is(appender.getValue()[0], logMessage);
   assert.is(countAppender.getValue().debug, 1);
+  countAppender.reset();
+  removeFromAppenderList(countAppender);
+});
+
+loggerSuite.add("test change appender after creating the logger", assert => {
+  const { appender }      = beforeStart();
+  const countAppender     = CountAppender();
+
+  const debug = debugLogger("ch.fhnw.test")(_context => _level => id);
+  let result = debug(logMessage);
+  assert.is(result, True);
+  assert.is(appender.getValue()[0], logMessage);
+  assert.is(countAppender.getValue().debug, 0);
+
+  // add a new appender to the appender list after creating the logger
+  addToAppenderList(countAppender);
+  result = debug(logMessage);
+  assert.is(result, True);
+  assert.is(appender.getValue()[1], logMessage);
+  assert.is(countAppender.getValue().debug, 1);
+
+  countAppender.reset();
   removeFromAppenderList(countAppender);
 });
 
