@@ -39,14 +39,15 @@ export {
  * Furthermore, each log statement has a context. The log message will only be logged, if the globalContext
  * (set with {@link setGlobalContext}) has the same prefix as the log message's context.
  *
- * The result of the callback function {@link FormatLogMessage} will be logged using the given {@link AppendCallback AppendCallbacks}.
+ * The result of the callback function {@link FormatLogMessage} will be logged using the given {@link AppendCallback AppendCallback's}.
  *
  * What's the difference between loggerLevel vs loggingLevel:
  * loggerLevel is the level of the respective logger
  * loggingLevel is the level at which logging is currently taking place.
  *
  * @function
- * @pure if the parameters "appender" of type {@link AppendCallback[]} and msgFormatter of type {@link FormatLogMessage} are pure.
+ * @pure if the {@link AppendCallback AppendCallback's} in the appender list and
+ *       the parameter msgFormatter of type {@link FormatLogMessage} are pure.
  * @type    {
  *               (loggerLevel:      LogLevelType)
  *            => (context:          String)
@@ -56,7 +57,7 @@ export {
  *          }
  * @private
  * @example
- * const log =  () => logger((LOG_DEBUG)("ch.fhnw")(_context => _level => id);
+ * const log =  logger(LOG_DEBUG)("ch.fhnw")(_context => _level => id);
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
@@ -155,7 +156,7 @@ const LOG_NOTHING = Pair(n9)("NOTHING");
 /**
  * Creates a new logger at log level {@link LOG_TRACE}.
  * @example
- * const trace = trace () => logger(("ch.fhnw")(_context => _level => id);
+ * const trace = traceLogger("ch.fhnw")(_context => _level => id);
  * trace("a message to log to console");
  * // writes "a message to log to console" to the console
  */
@@ -164,7 +165,7 @@ const traceLogger =  logger(LOG_TRACE);
 /**
  * Creates a new logger at log level {@link LOG_DEBUG}.
  * @example
- * const debug = debug () => logger(("ch.fhnw")(_context => _level => id);
+ * const debug = debugLogger("ch.fhnw")(_context => _level => id);
  * debug("a message to log to console");
  * // writes "a message to log to console" to the console
  */
@@ -173,7 +174,7 @@ const debugLogger =  logger(LOG_DEBUG);
 /**
  * Creates a new logger at log level {@link LOG_INFO}.
  * @example
- * const debug = debug () => logger(("ch.fhnw")(_context => _level => id);
+ * const debug = infoLogger("ch.fhnw")(_context => _level => id);
  * debug("a message to log to console");
  * // writes "a message to log to console" to the console
  */
@@ -182,7 +183,7 @@ const infoLogger = logger(LOG_INFO);
 /**
  * Creates a new logger at log level {@link LOG_WARN}.
  * @example
- * const warn = warn () => logger(("ch.fhnw")(_context => _level => id);
+ * const warn = warnLogger("ch.fhnw")(_context => _level => id);
  * warn("a message to log to console");
  * // writes "a message to log to console" to the console
  */
@@ -191,7 +192,7 @@ const warnLogger = logger(LOG_WARN);
 /**
  * Creates a new logger at log level {@link LOG_ERROR}.
  * @example
- * const error = error () => logger(("ch.fhnw")(_context => _level => id);
+ * const error = errorLogger("ch.fhnw")(_context => _level => id);
  * error("a message to log to console");
  * // writes "a message to log to console" to the console
  */
@@ -200,22 +201,29 @@ const errorLogger = logger(LOG_ERROR);
 /**
  * Creates a new logger at log level {@link LOG_FATAL}.
  * @example
- * const fatal = fatal () => logger(("ch.fhnw")(_context => _level => id);
+ * const fatal = fatalLogger("ch.fhnw")(_context => _level => id);
  * fatal("a message to log to console");
  * // writes "a message to log to console" to the console
  */
 const fatalLogger = logger(LOG_FATAL);
 
 /**
+ * This is a state.
+ * The currently active {@link AppenderType AppenderType's}.
  * @type { AppenderType[] }
  */
 const appenderList = [];
 
+/**
+ * Adds one or multiple {@link AppenderType AppenderType's} to the appender list.
+ * @param newAppender
+ */
 const addToAppenderList = (...newAppender) => newAppender.forEach(app => appenderList.push(app));
 
 /**
+ * Removes a given {@link AppenderType} from the current appender list.
  *
- * @param   { AppenderType } item
+ * @param   { AppenderType   } item
  * @returns { AppenderType[] }
  */
 const removeFromAppenderList = item => {
@@ -223,10 +231,13 @@ const removeFromAppenderList = item => {
   return /** @type { AppenderType[] }*/ removeItem(appenderList)(item);
 };
 
+/**
+ * Returns a copy of the current appender list.
+ * @return { AppenderType[] }
+ */
 const getAppenderList = () => {
   return [...appenderList];
 }
-
 
 /**
  * This is a state.
