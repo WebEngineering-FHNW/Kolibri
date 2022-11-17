@@ -212,7 +212,8 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
 
     renderTable().then(() => {
        updateTable(virtualScrollController.getListScrollTop());
-       virtualScrollController.onListScrollTopChanged(deferred(50)(updateTable));
+       // virtualScrollController.onListScrollTopChanged(deferred(40)(updateTable)); // uncomment to try variant
+       virtualScrollController.onListScrollTopChanged(updateTable);
 
        //add event listener to container scroll and update table content when triggered
        scrollFrame.addEventListener('scroll', _ => virtualScrollController.setListScrollTop(scrollFrame.scrollTop));
