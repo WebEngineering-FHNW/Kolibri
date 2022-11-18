@@ -26,7 +26,7 @@ asyncTest("latestWins (async)", assert => {
 
     return new Promise(resultDone => {
         setTimeout(_ => {               // give the scheduler time to finish
-            console.log(result);        // todo: remove
+            // console.log(result);        // todo: remove
             assert.is(result.length, 2);
             assert.is(result[0], 0);
             assert.is(result[1], 2);

@@ -61,12 +61,12 @@ const VirtualScrollController = dataService => {
     let scrollOffsetYPx      = 0;
 
     const updateScrollOffset = (scrollTop) => {
-        scrollOffsetYPx  = rowHeightPx * dataWindowStartIndex;
-        if (scrollTop >  headerRowHeightPx) {      // we have to move beyond the header space ...
-            scrollOffsetYPx += headerRowHeightPx;
-        } else {                                   // ... unless when the position is smaller than the header height
-            scrollOffsetYPx = scrollTop;
-        }
+        scrollOffsetYPx  = headerRowHeightPx + rowHeightPx * dataWindowStartIndex;
+        // if (scrollTop >  headerRowHeightPx) {      // we have to move beyond the header space ...
+        //     scrollOffsetYPx += headerRowHeightPx;
+        // } else {                                   // ... unless when the position is smaller than the header height
+        //     scrollOffsetYPx = scrollTop;
+        // }
     };
 
     /** Re-Dimensioning based on changes in one of the dimensions */
@@ -75,7 +75,7 @@ const VirtualScrollController = dataService => {
         factor          = Math.min(1.0, MAX_SCROLL_TOP / virtualHeightPx);
         virtualHeightPx *= factor;
         rowHeightPx     *= factor;
-        dataWindowSize  = Math.floor( (containerHeightPx - headerRowHeightPx) / rowHeightPx);
+        dataWindowSize  = Math.ceil( (containerHeightPx - headerRowHeightPx) / rowHeightPx);
         updateScrollOffset(0);
     };
     reDim();
@@ -97,7 +97,7 @@ const VirtualScrollController = dataService => {
     return {
         getVirtualHeightPx:         () => virtualHeightPx,
         getDataWindowStartIndex:    () => dataWindowStartIndex,
-        getDataWindowEndIndex:      () => dataWindowStartIndex + dataWindowSize - 1,
+        getDataWindowEndIndex:      () => dataWindowStartIndex + dataWindowSize,
         getDataRowCount:            () => dataRowCount,
         getDataWindow:              () => dataService.getWindow(dataWindowStartIndex, dataWindowSize),
         setRowHeightPx:             px => { rowHeightPx       = px; reDim(); },
@@ -126,15 +126,12 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
         <DIV id="scrollFrame" style="overflow: auto;">
             <DIV id="fairWay" style="min-height: ${virtualScrollController.getVirtualHeightPx()}px;">
                 <TABLE style="border-collapse: collapse;border-spacing: 0;">
-                    <TBODY></TBODY>
                     <THEAD></THEAD>
+                    <TBODY></TBODY>
                 </TABLE>
             </DIV>
         </DIV>
     `);
-    // ATTN! It is on purpose that THEAD comes _after_ TBODY !!!
-    // This ensures that the header is always painted on top of any data rows that might
-    // spill over at the end display of data sets with > 2 Mio entries when rounding errors for the offset kick in.
 
     container.appendChild(scrollFrame);             // we need to do this early to get the bounding rect dimensions
     const table = scrollFrame.querySelector("table");
@@ -151,7 +148,7 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
      * move the content to their translation position on the fairway
      * @param { HTMLElement } contentElement
      */
-    const shiftNodes = contentElement => contentElement.style.transform = `translateY(${virtualScrollController.getScrollOffsetYPx()}px)`;
+    const shiftNodes = contentElement => contentElement.style.top = `${virtualScrollController.getScrollOffsetYPx()}px`;
 
     /**
      * Renders the list initially and determines the dimensions for calculating.
@@ -197,8 +194,8 @@ const VirtualScrollView = (virtualScrollController, container, headTemplate, row
                 });
         });
 
-        shiftNodes(tbody);
-        thead.style.transform = `translateY(${scrollTop}px)`; // fix the header at the top of the visible fairway
+        // shiftNodes(tbody);
+        table.style.transform = `translateY(${scrollTop}px)`; // fix the header at the top of the visible fairway
 
     };
 

@@ -3,6 +3,12 @@
 <head>
     <title>Virtual Scrolling</title>
     <style>
+      *, *:before, *:after {
+          /*setting the padding to zero changes the tr height and messes up the calculations*/
+          /*padding: 0;*/
+          margin: 0;
+          box-sizing: border-box;
+      }
       .scroll-container {
         height: 600px;
         display: flex;

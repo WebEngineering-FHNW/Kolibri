@@ -33,7 +33,7 @@ const initVirtualScrolling = (dataService, container) => {
                 <TR>
                     <TD>${item ? item.id :   "n/a" }</TD>
                     <TD>${item ? item.title: "n/a" }</TD>
-                    <TD><div style="height:1em;width:5em;background-color: ${item ? item.color: 'black' };"></div></TD>
+                    <TD><div style="height:1em;width:5em;"></div></TD>
                 </TR>
             </TABLE>
         `);
@@ -93,7 +93,8 @@ const LazyDataService = length => {
 const serviceCtor = LazyDataService;
 // const serviceCtor = EagerDataService;
 // const dataService = serviceCtor(50);
-const dataService = serviceCtor(1_000_000); // max real size: 1_864_134 in chrome and safari, FF even less
+const dataService = serviceCtor(1_000_000);
+// const dataService = serviceCtor(2_000_000); // max real size: 1_864_134 in chrome and safari, FF even less
 // const dataService = serviceCtor(10_000_000);
 
 const start = tableContainer => initVirtualScrolling(dataService, tableContainer);
