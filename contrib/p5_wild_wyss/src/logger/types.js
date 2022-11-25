@@ -112,8 +112,9 @@
  */
 
 /**
- * A callback which takes no arguments and returns an {@link a}
+ * A callback which takes one argument and returns an {@link a}
  * @template a
  * @callback Predicate
+ * @param   { a } value
  * @returns { boolean }
  */

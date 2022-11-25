@@ -29,8 +29,6 @@ loggerSuite.add("test typical case deconstruction", assert => {
   assert.is(result.length, 4);
 });
 
-
-
 const testRange = (from, to, step, range, assert) => {
 
   for (let expected = from; expected <= to; expected += step) {
@@ -106,6 +104,18 @@ loggerSuite.add("test continue and break", assert => {
     assert.is(value, 4);
   }
 });
+
+loggerSuite.add("test running out of range", assert => {
+  const range = Range(2);
+
+  for (const _ of range) {
+    /** Nothing to do*/
+  }
+
+  assert.is(range[Symbol.iterator]().next().value, 2);
+  assert.is(range[Symbol.iterator]().next().value, 2);
+});
+
 
 loggerSuite.add("test negative Range(4, 6,- 2)", assert =>
   testRangeNegativeStepSize(6, 4, -2, Range(4, 6, -2), assert));
