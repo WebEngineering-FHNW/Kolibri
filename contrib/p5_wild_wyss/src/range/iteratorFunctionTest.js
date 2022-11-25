@@ -5,44 +5,42 @@ const loggerSuite = TestSuite("Iterator Functions");
 
 // test for dropWhile
 loggerSuite.add("test simple dropWhile", assert => {
-  const range = Range(10);
-
-  range.dropWhile(value => value < 3);
+  let range = Range(10).dropWhile(value => value < 3);
   assert.is(range[Symbol.iterator]().next().value, 3);
 });
 
 loggerSuite.add("test double dropWhile", assert => {
-  const range = Range(10);
-
-  range.dropWhile(value => value < 3)
-       .dropWhile(value => value < 4);
+  let range = Range(10)
+      .dropWhile(value => value < 3)
+      .dropWhile(value => value < 4);
 
   assert.is(range[Symbol.iterator]().next().value, 4);
 });
 
 loggerSuite.add("test dropWhile running out of range", assert => {
-  const range = Range(10);
-
-  range.dropWhile(_value => true)
+  let range = Range(10).dropWhile(_value => true)
 
   assert.is(range[Symbol.iterator]().next().value, 10);
 });
 
 // tests for drop
 loggerSuite.add("test simple drop", assert => {
-  const range = Range(10);
-
-  range.drop(3);
+  let range = Range(10).drop(3);
 
   assert.is(range[Symbol.iterator]().next().value, 3);
 });
 
 loggerSuite.add("test simple drop", assert => {
-  const range = Range(10);
-
-  range.drop(20);
+  let range = Range(10).drop(20);
 
   assert.is(range[Symbol.iterator]().next().value, 10);
+});
+
+// tests for takeWhile
+loggerSuite.add("test simple takeWhile", assert => {
+  let range = Range(4).takeWhile(value => value < 2);
+  assert.is(range[Symbol.iterator]().next().value, 0);
+  assert.is(range[Symbol.iterator]().next().value, 1);
 });
 
 

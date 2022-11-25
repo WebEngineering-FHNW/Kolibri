@@ -15,20 +15,22 @@ export { Range }
 const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
   const stepIsNegative  = 0 > step;
   let   done            = false;
-  let   [current, end]  = normalize(firstBoundary, secondBoundary, stepIsNegative);
+  const [left, right]   = normalize(firstBoundary, secondBoundary, stepIsNegative);
+  let value = left;
 
   const next = () => {
-    if (done) return { done, value: current };
+    if (done) return { done, value };
 
-    const returnValue = { done: false, value: current };
+    const returnValue = { done: false, value };
 
     // prepare next iteration
-    const nextNumber = current + step;
-    done = hasReachedEnd(stepIsNegative, nextNumber, end);
-    if (!done) current = nextNumber;
+    const nextNumber = value + step;
+    done = hasReachedEnd(stepIsNegative, nextNumber, right);
+    if (!done) value = nextNumber;
 
     return returnValue;
   };
+
 
   /**
    *
@@ -36,8 +38,20 @@ const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
    * @return { RangeType }
    */
   const dropWhile = predicate => {
-    while(predicate(current) && !done) next();
-    return api;
+    let current = value;
+    while(predicate(current) && current < right) current += step;
+    return Range(current, right, step);
+  };
+
+  /**
+   *
+   * @param  { (Number) => Boolean } predicate
+   * @return { RangeType }
+   */
+  const takeWhile = predicate => {
+    let current = value;
+    while(predicate(current) && current < right) current += step;
+    return Range(left, current, step);
   };
 
   /**
@@ -50,13 +64,12 @@ const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
     return dropWhile(_current => i++ < count);
   };
 
-  const api = {
+  return {
     dropWhile,
+    takeWhile,
     drop,
-    [Symbol.iterator]: () => ({ next })
-  }
-
-  return api;
+    [Symbol.iterator]: () => ({next})
+  };
 };
 
 /**
