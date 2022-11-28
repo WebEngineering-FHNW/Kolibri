@@ -98,11 +98,19 @@ const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
    */
   const take = applyCountFilter(takeWhile);
 
+  const forEach = consume => {
+    const copyRange = Range(value, right, step);
+    for(const elem of copyRange) {
+      consume(elem);
+    }
+  };
+
   return {
     dropWhile,
     takeWhile,
     drop,
     take,
+    forEach,
     [Symbol.iterator]: () => ({next})
   };
 };
