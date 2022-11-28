@@ -1,11 +1,21 @@
 export { Range }
 
 /**
+ * Creates a range of numbers between two inclusive boundaries,
+ * that implements the iterator protocol.
+ * First and second boundaries can be specified in arbitrary order,
+ * step size is always the third parameter.
+ * Consider the examples at the end of the documentation.
  *
+ * Contract:
+ * - End-value may not be reached exactly, but will never be exceeded.
+ * - Zero step size leads to infinite loops.
+ * - Only values that behave correctly with respect to addition and
+ *   size comparison may be passed as arguments.
  * @constructor
- * @param { Number } firstBoundary
- * @param { Number } secondBoundary
- * @param { Number } step
+ * @param { !Number } firstBoundary  - the first boundary of the range
+ * @param { Number }  secondBoundary - optionally the second boundary of the range
+ * @param { Number }  step - the size of a step, processed during each iteration
  * @returns RangeType
  * @example
  *  const [zero, one, two, three] = Range(3);
@@ -31,49 +41,74 @@ const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
     return returnValue;
   };
 
+  /**
+   * Finds the first element which does not match the given predicate.
+   * @param  { Predicate<Number> } predicate
+   * @return { Number } - the matched element
+   */
+  const findRangeBoundary = predicate => {
+    let current = value;
+    while(predicate(current) && current < right) current += step;
+    return current;
+  };
 
   /**
-   *
-   * @param  { (Number) => Boolean } predicate
-   * @return { RangeType }
+   * Drops all elements until an element fulfills the given predicate.
+   * @type { RangeFilter }
+   * @example
+   * Range(10).dropWhile(el => el < 5); // returns Range(5,10)
    */
   const dropWhile = predicate => {
-    let current = value;
-    while(predicate(current) && current < right) current += step;
-    return Range(current, right, step);
+    let start = findRangeBoundary(predicate);
+    return Range(start, right, step);
   };
 
   /**
-   *
-   * @param  { (Number) => Boolean } predicate
-   * @return { RangeType }
+   * Keeps all elements as long as the passed predicate is true.
+   * @type { RangeFilter }
+   * @example
+   * Range(10).takeWhile(el => el < 5); // returns Range(4)
    */
   const takeWhile = predicate => {
-    let current = value;
-    while(predicate(current) && current < right) current += step;
-    return Range(left, current, step);
+    let end = findRangeBoundary(predicate);
+    return Range(left, end, step);
   };
 
   /**
-   *
-   * @param  { Number } count
-   * @return { RangeType }
+   * @type { (filterFunction: RangeFilter) => (count: Number) => RangeType }
    */
-  const drop = count => {
+  const applyCountFilter = filterFunction => count => {
     let i = 0;
-    return dropWhile(_current => i++ < count);
+    return filterFunction(_ => i++ < count);
   };
+
+  /**
+   * Drops the next n elements.
+   * @type { CountRangeFilter }
+   * @example
+   * Range(10).drop(5); // returns Range(5, 10)
+   */
+  const drop = applyCountFilter(dropWhile);
+
+  /**
+   * Keeps the next n elements.
+   * @type { CountRangeFilter }
+   * @example
+   * Range(10).take(5); // returns Range(4)
+   */
+  const take = applyCountFilter(takeWhile);
 
   return {
     dropWhile,
     takeWhile,
     drop,
+    take,
     [Symbol.iterator]: () => ({next})
   };
 };
 
 /**
- *
+ * Sorts the two parameter a and b by its magnitude.
  * @param  { Number } a
  * @param  { Number } b
  * @return { [Number, Number] }
@@ -84,8 +119,8 @@ const sort = (a, b) => {
 };
 
 /**
- *
- * @param   { Boolean } stepIsNegative
+ * Determines if the end of the range is reached.
+ * @param   { Boolean } stepIsNegative - signals, which range boundary condition is active
  * @param   { Number }  next
  * @param   { Number }  end
  * @return  { boolean }
@@ -94,14 +129,15 @@ const hasReachedEnd = (stepIsNegative, next, end) =>
     stepIsNegative ? next < end : next > end;
 
 /**
- *
- * @param   { Number }  from
- * @param   { Number }  to
+ * Make sure, that the left and right values
+ * are in the proper order according to the given step.
+ * @param   { Number }  left
+ * @param   { Number }  right
  * @param   { Boolean } stepIsNegative
  * @return  { [Number, Number] }
  */
-const normalize = (from, to, stepIsNegative) => {
-  const [min, max] = sort(from, to);
+const normalize = (left, right, stepIsNegative) => {
+  const [min, max] = sort(left, right);
   let next = min;
   let end  = max;
   if (stepIsNegative) {

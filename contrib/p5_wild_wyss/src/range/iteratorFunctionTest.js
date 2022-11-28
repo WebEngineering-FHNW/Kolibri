@@ -43,5 +43,15 @@ loggerSuite.add("test simple takeWhile", assert => {
   assert.is(range[Symbol.iterator]().next().value, 1);
 });
 
+// test for take
+loggerSuite.add("test simple take", assert => {
+  let range = Range(10).take(5);
+  let counter = 0;
+  for(const element of range){
+    assert.is(element, counter++);
+  }
+  // check if range only contains 5 elements
+  assert.is(range[Symbol.iterator]().next().value, 5);
+});
 
 loggerSuite.run();
