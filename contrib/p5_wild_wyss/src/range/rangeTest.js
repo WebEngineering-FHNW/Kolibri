@@ -25,7 +25,7 @@ loggerSuite.add("test typical case deconstruction", assert => {
 });
 
 loggerSuite.add("test typical case deconstruction", assert => {
-  const result = Array.from(Range(3));
+  const result = Array.from(/** @type ArrayLike */ Range(3));
   assert.is(result.length, 4);
 });
 
