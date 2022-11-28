@@ -116,7 +116,6 @@ loggerSuite.add("test running out of range", assert => {
   assert.is(range[Symbol.iterator]().next().value, 2);
 });
 
-
 loggerSuite.add("test negative Range(4, 6,- 2)", assert =>
   testRangeNegativeStepSize(6, 4, -2, Range(4, 6, -2), assert));
 
@@ -128,6 +127,27 @@ loggerSuite.add("test negative Range(0, -2, -1)", assert =>
 
 loggerSuite.add("test negative Range(-12, -2, -2)", assert =>
   testRangeNegativeStepSize(-2, -12, -2, Range(-12, -2, -2), assert));
+
+// all combinations
+loggerSuite.add("test of all combinations", assert => {
+  testRange(0, 5, 1, Range(0, 5, 1), assert);
+  testRange(0, 5, 1, Range(5, 0, 1), assert);
+
+  testRange(-5, 5, 1, Range(-5, 5, 1), assert);
+  testRange(-5, 5, 1, Range(5, -5, 1), assert);
+
+  testRange(-5, 0, 1, Range(-5, 0, 1), assert);
+  testRange(-5, 0, 1, Range(0, -5, 1), assert);
+
+  testRangeNegativeStepSize(5, 0, -1, Range(0, 5, -1), assert);
+  testRangeNegativeStepSize(5, 0, -1, Range(5, 0, -1), assert);
+
+  testRangeNegativeStepSize(5, -5, -1, Range(-5, 5, -1), assert);
+  testRangeNegativeStepSize(5, -5, -1, Range(5, -5, -1), assert);
+
+  testRangeNegativeStepSize(0, -5, -1, Range(-5, 0, -1), assert);
+  testRangeNegativeStepSize(0, -5, -1, Range(0, -5, -1), assert);
+});
 
 loggerSuite.run();
 
