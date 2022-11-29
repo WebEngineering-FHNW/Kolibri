@@ -108,12 +108,10 @@ loggerSuite.add("test continue and break", assert => {
 loggerSuite.add("test running out of range", assert => {
   const range = Range(2);
 
-  for (const _ of range) {
-    /** Nothing to do*/
-  }
+  for (const _ of range) { /** Range gets exhausted. */ }
 
-  assert.is(range[Symbol.iterator]().next().value, 2);
-  assert.is(range[Symbol.iterator]().next().value, 2);
+  assert.is(range[Symbol.iterator]().next().done, true);
+  assert.is(range[Symbol.iterator]().next().done, true);
 });
 
 loggerSuite.add("test negative Range(4, 6,- 2)", assert =>
