@@ -1,6 +1,6 @@
 
-export { Iterator }
 
+export { Iterator }
 
 
 /** @typedef  IteratorType
@@ -11,6 +11,7 @@ export { Iterator }
  * @property { (count:Number)             => IteratorType<_T_> } drop      - jump over so many elements
  * @property { (predicate:Predicate<_T_>) => IteratorType<_T_> } takeWhile - proceed with the iteration until the predicate becomes true
  * @property { (count:Number)             => IteratorType<_T_> } take      - stop after so many elements
+ * @property { ()                         => IteratorType<_T_> } copy
  */
 
 /**
@@ -59,6 +60,8 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     return takeWhile(_ => i++ < count);
   };
 
+  const copy = () => Iterator(value, incrementFunction, stopDetected);
+
   const iteratorObject = {
     [Symbol.iterator]: () => ({ next }),
     forEach,
@@ -66,6 +69,7 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     drop,
     takeWhile,
     take,
+    copy,
   };
 
   return iteratorObject;
