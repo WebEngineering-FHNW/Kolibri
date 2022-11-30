@@ -60,6 +60,7 @@ loggerSuite.add("test break Range(7)", assert => {
   const range = Range(7);
   const result = [];
 
+  // noinspection LoopStatementThatDoesntLoopJS
   for (const value of range) {
     result.push(value);
     break;
@@ -72,12 +73,15 @@ loggerSuite.add("test double break", assert => {
   const range = Range(7);
   const result = [];
 
-  for (const value of range) { // TODO: range.drop(1)
-    result.push(value); // wenn das nicht da wäre
+  // noinspection LoopStatementThatDoesntLoopJS
+  for (const value of range) {
+    result.push(value);
     break;
   }
 
-  for (const value of range) { // TODO: range.take(1)
+
+  // noinspection LoopStatementThatDoesntLoopJS
+  for (const value of range) {
     result.push(value);
     break;
   }
