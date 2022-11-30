@@ -109,16 +109,9 @@ const Iterator = (value, incrementFunction, stopDetected) => {
   };
 
   const cons = a => {
-    let returned = false;
-    const oldNext = next;
-    next = () => {
-      if (returned) return oldNext();
-      returned = true;
-      return {done: false, value: a};
-    };
-    return iteratorObject;
+    const it = Iterator(a, _ => undefined, x => x === undefined);
+    return it.concat(iteratorObject);
   };
-
 
   const iteratorObject = {
     [Symbol.iterator]: () => ({ next }),
