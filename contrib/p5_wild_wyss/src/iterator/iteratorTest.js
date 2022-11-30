@@ -111,5 +111,11 @@ iteratorSuite.add("test concat 2 iterators", assert => {
   iterator.concat(iterator2);
   assert.is(arrayEq([0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 5, 6])([...iterator]), true);
 });
+iteratorSuite.add("test simple head", assert => {
+  const iterator = newIterator(4);
+  assert.is(0, iterator.head());
+  assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
+
+});
 
 iteratorSuite.run();

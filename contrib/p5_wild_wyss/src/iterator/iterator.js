@@ -18,6 +18,7 @@ export { Iterator }
  * @property { (op:BinaryOperation<_T_>, _T_)   => _T_ }               reduce    - Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
  * @property { (it:IteratorType<*>)             => IteratorType<*> }   concat    - add an iterator to the existing iterators end
  * @property { (a:_T_)                          => IteratorType<_T_> } cons      - add the element {@link a} to the front of the iterator
+ * @property { ()                               => _T_ }               head      - return the next value without consuming it
  */
 
 /**
@@ -115,6 +116,8 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     return it.concat(iteratorObject);
   };
 
+  const head = () => value;
+
   const iteratorObject = {
     [Symbol.iterator]: () => ({ next }),
     forEach,
@@ -128,6 +131,7 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     reduce,
     cons,
     concat,
+    head,
     copy,
   };
 
