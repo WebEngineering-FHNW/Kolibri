@@ -2,10 +2,14 @@ import { TestSuite }  from "../../../../docs/src/kolibri/util/test.js";
 import { Iterator }   from "./iterator.js";
 import { arrayEq } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
+
+const newIterator = limit => Iterator(0, current => current + 1, current => limit < current);
+
+
 const iteratorSuite = TestSuite("Iterator");
 
 iteratorSuite.add("test typical case for simple iterator.", assert => {
-  const iterator = Iterator(0, current => current + 1, current => 0 < current);
+  const iterator = newIterator(0);
   const [zero0, undef] = iterator;
 
   assert.is(zero0,0);
@@ -13,14 +17,14 @@ iteratorSuite.add("test typical case for simple iterator.", assert => {
 });
 
 iteratorSuite.add("test edge case for empty iteration.", assert => {
-  const iterator = Iterator(1, current => current + 1, current => 0 < current);
+  const iterator = newIterator(-1);
   const [undef]  = iterator;
 
-  assert.is(undef,undefined);
+  assert.is(undef, undefined);
 });
 
 iteratorSuite.add("test iterator identity.", assert => {
-  const iterator = Iterator(0, current => current + 1, current => 0 < current);
+  const iterator = newIterator(0);
   const [zero0]  = iterator;
   assert.is(zero0, 0);
 
@@ -29,7 +33,7 @@ iteratorSuite.add("test iterator identity.", assert => {
 });
 
 iteratorSuite.add("test copy of iterator", assert => {
-  const iterator = Iterator(0, current => current + 1, current => 4 < current);
+  const iterator = newIterator(4);
   const iteratorCopy = iterator.copy();
 
   assert.is(iterator === iteratorCopy, false);
@@ -38,7 +42,7 @@ iteratorSuite.add("test copy of iterator", assert => {
 });
 
 iteratorSuite.add("test copy of iterator in use", assert => {
-  const iterator = Iterator(0, current => current + 1, current => 4 < current);
+  const iterator = newIterator(4);
   iterator.drop(1);
   const iteratorCopy = iterator.copy();
 
@@ -47,7 +51,7 @@ iteratorSuite.add("test copy of iterator in use", assert => {
 });
 
 iteratorSuite.add("test modify copy of iterator should not affect the origin", assert => {
-  const iterator = Iterator(0, current => current + 1, current => 4 < current);
+  const iterator = newIterator(4);
   const iteratorCopy = iterator.copy();
   iteratorCopy.drop(1);
 
@@ -66,6 +70,37 @@ iteratorSuite.add("test DO NOT USE stopDetection with side effect", assert => {
   const iteratorCopy = iterator.copy();
 
   assert.is(arrayEq([...iterator.take(1)])([...iteratorCopy.take(1)]), false);
+});
+
+iteratorSuite.add("test simple map", assert => {
+  const iterator = newIterator(4);
+  iterator.map(el => el * 2);
+  assert.is(arrayEq([0, 2, 4, 6, 8])([...iterator]), true)
+});
+
+
+iteratorSuite.add("test multiple map", assert => {
+  const iterator = newIterator(4);
+  iterator.map(el => el * 2).map(el => el * 2);
+  assert.is(arrayEq([0, 4, 8, 12, 16])([...iterator]), true)
+});
+
+iteratorSuite.add("test simple retainAll", assert => {
+  const iterator = newIterator(4);
+  iterator.retainAll(el => el % 2 === 0);
+  assert.is(arrayEq([0, 2, 4])([...iterator]), true)
+});
+
+iteratorSuite.add("test simple rejectAll", assert => {
+  const iterator = newIterator(4);
+  iterator.rejectAll(el => el % 2 === 0);
+  assert.is(arrayEq([1, 3])([...iterator]), true)
+});
+
+iteratorSuite.add("test simple reduce", assert => {
+  const iterator = newIterator(4);
+  const result = iterator.reduce( (acc, cur) => acc + cur , 0);
+  assert.is(10, result);
 });
 
 iteratorSuite.run();
