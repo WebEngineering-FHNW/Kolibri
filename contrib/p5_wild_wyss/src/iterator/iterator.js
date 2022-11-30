@@ -83,9 +83,9 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     const oldNext = next;
 
     next = () => {
-      const {done, value} = oldNext();
+      const { done, value } = oldNext();
       const result = predicate(value) || done;
-      return result ? ({done, value}): next();
+      return result ? ({ done, value }): next();
     }
     return iteratorObject;
   };
@@ -106,7 +106,7 @@ const Iterator = (value, incrementFunction, stopDetected) => {
   const concat = it => {
     next = () => {
       const current = value;
-      let done      = stopDetected(current);
+      const done      = stopDetected(current);
       if(done) return it[Symbol.iterator]().next();
       value = incrementFunction(value);
       return { done, value: current };
@@ -119,7 +119,7 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     return it.concat(iteratorObject);
   };
 
-  const head = () => value;
+  const head = () => stopDetected(value) ? undefined : value;
 
   const reverse = () => {
     const values = [...iteratorObject].reverse();

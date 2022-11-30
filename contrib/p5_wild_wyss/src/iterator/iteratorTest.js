@@ -35,7 +35,6 @@ iteratorSuite.add("test copy of iterator", assert => {
   const iteratorCopy = iterator.copy();
 
   assert.is(iterator === iteratorCopy, false);
-  console.log(...iterator, ...iteratorCopy)
   assert.is(arrayEq([...iterator])([...iteratorCopy]), true)
 });
 
@@ -74,6 +73,12 @@ iteratorSuite.add("test simple map", assert => {
   const iterator = newIterator(4);
   iterator.map(el => el * 2);
   assert.is(arrayEq([0, 2, 4, 6, 8])([...iterator]), true)
+});
+
+iteratorSuite.add("test map to another type", assert => {
+  const iterator = newIterator(4);
+  iterator.map(el => el.toString());
+  assert.is(arrayEq(["0", "1", "2", "3", "4"])([...iterator]), true)
 });
 
 iteratorSuite.add("test multiple map", assert => {
@@ -118,9 +123,26 @@ iteratorSuite.add("test simple head", assert => {
   assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
 });
 
+iteratorSuite.add("test simple head", assert => {
+  const iterator = newIterator(4);
+  assert.is(0, iterator.head());
+  assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
+});
+
+iteratorSuite.add("test head on empty iterator", assert => {
+  const iterator = newIterator(-1);
+  assert.is(iterator.head(), undefined);
+});
+
 iteratorSuite.add("test simple reverse", assert => {
   const iterator = newIterator(4).map(x => x * 2);
   assert.is(arrayEq([0,2,4,6,8].reverse())([...iterator.reverse()]), true);
+});
+
+iteratorSuite.add("test reverse exhausted iterator", assert => {
+  const iterator = newIterator(4);
+  for (const _ of iterator) { /** Range gets exhausted. */ }
+  assert.is(arrayEq([])([...iterator.reverse()]), true);
 });
 
 iteratorSuite.run();
