@@ -76,7 +76,7 @@ const Assert = () => {
 
     const consoleErrorEquals = consoleEquals('error')
 
-    const consoleLogEquals = consoleEquals('log')
+    const consoleLogEquals = consoleEquals('Log')
 
     return {
         getOk: () => ok,
