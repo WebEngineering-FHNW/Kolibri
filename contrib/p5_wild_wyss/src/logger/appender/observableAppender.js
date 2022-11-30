@@ -162,15 +162,13 @@ const append = type => msg => limit => evictionStrategy => {
   // evict the stack using the given evictionStrategy
   logObservable = evictionStrategy(logObservable);
   LazyIf(full(limit))
-    (Then(()=>{
+    (Then(() => {
       // if the stack is full, despite using the set eviction strategy, use the default eviction strategy to make space.
       logObservable = DEFAULT_CACHE_EVICTION_STRATEGY(logObservable);
       logObservable.setValue(createNewStack(LOG_ERROR)(OVERFLOW_LOG_MESSAGE));
       logObservable.setValue(createNewStack(type)(msg));
     }))
-    (Else(()=>{
-      logObservable.setValue(createNewStack(type)(msg));
-    }));
+    (Else(() => logObservable.setValue(createNewStack(type)(msg))));
   return True;
 };
 

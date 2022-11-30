@@ -22,7 +22,7 @@ const LOGGER_CONTEXT          = "ch.fhnw.sample.logger";
 const INITIAL_GLOBAL_CONTEXT  = "ch.fhnw";
 
 setGlobalContext(INITIAL_GLOBAL_CONTEXT);
-setLoggingLevel(LOG_DEBUG)
+setLoggingLevel(LOG_DEBUG);
 
 const consoleAppender = ConsoleAppender();
 const arrayAppender   = ArrayAppender();

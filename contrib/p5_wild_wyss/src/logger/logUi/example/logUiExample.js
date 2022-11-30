@@ -12,7 +12,7 @@ const formatLogMsg = context => logLevel => logMessage => {
   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
 };
 
-addToAppenderList(observableAppender, consoleAppender)
+addToAppenderList(observableAppender, consoleAppender);
 
 const logger1 = LogFactory("ch.fhnw")    (formatLogMsg);
 const logger2 = LogFactory("ch.fhnw.ip5")(formatLogMsg);

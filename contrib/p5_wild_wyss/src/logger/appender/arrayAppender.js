@@ -80,8 +80,8 @@ let appenderArray = [];
  * @returns {Array} - the last value before clearing
  */
 const reset = () => {
-  const currentAppenderArray = appenderArray;
-  appenderArray = [];
+  const currentAppenderArray  = appenderArray;
+  appenderArray               = [];
   return currentAppenderArray;
 };
 
@@ -118,7 +118,7 @@ const full = limit =>
 
 /**
  * Appends the given message to the array.
- * If the array lenght equals the param limit, the array cache will be evicted using the defined eviction strategy.
+ * If the array length equals the param limit, the array cache will be evicted using the defined eviction strategy.
  * @type  {
  *          (msg: String!) =>
  *          (limit: number!) =>

@@ -123,7 +123,7 @@ loggerSuite.add("test context tag formatted log message", assert => {
 loggerSuite.add("test context, logger should not log", assert => {
   const { appender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
-  setGlobalContext("ch.fhnw.test")
+  setGlobalContext("ch.fhnw.test");
   const debug = debugLogger("ch.fhnw")(_context => _level => id);
 
   const result = debug(logMessage);

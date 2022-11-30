@@ -238,9 +238,7 @@ const removeFromAppenderList = item => {
  * Returns a copy of the current appender list.
  * @return { AppenderType[] }
  */
-const getAppenderList = () => {
-  return [...appenderList];
-}
+const getAppenderList = () => [...appenderList];
 
 /**
  * This is a state.
@@ -262,6 +260,7 @@ let globalContext = "";
  */
 const setGlobalContext = context => globalContext = context;
 
+// noinspection JSUnusedGlobalSymbols
 /**
  * Getter for the global Context.
  * @return { String } - the current global context

@@ -21,7 +21,7 @@ const id = x => x;
  * @param    {*} x
  * @returns  {function(y:*): function(x:*)} a function that ignores its argument and returns x
  */
-const K = x => y => x;
+const K = x => _y => x;
 
 /**
  * x -> y -> y ; Kite
@@ -29,10 +29,10 @@ const K = x => y => x;
  * @lambda  λx.y.y
  * @haskell Kite :: a -> b -> b
  * @function Kite
- * @param    {*} x
+ * @param    {*} _x
  * @returns  {function(y:*): function(y:*)} a function that returns its argument y
  */
-const KI = x => y => y;
+const KI = _x => y => y;
 
 /**
  * f -> g -> x -> f( g( x ) ) ; Bluebird (Function composition)
@@ -119,11 +119,11 @@ const Else = id;
 
 // churchNumbers
 
-/**
+/*
  *  church numbers 0 - 9
  *  n times application of function f to the argument a
  */
-const n0 = f => a => a;
+const n0 = _f => a => a;
 const n1 = f => a => f(a);
 const n2 = f => a => f(f(a));
 const n3 = f => a => f(f(f(a)));
