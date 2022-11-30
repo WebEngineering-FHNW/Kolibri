@@ -35,7 +35,7 @@ const beforeStart = () => {
 const cleanUp = controller => {
   setLoggingLevel(LOG_DEBUG);
   controller.resetLogMessages();
-}
+};
 
 const loggerSuite = TestSuite("LogUiController");
 
@@ -133,12 +133,12 @@ loggerSuite.add("test set global logging level by string", assert => {
   let loggingLevel = "DEBUG";
   controller.setLoggingLevelByString(loggingLevel);
   let currentLoggingLevel = getLoggingLevel();
-  assert.is(loggingLevel, currentLoggingLevel(snd))
+  assert.is(loggingLevel, currentLoggingLevel(snd));
 
   loggingLevel = "ERROR";
   controller.setLoggingLevelByString(loggingLevel);
   currentLoggingLevel = getLoggingLevel();
-  assert.is(loggingLevel, currentLoggingLevel(snd))
+  assert.is(loggingLevel, currentLoggingLevel(snd));
 
   cleanUp(controller);
 });

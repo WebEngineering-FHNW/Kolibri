@@ -1,6 +1,6 @@
-export { Appender }
+export { Appender}
 
-import { True } from "../lamdaCalculus.js";
+import {True} from "../lamdaCalculus.js";
 
 /**
  * Provides console appender.
@@ -15,16 +15,9 @@ const Appender = () => ({
   warn,
   error,
   fatal,
-  getValue: voidy,
-  reset: voidy
+  getValue: () => { /* Nothing to do */ },
+  reset: () => { /* Nothing to do */ }
 });
-
-/**
- * This appender has no result
- * @function
- * @returns { void }
- */
-const voidy = () => { /* Nothing to do */ };
 
 /**
  * @type { (Consumer) => AppendCallback }

@@ -22,6 +22,7 @@ const LOGGER_CONTEXT          = "ch.fhnw.sample.logger";
 const INITIAL_GLOBAL_CONTEXT  = "ch.fhnw";
 
 setGlobalContext(INITIAL_GLOBAL_CONTEXT);
+setLoggingLevel(LOG_DEBUG);
 
 const consoleAppender = ConsoleAppender();
 const arrayAppender   = ArrayAppender();
@@ -40,24 +41,18 @@ const logger          = LogFactory(LOGGER_CONTEXT)(formatLogMsg);
 const logLevels       = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
 const appender        = [consoleAppender, arrayAppender, countAppender];
 
-const traceAction     = () => log("trace");
-const debugAction     = () => log("debug");
-const infoAction      = () => log("info");
-const warnAction      = () => log("warn");
-const errorAction     = () => log("error");
-const fatalAction     = () => log("fatal");
 
 const reset = () => appender.forEach(el => {
     if(el.reset instanceof Function) el.reset();
     document.getElementById("log-output").value = "";
   });
 
-document.getElementById("btn-trace").onclick = traceAction;
-document.getElementById("btn-debug").onclick = debugAction;
-document.getElementById("btn-info") .onclick = infoAction;
-document.getElementById("btn-warn") .onclick = warnAction;
-document.getElementById("btn-error").onclick = errorAction;
-document.getElementById("btn-fatal").onclick = fatalAction;
+document.getElementById("btn-trace").onclick = () => log("trace");
+document.getElementById("btn-debug").onclick = () => log("debug");
+document.getElementById("btn-info") .onclick = () => log("info");
+document.getElementById("btn-warn") .onclick = () => log("warn");
+document.getElementById("btn-error").onclick = () => log("error");
+document.getElementById("btn-fatal").onclick = () => log("fatal");
 document.getElementById("btn-reset").onclick = reset;
 
 document.getElementById("context-global").addEventListener("input", event =>
@@ -69,9 +64,8 @@ const log = lvl => {
   const activeAppender  = updateLogger();
   const msg = document.getElementById("log-msg").value;
   logger[lvl](msg);
-  console.log(getAppenderList());
-  if (activeAppender.getValue !== undefined){
-    output.value = JSON.stringify(activeAppender.getValue());
+  if (activeAppender[0].getValue() !== undefined){
+    output.value = JSON.stringify(activeAppender[0].getValue());
   }
 };
 

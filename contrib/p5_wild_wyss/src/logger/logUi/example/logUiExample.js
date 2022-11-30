@@ -1,20 +1,21 @@
 import { Appender as ObservableAppender }   from "../../appender/observableAppender.js";
 import { Appender as ConsoleAppender }      from "../../appender/consoleAppender.js";
-import { LogFactory }   from "../../logFactory.js";
-import { createLogUi }  from "../createLogUi.js";
+import { LogFactory }         from "../../logFactory.js";
+import { createLogUi }        from "../createLogUi.js";
+import { addToAppenderList }  from "../../logger.js";
 
 const consoleAppender     = ConsoleAppender();
 const observableAppender  = ObservableAppender();
-
-const getActiveAppender = () => [observableAppender, consoleAppender];
 
 const formatLogMsg = context => logLevel => logMessage => {
   const date = new Date().toISOString();
   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
 };
 
-const logger1 = LogFactory()("ch.fhnw")    (formatLogMsg);
-const logger2 = LogFactory()("ch.fhnw.ip5")(formatLogMsg);
+addToAppenderList(observableAppender, consoleAppender);
+
+const logger1 = LogFactory("ch.fhnw")    (formatLogMsg);
+const logger2 = LogFactory("ch.fhnw.ip5")(formatLogMsg);
 
 const container = document.getElementById("container");
 

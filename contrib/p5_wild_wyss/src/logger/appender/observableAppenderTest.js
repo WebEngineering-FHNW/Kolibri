@@ -53,7 +53,7 @@ loggerSuite.add("The reset function should clear the stack", assert => {
   const lastStack = reset();
   // does the stack contain no elements after reset?
   assert.is(stackSize(obs), 0);
-  // Is the previous log messge in the stack returned by reset?
+  // Is the previous log message in the stack returned by reset?
   assert.is(obsHead(lastStack), "debug")
 });
 

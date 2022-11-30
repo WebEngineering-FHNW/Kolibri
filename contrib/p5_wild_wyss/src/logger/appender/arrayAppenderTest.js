@@ -38,12 +38,12 @@ loggerSuite.add("test reset array appender", assert => {
 });
 
 loggerSuite.add("test add all kind of levels to array appender", assert => {
-  const resultTraceLog = debug("debug");
-  const resultDebugLog = trace("trace");
-  const resultInfoLog = info("info");
-  const resultWarnLog = warn("warn");
-  const resultErrorLog = error("error");
-  const resultFatalLog = fatal("fatal");
+  const resultTraceLog  = debug("debug");
+  const resultDebugLog  = trace("trace");
+  const resultInfoLog   = info("info");
+  const resultWarnLog   = warn("warn");
+  const resultErrorLog  = error("error");
+  const resultFatalLog  = fatal("fatal");
   assert.is(resultTraceLog, True);
   assert.is(resultDebugLog, True);
   assert.is(resultInfoLog,  True);

@@ -53,7 +53,7 @@ const logMessagesProjector = (rootElement, controller, stack) => {
  * Creates a label and an associated input element
  * parameterized by passing parameters.
  *
- * @param   { String }  type - the type of the input (eg. text)
+ * @param   { String }  type - the type of the input (e.g. text)
  * @param   { String }  labelText
  * @param   { String }  id
  * @param   { String }  placeholder
