@@ -5,17 +5,19 @@ export { Iterator }
 
 /** @typedef  IteratorType
  * @template _T_
- * @property { () => { next: () => IteratorResult } }            [Symbol.iterator]
+ * @property { () => { next: () => IteratorResult } }                  [Symbol.iterator]
  * @property { (callback:Consumer<_T_>)         => void }              forEach   - executes the callback for each element and exhausts the iterator
  * @property { (predicate:Predicate<_T_>)       => IteratorType<_T_> } dropWhile - proceed with the iteration where the predicate no longer holds
  * @property { (count:Number)                   => IteratorType<_T_> } drop      - jump over so many elements
  * @property { (predicate:Predicate<_T_>)       => IteratorType<_T_> } takeWhile - proceed with the iteration until the predicate becomes true
  * @property { (count:Number)                   => IteratorType<_T_> } take      - stop after so many elements
- * @property { ()                               => IteratorType<_T_> } copy      - TODO => IteratorTest with side effect
+ * @property { ()                               => IteratorType<_T_> } copy      - duplicate the iterator. If the iterators progress depends on a variable in the closure, copy will not work correctly.
  * @property { (mapper:Functor<_T_, *>)         => IteratorType<_T_> } map       - transform each element
  * @property { (predicate:Predicate<_T_>)       => IteratorType<_T_> } retainAll - only keep elements which fulfill the predicate
  * @property { (predicate:Predicate<_T_>)       => IteratorType<_T_> } rejectAll - ignore elements which fulfill the predicate
  * @property { (op:BinaryOperation<_T_>, _T_)   => _T_ }               reduce    - Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
+ * @property { (it:IteratorType<*>)             => IteratorType<*> }   concat    - add an iterator to the existing iterators end
+ * @property { (a:_T_)                          => IteratorType<_T_> } cons      - add the element {@link a} to the front of the iterator
  */
 
 /**
