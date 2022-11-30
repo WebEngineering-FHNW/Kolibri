@@ -1,10 +1,8 @@
 import { TestSuite }  from "../../../../docs/src/kolibri/util/test.js";
 import { Iterator }   from "./iterator.js";
-import { arrayEq } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
-
+import { arrayEq }    from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => limit < current);
-
 
 const iteratorSuite = TestSuite("Iterator");
 
@@ -78,7 +76,6 @@ iteratorSuite.add("test simple map", assert => {
   assert.is(arrayEq([0, 2, 4, 6, 8])([...iterator]), true)
 });
 
-
 iteratorSuite.add("test multiple map", assert => {
   const iterator = newIterator(4);
   iterator.map(el => el * 2).map(el => el * 2);
@@ -101,6 +98,18 @@ iteratorSuite.add("test simple reduce", assert => {
   const iterator = newIterator(4);
   const result = iterator.reduce( (acc, cur) => acc + cur , 0);
   assert.is(10, result);
+});
+
+iteratorSuite.add("test simple cons", assert => {
+  const iterator = newIterator(4).cons(7);
+  assert.is(arrayEq([7, 0, 1, 2, 3, 4])([...iterator]), true);
+});
+
+iteratorSuite.add("test concat 2 iterators", assert => {
+  const iterator = newIterator(4);
+  const iterator2 = newIterator(6);
+  iterator.concat(iterator2);
+  assert.is(arrayEq([0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 5, 6])([...iterator]), true);
 });
 
 iteratorSuite.run();

@@ -97,6 +97,29 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     return accumulator;
   };
 
+  const concat = it => {
+    next = () => {
+      const current = value;
+      let done      = stopDetected(current);
+      if(done) return it[Symbol.iterator]().next();
+      value = incrementFunction(value);
+      return { done, value: current };
+    }
+    return iteratorObject;
+  };
+
+  const cons = a => {
+    let returned = false;
+    const oldNext = next;
+    next = () => {
+      if (returned) return oldNext();
+      returned = true;
+      return {done: false, value: a};
+    };
+    return iteratorObject;
+  };
+
+
   const iteratorObject = {
     [Symbol.iterator]: () => ({ next }),
     forEach,
@@ -108,6 +131,8 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     retainAll,
     rejectAll,
     reduce,
+    cons,
+    concat,
     copy,
   };
 
