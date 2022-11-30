@@ -2,7 +2,7 @@ import { TestSuite }  from "../../../../docs/src/kolibri/util/test.js";
 import { Iterator }   from "./iterator.js";
 import { arrayEq }    from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
-const newIterator = limit => Iterator(0, current => current + 1, current => limit < current);
+const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
 const iteratorSuite = TestSuite("Iterator");
 
@@ -43,8 +43,8 @@ iteratorSuite.add("test copy of iterator in use", assert => {
   iterator.drop(1);
   const iteratorCopy = iterator.copy();
 
-  assert.is(arrayEq([1, 2, 3, 4])([...iterator]),     true)
-  assert.is(arrayEq([1, 2, 3, 4])([...iteratorCopy]), true)
+  assert.is(arrayEq([1, 2, 3, 4])([...iterator]),     true);
+  assert.is(arrayEq([1, 2, 3, 4])([...iteratorCopy]), true);
 });
 
 iteratorSuite.add("test modify copy of iterator should not affect the origin", assert => {
@@ -52,7 +52,7 @@ iteratorSuite.add("test modify copy of iterator should not affect the origin", a
   const iteratorCopy = iterator.copy();
   iteratorCopy.drop(1);
 
-  assert.is(arrayEq([0, 1, 2, 3, 4])([...iterator]),     true)
+  assert.is(arrayEq([0, 1, 2, 3, 4])([...iterator]),     true);
   assert.is(arrayEq([1, 2, 3, 4])   ([...iteratorCopy]), true)
 });
 

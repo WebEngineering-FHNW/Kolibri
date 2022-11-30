@@ -73,9 +73,9 @@ const Iterator = (value, incrementFunction, stopDetected) => {
   const map = mapper => {
     const oldNext = next;
     next = () => {
-      const  { done, value } = oldNext()
+      const  { done, value } = oldNext();
       return { done, value: mapper(value) };
-    }
+    };
     return iteratorObject;
   };
 
@@ -85,8 +85,8 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     next = () => {
       const { done, value } = oldNext();
       const result = predicate(value) || done;
-      return result ? ({ done, value }): next();
-    }
+      return result ? { done, value }: next();
+    };
     return iteratorObject;
   };
 
@@ -110,7 +110,7 @@ const Iterator = (value, incrementFunction, stopDetected) => {
       if(done) return it[Symbol.iterator]().next();
       value = incrementFunction(value);
       return { done, value: current };
-    }
+    };
     return iteratorObject;
   };
 
