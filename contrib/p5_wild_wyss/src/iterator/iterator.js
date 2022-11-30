@@ -19,6 +19,7 @@ export { Iterator }
  * @property { (it:IteratorType<*>)             => IteratorType<*> }   concat    - add an iterator to the existing iterators end
  * @property { (a:_T_)                          => IteratorType<_T_> } cons      - add the element {@link a} to the front of the iterator
  * @property { ()                               => _T_ }               head      - return the next value without consuming it
+ * @property { ()                               => IteratorType<_T_> } reverse   - process the iterator backwards
  */
 
 /**
@@ -80,6 +81,7 @@ const Iterator = (value, incrementFunction, stopDetected) => {
 
   const filter = predicate => {
     const oldNext = next;
+
     next = () => {
       const {done, value} = oldNext();
       const result = predicate(value) || done;
@@ -87,6 +89,7 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     }
     return iteratorObject;
   };
+
 
   const retainAll = filter;
 
@@ -118,6 +121,18 @@ const Iterator = (value, incrementFunction, stopDetected) => {
 
   const head = () => value;
 
+  const reverse = () => {
+    const values = [...iteratorObject].reverse();
+    let i = 0;
+    next = () => {
+      const current = values[i];
+      const done = i === values.length;
+      if (!done) i++;
+      return {done, value: current};
+    };
+    return iteratorObject;
+  };
+
   const iteratorObject = {
     [Symbol.iterator]: () => ({ next }),
     forEach,
@@ -131,6 +146,7 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     reduce,
     cons,
     concat,
+    reverse,
     head,
     copy,
   };
