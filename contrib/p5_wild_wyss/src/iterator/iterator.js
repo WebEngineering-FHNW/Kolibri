@@ -1,4 +1,5 @@
 
+import { id } from "../logger/lamdaCalculus.js";
 
 export { Iterator }
 
@@ -30,14 +31,19 @@ export { Iterator }
  * @return { IteratorType<_T_> }
  * @constructor
  */
-const Iterator = (value, incrementFunction, stopDetected) => {
+const Iterator = (value, incrementFunction, stopDetected) =>
+  IteratorInternal(id, _ => true, value, incrementFunction, stopDetected);
 
+const IteratorInternal = (transform, select, value, incrementFunction, stopDetected) => {
   let next = () => {
     const current = value;
     const done    = stopDetected(current);
-    if (!done) value = incrementFunction(value);
-
-    return { done, value: current };
+    value = incrementFunction(value);
+    if (select(current) || done) {
+      return transform({ done, value: current });
+    } else {
+      return next();
+    }
   };
 
   const forEach = consume => {
@@ -68,28 +74,23 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     return takeWhile(_ => i++ < count);
   };
 
-  const copy = () => Iterator(value, incrementFunction, stopDetected);
+  const copy = () => IteratorInternal(transform, select, value, incrementFunction, stopDetected);
 
   const map = mapper => {
-    const oldNext = next;
-    next = () => {
-      const  { done, value } = oldNext();
-      return { done, value: mapper(value) };
-    };
+    const oldTransform = transform;
+    transform =  ({done, value: x}) => oldTransform({
+        done,
+        value: mapper(x)
+    });
     return iteratorObject;
   };
 
   const filter = predicate => {
-    const oldNext = next;
+    const oldSelect = select;
+    select = x => predicate(x) && oldSelect(x);
 
-    next = () => {
-      const { done, value } = oldNext();
-      const result = predicate(value) || done;
-      return result ? { done, value }: next();
-    };
     return iteratorObject;
   };
-
 
   const retainAll = filter;
 

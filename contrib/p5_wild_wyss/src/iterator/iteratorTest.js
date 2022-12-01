@@ -87,6 +87,12 @@ iteratorSuite.add("test multiple map", assert => {
   assert.is(arrayEq([0, 4, 8, 12, 16])([...iterator]), true)
 });
 
+iteratorSuite.add("test copy after map", assert => {
+  const iterator = newIterator(4);
+  const copy = iterator.map(el => el * 2).copy();
+  assert.is(arrayEq([0, 2, 4, 6, 8])([...copy]), true)
+});
+
 iteratorSuite.add("test simple retainAll", assert => {
   const iterator = newIterator(4);
   iterator.retainAll(el => el % 2 === 0);
@@ -97,6 +103,12 @@ iteratorSuite.add("test simple rejectAll", assert => {
   const iterator = newIterator(4);
   iterator.rejectAll(el => el % 2 === 0);
   assert.is(arrayEq([1, 3])([...iterator]), true)
+});
+
+iteratorSuite.add("test copy after filter", assert => {
+  const iterator = newIterator(4);
+  const copy = iterator.retainAll(el => el % 2 === 0).copy();
+  assert.is(arrayEq([0, 2, 4])([...copy]), true)
 });
 
 iteratorSuite.add("test simple reduce", assert => {
