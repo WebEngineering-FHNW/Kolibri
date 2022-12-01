@@ -1,5 +1,4 @@
-
-import { id } from "../logger/lamdaCalculus.js";
+import {id} from "../logger/lamdaCalculus.js";
 
 export { Iterator }
 
@@ -24,6 +23,13 @@ export { Iterator }
  */
 
 /**
+ * @callback Increment
+ * @param { Object } state
+ * @param {_T_} current
+ * @returns { state: Object, result: current }
+ */
+
+/**
  * @template _T_
  * @param { _T_ }               value
  * @param { (_T_) => _T_ }      incrementFunction
@@ -34,27 +40,30 @@ export { Iterator }
 const Iterator = (value, incrementFunction, stopDetected) =>
   IteratorInternal(id, _ => true, value, incrementFunction, stopDetected);
 
+const ArrayIterator = array =>
+  IteratorInternal(x => array[x], _ => true, 0, x => x + 1, x => x === array.length);
+
+
+
 const IteratorInternal = (transform, select, value, incrementFunction, stopDetected) => {
+
   let next = () => {
-    const current = value;
-    const done    = stopDetected(current);
-    value = incrementFunction(value);
+    const done    = stopDetected(value);
+    const current = transform(value);
+    value         = incrementFunction(value);
     if (select(current) || done) {
-      return transform({ done, value: current });
+      return { done, value: current };
     } else {
       return next();
     }
   };
 
   const forEach = consume => {
-    for (const elem of iteratorObject) {
-      consume(elem);
-    }
+    for (const elem of iteratorObject) consume(elem);
   };
 
   const dropWhile = predicate => {
     while (predicate(value) && !stopDetected(value)) next();
-
     return iteratorObject;
   };
 
@@ -78,10 +87,7 @@ const IteratorInternal = (transform, select, value, incrementFunction, stopDetec
 
   const map = mapper => {
     const oldTransform = transform;
-    transform =  ({done, value: x}) => oldTransform({
-        done,
-        value: mapper(x)
-    });
+    transform = x => mapper(oldTransform(x));
     return iteratorObject;
   };
 
@@ -123,15 +129,8 @@ const IteratorInternal = (transform, select, value, incrementFunction, stopDetec
   const head = () => stopDetected(value) ? undefined : value;
 
   const reverse = () => {
-    const values = [...iteratorObject].reverse();
-    let i = 0;
-    next = () => {
-      const current = values[i];
-      const done = i === values.length;
-      if (!done) i++;
-      return {done, value: current};
-    };
-    return iteratorObject;
+    const values = [...iteratorObject.copy()].reverse();
+    return ArrayIterator(values);
   };
 
   const iteratorObject = {

@@ -157,4 +157,20 @@ iteratorSuite.add("test reverse exhausted iterator", assert => {
   assert.is(arrayEq([])([...iterator.reverse()]), true);
 });
 
+iteratorSuite.add("test filter than map", assert => {
+  const iterator = newIterator(4).rejectAll(x => x === 3).map(x => x * 2);
+  // const copy = iterator.copy();
+  console.log(...iterator);
+  // assert.is(arrayEq([0,2,4,8].reverse())([...iterator]), true);
+  assert.is(arrayEq([0,2,4,8].reverse())([...iterator]), true);
+});
+
+iteratorSuite.add("test map than filter", assert => {
+  const iterator = newIterator(4).map(x => 10 * x).retainAll(x => x > 20 );
+  console.log(...iterator.copy());
+  assert.is(arrayEq([30, 40])([...iterator]), true);
+});
+
+
+
 iteratorSuite.run();
