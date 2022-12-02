@@ -125,8 +125,15 @@ iteratorSuite.add("test simple cons", assert => {
 iteratorSuite.add("test concat 2 iterators", assert => {
   const iterator = newIterator(4);
   const iterator2 = newIterator(6);
-  iterator.concat(iterator2);
-  assert.is(arrayEq([0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 5, 6])([...iterator]), true);
+  const it = iterator.concat(iterator2);
+  assert.is(arrayEq([0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 5, 6])([...it]), true);
+});
+iteratorSuite.add("test concat 2 iterators", assert => {
+  const iterator = newIterator(2);
+  const iterator2 = newIterator(2);
+  const iterator3 = newIterator(2);
+  const it = iterator.concat(iterator2).concat(iterator3);
+  assert.is(arrayEq([0,1,2,0,1,2,0,1,2])([...it]), true);
 });
 
 iteratorSuite.add("test simple head", assert => {
@@ -135,10 +142,10 @@ iteratorSuite.add("test simple head", assert => {
   assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
 });
 
-iteratorSuite.add("test simple head", assert => {
-  const iterator = newIterator(4);
-  assert.is(0, iterator.head());
-  assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
+iteratorSuite.add("test head with modified iterator", assert => {
+  const iterator = newIterator(4).map(el => 2 * el).drop(1);
+  assert.is(iterator.head(), 2);
+  assert.is(arrayEq([2,4,6,8])([...iterator]), true);
 });
 
 iteratorSuite.add("test head on empty iterator", assert => {
@@ -193,7 +200,6 @@ iteratorSuite.add("test filter, map, take,drop", assert => {
     .map(x => Number(x))
     .dropWhile(x => x < 40);
 
-  console.log(...iterator.copy());
   assert.is(arrayEq([40, 50, 60, 70, 80])([...iterator.copy()]), true);
   assert.is(arrayEq([40, 50, 60, 70, 80])([...iterator]), true);
 });

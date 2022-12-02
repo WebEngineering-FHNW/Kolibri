@@ -66,19 +66,6 @@ const IteratorInternal = (transform = id, value, incrementFunction, stopDetected
       done = n.done;
       current = transform(update(value)).value;
     }
-    // let dropFollowing = x => {
-    //   const { done, value, progress } = oldTransform(x);
-    //   const dropNext = predicate(value) || done;
-    //   if (dropNext){
-    //     return dropFollowing(update(progress))
-    //   } else {
-    //     predicate = _ => false;
-    //     return { done, value, progress };
-    //   }
-    // };
-
-    // transform = dropFollowing;
-
     return iteratorObject;
   };
 
@@ -144,35 +131,40 @@ const IteratorInternal = (transform = id, value, incrementFunction, stopDetected
   };
 
   const concat = it => {
-    const oldTransform = transform;
+    return ArrayIterator([...iteratorObject, ...it]);
 
-    transform = x => {
-      const done = stopDetected(x.value);
-      if (done) {
-        stopDetected = _ => true;
-        const { done: doneNew, value: valueNew } = it[Symbol.iterator]().next();
-        return {done: doneNew, value: valueNew, progress: valueNew};
-      } else {
-        return oldTransform(x);
-      }
-    };
-
-/*    next = () => {
-      const current = value;
-      const done      = stopDetected(current);
-      if(done) return it[Symbol.iterator]().next();
-      value = incrementFunction(value);
-      return { done, value: current };
-    };*/
-    return iteratorObject;
+    // const oldTransform = transform;
+    // transform = x => {
+    //   const done = x.done;
+    //   if (done || stopDetected(value)) {
+    //     stopDetected = _ => true;
+    //     const { done: doneNew, value: valueNew } = it[Symbol.iterator]().next();
+    //     return {done: doneNew, value: valueNew, progress: valueNew};
+    //   } else {
+    //     return oldTransform(x);
+    //   }
+    // };
+    // return iteratorObject;
   };
 
   const cons = a => {
+
+    // const oldTransform = transform;
+    // const result = {done: false, value:a, progress: value};
+    //
+    // transform = x => {
+    //   if(x.value === value){
+    //     return result;
+    //   }
+    //   return oldTransform(x);
+    // };
+
+
     const it = Iterator(a, _ => undefined, x => x === undefined);
     return it.concat(iteratorObject);
   };
 
-  const head = () => stopDetected(value) ? undefined : value;
+  const head = () => stopDetected(value) ? undefined : transform(update(value)).value;
 
   const reverse = () => {
     const values = [...iteratorObject.copy()].reverse();
