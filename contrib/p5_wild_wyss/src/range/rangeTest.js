@@ -1,10 +1,10 @@
 import { Range } from "./range.js"
 import {TestSuite} from "../../../../docs/src/kolibri/util/test.js";
 
-const loggerSuite = TestSuite("Range");
+const rangeSuite = TestSuite("Range");
 
 
-loggerSuite.add("test typical case for of", assert => {
+rangeSuite.add("test typical case for of", assert => {
   const result = [];
   for(const value of Range(1)){
     result.push(value);
@@ -12,19 +12,19 @@ loggerSuite.add("test typical case for of", assert => {
   assert.is(result.length, 2);
 });
 
-loggerSuite.add("test typical case spread", assert => {
+rangeSuite.add("test typical case spread", assert => {
   const result = [...Range(2)];
   assert.is(result.length, 3);
 });
 
-loggerSuite.add("test typical case deconstruction", assert => {
+rangeSuite.add("test typical case deconstruction", assert => {
   const [zero, one, two] = Range(2);
   assert.is(zero, 0);
   assert.is(one,  1);
   assert.is(two,  2);
 });
 
-loggerSuite.add("test typical case deconstruction", assert => {
+rangeSuite.add("test typical case deconstruction", assert => {
   const result = Array.from(/** @type ArrayLike */ Range(3));
   assert.is(result.length, 4);
 });
@@ -49,14 +49,14 @@ const testRangeNegativeStepSize = (from, to, step, range, assert) => {
   assert.isTrue(range[Symbol.iterator]().next().done)
 };
 
-loggerSuite.add("test simple Range(2,3)", assert =>
+rangeSuite.add("test simple Range(2,3)", assert =>
   testRange(2, 3, 1, Range(2, 3), assert));
 
-loggerSuite.add("test simple Range(3,2,1)", assert => {
+rangeSuite.add("test simple Range(3,2,1)", assert => {
   testRange(2, 3, 1, Range(3,2,1), assert)
 });
 
-loggerSuite.add("test break Range(7)", assert => {
+rangeSuite.add("test break Range(7)", assert => {
   const range = Range(7);
   const result = [];
 
@@ -69,7 +69,7 @@ loggerSuite.add("test break Range(7)", assert => {
   assert.is(result[0], 0);
 });
 
-loggerSuite.add("test double break", assert => {
+rangeSuite.add("test double break", assert => {
   const range = Range(7);
   const result = [];
 
@@ -91,7 +91,7 @@ loggerSuite.add("test double break", assert => {
   assert.is(result[1], 1);
 });
 
-loggerSuite.add("test use range twice", assert => {
+rangeSuite.add("test use range twice", assert => {
   const range = Range(0);
 
   const [zero] = range;
@@ -101,7 +101,7 @@ loggerSuite.add("test use range twice", assert => {
   assert.is(repeat, undefined)
 });
 
-loggerSuite.add("test continue and break", assert => {
+rangeSuite.add("test continue and break", assert => {
   for (const value of Range(Number.MAX_VALUE)) {
     if(4 > value) continue; // dropWhile value < 4
     if(4 < value) break;    // take(1)
@@ -109,7 +109,7 @@ loggerSuite.add("test continue and break", assert => {
   }
 });
 
-loggerSuite.add("test running out of range", assert => {
+rangeSuite.add("test running out of range", assert => {
   const range = Range(2);
 
   for (const _ of range) { /** Range gets exhausted. */ }
@@ -118,20 +118,20 @@ loggerSuite.add("test running out of range", assert => {
   assert.is(range[Symbol.iterator]().next().done, true);
 });
 
-loggerSuite.add("test negative Range(4, 6,- 2)", assert =>
+rangeSuite.add("test negative Range(4, 6,- 2)", assert =>
   testRangeNegativeStepSize(6, 4, -2, Range(4, 6, -2), assert));
 
-loggerSuite.add("test negative Range(6, 4, -2)", assert =>
+rangeSuite.add("test negative Range(6, 4, -2)", assert =>
   testRangeNegativeStepSize(6, 2, -2, Range(6, 2, -2), assert));
 
-loggerSuite.add("test negative Range(0, -2, -1)", assert =>
+rangeSuite.add("test negative Range(0, -2, -1)", assert =>
   testRangeNegativeStepSize(0, -2, -1, Range(0, -2, -1), assert));
 
-loggerSuite.add("test negative Range(-12, -2, -2)", assert =>
+rangeSuite.add("test negative Range(-12, -2, -2)", assert =>
   testRangeNegativeStepSize(-2, -12, -2, Range(-12, -2, -2), assert));
 
 // all combinations
-loggerSuite.add("test of all combinations", assert => {
+rangeSuite.add("test of all combinations", assert => {
   testRange(0, 5, 1, Range(0, 5, 1), assert);
   testRange(0, 5, 1, Range(5, 0, 1), assert);
 
@@ -151,7 +151,7 @@ loggerSuite.add("test of all combinations", assert => {
   testRangeNegativeStepSize(0, -5, -1, Range(0, -5, -1), assert);
 });
 
-loggerSuite.run();
+rangeSuite.run();
 
 // negRange.forEach(console.log); // forEach does not exist on JS Iterator until now
 // negRange.forEach(console.log); // never shown
