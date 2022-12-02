@@ -3,7 +3,8 @@ import {ArrayIterator, Iterator} from "../iterator/iterator.js";
 
 export { FocusRing }
 
-const emptyIterator = Iterator(undefined, _ => undefined, _ => true);
+const emptyIterator =
+  Iterator(undefined, _ => undefined, _ => true);
 
 const FocusRing = nonEmptyIterator => FocusRingInternal(
   emptyIterator,
@@ -27,7 +28,7 @@ const FocusRingInternal = (pre, post) => {
         pre.reverse()
       );
     }
-    const modifiedPre  = pre.copy().cons(currentFocus);
+    const modifiedPre = pre.copy().cons(currentFocus); // paranoid 2
     return FocusRingInternal(modifiedPre, modifiedPost);
   };
 
@@ -39,16 +40,11 @@ const FocusRingInternal = (pre, post) => {
       if (modifiedPre.isEmpty()) return FocusRingInternal(pre, post);
     }
 
-    const headPre = modifiedPre.head();
-    const modifiedPost = post.copy().cons(headPre);
+    const headPre       = modifiedPre.head();
+    const modifiedPost  = post.copy().cons(headPre);
 
     return FocusRingInternal(modifiedPre, modifiedPost);
   };
 
-
-  return {
-    focus,
-    left,
-    right,
-  }
+  return { focus, left, right }
 };
