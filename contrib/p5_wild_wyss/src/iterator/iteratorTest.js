@@ -10,8 +10,8 @@ iteratorSuite.add("test typical case for simple iterator.", assert => {
   const iterator = newIterator(0);
   const [zero0, undef] = iterator;
 
-  assert.is(zero0,0);
-  assert.is(undef,undefined);
+  assert.is(zero0, 0);
+  assert.is(undef, undefined);
 });
 
 iteratorSuite.add("test edge case for empty iteration.", assert => {
