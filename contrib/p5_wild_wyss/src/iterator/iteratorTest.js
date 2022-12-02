@@ -1,8 +1,11 @@
 import { TestSuite }  from "../../../../docs/src/kolibri/util/test.js";
-import { Iterator }   from "./iterator.js";
+import { ArrayIterator, Iterator } from "./iterator.js";
 import { arrayEq }    from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
+
+const assertIteratorValues = (assert, it, expected) =>
+  assert.is(ArrayIterator(expected).eq(it), true);
 
 const iteratorSuite = TestSuite("Iterator");
 
@@ -128,12 +131,13 @@ iteratorSuite.add("test concat 2 iterators", assert => {
   const it = iterator.concat(iterator2);
   assert.is(arrayEq([0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 5, 6])([...it]), true);
 });
-iteratorSuite.add("test concat 2 iterators", assert => {
+
+iteratorSuite.add("test concat 3 iterators", assert => {
   const iterator = newIterator(2);
-  const iterator2 = newIterator(2);
-  const iterator3 = newIterator(2);
+  const iterator2 = newIterator(3);
+  const iterator3 = newIterator(3);
   const it = iterator.concat(iterator2).concat(iterator3);
-  assert.is(arrayEq([0,1,2,0,1,2,0,1,2])([...it]), true);
+  assertIteratorValues(assert, it, [0, 1, 2, 0, 1, 2, 3, 0, 1, 2, 3]);
 });
 
 iteratorSuite.add("test simple head", assert => {
@@ -194,14 +198,29 @@ iteratorSuite.add("test filter, map, take,drop", assert => {
   const iterator = newIterator(100)
     .retainAll(x => x < 10 || x > 90 )
     .map(x => 10 * x)
+    .copy()
     .map(x => x.toString())
     .rejectAll(x => x.length >= 4)
     .takeWhile(x => x !== "90")
-    .map(x => Number(x))
+    .map(Number)
     .dropWhile(x => x < 40);
 
   assert.is(arrayEq([40, 50, 60, 70, 80])([...iterator.copy()]), true);
   assert.is(arrayEq([40, 50, 60, 70, 80])([...iterator]), true);
+});
+
+iteratorSuite.add("test multiple map", assert => {
+  const iterator = newIterator(4);
+  const result = iterator.copy().reduce((acc, curr) => acc + curr, 0);
+  assert.is(result, 10);
+  assert.is(arrayEq([0,1,2,3,4])([...iterator]), true)
+});
+
+iteratorSuite.add("test iterator equality", assert => {
+  const iterator = newIterator(4);
+  const iterator2 = newIterator(4);
+  assert.is(iterator.eq(iterator2), true);
+  assert.is(arrayEq([...iterator])([...iterator2]), true);
 });
 
 

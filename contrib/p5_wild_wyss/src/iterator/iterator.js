@@ -1,6 +1,7 @@
-import {id} from "../logger/lamdaCalculus.js";
+import { id } from "../logger/lamdaCalculus.js";
+import { arrayEq } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
-export { Iterator }
+export { Iterator, ArrayIterator }
 
 
 /** @typedef  IteratorType
@@ -50,7 +51,7 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
     return {done, value: current}
   };
 
-  const getNextValue = val => {
+  let getNextValue = val => {
       const current = val;
       const done    = stopDetected(current);
       return { done, current, nextValue: incrementFunction(val) };
@@ -107,6 +108,7 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
     return iteratorObject;
   };
 
+  //TODO: Could be implemented using dropWhile
   const filter = predicate => {
     const oldTransform = transform;
     const applyFilter = x => {
@@ -122,42 +124,15 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
 
   const rejectAll = predicate => filter(val => !predicate(val));
 
-  const reduce = (reducer, start) => {
-    let accumulator = start;
-    for (const current of iteratorObject) {
-      accumulator = reducer(accumulator, current);
-    }
-    return accumulator;
-  };
+  const reduce = (reducer, start) =>
+    [...iteratorObject].reduce(reducer, start);
 
-  const concat = it => {
-    return ArrayIterator([...iteratorObject, ...it]);
+  const eq = it =>
+    arrayEq([...iteratorObject.copy()])([...it.copy()]);
 
-  //   const oldTransform = transform;
-  //   transform = x => {
-  //     const done = x.done;
-  //     if (done || stopDetected(value)) {
-  //       stopDetected = _ => true;
-  //       const { done: newDone, value: newValue } = it[Symbol.iterator]().next();
-  //       return {done: newDone, current: newValue, nextValue: newValue};
-  //     } else {
-  //       return oldTransform(x);
-  //     }
-  //   };
-  //   return iteratorObject;
-  };
+  const concat = it => ArrayIterator([...iteratorObject, ...it]);
 
   const cons = a => {
-    // const oldTransform = transform;
-    // const result = {done: false, current:a, nextValue: value};
-    //
-    // transform = x => {
-    //   if(x.value === value){
-    //     return result;
-    //   }
-    //   return oldTransform(x);
-    // };
-
     const it = Iterator(a, _ => undefined, x => x === undefined);
     return it.concat(iteratorObject);
   };
@@ -185,6 +160,7 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
     reverse,
     head,
     copy,
+    eq
   };
 
   return iteratorObject;
