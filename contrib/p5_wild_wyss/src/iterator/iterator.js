@@ -51,7 +51,7 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
     return {done, value: current}
   };
 
-  let getNextValue = val => {
+  const getNextValue = val => {
       const current = val;
       const done    = stopDetected(current);
       return { done, current, nextValue: incrementFunction(val) };
@@ -139,6 +139,8 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
 
   const head = () => stopDetected(value) ? undefined : transform(getNextValue(value)).current;
 
+  const isEmpty = () => head() === undefined;
+
   const reverse = () => {
     const values = [...iteratorObject.copy()].reverse();
     return ArrayIterator(values);
@@ -159,6 +161,7 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
     concat,
     reverse,
     head,
+    isEmpty,
     copy,
     eq
   };
