@@ -31,16 +31,17 @@ export { Iterator }
  * @constructor
  */
 const Iterator = (value, incrementFunction, stopDetected) =>
-  IteratorInternal(id, value, incrementFunction, stopDetected);
+  IteratorInternal(value, incrementFunction, stopDetected, id);
 
 const ArrayIterator = array =>
-  IteratorInternal(({done, current, nextValue}) => ({
+  IteratorInternal(0, x => x + 1, x => x === array.length,
+    ({done, current, nextValue}) => ({
     done,
     current: array[current],
     nextValue
-  }), 0, x => x + 1, x => x === array.length);
+  }));
 
-const IteratorInternal = (transform, value, incrementFunction, stopDetected) => {
+const IteratorInternal = (value, incrementFunction, stopDetected, transform) => {
 
   const next = () => {
     const {done, current, nextValue} = transform(getNextValue(value));
@@ -95,7 +96,7 @@ const IteratorInternal = (transform, value, incrementFunction, stopDetected) => 
     return takeWhile(_ => i++ < count);
   };
 
-  const copy = () => IteratorInternal(transform, value, incrementFunction, stopDetected);
+  const copy = () => IteratorInternal(value, incrementFunction, stopDetected, transform);
 
   const map = mapper => {
     const oldTransform = transform;
