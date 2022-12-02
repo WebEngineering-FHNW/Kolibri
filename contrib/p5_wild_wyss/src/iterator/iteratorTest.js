@@ -169,5 +169,35 @@ iteratorSuite.add("test map than filter", assert => {
   assert.is(arrayEq([30, 40])([...iterator]), true);
 });
 
+iteratorSuite.add("test filter, map, take", assert => {
+  const iterator = newIterator(100)
+    .retainAll(x => x < 10 || x > 90 )
+    .map(x => 10 * x)
+    .map(x => x.toString())
+    .rejectAll(x => x.length >= 4)
+    .takeWhile(x => x !== "90")
+    .map(x => Number(x))
+    .rejectAll(x => x < 40);
+
+  assert.is(arrayEq([40, 50, 60, 70, 80])([...iterator.copy()]), true);
+  assert.is(arrayEq([40, 50, 60, 70, 80])([...iterator]), true);
+});
+
+iteratorSuite.add("test filter, map, take,drop", assert => {
+  const iterator = newIterator(100)
+    .retainAll(x => x < 10 || x > 90 )
+    .map(x => 10 * x)
+    .map(x => x.toString())
+    .rejectAll(x => x.length >= 4)
+    .takeWhile(x => x !== "90")
+    .map(x => Number(x))
+    .dropWhile(x => x < 40);
+
+  console.log(...iterator.copy());
+  assert.is(arrayEq([40, 50, 60, 70, 80])([...iterator.copy()]), true);
+  assert.is(arrayEq([40, 50, 60, 70, 80])([...iterator]), true);
+});
+
+
 
 iteratorSuite.run();

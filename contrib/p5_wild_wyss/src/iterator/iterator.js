@@ -23,13 +23,6 @@ export { Iterator }
  */
 
 /**
- * @callback Increment
- * @param { Object } state
- * @param {_T_} current
- * @returns { state: Object, result: current }
- */
-
-/**
  * @template _T_
  * @param { _T_ }               value
  * @param { (_T_) => _T_ }      incrementFunction
@@ -67,7 +60,25 @@ const IteratorInternal = (transform = id, value, incrementFunction, stopDetected
   };
 
   const dropWhile = predicate => {
-    while (predicate(value) && !stopDetected(value)) next();
+    let {done, value: current} = transform(update(value));
+    while(predicate(current) && !done) {
+      const n = next();
+      done = n.done;
+      current = transform(update(value)).value;
+    }
+    // let dropFollowing = x => {
+    //   const { done, value, progress } = oldTransform(x);
+    //   const dropNext = predicate(value) || done;
+    //   if (dropNext){
+    //     return dropFollowing(update(progress))
+    //   } else {
+    //     predicate = _ => false;
+    //     return { done, value, progress };
+    //   }
+    // };
+
+    // transform = dropFollowing;
+
     return iteratorObject;
   };
 
@@ -77,8 +88,19 @@ const IteratorInternal = (transform = id, value, incrementFunction, stopDetected
   };
 
   const takeWhile = predicate => {
-    const oldDetected = stopDetected;
-    stopDetected = value => oldDetected(value) || !predicate(value);
+    const oldTransform = transform;
+
+    transform = x => {
+      const { done, value, progress } = oldTransform(x);
+      const result = predicate(value) || done;
+
+      if (result) {
+        return {done, value, progress}
+      } else {
+        return { done: true, value, progress }
+      }
+    };
+
     return iteratorObject;
   };
 
@@ -98,18 +120,16 @@ const IteratorInternal = (transform = id, value, incrementFunction, stopDetected
     return iteratorObject;
   };
 
-
   const filter = predicate => {
     const oldTransform = transform;
-    const a = x => {
+    const applyFilter = x => {
       const { done, value, progress } = oldTransform(x);
       const result = predicate(value) || done;
-      return result ? { done, value, progress } : a(update(progress));
+      return result ? { done, value, progress } : applyFilter(update(progress));
     };
-    transform = a;
+    transform = applyFilter;
     return iteratorObject;
   };
-
 
   const retainAll = filter;
 
