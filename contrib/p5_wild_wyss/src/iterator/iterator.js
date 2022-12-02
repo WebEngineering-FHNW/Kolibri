@@ -38,24 +38,28 @@ export { Iterator }
  * @constructor
  */
 const Iterator = (value, incrementFunction, stopDetected) =>
-  IteratorInternal(id, _ => true, value, incrementFunction, stopDetected);
+  IteratorInternal(id, value, incrementFunction, stopDetected);
 
 const ArrayIterator = array =>
-  IteratorInternal(x => array[x], _ => true, 0, x => x + 1, x => x === array.length);
+  IteratorInternal(({done, value, progress}) => ({
+    done,
+    value: array[value],
+    progress
+  }), 0, x => x + 1, x => x === array.length);
 
+const IteratorInternal = (transform = id, value, incrementFunction, stopDetected) => {
 
+  const next = () => {
+    const {done, value: current, progress} = transform(update(value));
+    if (!done) value = progress;
 
-const IteratorInternal = (transform, select, value, incrementFunction, stopDetected) => {
+    return {done, value: current}
+  };
 
-  let next = () => {
-    const done    = stopDetected(value);
-    const current = transform(value);
-    value         = incrementFunction(value);
-    if (select(current) || done) {
-      return { done, value: current };
-    } else {
-      return next();
-    }
+  const update = val => {
+      const current = val;
+      const done    = stopDetected(current);
+      return { done, value: current, progress: incrementFunction(val) };
   };
 
   const forEach = consume => {
@@ -83,20 +87,29 @@ const IteratorInternal = (transform, select, value, incrementFunction, stopDetec
     return takeWhile(_ => i++ < count);
   };
 
-  const copy = () => IteratorInternal(transform, select, value, incrementFunction, stopDetected);
+  const copy = () => IteratorInternal(transform, value, incrementFunction, stopDetected);
 
   const map = mapper => {
     const oldTransform = transform;
-    transform = x => mapper(oldTransform(x));
+    transform = x => {
+      const  { done, value, progress } = oldTransform(x);
+      return { done, value: mapper(value), progress };
+    };
     return iteratorObject;
   };
+
 
   const filter = predicate => {
-    const oldSelect = select;
-    select = x => predicate(x) && oldSelect(x);
-
+    const oldTransform = transform;
+    const a = x => {
+      const { done, value, progress } = oldTransform(x);
+      const result = predicate(value) || done;
+      return result ? { done, value, progress } : a(update(progress));
+    };
+    transform = a;
     return iteratorObject;
   };
+
 
   const retainAll = filter;
 
@@ -111,13 +124,26 @@ const IteratorInternal = (transform, select, value, incrementFunction, stopDetec
   };
 
   const concat = it => {
-    next = () => {
+    const oldTransform = transform;
+
+    transform = x => {
+      const done = stopDetected(x.value);
+      if (done) {
+        stopDetected = _ => true;
+        const { done: doneNew, value: valueNew } = it[Symbol.iterator]().next();
+        return {done: doneNew, value: valueNew, progress: valueNew};
+      } else {
+        return oldTransform(x);
+      }
+    };
+
+/*    next = () => {
       const current = value;
       const done      = stopDetected(current);
       if(done) return it[Symbol.iterator]().next();
       value = incrementFunction(value);
       return { done, value: current };
-    };
+    };*/
     return iteratorObject;
   };
 
