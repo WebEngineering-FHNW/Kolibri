@@ -42,7 +42,7 @@ const Iterator = (value, incrementFunction, stopDetected) =>
  */
 const ArrayIterator = array =>
   IteratorInternal(0, x => x + 1, x => x === array.length,
-    ({ done, current, nextValue }) => ({
+    ({done, current, nextValue}) => ({
     done,
     current: array[current],
     nextValue
