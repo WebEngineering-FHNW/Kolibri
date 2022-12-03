@@ -60,14 +60,6 @@
  */
 
 /**
- * A unary operation on the given parameter.
- * @callback  UnaryOperation
- * @template  Template
- * @param     { Template } value
- * @returns   { Template }
- */
-
-/**
  * Logs a given message.
  * @callback Log
  * @param { LogMeType }
@@ -93,28 +85,4 @@
  *  console.log(msg);
  *  return True;
  * }
- */
-
-/**
- * A callback which takes no arguments and returns an {@link a}
- * @template a
- * @callback Producer
- * @returns { a }
- */
-
-/**
- * A callback which takes one argument and does something. (Usually this leads in a side effect)
- * @template a
- * @callback Consumer
- * @impure
- * @param { a } value
- * @returns void
- */
-
-/**
- * A callback which takes one argument and returns an {@link a}
- * @template a
- * @callback Predicate
- * @param   { a } value
- * @returns { boolean }
  */

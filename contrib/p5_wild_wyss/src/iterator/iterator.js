@@ -1,5 +1,5 @@
 import { id } from "../logger/lamdaCalculus.js";
-import { arrayEq } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import {arrayEq} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 export { Iterator, ArrayIterator }
 
@@ -25,23 +25,46 @@ export { Iterator, ArrayIterator }
 
 /**
  * @template _T_
- * @param { _T_ }               value
- * @param { (_T_) => _T_ }      incrementFunction
- * @param { (_T_) => Boolean }  stopDetected - returns true if the iteration should stop
- * @return { IteratorType<_T_> }
+ * @param   { _T_ }               value
+ * @param   { (_T_) => _T_ }      incrementFunction
+ * @param   { (_T_) => Boolean }  stopDetected - returns true if the iteration should stop
+ * @return  { IteratorType<_T_> }
  * @constructor
  */
 const Iterator = (value, incrementFunction, stopDetected) =>
   IteratorInternal(value, incrementFunction, stopDetected, id);
 
+/**
+ * @template _T_
+ * @param  { Array<_T_> } array
+ * @return { IteratorType<_T_> }
+ * @constructor
+ */
 const ArrayIterator = array =>
   IteratorInternal(0, x => x + 1, x => x === array.length,
-    ({done, current, nextValue}) => ({
+    ({ done, current, nextValue }) => ({
     done,
     current: array[current],
     nextValue
   }));
 
+/**
+ * @template _T_
+ * @typedef TransformType
+ * @property { Boolean } done
+ * @property { any }     current
+ * @property { _T_ }     nextValue
+ */
+
+/**
+ * @template _T_
+ * @param  { _T_ } value
+ * @param  { (_T_) => _T_ }      incrementFunction
+ * @param  { (_T_) => Boolean }  stopDetected - returns true if the iteration should stop
+ * @param  { UnaryOperation<TransformType<_T_>> } transform
+ * @return { IteratorType<_T_>}
+ * @constructor
+ */
 const IteratorInternal = (value, incrementFunction, stopDetected, transform) => {
 
   const next = () => {
@@ -51,6 +74,11 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
     return {done, value: current}
   };
 
+  /**
+   * @template _T_
+   * @param  { _T_ } val
+   * @return { TransformType<_T_> }
+   */
   const getNextValue = val => {
       const current = val;
       const done    = stopDetected(current);
@@ -62,10 +90,10 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
   };
 
   const dropWhile = predicate => {
-    let {done, current} = transform(getNextValue(value));
+    let { done, current } = transform(getNextValue(value));
     while(predicate(current) && !done) {
       const n = next();
-      done = n.done;
+      done    = n.done;
       current = transform(getNextValue(value)).current;
     }
     return iteratorObject;
@@ -84,7 +112,7 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
       const result = predicate(current) || done;
 
       if (result) {
-        return {done, current, nextValue}
+        return { done, current, nextValue }
       } else {
         return { done: true, current, nextValue }
       }
@@ -111,7 +139,7 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
   //TODO: Could be implemented using dropWhile
   const filter = predicate => {
     const oldTransform = transform;
-    const applyFilter = x => {
+    const applyFilter  = x => {
       const { done, current, nextValue } = oldTransform(x);
       const result = predicate(current) || done;
       return result ? { done, current, nextValue } : applyFilter(getNextValue(nextValue));
@@ -124,11 +152,13 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
 
   const rejectAll = predicate => filter(val => !predicate(val));
 
-  const reduce = (reducer, start) =>
-    [...iteratorObject].reduce(reducer, start);
-
-  const eq = it =>
-    arrayEq([...iteratorObject.copy()])([...it.copy()]);
+  const reduce = (reducer, start) => {
+    let accumulator = start;
+    for (const current of iteratorObject) {
+      accumulator = reducer(accumulator, current);
+    }
+    return accumulator;
+  };
 
   const concat = it => ArrayIterator([...iteratorObject, ...it]);
 
@@ -145,6 +175,10 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
     const values = [...iteratorObject.copy()].reverse();
     return ArrayIterator(values);
   };
+
+  const eq = it =>
+    arrayEq([...iteratorObject.copy()])([...it.copy()]);
+
 
   const iteratorObject = {
     [Symbol.iterator]: () => ({ next }),
