@@ -24,6 +24,13 @@ export { Iterator, ArrayIterator }
  */
 
 /**
+ *
+ * The incrementFunction should change the value (make progress) in a way that the stopDetected function can recognize
+ * the end of the iterator.
+ *
+ * Contract:
+ * - incrementFunction & stopDetected should not refer to any mutable state variable (because of side effect) in the closure.
+ * Otherwise, copying and iterator may not work as expected.
  * @template _T_
  * @param   { _T_ }               value
  * @param   { (_T_) => _T_ }      incrementFunction
@@ -35,6 +42,7 @@ const Iterator = (value, incrementFunction, stopDetected) =>
   IteratorInternal(value, incrementFunction, stopDetected, id);
 
 /**
+ * Constructs a new iterator based on the given array. Each iteration returns an element of the given array.
  * @template _T_
  * @param  { Array<_T_> } array
  * @return { IteratorType<_T_> }
