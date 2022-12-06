@@ -4,13 +4,33 @@
     <meta charset="UTF-8">
     <title>Slot Machine</title>
   <style>
+
     #scrollWheel {
-      display: flex;
-      flex-direction: column-reverse;
+      position: relative;
+    }
+
+    #scrollWheel:before {
+      content: "";
+      height: 60px;
+      width: 60px;
+      position: absolute;
+      background: white;
+      z-index: 1;
+    }
+    #scrollWheel:after {
+      content: "";
+      top: 200px;
+      height: 60px;
+      width: 60px;
+      position: absolute;
+      background: white;
+      z-index: 1;
     }
 
     .slot {
-      display: flex;
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 50px;
       height: 50px;
       background: rebeccapurple;
@@ -19,23 +39,22 @@
       align-content: center;
       justify-content: center;
       border: 1px solid black;
+      transition: all 500ms linear;
     }
-    .slot > div {
-      height: 5px;
-    }
+
   </style>
 </head>
 <body>
+<button id="btn">Hit Me!</button>
 
   <div id="scrollWheel"></div>
 
-  <button id="btn">Hit Me!</button>
 
 
   <script type="module">
-    import {FocusRing} from "../focusRing.js";
-    import {ArrayIterator} from "../../iterator/iterator.js";
-    import { dom }          from "../../../../../docs/src/kolibri/util/dom.js"
+    import { FocusRing }      from "../focusRing.js";
+    import { ArrayIterator }  from "../../iterator/iterator.js";
+    import { dom }            from "../../../../../docs/src/kolibri/util/dom.js"
 
 
     const createSlot = content => {
@@ -50,8 +69,6 @@
 
     const init = () => {
 
-      // console.log(focusRing.left().left().focus().outerHTML);
-
       const elements = [
         focusRing.left().left().focus(),
         focusRing.left().focus(),
@@ -59,16 +76,14 @@
         focusRing.right().focus(),
         focusRing.right().right().focus()
       ];
-      // const positionIds = [
-      //   "preLeft",
-      //   "left",
-      //   "focus",
-      //   "right",
-      //   "postRight",
-      // ];
 
-      document.getElementById("scrollWheel").append(...elements);
+      document.getElementById("scrollWheel").prepend(...elements);
+      let counter = 0;
 
+      for (const child of elements) {
+        child.style.top = counter + "px";
+        counter += 50;
+      }
     };
 
     const update = () => {
@@ -76,18 +91,18 @@
       focusRing = focusRing.right();
       const el = focusRing.right().right().focus();
       const wheel = document.getElementById("scrollWheel");
-      wheel.appendChild(el)
-      wheel.removeChild(wheel.children[0])
+      wheel.prepend(el);
+      wheel.removeChild(wheel.children[wheel.children.length -1]);
+
+      let counter = 0;
+      for (const child of wheel.children) {
+        child.style.top = counter + "px";
+        counter += 50;
+      }
+      setTimeout(() => {el.classList.remove("hide")}, 0);
 
     };
-    document.getElementById("btn").onclick = () => {
-      update();
-    };
-
-    const render = (htmlElement, id) => {
-      const parent = document.getElementById(id);
-      parent.innerHTML = htmlElement.outerHTML;
-    };
+    document.getElementById("btn").onclick = () => setInterval(() => update(), 500);
 
     init();
 
