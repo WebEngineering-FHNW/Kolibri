@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>Slot Machine</title>
   <style>
-    .scrollWheel {
+    #scrollWheel {
       display: flex;
-      flex-direction: column;
+      flex-direction: column-reverse;
     }
 
     .slot {
@@ -27,13 +27,7 @@
 </head>
 <body>
 
-  <div class="scrollWheel">
-    <div class="slot" id="postRight"><p></p></div>
-    <div class="slot" id="right"><p></p></div>
-    <div class="slot" id="focus"><p></p></div>
-    <div class="slot" id="left"> <p></p></div>
-    <div class="slot" id="preLeft"> <p></p></div>
-  </div>
+  <div id="scrollWheel"></div>
 
   <button id="btn">Hit Me!</button>
 
@@ -46,7 +40,7 @@
 
     const createSlot = content => {
       const [el] = dom(`
-        <p>${content}</p>
+        <div class="slot"><p>${content}</p></div>
         `
       );
       return el;
@@ -54,9 +48,9 @@
 
     let focusRing = FocusRing(ArrayIterator([1,2,3,4,5,6]).map(createSlot));
 
-    const update = () => {
+    const init = () => {
 
-      console.log(focusRing.left().left().focus().outerHTML);
+      // console.log(focusRing.left().left().focus().outerHTML);
 
       const elements = [
         focusRing.left().left().focus(),
@@ -65,19 +59,28 @@
         focusRing.right().focus(),
         focusRing.right().right().focus()
       ];
-      const positionIds = [
-        "preLeft",
-        "left",
-        "focus",
-        "right",
-        "postRight",
-      ];
+      // const positionIds = [
+      //   "preLeft",
+      //   "left",
+      //   "focus",
+      //   "right",
+      //   "postRight",
+      // ];
 
-      elements.map((e, i) => render(e, positionIds[i]));
+      document.getElementById("scrollWheel").append(...elements);
+
     };
 
-    document.getElementById("btn").onclick = () => {
+    const update = () => {
+      console.log(focusRing.focus().outerHTML);
       focusRing = focusRing.right();
+      const el = focusRing.right().right().focus();
+      const wheel = document.getElementById("scrollWheel");
+      wheel.appendChild(el)
+      wheel.removeChild(wheel.children[0])
+
+    };
+    document.getElementById("btn").onclick = () => {
       update();
     };
 
@@ -86,7 +89,7 @@
       parent.innerHTML = htmlElement.outerHTML;
     };
 
-    update();
+    init();
 
   </script>
 
