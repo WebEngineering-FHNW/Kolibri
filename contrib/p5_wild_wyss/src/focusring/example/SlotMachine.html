@@ -58,10 +58,7 @@
 
 
     const createSlot = content => {
-      const [el] = dom(`
-        <div class="slot"><p>${content}</p></div>
-        `
-      );
+      const [el] = dom(`<div class="slot"><p>${content}</p></div>`);
       return el;
     };
 
