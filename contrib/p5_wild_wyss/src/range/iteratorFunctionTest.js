@@ -1,5 +1,5 @@
-import {TestSuite} from "../../../../docs/src/kolibri/util/test.js";
-import {Range} from "./range.js";
+import { TestSuite }  from "../../../../docs/src/kolibri/util/test.js";
+import { Range }      from "./range.js";
 
 const loggerSuite = TestSuite("Iterator Functions");
 

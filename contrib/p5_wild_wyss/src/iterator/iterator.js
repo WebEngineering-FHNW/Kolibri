@@ -1,5 +1,5 @@
 import { id } from "../logger/lamdaCalculus.js";
-import {arrayEq} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { arrayEq } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 export { Iterator, ArrayIterator }
 
@@ -7,7 +7,7 @@ export { Iterator, ArrayIterator }
 /** @typedef  IteratorType
  * @template _T_
  * @property { () => { next: () => IteratorResult } }                  [Symbol.iterator]
- * @property { (callback:Consumer<_T_>)         => void }              forEach   - executes the callback for each element and exhausts the iterator
+ * @property { (callback:Consumer<_T_>)         => void }              forEach$   - executes the callback for each element and exhausts the iterator
  * @property { (predicate:Predicate<_T_>)       => IteratorType<_T_> } dropWhile - proceed with the iteration where the predicate no longer holds
  * @property { (count:Number)                   => IteratorType<_T_> } drop      - jump over so many elements
  * @property { (predicate:Predicate<_T_>)       => IteratorType<_T_> } takeWhile - proceed with the iteration until the predicate becomes true
@@ -16,12 +16,14 @@ export { Iterator, ArrayIterator }
  * @property { (mapper:Functor<_T_, *>)         => IteratorType<_T_> } map       - transform each element
  * @property { (predicate:Predicate<_T_>)       => IteratorType<_T_> } retainAll - only keep elements which fulfill the predicate
  * @property { (predicate:Predicate<_T_>)       => IteratorType<_T_> } rejectAll - ignore elements which fulfill the predicate
- * @property { (op:BinaryOperation<_T_>, _T_)   => _T_ }               reduce    - Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
- * @property { (it:IteratorType<*>)             => IteratorType<*> }   concat    - add an iterator to the existing iterators end
- * @property { (a:_T_)                          => IteratorType<_T_> } cons      - add the element {@link a} to the front of the iterator
+ * @property { (op:BinaryOperation<_T_>, _T_)   => _T_ }               reduce$   - Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
+ * @property { (it:IteratorType<*>)             => IteratorType<*> }   concat$    - add an iterator to the existing iterators end
+ * @property { (a:_T_)                          => IteratorType<_T_> } cons$      - add the element {@link a} to the front of the iterator
  * @property { ()                               => _T_ }               head      - return the next value without consuming it
- * @property { ()                               => IteratorType<_T_> } reverse   - process the iterator backwards
+ * @property { ()                               => IteratorType<_T_> } reverse$   - process the iterator backwards
+ * @property { (other:IteratorType<_T_>)        => Boolean } eq$         - process the iterator backwards
  */
+
 
 /**
  *
@@ -93,7 +95,7 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
       return { done, current, nextValue: incrementFunction(val) };
   };
 
-  const forEach = consume => {
+  const forEach$ = consume => {
     for (const elem of iteratorObject) consume(elem);
   };
 
@@ -160,7 +162,7 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
 
   const rejectAll = predicate => filter(val => !predicate(val));
 
-  const reduce = (reducer, start) => {
+  const reduce$ = (reducer, start) => {
     let accumulator = start;
     for (const current of iteratorObject) {
       accumulator = reducer(accumulator, current);
@@ -168,29 +170,28 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
     return accumulator;
   };
 
-  const concat = it => ArrayIterator([...iteratorObject, ...it]);
+  const concat$ = it => ArrayIterator([...iteratorObject, ...it]);
 
-  const cons = a => {
+  const cons$ = a => {
     const it = Iterator(a, _ => undefined, x => x === undefined);
-    return it.concat(iteratorObject);
+    return it.concat$(iteratorObject);
   };
 
   const head = () => stopDetected(value) ? undefined : transform(getNextValue(value)).current;
 
   const isEmpty = () => head() === undefined;
 
-  const reverse = () => {
+  const reverse$ = () => {
     const values = [...iteratorObject.copy()].reverse();
     return ArrayIterator(values);
   };
 
-  const eq = it =>
+  const eq$ = it =>
     arrayEq([...iteratorObject.copy()])([...it.copy()]);
 
 
   const iteratorObject = {
     [Symbol.iterator]: () => ({ next }),
-    forEach,
     dropWhile,
     drop,
     takeWhile,
@@ -198,14 +199,15 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
     map,
     retainAll,
     rejectAll,
-    reduce,
-    cons,
-    concat,
-    reverse,
     head,
     isEmpty,
     copy,
-    eq
+    reduce$,
+    forEach$,
+    cons$,
+    concat$,
+    reverse$,
+    eq$
   };
 
   return iteratorObject;

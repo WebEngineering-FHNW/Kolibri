@@ -1,8 +1,6 @@
-import {Iterator} from "../iterator/iterator.js";
+import { Iterator } from "../iterator/iterator.js";
 
 export { Range }
-
-
 
 /**
  * Creates a range of numbers between two inclusive boundaries,
@@ -20,7 +18,7 @@ export { Range }
  * @param { !Number } firstBoundary  - the first boundary of the range
  * @param { Number }  secondBoundary - optionally the second boundary of the range
  * @param { Number }  step - the size of a step, processed during each iteration
- * @returns RangeType
+ * @returns IteratorType<Number>
  * @example
  *  const [zero, one, two, three] = Range(3);
  *  const [five, three, one]      = Range(1, 5, -2);
@@ -76,5 +74,3 @@ const normalize = (left, right, stepIsNegative) => {
   }
   return [next, end];
 };
-
-

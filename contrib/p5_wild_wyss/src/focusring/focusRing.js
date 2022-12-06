@@ -1,5 +1,4 @@
-
-import {ArrayIterator, Iterator} from "../iterator/iterator.js";
+import { ArrayIterator, Iterator } from "../iterator/iterator.js";
 
 export { FocusRing }
 
@@ -18,30 +17,30 @@ const FocusRingInternal = (pre, post) => {
     const currentFocus = post.head();
     const modifiedPost = post.copy().drop(1);
 
-    if (modifiedPost.eq(emptyIterator)) {
-      if (pre.eq(emptyIterator)) {
+    if (modifiedPost.eq$(emptyIterator)) {
+      if (pre.eq$(emptyIterator)) {
         // do nothing when only one element in list
         return FocusRingInternal(pre, post);
       }
       return FocusRingInternal(
         ArrayIterator([currentFocus]),
-        pre.reverse()
+        pre.reverse$()
       );
     }
-    const modifiedPre = pre.copy().cons(currentFocus); // paranoid 2
+    const modifiedPre = pre.copy().cons$(currentFocus); // paranoid 2
     return FocusRingInternal(modifiedPre, modifiedPost);
   };
 
   const left = () => {
     let modifiedPre = pre.copy();
     if (modifiedPre.isEmpty()) {
-      modifiedPre = post.copy().drop(1).reverse();
+      modifiedPre = post.copy().drop(1).reverse$();
       // if post had only one element
       if (modifiedPre.isEmpty()) return FocusRingInternal(pre, post);
     }
 
     const headPre       = modifiedPre.head();
-    const modifiedPost  = post.copy().cons(headPre);
+    const modifiedPost  = post.copy().cons$(headPre);
 
     return FocusRingInternal(modifiedPre, modifiedPost);
   };
