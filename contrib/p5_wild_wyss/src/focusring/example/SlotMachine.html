@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slot Machine</title>
+  <style>
+    .scrollWheel {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slot {
+      display: flex;
+      width: 50px;
+      height: 50px;
+      background: rebeccapurple;
+      color: white;
+      text-align: center;
+      align-content: center;
+      justify-content: center;
+      border: 1px solid black;
+    }
+    .slot > div {
+      height: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scrollWheel">
+    <div class="slot" id="postRight"><p></p></div>
+    <div class="slot" id="right"><p></p></div>
+    <div class="slot" id="focus"><p></p></div>
+    <div class="slot" id="left"> <p></p></div>
+    <div class="slot" id="preLeft"> <p></p></div>
+  </div>
+
+  <button id="btn">Hit Me!</button>
+
+
+  <script type="module">
+    import {FocusRing} from "../focusRing.js";
+    import {ArrayIterator} from "../../iterator/iterator.js";
+    import { dom }          from "../../../../../docs/src/kolibri/util/dom.js"
+
+
+    const createSlot = content => {
+      const [el] = dom(`
+        <p>${content}</p>
+        `
+      );
+      return el;
+    };
+
+    let focusRing = FocusRing(ArrayIterator([1,2,3,4,5,6]).map(createSlot));
+
+    const update = () => {
+
+      console.log(focusRing.left().left().focus().outerHTML);
+
+      const elements = [
+        focusRing.left().left().focus(),
+        focusRing.left().focus(),
+        focusRing.focus(),
+        focusRing.right().focus(),
+        focusRing.right().right().focus()
+      ];
+      const positionIds = [
+        "preLeft",
+        "left",
+        "focus",
+        "right",
+        "postRight",
+      ];
+
+      elements.map((e, i) => render(e, positionIds[i]));
+    };
+
+    document.getElementById("btn").onclick = () => {
+      focusRing = focusRing.right();
+      update();
+    };
+
+    const render = (htmlElement, id) => {
+      const parent = document.getElementById(id);
+      parent.innerHTML = htmlElement.outerHTML;
+    };
+
+    update();
+
+  </script>
+
+</body>
+</html>

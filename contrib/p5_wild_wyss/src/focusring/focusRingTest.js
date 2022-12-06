@@ -9,8 +9,10 @@ focusRingSuite.add("basic access", assert => {
   assert.is(0, ring.focus());
   assert.is(1, ring.right().focus());
   assert.is(4, ring.left().focus());
-  assert.is(0, ring.left().right().focus());
+  assert.is(ring.left().right().focus(), 0);
   assert.is(0, ring.right().left().focus());
+  assert.is(2, ring.right().right().focus());
+  assert.is(ring.left().left().focus(), 3);
 });
 
 focusRingSuite.add("test reverse after right", assert => {
@@ -27,8 +29,8 @@ focusRingSuite.add("test focus ring with single element", assert => {
   assert.is(ring.left().focus(), 0 );
 });
 
-// focusRingSuite.add("test focus ring go left", assert => {
-//
-// });
+focusRingSuite.add("test focus ring go left", assert => {
+
+});
 
 focusRingSuite.run();
