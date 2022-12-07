@@ -9,16 +9,22 @@
       position: relative;
     }
 
-    #scrollWheel:before, #scrollWheel:after {
+    #scrollWheel:before {
       content: "";
-      height: 50px;
+      min-height: 250px;
       width: 50px;
       position: absolute;
       background: white;
+      background: linear-gradient(
+                180deg,
+                rgba(255,255,255,1) 20%,
+                rgba(0,0,0,1) 20%,
+                rgba(255,255,255,0) 30%,
+                rgba(255,255,255,0.4) 50%,
+                rgba(255,255,255,0) 70%,
+                rgba(0,0,0,1) 80%,
+                rgba(255,255,255,1) 80%);
       z-index: 1;
-    }
-    #scrollWheel:after {
-      top: 200px;
     }
 
     .slot {
@@ -34,7 +40,7 @@
       align-content: center;
       justify-content: center;
       border: 1px solid black;
-      transition: all 500ms linear;
+      transition: all 100ms linear;
     }
 
   </style>
@@ -45,8 +51,6 @@
 <p id="result"></p>
 
   <div id="scrollWheel"></div>
-
-
 
   <script type="module">
     import { FocusRing }      from "../focusRing.js";
@@ -60,15 +64,16 @@
     };
 
     let focusRing = FocusRing(ArrayIterator([1,2,3,4,5,6]).map(createSlot));
+    const speed = 500;
 
     const init = () => {
 
       const elements = [
-        focusRing.left().left().focus(),
-        focusRing.left().focus(),
-        focusRing.focus(),
+        focusRing.right().right().focus(),
         focusRing.right().focus(),
-        focusRing.right().right().focus()
+        focusRing.focus(),
+        focusRing.left().focus(),
+        focusRing.left().left().focus()
       ];
 
       document.getElementById("scrollWheel").prepend(...elements);
@@ -81,28 +86,29 @@
     };
 
     const update = () => {
+
       focusRing = focusRing.right();
       const el = focusRing.right().right().focus();
       const wheel = document.getElementById("scrollWheel");
       wheel.prepend(el);
-      wheel.removeChild(wheel.children[wheel.children.length -1]);
-
       let counter = 0;
+
       for (const child of wheel.children) {
         child.style.top = counter + "px";
+        child.style.transition = `all ${speed}ms linear`;
         counter += 50;
       }
       setTimeout(() => {el.classList.remove("hide")}, 0);
-
+      wheel.removeChild(wheel.children[wheel.children.length -1]);
     };
     let intervalId;
-    document.getElementById("start").onclick = () => intervalId = setInterval(() => update(), 500);
+
+    document.getElementById("start").onclick = () => intervalId = setInterval(() => update(), speed);
     document.getElementById("stop").onclick = () => {
         if(intervalId) {
           clearInterval(intervalId);
           document.getElementById("result").innerText = `Focus is on: ${focusRing.focus().innerText}`;
         }
-
     };
 
     init();
