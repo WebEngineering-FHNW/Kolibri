@@ -21,7 +21,7 @@ export { Iterator, ArrayIterator }
  * @property { (a:_T_)                          => IteratorType<_T_> } cons$      - add the element {@link a} to the front of the iterator
  * @property { ()                               => _T_ }               head       - return the next value without consuming it
  * @property { ()                               => IteratorType<_T_> } reverse$   - process the iterator backwards
- * @property { (other:IteratorType<_T_>)        => Boolean } eq$                  -
+ * @property { (other:IteratorType<_T_>)        => Boolean }           eq$        - checks the equality of two non infinite iterators
  */
 
 
@@ -32,7 +32,9 @@ export { Iterator, ArrayIterator }
  *
  * Contract:
  * - incrementFunction & stopDetected should not refer to any mutable state variable (because of side effect) in the closure.
- * Otherwise, copying and iterator may not work as expected.
+ *   Otherwise, copying and iterator may not work as expected.
+ * - Functions ending with a "$" must not be applied to infinite iterators.
+ *
  * @template _T_
  * @param   { _T_ }               value
  * @param   { (_T_) => _T_ }      incrementFunction

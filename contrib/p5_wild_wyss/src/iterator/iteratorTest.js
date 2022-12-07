@@ -170,8 +170,6 @@ iteratorSuite.add("test reverse exhausted iterator", assert => {
 
 iteratorSuite.add("test filter than map", assert => {
   const iterator = newIterator(4).rejectAll(x => x === 3).map(x => x * 2);
-  // const copy = iterator.copy();
-  // assert.is(arrayEq([0,2,4,8].reverse())([...iterator]), true);
   assert.is(arrayEq([0,2,4,8])([...iterator]), true);
 });
 
@@ -223,6 +221,28 @@ iteratorSuite.add("test iterator equality", assert => {
   assert.is(arrayEq([...iterator])([...iterator2]), true);
 });
 
+iteratorSuite.add("test simple ArrayIterator", assert => {
+  const array = [1,2,3];
+  const arrayIterator = ArrayIterator(array);
+  assert.is(arrayEq(array)([...arrayIterator]), true);
+});
 
+iteratorSuite.add("test ArrayIterator equality", assert => {
+  const array = [1,2,3];
+  const arrayIterator1 = ArrayIterator(array);
+  const arrayIterator2 = ArrayIterator(array);
+  assert.is(arrayIterator1.eq$(arrayIterator2), true);
+  assert.is(arrayEq([...arrayIterator1])([...arrayIterator2]), true);
+});
+
+iteratorSuite.add("test ArrayIterator with arbitrary elements", assert => {
+  const array = ["0", 1, "a", 2, "b"];
+  const result = [];
+  const arrayIterator = ArrayIterator(array);
+  for (const element of arrayIterator) {
+    result.push(element);
+  }
+  assert.is(arrayEq(result)(array), true);
+});
 
 iteratorSuite.run();
