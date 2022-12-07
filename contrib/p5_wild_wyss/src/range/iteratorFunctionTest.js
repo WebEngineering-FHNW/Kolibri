@@ -73,7 +73,7 @@ loggerSuite.add("test simple take", assert => {
 loggerSuite.add("test simple take", assert => {
   const range = Range(10);
   const result = [];
-  range.forEach(el => result.push(el));
+  range.forEach$(el => result.push(el));
   let i = 0;
   for(const elem of range){
     assert.is(elem, result[i++]);

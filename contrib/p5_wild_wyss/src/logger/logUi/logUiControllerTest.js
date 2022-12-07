@@ -37,9 +37,9 @@ const cleanUp = controller => {
   controller.resetLogMessages();
 };
 
-const loggerSuite = TestSuite("LogUiController");
+const logUiControllerSuite = TestSuite("LogUiController");
 
-loggerSuite.add("test flip log level", assert => {
+logUiControllerSuite.add("test flip log level", assert => {
   const { model, controller } = beforeStart();
   const levelsBeforeSwitch = model.getAvailableLogLevels();
 
@@ -56,7 +56,7 @@ loggerSuite.add("test flip log level", assert => {
   cleanUp(controller);
 });
 
-loggerSuite.add("test on new log message", assert => {
+logUiControllerSuite.add("test on new log message", assert => {
   const { controller, appender } = beforeStart();
   const logMessage = "Tobias Wyss";
 
@@ -72,7 +72,7 @@ loggerSuite.add("test on new log message", assert => {
   cleanUp(controller);
 });
 
-loggerSuite.add("test filter message by text", assert => {
+logUiControllerSuite.add("test filter message by text", assert => {
   const { controller, appender } = beforeStart();
 
   const logMessage1 = "Tobias Wyss";
@@ -100,7 +100,7 @@ loggerSuite.add("test filter message by text", assert => {
   cleanUp(controller);
 });
 
-loggerSuite.add("test filter message by log level", assert => {
+logUiControllerSuite.add("test filter message by log level", assert => {
   const { model, controller, appender } = beforeStart();
 
   const logMessage1 = "Tobias Wyss";
@@ -127,7 +127,7 @@ loggerSuite.add("test filter message by log level", assert => {
   cleanUp(controller);
 });
 
-loggerSuite.add("test set global logging level by string", assert => {
+logUiControllerSuite.add("test set global logging level by string", assert => {
   const { controller } = beforeStart();
 
   let loggingLevel = "DEBUG";
@@ -143,4 +143,4 @@ loggerSuite.add("test set global logging level by string", assert => {
   cleanUp(controller);
 });
 
-loggerSuite.run();
+logUiControllerSuite.run();

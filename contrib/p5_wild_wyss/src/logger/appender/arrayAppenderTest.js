@@ -9,16 +9,16 @@ reset(); // clear the state of the appender since it is a singleton
 const msg1 = "Tobias Wyss";
 const msg2 = "Andri Wild";
 
-const loggerSuite = TestSuite("Array Appender");
+const arrayAppenderSuite = TestSuite("Array Appender");
 
-loggerSuite.add("test add debug value to array appender", assert => {
+arrayAppenderSuite.add("test add debug value to array appender", assert => {
   const result = debug("debug");
   assert.is(result, True);
   assert.is(getValue()[0], "debug");
   reset();
 });
 
-loggerSuite.add("test add two values to array appender", assert => {
+arrayAppenderSuite.add("test add two values to array appender", assert => {
   const result1 = debug("first");
   const result2 = debug("second");
   assert.is(result1, True);
@@ -29,7 +29,7 @@ loggerSuite.add("test add two values to array appender", assert => {
   reset();
 });
 
-loggerSuite.add("test reset array appender", assert => {
+arrayAppenderSuite.add("test reset array appender", assert => {
   const result1 = debug("first");
   assert.is(result1, True);
   assert.is(getValue()[0], "first");
@@ -37,7 +37,7 @@ loggerSuite.add("test reset array appender", assert => {
   assert.isTrue(0 === getValue().length);
 });
 
-loggerSuite.add("test add all kind of levels to array appender", assert => {
+arrayAppenderSuite.add("test add all kind of levels to array appender", assert => {
   const resultTraceLog  = debug("debug");
   const resultDebugLog  = trace("trace");
   const resultInfoLog   = info("info");
@@ -61,7 +61,7 @@ loggerSuite.add("test add all kind of levels to array appender", assert => {
 });
 
 
-loggerSuite.add("test default appender overflow implementation", assert => {
+arrayAppenderSuite.add("test default appender overflow implementation", assert => {
   // limit will be lifted to at least 2
   const {trace, getValue, reset} = Appender(1);
   const result = trace(msg1);
@@ -79,7 +79,7 @@ loggerSuite.add("test default appender overflow implementation", assert => {
   reset();
 });
 
-loggerSuite.add("test custom limit implementation", assert => {
+arrayAppenderSuite.add("test custom limit implementation", assert => {
   let value = [];
   const onLimitReached = array => {
     value = array;
@@ -95,7 +95,7 @@ loggerSuite.add("test custom limit implementation", assert => {
   reset();
 });
 
-loggerSuite.add(
+arrayAppenderSuite.add(
   "test appender should fallback to default eviction strategy, if array reaches limit and has not been cleaned up.",
   assert => {
     const {trace, getValue, reset} = Appender(2, id);
@@ -110,4 +110,4 @@ loggerSuite.add(
     reset();
   });
 
-loggerSuite.run();
+arrayAppenderSuite.run();

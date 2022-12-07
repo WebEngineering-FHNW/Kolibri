@@ -6,7 +6,7 @@ import { emptyStack, head, size } from "../../../../p6_brodwolf_andermatt/src/st
 const msg1 = "Andri Wild";
 const msg2 = "Tobias Wyss";
 
-const loggerSuite = TestSuite("Observable Appender");
+const observableAppenderSuite = TestSuite("Observable Appender");
 const { trace, debug, getValue, reset } = Appender();
 
 /**
@@ -22,7 +22,7 @@ const stackSize = observable => jsNum(size(observable.getValue()));
  */
 const obsHead = observable => head(observable.getValue())(snd); // TODO: Update head documentation (return value)
 
-loggerSuite.add("test add debug log to observable appender", assert => {
+observableAppenderSuite.add("test add debug log to observable appender", assert => {
   const obs     = getValue();
   const result  = debug("debug");
   assert.is(result, True);
@@ -32,7 +32,7 @@ loggerSuite.add("test add debug log to observable appender", assert => {
   reset();
 });
 
-loggerSuite.add("The whole stack should be retrieved when observing", assert => {
+observableAppenderSuite.add("The whole stack should be retrieved when observing", assert => {
   const obs     = getValue();
   const result  = debug("debug");
   assert.is(obsHead(obs), "debug");
@@ -46,7 +46,7 @@ loggerSuite.add("The whole stack should be retrieved when observing", assert => 
   reset();
 });
 
-loggerSuite.add("The reset function should clear the stack", assert => {
+observableAppenderSuite.add("The reset function should clear the stack", assert => {
   const obs = getValue();
   debug("debug");
 
@@ -57,7 +57,7 @@ loggerSuite.add("The reset function should clear the stack", assert => {
   assert.is(obsHead(lastStack), "debug")
 });
 
-loggerSuite.add("test default appender overflow implementation", assert => {
+observableAppenderSuite.add("test default appender overflow implementation", assert => {
   // limit will be lifted to at least 2
   const {trace, getValue: getObservable, reset} = Appender(1);
   const result = trace(msg1);
@@ -76,7 +76,7 @@ loggerSuite.add("test default appender overflow implementation", assert => {
   reset();
 });
 
-loggerSuite.add("test custom limit implementation", assert => {
+observableAppenderSuite.add("test custom limit implementation", assert => {
   let value;
   const onLimitReached = obs => {
     value = obs.getValue();
@@ -94,7 +94,7 @@ loggerSuite.add("test custom limit implementation", assert => {
   reset();
 });
 
-loggerSuite.add(
+observableAppenderSuite.add(
   "test appender should fallback to default eviction strategy, if array reaches limit and has not been cleaned up.",
   assert => {
     const {trace, getValue: getObservable, reset} = Appender(2, id);
@@ -108,4 +108,4 @@ loggerSuite.add(
     reset();
   });
 
-loggerSuite.run();
+observableAppenderSuite.run();
