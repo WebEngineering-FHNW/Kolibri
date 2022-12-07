@@ -40,7 +40,9 @@
   </style>
 </head>
 <body>
-<button id="btn">Hit Me!</button>
+<button id="start">start</button>
+<button id="stop">stop</button>
+<p id="result"></p>
 
   <div id="scrollWheel"></div>
 
@@ -93,7 +95,15 @@
       setTimeout(() => {el.classList.remove("hide")}, 0);
 
     };
-    document.getElementById("btn").onclick = () => setInterval(() => update(), 500);
+    let intervalId;
+    document.getElementById("start").onclick = () => intervalId = setInterval(() => update(), 500);
+    document.getElementById("stop").onclick = () => {
+        if(intervalId) {
+          clearInterval(intervalId);
+          document.getElementById("result").innerText = `Focus is on: ${focusRing.focus().innerText}`;
+        }
+
+    };
 
     init();
 
