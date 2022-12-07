@@ -6,31 +6,25 @@ const focusRingSuite = TestSuite("FocusRing");
 
 focusRingSuite.add("basic access", assert => {
   const ring = FocusRing(Range(4));
-  assert.is(0, ring.focus());
-  assert.is(1, ring.right().focus());
-  assert.is(4, ring.left().focus());
-  assert.is(ring.left().right().focus(), 0);
-  assert.is(0, ring.right().left().focus());
-  assert.is(2, ring.right().right().focus());
-  assert.is(ring.left().left().focus(), 3);
+  assert.is(ring.focus(), 0 );
+  assert.is(ring.right().focus(), 1 );
+  assert.is(ring.left().focus(), 4);
 });
 
-focusRingSuite.add("test reverse after right", assert => {
-  const ring = FocusRing(Range(1));
-  assert.is(ring.focus(),0 );
-  assert.is(ring.right().focus(),1 );
-  assert.is(ring.right().right().focus(), 0 );
+focusRingSuite.add("test left/right combinations", assert => {
+  const ring = FocusRing(Range(4));
+  assert.is(ring.left().left().focus()  , 3);
+  // test reverse after right
+  assert.is(ring.left().right().focus() , 0);
+  assert.is(ring.right().left().focus() , 0);
+  assert.is(ring.right().right().focus(), 2);
 });
 
 focusRingSuite.add("test focus ring with single element", assert => {
   const ring = FocusRing(Range(0));
-  assert.is(ring.focus(),0);
-  assert.is(ring.right().focus(), 0 );
-  assert.is(ring.left().focus(), 0 );
-});
-
-focusRingSuite.add("test focus ring go left", assert => {
-
+  assert.is(ring.focus()        , 0);
+  assert.is(ring.right().focus(), 0);
+  assert.is(ring.left().focus() , 0);
 });
 
 focusRingSuite.run();
