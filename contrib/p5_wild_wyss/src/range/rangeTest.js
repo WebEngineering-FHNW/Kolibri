@@ -1,8 +1,7 @@
-import { Range } from "./range.js"
-import {TestSuite} from "../../../../docs/src/kolibri/util/test.js";
+import { Range }      from "./range.js"
+import { TestSuite }  from "../../../../docs/src/kolibri/util/test.js";
 
 const rangeSuite = TestSuite("Range");
-
 
 rangeSuite.add("test typical case for of", assert => {
   const result = [];
@@ -152,13 +151,3 @@ rangeSuite.add("test of all combinations", assert => {
 });
 
 rangeSuite.run();
-
-// negRange.forEach(console.log); // forEach does not exist on JS Iterator until now
-// negRange.forEach(console.log); // never shown
-// range.dropWhile( value => value < 5 ) -> 5... rest
-// range.takeWhile( value => value < 5 ) -> start ... 4
-// range.filter( value => value % 2 === 0)
-// alternative names for filter:
-// range.retainAll( value => value % 2 === 0)
-// range.select( value => value % 2 === 0)
-// range.reject( value => value % 2 === 0)
