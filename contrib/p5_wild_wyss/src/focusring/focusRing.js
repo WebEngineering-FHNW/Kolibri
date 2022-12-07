@@ -32,18 +32,20 @@ const FocusRingInternal = (pre, post) => {
   };
 
   const left = () => {
-    let modifiedPre = pre.copy();
-    let modifiedPost = post.copy();
-    if (modifiedPre.isEmpty()) {
+    let modifiedPre   = pre.copy();
+    let modifiedPost  = post.copy();
+
+    if (pre.isEmpty()) {
+      modifiedPost = emptyIterator;
       modifiedPre = post.copy().reverse$();
-      modifiedPost = ArrayIterator([]);
-      // if post had only one element
-      if (modifiedPre.isEmpty()) return FocusRingInternal(pre, post);
     }
 
-    const headPre       = modifiedPre.head();
-    modifiedPost        = modifiedPost.copy().cons$(headPre);
-    return FocusRingInternal(modifiedPre.drop(1), modifiedPost);
+    // remove head from pre and add it to post
+    const headPre = modifiedPre.head();
+    modifiedPre   = modifiedPre.drop(1);
+    modifiedPost  = modifiedPost.cons$(headPre);
+
+    return FocusRingInternal(modifiedPre, modifiedPost);
   };
 
   return { focus, left, right }
