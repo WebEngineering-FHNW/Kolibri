@@ -39,7 +39,7 @@
       align-content: center;
       justify-content: center;
       border: 1px solid black;
-      transition: all 500ms linear;
+      transition: all 200ms linear;
     }
 
   </style>
@@ -84,7 +84,6 @@
     };
 
     const update = () => {
-      console.log(focusRing.focus().outerHTML);
       focusRing = focusRing.right();
       const el = focusRing.right().right().focus();
       const wheel = document.getElementById("scrollWheel");
@@ -99,7 +98,7 @@
       setTimeout(() => {el.classList.remove("hide")}, 0);
 
     };
-    document.getElementById("btn").onclick = () => setInterval(() => update(), 500);
+    document.getElementById("btn").onclick = () => setInterval(() => update(), 200);
 
     init();
 
