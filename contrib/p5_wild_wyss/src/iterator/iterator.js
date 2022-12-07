@@ -16,6 +16,7 @@ export { Iterator, ArrayIterator }
  * @property { (mapper:Functor<_T_, *>)         => IteratorType<_T_> } map        - transform each element
  * @property { (predicate:Predicate<_T_>)       => IteratorType<_T_> } retainAll  - only keep elements which fulfill the predicate
  * @property { (predicate:Predicate<_T_>)       => IteratorType<_T_> } rejectAll  - ignore elements which fulfill the predicate
+ * @property { ()                               => Boolean }           isEmpty    - returns true, if the iterators head is undefined
  * @property { (op:BinaryOperation<_T_>, _T_)   => _T_ }               reduce$    - Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
  * @property { (it:IteratorType<*>)             => IteratorType<*> }   concat$    - add an iterator to the existing iterators end
  * @property { (a:_T_)                          => IteratorType<_T_> } cons$      - add the element {@link a} to the front of the iterator

@@ -221,6 +221,18 @@ iteratorSuite.add("test iterator equality", assert => {
   assert.is(arrayEq([...iterator])([...iterator2]), true);
 });
 
+iteratorSuite.add("test empty iterator", assert => {
+  const iterator = Iterator(undefined, _ => undefined, _ => true);
+  assert.is(iterator.isEmpty(), true);
+});
+
+iteratorSuite.add("test empty iterator", assert => {
+  const iterator = newIterator(4);
+  assert.is(iterator.isEmpty(), false);
+  for (const _element of iterator) { /** Iterator gets exhausted. */ }
+  assert.is(iterator.isEmpty(), true);
+});
+
 iteratorSuite.add("test simple ArrayIterator", assert => {
   const array = [1,2,3];
   const arrayIterator = ArrayIterator(array);
