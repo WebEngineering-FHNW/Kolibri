@@ -5,11 +5,17 @@
     <title>Slot Machine</title>
   <style>
 
-    #scrollWheel {
+      #wheels {
+          display: flex;
+      }
+
+    .scrollWheel {
       position: relative;
+        width: 50px;
+
     }
 
-    #scrollWheel:before {
+    .scrollWheel:before {
       content: "";
       min-height: 250px;
       width: 50px;
@@ -31,7 +37,7 @@
       box-sizing: border-box;
       position: absolute;
       top: 0;
-      left: 0;
+      /*left: 0;*/
       width: 50px;
       height: 50px;
       background: rebeccapurple;
@@ -46,74 +52,10 @@
   </style>
 </head>
 <body>
-<button id="start">start</button>
-<button id="stop">stop</button>
 <p id="result"></p>
 
-  <div id="scrollWheel"></div>
-
-  <script type="module">
-    import { FocusRing }      from "../focusRing.js";
-    import { ArrayIterator }  from "../../iterator/iterator.js";
-    import { dom }            from "../../../../../docs/src/kolibri/util/dom.js"
-
-
-    const createSlot = content => {
-      const [el] = dom(`<div class="slot"><p>${content}</p></div>`);
-      return el;
-    };
-
-    let focusRing = FocusRing(ArrayIterator([1,2,3,4,5,6]).map(createSlot));
-    const speed = 3000;
-
-    const init = () => {
-
-      const elements = [
-        focusRing.right().right().focus(),
-        focusRing.right().focus(),
-        focusRing.focus(),
-        focusRing.left().focus(),
-        focusRing.left().left().focus()
-      ];
-
-      document.getElementById("scrollWheel").prepend(...elements);
-      let counter = 0;
-
-      for (const child of elements) {
-        child.style.top = counter + "px";
-        counter += 50;
-      }
-    };
-
-    const update = () => {
-
-      focusRing = focusRing.right();
-      const el = focusRing.right().right().focus();
-      const wheel = document.getElementById("scrollWheel");
-      wheel.prepend(el);
-      let counter = 0;
-
-      for (const child of wheel.children) {
-        child.style.top = counter + "px";
-        child.style.transition = `all ${speed}ms linear`;
-        counter += 50;
-      }
-      setTimeout(() => {el.classList.remove("hide")}, 0);
-      wheel.removeChild(wheel.children[wheel.children.length -1]);
-    };
-    let intervalId;
-
-    document.getElementById("start").onclick = () => intervalId = setInterval(() => update(), speed);
-    document.getElementById("stop").onclick = () => {
-        if(intervalId) {
-          clearInterval(intervalId);
-          document.getElementById("result").innerText = `Focus is on: ${focusRing.focus().innerText}`;
-        }
-    };
-
-    init();
-
-  </script>
-
+<div id="controls"></div>
+<div id="wheels"></div>
+    <script src="scrollWheel.js" type="module"></script>
 </body>
 </html>
