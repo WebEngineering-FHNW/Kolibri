@@ -5,7 +5,7 @@ import { Observable }    from "../../../../../docs/src/kolibri/observable.js"
 
 const ROTATION_SPEED = 100;
 
-const slotChars = [1,2,3,4,5,6];
+const slotChars = ["&#9917;",  "&#127866;", "&#127921;", "&#127922;", "&#127891;"];
 
 const Model = slotChars => {
 
@@ -36,11 +36,11 @@ const Controller = () => {
   const startEngine = () => {
     if(model.isRunning()) return;
     model.setIsRunning(true);
-    let runTime = 1000;
+    let runTime = 200 + Math.random() * 1000;
     model.wheels.map( obs =>
         setInterval(() => obs.setValue(obs.getValue().right()), ROTATION_SPEED))
         .forEach((id, idx) => {
-          runTime += 1000;
+          runTime += 500 + Math.random() * 300;
           setTimeout( () => {
             clearInterval(id);
             if(idx === model.wheels.length -1) model.setIsRunning(false);
@@ -62,7 +62,7 @@ const wheelProjector = (rootElement, wheelObservable) => {
 
 
   const createSlot = content => {
-    const [el] = dom(`<div class="slot"><p>${content}</p></div>`);
+    const [el] = dom(`<div class="slot">${content}</div>`);
     return el;
   };
 
