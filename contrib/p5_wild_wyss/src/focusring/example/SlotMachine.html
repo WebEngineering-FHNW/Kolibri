@@ -7,6 +7,7 @@
 
       :root {
           --color: #a90707;
+          --secondary-color: rgb(221,	200,	128);
           --border: 50px solid var(--color);
           --glow-shadow:
           0 0 60px 30px #fff,  /* inner white */
@@ -55,7 +56,7 @@
           top: 0;
           width: 50px;
           height: 50px;
-          background: rgb(221,	200,	128);
+          background: var(--secondary-color);
           color: white;
           text-align: center;
           align-content: center;
@@ -66,6 +67,29 @@
       }
 
 
+      #lever-boundary{
+          position: relative;
+          height: 150px;
+      }
+      #lever {
+          position: absolute;
+          width: 10px;
+          height: 75px;
+          top: 0;
+          background: var(--secondary-color);
+      }
+
+      #knob {
+          z-index: 10;
+          top: -10px;
+          left: -10px;
+          position: absolute;
+          border-radius: 100%;
+          width: 30px;
+          height: 30px;
+          background: var(--color);
+      }
+
 
   </style>
 </head>
@@ -74,6 +98,54 @@
 
 <div id="controls"></div>
 <div id="wheels"></div>
-<script src="scrollWheel.js" type="module"></script>
+<script src="starter.js" type="module"></script>
+
+<div id="lever-boundary">
+  <div id="knob"></div>
+  <div id="lever"></div>
+</div>
+
+<script>
+  const lever = document.getElementById("lever");
+  const knob = document.getElementById("knob");
+
+  const breaking = lever.getBoundingClientRect().top + lever.getBoundingClientRect().height;
+  let pull = false;
+  let dy = 0;
+  let mouseDown = 0;
+  document.addEventListener('mousemove', evt => {
+
+    if (pull) {
+      dy = evt.clientY - mouseDown;
+      if (dy >= 0){
+
+        knob.style.top = `${dy}px`;
+
+        if (evt.clientY < breaking){
+          lever.style.top = `${dy}px`;
+          lever.style.height = `${75-dy}px`;
+        } else {
+          lever.style.top = `75px`;
+          lever.style.height = `${dy-75}px`;
+
+        }
+      }
+    }
+  });
+
+  knob.addEventListener('mousedown', evt => {
+    console.log("down", evt);
+    mouseDown = evt.clientY;
+    knob.style.top = "";
+    pull = true;
+  });
+
+  document.addEventListener('mouseup', evt => {
+    console.log("up", evt);
+    pull = false;
+  });
+
+
+</script>
 </body>
 </html>

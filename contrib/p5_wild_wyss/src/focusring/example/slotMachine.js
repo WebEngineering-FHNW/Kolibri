@@ -3,12 +3,13 @@ import { ArrayIterator }  from "../../iterator/iterator.js";
 import { dom }            from "../../../../../docs/src/kolibri/util/dom.js"
 import { Observable }    from "../../../../../docs/src/kolibri/observable.js"
 
+export { Controller, SlotMachineView }
+
 const ROTATION_SPEED = 100;
 
 const slotChars = ["&#9917;",  "&#127866;", "&#127921;", "&#127922;", "&#127891;"];
 
 const Model = slotChars => {
-
   const isRunning = Observable(false);
 
   const shuffle = array =>
@@ -55,6 +56,15 @@ const Controller = () => {
   }
 };
 
+const SlotMachineView = (rootElement, controller) => {
+  const renderWheel = wheel =>
+      wheelProjector(rootElement, wheel);
+
+  controller.wheels.forEach(renderWheel);
+
+  buttonProjector(document.getElementById("controls"), controller);
+};
+
 const wheelProjector = (rootElement, wheelObservable) => {
 
   const wheel = wheelObservable.getValue();
@@ -73,6 +83,7 @@ const wheelProjector = (rootElement, wheelObservable) => {
     wheel.left().focus(),
     wheel.left().left().focus()
   ].map(createSlot);
+
   wheelElement.prepend(...initialValues);
   let counter = 0;
 
@@ -104,15 +115,3 @@ const buttonProjector = (rootElement, controller) => {
 
   rootElement.append(button);
 };
-
-const SlotMachineView = (rootElement, controller) => {
-  const renderWheel = wheel =>
-      wheelProjector(rootElement, wheel);
-
-  controller.wheels.forEach(renderWheel);
-
-  buttonProjector(document.getElementById("controls"), controller);
-};
-
-const slotMachineController = Controller();
-SlotMachineView(document.getElementById("wheels"), slotMachineController);
