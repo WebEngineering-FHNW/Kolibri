@@ -6,8 +6,10 @@
   <style>
 
       :root {
-          --color: #a90707;
-          --secondary-color: rgb(221,	200,	128);
+          /*--color: #a90707;*/
+          --color: rgb(191, 6, 20);
+          /*--secondary-color: rgb(221,	200,	128);*/
+          --secondary-color: rgb(251, 204, 54);
           --border: 50px solid var(--color);
           --glow-shadow:
           0 0 60px 30px #fff,  /* inner white */
@@ -18,7 +20,32 @@
       body {
         display: flex;
         justify-content: center;
+      }
+
+      .title {
+        display: flex;
+        justify-content: center;
+        margin: 10px;
+        font-family: "DejaVu Sans", monospace;
+        font-size: x-large;
+        font-weight: bold;
+        color: var(--secondary-color);
+      }
+
+      .slotMachine {
+        padding: 20px;
+        background: linear-gradient(0deg, rgba(215,38,47,1) 0%, rgba(205,133,137,1) 50%, rgba(215,38,47,1) 100%);
+        width: 300px;
+        border-radius: 50px 50px 0 0 ;
+        border: 10px solid var(--secondary-color);
+
+      }
+
+      .machine {
+        display: flex;
+        justify-content: center;
         align-items: center;
+        box-shadow: red;
       }
 
       #wheels {
@@ -62,7 +89,7 @@
         top: 0;
         width: 50px;
         height: 50px;
-        background: var(--secondary-color);
+        background: white;
         color: white;
         text-align: center;
         align-content: center;
@@ -72,10 +99,8 @@
         transition: all 100ms linear;
       }
 
-
       #lever-boundary {
         margin-left: 20px;
-        width: 50px;
         position: relative;
         height: 180px;
       }
@@ -85,7 +110,7 @@
         width: 10px;
         height: 75px;
         top: 15px;
-        background: var(--secondary-color);
+        background: linear-gradient(-90deg, var(--secondary-color) 50%, rgb(130, 100, 70) 100%);
         border-bottom: 1px solid black;
       }
 
@@ -93,7 +118,7 @@
         position: absolute;
         width: 10px;
         top: 90px;
-        background: var(--secondary-color);
+        background: linear-gradient(-90deg, var(--secondary-color) 50%, rgb(130, 100, 70) 100%);
         visibility: hidden;
         border-top: 1px solid black;
       }
@@ -106,61 +131,21 @@
         width: 30px;
         height: 30px;
         background: var(--color);
+        background: radial-gradient(circle, rgb(232, 80, 80) 10%, var(--color) 50%);
       }
 
   </style>
 </head>
 <body>
-  <p id="result"></p>
-  <div id="wheels"></div>
-  <div id="lever-boundary"></div>
+  <div class="slotMachine">
+    <div class="title">BIG WINS</div>
+    <div class="machine">
+      <div id="wheels"></div>
+      <div id="lever-boundary"></div>
+    </div>
+
+  </div>
+
   <script src="starter.js" type="module"></script>
-
-<!--<script>-->
-<!--  const leverUp     = document.getElementById("leverUp");-->
-<!--  const leverDown   = document.getElementById("leverDown");-->
-<!--  const knob        = document.getElementById("knob");-->
-
-<!--  const knobOffset = knob.getBoundingClientRect().height / 2;-->
-<!--  const breaking   = leverUp.getBoundingClientRect().bottom;-->
-<!--  let pull         = false;-->
-<!--  let dy           = 0;-->
-<!--  let mouseDown    = 0;-->
-
-<!--  document.addEventListener('mousemove', evt => {-->
-<!--    if (pull) {-->
-<!--      dy             = evt.clientY - mouseDown;-->
-<!--      knob.style.top = `${dy}px`;-->
-
-<!--      if(evt.clientY < breaking){-->
-<!--        leverUp.style.visibility    = "visible";-->
-<!--        leverUp.style.top           = `${dy+ knobOffset}px`;-->
-<!--        leverUp.style.height        = `${75-dy}px`;-->
-<!--        leverDown.style.visibility  = "hidden";-->
-<!--      } else {-->
-<!--        leverUp.style.visibility    = "hidden";-->
-<!--        leverDown.style.visibility  = "visible";-->
-<!--        leverDown.style.height      = `${dy-75}px`;-->
-<!--      }-->
-<!--    }-->
-<!--  });-->
-
-<!--  knob.addEventListener('mousedown', evt => {-->
-<!--    if(!pull){-->
-<!--      mouseDown       = evt.clientY;-->
-<!--      knob.style.top  = "";-->
-<!--      pull            = true;-->
-<!--    }-->
-<!--  });-->
-
-<!--  document.addEventListener('mouseup', evt => {-->
-<!--    knob.style.top              = "";-->
-<!--    leverUp.style.top           = "";-->
-<!--    leverUp.style.height        = "75px";-->
-<!--    leverUp.style.visibility    = "visible";-->
-<!--    leverDown.style.visibility  = "hidden";-->
-<!--    pull = false;-->
-<!--  });-->
-</script>
 </body>
 </html>
