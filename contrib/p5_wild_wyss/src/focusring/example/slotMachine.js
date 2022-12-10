@@ -129,7 +129,7 @@ const leverProjector = (rootElement, controller) => {
   document.addEventListener('mousemove', evt => {
     if (pull) {
       dy = evt.clientY - mouseDown;
-      if(2 * LEVER_HEIGHT - KNOB_RADIUS > dy && 0 < dy) knob.style.top = `${dy}px`;
+      if(2 * LEVER_HEIGHT > dy && 0 < dy) knob.style.top = `${dy}px`;
 
       if(evt.clientY < breaking){
         // mouse moves above the turning point
