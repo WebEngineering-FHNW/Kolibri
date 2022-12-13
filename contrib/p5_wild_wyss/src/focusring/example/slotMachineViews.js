@@ -5,18 +5,18 @@ export { SlotMachineView, ResultView }
 
 const SlotMachineView = (rootElement, controller) => {
 
-  const [wheels, lever] = dom(`
+  const [wheelsElement, leverElement] = dom(`
       <div id="wheels"></div>
       <div id="lever-boundary"></div>
   `);
 
-  rootElement.append(wheels, lever);
-
-  leverProjector(lever, controller);
+  rootElement.append(wheelsElement, leverElement);
 
   const renderWheel = wheel =>
-      wheelProjector(wheels, wheel);
+    wheelProjector(wheelsElement, wheel);
+
   controller.wheels.forEach(renderWheel);
+  leverProjector(leverElement, controller);
 };
 
 const ResultView = (rootElement, controller) => {
@@ -30,50 +30,40 @@ const ResultView = (rootElement, controller) => {
 
   const render = idx => focusRing => {
     focus[idx] = focusRing.focus();
-    result.innerHTML = focus.join(" ")
+    result.innerHTML = focus.join(" ");
   };
 
-  controller.wheels.forEach((wheel, idx) => wheel.onChange(render(idx)))
-  rootElement.append(text, result)
+  controller.wheels.forEach((wheel, idx) => wheel.onChange(render(idx)));
+  rootElement.append(text, result);
 };
 
 
 const wheelProjector = (rootElement, wheelObservable) => {
+  const wheel           = wheelObservable.getValue();
+  const [wheelElement]  = dom(`<div class="scrollWheel"></div>`);
 
-  const wheel = wheelObservable.getValue();
-  const [wheelElement] = dom(`<div class="scrollWheel"></div>`);
+  const createSlot = content =>
+    dom(`<div class="slot">${content}</div>`)[0];
 
-
-  const createSlot = content => {
-    const [el] = dom(`<div class="slot">${content}</div>`);
-    return el;
-  };
-
-  const initialValues = [
-    wheel.right().right().focus(),
-    wheel.right().focus(),
-    wheel.focus(),
-    wheel.left().focus(),
-    wheel.left().left().focus()
+  const initialSlots = [
+    wheel.right()             .focus(),
+    wheel                     .focus(),
+    wheel.left()              .focus(),
+    wheel.left().left()       .focus(),
+    wheel.left().left().left().focus()
   ].map(createSlot);
 
-  wheelElement.prepend(...initialValues);
-  let counter = 0;
+  wheelElement.append(...initialSlots);
 
-  for (const child of initialValues) {
-    child.style.top = counter + "px";
-    counter += 50;
-  }
+  wheelObservable.onChange( focusRing => {
+    const newSlot = createSlot(focusRing.right().right().focus());
+    wheelElement.prepend(newSlot);
 
-  wheelObservable.onChange( w => {
-    const el = createSlot(w.right().right().focus());
-    wheelElement.prepend(el);
-
-    let counter = 0;
+    let offset = 0;
     for (const child of wheelElement.children) {
-      child.style.top = counter + "px";
+      child.style.top        = offset + "px";
       child.style.transition = `all ${ROTATION_SPEED}ms linear`;
-      counter += 50;
+      offset                += 50;
     }
 
     wheelElement.removeChild(wheelElement.children[wheelElement.children.length -1]);

@@ -1,8 +1,6 @@
 
 :root {
-    /*--color: #a90707;*/
     --color: rgb(191, 6, 20);
-    /*--secondary-color: rgb(221,	200,	128);*/
     --secondary-color: rgb(251, 204, 54);
     --border: 50px solid var(--color);
     --glow-shadow:

@@ -1,27 +1,26 @@
-import { FocusRing }      from "../focusRing.js";
-import { ArrayIterator }  from "../../iterator/iterator.js";
-import { Observable }     from "../../../../../docs/src/kolibri/observable.js"
+import {FocusRing} from "../focusRing.js";
+import {ArrayIterator} from "../../iterator/iterator.js";
+import {Observable} from "../../../../../docs/src/kolibri/observable.js"
+import {Range} from "../../range/range.js";
 
 export { Controller, ROTATION_SPEED }
 
 const ROTATION_SPEED = 100;
-
-
-const slotChars = ["&#9917;",  "&#127866;", "&#127921;", "&#127922;", "&#127891;"];
+const SLOT_CHARS     = ["&#9917;", "&#127866;", "&#127866;", "&#127866;", "&#127921;", "&#127922;", "&#127891;"];
 
 const Model = slotChars => {
   const isRunning = Observable(false);
 
   const shuffle = array =>
-      array.map(el => ({el, sort: Math.random()}))
-          .sort((a, b) => a.sort - b.sort)
-          .map(el => el.el);
+      array .map(char     => ({ char, sort: Math.random() }))
+            .sort((a, b)  => a.sort - b.sort)
+            .map(it       => it.char);
 
   const wheels = [
-    FocusRing(ArrayIterator(shuffle(slotChars))),
-    FocusRing(ArrayIterator(shuffle(slotChars))),
-    FocusRing(ArrayIterator(shuffle(slotChars))),
-  ].map(Observable);
+    ...Range(2)
+    .map(_ => FocusRing(ArrayIterator(shuffle(slotChars))))
+    .map(Observable)
+  ];
 
   return {
     wheels:            wheels.map(w => ({ getValue: w.getValue, setValue: w.setValue, onChange: w.onChange })),
@@ -32,21 +31,26 @@ const Model = slotChars => {
 };
 
 const Controller = () => {
-  const model = Model(slotChars);
+  const model = Model(SLOT_CHARS);
 
   const startEngine = () => {
     if(model.isRunning()) return;
     model.setIsRunning(true);
-    let runTime = 200 + Math.random() * 1000;
+
+    const minimalRunTime = 200 + Math.random() * 1000;
+
     model.wheels.map( obs =>
         setInterval(() => obs.setValue(obs.getValue().right()), ROTATION_SPEED))
-        .forEach((id, idx) => {
-          runTime += 500 + Math.random() * 300;
-          setTimeout( () => {
-            clearInterval(id);
-            if(idx === model.wheels.length -1) model.setIsRunning(false);
-          }, runTime)
-        });
+        .forEach(clearIntervalAfterTimout(minimalRunTime));
+  };
+
+  const clearIntervalAfterTimout = runTime => (intervalId, idx) => {
+    runTime += 500 + Math.random() * 300; // do not stop all wheels at once
+    const isLast = idx === model.wheels.length - 1;
+    setTimeout(() => {
+      clearInterval(intervalId);
+      if (isLast) model.setIsRunning(false);
+    }, runTime)
   };
 
   return {
