@@ -3,7 +3,7 @@ import { ArrayIterator }  from "../../iterator/iterator.js";
 import { dom }            from "../../../../../docs/src/kolibri/util/dom.js"
 import { Observable }     from "../../../../../docs/src/kolibri/observable.js"
 
-export { Controller, SlotMachineView, LeverView }
+export { Controller, SlotMachineView }
 
 const ROTATION_SPEED = 100;
 
@@ -57,9 +57,18 @@ const Controller = () => {
 };
 
 const SlotMachineView = (rootElement, controller) => {
-  const renderWheel = wheel =>
-      wheelProjector(rootElement, wheel);
 
+  const [wheels, lever] = dom(`
+      <div id="wheels"></div>
+      <div id="lever-boundary"></div>
+  `);
+
+  rootElement.append(wheels, lever);
+
+  leverProjector(lever, controller);
+
+  const renderWheel = wheel =>
+      wheelProjector(wheels, wheel);
   controller.wheels.forEach(renderWheel);
 };
 
@@ -175,4 +184,3 @@ const leverProjector = (rootElement, controller) => {
   });
 };
 
-const LeverView = (rootElement, controller) => leverProjector(rootElement, controller);

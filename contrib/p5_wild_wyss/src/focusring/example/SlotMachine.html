@@ -38,7 +38,6 @@
         width: 300px;
         border-radius: 50px 50px 0 0 ;
         border: 10px solid var(--secondary-color);
-
       }
 
       .machine {
@@ -60,7 +59,6 @@
       .scrollWheel {
           position: relative;
           width: 50px;
-
       }
 
       .scrollWheel:before {
@@ -139,13 +137,10 @@
 <body>
   <div class="slotMachine">
     <div class="title">BIG WINS</div>
-    <div class="machine">
-      <div id="wheels"></div>
-      <div id="lever-boundary"></div>
-    </div>
-
+    <div id="machine" class="machine"></div>
   </div>
 
+  <div id="result"></div>
   <script src="starter.js" type="module"></script>
 </body>
 </html>

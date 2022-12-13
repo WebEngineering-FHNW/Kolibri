@@ -1,5 +1,4 @@
-import { Controller, SlotMachineView, LeverView } from "./slotMachine.js";
+import { Controller, SlotMachineView } from "./slotMachine.js";
 
 const slotMachineController = Controller();
-SlotMachineView(document.getElementById("wheels"), slotMachineController);
-LeverView(document.getElementById("lever-boundary"), slotMachineController);
+SlotMachineView(document.getElementById("machine"), slotMachineController);
