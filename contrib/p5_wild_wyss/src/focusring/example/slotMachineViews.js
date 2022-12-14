@@ -47,7 +47,7 @@ const wheelProjector = (rootElement, wheelObservable) => {
 
   const initialSlots = [
     wheel.right()             .focus(),
-    wheel                     .focus(),
+    wheel                     .focus(), // onChange later on will cause the wheel to turn once, this element will be in the middle then.
     wheel.left()              .focus(),
     wheel.left().left()       .focus(),
     wheel.left().left().left().focus()
@@ -75,52 +75,52 @@ const leverProjector = (rootElement, controller) => {
 
   const [knob, leverUp, leverDown] = dom(`
     <div id="knob"></div>
-    <div id="leverUp"></div>
-    <div id="leverDown"></div>
+    <div id="leverUp"></div> <!--goes from top to middle-->
+    <div id="leverDown"></div> <!--goes from middle to bottom-->
   `);
 
   rootElement.append(leverUp, leverDown, knob);
 
-  const LEVER_HEIGHT = leverUp.getBoundingClientRect().height;
-  const KNOB_RADIUS  = knob.getBoundingClientRect().height / 2;
-  const breaking     = leverUp.getBoundingClientRect().bottom;
+  const LEVER_HEIGHT    = leverUp.getBoundingClientRect().height;
+  const KNOB_RADIUS     = knob.getBoundingClientRect().height / 2;
+  const LEVER_MIDDLE_Y  = leverUp.getBoundingClientRect().bottom;
 
-  let pull           = false;
-  let activated      = false;
-  let dy             = 0;
-  let mouseDown      = 0;
+  let knobIsPulled      = false;
+  let activated         = false;
+  let dy                = 0;
+  let initialKnobState  = 0;
 
   document.addEventListener('mousemove', evt => {
-    if (pull) {
-      dy = evt.clientY - mouseDown;
-      if(2 * LEVER_HEIGHT > dy && 0 < dy) knob.style.top = `${dy}px`;
+    if (knobIsPulled) {
+      dy = evt.clientY - initialKnobState;
+      if (2 * LEVER_HEIGHT > dy && 0 < dy) knob.style.top = `${dy}px`;
 
-      if(evt.clientY < breaking){
+      if (evt.clientY < LEVER_MIDDLE_Y) {
         // mouse moves above the turning point
         leverUp.style.visibility    = "visible";
         leverDown.style.visibility  = "hidden";
-        if(0 < dy) {
-          leverUp.style.top    = `${dy + KNOB_RADIUS}px`;
-          leverUp.style.height = `${LEVER_HEIGHT - dy}px`;
+        if (0 < dy) { // only adjust lever size when moving downwards
+          leverUp.style.top         = `${dy + KNOB_RADIUS}px`;
+          leverUp.style.height      = `${LEVER_HEIGHT - dy}px`;
         }
       } else {
         // mouse moves below the turning point
-        leverUp.style.visibility   = "hidden";
-        leverDown.style.visibility = "visible";
-        if(2 * LEVER_HEIGHT < dy) {
+        leverUp.style.visibility    = "hidden";
+        leverDown.style.visibility  = "visible";
+        if(2 * LEVER_HEIGHT < dy) { // only activate if lever was pulled all down to the bottom
           activated = true;
         } else {
-          leverDown.style.height = `${dy - LEVER_HEIGHT}px`;
+          leverDown.style.height    = `${dy - LEVER_HEIGHT}px`;
         }
       }
     }
   });
 
   knob.addEventListener('mousedown', evt => {
-    if(!pull){
-      mouseDown       = evt.clientY;
-      knob.style.top  = "";
-      pull            = true;
+    if (!knobIsPulled) {
+      initialKnobState  = evt.clientY;
+      knob.style.top    = "";
+      knobIsPulled      = true;
     }
   });
 
@@ -131,11 +131,11 @@ const leverProjector = (rootElement, controller) => {
     leverUp.style.height        = `${LEVER_HEIGHT}px`;
     leverUp.style.visibility    = "visible";
     leverDown.style.visibility  = "hidden";
-    if(activated) {
+    if (activated) {
       controller.startEngine();
       activated = false;
     }
-    pull = false;
+    knobIsPulled = false;
   });
 };
 
