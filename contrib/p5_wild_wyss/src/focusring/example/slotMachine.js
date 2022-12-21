@@ -7,7 +7,7 @@ export { Controller, ROTATION_SPEED }
 
 const ROTATION_SPEED = 100;
 const SLOT_CHARS     = ["&#9917;", "&#127866;", "&#127866;", "&#127866;", "&#127921;", "&#127922;", "&#127891;"];
-
+const WHEEL_COUNT = 3;
 const Model = slotChars => {
   const isRunning = Observable(false);
 
@@ -21,8 +21,9 @@ const Model = slotChars => {
       // Math.random() returns a number between [0,1]. If the result, of the compareFn >= 0, a is first.
       [...array].sort((_a, _b) => 0.5 - Math.random());
 
+  /** @type {Array<IObservable<FocusRingType>>} */
   const wheels = [
-    ...Range(2)
+    ...Range(WHEEL_COUNT-1)
     .map(_ => FocusRing(ArrayIterator(shuffle(slotChars))))
     .map(Observable)
   ];
