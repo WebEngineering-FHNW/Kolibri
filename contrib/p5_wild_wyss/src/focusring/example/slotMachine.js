@@ -11,10 +11,15 @@ const SLOT_CHARS     = ["&#9917;", "&#127866;", "&#127866;", "&#127866;", "&#127
 const Model = slotChars => {
   const isRunning = Observable(false);
 
+  /**
+   * Returns a randomly shuffled copy of the given array.
+   * @template _T_
+   * @param {Array<_T_>} array
+   * @returns {Array<_T_>}
+   */
   const shuffle = array =>
-      array .map(char     => ({ char, sort: Math.random() }))
-            .sort((a, b)  => a.sort - b.sort)
-            .map(it       => it.char);
+      // Math.random() returns a number between [0,1]. If the result, of the compareFn >= 0, a is first.
+      [...array].sort((_a, _b) => 0.5 - Math.random());
 
   const wheels = [
     ...Range(2)
