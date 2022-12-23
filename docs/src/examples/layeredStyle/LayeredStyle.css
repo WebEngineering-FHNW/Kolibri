@@ -7,6 +7,10 @@
 
 @layer example-application, kolibri-light-colors, kolibri-light-fonts, kolibri-base;
 
+/* note: some tools issue a warning here that imports should be at the top.
+   This is not true for the @layer syntax.
+   It also must be in this sequence or it won't work.
+ */
 @import "../../../css/kolibri-light-colors.css" layer(kolibri-light-colors);
 @import "../../../css/kolibri-light-fonts.css"  layer(kolibri-light-fonts);
 @import "../../../css/kolibri-base.css"         layer(kolibri-base);
