@@ -22,9 +22,10 @@ const SlotMachineModel = slotChars => {
 
   /**
    * Returns a randomly shuffled copy of the given array.
+   *
    * @template _T_
-   * @param {Array<_T_>} array
-   * @returns {Array<_T_>}
+   * @param   { Array<_T_> } array
+   * @returns { Array<_T_> }
    */
   const shuffle = array =>
       // Math.random() returns a number between [0,1]. If the result, of the compareFn >= 0, a is first.
@@ -52,8 +53,12 @@ const SlotMachineModel = slotChars => {
  * @constructor
  */
 const SlotMachineController = () => {
+
   const model = SlotMachineModel(SLOT_CHARS);
 
+  /**
+   * Starts the rotation of the slot machine wheels.
+   */
   const startEngine = () => {
     if(model.isRunning()) return;
     model.setIsRunning(true);
@@ -66,6 +71,7 @@ const SlotMachineController = () => {
   };
 
   /**
+   * Calculates wheel rotation time and stop it after a timeout.
    *
    * @param { Number } runTime
    */
@@ -79,9 +85,9 @@ const SlotMachineController = () => {
   };
 
   return {
-    wheels: model.wheels,
-    startEngine,
+    wheels:            model.wheels,
     onIsRunningChange: model.onIsRunningChange,
+    startEngine,
   }
 };
 

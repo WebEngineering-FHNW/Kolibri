@@ -3,6 +3,12 @@ import { ROTATION_SPEED } from "./slotMachine.js";
 
 export { SlotMachineView, ResultView }
 
+/**
+ * Draws the parent container of the slot machine to the UI.
+ *
+ * @param { HTMLElement }               rootElement
+ * @param { SlotMachineControllerType } controller
+ */
 const SlotMachineView = (rootElement, controller) => {
 
   const [wheelsElement, leverElement] = dom(`
@@ -19,6 +25,12 @@ const SlotMachineView = (rootElement, controller) => {
   leverProjector(leverElement, controller);
 };
 
+/**
+ * Shows the current result of the slot machine on the UI.
+ *
+ * @param { HTMLElement }               rootElement
+ * @param { SlotMachineControllerType } controller
+ */
 const ResultView = (rootElement, controller) => {
 
   const focus = [];
@@ -37,7 +49,12 @@ const ResultView = (rootElement, controller) => {
   rootElement.append(text, result);
 };
 
-
+/**
+ * Draws the wheels to the UI. Each slot of the wheel is represented by a value of the focusring.
+ *
+ * @param { HTMLElement }                rootElement
+ * @param { IObservable<FocusRingType> } wheelObservable
+ */
 const wheelProjector = (rootElement, wheelObservable) => {
   const wheel           = wheelObservable.getValue();
   const [wheelElement]  = dom(`<div class="scrollWheel"></div>`);
@@ -71,6 +88,12 @@ const wheelProjector = (rootElement, wheelObservable) => {
   rootElement.append(wheelElement)
 };
 
+/**
+ * Draws a lever to the UI which allows to start the slot machine.
+ *
+ * @param { HTMLElement }               rootElement
+ * @param { SlotMachineControllerType } controller
+ */
 const leverProjector = (rootElement, controller) => {
 
   const [knob, leverUp, leverDown] = dom(`

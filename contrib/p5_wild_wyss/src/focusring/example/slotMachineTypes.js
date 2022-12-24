@@ -9,7 +9,7 @@
 /**
  * @typedef SlotMachineControllerType
  * @property { Array<IObservable<String>> } wheels
- * @property { () => void }                 startEngine
  * @property { (callback: onValueChangeCallback<Boolean>) => void }  onIsRunningChange
+ * @property { () => void }                 startEngine
  *
  */
