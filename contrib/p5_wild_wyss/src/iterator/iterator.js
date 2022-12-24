@@ -1,5 +1,5 @@
-import { id } from "../logger/lamdaCalculus.js";
-import { arrayEq } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { id }       from "../logger/lamdaCalculus.js";
+import { arrayEq }  from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 export { Iterator, ArrayIterator }
 
@@ -84,7 +84,7 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
     const {done, current, nextValue} = transform(getNextValue(value));
     if (!done) value = nextValue;
 
-    return {done, value: current}
+    return { done, value: current }
   };
 
   /**

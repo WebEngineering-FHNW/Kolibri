@@ -1,14 +1,23 @@
-import {FocusRing} from "../focusRing.js";
-import {ArrayIterator} from "../../iterator/iterator.js";
-import {Observable} from "../../../../../docs/src/kolibri/observable.js"
-import {Range} from "../../range/range.js";
+import { FocusRing }      from "../focusRing.js";
+import { ArrayIterator }  from "../../iterator/iterator.js";
+import { Observable }     from "../../../../../docs/src/kolibri/observable.js"
+import { Range }          from "../../range/range.js";
 
-export { Controller, ROTATION_SPEED }
+export { SlotMachineController, ROTATION_SPEED }
 
 const ROTATION_SPEED = 100;
 const SLOT_CHARS     = ["&#9917;", "&#127866;", "&#127866;", "&#127866;", "&#127921;", "&#127922;", "&#127891;"];
-const WHEEL_COUNT = 3;
-const Model = slotChars => {
+const WHEEL_COUNT    = 3;
+
+/**
+ * The model manages the data held in the observables.
+ *
+ * @param  { Array<String> } slotChars
+ * @return { SlotMachineModelType }
+ * @constructor
+ */
+const SlotMachineModel = slotChars => {
+
   const isRunning = Observable(false);
 
   /**
@@ -36,8 +45,14 @@ const Model = slotChars => {
   };
 };
 
-const Controller = () => {
-  const model = Model(SLOT_CHARS);
+/**
+ * Processes the actions from the user interface and manages the model.
+ *
+ * @return { SlotMachineControllerType }
+ * @constructor
+ */
+const SlotMachineController = () => {
+  const model = SlotMachineModel(SLOT_CHARS);
 
   const startEngine = () => {
     if(model.isRunning()) return;
@@ -50,6 +65,10 @@ const Controller = () => {
         .forEach(clearIntervalAfterTimout(minimalRunTime));
   };
 
+  /**
+   *
+   * @param { Number } runTime
+   */
   const clearIntervalAfterTimout = runTime => (intervalId, idx) => {
     runTime += 500 + Math.random() * 300; // do not stop all wheels at once
     const isLast = idx === model.wheels.length - 1;
