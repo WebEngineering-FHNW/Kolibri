@@ -25,7 +25,7 @@ const SlotMachineModel = slotChars => {
    *
    * @template _T_
    * @param   { Array<_T_> } array
-   * @returns { Array<_T_> }
+   * @returns { Array<_T_> } the shuffled array
    */
   const shuffle = array =>
       // Math.random() returns a number between [0,1]. If the result, of the compareFn >= 0, a is first.
@@ -73,7 +73,7 @@ const SlotMachineController = () => {
   /**
    * Calculates wheel rotation time and stop it after a timeout.
    *
-   * @param { Number } runTime
+   * @param { Number } runTime - the minimal runtime
    */
   const clearIntervalAfterTimout = runTime => (intervalId, idx) => {
     runTime += 500 + Math.random() * 300; // do not stop all wheels at once

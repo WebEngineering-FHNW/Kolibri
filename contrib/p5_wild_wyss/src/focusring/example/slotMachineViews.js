@@ -4,7 +4,8 @@ import { ROTATION_SPEED } from "./slotMachine.js";
 export { SlotMachineView, ResultView }
 
 /**
- * Draws the parent container of the slot machine to the UI.
+ * Draws the parent containers of the slot machine to the user interface.
+ * The lever and wheels are drawn into these containers.
  *
  * @param { HTMLElement }               rootElement
  * @param { SlotMachineControllerType } controller
@@ -26,7 +27,7 @@ const SlotMachineView = (rootElement, controller) => {
 };
 
 /**
- * Shows the current result of the slot machine on the UI.
+ * Shows the current result of the slot machine on the user interface.
  *
  * @param { HTMLElement }               rootElement
  * @param { SlotMachineControllerType } controller
@@ -89,7 +90,7 @@ const wheelProjector = (rootElement, wheelObservable) => {
 };
 
 /**
- * Draws a lever to the UI which allows to start the slot machine.
+ * Draws a lever to the user interface which allows to start the slot machine.
  *
  * @param { HTMLElement }               rootElement
  * @param { SlotMachineControllerType } controller
