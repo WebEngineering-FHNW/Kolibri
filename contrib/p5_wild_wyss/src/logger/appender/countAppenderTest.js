@@ -5,16 +5,16 @@ import { True }             from "../lamdaCalculus.js";
 const { trace, debug, info, warn, error, fatal, getValue, reset } = Appender();
 reset(); // clear the state of the appender since it is a singleton
 
-const loggerSuite = TestSuite("Count Appender");
+const countAppenderSuite = TestSuite("Count Appender");
 
-loggerSuite.add("test add debug value to count appender", assert => {
+countAppenderSuite.add("test add debug value to count appender", assert => {
   const result = debug("debug");
   assert.is(result, True);
   assert.is(getValue().debug, 1);
   reset();
 });
 
-loggerSuite.add("test add two values to count appender", assert => {
+countAppenderSuite.add("test add two values to count appender", assert => {
   const result1 = debug("first");
   const result2 = debug("second");
   assert.is(result1, True);
@@ -23,7 +23,7 @@ loggerSuite.add("test add two values to count appender", assert => {
   reset();
 });
 
-loggerSuite.add("test reset count appender", assert => {
+countAppenderSuite.add("test reset count appender", assert => {
   const result1 = debug("first");
   assert.is(result1, True);
   assert.is(getValue().debug, 1);
@@ -31,7 +31,7 @@ loggerSuite.add("test reset count appender", assert => {
   assert.isTrue(0 === getValue().debug );
 });
 
-loggerSuite.add("test add all kind of levels to count appender", assert => {
+countAppenderSuite.add("test add all kind of levels to count appender", assert => {
   const traceResult  = trace("trace");
   const debugResult  = debug("debug");
   const infoResult   = info ("info");
@@ -59,4 +59,4 @@ loggerSuite.add("test add all kind of levels to count appender", assert => {
   assert.isTrue(0 === getValue().fatal);
 });
 
-loggerSuite.run();
+countAppenderSuite.run();

@@ -1,0 +1,128 @@
+
+:root {
+    --color: rgb(191, 6, 20);
+    --secondary-color: rgb(251, 204, 54);
+    --border: 50px solid var(--color);
+    --glow-shadow:
+            0 0 60px 30px #fff,  /* inner white */
+            0 0 100px 60px #f0f, /* middle magenta */
+            0 0 140px 90px #0ff; /* outer cyan */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "DejaVu Sans", monospace;
+    font-size: large;
+    row-gap: 20px;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    font-size: x-large;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.slotMachine {
+    padding: 20px;
+    background: linear-gradient(0deg, rgba(215,38,47,1) 0%, rgba(205,133,137,1) 50%, rgba(215,38,47,1) 100%);
+    width: 300px;
+    border-radius: 50px 50px 0 0 ;
+    border: 10px solid var(--secondary-color);
+}
+
+.machine {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: red;
+}
+
+#wheels {
+    height: 250px;
+    width: 150px;
+    display: flex;
+    position: relative;
+    border-left: var(--border);
+    border-right: var(--border);
+}
+
+.scrollWheel {
+    position: relative;
+    width: 50px;
+}
+
+.scrollWheel:before {
+    content: "";
+    min-height: 250px;
+    width: 50px;
+    position: absolute;
+    background: linear-gradient(
+            180deg,
+            var(--color) 20%,
+            rgba(0, 0, 0, 0.8) 20%,
+            rgba(255, 255, 255, 0) 30%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0) 70%,
+            rgba(0, 0, 0, 0.8) 80%,
+            var(--color) 80%);
+    z-index: 1;
+}
+
+.slot {
+    display: flex;
+    align-items: center;
+    font-size: 1.8em;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    width: 50px;
+    height: 50px;
+    background: white;
+    color: white;
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    border-left: 1px solid black;
+    border-bottom: 1px solid grey;
+    transition: all 100ms linear;
+}
+
+#lever-boundary {
+    margin-left: 20px;
+    position: relative;
+    height: 180px;
+}
+
+#leverUp, #leverDown {
+    position: absolute;
+    width: 10px;
+    background: linear-gradient(-90deg, var(--secondary-color) 50%, rgb(130, 100, 70) 100%);
+}
+
+#leverUp {
+    height: 75px;
+    top: 15px;
+    border-bottom: 1px solid black;
+}
+
+#leverDown {
+    top: 90px;
+    visibility: hidden;
+    border-top: 1px solid black;
+}
+
+#knob {
+    z-index: 10;
+    left: -10px;
+    position: absolute;
+    border-radius: 100%;
+    width: 30px;
+    height: 30px;
+    background: var(--color);
+    background: radial-gradient(circle, rgb(232, 80, 80) 10%, var(--color) 50%);
+}

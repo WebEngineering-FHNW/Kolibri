@@ -4,9 +4,9 @@ import { True }       from "../lamdaCalculus.js";
 
 const { trace, debug, info, warn, error, fatal } = Appender();
 
-const loggerSuite = TestSuite("Console Appender");
+const consoleAppenderSuite = TestSuite("Console Appender");
 
-loggerSuite.add("test add all kind of levels to console appender", assert => {
+consoleAppenderSuite.add("test add all kind of levels to console appender", assert => {
   const resultTrace  = trace ("trace");
   const resultDebug  = debug ("debug");
   const resultInfo   = info  ("info");
@@ -21,4 +21,4 @@ loggerSuite.add("test add all kind of levels to console appender", assert => {
   assert.is(resultFatal, True);
 });
 
-loggerSuite.run();
+consoleAppenderSuite.run();
