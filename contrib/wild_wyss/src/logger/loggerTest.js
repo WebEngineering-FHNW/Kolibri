@@ -11,7 +11,7 @@ import {
   setGlobalContext,
   setLoggingLevel,
   addToAppenderList,
-  removeFromAppenderList,
+  removeFromAppenderList, setMessageFormatter,
 } from "./logger.js";
 
 const logMessage  = "hello world";
@@ -30,7 +30,7 @@ const loggerSuite = TestSuite("Logger");
 loggerSuite.add("test simple logging", assert => {
   const { appender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
-  const debug = debugLogger("ch.fhnw.test")(_context => _level => id);
+  const debug = debugLogger("ch.fhnw.test");
   const result = debug(logMessage);
 
   assert.is(result, True);
@@ -40,7 +40,7 @@ loggerSuite.add("test simple logging", assert => {
 loggerSuite.add("test enabling logging", assert => {
   const { appender } = beforeStart();
   setLoggingLevel(LOG_NOTHING);
-  const debug = debugLogger("ch.fhnw.test")(_context => _level => id);
+  const debug = debugLogger("ch.fhnw.test");
 
   // logging should be disabled
   const result1 = debug(logMessage);
@@ -57,7 +57,7 @@ loggerSuite.add("test enabling logging", assert => {
 loggerSuite.add("test disabling logging", assert => {
   const { appender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
-  const debug = debugLogger("ch.fhnw.test")(_context => _level => id);
+  const debug = debugLogger("ch.fhnw.test");
 
   // logging should be enabled
   const result1 = debug(logMessage);
@@ -76,7 +76,7 @@ loggerSuite.add("log lower logging level, should log", assert => {
   const { appender } = beforeStart();
 
   setLoggingLevel(LOG_TRACE);
-  const debug = debugLogger("ch.fhnw.test")(_context => _level => id);
+  const debug = debugLogger("ch.fhnw.test");
 
   // loglevel debug should also be logged, when LOG_TRACE is enabled
   const result = debug(logMessage);
@@ -88,7 +88,7 @@ loggerSuite.add("log higher logging level, should not log", assert => {
   const { appender } = beforeStart();
 
   setLoggingLevel(LOG_WARN);
-  const debug = debugLogger("ch.fhnw.test")(_context => _level => id);
+  const debug = debugLogger("ch.fhnw.test");
 
   // loglevel debug should not log when LOG_WARN is enabled
   const result = debug(logMessage);
@@ -99,32 +99,35 @@ loggerSuite.add("log higher logging level, should not log", assert => {
 loggerSuite.add("test debug tag formatted log message", assert => {
   const { appender } = beforeStart();
   const levelFormatter = _ => lvl => msg => `[${lvl}] ${msg}`;
-
+  setMessageFormatter(levelFormatter);
   setLoggingLevel(LOG_DEBUG);
-  const debug = debugLogger("ch.fhnw.test")(levelFormatter);
+  const debug = debugLogger("ch.fhnw.test");
 
   const result = debug(logMessage);
   assert.is(result, True);
   assert.is(appender.getValue()[0], `[DEBUG] ${logMessage}`);
+  setMessageFormatter(_c => _l => id);
 });
 
 loggerSuite.add("test context tag formatted log message", assert => {
   const { appender } = beforeStart();
   const levelFormatter = ctx => _ => msg => `${ctx}: ${msg}`;
+  setMessageFormatter(levelFormatter);
   setLoggingLevel(LOG_DEBUG);
   const context = "ch.fhnw.test";
-  const debug = debugLogger("ch.fhnw.test")(levelFormatter);
+  const debug = debugLogger("ch.fhnw.test");
 
   const result = debug(logMessage);
   assert.is(result, True);
   assert.is(appender.getValue()[0], `${context}: ${logMessage}`);
+  setMessageFormatter(_c => _l => id);
 });
 
 loggerSuite.add("test context, logger should not log", assert => {
   const { appender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
   setGlobalContext("ch.fhnw.test");
-  const debug = debugLogger("ch.fhnw")(_context => _level => id);
+  const debug = debugLogger("ch.fhnw");
 
   const result = debug(logMessage);
   assert.is(result, False);
@@ -134,7 +137,7 @@ loggerSuite.add("test context, logger should not log", assert => {
 loggerSuite.add("test context, logger should log", assert => {
   const { appender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
-  const debug = debugLogger("ch.fhnw.test.specific.tag")(_context => _level => id);
+  const debug = debugLogger("ch.fhnw.test.specific.tag");
 
   const result = debug(logMessage);
   assert.is(result, True);
@@ -145,7 +148,7 @@ loggerSuite.add("test lazy evaluation, logger should log", assert => {
   const { appender } = beforeStart();
 
   setLoggingLevel(LOG_DEBUG);
-  const debug = debugLogger("ch.fhnw.test")(_context => _level => id);
+  const debug = debugLogger("ch.fhnw.test");
 
   const result = debug(lazy(logMessage));
   assert.is(result, True);
@@ -156,7 +159,7 @@ loggerSuite.add("test lazy evaluation, logger should not log and function should
   const { appender } = beforeStart();
 
   setLoggingLevel(LOG_NOTHING);
-  const debug = debugLogger("ch.fhnw.test")(_context => _level => id);
+  const debug = debugLogger("ch.fhnw.test");
 
   const result = debug(lazy(logMessage));
   assert.is(result, False);
@@ -168,7 +171,7 @@ loggerSuite.add("test log to multiple appender", assert => {
   const countAppender     = CountAppender();
   addToAppenderList(countAppender);
 
-  const debug = debugLogger("ch.fhnw.test")(_context => _level => id);
+  const debug = debugLogger("ch.fhnw.test");
 
   const result = debug(logMessage);
   assert.is(result, True);
@@ -182,7 +185,7 @@ loggerSuite.add("test change appender after creating the logger", assert => {
   const { appender }      = beforeStart();
   const countAppender     = CountAppender();
 
-  const debug = debugLogger("ch.fhnw.test")(_context => _level => id);
+  const debug = debugLogger("ch.fhnw.test");
   let result = debug(logMessage);
   assert.is(result, True);
   assert.is(appender.getValue()[0], logMessage);

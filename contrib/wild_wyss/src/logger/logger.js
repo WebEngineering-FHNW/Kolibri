@@ -1,6 +1,6 @@
 import { Pair, snd, fst } from "../../../../docs/src/kolibri/stdlib.js"
 import {
-  n0, n1, n2, n3, n4, n5, n9,
+  id, n0, n1, n2, n3, n4, n5, n9,
   LazyIf, Else, Then, and, leq,
   False, True,
   toChurchBoolean,
@@ -29,6 +29,7 @@ export {
   addToAppenderList,
   removeFromAppenderList,
   getAppenderList,
+  setMessageFormatter
 }
 
 /**
@@ -46,22 +47,20 @@ export {
  * loggingLevel is the level at which logging is currently taking place.
  *
  * @function
- * @pure if the {@link AppendCallback AppendCallback's} in the appender list and
- *       the parameter msgFormatter of type {@link FormatLogMessage} are pure.
+ * @pure if the {@link AppendCallback AppendCallback's} in the appender list and the parameter msgFormatter of type {@link FormatLogMessage} are pure.
  * @type    {
  *               (loggerLevel:      LogLevelType)
  *            => (context:          String)
- *            => (formatMsg:        FormatLogMessage)
  *            => (msg:              LogMeType)
  *            => churchBoolean
  *          }
  * @private
  * @example
- * const log =  logger(LOG_DEBUG)("ch.fhnw")(_context => _level => id);
+ * const log = logger(LOG_DEBUG)("ch.fhnw");
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
-const logger = loggerLevel  => context => formatMsg => msg =>
+const logger = loggerLevel => context => msg =>
   LazyIf(
       messageShouldBeLogged(loggerLevel)(context)
   )
@@ -291,3 +290,23 @@ const setLoggingLevel = level => loggingLevel = level;
  * @return { LogLevelType } - the current logging level
  */
 const getLoggingLevel = () => loggingLevel;
+
+/**
+ * The formatting function used in this logging environment.
+ * @type { FormatLogMessage }
+ */
+let formatMsg = _context => _logLevel => id;
+
+/**
+ * This function can be used to specify a custom function to format the log message.
+ * When it is set, it will be applied to each log message before it gets logged.
+ * @param { FormatLogMessage } formattingFunction
+ * @example
+ * const formatLogMsg = context => logLevel => logMessage => {
+ *   const date = new Date().toISOString();
+ *   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
+ * }
+ * setMessageFormatter(formatLogMsg);
+ */
+const setMessageFormatter = formattingFunction =>
+  formatMsg = formattingFunction;
