@@ -10,7 +10,8 @@ import {
   setLoggingLevel,
   addToAppenderList,
   removeFromAppenderList,
-  getAppenderList
+  getAppenderList,
+  setMessageFormatter
 } from "../logger.js";
 
 import { Appender as ArrayAppender }    from "../appender/arrayAppender.js";
@@ -21,8 +22,14 @@ import { LogFactory }                   from "../logFactory.js";
 const LOGGER_CONTEXT          = "ch.fhnw.sample.logger";
 const INITIAL_GLOBAL_CONTEXT  = "ch.fhnw";
 
+const formatLogMsg = context => logLevel => logMessage => {
+  const date = new Date().toISOString();
+  return `${context}: [${logLevel}] ${date}: ${logMessage}`;
+};
+
 setGlobalContext(INITIAL_GLOBAL_CONTEXT);
 setLoggingLevel(LOG_DEBUG);
+setMessageFormatter(formatLogMsg);
 
 const consoleAppender = ConsoleAppender();
 const arrayAppender   = ArrayAppender();
@@ -32,15 +39,10 @@ const appenderList    = document.getElementsByName("appender");
 const levelList       = document.getElementsByName("log-level");
 const output          = document.getElementById   ("log-output");
 
-const formatLogMsg = context => logLevel => logMessage => {
-  const date = new Date().toISOString();
-  return `${context}: [${logLevel}] ${date}: ${logMessage}`;
-};
 
-const logger          = LogFactory(LOGGER_CONTEXT)(formatLogMsg);
+const logger          = LogFactory(LOGGER_CONTEXT);
 const logLevels       = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
 const appender        = [consoleAppender, arrayAppender, countAppender];
-
 
 const reset = () => appender.forEach(el => {
     if(el.reset instanceof Function) el.reset();

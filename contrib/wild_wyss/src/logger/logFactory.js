@@ -11,23 +11,19 @@ import {
 
 /**
  * Constructs logger for each log levels using the given parameters.
- * @type       {
- *                (context: String) =>
- *                (formatMsg: FormatLogMessage) =>
- *                LoggerType
- *             }
+ * @param { String } context - The origin of the log statement
+ * @returns { LoggerType }
  * @constructor
  * @example
- * import { Appender } from "consoleAppender.js"
- * const { trace, debug } = LogFactory("ch.fhnw")(_context => _level => id);
+ * const { trace, debug } = LogFactory("ch.fhnw");
  * trace("Tobias Wyss") // a log message appended on the loglevel {@link LOG_TRACE}
  * debug("Andri Wild") // a log message appended on the loglevel {@link LOG_DEBUG}
  */
-const LogFactory = context => formatMsg => ({
-      trace:  traceLogger(context)(formatMsg),
-      debug:  debugLogger(context)(formatMsg),
-      info:   infoLogger (context)(formatMsg),
-      warn:   warnLogger (context)(formatMsg),
-      error:  errorLogger(context)(formatMsg),
-      fatal:  fatalLogger(context)(formatMsg),
+const LogFactory = context => ({
+      trace:  traceLogger(context),
+      debug:  debugLogger(context),
+      info:   infoLogger (context),
+      warn:   warnLogger (context),
+      error:  errorLogger(context),
+      fatal:  fatalLogger(context),
 });

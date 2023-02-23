@@ -111,7 +111,6 @@ const contextActivated = context => toChurchBoolean(context.startsWith(globalCon
  */
 const evaluateMessage = msg => msg instanceof Function ? msg() : msg;
 
-
 /**
  * The logging level "trace"
  * @returns { LogLevelType }

@@ -1,8 +1,8 @@
-import { Appender as ObservableAppender }   from "../../appender/observableAppender.js";
-import { Appender as ConsoleAppender }      from "../../appender/consoleAppender.js";
-import { LogFactory }         from "../../logFactory.js";
-import { createLogUi }        from "../createLogUi.js";
-import { addToAppenderList }  from "../../logger.js";
+import { Appender as ObservableAppender }         from "../../appender/observableAppender.js";
+import { Appender as ConsoleAppender }            from "../../appender/consoleAppender.js";
+import { LogFactory }                             from "../../logFactory.js";
+import { createLogUi }                            from "../createLogUi.js";
+import { addToAppenderList, setMessageFormatter } from "../../logger.js";
 
 const consoleAppender     = ConsoleAppender();
 const observableAppender  = ObservableAppender();
@@ -12,10 +12,11 @@ const formatLogMsg = context => logLevel => logMessage => {
   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
 };
 
+setMessageFormatter(formatLogMsg);
 addToAppenderList(observableAppender, consoleAppender);
 
-const logger1 = LogFactory("ch.fhnw")    (formatLogMsg);
-const logger2 = LogFactory("ch.fhnw.ip5")(formatLogMsg);
+const logger1 = LogFactory("ch.fhnw");
+const logger2 = LogFactory("ch.fhnw.ip5");
 
 const container = document.getElementById("container");
 
