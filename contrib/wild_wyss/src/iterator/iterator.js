@@ -43,6 +43,7 @@ export { Iterator, ArrayIterator }
  * @return  { IteratorType<_T_> }
  * @constructor
  */
+
 const Iterator = (value, incrementFunction, stopDetected) =>
   IteratorInternal(value, incrementFunction, stopDetected, id);
 
@@ -141,6 +142,7 @@ const IteratorInternal = (value, incrementFunction, stopDetected, transform) => 
   const copy = () => IteratorInternal(value, incrementFunction, stopDetected, transform);
 
   const map = mapper => {
+
     const oldTransform = transform;
     transform = x => {
       const  { done, current, nextValue } = oldTransform(x);
