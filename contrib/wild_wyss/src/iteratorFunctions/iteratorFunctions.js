@@ -1,52 +1,6 @@
-export { map, filter, Iterator, ArrayIterator }
+import { createIterator, nextOf } from "./iterator.js";
 
-const Iterator = (value, inc, stop) => {
-
-  const next = () => {
-    const current = value;
-    value = inc(value);
-    const done = stop(current);
-    return { done, value: current };
-  };
-
-  const copy = () => Iterator(value, inc, stop);
-
-  const pipe = (...transformers) => {
-    let it = copy();
-    for (const transformer of transformers) {
-     it = transformer(it);
-    }
-    return it;
-  };
-
-  return {
-    [Symbol.iterator]: () => ({ next }),
-    copy,
-    pipe
-  }
-};
-
-const ArrayIterator = array => {
-  const inner = Iterator(0, x => x + 1, x => x === array.length);
-  return ArrayIteratorInternal(array)(inner);
-};
-
-const ArrayIteratorInternal = array => inner => {
-
-  const next = () => {
-    const { done, value } = nextOf(inner);
-    return {
-      done,
-      value: array[value],
-    }
-  };
-
-  return createIterator(next)(ArrayIteratorInternal)([array])(inner);
-};
-
-const emptyIterator =
-  Iterator(undefined, _ => undefined, _ => true);
-
+export { map, filter }
 
 const map = mapper => iterator => {
   const inner = iterator.copy();
@@ -76,24 +30,3 @@ const filter = predicate => iterator => {
 
   return createIterator(next)(filter)(predicate)(inner);
 };
-
-const createIterator = next => iteratorFunction => (...params) => innerIterator => {
-
-  const copy = () => iteratorFunction(...params)(innerIterator.copy());
-
-  const pipe = (...transformers) => {
-      let it = copy();
-      for (const transformer of transformers) {
-        it = transformer(it);
-      }
-      return it;
-    };
-
-  return {
-    [Symbol.iterator]: () => ({ next }),
-    copy,
-    pipe,
-  };
-};
-
-const nextOf = it => it[Symbol.iterator]().next();

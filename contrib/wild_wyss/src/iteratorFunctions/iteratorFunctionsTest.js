@@ -1,11 +1,9 @@
 import { TestSuite }                from "../../../../docs/src/kolibri/util/test.js";
 import { arrayEq }                  from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { map, filter }              from "./iteratorFunctions.js";
+import { Iterator, ArrayIterator }  from "./iterator.js"
 
-import {map, filter, Iterator, ArrayIterator} from "./iteratorFunctions.js"
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
-
-// const assertIteratorValues = (assert, it, expected) =>
-//   assert.is(ArrayIterator(expected).eq$(it), true);
 
 const iteratorSuite = TestSuite("IteratorFunctions");
 iteratorSuite.add("test simple map", assert => {
@@ -58,7 +56,7 @@ iteratorSuite.add("test simple array iterator", assert => {
 });
 
 iteratorSuite.add("test complex array iterator", assert => {
-  const  arrayIterator = ArrayIterator([1,2,3]);
+  const arrayIterator = ArrayIterator([1,2,3]);
   const pipedArrayIterator = arrayIterator.pipe(
     map(i => i + 1),
     filter(el => el % 2 === 0)
