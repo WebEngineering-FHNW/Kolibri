@@ -1,4 +1,4 @@
-export { map, filter, Iterator }
+export { map, filter, Iterator, ArrayIterator }
 
 const Iterator = (value, inc, stop) => {
 
@@ -6,53 +6,94 @@ const Iterator = (value, inc, stop) => {
     const current = value;
     value = inc(value);
     const done = stop(current);
-    return {done, value:current};
+    return { done, value: current };
   };
 
   const copy = () => Iterator(value, inc, stop);
 
+  const pipe = (...transformers) => {
+    let it = copy();
+    for (const transformer of transformers) {
+     it = transformer(it);
+    }
+    return it;
+  };
+
   return {
     [Symbol.iterator]: () => ({ next }),
-    copy
+    copy,
+    pipe
   }
 };
 
+const ArrayIterator = array => {
+  const inner = Iterator(0, x => x + 1, x => x === array.length);
+  return ArrayIteratorInternal(array)(inner);
+};
+
+const ArrayIteratorInternal = array => inner => {
+
+  const next = () => {
+    const { done, value } = nextOf(inner);
+    return {
+      done,
+      value: array[value],
+    }
+  };
+
+  return createIterator(next)(ArrayIteratorInternal)([array])(inner);
+};
+
+const emptyIterator =
+  Iterator(undefined, _ => undefined, _ => true);
+
+
 const map = mapper => iterator => {
   const inner = iterator.copy();
+
   const next = () => {
-    const { done, value } = inner[Symbol.iterator]().next();
+    const { done, value } = nextOf(inner);
     return {
       done,
       value: mapper(value)
     }
   };
 
-  return build(next)(map)(mapper)(inner);
+  return createIterator(next)(map)(mapper)(inner);
 };
 
 const filter = predicate => iterator => {
   const inner = iterator.copy();
-  const next = () => {
 
+  const next = () => {
     const applyFilter  = current => {
       const { done, value } = current;
       const result = predicate(value) || done;
-      return result ? { done, value} : applyFilter(n(inner));
+      return result ? { done, value } : applyFilter(nextOf(inner));
     };
-    return applyFilter(n(inner))
+    return applyFilter(nextOf(inner))
   };
 
-  return build(next)(filter)(predicate)(inner);
+  return createIterator(next)(filter)(predicate)(inner);
 };
 
-const build = next => f => (...g) => it => ({
-  [Symbol.iterator]: () => ({ next }),
-  copy: () => f(...g)(it.copy())
-});
+const createIterator = next => iteratorFunction => (...params) => innerIterator => {
 
+  const copy = () => iteratorFunction(...params)(innerIterator.copy());
 
-const n = it => it[Symbol.iterator]().next();
+  const pipe = (...transformers) => {
+      let it = copy();
+      for (const transformer of transformers) {
+        it = transformer(it);
+      }
+      return it;
+    };
 
-const createIterator = next => ({
-  [Symbol.iterator] : () =>  ({ next })
-});
+  return {
+    [Symbol.iterator]: () => ({ next }),
+    copy,
+    pipe,
+  };
+};
+
+const nextOf = it => it[Symbol.iterator]().next();
