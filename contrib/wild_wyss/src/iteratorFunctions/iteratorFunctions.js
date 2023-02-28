@@ -112,7 +112,7 @@ const head = iterator => {
 };
 
 
-// TODO: this implementation does not seem to be correct. an iterator could contain elements after an undefined head
+// TODO: this implementation does not seem to be correct. an iterator could contain elements after an undefined head. Maybe it would be better to check for the done property
 /**
  * Returns true, if the iterators head is undefined.
  *
@@ -134,7 +134,7 @@ const isEmpty = iterator => head(iterator) === undefined;
  * @template _T_
  * @pure
  * @type {
- *             (predicate: Predicate<_T_>)
+ *              (predicate: Predicate<_T_>)
  *           => (iterator: IteratorType<_T_>)
  *           => IteratorType<_T_>
  *       }

@@ -9,41 +9,61 @@ export {
 
 import { map } from "./iteratorFunctions.js"
 
+// TODO: varargs werden hier nicht von jsdoc erkannt.
 /**
  * @template _T_
- * @callback CopyType
- * @returns { IteratorType<_T_> }
- */
-
-/**
- * @template _T_
- * @callback PipeType
- * @param   { CopyType } copy
- * @param   { ...* }
- * @returns { IteratorType<_T_> }
+ * @type  {
+ *            (copy: () => IteratorType<_T_>) =>
+ *            (transformers: IteratorOperationType ) =>
+ *            IteratorType<_T_>
+ *        }
  */
 const pipe = copy => (...transformers) => {
-  let it = copy();
+  let it = copy(); // TODO: muss das hier kopiert werden, theoretisch könnte hier auch ein iterator übergeben werden
   for (const transformer of transformers) {
     it = transformer(it);
   }
   return it;
 };
 
-/** @typedef  IteratorType
+/**
+ * Defines a single operation to decorate an existing {@link IteratorType}.
+ *
+ * _Note_: Functions of this type must always copy the given iterator.
+ * @typedef IteratorOperationType
  * @template _T_
- * @property { () => { next: () => IteratorResult } }                  [Symbol.iterator]
- * @property { CopyType }                                              copy
- * @property { (...*) => IteratorType<_T_> }  pipe
+ * @template _U_
+ * @callback
+ * @type  {
+ *          (transform: (params: *) => IteratorType<_U_>) =>
+ *          (iterator: IteratorType<_T_>) =>
+ *          (IteratorType<_U_>)
+ *        }
+ */
+
+/**
+ * This type is conform to the JS iteration protocols and can therefore
+ * be used in for ... of loops and other syntactical sugar.
+ *
+ * Furthermore, the Kolibri defines many of functions of type
+ * {@link IteratorOperationType} which can be used to
+ * transform the elements of this Iterator.
+ *
+ * @typedef IteratorType
+ * @template _T_
+ * @property { () => { next: () => IteratorResult<_T_, _T_> } }       [Symbol.iterator] - returns the iterator for this object.
+ * @property { () => IteratorType<_T_> }                              copy - creates a copy of this {@link IteratorType}
+ * @property { (...IteratorOperationType<*,*>) => IteratorType<*> }   pipe - transforms this iterators using the passed {@link IteratorOperationType}
  */
 
 /**
  *
- * The incrementFunction should change the value (make progress) in a way that the stopDetected function can recognize
- * the end of the iterator.
+ * The incrementFunction should change the value (make progress) in a way
+ * that the stopDetected function can recognize the end of the iterator.
  *
  * Contract:
- * - incrementFunction & stopDetected should not refer to any mutable state variable (because of side effect) in the closure.
+ * - incrementFunction & stopDetected should not refer to any mutable
+ *   state variable (because of side effect) in the closure.
  *   Otherwise, copying and iterator may not work as expected.
  * - Functions ending with a "$" must not be applied to infinite iterators.
  *
@@ -51,11 +71,15 @@ const pipe = copy => (...transformers) => {
  * @param   { _T_ }               value
  * @param   { (_T_) => _T_ }      incrementFunction
  * @param   { (_T_) => Boolean }  stopDetected - returns true if the iteration should stop
- * @returns { IteratorType<T> }
+ * @returns { IteratorType<_T_> }
  * @constructor
  */
 const Iterator = (value, incrementFunction, stopDetected) => {
-
+  /**
+   * @template _T_
+   * Returns the next iteration of this iterable object.
+   * @returns {IteratorResult<_T_, _T_>}
+   */
   const next = () => {
     const current = value;
     const done    = stopDetected(current);
@@ -63,6 +87,11 @@ const Iterator = (value, incrementFunction, stopDetected) => {
     return { done, value: current };
   };
 
+  /**
+   * @template _T_
+   * Returns a copy of this Iterator
+   * @returns {IteratorType<_T_>}
+   */
   const copy = () => Iterator(value, incrementFunction, stopDetected);
 
   return {
@@ -106,13 +135,27 @@ const TupleIterator = tuple => {
 };
 
 /**
+ * This const represents an iterator with no values in it.
  * @template _T_
  * @type { IteratorType<_T_> }
  */
 const emptyIterator =
   Iterator(undefined, _ => undefined, _ => true);
 
-
+// TODO: varargs werden hier nicht von jsdoc erkannt.
+/**
+ * Helper function to create a new {@link IteratorType}.
+ * @function
+ * @template _T_
+ * @template _U_
+ * @type {
+ *  (next: () => IteratorResult<_T_, _T_>) =>
+ *  (iteratorFunction: IteratorOperationType<_T_, _U_>) =>
+ *  (params: *) =>
+ *  (inner: IteratorType<_U_>) =>
+ *  IteratorType<_T_>
+ * }
+ */
 const createIterator = next => iteratorFunction => (...params) => innerIterator => {
   const copy = () => iteratorFunction(...params)(innerIterator.copy());
 
@@ -123,4 +166,11 @@ const createIterator = next => iteratorFunction => (...params) => innerIterator 
   };
 };
 
+/**
+ * @function
+ * @template _T_
+ * Convenience function to call the next function of an object which is iterable.
+ * @param {IteratorType<_T_>} it
+ * @returns {IteratorResult<_T_, _T_>}
+ */
 const nextOf = it => it[Symbol.iterator]().next();
