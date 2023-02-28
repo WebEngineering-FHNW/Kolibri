@@ -186,4 +186,14 @@ iteratorSuite.add("test typical case: cons$", assert => {
   assert.is(arrayEq([7, 0, 1])([...cons]), true);
 });
 
+
+iteratorSuite.add("test advanced case: cons$", assert => {
+  const it   = newIterator(4);
+  const piped = it.pipe(
+    map(el => el + 1),
+    cons$(0),
+    filter(el => el !== 1),
+  );
+  assert.is(arrayEq([0, 2, 3, 4, 5])([...piped]), true);
+});
 iteratorSuite.run();

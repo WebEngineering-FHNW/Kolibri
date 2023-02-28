@@ -15,6 +15,7 @@ export {
 }
 
 /**
+ * Transform each element.
  * @template _T_
  * @function
  * @pure
@@ -70,6 +71,7 @@ const filter = predicate => iterator => {
 };
 
 /**
+ * Checks the equality of two non-infinite iterators.
  * @function
  * @pure
  * @type {
@@ -86,6 +88,7 @@ const eq$ = it1 => it2 =>
   arrayEq([...it1.copy()])([...it2.copy()]);
 
 /**
+ * Return the next value without consuming it.
  * @function
  * @pure
  * @type { (it1: IteratorType) => any }
@@ -100,6 +103,7 @@ const head = iterator => {
 };
 
 /**
+ * Returns true, if the iterators head is undefined.
  * @function
  * @pure
  * @param   { IteratorType } iterator
@@ -111,6 +115,7 @@ const head = iterator => {
 const isEmpty = iterator => head(iterator) === undefined;
 
 /**
+ * Proceed with the iteration where the predicate no longer holds.
 * @template _T_
 * @function
 * @pure
@@ -143,6 +148,7 @@ const dropWhile = predicate => iterator => {
 };
 
 /**
+ * Jump over so many elements.
  * @template _T_
  * @function
  * @pure
@@ -161,6 +167,7 @@ const drop = count => iterator => {
 };
 
 /**
+ * Process the iterator backwards.
  * @template _T_
  * @function
  * @pure
@@ -175,6 +182,7 @@ const reverse$ = iterator => {
 };
 
 /**
+ * Add an iterator to the existing iterators end.
  * @template _T_
  * @function
  * @pure
@@ -191,6 +199,7 @@ const reverse$ = iterator => {
 const concat$ = it1 => it2 => ArrayIterator([...it1, ...it2]);
 
 /**
+ * Add the element {@link a} to the front of the iterator.
  * @template _T_
  * @function
  * @pure
