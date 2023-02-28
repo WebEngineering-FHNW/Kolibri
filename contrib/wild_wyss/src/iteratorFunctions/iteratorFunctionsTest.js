@@ -160,6 +160,12 @@ iteratorSuite.add("test typical case: drop", assert => {
 
 iteratorSuite.add("test advanced case: drop", assert => {
   const iterator = newIterator(4);
+  const dropped  = drop(1)(iterator);
+  const dropped2  = drop(1)(dropped);
+  assert.is(arrayEq([2, 3, 4])([...dropped2]), true);
+});
+iteratorSuite.add("test advanced case: drop", assert => {
+  const iterator = newIterator(4);
   const result   = iterator.pipe(
     drop(2),
     map(el => el + 1)
@@ -171,6 +177,13 @@ iteratorSuite.add("test typical case: reverse$", assert => {
   const iterator = newIterator(4);
   const reversed = reverse$(iterator);
   assert.is(arrayEq([4, 3, 2, 1, 0])([...reversed]), true);
+});
+
+iteratorSuite.add("test advanced case: reverse$", assert => {
+  const iterator = newIterator(4);
+  const reversed = reverse$(iterator);
+  const doubleReversed = reverse$(reversed);
+  assert.is(arrayEq([...iterator])([...doubleReversed]), true);
 });
 
 iteratorSuite.add("test typical case: concat$", assert => {

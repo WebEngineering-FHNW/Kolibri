@@ -4,7 +4,7 @@ import { arrayEq }  from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 export { Iterator, ArrayIterator }
 
 
-/** @typedef  IteratorType
+/** @typedef  IteratorType2
  * @template _T_
  * @property { () => { next: () => IteratorResult } }                  [Symbol.iterator]
  * @property { (callback:Consumer<_T_>)         => void }              forEach$   - executes the callback for each element and exhausts the iterator

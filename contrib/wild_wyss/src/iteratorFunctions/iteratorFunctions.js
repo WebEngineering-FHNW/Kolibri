@@ -163,7 +163,24 @@ const dropWhile = predicate => iterator => {
  */
 const drop = count => iterator => {
   let i = 0;
-  return dropWhile(_ => i++ < count)(iterator);
+
+  const inner = iterator.copy();
+
+  const next = () => {
+    let { done, value } = nextOf(inner);
+
+    while( i++ < count && !done) {
+      const n = nextOf(inner);
+      done    = n.done;
+      value   = n.value;
+    }
+    return {
+      done,
+      value
+    }
+  };
+  return createIterator(next)(drop)(count)(inner);
+
 };
 
 /**

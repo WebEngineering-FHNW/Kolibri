@@ -32,9 +32,9 @@ const pipe = copy => (...transformers) => {
 
 /** @typedef  IteratorType
  * @template _T_
- * @property { () => { next: () => IteratorResult } }                  [Symbol.iterator]
- * @property { CopyType }                                              copy
- * @property { (...*) => IteratorType<_T_> }  pipe
+ * @property { () => { next: () => IteratorResult } } [Symbol.iterator]
+ * @property { CopyType }                             copy
+ * @property { (...*) => IteratorType<_T_> }          pipe
  */
 
 /**
