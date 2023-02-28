@@ -15,13 +15,15 @@ export {
 }
 
 /**
- * @template _T_
+ * Transforms each element using the given function.
  * @function
+ * @template _T_
+ * @template _U_
  * @pure
  * @type {
- *               (mapper: Functor)
- *            => (iterator: IteratorType)
- *            => IteratorType
+ *               (mapper: Functor<_T_, _U_>)
+ *            => (iterator: IteratorType<_T_>)
+ *            => IteratorType<_U_>
  *       }
  * @example
  * const it     = Iterator(0, inc, stop);
@@ -42,17 +44,19 @@ const map = mapper => iterator => {
 };
 
 /**
- * @template _T_
+ * Only keeps elements which fulfill the predicate.
  * @function
+ * @template _T_
  * @pure
  * @type {
- *             (predicate: Predicate)
- *          => (iterator: IteratorType)
+ *             (predicate: Predicate<_T_>)
+ *          => (iterator: IteratorType<_T_>)
  *          => IteratorType<_T_>
  *       }
  * @example
  * const it     = Iterator(0, inc, stop);
- * const mapped = filter(el => el !== 2)(it);
+ * // reject all odd numbers
+ * const filtered = filter(el => el % 2 === 0)(it);
  */
 const filter = predicate => iterator => {
   const inner = iterator.copy();
@@ -70,11 +74,14 @@ const filter = predicate => iterator => {
 };
 
 /**
+ * Checks the equality of two non-infinite iterators.
+ *
+ *_Note_: Two iterators are considered as equal if they contain or create the exactly same values in the same order.
  * @function
  * @pure
  * @type {
- *             (it1: IteratorType)
- *          => (it2: IteratorType)
+ *             (it1: IteratorType<*>)
+ *          => (it2: IteratorType<*>)
  *          => boolean
  *       }
  * @example
@@ -86,9 +93,14 @@ const eq$ = it1 => it2 =>
   arrayEq([...it1.copy()])([...it2.copy()]);
 
 /**
+ * Returns the next value of this iterator.
+ *
+ * _Note_: The value will not be consumed.
  * @function
+ * @template _T_
  * @pure
- * @type { (it1: IteratorType) => any }
+ * @param   { IteratorType<_T_> } iterator
+ * @returns _T_
  * @example
  * const it     = Iterator(0, inc, stop);
  * const result = head(it);
@@ -99,11 +111,16 @@ const head = iterator => {
   return done ? undefined : value;
 };
 
+
+// TODO: this implementation does not seem to be correct. an iterator could contain elements after an undefined head
 /**
+ * Returns true, if the iterators head is undefined.
+ *
  * @function
+ * @template _T_
  * @pure
- * @param   { IteratorType } iterator
- * @returns { boolean }
+ * @param   { IteratorType<_T_> } iterator
+ * @returns boolean
  * @example
  * const it     = Iterator(0, inc, stop);
  * const result = isEmpty(it);
@@ -111,18 +128,20 @@ const head = iterator => {
 const isEmpty = iterator => head(iterator) === undefined;
 
 /**
-* @template _T_
-* @function
-* @pure
-* @type {
-*             (predicate: Predicate)
-  *          => (iterator: IteratorType)
-  *          => IteratorType<_T_>
-  *      }
-* @example
-* const it      = Iterator(0, inc, stop);
-* const dropped = dropWhile(el => el < 2)(it);
-*/
+ * Proceeds with the iteration where the predicate no longer holds.
+ *
+ * @function
+ * @template _T_
+ * @pure
+ * @type {
+ *             (predicate: Predicate<_T_>)
+ *           => (iterator: IteratorType<_T_>)
+ *           => IteratorType<_T_>
+ *       }
+ * @example
+ * const it      = Iterator(0, inc, stop);
+ * const dropped = dropWhile(el => el < 2)(it);
+ */
 const dropWhile = predicate => iterator => {
   const inner = iterator.copy();
 
@@ -143,8 +162,10 @@ const dropWhile = predicate => iterator => {
 };
 
 /**
- * @template _T_
+ * Jumps over so many elements.
+ *
  * @function
+ * @template _T_
  * @pure
  * @type {
  *             (count: number)
@@ -161,10 +182,12 @@ const drop = count => iterator => {
 };
 
 /**
+ * Processes the iterator backwards.
  * @template _T_
  * @function
  * @pure
- * @type { (iterator: IteratorType) => IteratorType<_T_> }
+ * @param { IteratorType<_T_> } iterator
+ * @returns IteratorType<_T_>
  * @example
  * const it       = Iterator(0, inc, stop);
  * const reversed = reverse(it);
@@ -174,13 +197,15 @@ const reverse$ = iterator => {
   return ArrayIterator(values);
 };
 
+// TODO: the iterators should be copied here
 /**
- * @template _T_
+ * Adds the second iterator to the first iterators end.
  * @function
+ * @template _T_
  * @pure
  * @type {
- *             (it1: IteratorType)
- *          => (it2: IteratorType)
+ *             (it1: IteratorType<_T_>)
+ *          => (it2: IteratorType<_T_>)
  *          => IteratorType<_T_>
  *       }
  * @example
@@ -191,12 +216,13 @@ const reverse$ = iterator => {
 const concat$ = it1 => it2 => ArrayIterator([...it1, ...it2]);
 
 /**
- * @template _T_
+ * Adds the given element to the front of the iterator.
  * @function
+ * @template _T_
  * @pure
  * @type {
- *             (element: any)
- *          => (it: IteratorType)
+ *             (element: _T_)
+ *          => (it: IteratorType<_T_>)
  *          => IteratorType<_T_>
  *       }
  * @example
@@ -204,7 +230,7 @@ const concat$ = it1 => it2 => ArrayIterator([...it1, ...it2]);
  * const element = 1;
  * const cons    = cons$(element)(it2);
  */
-const cons$ = a => iterator => {
+const cons$ = element => iterator => {
   const inner = iterator.copy();
-  return ArrayIterator([a, ...inner]);
+  return ArrayIterator([element, ...inner]);
 };

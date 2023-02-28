@@ -41,7 +41,7 @@
  */
 
 /**
- * A callback which takes one argument and returns an {@link _A_}
+ * A callback which takes one argument of type {@link _A_} and returns a boolean.
  * @template _A_
  * @callback Predicate
  * @param   { _A_ } value
