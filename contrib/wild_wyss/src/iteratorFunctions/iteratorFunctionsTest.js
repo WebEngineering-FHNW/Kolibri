@@ -18,7 +18,7 @@ import {
   drop,
   reverse$,
   concat$,
-  cons$,
+  cons$, takeWhile,
 } from "./iteratorFunctions.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
@@ -209,4 +209,20 @@ iteratorSuite.add("test advanced case: cons$", assert => {
   );
   assert.is(arrayEq([0, 2, 3, 4, 5])([...piped]), true);
 });
+
+
+iteratorSuite.add("test typical case: takeWhile", assert => {
+  const iterator = newIterator(10);
+  const some = takeWhile(el => el < 5)(iterator);
+  assert.is(arrayEq([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])([...iterator]), true);
+  assert.is(arrayEq([0, 1, 2, 3, 4 ])([...some]), true);
+});
+
+iteratorSuite.add("test advanced case: takeWhile", assert => {
+  // the inner iterator stops before the outer
+  const iterator = newIterator(3);
+  const some = takeWhile(el => el < 100)(iterator);
+  assert.is(arrayEq([0, 1, 2, 3])([...some]), true);
+});
+
 iteratorSuite.run();

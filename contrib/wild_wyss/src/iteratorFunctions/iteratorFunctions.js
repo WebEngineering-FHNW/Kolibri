@@ -12,6 +12,7 @@ export {
   reverse$,
   concat$,
   cons$,
+  takeWhile
 }
 
 /**
@@ -247,4 +248,26 @@ const concat$ = it1 => it2 => ArrayIterator([...it1, ...it2]);
 const cons$ = element => iterator => {
   const inner = iterator.copy();
   return ArrayIterator([element, ...inner]);
+};
+
+/**
+ * @function
+ * @template _T_
+ * @type {
+ *    (predicate: (_T_) => Boolean) =>
+ *    (iterator: IteratorType<_T_>) =>
+ *    IteratorType<_T_>
+ * }
+ */
+const takeWhile = predicate => iterator => {
+  const inner = iterator.copy();
+
+  const next = () => {
+    const el = nextOf(inner);
+    // the iterator finishes, when the predicate does not return true anymore,
+    // or the previous iterator has no more elements left
+    const done = el.done || !predicate(el.value);
+    return  { value: el.value, done };
+  };
+  return createIterator(next)(takeWhile)(predicate)(inner);
 };
