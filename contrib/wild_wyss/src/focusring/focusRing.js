@@ -1,5 +1,5 @@
-import { ArrayIterator, emptyIterator } from "../iteratorFunctions/iterator.js";
-import {eq$, reverse$, head, cons$, drop, isEmpty } from "../iteratorFunctions/iteratorFunctions.js";
+import { ArrayIterator, emptyIterator }              from "../iteratorFunctions/iterator.js";
+import { eq$, reverse$, head, cons$, drop, isEmpty } from "../iteratorFunctions/iteratorFunctions.js";
 
 export { FocusRing }
 
