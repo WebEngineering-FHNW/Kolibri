@@ -1,4 +1,5 @@
-import { ArrayIterator, Iterator } from "../iterator/iterator.js";
+import { ArrayIterator, emptyIterator }              from "../iteratorFunctions/iterator.js";
+import { eq$, reverse$, head, cons$, drop, isEmpty } from "../iteratorFunctions/iteratorFunctions.js";
 
 export { FocusRing }
 
@@ -15,13 +16,6 @@ const FocusRing = nonEmptyIterator => FocusRingInternal(
 );
 
 /**
- * @template _T_
- * @type {IteratorType<_T_>}
- */
-const emptyIterator =
-  Iterator(undefined, _ => undefined, _ => true);
-
-/**
  * Constructs a new immutable focus ring using the given iterators.
  * @template _T_
  * @param   { !IteratorType<_T_> } pre  - a finite iterator
@@ -30,23 +24,23 @@ const emptyIterator =
  * @constructor
  */
 const FocusRingInternal = (pre, post) => {
-  const focus = () => post.head();
+  const focus = () => head(post);
 
   const right = () => {
-    const currentFocus = post.head();
-    const modifiedPost = post.copy().drop(1);
+    const currentFocus = head(post);
+    const modifiedPost = drop(1)(post.copy());
 
-    if (modifiedPost.eq$(emptyIterator)) {
-      if (pre.eq$(emptyIterator)) {
+    if (eq$(modifiedPost)(emptyIterator)) {
+      if (eq$(pre)(emptyIterator)) {
         // do nothing when only one element in list
         return FocusRingInternal(pre, post);
       }
       return FocusRingInternal(
         ArrayIterator([currentFocus]),
-        pre.reverse$()
+        reverse$(pre)
       );
     }
-    const modifiedPre = pre.copy().cons$(currentFocus); // paranoid 2
+    const modifiedPre = cons$(currentFocus)(pre.copy()); // paranoid 2
     return FocusRingInternal(modifiedPre, modifiedPost);
   };
 
@@ -54,15 +48,15 @@ const FocusRingInternal = (pre, post) => {
     let modifiedPre   = pre.copy();
     let modifiedPost  = post.copy();
 
-    if (pre.isEmpty()) {
+    if (isEmpty(pre)) {
       modifiedPost = emptyIterator;
-      modifiedPre = post.copy().reverse$();
+      modifiedPre = reverse$(post.copy());
     }
 
     // remove head from pre and add it to post
-    const headPre = modifiedPre.head();
-    modifiedPre   = modifiedPre.drop(1);
-    modifiedPost  = modifiedPost.cons$(headPre);
+    const headPre = head(modifiedPre);
+    modifiedPre   = drop(1)(modifiedPre);
+    modifiedPost  = cons$(headPre)(modifiedPost);
 
     return FocusRingInternal(modifiedPre, modifiedPost);
   };

@@ -93,9 +93,7 @@ const eq$ = it1 => it2 =>
   arrayEq([...it1.copy()])([...it2.copy()]);
 
 /**
- * Returns the next value of this iterator.
- *
- * _Note_: The value will not be consumed.
+ * Return the next value without consuming it.
  * @function
  * @template _T_
  * @pure
@@ -115,7 +113,6 @@ const head = iterator => {
 // TODO: this implementation does not seem to be correct. an iterator could contain elements after an undefined head. Maybe it would be better to check for the done property
 /**
  * Returns true, if the iterators head is undefined.
- *
  * @function
  * @template _T_
  * @pure
@@ -178,7 +175,24 @@ const dropWhile = predicate => iterator => {
  */
 const drop = count => iterator => {
   let i = 0;
-  return dropWhile(_ => i++ < count)(iterator);
+
+  const inner = iterator.copy();
+
+  const next = () => {
+    let { done, value } = nextOf(inner);
+
+    while( i++ < count && !done) {
+      const n = nextOf(inner);
+      done    = n.done;
+      value   = n.value;
+    }
+    return {
+      done,
+      value
+    }
+  };
+  return createIterator(next)(drop)(count)(inner);
+
 };
 
 /**
