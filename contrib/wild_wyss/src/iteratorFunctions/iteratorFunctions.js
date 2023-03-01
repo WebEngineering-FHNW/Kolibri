@@ -14,6 +14,8 @@ export {
   reverse$,
   concat$,
   cons$,
+  takeWhile,
+  take,
 }
 
 /**
@@ -297,3 +299,22 @@ const takeWhile = predicate => iterator => {
   };
   return createIterator(next)(takeWhile)(predicate)(inner);
 };
+
+/**
+ * Stop after so many elements
+ * @function
+ * @template _T_
+ * @type {
+ *    (count: Number) =>
+ *    (iterator: IteratorType<_T_>) =>
+ *    IteratorType<_T_>
+ * }
+ * const it      = Iterator(0, inc, stop);
+ * // only keep the next 4 elements, ignore the others
+ * const dropped = take(4)(it);
+ */
+const take = count => iterator => {
+  let i = 0;
+  return takeWhile(_ => i++ < count)(iterator);
+};
+
