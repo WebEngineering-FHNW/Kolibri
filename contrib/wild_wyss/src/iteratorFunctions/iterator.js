@@ -30,15 +30,11 @@ const pipe = copy => (...transformers) => {
  * Defines a single operation to decorate an existing {@link IteratorType}.
  *
  * _Note_: Functions of this type must always copy the given iterator.
- * @typedef IteratorOperationType
+ * @callback IteratorOperationType
  * @template _T_
  * @template _U_
- * @callback
- * @type  {
- *          (transform: (params: *) => IteratorType<_U_>) =>
- *          (iterator: IteratorType<_T_>) =>
- *          (IteratorType<_U_>)
- *        }
+ * @param {IteratorType<_T_>} iterator
+ * @returns { IteratorType<_U_>}
  */
 
 /**
@@ -53,7 +49,13 @@ const pipe = copy => (...transformers) => {
  * @template _T_
  * @property { () => { next: () => IteratorResult<_T_, _T_> } }       [Symbol.iterator] - returns the iterator for this object.
  * @property { () => IteratorType<_T_> }                              copy - creates a copy of this {@link IteratorType}
- * @property { (...IteratorOperationType<*,*>) => IteratorType<*> }   pipe - transforms this iterators using the passed {@link IteratorOperationType}
+ * @property { PipeType }   pipe - transforms this iterator using the passed {@link IteratorOperationType}
+ */
+
+/**
+ * @callback PipeType
+ * @param { ...IteratorOperationType<any,any>} it
+ * @returns { IteratorType<any> }
  */
 
 /**
