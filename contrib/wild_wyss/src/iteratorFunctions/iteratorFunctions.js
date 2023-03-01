@@ -16,6 +16,7 @@ export {
   cons$,
   takeWhile,
   take,
+  reduce$
 }
 
 /**
@@ -318,3 +319,22 @@ const take = count => iterator => {
   return takeWhile(_ => i++ < count)(iterator);
 };
 
+/**
+ * Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
+ * @function
+ * @template _T_
+ * @type {
+ *          (accumulationFn: BinaryOperation<_T_>, start: _T_) =>
+ *          (iterator: IteratorType<_T_>) =>
+ *          _T_
+ *       }
+ * @returns {function(*): *}
+ */
+const reduce$ = (accumulationFn, start) => iterator => {
+  const inner = iterator.copy();
+  let accumulator = start;
+  for (const current of inner) {
+     accumulator = accumulationFn(accumulator, current);
+  }
+  return accumulator;
+};

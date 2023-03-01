@@ -22,6 +22,7 @@ import {
   cons$,
   takeWhile,
   take,
+  reduce$
 } from "./iteratorFunctions.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
@@ -252,6 +253,13 @@ iteratorSuite.add("test typical case: rejectAll", assert => {
   const iterator = newIterator(4);
   const filtered = rejectAll(el => el % 2 !== 0)(iterator);
   assert.is(arrayEq([0, 2, 4])([...filtered]), true)
+});
+
+iteratorSuite.add("test typical case: reduce", assert => {
+  const iterator = newIterator(4);
+  const result = reduce$( (acc, cur) => acc + cur , 0)(iterator);
+  assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
+  assert.is(10, result);
 });
 
 
