@@ -47,13 +47,14 @@ const pipe = copy => (...transformers) => {
  *
  * @typedef IteratorType
  * @template _T_
- * @property { () => { next: () => IteratorResult<_T_, _T_> } }       [Symbol.iterator] - returns the iterator for this object.
- * @property { () => IteratorType<_T_> }                              copy - creates a copy of this {@link IteratorType}
- * @property { PipeType }   pipe - transforms this iterator using the passed {@link IteratorOperationType}
+ * @property { () => { next: () => IteratorResult<_T_, _T_> } } [Symbol.iterator] - returns the iterator for this object.
+ * @property { () => IteratorType<_T_> }                        copy - creates a copy of this {@link IteratorType}
+ * @property { Pipe }                                           pipe - transforms this iterator using the passed {@link IteratorOperationType}
  */
 
 /**
- * @callback PipeType
+ * Pipe applies the given {@link IteratorOperationType} to the iterator it is called on.
+ * @callback Pipe
  * @param { ...IteratorOperationType<any,any>} it
  * @returns { IteratorType<any> }
  */
