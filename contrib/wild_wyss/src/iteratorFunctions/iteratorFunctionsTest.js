@@ -22,7 +22,8 @@ import {
   cons$,
   takeWhile,
   take,
-  reduce$
+  reduce$,
+  forEach$
 } from "./iteratorFunctions.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
@@ -261,6 +262,26 @@ iteratorSuite.add("test typical case: reduce", assert => {
   assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
   assert.is(10, result);
 });
+
+iteratorSuite.add("test typical case: forEach", assert => {
+  const iterator = newIterator(4);
+  const iterElements = [];
+  forEach$(cur => iterElements.push(cur))(iterator);
+  assert.is(arrayEq([0,1,2,3,4])(iterElements), true);
+});
+
+iteratorSuite.add("test advanced case: forEach", assert => {
+  const iterator = newIterator(4);
+  const iterElements = [];
+  const it = forEach$(cur => {
+    // consume all elements of the iterator, to test if the iterator has been copied correctly
+    for (const _ of iterator) { }
+    iterElements.push(cur);
+  })(iterator);
+  assert.is(arrayEq([0,1,2,3,4])([...it]), true);
+  assert.is(arrayEq([0,1,2,3,4])(iterElements), true);
+});
+
 
 
 iteratorSuite.run();

@@ -16,7 +16,8 @@ export {
   cons$,
   takeWhile,
   take,
-  reduce$
+  reduce$,
+  forEach$,
 }
 
 /**
@@ -338,3 +339,28 @@ const reduce$ = (accumulationFn, start) => iterator => {
   }
   return accumulator;
 };
+
+/* TODO: ist das die richtige Art die Operation zu implemeniteren?
+    sollte hier besser auf currying verzichtet werdne? macht es
+    Sinn hier wieder einen Iterator zurück zugeben damit man die Funktion pipen kann?
+*/
+/**
+ * Executes the callback for each element.
+ * @function
+ * @template _T_
+ * @type {
+ *   (callback: Consumer<_T_>) =>
+ *   (iterator: IteratorType<_T_>) =>
+ *   IteratorType<_T_>
+ * }
+ */
+const forEach$ = callback => iterator => {
+  const inner = iterator.copy();
+  // copy again to return it later,
+  // Since the user of forEach$ could consume the initial iterator during the callback() function
+  for (const current of inner.copy()) {
+    callback(current);
+  }
+  return inner;
+};
+
