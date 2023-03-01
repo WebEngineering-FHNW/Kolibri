@@ -1,9 +1,11 @@
-import { ArrayIterator, createIterator, nextOf } from "./iterator.js";
-import { arrayEq }                               from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { ArrayIterator, createIterator, nextOf }  from "./iterator.js";
+import { arrayEq }                                from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { Pair }                                   from "../../../../docs/src/kolibri/stdlib.js";
 
 export {
   map,
-  filter,
+  retainAll,
+  rejectAll,
   eq$,
   head,
   isEmpty,
@@ -12,7 +14,6 @@ export {
   reverse$,
   concat$,
   cons$,
-  takeWhile
 }
 
 /**
@@ -22,9 +23,9 @@ export {
  * @template _U_
  * @pure
  * @type {
- *               (mapper: Functor<_T_, _U_>)
- *            => (iterator: IteratorType<_T_>)
- *            => IteratorType<_U_>
+ *               (mapper: Functor<_U_, _T_>)
+ *            => (iterator: IteratorType<_U_>)
+ *            => IteratorType<_T_>
  *       }
  * @example
  * const it     = Iterator(0, inc, stop);
@@ -56,10 +57,10 @@ const map = mapper => iterator => {
  *       }
  * @example
  * const it     = Iterator(0, inc, stop);
- * // reject all odd numbers
- * const filtered = filter(el => el % 2 === 0)(it);
+ * // just keep even numbers
+ * const filtered = retainAll(el => el % 2 === 0)(it);
  */
-const filter = predicate => iterator => {
+const retainAll = predicate => iterator => {
   const inner = iterator.copy();
 
   const next = () => {
@@ -71,8 +72,27 @@ const filter = predicate => iterator => {
     return applyFilter(nextOf(inner))
   };
 
-  return createIterator(next)(filter)(predicate)(inner);
+  return createIterator(next)(retainAll)(predicate)(inner);
 };
+
+/**
+ * Only keeps elements which fulfill the predicate.
+ * @function
+ * @template _T_
+ * @pure
+ * @type {
+ *             (predicate: Predicate<_T_>)
+ *          => (iterator: IteratorType<_T_>)
+ *          => IteratorType<_T_>
+ *       }
+ * @example
+ * const it     = Iterator(0, inc, stop);
+ * // reject even numbers
+ * const filtered = retainAll(el => el % 2 === 0)(it);
+ */
+const rejectAll = predicate => iterator =>
+  // flip the predicate and call retainAll
+  retainAll(el => !predicate(el))(iterator);
 
 /**
  * Checks the equality of two non-infinite iterators.
@@ -138,6 +158,7 @@ const isEmpty = iterator => head(iterator) === undefined;
  *       }
  * @example
  * const it      = Iterator(0, inc, stop);
+ * // discard all elements until one element is bigger or equal to 2.
  * const dropped = dropWhile(el => el < 2)(it);
  */
 const dropWhile = predicate => iterator => {
@@ -251,6 +272,7 @@ const cons$ = element => iterator => {
 };
 
 /**
+ * Proceeds with the iteration until the predicate becomes true
  * @function
  * @template _T_
  * @type {
@@ -258,6 +280,10 @@ const cons$ = element => iterator => {
  *    (iterator: IteratorType<_T_>) =>
  *    IteratorType<_T_>
  * }
+ * @example
+ * const it      = Iterator(0, inc, stop);
+ * // keep all elements until one element is bigger or equal to 2.
+ * const dropped = takeWhile(el => el < 2)(it);
  */
 const takeWhile = predicate => iterator => {
   const inner = iterator.copy();

@@ -1,6 +1,6 @@
 import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
 import { arrayEq }   from "../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { Tuple }     from "../../../../docs/src/kolibri/stdlib.js";
+import { Tuple, fst, snd }     from "../../../../docs/src/kolibri/stdlib.js";
 
 import {
   Iterator,
@@ -10,7 +10,8 @@ import {
 
 import {
   map,
-  filter,
+  retainAll,
+  rejectAll,
   eq$,
   head,
   isEmpty,
@@ -18,7 +19,7 @@ import {
   drop,
   reverse$,
   concat$,
-  cons$, takeWhile,
+  cons$,
 } from "./iteratorFunctions.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
@@ -43,15 +44,15 @@ iteratorSuite.add("test advanced case: map", assert => {
 
 iteratorSuite.add("test typical case: retainAll", assert => {
   const iterator = newIterator(4);
-  const filtered = filter(el => el % 2 === 0)(iterator);
+  const filtered = retainAll(el => el % 2 === 0)(iterator);
   assert.is(arrayEq([0, 2, 4])([...filtered]), true)
 });
 
 iteratorSuite.add("test advanced case: retainAll", assert => {
   const iterator       = newIterator(4);
-  const filtered       = filter(el => el % 2 === 0)(iterator);
+  const filtered       = retainAll(el => el % 2 === 0)(iterator);
   const copy           = filtered.copy();
-  const copyFiltered   = filter(el => el === 2)(copy);
+  const copyFiltered   = retainAll(el => el === 2)(copy);
   const mappedFiltered = map(el => el * 2)(copyFiltered);
   assert.is(arrayEq([0, 2, 4])([...filtered]),       true);
   assert.is(arrayEq([2])      ([...copyFiltered]),   true);
@@ -62,7 +63,7 @@ iteratorSuite.add("test typical case: pipe", assert => {
   const iterator = newIterator(4);
   const piped    = iterator.pipe(
     map(i => i + 1),
-    filter(el => el % 2 === 0)
+    retainAll(el => el % 2 === 0)
   );
   assert.is(arrayEq([2,4])([...piped]), true);
 });
@@ -76,7 +77,7 @@ iteratorSuite.add("test advanced case: ArrayIterator", assert => {
   const arrayIterator      = ArrayIterator([1,2,3]);
   const pipedArrayIterator = arrayIterator.pipe(
     map(i => i + 1),
-    filter(el => el % 2 === 0)
+    retainAll(el => el % 2 === 0)
   );
   assert.is(arrayEq([2,4])([...pipedArrayIterator]), true);
 });
@@ -94,7 +95,7 @@ iteratorSuite.add("test advanced case: tuple iterator", assert => {
   const tupleIterator = TupleIterator(triple);
   const pipedTupleIterator = tupleIterator.pipe(
     map(i => i + 1),
-    filter(el => el % 2 === 0)
+    retainAll(el => el % 2 === 0)
   );
   assert.is(arrayEq([2,4])([...pipedTupleIterator]), true);
 });
@@ -205,24 +206,30 @@ iteratorSuite.add("test advanced case: cons$", assert => {
   const piped = it.pipe(
     map(el => el + 1),
     cons$(0),
-    filter(el => el !== 1),
+    retainAll(el => el !== 1),
   );
   assert.is(arrayEq([0, 2, 3, 4, 5])([...piped]), true);
 });
 
 
-iteratorSuite.add("test typical case: takeWhile", assert => {
-  const iterator = newIterator(10);
-  const some = takeWhile(el => el < 5)(iterator);
-  assert.is(arrayEq([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])([...iterator]), true);
-  assert.is(arrayEq([0, 1, 2, 3, 4 ])([...some]), true);
+
+iteratorSuite.add("test typical case: rejectAll", assert => {
+  const iterator = newIterator(4);
+  const filtered = rejectAll(el => el % 2 !== 0)(iterator);
+  assert.is(arrayEq([0, 2, 4])([...filtered]), true)
 });
 
-iteratorSuite.add("test advanced case: takeWhile", assert => {
-  // the inner iterator stops before the outer
-  const iterator = newIterator(3);
-  const some = takeWhile(el => el < 100)(iterator);
-  assert.is(arrayEq([0, 1, 2, 3])([...some]), true);
+iteratorSuite.add("test advanced case: rejectAll", assert => {
+  const iterator       = newIterator(4);
+  const filtered       = rejectAll(el => el % 2 !== 0)(iterator);
+  const copy           = filtered.copy();
+  const copyFiltered   = rejectAll(el => el !== 2)(copy);
+  const mappedFiltered = map(el => el * 2)(copyFiltered);
+
+  assert.is(arrayEq([0, 2, 4])([...filtered]),       true);
+  assert.is(arrayEq([2])      ([...copyFiltered]),   true);
+  assert.is(arrayEq([4])      ([...mappedFiltered]), true);
 });
+
 
 iteratorSuite.run();

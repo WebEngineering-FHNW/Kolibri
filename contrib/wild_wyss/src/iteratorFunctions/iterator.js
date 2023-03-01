@@ -150,7 +150,7 @@ const emptyIterator =
  * @template _U_
  * @type {
  *  (next: () => IteratorResult<_T_, _T_>) =>
- *  (iteratorFunction: IteratorOperationType<_T_, _U_>) =>
+ *  (iteratorFunction: IteratorOperationType<_U_, _T_>) =>
  *  (params: *) =>
  *  (inner: IteratorType<_U_>) =>
  *  IteratorType<_T_>
