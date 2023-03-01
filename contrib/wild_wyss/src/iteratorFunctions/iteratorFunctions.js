@@ -18,6 +18,7 @@ export {
   take,
   reduce$,
   forEach$,
+  uncons
 }
 
 /**
@@ -364,3 +365,17 @@ const forEach$ = callback => iterator => {
   return inner;
 };
 
+/* TODO: macht es Sinn hier ein Pair zurück zugeben?
+    Haskell macht das analog:https://hackage.haskell.org/package/base-4.17.0.0/docs/Data-List.html#v:uncons
+*/
+/**
+ * @function
+ * @template _T_
+ * @param { IteratorType<_T_> } iterator
+ * @returns {(s: pairSelector) => (_T_ |IteratorType<_T_>)}
+ */
+const uncons = iterator => {
+  const inner = iterator.copy();
+  const { value } = nextOf(inner);
+  return Pair(value)(inner);
+};

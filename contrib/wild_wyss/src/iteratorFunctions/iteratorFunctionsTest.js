@@ -23,7 +23,8 @@ import {
   takeWhile,
   take,
   reduce$,
-  forEach$
+  forEach$,
+  uncons
 } from "./iteratorFunctions.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
@@ -282,6 +283,19 @@ iteratorSuite.add("test advanced case: forEach", assert => {
   assert.is(arrayEq([0,1,2,3,4])(iterElements), true);
 });
 
+iteratorSuite.add("test typical case: uncons", assert => {
+  const iterator = newIterator(4);
+  const pair = uncons(iterator);
+  assert.is(pair(fst), 0);
+  assert.is(arrayEq([1,2,3,4])([...pair(snd)]), true);
+});
 
+iteratorSuite.add("test advanced case: uncons with copy", assert => {
+  const iterator = newIterator(4);
+  const pair = uncons(iterator);
+  assert.is(pair(fst), 0);
+  assert.is(arrayEq([1,2,3,4])([...pair(snd).copy()]), true);
+  assert.is(arrayEq([1,2,3,4])([...pair(snd)]), true);
+});
 
 iteratorSuite.run();
