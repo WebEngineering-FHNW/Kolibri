@@ -18,10 +18,10 @@ const newIterator = limit => Iterator(0, current => current + 1, current => curr
 /**
  * Checks if a given operation does not modify the underlying iterator.
  */
-const operationDoesNotModify = op => assert => {
-  const iterator = newIterator(4);
+const testPurity = op => assert => {
+  const iterator = newIterator(5);
   op(iterator);
-  assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
+  assert.is(arrayEq([0,1,2,3,4, 5])([...iterator]), true);
 };
 
 const terminalOperationsSuite = TestSuite("TerminalOperations");
@@ -45,11 +45,11 @@ terminalOperationsSuite.add("test advanced case: eq$ should return false after e
   assert.is(eq$(it1)(it2), false);
 });
 
-terminalOperationsSuite.add("test purity: eq$ is pure, first iterator.",
-  operationDoesNotModify(it => eq$(it)(newIterator(4))));
+terminalOperationsSuite.add("test purity: eq$. first iterator.",
+  testPurity(it => eq$(it)(newIterator(4))));
 
-terminalOperationsSuite.add("test purity: eq$ is pure, second iterator.",
-  operationDoesNotModify(it => eq$(newIterator(4))(it)));
+terminalOperationsSuite.add("test purity: eq$. second iterator.",
+  testPurity(it => eq$(newIterator(4))(it)));
 
 terminalOperationsSuite.add("test advanced case: eq$ should return true after mapping", assert => {
   const texts = ["hello", "world"];
@@ -74,7 +74,7 @@ terminalOperationsSuite.add("test advanced case: head of empty iterator", assert
   assert.is(head(iterator), undefined);
 });
 
-terminalOperationsSuite.add("test purity: head is pure.", operationDoesNotModify(head) );
+terminalOperationsSuite.add("test purity: head.", testPurity(head) );
 
 terminalOperationsSuite.add("test typical case: isEmpty", assert => {
   const iterator = newIterator(4);
@@ -85,7 +85,7 @@ terminalOperationsSuite.add("test typical case: isEmpty", assert => {
   assert.is(result, true);
 });
 
-terminalOperationsSuite.add("test purity: isEmpty is pure.", operationDoesNotModify(isEmpty) );
+terminalOperationsSuite.add("test purity: isEmpty.", testPurity(isEmpty) );
 
 terminalOperationsSuite.add("test typical case: reduce", assert => {
   const iterator = newIterator(4);
@@ -94,7 +94,7 @@ terminalOperationsSuite.add("test typical case: reduce", assert => {
   assert.is(10, result);
 });
 
-terminalOperationsSuite.add("test purity: reduce$ is pure.", operationDoesNotModify(reduce$((acc, cur) => acc + cur , 0)));
+terminalOperationsSuite.add("test purity: reduce$.", testPurity(reduce$((acc, cur) => acc + cur , 0)));
 
 terminalOperationsSuite.add("test typical case: forEach$", assert => {
   const iterator = newIterator(4);
@@ -114,7 +114,7 @@ terminalOperationsSuite.add("test advanced case: forEach", assert => {
   assert.is(arrayEq([0,1,2,3,4])(iterElements), true);
 });
 
-terminalOperationsSuite.add("test purity: forEach$ is pure.", operationDoesNotModify(forEach$(_ => undefined)));
+terminalOperationsSuite.add("test purity: forEach$.", testPurity(forEach$(_ => undefined)));
 
 terminalOperationsSuite.add("test typical case: uncons", assert => {
   const iterator = newIterator(4);
@@ -131,6 +131,6 @@ terminalOperationsSuite.add("test advanced case: uncons with copy", assert => {
   assert.is(arrayEq([1,2,3,4])([...pair(snd)]), true);
 });
 
-terminalOperationsSuite.add("test purity: uncons is pure.", operationDoesNotModify(uncons));
+terminalOperationsSuite.add("test purity: uncons.", testPurity(uncons));
 
 terminalOperationsSuite.run();
