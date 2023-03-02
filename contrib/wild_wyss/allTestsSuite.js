@@ -15,7 +15,6 @@ import "./src/iteratorFunctions/iteratorFunctionsTest.js"
 
 // range
 import "./src/range/rangeTest.js"
-import "./src/range/iteratorFunctionTest.js"
 
 // focusring
 import "./src/focusring/focusRingTest.js"
