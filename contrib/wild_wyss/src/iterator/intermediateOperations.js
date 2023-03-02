@@ -192,7 +192,7 @@ const reverse$ = iterator => {
  * const it2     = Iterator(0, inc, stop);
  * const concat = concat$(it1)(it2);
  */
-const concat$ = it1 => it2 => ArrayIterator([...it1, ...it2]);
+const concat$ = it1 => it2 => ArrayIterator([...it1.copy(), ...it2.copy()]);
 
 /**
  * Adds the given element to the front of the iterator.

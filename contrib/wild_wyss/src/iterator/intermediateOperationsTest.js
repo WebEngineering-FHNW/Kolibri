@@ -18,6 +18,15 @@ import {
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
+/**
+ * Checks if a given operation does not modify the underlying iterator.
+ */
+const operationDoesNotModify = op => assert => {
+  const iterator = newIterator(4);
+  op(iterator);
+  assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
+};
+
 const iteratorSuite = TestSuite("IntermediateOperations");
 
 iteratorSuite.add("test typical case: map", assert => {
@@ -35,6 +44,9 @@ iteratorSuite.add("test advanced case: map and copy", assert => {
   assert.is(arrayEq([0, 2, 4, 6, 8])  ([...copy]),       true);
   assert.is(arrayEq([0, 4, 8, 12, 16])([...copyMapped]), true);
 });
+
+iteratorSuite.add("test purity: map is pure.",
+  operationDoesNotModify(map(el => el * 2)));
 
 iteratorSuite.add("test typical case: retainAll", assert => {
   const iterator = newIterator(4);
@@ -54,6 +66,9 @@ iteratorSuite.add("test advanced case: retainAll then map", assert => {
   assert.is(arrayEq([4])      ([...mappedFiltered]), true);
 });
 
+iteratorSuite.add("test purity: retainAll is pure.",
+  operationDoesNotModify(retainAll(el => el > 2)));
+
 iteratorSuite.add("test typical case: rejectAll", assert => {
   const iterator = newIterator(4);
   const filtered = rejectAll(el => el % 2 !== 0)(iterator);
@@ -71,6 +86,9 @@ iteratorSuite.add("test advanced case: rejectAll and map", assert => {
   assert.is(arrayEq([6])   ([...copyFiltered]),   true);
 });
 
+iteratorSuite.add("test purity: rejectAll is pure.",
+  operationDoesNotModify(rejectAll(el => el > 2)));
+
 iteratorSuite.add("test typical case: dropWhile", assert => {
   const iterator = newIterator(4);
   const dropped  = dropWhile(el => el < 2)(iterator);
@@ -85,6 +103,9 @@ iteratorSuite.add("test advanced case: dropWhile and map", assert => {
   );
   assert.is(arrayEq([3, 4, 5])([...result]), true);
 });
+
+iteratorSuite.add("test purity: dropWhile is pure.",
+  operationDoesNotModify(dropWhile(el => el > 2)));
 
 iteratorSuite.add("test typical case: drop", assert => {
   const iterator = newIterator(4);
@@ -108,6 +129,9 @@ iteratorSuite.add("test advanced case: drop than map", assert => {
   assert.is(arrayEq([3, 4, 5])([...result]), true);
 });
 
+iteratorSuite.add("test purity: drop is pure.",
+  operationDoesNotModify(drop(4)));
+
 iteratorSuite.add("test typical case: reverse$", assert => {
   const iterator = newIterator(4);
   const reversed = reverse$(iterator);
@@ -121,12 +145,20 @@ iteratorSuite.add("test advanced case: reverse$ double", assert => {
   assert.is(arrayEq([...iterator])([...doubleReversed]), true);
 });
 
+iteratorSuite.add("test purity: reverse$ is pure.", operationDoesNotModify(reverse$));
+
 iteratorSuite.add("test typical case: concat$", assert => {
   const it1    = newIterator(1);
   const it2    = newIterator(2);
   const concat = concat$(it1)(it2);
   assert.is(arrayEq([0, 1, 0, 1, 2])([...concat]), true);
 });
+
+iteratorSuite.add("test purity: concat$ is pure. Second not changed",
+  operationDoesNotModify(concat$(newIterator(4))));
+
+iteratorSuite.add("test purity: concat$ is pure. First not changed",
+  operationDoesNotModify(it => concat$(it)(newIterator(4))));
 
 iteratorSuite.add("test typical case: cons$", assert => {
   const it   = newIterator(1);
@@ -145,6 +177,9 @@ iteratorSuite.add("test advanced case: cons$ in pipe", assert => {
   assert.is(arrayEq([0, 2, 3, 4, 5])([...piped]), true);
 });
 
+iteratorSuite.add("test purity: cons$ is pure.",
+  operationDoesNotModify(cons$(0)));
+
 iteratorSuite.add("test typical case: takeWhile", assert => {
   const iterator = newIterator(10);
   const some = takeWhile(el => el < 5)(iterator);
@@ -158,6 +193,9 @@ iteratorSuite.add("test advanced case: takeWhile inner operator is shorter", ass
   const some = takeWhile(el => el < 100)(iterator);
   assert.is(arrayEq([0, 1, 2, 3])([...some]), true);
 });
+
+iteratorSuite.add("test purity: takeWhile is pure.",
+  operationDoesNotModify(takeWhile(el => el > 2)));
 
 iteratorSuite.add("test simple case: take", assert => {
   const iterator = newIterator(10);
@@ -173,5 +211,8 @@ iteratorSuite.add("test advanced case: take with copy", assert => {
   assert.is(arrayEq([0, 1, 2, 3])([...some]), true);
   assert.is(arrayEq([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])([...iterator]), true);
 });
+
+iteratorSuite.add("test purity: take is pure.",
+  operationDoesNotModify(take(2)));
 
 iteratorSuite.run();
