@@ -7,14 +7,14 @@ export {
   emptyIterator,
 }
 
-import { map } from "./iteratorFunctions.js"
+import {map} from "./iteratorFunctions.js"
 
 // TODO: varargs werden hier nicht von jsdoc erkannt.
 /**
  * @template _T_
  * @type  {
  *            (copy: () => IteratorType<_T_>) =>
- *            (transformers: IteratorOperationType ) =>
+ *            (transformers: IteratorOperation ) =>
  *            IteratorType<_T_>
  *        }
  */
@@ -30,7 +30,7 @@ const pipe = copy => (...transformers) => {
  * Defines a single operation to decorate an existing {@link IteratorType}.
  *
  * _Note_: Functions of this type must always copy the given iterator.
- * @callback IteratorOperationType
+ * @callback IteratorOperation
  * @template _T_
  * @template _U_
  * @param {IteratorType<_T_>} iterator
@@ -42,20 +42,20 @@ const pipe = copy => (...transformers) => {
  * be used in for ... of loops and other syntactical sugar.
  *
  * Furthermore, the Kolibri defines many of functions of type
- * {@link IteratorOperationType} which can be used to
+ * {@link IteratorOperation} which can be used to
  * transform the elements of this Iterator.
  *
  * @typedef IteratorType
  * @template _T_
  * @property { () => { next: () => IteratorResult<_T_, _T_> } } [Symbol.iterator] - returns the iterator for this object.
  * @property { () => IteratorType<_T_> }                        copy - creates a copy of this {@link IteratorType}
- * @property { Pipe }                                           pipe - transforms this iterator using the passed {@link IteratorOperationType}
+ * @property { Pipe }                                           pipe - transforms this iterator using the passed {@link IteratorOperation}
  */
 
 /**
- * Pipe applies the given {@link IteratorOperationType} to the iterator it is called on.
+ * Pipe applies the given {@link IteratorOperation} to the iterator it is called on.
  * @callback Pipe
- * @param { ...IteratorOperationType<any,any>} it
+ * @param { ...IteratorOperation<any,any>} it
  * @returns { IteratorType<any> }
  */
 
@@ -85,9 +85,9 @@ const Iterator = (value, incrementFunction, stopDetected) => {
    */
   const next = () => {
     const current = value;
-    const done    = stopDetected(current);
-    value         = incrementFunction(value);
-    return { done, value: current };
+    const done = stopDetected(current);
+    value = incrementFunction(value);
+    return {done, value: current};
   };
 
   /**
@@ -98,7 +98,7 @@ const Iterator = (value, incrementFunction, stopDetected) => {
   const copy = () => Iterator(value, incrementFunction, stopDetected);
 
   return {
-    [Symbol.iterator]: () => ({ next }),
+    [Symbol.iterator]: () => ({next}),
     copy,
     pipe: pipe(copy)
   }
@@ -132,7 +132,7 @@ const TupleIterator = tuple => {
   // detect number of elements in tuple using a special selector function
   const lengthSelector = arr => arr.length;
   // TODO: replace Iterator with Range
-  const indexIterator  = Iterator(0, i => i + 1, i => i >= tuple(lengthSelector));
+  const indexIterator = Iterator(0, i => i + 1, i => i >= tuple(lengthSelector));
   // map over indices and grab corresponding element from tuple
   return map(idx => tuple(values => values[idx]))(indexIterator);
 };
@@ -152,18 +152,18 @@ const emptyIterator =
  * @template _T_
  * @template _U_
  * @type {
- *  (next: () => IteratorResult<_T_, _T_>) =>
- *  (iteratorFunction: IteratorOperationType<_U_, _T_>) =>
- *  (params: *) =>
- *  (inner: IteratorType<_U_>) =>
- *  IteratorType<_T_>
+ *    (next: () => IteratorResult<_T_, _T_>) =>
+ *    (iteratorFunction: (it: IteratorType) => IteratorOperation<_T_, _U_>) =>
+ *    (params: any) =>
+ *    (inner: IteratorType<_U_>) =>
+ *    IteratorType<_T_>
  * }
  */
 const createIterator = next => iteratorFunction => (...params) => innerIterator => {
   const copy = () => iteratorFunction(...params)(innerIterator.copy());
 
   return {
-    [Symbol.iterator]: () => ({ next }),
+    [Symbol.iterator]: () => ({next}),
     copy,
     pipe: pipe(copy)
   };
