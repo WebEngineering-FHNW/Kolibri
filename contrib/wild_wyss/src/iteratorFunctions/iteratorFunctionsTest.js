@@ -280,12 +280,11 @@ iteratorSuite.add("test typical case: forEach", assert => {
 iteratorSuite.add("test advanced case: forEach", assert => {
   const iterator = newIterator(4);
   const iterElements = [];
-  const it = forEach$(cur => {
+  forEach$(cur => {
     // consume all elements of the iterator, to test if the iterator has been copied correctly
     for (const _ of iterator) { }
     iterElements.push(cur);
   })(iterator);
-  assert.is(arrayEq([0,1,2,3,4])([...it]), true);
   assert.is(arrayEq([0,1,2,3,4])(iterElements), true);
 });
 

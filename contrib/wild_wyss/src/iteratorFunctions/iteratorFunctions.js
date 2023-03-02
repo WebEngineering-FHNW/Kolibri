@@ -345,23 +345,16 @@ const reduce$ = (accumulationFn, start) => iterator => {
  * @template _T_
  * @type {
  *            (callback: Consumer<_T_>)
- *         => IteratorOperation<_T_>
+ *         => (it: IteratorType<_T_>)
+ *         => void
  *       }
  */
 const forEach$ = callback => iterator => {
-  const inner = iterator.copy();
-  // copy again to return it later,
-  // Since the user of forEach$ could consume the initial iterator during the callback() function
-  for (const current of inner.copy()) {
+  for (const current of iterator.copy()) {
     callback(current);
   }
-
-  return inner;
 };
 
-/* TODO: macht es Sinn hier ein Pair zurück zugeben?
-    Haskell macht das analog:https://hackage.haskell.org/package/base-4.17.0.0/docs/Data-List.html#v:uncons
-*/
 /**
  * @function
  * @template _T_
