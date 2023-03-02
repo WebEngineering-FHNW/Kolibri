@@ -103,7 +103,7 @@ const rejectAll = predicate => iterator =>
  * @type {
  *             (it1: IteratorType<*>)
  *          => (it2: IteratorType<*>)
- *          => boolean
+ *          => Boolean
  *       }
  * @example
  * const it1    = Iterator(0, inc, stop);
@@ -118,7 +118,10 @@ const eq$ = it1 => it2 =>
  * @function
  * @template _T_
  * @pure
- * @type { (iterator: IteratorType<_T_>) =>  _T_ }
+ * @type {
+ *              (iterator: IteratorType<_T_>)
+ *          =>  _T_
+ *       }
  * @example
  * const it     = Iterator(0, inc, stop);
  * const result = head(it);
@@ -137,8 +140,10 @@ const head = iterator => {
  * @function
  * @template _T_
  * @pure
- * @param   { IteratorType<_T_> } iterator
- * @returns boolean
+ * @type {
+ *            (iterator: IteratorType<_T_>)
+ *         => Boolean
+ *       }
  * @example
  * const it     = Iterator(0, inc, stop);
  * const result = isEmpty(it);
@@ -217,8 +222,10 @@ const drop = count => iterator => {
  * @template _T_
  * @function
  * @pure
- * @param { IteratorType<_T_> } iterator
- * @returns IteratorType<_T_>
+ * @type {
+ *             (iterator: IteratorType<_T_>)
+ *          => IteratorType<_T_>
+ *       }
  * @example
  * const it       = Iterator(0, inc, stop);
  * const reversed = reverse(it);
