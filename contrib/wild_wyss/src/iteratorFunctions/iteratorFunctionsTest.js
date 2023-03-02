@@ -244,9 +244,16 @@ iteratorSuite.add("test advanced case: takeWhile", assert => {
 });
 
 iteratorSuite.add("test simple case: take", assert => {
-  // the inner iterator stops before the outer
   const iterator = newIterator(10);
   const some = take(4)(iterator);
+  assert.is(arrayEq([0, 1, 2, 3])([...some]), true);
+  assert.is(arrayEq([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])([...iterator]), true);
+});
+
+iteratorSuite.add("test advanced case: take with copy", assert => {
+  const iterator = newIterator(10);
+  const some = take(4)(iterator);
+  assert.is(arrayEq([0, 1, 2, 3])([...some.copy()]), true);
   assert.is(arrayEq([0, 1, 2, 3])([...some]), true);
   assert.is(arrayEq([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])([...iterator]), true);
 });

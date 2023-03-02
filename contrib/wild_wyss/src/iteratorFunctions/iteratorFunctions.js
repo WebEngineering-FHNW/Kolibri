@@ -318,7 +318,9 @@ const takeWhile = predicate => iterator => {
  */
 const take = count => iterator => {
   let i = 0;
-  return takeWhile(_ => i++ < count)(iterator);
+  // just returning takeWhile would break copy, since the state of i would be the same for all copies
+  const inner = takeWhile(_ => i++ < count)(iterator);
+  return createIterator(inner[Symbol.iterator]().next)(take)(count)(iterator);
 };
 
 /**
