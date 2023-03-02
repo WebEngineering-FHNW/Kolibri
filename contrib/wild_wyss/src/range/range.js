@@ -1,4 +1,4 @@
-import { Iterator } from "../iteratorFunctions/iterator.js";
+import { Iterator } from "../iteratorOperations/iterator.js";
 
 export { Range }
 

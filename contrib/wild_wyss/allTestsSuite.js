@@ -11,7 +11,8 @@ import "./src/logger/logUi/logUiControllerTest.js"
 
 // iterator
 import "./src/iterator/iteratorTest.js"
-import "./src/iteratorFunctions/iteratorFunctionsTest.js"
+import "./src/iteratorOperations/intermediateOperationsTest.js"
+import "./src/iteratorOperations/terminalOperationsTest.js"
 
 // range
 import "./src/range/rangeTest.js"

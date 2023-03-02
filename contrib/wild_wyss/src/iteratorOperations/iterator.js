@@ -7,7 +7,7 @@ export {
   emptyIterator,
 }
 
-import {map} from "./iteratorFunctions.js"
+import {map} from "./intermediateOperations.js"
 
 // TODO: varargs werden hier nicht von jsdoc erkannt.
 /**
@@ -33,7 +33,7 @@ const pipe = copy => (...transformers) => {
  * @callback IteratorOperation
  * @template _T_
  * @template _U_
- * @param {IteratorType<_T_>} iterator
+ * @param { IteratorType<_T_> } iterator
  * @returns { IteratorType<_U_>}
  */
 
