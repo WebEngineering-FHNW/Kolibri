@@ -28,7 +28,7 @@ const FocusRingInternal = (pre, post) => {
 
   const right = () => {
     const currentFocus = head(post);
-    const modifiedPost = drop(1)(post.copy());
+    const modifiedPost = drop(1)(post);
 
     if (eq$(modifiedPost)(emptyIterator)) {
       if (eq$(pre)(emptyIterator)) {
@@ -40,17 +40,17 @@ const FocusRingInternal = (pre, post) => {
         reverse$(pre)
       );
     }
-    const modifiedPre = cons(currentFocus)(pre.copy()); // paranoid 2
+    const modifiedPre = cons(currentFocus)(pre);
     return FocusRingInternal(modifiedPre, modifiedPost);
   };
 
   const left = () => {
-    let modifiedPre   = pre.copy();
-    let modifiedPost  = post.copy();
+    let modifiedPre  = pre;
+    let modifiedPost = post;
 
     if (isEmpty(pre)) {
       modifiedPost = emptyIterator;
-      modifiedPre = reverse$(post.copy());
+      modifiedPre  = reverse$(post);
     }
 
     // remove head from pre and add it to post
