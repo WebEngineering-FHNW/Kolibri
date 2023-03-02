@@ -154,7 +154,7 @@ const emptyIterator =
  * @type {
  *    (next: () => IteratorResult<_T_, _T_>) =>
  *    (iteratorFunction: (it: IteratorType) => IteratorOperation<_T_, _U_>) =>
- *    (params: any) =>
+ *    (...params: any) =>
  *    (inner: IteratorType<_U_>) =>
  *    IteratorType<_T_>
  * }

@@ -28,9 +28,8 @@ export {
  * @template _U_
  * @pure
  * @type {
- *               (mapper: Functor<_U_, _T_>)
- *            => (iterator: IteratorType<_U_>)
- *            => IteratorType<_T_>
+ *            (mapper: Functor<_U_, _T_>)
+ *         => IteratorOperation<_T_>
  *       }
  * @example
  * const it     = Iterator(0, inc, stop);
@@ -57,8 +56,7 @@ const map = mapper => iterator => {
  * @pure
  * @type {
  *             (predicate: Predicate<_T_>)
- *          => (iterator: IteratorType<_T_>)
- *          => IteratorType<_T_>
+ *          => IteratorOperation<_T_>
  *       }
  * @example
  * const it     = Iterator(0, inc, stop);
@@ -86,9 +84,8 @@ const retainAll = predicate => iterator => {
  * @template _T_
  * @pure
  * @type {
- *             (predicate: Predicate<_T_>)
- *          => (iterator: IteratorType<_T_>)
- *          => IteratorType<_T_>
+ *            (predicate: Predicate<_T_>)
+ *         => IteratorOperation<_T_>
  *       }
  * @example
  * const it     = Iterator(0, inc, stop);
@@ -123,8 +120,7 @@ const eq$ = it1 => it2 =>
  * @function
  * @template _T_
  * @pure
- * @param   { IteratorType<_T_> } iterator
- * @returns _T_
+ * @type { (iterator: IteratorType<_T_>) =>  _T_ }
  * @example
  * const it     = Iterator(0, inc, stop);
  * const result = head(it);
@@ -157,9 +153,8 @@ const isEmpty = iterator => head(iterator) === undefined;
  * @template _T_
  * @pure
  * @type {
- *              (predicate: Predicate<_T_>)
- *           => (iterator: IteratorType<_T_>)
- *           => IteratorType<_T_>
+ *            (predicate: Predicate<_T_>)
+ *         => IteratorOperation<_T_>
  *       }
  * @example
  * const it      = Iterator(0, inc, stop);
@@ -192,9 +187,8 @@ const dropWhile = predicate => iterator => {
  * @template _T_
  * @pure
  * @type {
- *             (count: number)
- *          => (iterator: IteratorType)
- *          => IteratorType<_T_>
+ *            (count: number)
+ *         => IteratorOperation<_T_>
  *       }
  * @example
  * const it      = Iterator(0, inc, stop);
@@ -262,9 +256,8 @@ const concat$ = it1 => it2 => ArrayIterator([...it1, ...it2]);
  * @template _T_
  * @pure
  * @type {
- *             (element: _T_)
- *          => (it: IteratorType<_T_>)
- *          => IteratorType<_T_>
+ *            (element: _T_)
+ *         => IteratorOperation<_T_>
  *       }
  * @example
  * const it      = Iterator(0, inc, stop);
@@ -281,10 +274,9 @@ const cons$ = element => iterator => {
  * @function
  * @template _T_
  * @type {
- *    (predicate: (_T_) => Boolean) =>
- *    (iterator: IteratorType<_T_>) =>
- *    IteratorType<_T_>
- * }
+ *            (predicate: (_T_) => Boolean)
+ *         => IteratorOperation<_T_>
+ *       }
  * @example
  * const it      = Iterator(0, inc, stop);
  * // keep all elements until one element is bigger or equal to 2.
@@ -308,10 +300,9 @@ const takeWhile = predicate => iterator => {
  * @function
  * @template _T_
  * @type {
- *    (count: Number) =>
- *    (iterator: IteratorType<_T_>) =>
- *    IteratorType<_T_>
- * }
+ *            (count: Number)
+ *         => IteratorOperation<_T_>
+ *       }
  * const it      = Iterator(0, inc, stop);
  * // only keep the next 4 elements, ignore the others
  * const dropped = take(4)(it);
@@ -328,11 +319,10 @@ const take = count => iterator => {
  * @function
  * @template _T_
  * @type {
- *          (accumulationFn: BinaryOperation<_T_>, start: _T_) =>
- *          (iterator: IteratorType<_T_>) =>
- *          _T_
+ *             (accumulationFn: BinaryOperation<_T_>, start: _T_)
+ *          => (iterator: IteratorType<_T_>)
+ *          => _T_
  *       }
- * @returns {function(*): *}
  */
 const reduce$ = (accumulationFn, start) => iterator => {
   const inner = iterator.copy();
@@ -352,10 +342,9 @@ const reduce$ = (accumulationFn, start) => iterator => {
  * @function
  * @template _T_
  * @type {
- *   (callback: Consumer<_T_>) =>
- *   (iterator: IteratorType<_T_>) =>
- *   IteratorType<_T_>
- * }
+ *            (callback: Consumer<_T_>)
+ *         => IteratorOperation<_T_>
+ *       }
  */
 const forEach$ = callback => iterator => {
   const inner = iterator.copy();
