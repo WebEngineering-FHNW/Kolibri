@@ -59,6 +59,7 @@ iteratorSuite.add("test advanced case: retainAll", assert => {
   const copy           = filtered.copy();
   const copyFiltered   = retainAll(el => el === 2)(copy);
   const mappedFiltered = map(el => el * 2)(copyFiltered);
+
   assert.is(arrayEq([0, 2, 4])([...filtered]),       true);
   assert.is(arrayEq([2])      ([...copyFiltered]),   true);
   assert.is(arrayEq([4])      ([...mappedFiltered]), true);
@@ -68,7 +69,7 @@ iteratorSuite.add("test typical case: pipe", assert => {
   const iterator = newIterator(4);
   const piped    = iterator.pipe(
     map(i => i + 1),
-    retainAll(el => el % 2 === 0)
+    retainAll(el => el % 2 === 0),
   );
   assert.is(arrayEq([2,4])([...piped]), true);
 });
@@ -218,16 +219,14 @@ iteratorSuite.add("test advanced case: cons$", assert => {
 
 iteratorSuite.add("test advanced case: rejectAll", assert => {
   const iterator       = newIterator(4);
-  const filtered       = rejectAll(el => el % 2 !== 0)(iterator);
-  const copy           = filtered.copy();
-  const copyFiltered   = rejectAll(el => el !== 2)(copy);
-  const mappedFiltered = map(el => el * 2)(copyFiltered);
+  const filtered       = rejectAll(el => el % 2 === 0)(iterator);
+  const mappedFiltered = map(el => el * 2)(filtered);
+  const copyFiltered   = rejectAll(el => el === 2)(mappedFiltered);
 
-  assert.is(arrayEq([0, 2, 4])([...filtered]),       true);
-  assert.is(arrayEq([2])      ([...copyFiltered]),   true);
-  assert.is(arrayEq([4])      ([...mappedFiltered]), true);
+  assert.is(arrayEq([1, 3])([...filtered]),       true);
+  assert.is(arrayEq([2, 6])      ([...mappedFiltered]), true);
+  assert.is(arrayEq([6])      ([...copyFiltered]),   true);
 });
-
 
 iteratorSuite.add("test typical case: takeWhile", assert => {
   const iterator = newIterator(10);
