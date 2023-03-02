@@ -11,14 +11,6 @@ import {
 import {
   map,
   retainAll,
-  rejectAll,
-  dropWhile,
-  drop,
-  reverse$,
-  concat$,
-  cons$,
-  takeWhile,
-  take,
 } from "./intermediateOperations.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);

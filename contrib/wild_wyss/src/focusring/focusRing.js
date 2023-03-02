@@ -1,5 +1,5 @@
 import { ArrayIterator, emptyIterator }              from "../iterator/iterator.js";
-import { reverse$, cons$, drop } from "../iterator/intermediateOperations.js";
+import { reverse$, cons, drop } from "../iterator/intermediateOperations.js";
 import { eq$, head, isEmpty } from "../iterator/terminalOperations.js";
 export { FocusRing }
 
@@ -40,7 +40,7 @@ const FocusRingInternal = (pre, post) => {
         reverse$(pre)
       );
     }
-    const modifiedPre = cons$(currentFocus)(pre.copy()); // paranoid 2
+    const modifiedPre = cons(currentFocus)(pre.copy()); // paranoid 2
     return FocusRingInternal(modifiedPre, modifiedPost);
   };
 
@@ -56,7 +56,7 @@ const FocusRingInternal = (pre, post) => {
     // remove head from pre and add it to post
     const headPre = head(modifiedPre);
     modifiedPre   = drop(1)(modifiedPre);
-    modifiedPost  = cons$(headPre)(modifiedPost);
+    modifiedPost  = cons(headPre)(modifiedPost);
 
     return FocusRingInternal(modifiedPre, modifiedPost);
   };

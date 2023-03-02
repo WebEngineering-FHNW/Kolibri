@@ -11,7 +11,7 @@ import {
   drop,
   reverse$,
   concat$,
-  cons$,
+  cons,
   takeWhile,
   take,
 } from "./intermediateOperations.js";
@@ -53,7 +53,7 @@ const testSimple = op => expected => assert => {
   ["reverse$",      reverse$,                          [4, 3, 2, 1, 0],      ],
   ["concat$ (fst)", concat$(newIterator(1)),           [0, 1, 0, 1, 2, 3, 4],],
   ["concat$ (snd)", it => concat$(it)(newIterator(1)), [0, 1, 2, 3, 4, 0, 1],],
-  ["cons$",         cons$(2),                          [2, 0, 1, 2, 3, 4],   ],
+  ["cons",          cons(2),                           [2, 0, 1, 2, 3, 4],   ],
 ].forEach(el => {
   const [ name, op, expected ] = el;
   iteratorSuite.add(`test simple: ${name}`,  testSimple (op)(expected));

@@ -8,7 +8,7 @@ export {
   drop,
   reverse$,
   concat$,
-  cons$,
+  cons,
   takeWhile,
   take,
 }
@@ -86,10 +86,6 @@ const rejectAll = predicate => iterator =>
   // flip the predicate and call retainAll
   retainAll(el => !predicate(el))(iterator);
 
-
-
-
-
 /**
  * Proceeds with the iteration where the predicate no longer holds.
  *
@@ -140,22 +136,10 @@ const dropWhile = predicate => iterator => {
 const drop = count => iterator => {
   let i = 0;
 
-  const inner = iterator.copy();
-
-  const next = () => {
-    let { done, value } = nextOf(inner);
-
-    while( i++ < count && !done) {
-      const n = nextOf(inner);
-      done    = n.done;
-      value   = n.value;
-    }
-
-    return { done, value }
-  };
-
-  return createIterator(next)(drop)(count)(inner);
+  const inner = dropWhile(_ => i++ < count)(iterator);
+  return createIterator(inner[Symbol.iterator]().next)(drop)(count)(iterator);
 };
+
 
 /**
  * Processes the iterator backwards.
@@ -204,14 +188,22 @@ const concat$ = it1 => it2 => ArrayIterator([...it1.copy(), ...it2.copy()]);
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it      = Iterator(0, inc, stop);
- * const element = 1;
- * const cons    = cons$(element)(it2);
+ * const it       = Iterator(0, inc, stop);
+ * const element  = 1;
+ * const iterator = cons(element)(it);
  */
-const cons$ = element => iterator => {
+const cons = element => iterator => {
   const inner = iterator.copy();
 
-  return ArrayIterator([element, ...inner]);
+  let isReturned = false;
+  const next = () => {
+    if (!isReturned) {
+      isReturned = true;
+      return { done: false, value: element };
+    }
+    return nextOf(inner);
+  };
+  return createIterator(next)(cons)(element)(inner);
 };
 
 /**
