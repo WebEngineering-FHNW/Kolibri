@@ -40,10 +40,7 @@ const map = mapper => iterator => {
 
   const next = () => {
     const { done, value } = nextOf(inner);
-    return {
-      done,
-      value: mapper(value)
-    }
+    return { done, value: mapper(value) }
   };
 
   return createIterator(next)(map)(mapper)(inner);
@@ -72,6 +69,7 @@ const retainAll = predicate => iterator => {
       const result = predicate(value) || done;
       return result ? { done, value } : applyFilter(nextOf(inner));
     };
+
     return applyFilter(nextOf(inner))
   };
 
@@ -99,7 +97,7 @@ const rejectAll = predicate => iterator =>
 /**
  * Checks the equality of two non-infinite iterators.
  *
- *_Note_: Two iterators are considered as equal if they contain or create the exactly same values in the same order.
+ * _Note_: Two iterators are considered as equal if they contain or create the exactly same values in the same order.
  * @function
  * @pure
  * @type {
@@ -128,6 +126,7 @@ const eq$ = it1 => it2 =>
 const head = iterator => {
   const inner = iterator.copy();
   const { done, value } = nextOf(inner);
+
   return done ? undefined : value;
 };
 
@@ -172,11 +171,10 @@ const dropWhile = predicate => iterator => {
       done    = n.done;
       value   = n.value;
     }
-    return {
-      done,
-      value
-    }
+
+    return { done, value }
   };
+
   return createIterator(next)(dropWhile)(predicate)(inner);
 };
 
@@ -207,13 +205,11 @@ const drop = count => iterator => {
       done    = n.done;
       value   = n.value;
     }
-    return {
-      done,
-      value
-    }
-  };
-  return createIterator(next)(drop)(count)(inner);
 
+    return { done, value }
+  };
+
+  return createIterator(next)(drop)(count)(inner);
 };
 
 /**
@@ -229,6 +225,7 @@ const drop = count => iterator => {
  */
 const reverse$ = iterator => {
   const values = [...iterator.copy()].reverse();
+
   return ArrayIterator(values);
 };
 
@@ -266,6 +263,7 @@ const concat$ = it1 => it2 => ArrayIterator([...it1, ...it2]);
  */
 const cons$ = element => iterator => {
   const inner = iterator.copy();
+
   return ArrayIterator([element, ...inner]);
 };
 
@@ -290,8 +288,10 @@ const takeWhile = predicate => iterator => {
     // the iterator finishes, when the predicate does not return true anymore,
     // or the previous iterator has no more elements left
     const done = el.done || !predicate(el.value);
+
     return  { value: el.value, done };
   };
+
   return createIterator(next)(takeWhile)(predicate)(inner);
 };
 
@@ -311,6 +311,7 @@ const take = count => iterator => {
   let i = 0;
   // just returning takeWhile would break copy, since the state of i would be the same for all copies
   const inner = takeWhile(_ => i++ < count)(iterator);
+
   return createIterator(inner[Symbol.iterator]().next)(take)(count)(iterator);
 };
 
@@ -330,6 +331,7 @@ const reduce$ = (accumulationFn, start) => iterator => {
   for (const current of inner) {
      accumulator = accumulationFn(accumulator, current);
   }
+
   return accumulator;
 };
 
@@ -353,6 +355,7 @@ const forEach$ = callback => iterator => {
   for (const current of inner.copy()) {
     callback(current);
   }
+
   return inner;
 };
 
@@ -368,5 +371,6 @@ const forEach$ = callback => iterator => {
 const uncons = iterator => {
   const inner = iterator.copy();
   const { value } = nextOf(inner);
+
   return Pair(value)(inner);
 };
