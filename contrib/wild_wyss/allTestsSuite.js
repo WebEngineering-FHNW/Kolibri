@@ -10,9 +10,9 @@ import "./src/logger/appender/observableAppenderTest.js"
 import "./src/logger/logUi/logUiControllerTest.js"
 
 // iterator
-import "./src/iteratorOperations/iteratorTest.js"
-import "./src/iteratorOperations/intermediateOperationsTest.js"
-import "./src/iteratorOperations/terminalOperationsTest.js"
+import "./src/iterator/iteratorTest.js"
+import "./src/iterator/intermediateOperationsTest.js"
+import "./src/iterator/terminalOperationsTest.js"
 
 // range
 import "./src/range/rangeTest.js"
