@@ -7,14 +7,13 @@ export {
   emptyIterator,
 }
 
-import {map} from "./intermediateOperations.js"
+import { map } from "./intermediateOperations.js"
 
-// TODO: varargs werden hier nicht von jsdoc erkannt.
 /**
  * @template _T_
  * @type  {
  *            (copy: () => IteratorType<_T_>) =>
- *            (transformers: IteratorOperation ) =>
+ *            (...transformers: IteratorOperation ) =>
  *            IteratorType<_T_>
  *        }
  */
