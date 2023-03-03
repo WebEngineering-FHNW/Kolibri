@@ -12,17 +12,26 @@ import {
   map,
   retainAll,
 } from "./intermediateOperations.js";
+import {reduce$} from "./terminalOperations.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
 const iteratorSuite = TestSuite("Iterator");
 
+iteratorSuite.add("test special case: no increment after done", assert => {
+  let result = true;
+  const iterator = Iterator(true, _ => result = false, _ => true);
+  for (const iteratorElement of iterator) { /* exhausting iterator */ }
+  assert.is(result, true);
+});
+
 iteratorSuite.add("test typical case: pipe", assert => {
   const iterator = newIterator(4);
   const piped    = iterator.pipe(
     map(i => i + 1),
-    retainAll(el => el % 2 === 0),
+    retainAll(el => el % 2 === 0)
   );
+
   assert.is(arrayEq([2,4])([...piped]), true);
 });
 

@@ -61,10 +61,10 @@ const pipe = copy => (...transformers) => {
 /**
  *
  * The incrementFunction should change the value (make progress) in a way
- * that the stopDetected function can recognize the end of the iterator.
+ * that the isDoneFunction function can recognize the end of the iterator.
  *
  * Contract:
- * - incrementFunction & stopDetected should not refer to any mutable
+ * - incrementFunction & isDoneFunction should not refer to any mutable
  *   state variable (because of side effect) in the closure.
  *   Otherwise, copying and iterator may not work as expected.
  * - Functions ending with a "$" must not be applied to infinite iterators.
@@ -72,21 +72,23 @@ const pipe = copy => (...transformers) => {
  * @template _T_
  * @param   { _T_ }               value
  * @param   { (_T_) => _T_ }      incrementFunction
- * @param   { (_T_) => Boolean }  stopDetected - returns true if the iteration should stop
+ * @param   { (_T_) => Boolean }  isDoneFunction - returns true if the iteration should stop
  * @returns { IteratorType<_T_> }
  * @constructor
  */
-const Iterator = (value, incrementFunction, stopDetected) => {
+const Iterator = (value, incrementFunction, isDoneFunction) => {
   /**
    * @template _T_
    * Returns the next iteration of this iterable object.
-   * @returns {IteratorResult<_T_, _T_>}
+   * @returns { IteratorResult<_T_, _T_> }
    */
   const next = () => {
     const current = value;
-    const done = stopDetected(current);
-    value = incrementFunction(value);
-    return {done, value: current};
+    const done    = isDoneFunction(current);
+    if (!done) {
+      value       = incrementFunction(value);
+    }
+    return { done, value: current };
   };
 
   /**
@@ -94,10 +96,10 @@ const Iterator = (value, incrementFunction, stopDetected) => {
    * Returns a copy of this Iterator
    * @returns {IteratorType<_T_>}
    */
-  const copy = () => Iterator(value, incrementFunction, stopDetected);
+  const copy = () => Iterator(value, incrementFunction, isDoneFunction);
 
   return {
-    [Symbol.iterator]: () => ({next}),
+    [Symbol.iterator]: () => ({ next }),
     copy,
     pipe: pipe(copy)
   }
@@ -158,8 +160,8 @@ const emptyIterator =
  *    IteratorType<_T_>
  * }
  */
-const createIterator = next => iteratorFunction => (...params) => innerIterator => {
-  const copy = () => iteratorFunction(...params)(innerIterator.copy());
+const createIterator = next => operation => (...params) => innerIterator => {
+  const copy = () => operation(...params)(innerIterator.copy());
 
   return {
     [Symbol.iterator]: () => ({ next }),
