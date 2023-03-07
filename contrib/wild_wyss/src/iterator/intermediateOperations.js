@@ -1,4 +1,5 @@
-import { ArrayIterator, createIterator, nextOf }  from "./iterator.js";
+import {ArrayIterator, ConcatIterator, createIterator, emptyIterator, nextOf} from "./iterator.js";
+import {reduce$} from "./terminalOperations.js";
 
 export {
   map,
@@ -11,6 +12,7 @@ export {
   cons,
   takeWhile,
   take,
+  mconcat,
 }
 
 /**
@@ -242,6 +244,7 @@ const takeWhile = predicate => iterator => {
  *            (count: Number)
  *         => IteratorOperation<_T_>
  *       }
+ * @example
  * const it      = Iterator(0, inc, stop);
  * // only keep the next 4 elements, ignore the others
  * const dropped = take(4)(it);
@@ -253,3 +256,27 @@ const take = count => iterator => {
 
   return createIterator(inner[Symbol.iterator]().next)(take)(count)(iterator);
 };
+
+/**
+ * @function
+ * @template _T_
+ * @type {
+ *       (iterator: IteratorType<IteratorType<_T_>>)
+ *       => IteratorType<_T_>
+ *   }
+ * @example
+ * const iterators = ArrayIterator([
+ *   Range(2),
+ *   Range(2),
+ *   Range(2),
+ * ]);
+ * const result = mconcat(iterators);
+ * console.log(...result);
+ * // prints: 0, 1, 2, 0, 1, 2, 0, 1, 2
+ */
+const mconcat = iterator =>
+   /** @template _T_
+    * @type { IteratorType<_T_> }
+    */
+   reduce$((acc, cur) => ConcatIterator(acc)(cur), emptyIterator)(iterator);
+

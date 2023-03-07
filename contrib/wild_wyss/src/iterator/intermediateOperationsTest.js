@@ -1,7 +1,7 @@
 import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
 import { arrayEq }   from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
-import { Iterator } from "./iterator.js"
+import {ArrayIterator, Iterator} from "./iterator.js"
 
 import {
   map,
@@ -14,8 +14,14 @@ import {
   cons,
   takeWhile,
   take,
+  mconcat,
 } from "./intermediateOperations.js";
 
+/**
+ *
+ * @param  { Number } limit
+ * @returns { IteratorType<Number> }
+ */
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
 const iteratorSuite = TestSuite("IntermediateOperations");
@@ -42,18 +48,25 @@ const testSimple = op => expected => assert => {
   assert.is(arrayEq(expected)([...operated]), true)
 };
 
+const mconcatInit = _ => mconcat(ArrayIterator([
+  newIterator(2),
+  newIterator(2),
+  newIterator(2),
+]));
+
 [
-  ["map",           map(el => 2 * el),                 [0, 2, 4, 6, 8],      ],
-  ["retainAll",     retainAll(el => el % 2 === 0),     [0, 2, 4],            ],
-  ["rejectAll",     rejectAll(el => el % 2 === 0),     [1, 3],               ],
-  ["dropWhile",     dropWhile(el => el < 2),           [2, 3, 4],            ],
-  ["takeWhile",     takeWhile(el => el < 2),           [0, 1],               ],
-  ["drop",          drop(2),                           [2, 3, 4],            ],
-  ["take",          take(2),                           [0, 1],               ],
-  ["reverse$",      reverse$,                          [4, 3, 2, 1, 0],      ],
-  ["concat$ (fst)", concat$(newIterator(1)),           [0, 1, 0, 1, 2, 3, 4],],
-  ["concat$ (snd)", it => concat$(it)(newIterator(1)), [0, 1, 2, 3, 4, 0, 1],],
-  ["cons",          cons(2),                           [2, 0, 1, 2, 3, 4],   ],
+  ["map",           map(el => 2 * el),                 [0, 2, 4, 6, 8],           ],
+  ["retainAll",     retainAll(el => el % 2 === 0),     [0, 2, 4],                 ],
+  ["rejectAll",     rejectAll(el => el % 2 === 0),     [1, 3],                    ],
+  ["dropWhile",     dropWhile(el => el < 2),           [2, 3, 4],                 ],
+  ["takeWhile",     takeWhile(el => el < 2),           [0, 1],                    ],
+  ["drop",          drop(2),                           [2, 3, 4],                 ],
+  ["take",          take(2),                           [0, 1],                    ],
+  ["reverse$",      reverse$,                          [4, 3, 2, 1, 0],           ],
+  ["concat$ (fst)", concat$(newIterator(1)),           [0, 1, 0, 1, 2, 3, 4],     ],
+  ["concat$ (snd)", it => concat$(it)(newIterator(1)), [0, 1, 2, 3, 4, 0, 1],     ],
+  ["cons",          cons(2),                           [2, 0, 1, 2, 3, 4],        ],
+  ["mconcat",       mconcatInit,                       [0, 1, 2, 0, 1, 2, 0, 1, 2]],
 ].forEach(el => {
   const [ name, op, expected ] = el;
   iteratorSuite.add(`test simple: ${name}`,  testSimple (op)(expected));
