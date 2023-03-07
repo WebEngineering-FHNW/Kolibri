@@ -90,8 +90,8 @@ const forEach$ = callback => iterator => {
 /**
  * @function
  * @template _T_
- * @param { IteratorType<_T_> } iterator
- * @returns {(s: pairSelector) => (_T_ |IteratorType<_T_>)}
+ * @param   { IteratorType<_T_> } iterator
+ * @returns { (s: pairSelector) => (_T_ |IteratorType<_T_>) }
  */
 const uncons = iterator => {
   const inner = iterator.copy();

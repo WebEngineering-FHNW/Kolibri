@@ -8,8 +8,6 @@ export {
   emptyIterator,
 }
 
-import { map } from "./intermediateOperations.js"
-
 /**
  * @template _T_
  * @type  {
@@ -85,10 +83,8 @@ const Iterator = (value, incrementFunction, isDoneFunction) => {
    */
   const next = () => {
     const current = value;
-    const done    = isDoneFunction(current);
-    if (!done) {
-      value       = incrementFunction(value);
-    }
+    const done = isDoneFunction(current);
+    if (!done) value = incrementFunction(value);
     return { done, value: current };
   };
 
@@ -114,7 +110,7 @@ const Iterator = (value, incrementFunction, isDoneFunction) => {
  * @constructor
  */
 const ArrayIterator = array =>
-  map(i => array[i])(Iterator(0, x => x + 1, x => x === array.length));
+  internalMap(i => array[i])(Iterator(0, x => x + 1, x => x === array.length));
 
 /**
  * @template _T_
@@ -136,7 +132,7 @@ const TupleIterator = tuple => {
   // TODO: replace Iterator with Range
   const indexIterator = Iterator(0, i => i + 1, i => i >= tuple(lengthSelector));
   // map over indices and grab corresponding element from tuple
-  return map(idx => tuple(values => values[idx]))(indexIterator);
+  return internalMap(idx => tuple(values => values[idx]))(indexIterator);
 };
 
 /**
@@ -225,3 +221,15 @@ const createIterator = next => operation => (...params) => innerIterator => {
  * @returns { IteratorResult<_T_, _T_> }
  */
 const nextOf = it => it[Symbol.iterator]().next();
+
+// To prevent cycle dependencies, this module defines an own mapping function
+const internalMap = mapper => iterator => {
+  const inner = iterator.copy();
+
+  const next = () => {
+    const { done, value } = nextOf(inner);
+    return { done, value: mapper(value) }
+  };
+
+  return createIterator(next)(internalMap)(mapper)(inner);
+};
