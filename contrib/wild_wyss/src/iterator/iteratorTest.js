@@ -6,13 +6,15 @@ import {
   Iterator,
   ArrayIterator,
   TupleIterator,
-  ConcatIterator,
+  ConcatIterator, StackIterator,
 } from "./iterator.js"
 
 import {
   map, rejectAll,
   retainAll,
 } from "./intermediateOperations.js";
+import {emptyStack, pop, push, stackEquals} from "../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import { fst, snd }    from "../../../../docs/src/kolibri/stdlib.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
@@ -99,6 +101,22 @@ iteratorSuite.add("test purity: ConcatIterator", assert => {
   for (const _ of concatIterator) { /* Exhausting */ }
   assert.is(arrayEq([0,1,2,3,4])([...it1]), true);
   assert.is(arrayEq([0,1,2])    ([...it2]), true);
+});
+
+iteratorSuite.add("test typical case: stack iterator", assert => {
+  const stack = push(push(push(emptyStack)(1))(2))(3);
+
+  const stackIterator = StackIterator(stack);
+  assert.is(arrayEq([3,2,1])([...stackIterator]), true);
+});
+
+iteratorSuite.add("test copy: StackIterator", assert => {
+  const stack = push(push(push(emptyStack)(1))(2))(3);
+
+  const stackIterator = StackIterator(stack);
+  const copy = stackIterator.copy();
+  for (const _ of stackIterator) { /* Exhausting */ }
+  assert.is(arrayEq([3,2,1])([...copy]), true);
 });
 
 iteratorSuite.run();
