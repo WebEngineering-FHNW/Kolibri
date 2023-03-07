@@ -88,10 +88,16 @@ const forEach$ = callback => iterator => {
 };
 
 /**
+ * Removes the first element of this iterator.
  * @function
  * @template _T_
  * @param   { IteratorType<_T_> } iterator
  * @returns { (s: pairSelector) => (_T_ |IteratorType<_T_>) }
+ * @example
+ * const it     = Iterator(0, inc, stop);
+ * const result = uncons(it);
+ * const head   = result(fst); // 0
+ * const tail   = result(snd); // 1, 2, 3, ...
  */
 const uncons = iterator => {
   const inner = iterator.copy();
