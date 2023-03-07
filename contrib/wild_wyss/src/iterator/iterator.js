@@ -129,8 +129,7 @@ const ArrayIterator = array =>
 const TupleIterator = tuple => {
   // detect number of elements in tuple using a special selector function
   const lengthSelector = arr => arr.length;
-  // TODO: replace Iterator with Range
-  const indexIterator = Iterator(0, i => i + 1, i => i >= tuple(lengthSelector));
+  const indexIterator  = Iterator(0, i => i + 1, i => i === tuple(lengthSelector));
   // map over indices and grab corresponding element from tuple
   return internalMap(idx => tuple(values => values[idx]))(indexIterator);
 };
@@ -189,7 +188,6 @@ const ConcatIterator = it1 => it2 => {
 const emptyIterator =
   Iterator(undefined, _ => undefined, _ => true);
 
-// TODO: varargs werden hier nicht von jsdoc erkannt.
 /**
  * Helper function to create a new {@link IteratorType}.
  * @function
@@ -222,7 +220,9 @@ const createIterator = next => operation => (...params) => innerIterator => {
  */
 const nextOf = it => it[Symbol.iterator]().next();
 
-// To prevent cycle dependencies, this module defines an own mapping function
+/**
+ * To prevent cycle dependencies, this module defines an own mapping function.
+ */
 const internalMap = mapper => iterator => {
   const inner = iterator.copy();
 
