@@ -139,6 +139,21 @@ const TupleIterator = tuple => {
   return map(idx => tuple(values => values[idx]))(indexIterator);
 };
 
+/**
+ * Adds the second iterator to the first iterators end.
+ * @function
+ * @template _T_
+ * @pure
+ * @type {
+ *             (it1: IteratorType<_T_>)
+ *          => (it2: IteratorType<_T_>)
+ *          => IteratorType<_T_>
+ *       }
+ * @example
+ * const it1     = Iterator(0, inc, stop);
+ * const it2     = Iterator(0, inc, stop);
+ * const concatIterator = ConcatIterator(it1)(it2);
+ */
 const ConcatIterator = it1 => it2 => {
   const inner1 = it1.copy();
   const inner2 = it2.copy();
