@@ -4,6 +4,7 @@ export {
   Iterator,
   ArrayIterator,
   TupleIterator,
+  ConcatIterator,
   emptyIterator,
 }
 
@@ -136,6 +137,37 @@ const TupleIterator = tuple => {
   const indexIterator = Iterator(0, i => i + 1, i => i >= tuple(lengthSelector));
   // map over indices and grab corresponding element from tuple
   return map(idx => tuple(values => values[idx]))(indexIterator);
+};
+
+const ConcatIterator = it1 => it2 => {
+  const inner1 = it1.copy();
+  const inner2 = it2.copy();
+  let fstDone, sndDone = false;
+
+  const next = () => {
+    let result;
+    if (!fstDone) {
+      result = nextOf(inner1);
+      fstDone    = result.done;
+    }
+
+    if (fstDone) {
+      result  = nextOf(inner2);
+      sndDone = result.done;
+    }
+    return {
+      done: fstDone && sndDone,
+      value: result.value
+    }
+  };
+
+  const copy = () => ConcatIterator(inner1.copy())(inner2.copy());
+
+  return {
+    [Symbol.iterator]: () => ({ next }),
+    copy,
+    pipe: pipe(copy)
+  };
 };
 
 /**

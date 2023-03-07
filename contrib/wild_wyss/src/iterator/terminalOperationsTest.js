@@ -1,7 +1,7 @@
-import { TestSuite }  from "../../../../docs/src/kolibri/util/test.js";
-import { arrayEq }    from "../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { fst, snd }   from "../../../../docs/src/kolibri/stdlib.js";
-import {ArrayIterator, Iterator} from "./iterator.js"
+import { TestSuite }                from "../../../../docs/src/kolibri/util/test.js";
+import { arrayEq }                  from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { fst, snd }                 from "../../../../docs/src/kolibri/stdlib.js";
+import { ArrayIterator, Iterator }  from "./iterator.js"
 import {
   eq$,
   head,

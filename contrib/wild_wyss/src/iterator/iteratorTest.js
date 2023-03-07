@@ -5,14 +5,14 @@ import { Tuple }     from "../../../../docs/src/kolibri/stdlib.js";
 import {
   Iterator,
   ArrayIterator,
-  TupleIterator
+  TupleIterator,
+  ConcatIterator,
 } from "./iterator.js"
 
 import {
-  map,
+  map, rejectAll,
   retainAll,
 } from "./intermediateOperations.js";
-import {reduce$} from "./terminalOperations.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
@@ -65,6 +65,31 @@ iteratorSuite.add("test advanced case: tuple iterator", assert => {
     retainAll(el => el % 2 === 0)
   );
   assert.is(arrayEq([2,4])([...pipedTupleIterator]), true);
+});
+
+iteratorSuite.add("test typical case: ConcatIterator", assert => {
+  const it1 = newIterator(4);
+  const it2 = newIterator(2);
+  const concatIterator = ConcatIterator(it1)(it2);
+  assert.is(arrayEq([0,1,2,3,4,0,1,2])([...concatIterator]), true);
+});
+
+iteratorSuite.add("test copy: ConcatIterator", assert => {
+  const it1 = newIterator(4);
+  const it2 = newIterator(2);
+  const concatIterator = ConcatIterator(it1)(it2);
+  const copy = concatIterator.copy();
+  for (const _ of concatIterator) { /* Exhausting */ }
+  assert.is(arrayEq([0,1,2,3,4,0,1,2])([...copy]), true);
+});
+
+iteratorSuite.add("test purity: ConcatIterator", assert => {
+  const it1 = newIterator(4);
+  const it2 = newIterator(2);
+  const concatIterator = ConcatIterator(it1)(it2);
+  for (const _ of concatIterator) { /* Exhausting */ }
+  assert.is(arrayEq([0,1,2,3,4])([...it1]), true);
+  assert.is(arrayEq([0,1,2])    ([...it2]), true);
 });
 
 iteratorSuite.run();
