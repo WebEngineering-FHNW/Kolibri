@@ -6,7 +6,7 @@ import {
   LOG_NOTHING,
   LOG_TRACE,
   LOG_WARN,
-  setGlobalContext,
+  setLoggingContext,
   setLoggingLevel,
   addToAppenderList,
   removeFromAppenderList,
@@ -27,7 +27,7 @@ const formatLogMsg = context => logLevel => logMessage => {
   return `${context}: [${logLevel}] ${date}: ${logMessage}`;
 };
 
-setGlobalContext(INITIAL_GLOBAL_CONTEXT);
+setLoggingContext(INITIAL_GLOBAL_CONTEXT);
 setLoggingLevel(LOG_DEBUG);
 setMessageFormatter(formatLogMsg);
 
@@ -58,7 +58,7 @@ document.getElementById("btn-fatal").onclick = () => log("fatal");
 document.getElementById("btn-reset").onclick = reset;
 
 document.getElementById("context-global").addEventListener("input", event =>
-    setGlobalContext(event.target.value)
+    setLoggingContext(event.target.value)
 );
 
 const log = lvl => {

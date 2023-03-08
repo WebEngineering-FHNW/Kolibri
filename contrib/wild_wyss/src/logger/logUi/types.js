@@ -25,7 +25,7 @@
  * @property { (Consumer) => void }           onTextFilterChange
  * @property { (String) => void }             setTextFilter
  * @property { () => String }                 getTextFilter
- * @property { (String) => void }             setGlobalContext
+ * @property { (String) => void }             setLoggingContext
  * @property { (String) => void }             setLoggingLevelByString
  * @property { (LogLevelFilterType) => void } flipLogLevel
  */

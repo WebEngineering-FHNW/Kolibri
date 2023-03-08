@@ -3,7 +3,7 @@ export { createLogUi }
 import { dom }                    from "../../../../../docs/src/kolibri/util/dom.js"
 import { shadowCss }              from "../../../../../docs/src/kolibri/style/kolibriStyle.js";
 import { LogUiController }        from "./logUiController.js";
-import { setGlobalContext }       from "../logger.js";
+import { setLoggingContext }       from "../logger.js";
 import { projectDebounceInput }   from "./../../debounceInput/simpleInputProjector.js";
 import { SimpleInputController }  from "../../../../../docs/src/kolibri/projector/simpleForm/simpleInputController.js";
 import { loggingSelectProjector } from "./logUiProjector.js";
@@ -46,7 +46,7 @@ const createLogUi = rootElement => {
     type:   "text",
   });
 
-  simpleController.onValueChanged(value => setGlobalContext(value));
+  simpleController.onValueChanged(value => setLoggingContext(value));
   filterController.onValueChanged(value => controller.setTextFilter(value));
 
   configSection.append(...projectDebounceInput  ("context", simpleController, 200));
