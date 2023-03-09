@@ -35,7 +35,7 @@ const createLogUi = rootElement => {
 
   const simpleController = SimpleInputController({
     value:  "",
-    label:  "Global Context",
+    label:  "Logging Context",
     name:   "context",
     type:   "text",
   });
