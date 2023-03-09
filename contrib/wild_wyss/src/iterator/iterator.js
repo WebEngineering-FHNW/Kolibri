@@ -111,7 +111,7 @@ const Iterator = (value, incrementFunction, isDoneFunction) => {
  * Constructs a new iterator based on the given array. Each iteration returns an element of the given array.
  * @template _T_
  * @param  { Array<_T_> } array
- * @return { IteratorType<_T_> }
+ * @returns { IteratorType<_T_> }
  * @constructor
  */
 const ArrayIterator = array =>
@@ -259,6 +259,12 @@ const nextOf = it => it[Symbol.iterator]().next();
 
 /**
  * To prevent cycle dependencies, this module defines an own mapping function.
+ * @template _T_
+ * @template _U_
+ * @type {
+ *            (mapper: Functor<_U_, _T_>)
+ *         => IteratorOperation<_T_>
+ *       }
  */
 const internalMap = mapper => iterator => {
   const inner = iterator.copy();

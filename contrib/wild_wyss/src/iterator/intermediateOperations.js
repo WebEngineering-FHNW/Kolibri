@@ -260,8 +260,8 @@ const take = count => iterator => {
 /**
  * @function
  * @template _T_
- * @param { IteratorType<IteratorType<_T_>> } - iterator
- * @returns  { (iterator: IteratorType<_T_>) => IteratorType<_T_> }
+ * @param { IteratorType<IteratorType<_T_>> } iterator -
+ * @returns IteratorType<_T_>
  * @example
  * const iterators = ArrayIterator([
  *   Range(2),
@@ -272,11 +272,9 @@ const take = count => iterator => {
  * console.log(...result);
  * // prints: 0, 1, 2, 0, 1, 2, 0, 1, 2
  */
-const mconcat =
-   /** @template _T_
-    * @type {
-    *         (iterator: IteratorType<_T_>) => IteratorType<_T_>
-    *       }
-    */
-   reduce$((acc, cur) => ConcatIterator(acc)(cur), emptyIterator);
-
+const mconcat = iterator =>
+  /**
+   * @template _T_
+   * @type { IteratorType<_T_> }
+   */
+  reduce$((acc, cur) => ConcatIterator(acc)(cur), emptyIterator)(iterator);
