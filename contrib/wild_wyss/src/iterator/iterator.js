@@ -4,6 +4,7 @@ import { convertToJsBool } from "../logger/lamdaCalculus.js";
 
 export {
   nextOf,
+  createIteratorWithArgs,
   createIterator,
   Iterator,
   ArrayIterator,
@@ -226,20 +227,53 @@ const emptyIterator =
   Iterator(undefined, _ => undefined, _ => true);
 
 /**
- * Helper function to create a new {@link IteratorType}.
+ * Helper function to construct a new {@link IteratorType}.
+ * This function is mainly used by iterator operations, which return a new iterator (e.g. map).
+ *
+ * It can be used for operations which take additional arguments (e.g. map, which takes a mapper).
+ * For operations which take arguments, please consider {@link createIterator}.
  * @function
  * @template _T_
  * @template _U_
  * @type {
- *    (next: () => IteratorResult<_T_, _T_>) =>
- *    (iteratorFunction: (it: IteratorType) => IteratorOperation<_T_, _U_>) =>
- *    (...params: any) =>
- *    (inner: IteratorType<_U_>) =>
- *    IteratorType<_T_>
- * }
+ *            (next: () => IteratorResult<_T_, _T_>)
+ *         => (iteratorFunction: (it: IteratorType)
+ *         => IteratorOperation<_T_, _U_>)
+ *         => (...args: any)
+ *         => (inner: IteratorType<_U_>)
+ *         => IteratorType<_T_>
+ *       }
  */
-const createIterator = next => operation => (...params) => innerIterator => {
-  const copy = () => operation(...params)(innerIterator.copy());
+const createIteratorWithArgs = next => operation => (...args) => innerIterator => {
+  const copy = () => operation(...args)(innerIterator);
+
+  return {
+    [Symbol.iterator]: () => ({ next }),
+    copy,
+    pipe: pipe(copy)
+  };
+};
+
+/**
+ * Helper function to construct a new {@link IteratorType}.
+ * This function is mainly used by iterator operations, which return a new iterator (e.g. map).
+ *
+ * It can be used for operations which take no additional arguments (e.g. cycle).
+ * For operations which take arguments, please consider {@link createIteratorWithArgs}.
+ *
+ * @function
+ * @template _T_
+ * @template _U_
+ * @type {
+ *            (next: () => IteratorResult<_T_, _T_>)
+ *         => (iteratorFunction: (it: IteratorType)
+ *         => IteratorOperation<_T_, _U_>)
+ *         => (inner: IteratorType<_U_>)
+ *         => IteratorType<_T_>
+ *       }
+ */
+const createIterator = next => operation => innerIterator => {
+  const copy = () => operation(innerIterator);
 
   return {
     [Symbol.iterator]: () => ({ next }),
@@ -274,5 +308,5 @@ const internalMap = mapper => iterator => {
     return { done, value: mapper(value) }
   };
 
-  return createIterator(next)(internalMap)(mapper)(inner);
+  return createIteratorWithArgs(next)(internalMap)(mapper)(inner);
 };

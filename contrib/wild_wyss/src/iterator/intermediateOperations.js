@@ -1,4 +1,4 @@
-import {ArrayIterator, ConcatIterator, createIterator, emptyIterator, nextOf} from "./iterator.js";
+import {ArrayIterator, ConcatIterator, createIteratorWithArgs, createIterator, emptyIterator, nextOf} from "./iterator.js";
 import {reduce$} from "./terminalOperations.js";
 
 export {
@@ -13,6 +13,7 @@ export {
   takeWhile,
   take,
   mconcat,
+  cycle,
 }
 
 /**
@@ -37,7 +38,7 @@ const map = mapper => iterator => {
     return { done, value: mapper(value) }
   };
 
-  return createIterator(next)(map)(mapper)(inner);
+  return createIteratorWithArgs(next)(map)(mapper)(inner);
 };
 
 /**
@@ -67,7 +68,7 @@ const retainAll = predicate => iterator => {
     return applyFilter(nextOf(inner))
   };
 
-  return createIterator(next)(retainAll)(predicate)(inner);
+  return createIteratorWithArgs(next)(retainAll)(predicate)(inner);
 };
 
 /**
@@ -118,7 +119,7 @@ const dropWhile = predicate => iterator => {
     return { done, value }
   };
 
-  return createIterator(next)(dropWhile)(predicate)(inner);
+  return createIteratorWithArgs(next)(dropWhile)(predicate)(inner);
 };
 
 /**
@@ -139,7 +140,7 @@ const drop = count => iterator => {
   let i = 0;
 
   const inner = dropWhile(_ => i++ < count)(iterator);
-  return createIterator(inner[Symbol.iterator]().next)(drop)(count)(iterator);
+  return createIteratorWithArgs(inner[Symbol.iterator]().next)(drop)(count)(iterator);
 };
 
 
@@ -205,7 +206,7 @@ const cons = element => iterator => {
     }
     return nextOf(inner);
   };
-  return createIterator(next)(cons)(element)(inner);
+  return createIteratorWithArgs(next)(cons)(element)(inner);
 };
 
 /**
@@ -233,7 +234,7 @@ const takeWhile = predicate => iterator => {
     return  { value: el.value, done };
   };
 
-  return createIterator(next)(takeWhile)(predicate)(inner);
+  return createIteratorWithArgs(next)(takeWhile)(predicate)(inner);
 };
 
 /**
@@ -254,7 +255,7 @@ const take = count => iterator => {
   // just returning takeWhile would break copy, since the state of i would be the same for all copies
   const inner = takeWhile(_ => i++ < count)(iterator);
 
-  return createIterator(inner[Symbol.iterator]().next)(take)(count)(iterator);
+  return createIteratorWithArgs(inner[Symbol.iterator]().next)(take)(count)(iterator);
 };
 
 /**
@@ -278,3 +279,22 @@ const mconcat = iterator =>
    * @type { IteratorType<_T_> }
    */
   reduce$((acc, cur) => ConcatIterator(acc)(cur), emptyIterator)(iterator);
+
+/**
+ *
+ * @param iterator
+ */
+const cycle = iterator => {
+    const origin  = iterator.copy();
+    let inner     = origin.copy();
+
+    const next = () => {
+      const result = nextOf(inner);
+      if (!result.done) return result;
+
+      inner = origin.copy();
+      return nextOf(inner);
+  };
+
+  return createIterator(next)(cycle)(inner)
+};

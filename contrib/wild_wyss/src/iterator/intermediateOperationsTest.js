@@ -4,17 +4,18 @@ import { arrayEq }   from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import {ArrayIterator, Iterator} from "./iterator.js"
 
 import {
-  map,
-  retainAll,
-  rejectAll,
-  dropWhile,
-  drop,
-  reverse$,
   concat$,
   cons,
-  takeWhile,
-  take,
+  cycle,
+  drop,
+  dropWhile,
+  map,
   mconcat,
+  rejectAll,
+  retainAll,
+  reverse$,
+  take,
+  takeWhile,
 } from "./intermediateOperations.js";
 
 /**
@@ -54,6 +55,13 @@ const mconcatInit = _ => mconcat(ArrayIterator([
   newIterator(2),
 ]));
 
+const cycleInit = _ => {
+  const iterator = newIterator(2);
+  const cycled = cycle(iterator);
+
+  return take(9)(cycled);
+};
+
 [
   ["map",           map(el => 2 * el),                 [0, 2, 4, 6, 8],           ],
   ["retainAll",     retainAll(el => el % 2 === 0),     [0, 2, 4],                 ],
@@ -67,6 +75,7 @@ const mconcatInit = _ => mconcat(ArrayIterator([
   ["concat$ (snd)", it => concat$(it)(newIterator(1)), [0, 1, 2, 3, 4, 0, 1],     ],
   ["cons",          cons(2),                           [2, 0, 1, 2, 3, 4],        ],
   ["mconcat",       mconcatInit,                       [0, 1, 2, 0, 1, 2, 0, 1, 2]],
+  ["cycle",         cycleInit,                         [0, 1, 2, 0, 1, 2, 0, 1, 2]],
 ].forEach(el => {
   const [ name, op, expected ] = el;
   iteratorSuite.add(`test simple: ${name}`,  testSimple (op)(expected));
