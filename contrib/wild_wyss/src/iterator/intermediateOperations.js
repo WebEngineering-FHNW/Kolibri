@@ -1,5 +1,13 @@
-import {ArrayIterator, ConcatIterator, createIteratorWithArgs, createIterator, emptyIterator, nextOf} from "./iterator.js";
-import {reduce$} from "./terminalOperations.js";
+import {
+  ArrayIterator,
+  ConcatIterator,
+  createIteratorWithArgs,
+  createIterator,
+  emptyIterator,
+  nextOf,
+} from "./iterator.js";
+
+import { reduce$ } from "./terminalOperations.js";
 
 export {
   map,

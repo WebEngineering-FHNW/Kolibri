@@ -3,6 +3,7 @@ import { fst, snd }    from "../../../../docs/src/kolibri/stdlib.js";
 import { convertToJsBool } from "../logger/lamdaCalculus.js";
 
 export {
+  pipe,
   nextOf,
   createIteratorWithArgs,
   createIterator,
@@ -15,15 +16,16 @@ export {
 }
 
 /**
+ * Transforms the given {@link IteratorType iterator} using the passed {@link IteratorOperation}
  * @template _T_
  * @type  {
- *            (copy: () => IteratorType<_T_>) =>
- *            (...transformers: IteratorOperation ) =>
- *            IteratorType<_T_>
+ *               (iterator: IteratorType<_T_>)
+ *            => (...transformers: IteratorOperation )
+ *            => IteratorType<_T_>
  *        }
  */
-const pipe = copy => (...transformers) => {
-  let it = copy(); // TODO: muss das hier kopiert werden, theoretisch könnte hier auch ein iterator übergeben werden
+const pipe = iterator => (...transformers) => {
+  let it = iterator.copy(); // TODO: muss das hier kopiert werden, theoretisch könnte hier auch ein iterator übergeben werden
   for (const transformer of transformers) {
     it = transformer(it);
   }
@@ -53,7 +55,6 @@ const pipe = copy => (...transformers) => {
  * @template _T_
  * @property { () => { next: () => IteratorResult<_T_, _T_> } } [Symbol.iterator] - returns the iterator for this object.
  * @property { () => IteratorType<_T_> }                        copy - creates a copy of this {@link IteratorType}
- * @property { Pipe }                                           pipe - transforms this iterator using the passed {@link IteratorOperation}
  */
 
 /**
@@ -104,7 +105,6 @@ const Iterator = (value, incrementFunction, isDoneFunction) => {
   return {
     [Symbol.iterator]: () => ({ next }),
     copy,
-    pipe: pipe(copy)
   }
 };
 
@@ -182,7 +182,7 @@ const ConcatIterator = it1 => it2 => {
   return {
     [Symbol.iterator]: () => ({ next }),
     copy,
-    pipe: pipe(copy)
+
   };
 };
 
@@ -214,7 +214,6 @@ const StackIterator = stack => {
   return {
     [Symbol.iterator]: () => ({ next }),
     copy,
-    pipe: pipe(copy)
   }
 };
 
@@ -250,7 +249,6 @@ const createIteratorWithArgs = next => operation => (...args) => innerIterator =
   return {
     [Symbol.iterator]: () => ({ next }),
     copy,
-    pipe: pipe(copy)
   };
 };
 
@@ -278,7 +276,6 @@ const createIterator = next => operation => innerIterator => {
   return {
     [Symbol.iterator]: () => ({ next }),
     copy,
-    pipe: pipe(copy)
   };
 };
 
