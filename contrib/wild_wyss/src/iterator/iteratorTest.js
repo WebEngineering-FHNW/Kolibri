@@ -22,11 +22,15 @@ const iteratorSuite = TestSuite("Iterator");
 
 iteratorSuite.add("test typical case: Iterator", assert => {
   const iterator = Iterator(0, current => current + 1, current => current > 5);
-  let currentElement = 0;
-  for (const iteratorElement of iterator) {
-    assert.is(currentElement++, iteratorElement);
-  }
+  assert.is(arrayEq([0, 1, 2, 3, 4, 5])([...iterator]), true);
   assert.is(arrayEq([])([...iterator]), true);
+});
+
+iteratorSuite.add("test copy: Iterator", assert => {
+  const iterator = Iterator(0, current => current + 1, current => current > 5);
+  const copy = iterator.copy();
+  assert.is(arrayEq([0, 1, 2, 3, 4, 5])([...copy]), true);
+  assert.is(arrayEq([0, 1, 2, 3, 4, 5])([...iterator]), true);
 });
 
 iteratorSuite.add("test special case: no increment after done", assert => {
