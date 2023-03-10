@@ -3,6 +3,7 @@ import { arrayEq }   from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Tuple }     from "../../../../docs/src/kolibri/stdlib.js";
 
 import {
+  pipe,
   Iterator,
   ArrayIterator,
   TupleIterator,
@@ -10,11 +11,10 @@ import {
 } from "./iterator.js"
 
 import {
-  map, rejectAll,
+  map,
   retainAll,
 } from "./intermediateOperations.js";
-import {emptyStack, pop, push, stackEquals} from "../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import { fst, snd }    from "../../../../docs/src/kolibri/stdlib.js";
+import {emptyStack, push } from "../../../p6_brodwolf_andermatt/src/stack/stack.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
@@ -42,7 +42,7 @@ iteratorSuite.add("test special case: no increment after done", assert => {
 
 iteratorSuite.add("test typical case: pipe", assert => {
   const iterator = newIterator(4);
-  const piped    = iterator.pipe(
+  const piped    = pipe(iterator)(
     map(i => i + 1),
     retainAll(el => el % 2 === 0)
   );
@@ -57,7 +57,7 @@ iteratorSuite.add("test typical case: ArrayIterator", assert => {
 
 iteratorSuite.add("test advanced case: ArrayIterator", assert => {
   const arrayIterator      = ArrayIterator([1,2,3]);
-  const pipedArrayIterator = arrayIterator.pipe(
+  const pipedArrayIterator = pipe(arrayIterator)(
     map(i => i + 1),
     retainAll(el => el % 2 === 0)
   );
@@ -75,7 +75,7 @@ iteratorSuite.add("test advanced case: tuple iterator", assert => {
   const [ Triple ]    = Tuple(3);
   const triple        = Triple(1)(2)(3);
   const tupleIterator = TupleIterator(triple);
-  const pipedTupleIterator = tupleIterator.pipe(
+  const pipedTupleIterator = pipe(tupleIterator)(
     map(i => i + 1),
     retainAll(el => el % 2 === 0)
   );
