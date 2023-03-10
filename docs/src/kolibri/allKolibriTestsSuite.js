@@ -6,6 +6,7 @@ import "./util/arrayTest.js";
 import "./util/domTest.js";
 import "./observableTest.js";
 import "./presentationModelTest.js";
+import "./logger/loggerTest.js";
 import "./rest/restClientTest.js";
 import "./dataflow/dataflowTest.js";
 import "./projector/projectorUtilsTest.js"
