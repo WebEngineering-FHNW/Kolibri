@@ -8,10 +8,10 @@
 /**
  * A Loglevel is a {@link Pair}, which consists of a {@link churchNumber} interpreted as level
  * and a {@link String} interpreted as label.
- * Given a {@link pairSelector}, either the level or the label can be selected.
+ * Given a {@link PairSelectorType}, either the level or the label can be selected.
  *
  * @typedef LogLevelType
- * @type { (pairSelector) => churchNumber | String }
+ * @type { (PairSelectorType) => churchNumber | String }
  */
 
 /**

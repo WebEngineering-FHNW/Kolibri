@@ -45,7 +45,7 @@ const LogUiController = () => {
 
   /**
    * Checks whether a message matches the set filter.
-   * @param   { (pairSelector) => LogLevelType | String } levelMessagePair
+   * @param   { (PairSelectorType) => LogLevelType | String } levelMessagePair
    * @return  { boolean }
    */
   const filter = levelMessagePair => {

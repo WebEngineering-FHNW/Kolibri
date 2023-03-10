@@ -1,185 +1,499 @@
-// church encoding of the lambda calculus in JavaScript
+/**
+ * @module lambda/church
+ * Church encoding of the lambda calculus in JavaScript
+ * to the extent that we need it in Kolibri.
+ * Recommended reading: https://en.wikipedia.org/wiki/Church_encoding .
+ * Recommended watching: https://www.youtube.com/watch?v=6BnVo7EHO_8&t=1032s .
+ */
 
 export {
-    id, beta, konst, flip, kite, cmp, cmp2,
+    id, beta, konst, c, flip, kite, cmp, cmp2,
     T, F, and, not, beq, or, xor, imp, rec,
     n0, n1, n2, n3, n4, n5,
-    succ, plus, mult, pow, isZero, church,
-    pair, fst, snd,
+    succ, plus, mult, pow, isZero, church, jsNum,
+    Pair, fst, snd,
+    Tuple, Choice,
     either, Left, Right,
-    Nothing, Just, maybe, bindMaybe,
+    Nothing, Just, maybe,
     curry, uncurry
 }
 
-// function id(x) { return x; }, \x.x
+
+/**
+ * Identity function, aka "I" in the SKI calculus or "Ibis" (or "Idiot") in the Smullyan bird metaphors.
+ * The function is pure and runs in O(1). Function calls can be inlined.
+ * @haskell  a -> a
+ * @pure
+ * @type  { <_T_> (_T_) => _T_ }
+ * @example 
+ * id(1) === 1
+ */
 const id = x => x;
 
-// function application, beta reduction
-// const beta = f => id(f);
-// const beta = f => f;
-// beta.toString = () => "beta";
+/**
+ * Constant function that captures and caches the argument and makes it available like a "getter".
+ * Aka "konst", "fst" (the first of two curried parameters),
+ * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
+ * @haskell  a -> b -> a
+ * @pure
+ * @type     { <_T_> (x:_T_) => (...y) => _T_ }
+ * @example
+ * c(1)(undefined) === 1;
+ * const getExpr = c(expr);
+ * // expression might change here but even if it does, the cached value will be returned
+ * getExpr() === expr;
+ */
+const c = x => () => x;
+
+/** The first of two curried arguments, identical to {@link c} (see there for more info).
+ * Often used to pick the first element of a {@link Pair}.
+ * @type     { <_T_> (x:_T_) => (...y) => _T_ }
+ * @example
+ * const point = Pair(1)(2);
+ * point(fst) === 1;
+ */
+const fst = c;
+
+/**
+ * A Function that returns the second of two curried arguments.
+ * "KI" in the SKI calculus, or "Kite" in the Smullyan bird metaphors.
+ * It can be seen as a cached getter for the id function: {@link c}({@link id})
+ * Often used to pick the first element of a {@link Pair}.
+ * @haskell  b -> a -> a
+ * @pure
+ * @type     { <_T_> (...x) => (y:_T_) => _T_ }
+ * @example
+ * snd(undefined)(1) === 1;
+ * const point = Pair(1)(2);
+ * point(snd) === 2;
+ */
+const snd = (_=undefined) => y => y;
+
+// --------- ADT section ---------
+
+// private ADT implementation details ---------------------
+
+/** @private */
+const TupleCtor = n => values =>
+    n === 0                                            // we have curried all ctor args, now
+        ? Object.seal(selector => selector(values))    // return a function that waits for the selector
+        : value =>                                     // there are still values to be curried
+          TupleCtor (n - 1) ([...values, value]);      // return the ctor for the remaining args
+
+/** @private */
+const ChoiceCtor = position => n => choices =>
+    n === 0                                                      // we have curried all ctor args, now
+        ? Object.seal(choices[position] (choices[0]) )           // we call the chosen function with the ctor argument
+        : choice =>                                              // there are still choices to be curried
+          ChoiceCtor (position) (n - 1) ([...choices, choice]);  // return the ctor for the remaining args
+
+// end of private section, publicly exported constructors follow
+
+/**
+ * An n-Tuple stores n different values, which can be retrieved by accessor functions.
+ * It is the most general form of a Product Type. Tuples are immutable. Values are accessed in O(1).
+ * Since no indexes are managed by the user, there are no out-of-bounds errors.
+ * @pure
+ * @param  {!Number} n - the cardinality, i.e. Tuple(n) can store n values. Mandatory. Must be > 0 or an error is thrown.
+ * @return {Array<Function>} - an array where the first item is a constructor, follow by n accessor functions
+ * @constructor
+ * @example
+ * const [Triple, one, two, three] = Tuple(3);
+ * const triple = Triple(1)(2)(3);
+ * triple(two) === 2;
+ */
+const Tuple = n => {
+    if (n < 1) throw new Error("Tuple must have first argument n > 0");
+    return [
+        TupleCtor (n) ([]), // ctor curries all values and then waits for the selector
+        // every selector is a function that picks the value from the curried ctor at the same position
+        ...Array.from( {length:n}, (it, idx) => values => values[idx] )
+    ];
+};
+
+/**
+ * A Choice selects between n distinct values, each of which can only be accessed if a
+ * handling function is provided for each possible value. One cannot forget to handle edge cases.
+ * It is the most general form of a CoProduct aka Sum Type. Choices are immutable.
+ * @pure
+ * @param {!Number} n - the cardinality, i.e. number of possible choices. Mandatory. Must be > 0 or an error is thrown.
+ * @return {Array<Function>} - an array of n choice constructors
+ * @constructor
+ * @example
+ * const [Bad, Good, Unknown] = Choice(3);
+ * const guessWhat = Good(1);
+ * guessWhat
+ *      (_ => console.error("this is bad")) // handle Bad case
+ *      (x => x)                            // handle Good case
+ *      (_ => 0);                           // Unknown -> default value
+ */
+const Choice = n => { // number of constructors
+    if (n < 1) throw new Error("Choice must have first argument n > 0");
+    return Array.from( {length:n}, (it, idx) => ChoiceCtor (idx + 1) (n + 1) ([]) ) ; // n constructors with n curried args
+};
+
+// end of private ADT implementation details
+
+/**
+ * A callback function that selects between two arguments that are given in curried style.
+ * Only needed internally for the sake of proper JsDoc.
+ * @callback PairSelectorType
+ * @pure
+ * @type     { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
+ */
+/**
+ * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
+ * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
+ * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
+ * @haskell a -> b -> (a -> b -> a|b) -> a|b
+ * @pure    if the selector function is pure, which it usually is
+ * @type    {  <_T_, _U_> (x: _T_) => (y: _U_) => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
+ * @constructor
+ * @example
+ * const dierk = Pair("Dierk")("König");
+ * dierk(fst) === "Dierk");
+ * dierk(snd) === "König");
+ */
+const Pair = x => y => selector => selector(x)(y);
+
+
+/*
+ * The Either types.
+ * @haskell Either a b
+ */
+
+/**
+ * A generic function from whatever type "a" to whatever "b".
+ * Only needed internally for the sake of proper JsDoc.
+ * @typedef  FunctionAtoBType
+ * @pure     supposed to be pure
+ * @type     { <_T_, _U_> (x:_T_) => _U_ }
+ */
+
+/**
+ * Type of the {@link Left} constructor after being bound to a value x of type _T_.
+ * @typedef LeftXType
+ * @type    { <_T_, _U_>  (f:FunctionAtoBType<_T_, _U_>) => (g:*) => _U_ }
+ */
+
+/**
+ * The Left constructor of an Either type. An "Either" is either {@link Left} or {@link Right}.
+ * It is constructed with a value of type "a" and waits for two more functions f and g
+ * as curried arguments.
+ * When both are given, f(x) is called.
+ * The Left case of an Either type is usually (but not necessarily so) an error case.
+ * Left values are immutable.
+ * @haskell a -> (a -> b) -> c -> b
+ * @pure    if FunctionAtoBType is pure
+ * @type    { <_T_, _U_>  (x:_T_) =>  LeftXType<_T_, _U_> }
+ * @example
+ * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
+ * withFoo
+ *      (msg => console.error(msg))      // handle left case
+ *      (x   => doSomethingWithFoo(x));  // handle right case
+ */
+
+const Left  = x => f => _g => f(x);
+
+/**
+ * Type of the {@link Right} constructor after being bound to a value x of type _T_.
+ * @typedef RightXType
+ * @type     { <_T_, _U_>  (f:*)  => (f:FunctionAtoBType<_T_, _U_>) => _U_ }
+ */
+
+/**
+ * The Right constructor of an Either type. An "Either" is either {@link Left} or {@link Right}.
+ * It is constructed with a value of type "b" and waits for two more functions f and g
+ * as curried arguments.
+ * When both are given, g(x) is called.
+ * The Right case of an Either type is usually (but not necessarily so) the good case.
+ * Right values are immutable.
+ * @haskell a -> c -> (a -> b) -> b
+ * @pure    if FunctionAtoBType is pure
+ * @type    { <_T_, _U_>  (x:_T_) =>  RightXType<_T_, _U_> }
+ * @example
+ * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
+ * withFoo
+ *      (msg => console.error(msg))
+ *      (x   => doSomethingWithFoo(x));
+ */
+const Right = x => _f => g => g(x);
+
+/**
+ * @typedef { LeftXType<_T_,_U_> | RightXType<_T_,_U_> } EitherType
+ * @template _T_
+ * @template _U_
+ * @pure
+ */
+
+/**
+ * Type of the {@link Nothing} constructor after _not_ being bound to anny value.
+ * @typedef NothingXType
+ * @type    { <_T_, _U_>  (f:FunctionAtoBType<_T_, _U_>)  => (g:*) => _U_ }
+ */
+/**
+ * Nothing is the error case of the Maybe type. A "Maybe a" can be either Nothing or "{@link Just} a".
+ * Nothing is immutable. Nothing is a singleton.
+ * Nothing is used to get around missing null/undefined checks.
+ * @haskell Nothing :: Maybe a
+ * @pure
+ * @type    { <_T_, _U_>  (f:FunctionAtoBType<_T_, _U_>)  => (g:*) => _U_ }
+ * 
+ * @example
+ * const mayFoo = (null == foo) ? Nothing : Just(foo);
+ * mayFoo
+ *      (_   => console.error("cannot find foo"))
+ *      (x   => doSomethingWithFoo(x));
+ */
+const Nothing = Left (undefined);
+
+/**
+ * Type of the {@link Just} constructor after being bound to a value x of type _T_.
+ * @typedef JustXType
+ * @type    { <_T_, _U_>  (f:*)  => (f:FunctionAtoBType<_T_, _U_>) => _U_ }
+ */
+
+/**
+ * Just is the success case of the Maybe type. A "Maybe a" can be either {@link Nothing} or "Just a".
+ * Just values are immutable.
+ * Just is used to get around missing null/undefined checks.
+ * @haskell Just a :: Maybe a
+ * @pure
+ * @type    { <_T_, _U_>  (x:_T_) =>  (f:*)  => (f:FunctionAtoBType<_T_, _U_>) => _U_ }
+ * @example
+ * const mayFoo = (null == foo) ? Nothing : Just(foo);
+ * mayFoo
+ *      (_   => console.error("cannot find foo"))
+ *      (x   => doSomethingWithFoo(x));
+ */
+const Just = Right;
+
+/**
+ * @typedef { NothingXType<_T_, _U_> | JustXType<_T_, _U_> } MaybeType
+ * @template _T_
+ * @template _U_
+ * @pure
+ */
+
+/** function application, beta reduction
+ * @haskell (a -> b) -> a -> b
+ * @pure if f is pure
+ * @type { <_T_, _U_> (f: FunctionAtoBType<_T_, _U_>) => (x: _T_) => _U_ }
+ * @example
+ * beta(id)(42) === 42;
+ */
 const beta = f => x => f(x);
 
-// M, const, first, id2, true
-const konst = x => y => x;
+/** An alternative name for the {@link c} function. */
+const konst = c;
 
+/** 
+ * Flipping the sequence of two curried-style arguments.
+ * Sometimes used to prepare for later eta reduction or make for more convenient use of f 
+ * when the x argument is a lengthy in-line expression.
+ * @haskell (a -> b -> c) -> b -> a -> c
+ * @type { <_T_, _U_, _V_> (f: (_T_) => (_U_) => _V_) => (_U_) => (_T_) => _V_ }
+ */
 const flip = f => x => y => f(y)(x);
 
-// const flip = f => g => x => f(x)(g);  // f(x)(g(x)) // konst(g)(x) -> g
-// const flip = f => g      => s(f)(konst(g));         // C = \fg.S(f)(Kg)
-// const flip = f => g => x => s(f)(konst(g))(x);      // def of S
-// const flip = f => g => x => f(x)(konst(g)(x));
-// const flip = f => g => x => f(x)(g); // qed.
+/** An alternative name for the {@link snd} function. */
+const kite = snd;
 
-// Kite
-// kite = x => y => y;
-// kite = x => y => konst(id)(x)(y);
-// const kite = konst(id);
-// const kite = x => y => flip(konst)(x)(y);
-const kite = flip(konst);
-
-// -----
-
-// Bluebird, composition
+/** Composition of two functions, aka Bluebird (B) in the Smullyan bird metaphors.
+ * @haskell (b -> c) -> (a -> b) -> a -> c
+ * @type { <_T_, _U_, _V_> (f: FunctionAtoBType<_U_, _V_>) => (g: FunctionAtoBType<_T_, _U_>) => (x: _T_) => _V_ }
+ */
 const cmp = f => g => x => f(g(x));
-// const cmp = f => g      => S(konst(f))(g);
-// const cmp = f => g => x => S(konst(f))(g)(x);
-// const cmp = f => g => x => (konst(f)(x))(g(x));
-// const cmp = f => g => x => (f)(g(x));
-// const cmp = f => g => x => f(g(x)); // qed.
 
-//const cmp2 = f => g => x => y => f(g(x)(y));
-const cmp2 = cmp (cmp)(cmp);
+/** 
+ * Composition of two functions f and g where g takes two arguments in curried style,
+ * also known as Blackbird (BB) in the Smullyan bird metaphors.
+ */
+const cmp2 = f => g => x => y => f(g(x)(y));
 
 // ---- boolean logic
 
-const T   = konst;
-const not = flip;
-const F   = not(T);             //const F = kite;
+/**
+ * True is the success case of the Boolean type. 
+ */
+const T   = fst;
+/**
+ * False is the error case of the Boolean type. 
+ */
+const F   = snd;
 
+/**
+ * A boolean value (True or False) in the Church encoding.
+ * @typedef { T | F } ChurchBooleanType
+ */
+
+/**
+ * Negating a boolean value.
+ * @type { (x:ChurchBooleanType) => ChurchBooleanType }
+ */
+const not = x => x(F)(T);
+
+/** 
+ * The "and" operation for boolean values.
+ * @type { (x:ChurchBooleanType) => (y:ChurchBooleanType) => ChurchBooleanType }
+ */
 const and = x => y => x(y)(x);
-// const and = f => g => f(g)(f);
-// const and = f => g => S(f)(konst(f))(g)  // \fg.Sf(Kf)g
 
-// const or  = x => y => x(x)(y);
-const or  = x =>  x(x);
-// const or  = M;
+/**
+ * The "or" operation for boolean values.
+ * @type { (x:ChurchBooleanType) => (y:ChurchBooleanType) => ChurchBooleanType }
+ */
+const or = x => x(x);
 
+/**
+ * The boolean equivalence operation.
+ * @type { (x:ChurchBooleanType) => (y:ChurchBooleanType) => ChurchBooleanType }
+ */
 const beq = x => y => x(y)(not(y));
-//const beq = x => y => S(x)(not)(y);
-//const beq = x => S(x)(not);   // S(x)(K)
 
-//const xor = cmp (cmp(not)) (beq)   ;
-const xor =  cmp2 (not) (beq)   ;
+/**
+ * The boolean exclusive-or operation.
+ * @type { (x:ChurchBooleanType) => (y:ChurchBooleanType) => ChurchBooleanType }
+ */
+const xor = x => y => cmp2 (not) (beq) (x) (y) ; // we cannot eta reduce since that messes up the jsDoc type inference
 
-//const imp = x => y => x (y) (T);
-//const imp = x => y => x (y) ( not(x));
-// const imp = x => y => flip(x) (not(x)) (y) ;
+/**
+ * The boolean implication operation.
+ * @type { (x:ChurchBooleanType) => (y:ChurchBooleanType) => ChurchBooleanType }
+ */
 const imp = x => flip(x) (not(x)) ;
-// const imp = S(not)(not) ;
-//const imp = S(C)(C) ;
 
+/**
+ * Calling the function f recursively.
+ * @type { <_T_> (f: (_T_) => _T_) => _T_ }
+ */
+const rec = f => f ( n => rec(f)(n)  ) ;
 
-// ----
+// ---------- Peano numbers in the church encoding
 
-// loop = loop
-// loop = (\x. x x) (\x. x x)
-// loop = ( x => x(x) ) ( x => x(x) )
-// this is self-application applied to self-application, i.e. M(M)
-// which we already checked to be endlessly recursive
+/**
+ * Peano numbers in the church encoding.
+ * The number n is also immediately an n-loop over its function argument.
+ * @typedef { (f:FunctionAtoBType<ChurchNumberType,ChurchNumberType>) => (x:ChurchNumberType) => ChurchNumberType } ChurchNumberType
+ */
 
-// rec = f => f (rec (f)) // cannot work, since rec(f) appears in argument position
+/**
+ * The zero number in the church encoding.
+ * @type { ChurchNumberType }
+ */
+const n0 = _f => x => x;
+/**
+ * The one number in the church encoding.
+ * @type { ChurchNumberType }
+ */
+const n1 = f => x => f(x);
+/**
+ * The two number in the church encoding.
+ * @type { ChurchNumberType }
+ */
+const n2 = f => x => f(f(x));
+/**
+ * The three number in the church encoding.
+ * @type { ChurchNumberType }
+ */
+const n3 = f => x => f(f(f(x)));
+/** @type { ChurchNumberType } */
 
-// define loop in terms of rec:
-// const rec = f => f (rec (f));  // y
-// const rec = f => M ( x => f(M(x)) )     // s/o
+/**
+ * The successor function for the church encoding of numbers.
+ * @type { (x:ChurchNumberType) => ChurchNumberType }
+ */
+const succ = n => ( f => cmp(f) (n(f)) );
 
-// this works:
-// rec :: (a -> a) -> a
-const rec  = f => f ( n => rec(f)(n)  ) ;
-
-// ---------- Numbers
-
-const n0 = f => x => x;         // same as konst, F
-const n1 = f => x => f(x);      // same as beta, once, lazy
-const n2 = f => x => f(f(x));           // twice
-const n3 = f => x => f(f(f(x)));        // thrice
-
-//const succ = cn => ( f => x => f( cn(f)(x) ) );
-//const succ = cn => ( f => x => f( (cn(f)) (x) ) );
-//const succ = cn => ( f => x => cmp(f) (cn(f)) (x)  );
-const succ = cn => ( f => cmp(f) (cn(f)) );
-//const succ = cn => ( f => S(cmp)(cn)(f) );
-//const succ = cn => S(B)(cn);
-
+/**
+ * The number four in the church encoding.
+ * @type {ChurchNumberType}
+ */
 const n4 = succ(n3);
+/**
+ * The number five in the church encoding.
+ * @type {ChurchNumberType}
+ */
 const n5 = succ(n4);
 
-// addition + n is the nth successor
+/**
+ * The plus operation on peano numbers in the church encoding.
+ * @type { (x:ChurchNumberType) => (y:ChurchNumberType) => ChurchNumberType }
+ */
+const plus = cn1 => cn2 => cn2(succ)(cn1)  ;
 
-//const plus = cn1 => cn2 => f => x =>  cn2(succ)(cn1)(f)(x)  ; // eta
-const plus = cn1 => cn2 =>  cn2(succ)(cn1)  ;
-
-// multiplication is repeated plus
-// const mult = cn1 => cn2 => cn2 (plus(cn1)) (n0) ;
-// rolled out example 2 * 3
-// const mult = cn1 => cn2 => f => x =>  f f f   f f f   x
-// const mult = cn1 => cn2 => f => x =>  cn1 (cn2 (f))  (x); // eta
-// const mult = cn1 => cn2 => f =>  cn1 (cn2 (f));  // introduce composition
-// const mult = cn1 => cn2 => cmp(cn1)(cn2); // eta
-// const mult = cn1 => cmp(cn1); // eta
+/**
+ * The multiplication operation on peano numbers in the church encoding.
+ * @type { (x:ChurchNumberType) => (y:ChurchNumberType) => ChurchNumberType }
+ */
 const mult = cmp;
-//const mult = B;
 
-// power is repeated multiplication
-// 2 ^ 3 = (2* (2* (2*(1))) ,
-// const pow = cn1 => cn2 => cn2 (mult(cn1)) (n1);
-// rolled out = f f ( f f ( f f x ))
-// const pow = cn1 => cn2 => f => x => cn2 (cn1)(f)(x); // eta
+/**
+ * The power operation on peano numbers in the church encoding.
+ * @type { (x:ChurchNumberType) => (y:ChurchNumberType) => ChurchNumberType }
+ */
 const pow = cn1 => cn2 => cn2 (cn1) ;
-// const pow = cn1 => cn2 => beta (cn2) (cn1) ;
-// const pow = cn1 => cn2 => flip (beta) (cn1) (cn2) ;
-// const pow = flip (beta) ;
-// const pow = not(id);       // x^0 = 1
 
-const isZero = cn =>  cn (konst(F)) (T);
+/**
+ * The is-zero check on peano numbers in the church encoding.
+ * @type { (x:ChurchNumberType) => ChurchBooleanType }
+ */
+const isZero = cn => /** @type { ChurchBooleanType } **/ cn (c(F)) (T); // We need a cast since we don't return a church numeral.
 
-const church = n => n === 0 ? n0 : succ(church(n-1)); // church numeral for n
+/**
+ * Convert a js number to a church numeral.
+ * @type { (n:Number) => ChurchNumberType }
+ */
+const church = n => n === 0 ? n0 : succ(church(n-1));
 
-// ----------- Data structures
+/**
+ * Convert a church numeral to a js number.
+ * @type { (ChurchNumberType) => Number }
+ */
+const jsNum = cn => /** @type { Number } */ cn (n => n+1) (0); // We need a cast since we don't return a church numeral.
 
-// prototypical Product Type: pair
-const pair = a => b => f => f(a)(b);
+/**
+ * @callback HandleLeftCallback
+ * @type { <_T_,_U_,_V_> (l:LeftXType<_T_,_U_>) => _V_ }
+ */
+/**
+ * @callback HandleRightCallback
+ * @type { <_T_,_U_,_V_> (r:RightXType<_T_,_U_>) => _V_ }
+ */
+/**
+ * Apply the f or g handling function to the Either value.
+ * @type  { <_T_,_U_,_V_> (e:EitherType<_T_,_U_>) => (hl:HandleLeftCallback<_T_,_U_>) => (hr:HandleRightCallback<_T_,_U_>) => _V_ }
+ */
+const either = e => f => g => e(f)(g);
 
-const fst = p => p(T); // pick first  element from pair
-const snd = p => p(F); // pick second element from pair
 
-// prototypical Sum Type: either
+/**
+ * @callback HandleNothingCallback
+ * @type { <_T_,_U_> (n:NothingXType<_T_,_U_>) => _U_ }
+ */
+/**
+ * @callback HandleJustCallback
+ * @type { <_T_,_U_> (j:JustXType<_T_,_U_>) => _U_ }
+ */
+/**
+ * Apply the f or g handling function to the Maybe value depending on whether it is a Just or a Nothing.
+ * @type  { <_T_,_V_> (m:MaybeType<_T_,_V_>) => (hn:HandleNothingCallback<_T_,_V_>) => (hj:HandleJustCallback<_T_,_V_>) => _V_ }
+ */
+const maybe = m => f => g => m(f)(g);
 
-const Left   = x => f => g => f (x);
-const Right  = x => f => g => g (x);
-const either = e => f => g => e (f) (g);
-
-// maybe as a sum type
-
-// const Nothing  = ()=> f => g => f ;        // f is used as a value
-// const Just     = x => f => g => g (x);
-// const maybe    = m => f => g => m (f) (g);
-
-const Nothing  = Left() ;        // f is used as a value
-const Just     = Right  ;
-// const maybe    = either ;     // convenience: caller does not need to repeat "konst"
-const maybe    = m => f => either (m) (konst(f)) ;
-
-//    bindMaybe :: m a -> (a -> m b) -> mb
-const bindMaybe = ma => f => maybe (ma) (ma) (f);
-
-// ---- curry
-
-// curry :: ((a,b)->c) -> a -> b -> c
+/**
+ * Take a function of two arguments and return a function of one argument that returns a function of one argument,
+ * i.e. a function of two arguments in curried style.
+ * @haskell curry :: ((a,b)->c) -> a -> b -> c
+ * @type { <_T_,_U_,_V_> (f:FunctionAtoBType<_T_,FunctionAtoBType<_U_,_V_>>) => FunctionAtoBType<_T_,FunctionAtoBType<_U_,_V_>> }
+ */
 const curry = f => x => y => f(x,y);
 
 // uncurry :: ( a -> b -> c) -> ((a,b) -> c)
+/**
+ * Take af function of two arguments in curried style and return a function of two arguments.
+ * @type { <_T_,_U_,_V_> (f:FunctionAtoBType<_T_,FunctionAtoBType<_U_,_V_>>) => FunctionAtoBType<_T_,_U_,_V_> }
+ */
 const uncurry = f => (x,y) => f(x)(y);
 
 

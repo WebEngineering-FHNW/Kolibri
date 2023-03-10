@@ -39,7 +39,7 @@ const LogUiModel = () => {
 
   /**
    * Filters the stacks messages and notifies all listeners.
-   * @param { (pairSelector) => LogLevelType | String } predicate
+   * @param { (PairSelectorType) => LogLevelType | String } predicate
    */
   const filterAndNotify = predicate => {
     const stack     = appender.getValue().getValue();

@@ -1,61 +1,89 @@
-// the SKI combinators for the church encoding
+/**
+ * @module lambda/ski
+ * The SKI combinators for the church encoding of lambda calculus wrt the Smullyan bird names.
+ * Recommended reading: https://en.wikipedia.org/wiki/SKI_combinator_calculus,
+ * https://www.angelfire.com/tx4/cus/combinator/birds.html.
+ * Graham Hutton: https://www.youtube.com/watch?v=9T8A89jgeTI
+ */
 
-export {I, K, M, C, KI, B, BB, S, Z, Th, V}
+export { I, K, M, C, KI, B, BB, S, Z, Th, V }
 
-import {id, beta, konst, flip, kite, cmp, cmp2, F, T, pair } from "./church.js"
+import {id, c, flip, snd, cmp, cmp2, Pair } from "./church.js"
 
-const I = id ;          // Identity I, for all a: id(a) == a
+/**
+ * Identity, Ibis, I.
+ * See {@link id}.
+ */
+const I = id ;
 
-// self-application, Mockingbird, \x.x x
-const M = f => beta(f)(f);  // f(f)
-// M is SII
-// S(id)(id) (x) = id(x) (id(x))
-// S(id)(id) = M
-// S(I)(I) = M
-//, also: M = or
+/**
+ * Mockingbird, M, \f.ff , self-application of f.
+ * Is also SII and the boolean "or" operator.
+ * Basis for the Y combinator.
+ * @type {function(function): function}
+ */
+const M = f => f(f);  // beta(f)(f)
 
-// M, const, first, id2, true
-const K = konst;        // Kestrel K, \x. \y. x
+/**
+ * Kestrel, K, c, konst, fst, \x. \y. x .
+ * See also {@link c}.
+ */
+const K = c;
 
-const C = flip;         // Cardinal C, \fxy.fyx
+/**
+ * Cardinal, C, flip, \fxy.fyx .
+ * Also the boolean "not" operator.
+ * See also {@link flip}.
+ */
+const C = flip;
 
-const KI  = kite;
+/**
+ * Kite, KI, snd, kite, \x. \y. y .
+ * See also {@link snd}.
+ */
+const KI  = snd;
 
-const B = cmp; // Bluebird B,  \fg.S(Kf)g
-// also:  B = mult
+/**
+ * Bluebird B, function composition, cmp,  \fg.S(Kf)g .
+ * Also: multiplication for church numerals.
+ */
+const B = cmp;
 
-const BB = cmp2;        // Blackbird
+/**
+ * Blackbird BB, function composition with two curried args, cmp2,  \fg.S(Kf)g .
+ * Used for the boolean "xor" operator.
+ * See also {@link cmp2}.
+ */
+const BB = cmp2;
 
-// Starling, \abc.ac(bc)
+/**
+ * Starling, S, \abc.ac(bc) .
+ * One of the SKI "atoms".
+ * Identity can be written as S(K)(K).
+ */
 const S = f => g => x => f(x)(g(x));
 
-// identity is SKK, S(konst)(konst)
-// S(K)(K)(x) = konst(x)( konst(x) )
-// S(K)(K)(x) =      (x)
-// S(K)(K)(x) =    id(x)
-// S(K)(K)    =    id          // qed
-
-
-// ---- boolean logic
-
-// const imp = S(C)(C) ;
-
-// ----
-// Graham Hutton: https://www.youtube.com/watch?v=9T8A89jgeTI
-
+// The Y combinator appears only as a comment here, because it is of little use in a strict language.
 // Y combinator: \f. (\x.f(x x)) (\x.f(x x))
 // Y = f => ( x => f(x(x)) )  ( x => f(x(x)) )
 // Y is a fixed point for every f: Y(f) == Y(Y(f))
 // \f. M(\x. f(Mx))
 // f => M(x => f(M(x)))
 
-// in a non-lazy language, we need the Z fixed-point combinator
-// \f. (\x. f(\v.xxv)) (\x. f(\v.xxv))
-// \f. M(\x. f(\v. Mxv))
+/**
+ * Z combinator, \f. M(\x. f(\v. Mxv)) .
+ * The replacement for the Y combinator in a strict language to capture recursion and looping.
+ */
 const Z = f => M(x => f(v => M(x)(v) ));
 
-// const mult = B;
+// noinspection GrazieInspection
+/**
+ * Thrush combinator, Th, CI (Cardinal after Identity),  \af.fa .
+ */
+const Th = f => g => g(f);
 
-const Th = f => g => g(f);  // Thrush combinator  Th \af.fa ; CI
-
-const V = pair;  // Vireo  V \abf.fab
+/**
+ * Vireo combinator, V, Pair, \abf.fab .
+ * See also {@link Pair}.
+ */
+const V = Pair;

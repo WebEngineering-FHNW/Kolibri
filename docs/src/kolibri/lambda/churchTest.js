@@ -1,113 +1,118 @@
-
-import { TestSuite } from "../util/test.js"
+import {TestSuite} from "../util/test.js";
 
 import {
-    id, beta, konst, flip, kite, cmp, cmp2,
-    T, F, and, not, beq, or, xor, imp, rec,
-    n0, n1, n2, n3, n4, n5,
-    succ, plus, mult, pow, isZero, church,
-    pair, fst, snd,
-    either, Left, Right,
-    Nothing, Just, maybe, bindMaybe,
-    curry, uncurry
-} from "./church.js"
+        and,
+        beq,
+        beta,
+        c, Choice,
+        church,
+        cmp,
+        curry,
+        either,
+        F,
+        flip,
+        fst,
+        id,
+        imp,
+        isZero,
+        jsNum,
+        Just,
+        kite,
+        konst,
+        Left,
+        maybe,
+        mult,
+        n0,
+        n1,
+        n2,
+        n3,
+        n4,
+        n5,
+        not,
+        Nothing,
+        or,
+        Pair,
+        plus,
+        pow,
+        rec,
+        Right,
+        snd,
+        succ,
+        T, Tuple,
+        uncurry,
+        xor
+} from "./church.js";
 
-import {I, K, M, C, KI, B, BB, S, Z, Th, V} from "./ski.js";
+import {I, M, Th, Z,}  from "./ski.js";
 
 const churchSuite = TestSuite("church");
 
-
 churchSuite.add("identity", assert => {
+
+        // noinspection EqualityComparisonWithCoercionJS
+        const weekEq = (a, b) => a == b;
 
         // identity
         assert.is( id(0) , 0);
         assert.is( id(1) , 1);
-        assert.is( id , id);    // JS has function identity
-        assert.isTrue( id == id);     // JS has function equality by string representation
-        assert.isTrue( "x => x" == id);
+        assert.is( id , id);                  // JS has function identity
+        assert.isTrue( weekEq("x => x", id)); // JS has weak function equivalence by string representation
 
         // function equivalence
         const other = x => x;
-        assert.isTrue( "x => x" == other);
+        assert.isTrue( weekEq("x => x", other));
 
         const alpha = y => y;
-        assert.isTrue( alpha != id );  // JS has no alpha equivalence
+        assert.isTrue( ! weekEq(alpha, id ));  // JS has no alpha equivalence
 
         // in JS, a == b && a == c  does not imply b == c
-        assert.isTrue( id != other);
-        assert.isTrue( id.toString() == other.toString());
-
-        assert.is( id(id) , id);
-
+        assert.isTrue( ! weekEq(id, other));
+        assert.isTrue( weekEq(id.toString(), other.toString()));
     }
 );
 
 churchSuite.add("mockingbird", assert => {
-
         assert.is( M(id) , id ); // id of id is id
 
         assert.is("x => f(x)" , M(beta).toString()); // ???
-        // M(beta) == beta => beta(beta)(beta)
-        // M(beta) == beta(beta)(beta)
-        // M(beta) == f => x => f(x)
-        // M(beta) == beta => beta => beta(beta)
-        // M(beta) == beta(beta)
-        // M(beta) == f => x => f(x)
-        // M(beta) == beta => x => beta(x)
-        // M(beta) == x => beta(x)           // eta reduction
-        // M(beta) == beta                   // qed.
+
         const inc = x => x + 1;
         assert.is( M(beta)(inc)(0) , beta(inc)(0)); //extensional equality
 
-
-        // when loaded as an async module, this code crashes Safari and does not produce a proper s/o error
-        // You can uncomment to test with a synchronous bundle.
-        // try {
-        //     assert.is( M(M) , M );  // recursion until s/o
-        //     assert.isTrue( false );   // must not reach here
-        // } catch (e) {
-        //     assert.isTrue(true) // maximum call size error expected
-        // }
     }
 );
 
 
 churchSuite.add("kestrel", assert => {
-
         assert.is(konst(5)(1) , 5);
         assert.is(konst(5)(2) , 5);
 
         assert.is(konst(id)(0) , id);
         assert.is(konst(id)(0)(1) , 1); // id(1)
-
     }
 );
 
 
 churchSuite.add("kite", assert => {
-
         assert.is(kite(1)(5) , 5);
         assert.is(kite(2)(5) , 5);
-
     }
 );
 
 churchSuite.add("flip", assert => {
-
         const append = x => y => x + y;
         assert.is( append("x")("y") , "xy");
         assert.is( flip(append)("x")("y") , "yx");
 
         const backwards = flip(append);
         assert.is( backwards("x")("y") , "yx");
-
     }
 );
 
 
 churchSuite.add("boolean", assert => {
-        let bool = x => x(true)(false); // only for easier testing
-        let veq = x => y => bool(beq(x)(y)); // value equality
+        const bool = x => x(true)(false); // only for easier testing
+        const veq  = x => y => bool(beq(x)(y)); // value equality
 
         assert.isTrue(   bool(T) );   // sanity checks
         assert.isTrue( ! bool(F) );
@@ -143,7 +148,6 @@ churchSuite.add("boolean", assert => {
         assert.isTrue( veq (T) (isZero(n0)) );
         assert.isTrue( veq (F) (isZero(n1)) );
         assert.isTrue( veq (F) (isZero(n2)) );
-
     }
 );
 
@@ -161,10 +165,6 @@ churchSuite.add("composition", assert => {
         assert.is( f2("x")("y") , "xy");
         assert.is( f1("x")("y") , "xy");
         assert.is( f0("x")("y") , "xy");
-
-        // explain currying sequence with paren nesting
-        // const myappend = (x => (y => (append(x)) (y) ));
-
     }
 );
 
@@ -182,7 +182,7 @@ churchSuite.add("recursion", assert => {
         const triTail = acc => n => n < 1 ? acc : triTail(acc + n)(n-1);
         assert.is( triTail(0)(10) , 55);
 
-        // triFun does not longer appear on the right-hand side of the recursion!
+        // triFun does no longer appear on the right-hand side of the recursion!
         const triFun = f => acc => n => n < 1 ? acc : f(acc + n)(n-1) ;
         assert.is( rec (triFun)(0)(10) , 55);
         assert.is( Z   (triFun)(0)(10) , 55); // the same in terms of the Z combinator
@@ -190,49 +190,48 @@ churchSuite.add("recursion", assert => {
 
         // if even works with non-tail recursion
         assert.is( rec (f => n => n < 1 ? 0 : f(n-1) + n) (10) , 55);
-
-        // ideas for more exercises:
-        // count, sum, product, (evtl later on array: none, any, every)
-
     }
 );
 
 
 churchSuite.add("numbers", assert => {
 
-        const inc = x => x + 1;
-        const nval = cn => cn(inc)(0);
+        assert.is(jsNum(n0) , 0 );
+        assert.is(jsNum(n1) , 1 );
+        assert.is(jsNum(n2) , 2 );
+        assert.is(jsNum(n3) , 3 );
 
-        assert.is( nval(n0) , 0 );
-        assert.is( nval(n1) , 1 );
-        assert.is( nval(n2) , 2 );
-        assert.is( nval(n3) , 3 );
+        assert.is(jsNum(succ(n3) ) , 4 );
 
-        assert.is( nval( succ(n3) ) , 4 );
+        assert.is(jsNum(n4) , 4 );
+        assert.is(jsNum(n5) , 5 );
 
-        assert.is( nval(n4) , 4 );
-        assert.is( nval(n5) , 5 );
+        assert.is(jsNum(succ(succ(n3))) , 3 + 1 + 1 );
+        assert.is(jsNum(plus(n3)(n2))   , 3 + 2 );
 
-        assert.is( nval( succ(succ(n3))) , 3 + 1 + 1 );
-        assert.is( nval( plus(n3)(n2))   , 3 + 2 );
+        assert.is(jsNum(plus(n2)(plus(n2)(n2)) )   , 2 + 2 + 2 );
+        assert.is(jsNum(mult(n2)(n3) )             , 2 * 3 );
+        assert.is(jsNum(mult(n2)(n3) )             , 2 * 3 );
 
-        assert.is( nval( plus(n2)(plus(n2)(n2)) )   , 2 + 2 + 2 );
-        assert.is( nval( mult(n2)(n3) )             , 2 * 3 );
-        assert.is( nval( mult(n2)(n3) )             , 2 * 3 );
+        assert.is(jsNum(pow(n2)(n3) )              , 2 * 2 * 2); // 2^3
+        assert.is(jsNum(pow(n2)(n0) )              , 1); // x^0
+        assert.is(jsNum(pow(n2)(n1) )              , 2); // x^1
+        assert.is(jsNum(pow(n0)(n2) )              , 0); // 0^x
+        assert.is(jsNum(pow(n1)(n2) )              , 1); // 1^x
 
-        assert.is( nval( pow(n2)(n3) )              , 2 * 2 * 2); // 2^3
-        assert.is( nval( pow(n2)(n0) )              , 1); // x^0
-        assert.is( nval( pow(n2)(n1) )              , 2); // x^1
-        assert.is( nval( pow(n0)(n2) )              , 0); // 0^x
-        assert.is( nval( pow(n1)(n2) )              , 1); // 1^x
+        assert.is(jsNum(pow(n0)(n0) )              , 1); // 0^0  // Ha !!!
 
-        assert.is( nval( pow(n0)(n0) )              , 1); // 0^0  // Ha !!!
+        assert.isTrue (jsNum(church(42) ) === 42 );
 
-        assert.isTrue ( nval( church(42) ) === 42 );
+    }
+);
+
+churchSuite.add("number operations", assert => {
 
         const sval = cn => cn(s => 'I' + s)('');
         assert.is( sval(church(10)) , 'IIIIIIIIII');
 
+        const inc = x => x + 1;
         const qval = cn => cn(n => cn(inc)(n))(0); // square by cont adding
         assert.is( qval(church(9)) , 81 );
 
@@ -250,14 +249,14 @@ churchSuite.add("numbers", assert => {
     }
 );
 
-churchSuite.add("pair", assert => {
+churchSuite.add("Pair", assert => {
 
-        const p = pair(0)(1);      // constituent of a product type
-        assert.is( fst(p)   , 0);  // p(konst) (pick first element of pair)
-        assert.is( snd(p)   , 1);  // p(kite)  (pick second element of pair)
+        const p = Pair(0)(1);      // constituent of a product type
+        assert.is( p(fst)   , 0);  // p(konst) (pick first element of pair)
+        assert.is( p(snd)   , 1);  // p(kite)  (pick second element of pair)
 
-        const pval = cn => cn(p => pair(fst(p) + snd(p) + 1)(snd(p) + 1) ) ( pair(0)(0) );
-        assert.is( fst(pval(church(10))) , 55);  // triangle numbers
+        const pval = cn => cn(p => Pair(p(fst) + p(snd) + 1)(p(snd) + 1) ) (Pair(0)(0) );
+        assert.is( pval(church(10))(fst) , 55);  // triangle numbers
 
     }
 );
@@ -325,14 +324,9 @@ churchSuite.add("either", assert => {
 
 churchSuite.add("maybe", assert => {
 
-        const no = Nothing;
-        assert.isTrue( maybe (no) ( true ) (konst(false)) );  // test the nothing case
+        assert.isTrue( maybe (Nothing)   (c(true) )  (c(false)) );  // test the nothing case
 
-        const good = Just(true);
-        assert.isTrue( maybe (good) ( false ) (id) );  // test the just value
-
-        const bound = bindMaybe(Just(false))( b => Right(not(b))); // bind with not
-        assert.isTrue( maybe (bound) ( false ) (id) );  // test the just value
+        assert.isTrue( maybe (Just(true)) (c(false)) (id) );  // test the just value
 
     }
 );
@@ -350,5 +344,57 @@ churchSuite.add("curry", assert => {
     }
 );
 
+churchSuite.add("Tuple border cases", assert => {
 
-churchSuite.run(); // go for the lazy eval as this will improve reporting later
+     try {
+         Tuple(-1);
+         assert.isTrue(false); // must not reach here
+     } catch (expected) {
+         assert.isTrue(true);
+     }
+
+     try {
+         Tuple(0);
+         assert.isTrue(false); // must not reach here
+     } catch (expected) {
+         assert.isTrue(true);
+     }
+});
+
+churchSuite.add("tuple3", assert => {
+
+     const [Person, firstname, lastname, age] = Tuple(3);
+
+     const dierk = Person("Dierk")("König")(50);
+
+     assert.is(dierk(firstname), "Dierk");
+     assert.is(dierk(lastname),  "König");
+     assert.is(dierk(age),       50);
+
+});
+
+churchSuite.add("choice", assert => {
+
+    const [Cash, CreditCard, Transfer] = Choice(3); // generalized sum type
+
+    const pay = payment => payment                  // "pattern" match
+        (() =>
+             amount => 'pay ' + amount + ' cash')
+        (({number, sec}) =>
+             amount => 'pay ' + amount + ' with credit card ' + number + ' / ' + sec)
+        (([from, to]) =>
+             amount => 'pay ' + amount + ' by wire from ' + from + ' to ' + to);
+
+    let payment = Cash();
+    assert.is(pay(payment)(50), 'pay 50 cash');
+
+    payment = CreditCard({number: '0000 1111 2222 3333', sec: '123'});
+    assert.is(pay(payment)(50), 'pay 50 with credit card 0000 1111 2222 3333 / 123');
+
+    payment = Transfer(['Account 1', 'Account 2']);
+    assert.is(pay(payment)(50), 'pay 50 by wire from Account 1 to Account 2');
+
+});
+
+
+churchSuite.run();

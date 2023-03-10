@@ -1,6 +1,6 @@
 /**
  * @typedef LogLevelFilterType
- * @type { (pairSelector) => LogLevelType | boolean }
+ * @type { (PairSelectorType) => LogLevelType | boolean }
  */
 
 /**
