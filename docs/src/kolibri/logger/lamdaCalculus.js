@@ -3,11 +3,22 @@ export { Pair, snd, fst, LazyIf, Then, Else, True, False, not, and, id, lazy,
   succ, leq, eq, jsNum
 }
 
-import { fst, snd } from "../../../../docs/src/kolibri/stdlib.js";
+import { fst, snd } from "../stdlib.js";
 
 const lazy = x => () => x;
 const toChurchBoolean = value => value ? True : False;
 const convertToJsBool = b => b(true)(false);
+
+/**
+ * @callback MonoidalFunction
+ * @template _T_
+ * @type { (_T_) => _T_ }
+ */
+
+/**
+ * @typedef { <_T_> (x:_T_) => (y:_T_) => _T_ } churchBoolean
+ * @typedef { <_T_> ( MonoidalFunction<_T_> ) => (y:_T_) => _T_ } churchNumber
+ */
 
 // lambda calculus
 
@@ -91,7 +102,7 @@ const and = p => q => p(q)(False);
 
 /**
  * @function
- * @param p {churchBoolean}
+ * @param {churchBoolean} p
  * @returns churchBoolean
  */
 const not = p => p(False)(True);
