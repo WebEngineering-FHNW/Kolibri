@@ -20,6 +20,7 @@ import "./src/range/rangeTest.js"
 // focusring
 import "./src/focusring/focusRingTest.js"
 
+// import "./src/iterator/performanceTest.js"
 
 total.onChange( value => document.getElementById('grossTotal').textContent = "" + value + " tests done.");
 
