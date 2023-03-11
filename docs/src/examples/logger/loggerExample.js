@@ -12,12 +12,12 @@ import {
   removeFromAppenderList,
   getAppenderList,
   setMessageFormatter
-} from "../logger.js";
+} from "../../kolibri/logger/logger.js";
 
-import { Appender as ArrayAppender }    from "../appender/arrayAppender.js";
-import { Appender as ConsoleAppender }  from "../appender/consoleAppender.js";
-import { Appender as CountAppender }    from "../appender/countAppender.js";
-import { LogFactory }                   from "../logFactory.js";
+import { Appender as ArrayAppender }   from "../../kolibri/logger/appender/arrayAppender.js";
+import { Appender as ConsoleAppender } from "../../kolibri/logger/appender/consoleAppender.js";
+import { Appender as CountAppender }   from "../../kolibri/logger/appender/countAppender.js";
+import { LogFactory }                  from "../../kolibri/logger/logFactory.js";
 
 const LOGGER_CONTEXT           = "ch.fhnw.sample.logger";
 const INITIAL_LOGGING_CONTEXT  = "ch.fhnw";

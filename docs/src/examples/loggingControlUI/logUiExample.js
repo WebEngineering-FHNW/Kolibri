@@ -1,8 +1,8 @@
-import { Appender as ObservableAppender }         from "../../appender/observableAppender.js";
-import { Appender as ConsoleAppender }            from "../../appender/consoleAppender.js";
-import { LogFactory }                             from "../../logFactory.js";
-import { createLogUi }                            from "../createLogUi.js";
-import { addToAppenderList, setMessageFormatter } from "../../logger.js";
+import { Appender as ObservableAppender }         from "../../kolibri/logger/appender/observableAppender.js";
+import { Appender as ConsoleAppender }            from "../../kolibri/logger/appender/consoleAppender.js";
+import { LogFactory }                             from "../../kolibri/logger/logFactory.js";
+import { createLogUi }                            from "../../kolibri/logger/logUi/createLogUi.js";
+import { addToAppenderList, setMessageFormatter } from "../../kolibri/logger/logger.js";
 
 const consoleAppender     = ConsoleAppender();
 const observableAppender  = ObservableAppender();
