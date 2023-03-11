@@ -1,10 +1,8 @@
 export {
-  LazyIf,
-  Then,
-  Else,
+  LazyIf
 }
 
-import {id, c, T, F, churchBool, jsBool} from "../lambda/church.js";
+import {id } from "../lambda/church.js";
 
 export {
   id,
@@ -22,7 +20,9 @@ export {
 
 /**
  * Syntactic sugar for creating an If-Then-Else-Construct for lazy Evaluation - it avoid that JavaScript eagerly evaluate both cases (then and else)
- * Important: Add in 'Then' and 'Else' an anonym function: () => "your function"
+ * Important: Add the 'Then' and 'Else' cases anonymous producer functions: () => "your function".
+ * In other words:
+ * LazyIf acts like a church boolean where we know that the result will be a function that we call without arguments.
  *
  * @type { <_T_>
  *     (ChurchBooleanType)
@@ -32,14 +32,9 @@ export {
  *     }
  * @example
  * LazyIf( eq(n1)(n1) )
- *  (Then( () => "same"     ))
- *  (Else( () => "not same" ))
+ *   ( _=> "same"     )
+ *   ( _=> "not same" )
  */
-const LazyIf = condition => truthy => falsy => ( condition(truthy)(falsy) )();
+const LazyIf = condition => thenFunction => elseFunction => ( condition(thenFunction)(elseFunction) )();
 
-/**
- * Syntactic sugar for If-Construct
- */
-const Then = id;
-const Else = id;
 

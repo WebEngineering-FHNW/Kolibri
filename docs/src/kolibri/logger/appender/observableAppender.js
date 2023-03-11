@@ -9,7 +9,7 @@ import {
   push,
   size
 }                                                                        from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import {Else, id, jsNum, LazyIf, Then, T,}                            from "../lamdaCalculus.js";
+import {id, jsNum, LazyIf, T}                                            from "../lamdaCalculus.js";
 import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN,} from "../logger.js";
 
 const MAX_STACK_ELEMENTS    = Number.MAX_SAFE_INTEGER -1;
@@ -93,9 +93,9 @@ const reset = () => {
 const appenderCallback = type => limit => onOverflow => msg =>
   LazyIf(full(limit))
     // if the stack is full, call the overflow function and add the new value afterwards.
-    (Then(() => append(type)(msg)(limit)(onOverflow)))
+    (() => append(type)(msg)(limit)(onOverflow))
     // in any other case just append the new message.
-    (Else(() => append(type)(msg)(limit)(id)));
+    (() => append(type)(msg)(limit)(id));
 
 
 /**
@@ -153,13 +153,13 @@ const append = type => msg => limit => evictionStrategy => {
   // evict the stack using the given evictionStrategy
   logObservable = evictionStrategy(logObservable);
   LazyIf(full(limit))
-    (Then(() => {
+    ( () => {
       // if the stack is full, despite using the set eviction strategy, use the default eviction strategy to make space.
       logObservable = DEFAULT_CACHE_EVICTION_STRATEGY(logObservable);
       logObservable.setValue(createNewStack(LOG_ERROR)(OVERFLOW_LOG_MESSAGE));
       logObservable.setValue(createNewStack(type)(msg));
-    }))
-    (Else(() => logObservable.setValue(createNewStack(type)(msg))));
+    })
+    (() => logObservable.setValue(createNewStack(type)(msg)));
   return T;
 };
 

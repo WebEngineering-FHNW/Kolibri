@@ -1,5 +1,5 @@
 import {fst, Pair, snd}                                                      from "../../../../docs/src/kolibri/stdlib.js";
-import {and, Else, id, LazyIf, leq, n0, n1, n2, n3, n4, n5, n9, Then, T, F} from "./lamdaCalculus.js";
+import {and, id, LazyIf, leq, n0, n1, n2, n3, n4, n5, n9, T, F}              from "./lamdaCalculus.js";
 
 import {removeItem} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import {churchBool} from "../lambda/church.js";
@@ -60,16 +60,16 @@ const logger = loggerLevel => loggerContext => msg =>
   LazyIf(
       messageShouldBeLogged(loggerLevel)(loggerContext)
   )
-  (Then(() =>
+  (() =>
         appenderList
             .map(appender => {
               const levelName = loggerLevel(snd);
               const levelCallback = appender[levelName.toLowerCase()];
               return levelCallback(formatMsg(loggerContext)(levelName)(evaluateMessage(msg)))
             })
-            .reduce((acc, cur) => and(acc)(cur), T)) // every() for array of churchBooleans
+            .reduce((acc, cur) => and(acc)(cur), T) // every() for array of churchBooleans
   )
-  (Else(() => F));
+  (() => F);
 
 /**
  * Decides if a message fulfills the conditions to be logged.

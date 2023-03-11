@@ -1,6 +1,6 @@
 export { Appender}
 
-import {Else, id, LazyIf, Then, T, F} from "../lamdaCalculus.js";
+import {id, LazyIf, T, F} from "../lamdaCalculus.js";
 
 const MAX_ARRAY_ELEMENTS    = Number.MAX_SAFE_INTEGER - 1;
 const MIN_ARRAY_LENGTH      = 2;
@@ -102,9 +102,9 @@ const getValue = () => appenderArray;
 const appenderCallback = limit => onOverflow => msg =>
   LazyIf(full(limit))
     // if the array is full, call the overflow function and add the new value afterwards.
-    (Then(() => append(msg)(limit)(onOverflow)))
+    (() => append(msg)(limit)(onOverflow))
     // in any other case just append the new message.
-    (Else(() => append(msg)(limit)(    id    )));
+    (() => append(msg)(limit)(    id    ));
 
 /**
  * Returns {@link T} if the appender array equals the limit.
@@ -130,12 +130,12 @@ const append = msg => limit => evictionStrategy => {
   // evict the array using the given evictionStrategy
   appenderArray = evictionStrategy(appenderArray);
   LazyIf(full(limit))
-    (Then(() => {
+    (() => {
       // if array is full, despite using the set eviction strategy, use the default eviction strategy to make space.
       appenderArray = DEFAULT_CACHE_EVICTION_STRATEGY(appenderArray);
       appenderArray.push(OVERFLOW_LOG_MESSAGE);
       appenderArray.push(msg)
-    }))
-    (Else( () => appenderArray.push(msg)));
+    })
+    (() => appenderArray.push(msg));
   return T;
 };
