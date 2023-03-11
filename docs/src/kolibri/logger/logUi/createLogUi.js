@@ -1,10 +1,11 @@
+import {projectDebounceInput} from "../../projector/simpleForm/simpleInputProjector.js";
+
 export { createLogUi }
 
 import { dom }                    from "../../util/dom.js"
 import { shadowCss }              from "../../style/kolibriStyle.js";
 import { LogUiController }        from "./logUiController.js";
 import { setLoggingContext }      from "../logger.js";
-import { projectDebounceInput }   from "./../../debounceInput/simpleInputProjector.js";
 import { SimpleInputController }  from "../../projector/simpleForm/simpleInputController.js";
 import { loggingSelectProjector } from "./logUiProjector.js";
 import { LogMessagesView, projectLogLevelControls } from "./logView.js";

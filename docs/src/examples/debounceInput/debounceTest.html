@@ -6,14 +6,16 @@
 </head>
 <body>
 
+<p> The output should be updated only when the input has a quiet time, not while typing quickly</p>
+
   <div id="input"></div>
   <button id="btn">Button</button>
   <span id="out"></span>
 
 <script type="module">
 
-  import {projectDebounceInput} from "./simpleInputProjector.js";
-  import {SimpleInputController} from "../../../../docs/src/kolibri/projector/simpleForm/simpleInputController.js";
+  import {SimpleInputController} from "../../kolibri/projector/simpleForm/simpleInputController.js";
+  import {projectDebounceInput}  from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
 
   const controller = SimpleInputController({
     value:  "Tobias",
@@ -31,7 +33,7 @@
 
     button.onclick = () => controller.setValue("Wild");
 
-    controller.onValueChanged(text => output.innerText += text + "\n" );
+    controller.onValueChanged(text => output.textContent += text + "\n" );
 
 </script>
 

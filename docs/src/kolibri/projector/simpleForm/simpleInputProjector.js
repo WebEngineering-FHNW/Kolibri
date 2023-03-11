@@ -13,13 +13,10 @@
  * to the application while all business logic and their test cases remain untouched.
  */
 
-import {
-    CHANGE, dom, INPUT, TIME, CHECKBOX
-}                                  from "../../util/dom.js";
-import { timeStringToMinutes,
-         totalMinutesToTimeString} from "../projectorUtils.js";
+import {CHANGE, dom, INPUT, TIME, CHECKBOX}               from "../../util/dom.js";
+import { timeStringToMinutes, totalMinutesToTimeString}   from "../projectorUtils.js";
 
-export { projectInstantInput, projectChangeInput }
+export { projectInstantInput, projectChangeInput, projectDebounceInput }
 
 /**
  * Internal mutable singleton state to produce unique id values for the label-input pairs.
@@ -31,22 +28,20 @@ let counter = 0;
 /**
  * Projection function that creates a view for input purposes, binds the information that is available through
  * the inputController, and returns the generated views.
- * @typedef { (formClassName:!String, inputController:!SimpleInputControllerType<T>)
+ * @typedef { (formClassName:!String, inputController:!SimpleInputControllerType<_T_>, timeout:?Number)
  *               => [HTMLLabelElement, HTMLInputElement]
- *          } InputProjector<T>
- * @template T
+ *          } InputProjector<_T_>
+ * @template _T_
  * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
  */
 
 /**
  * Implementation for the exported {@link projectInstantInput} and {@link projectChangeInput} function.
  * @private
- * @type { (eventType:EventTypeString) => InputProjector<T> }
- * @template T
+ * @type { (eventType:EventTypeString) => InputProjector<_T_> }
+ * @template _T_
  */
-const projectInput =
-        eventType =>
-        (formClassName, inputController) => {
+const projectInput = (eventType) => (formClassName, inputController, timeout = 0) => {
     if( ! inputController) {
         console.error("no inputController in input projector."); // be defensive
         return;
@@ -66,15 +61,28 @@ const projectInput =
 
     // view and data binding can depend on the type
     if (inputController.getType() === TIME) { // "hh:mm" in the vies vs minutes since midnight in the model
-        inputElement.addEventListener(eventType, _ => inputController.setValue(timeStringToMinutes(inputElement.value)));
-        inputController.onValueChanged(val => inputElement.value = totalMinutesToTimeString(val));
+        inputElement.addEventListener(eventType, _ =>
+            inputController.setValue(/** @type { * } */ timeStringToMinutes(inputElement.value))
+        );
+        inputController.onValueChanged(val => inputElement.value = totalMinutesToTimeString(/** @type { * } */ val));
     } else
     if (inputController.getType() === CHECKBOX) { // "checked" attribute vs boolean in model
-        inputElement.addEventListener(eventType, _ => inputController.setValue(inputElement.checked));
-        inputController.onValueChanged(val => inputElement.checked = val);
+        inputElement.addEventListener(eventType, _ => inputController.setValue(/** @type { * } */ inputElement.checked));
+        inputController.onValueChanged(val => inputElement.checked = /** @type { * } */ val);
     } else {
-        inputElement.addEventListener(eventType, _ => inputController.setValue(inputElement.value));
-        inputController.onValueChanged(val => inputElement.value = val);
+        if(timeout !== 0) {
+            let timeoutId;
+            inputElement.addEventListener(eventType, _event => {
+                if(timeoutId !== undefined) clearTimeout(timeoutId);
+                timeoutId = setTimeout( _timestamp =>
+                    inputController.setValue(/** @type { * } */ inputElement.value),
+                    timeout
+                );
+            });
+        } else {
+            inputElement.addEventListener(eventType, _ => inputController.setValue(/** @type { * } */ inputElement.value));
+        }
+        inputController.onValueChanged(val => inputElement.value = /** @type { * } */ val);
     }
 
     inputController.onLabelChanged (label => {
@@ -96,8 +104,8 @@ const projectInput =
  * Depending on the control and how the browser handles it, this might require a user action to confirm the
  * finalization of the value change like pressing the enter key or leaving the input field.
  * @constant
- * @template T
- * @type { InputProjector<T> }
+ * @template _T_
+ * @type { InputProjector<_T_> }
  * @example
  * const [labelElement, spanElement] = projectChangeInput(controller);
  */
@@ -108,9 +116,22 @@ const projectChangeInput  = projectInput(CHANGE);
  * Depending on the control and how the browser handles it, this might result in each keystroke in a
  * text field leading to instant update of the underlying model.
  * @constant
- * @template T
- * @type { InputProjector<T> }
+ * @template _T_
+ * @type { InputProjector<_T_> }
  * @example
  * const [labelElement, spanElement] = projectInstantInput(controller);
  */
 const projectInstantInput = projectInput(INPUT);
+
+/**
+ * An {@link InputProjector} that binds the input on any change with a given delay in milliseconds such that
+ * a quick succession of keystrokes is not interpreted as input until there is some quiet time.
+ * Each keystroke triggers the defined timeout. If the timeout is still pending while a key is pressed,
+ * it is reset and starts from the beginning. After the timeout expires, the underlying model is updated.
+ * @constant
+ * @template _T_
+ * @type { InputProjector<_T_> }
+ * @example
+ * const [labelElement, spanElement] = projectDebounceInput(controller, 200);
+ */
+const projectDebounceInput = projectInput(INPUT);
