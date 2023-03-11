@@ -1,6 +1,7 @@
 
 import "./versionTest.js";
 import "./lambda/churchTest.js";
+import "./lambda/churchNumberTest.js";
 import "./lambda/skiTest.js";
 import "./util/arrayFunctionsTest.js";
 import "./util/arrayTest.js";

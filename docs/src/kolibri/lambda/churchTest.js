@@ -5,7 +5,6 @@ import {
         beq,
         beta,
         c, Choice,
-        churchNum,
         churchBool,
         cmp,
         curry,
@@ -15,31 +14,19 @@ import {
         fst,
         id,
         imp,
-        isZero,
         jsBool,
-        jsNum,
         Just,
         kite,
         konst,
         Left,
         maybe,
-        mult,
-        n0,
-        n1,
-        n2,
-        n3,
-        n4,
-        n5,
         not,
         Nothing,
         or,
         Pair,
-        plus,
-        pow,
         rec,
         Right,
         snd,
-        succ,
         T, Tuple,
         uncurry,
         xor
@@ -148,11 +135,6 @@ churchSuite.add("boolean", assert => {
         assert.isTrue( veq (F) (imp(T)(F)) );
         assert.isTrue( veq (T) (imp(F)(T)) );
         assert.isTrue( veq (T) (imp(F)(F)) );
-
-        // addition from numerals
-        assert.isTrue( veq (T) (isZero(n0)) );
-        assert.isTrue( veq (F) (isZero(n1)) );
-        assert.isTrue( veq (F) (isZero(n2)) );
     }
 );
 
@@ -199,70 +181,20 @@ churchSuite.add("recursion", assert => {
 );
 
 
-churchSuite.add("numbers", assert => {
-
-        assert.is(jsNum(n0) , 0 );
-        assert.is(jsNum(n1) , 1 );
-        assert.is(jsNum(n2) , 2 );
-        assert.is(jsNum(n3) , 3 );
-
-        assert.is(jsNum(succ(n3) ) , 4 );
-
-        assert.is(jsNum(n4) , 4 );
-        assert.is(jsNum(n5) , 5 );
-
-        assert.is(jsNum(succ(succ(n3))) , 3 + 1 + 1 );
-        assert.is(jsNum(plus(n3)(n2))   , 3 + 2 );
-
-        assert.is(jsNum(plus(n2)(plus(n2)(n2)) )   , 2 + 2 + 2 );
-        assert.is(jsNum(mult(n2)(n3) )             , 2 * 3 );
-        assert.is(jsNum(mult(n2)(n3) )             , 2 * 3 );
-
-        assert.is(jsNum(pow(n2)(n3) )              , 2 * 2 * 2); // 2^3
-        assert.is(jsNum(pow(n2)(n0) )              , 1); // x^0
-        assert.is(jsNum(pow(n2)(n1) )              , 2); // x^1
-        assert.is(jsNum(pow(n0)(n2) )              , 0); // 0^x
-        assert.is(jsNum(pow(n1)(n2) )              , 1); // 1^x
-
-        assert.is(jsNum(pow(n0)(n0) )              , 1); // 0^0  // Ha !!!
-
-        assert.isTrue (jsNum(churchNum(42) ) === 42 );
-
-    }
-);
-
-churchSuite.add("number operations", assert => {
-
-        const sval = cn => cn(s => 'I' + s)('');
-        assert.is(sval(churchNum(10)) , 'IIIIIIIIII');
-
-        const inc = x => x + 1;
-        const qval = cn => cn(n => cn(inc)(n))(0); // square by cont adding
-        assert.is(qval(churchNum(9)) , 81 );
-
-        const aval = cn => cn(a => a.concat(a[a.length-1]+a[a.length-2]) ) ( [0,1] );
-        assert.is(aval(churchNum(10 - 2)).toString() , '0,1,1,2,3,5,8,13,21,34');  // fibonacci numbers
-
-        const oval = cn => cn(o => ({acc:o.acc+o.i+1, i:o.i+1})  ) ( {acc:0, i:0} );
-        assert.is(oval(churchNum(10)).acc , 55);  // triangle numbers
+churchSuite.add("deferred operations", assert => {
 
         // Thrush can be used as a one-element closure
         const closure = Th(1);  // closure is now "storing" the value until a function uses it
         assert.is( closure(id)  , 1 );
-        assert.is( closure(inc) , 2 );
+        assert.is( closure(x => x+1) , 2 );
 
     }
 );
 
 churchSuite.add("Pair", assert => {
-
         const p = Pair(0)(1);      // constituent of a product type
         assert.is( p(fst)   , 0);  // p(konst) (pick first element of pair)
         assert.is( p(snd)   , 1);  // p(kite)  (pick second element of pair)
-
-        const pval = cn => cn(p => Pair(p(fst) + p(snd) + 1)(p(snd) + 1) ) (Pair(0)(0) );
-        assert.is(pval(churchNum(10))(fst) , 55);  // triangle numbers
-
     }
 );
 
@@ -312,6 +244,8 @@ churchSuite.add("lazy", assert => {
         const bad3  = () => y=true;
         T (good3) (bad3) ();
         assert.isTrue(x === true && y === false);
+
+        // todo dk: try with Thrush
 
     }
 );
