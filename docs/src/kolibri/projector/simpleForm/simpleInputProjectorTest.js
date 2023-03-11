@@ -93,7 +93,6 @@ simpleInputProjectorSuite.add("time", assert => {
 
     assert.is(controller.getValue(), 0);
     assert.is(inputElement.value, "00:00");
-
 });
 
 
