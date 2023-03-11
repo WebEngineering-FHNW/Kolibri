@@ -1,8 +1,7 @@
-import {fst, Pair, snd}                                                      from "../../../../docs/src/kolibri/stdlib.js";
-import {and, id, LazyIf, leq, n0, n1, n2, n3, n4, n5, n9, T, F}              from "./lamdaCalculus.js";
+import { fst, Pair, snd, and, id, T, F, churchBool, LazyIf }  from "../lambda/church.js";
+import { leq, n0, n1, n2, n3, n4, n5, n9, }                   from "../lambda/churchNumbers.js";
 
-import {removeItem} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
-import {churchBool} from "../lambda/church.js";
+import {removeItem} from "../util/arrayFunctions.js";
 
 export {
   LOG_TRACE,

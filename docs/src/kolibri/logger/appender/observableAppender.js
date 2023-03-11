@@ -1,16 +1,12 @@
 export { Appender}
 
-import {Pair}                                                            from "../../../../../docs/src/kolibri/stdlib.js";
-import {
-  Observable
-}                                                                        from "../../../../../docs/src/kolibri/observable.js";
-import {
-  emptyStack,
-  push,
-  size
-}                                                                        from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import {id, jsNum, LazyIf, T}                                            from "../lamdaCalculus.js";
-import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN,} from "../logger.js";
+import { Observable }                from "../../observable.js";
+
+// todo dk: do not rely on contrib
+import { emptyStack, push, size }    from "../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
+import { Pair, id, T, LazyIf }       from "../../lambda/church.js";
+import { jsNum }                     from "../../lambda/churchNumbers.js";
+import { LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN,} from "../logger.js";
 
 const MAX_STACK_ELEMENTS    = Number.MAX_SAFE_INTEGER -1;
 const MIN_STACK_SIZE        = 2;

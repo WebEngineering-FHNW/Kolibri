@@ -2,7 +2,7 @@ import {TestSuite}                         from "../util/test.js"
 import {I, K, C, KI, B, BB, V, S}          from "./ski.js";
 import {id, c, cmp, cmp2, snd, Pair, flip} from "./church.js";
 
-const skiSuite = TestSuite("rock");
+const skiSuite = TestSuite("ski");
 
 skiSuite.add("aliases", assert => {
     assert.is(I,  id);

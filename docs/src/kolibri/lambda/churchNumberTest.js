@@ -61,7 +61,7 @@ churchNumberSuite.add("number operations", assert => {
         assert.is( eq(n2)(minus(n2)(n0)), T);
         assert.is( eq(n2)(minus(n6)(n0)), F);
 
-        const rand = Math.floor(Math.random() * 100);
+        const rand = Math.ceil(Math.random() * 100);
         assert.is( eq(churchNum(rand))(churchNum(rand)),   T);
         assert.is( eq(churchNum(rand))(churchNum(rand+1)), F);
         assert.is( jsNum(churchNum(rand)), rand);

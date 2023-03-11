@@ -1,4 +1,4 @@
-import {T} from "../lamdaCalculus.js";
+import { T } from "../../lambda/church.js";
 
 export { Appender }
 

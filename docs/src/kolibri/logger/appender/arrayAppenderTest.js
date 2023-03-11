@@ -1,6 +1,6 @@
-import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
+import {TestSuite} from "../../util/test.js";
 import {Appender}  from "./arrayAppender.js";
-import {id}        from "../lamdaCalculus.js";
+import {id}        from "../../lambda/church.js";
 
 const { trace, debug, info, warn, error, fatal, getValue, reset } = Appender();
 

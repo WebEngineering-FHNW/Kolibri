@@ -1,6 +1,6 @@
 export { Appender}
 
-import {id, LazyIf, T, F} from "../lamdaCalculus.js";
+import { id, T, F, LazyIf } from "../../lambda/church.js";
 
 const MAX_ARRAY_ELEMENTS    = Number.MAX_SAFE_INTEGER - 1;
 const MIN_ARRAY_LENGTH      = 2;

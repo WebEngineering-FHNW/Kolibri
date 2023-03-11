@@ -1,5 +1,5 @@
 import {TestSuite}      from "../util/test.js";
-import {F, id, T}       from "./lamdaCalculus.js";
+import {F, id, T}       from "../lambda/church.js";
 import {Appender}       from "./appender/arrayAppender.js";
 import {Appender as CountAppender} from "./appender/countAppender.js";
 import {

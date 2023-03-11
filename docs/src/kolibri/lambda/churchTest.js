@@ -1,38 +1,38 @@
 import {TestSuite} from "../util/test.js";
 
 import {
-        and,
-        beq,
-        beta,
-        c, Choice,
-        churchBool,
-        cmp,
-        curry,
-        either,
-        F,
-        flip,
-        fst,
-        id,
-        imp,
-        jsBool,
-        Just,
-        kite,
-        konst,
-        Left,
-        maybe,
-        not,
-        Nothing,
-        or,
-        Pair,
-        rec,
-        Right,
-        snd,
-        T, Tuple,
-        uncurry,
-        xor
+    and,
+    beq,
+    beta,
+    c, Choice,
+    churchBool,
+    cmp,
+    curry,
+    either,
+    F,
+    flip,
+    fst,
+    id,
+    imp,
+    jsBool,
+    Just,
+    kite,
+    konst, LazyIf,
+    Left,
+    maybe,
+    not,
+    Nothing,
+    or,
+    Pair,
+    rec,
+    Right,
+    snd,
+    T, Tuple,
+    uncurry,
+    xor
 } from "./church.js";
 
-import {I, M, Th, Z,}  from "./ski.js";
+import { M, Th, Z }  from "./ski.js";
 
 const churchSuite = TestSuite("church");
 
@@ -104,37 +104,81 @@ churchSuite.add("boolean", assert => {
         assert.isTrue(   jsBool(churchBool(true)));
         assert.isTrue( ! jsBool(churchBool(false)));
 
-        const veq  = x => y => jsBool(beq(x)(y)); // value equality
+        assert.is( jsBool(T), true);   // sanity checks
+        assert.is( jsBool(F), false);
 
-        assert.isTrue(   jsBool(T) );   // sanity checks
-        assert.isTrue( ! jsBool(F) );
-        assert.isTrue(   veq(T)(T) );
-        assert.isTrue( ! veq(T)(F) );
-        assert.isTrue( ! veq(F)(T) );
-        assert.isTrue(   veq(F)(F) );
+        assert.is(not(T), F );
+        assert.is(not(F), T );
 
-        assert.isTrue( veq (not(T)) (F) );
-        assert.isTrue( veq (not(F)) (T) );
+        assert.is( T, and(T)(T) );
+        assert.is( F, and(T)(F) );
+        assert.is( F, and(F)(T) );
+        assert.is( F, and(F)(F) );
 
-        assert.isTrue( veq (T) (and(T)(T)) );
-        assert.isTrue( veq (F) (and(T)(F)) );
-        assert.isTrue( veq (F) (and(F)(T)) );
-        assert.isTrue( veq (F) (and(F)(F)) );
+        assert.is( T, or(T)(T) );
+        assert.is( T, or(T)(F) );
+        assert.is( T, or(F)(T) );
+        assert.is( F, or(F)(F) );
 
-        assert.isTrue( veq (T) (or(T)(T)) );
-        assert.isTrue( veq (T) (or(T)(F)) );
-        assert.isTrue( veq (T) (or(F)(T)) );
-        assert.isTrue( veq (F) (or(F)(F)) );
+        assert.is( F, xor(T)(T) );
+        assert.is( T, xor(T)(F) );
+        assert.is( T, xor(F)(T) );
+        assert.is( F, xor(F)(F) );
 
-        assert.isTrue( veq (F) (xor(T)(T)) );
-        assert.isTrue( veq (T) (xor(T)(F)) );
-        assert.isTrue( veq (T) (xor(F)(T)) );
-        assert.isTrue( veq (F) (xor(F)(F)) );
+        assert.is( T, imp(T)(T) );
+        assert.is( F, imp(T)(F) );
+        assert.is( T, imp(F)(T) );
+        assert.is( T, imp(F)(F) );
+    }
+);
 
-        assert.isTrue( veq (T) (imp(T)(T)) );
-        assert.isTrue( veq (F) (imp(T)(F)) );
-        assert.isTrue( veq (T) (imp(F)(T)) );
-        assert.isTrue( veq (T) (imp(F)(F)) );
+churchSuite.add("bool distr rule", assert => {
+
+        // conjunctive normal form
+        // (a or b) and (a or c) = a or (b and c)
+        const conjNF = a => b => c =>  beq (and (or(a)(b)) (or(a)(c)))  (or (a) (and(b)(c)));
+
+        assert.is( T, conjNF(F)(F)(F) );
+        assert.is( T, conjNF(F)(F)(T) );
+        assert.is( T, conjNF(F)(T)(F) );
+        assert.is( T, conjNF(F)(T)(T) );
+        assert.is( T, conjNF(T)(F)(F) );
+        assert.is( T, conjNF(T)(F)(T) );
+        assert.is( T, conjNF(T)(T)(F) );
+        assert.is( T, conjNF(T)(T)(T) );
+
+        // disjunctive normal form
+        // (a and b) or (a and c) = a and (b or c)
+        const disjNF = a => b => c =>  beq (or (and(a)(b)) (and(a)(c)))  (and (a) (or(b)(c)));
+
+        assert.is( T, disjNF(F)(F)(F) );
+        assert.is( T, disjNF(F)(F)(T) );
+        assert.is( T, disjNF(F)(T)(F) );
+        assert.is( T, disjNF(F)(T)(T) );
+        assert.is( T, disjNF(T)(F)(F) );
+        assert.is( T, disjNF(T)(F)(T) );
+        assert.is( T, disjNF(T)(T)(F) );
+        assert.is( T, disjNF(T)(T)(T) );
+
+    }
+);
+
+churchSuite.add("bool deMorgan", assert => {
+        // not (a and b) = not a or not b
+        const deM1 = a => b => beq (not (and(a)(b))) (or (not(a))(not(b)));
+
+        assert.is( T, deM1(F)(F) );
+        assert.is( T, deM1(F)(T) );
+        assert.is( T, deM1(T)(F) );
+        assert.is( T, deM1(T)(T) );
+
+        // not (a or b) = not a and not b
+        const deM2 = a => b => beq (not (or(a)(b))) (and (not(a))(not(b)));
+
+        assert.is( T, deM2(F)(F) );
+        assert.is( T, deM2(F)(T) );
+        assert.is( T, deM2(T)(F) );
+        assert.is( T, deM2(T)(T) );
     }
 );
 
@@ -187,6 +231,20 @@ churchSuite.add("deferred operations", assert => {
         const closure = Th(1);  // closure is now "storing" the value until a function uses it
         assert.is( closure(id)  , 1 );
         assert.is( closure(x => x+1) , 2 );
+
+        let result;
+
+        result = 0;
+        LazyIf ( T )
+            ( _=> result += 1 )  // then case
+            ( _=> result += 2 ); // else case
+        assert.is( result , 1 );
+
+        result = 0;
+        LazyIf ( F )
+            ( _=> result += 1 )  // then case
+            ( _=> result += 2 ); // else case
+        assert.is( result , 2 );
 
     }
 );

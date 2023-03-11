@@ -8,7 +8,8 @@
 
 export {
     id, beta, konst, c, flip, kite, cmp, cmp2,
-    T, F, and, not, beq, or, xor, imp, jsBool, churchBool, rec,
+    T, F, and, not, beq, or, xor, imp,
+    LazyIf, jsBool, churchBool, rec,
     Pair, fst, snd,
     Tuple, Choice,
     either, Left, Right,
@@ -377,6 +378,26 @@ const jsBool = b => b(true)(false);
  * @type { (jsB:Boolean) => ChurchBooleanType }
  */
 const churchBool = jsB => /** @type {ChurchBooleanType} */ jsB ? T : F;
+
+/**
+ * LazyIf makes a church boolean useful in an If-Then-Else construct where unlike the standard
+ * JavaScript strict evaluation strategy the 'then' and 'else' cases are not evaluated eagerly but lazily.
+ * To this end, the 'then' and 'else' cases must be wrapped in anonymous producer functions.
+ * In other words:
+ * LazyIf acts like a church boolean where we know that the result will be a function that we call without arguments.
+ *
+ * @type { <_T_>
+ *     (ChurchBooleanType)
+ *     => (f:FunctionAtoBType<undefined, _T_>)
+ *     => (g:FunctionAtoBType<undefined, _T_>)
+ *     => _T_
+ *     }
+ * @example
+ * LazyIf( eq(n1)(n1) )
+ *   ( _=> "same"     )
+ *   ( _=> "not same" )
+ */
+const LazyIf = condition => thenFunction => elseFunction => ( condition(thenFunction)(elseFunction) )();
 
 /**
  * Calling the function f recursively.
