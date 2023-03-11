@@ -1,12 +1,8 @@
-import { Pair, snd, fst } from "../../../../docs/src/kolibri/stdlib.js"
-import {
-  id, n0, n1, n2, n3, n4, n5, n9,
-  LazyIf, Else, Then, and, leq,
-  False, True,
-  toChurchBoolean,
-} from "./lamdaCalculus.js";
+import {fst, Pair, snd}                                                      from "../../../../docs/src/kolibri/stdlib.js";
+import {and, Else, id, LazyIf, leq, n0, n1, n2, n3, n4, n5, n9, Then, T, F} from "./lamdaCalculus.js";
 
-import { removeItem } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import {removeItem} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import {churchBool} from "../lambda/church.js";
 
 export {
   LOG_TRACE,
@@ -71,9 +67,9 @@ const logger = loggerLevel => loggerContext => msg =>
               const levelCallback = appender[levelName.toLowerCase()];
               return levelCallback(formatMsg(loggerContext)(levelName)(evaluateMessage(msg)))
             })
-            .reduce((acc, cur) => and(acc)(cur), True)) // every() for array of churchBooleans
+            .reduce((acc, cur) => and(acc)(cur), T)) // every() for array of churchBooleans
   )
-  (Else(() => False));
+  (Else(() => F));
 
 /**
  * Decides if a message fulfills the conditions to be logged.
@@ -97,10 +93,10 @@ const logLevelActivated = loggerLevel => leq(loggingLevel(fst))(loggerLevel(fst)
  * Returns {@link True} if the {@link loggingContext} is a prefix of the given {@link String} parameter.
  * @function
  * @param   { String } context
- * @return  { churchBoolean }
+ * @return  {ChurchBooleanType}
  * @private
  */
-const contextActivated = context => toChurchBoolean(context.startsWith(loggingContext));
+const contextActivated = context => churchBool(context.startsWith(loggingContext));
 
 /**
  * if the param "msg" is a function, it's result will be returned.

@@ -2,11 +2,7 @@ export {
   LazyIf,
   Then,
   Else,
-  True,
-  False,
   lazy,
-  toChurchBoolean,
-  convertToJsBool
 }
 
 import {id, c, T, F, churchBool, jsBool} from "../lambda/church.js";
@@ -25,12 +21,6 @@ export {
 } from "../lambda/churchNumbers.js";
 
 const lazy = c;
-const toChurchBoolean = churchBool;
-const convertToJsBool = jsBool;
-
-const True  = T;
-const False = F;
-
 
 /**
  * Syntactic sugar for creating an If-Then-Else-Construct for lazy Evaluation - it avoid that JavaScript eagerly evaluate both cases (then and else)

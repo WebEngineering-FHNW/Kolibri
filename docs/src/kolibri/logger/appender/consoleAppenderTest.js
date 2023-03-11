@@ -1,6 +1,5 @@
-import { TestSuite }  from "../../../../../docs/src/kolibri/util/test.js";
-import { Appender }   from "./consoleAppender.js";
-import { True }       from "../lamdaCalculus.js";
+import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
+import {Appender}  from "./consoleAppender.js";
 
 const { trace, debug, info, warn, error, fatal } = Appender();
 
@@ -13,12 +12,12 @@ consoleAppenderSuite.add("test add all kind of levels to console appender", asse
   const resultWarn   = warn  ("warn");
   const resultError  = error ("error");
   const resultFatal  = fatal ("fatal");
-  assert.is(resultTrace, True);
-  assert.is(resultDebug, True);
-  assert.is(resultInfo,  True);
-  assert.is(resultWarn,  True);
-  assert.is(resultError, True);
-  assert.is(resultFatal, True);
+  assert.is(resultTrace, T);
+  assert.is(resultDebug, T);
+  assert.is(resultInfo, T);
+  assert.is(resultWarn, T);
+  assert.is(resultError, T);
+  assert.is(resultFatal, T);
 });
 
 consoleAppenderSuite.run();

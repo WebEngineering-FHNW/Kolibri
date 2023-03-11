@@ -1,6 +1,6 @@
-export { Appender }
+export { Appender}
 
-import { False, True, LazyIf, Then, Else, id } from "../lamdaCalculus.js";
+import {Else, id, LazyIf, Then, T, F} from "../lamdaCalculus.js";
 
 const MAX_ARRAY_ELEMENTS    = Number.MAX_SAFE_INTEGER - 1;
 const MIN_ARRAY_LENGTH      = 2;
@@ -113,7 +113,7 @@ const appenderCallback = limit => onOverflow => msg =>
  * @private
  */
 const full = limit =>
-  limit === appenderArray.length  ? True: False;
+  limit === appenderArray.length ? T : F;
 
 
 /**
@@ -137,5 +137,5 @@ const append = msg => limit => evictionStrategy => {
       appenderArray.push(msg)
     }))
     (Else( () => appenderArray.push(msg)));
-  return True;
+  return T;
 };

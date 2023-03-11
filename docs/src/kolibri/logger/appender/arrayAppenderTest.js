@@ -1,6 +1,6 @@
-import { TestSuite }  from "../../../../../docs/src/kolibri/util/test.js";
-import { Appender }   from "./arrayAppender.js";
-import { id, True }   from "../lamdaCalculus.js";
+import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
+import {Appender}  from "./arrayAppender.js";
+import {id}        from "../lamdaCalculus.js";
 
 const { trace, debug, info, warn, error, fatal, getValue, reset } = Appender();
 
@@ -13,7 +13,7 @@ const arrayAppenderSuite = TestSuite("Array Appender");
 
 arrayAppenderSuite.add("test add debug value to array appender", assert => {
   const result = debug("debug");
-  assert.is(result, True);
+  assert.is(result, T);
   assert.is(getValue()[0], "debug");
   reset();
 });
@@ -21,8 +21,8 @@ arrayAppenderSuite.add("test add debug value to array appender", assert => {
 arrayAppenderSuite.add("test add two values to array appender", assert => {
   const result1 = debug("first");
   const result2 = debug("second");
-  assert.is(result1, True);
-  assert.is(result2, True);
+  assert.is(result1, T);
+  assert.is(result2, T);
   assert.is(getValue()[0], "first");
   assert.is(getValue()[1], "second");
   assert.is(getValue().length, 2);
@@ -31,7 +31,7 @@ arrayAppenderSuite.add("test add two values to array appender", assert => {
 
 arrayAppenderSuite.add("test reset array appender", assert => {
   const result1 = debug("first");
-  assert.is(result1, True);
+  assert.is(result1, T);
   assert.is(getValue()[0], "first");
   reset();
   assert.isTrue(0 === getValue().length);
@@ -44,12 +44,12 @@ arrayAppenderSuite.add("test add all kind of levels to array appender", assert =
   const resultWarnLog   = warn("warn");
   const resultErrorLog  = error("error");
   const resultFatalLog  = fatal("fatal");
-  assert.is(resultTraceLog, True);
-  assert.is(resultDebugLog, True);
-  assert.is(resultInfoLog,  True);
-  assert.is(resultWarnLog,  True);
-  assert.is(resultErrorLog, True);
-  assert.is(resultFatalLog, True);
+  assert.is(resultTraceLog, T);
+  assert.is(resultDebugLog, T);
+  assert.is(resultInfoLog, T);
+  assert.is(resultWarnLog, T);
+  assert.is(resultErrorLog, T);
+  assert.is(resultFatalLog, T);
   assert.is(getValue()[0], "debug");
   assert.is(getValue()[1], "trace");
   assert.is(getValue()[2], "info");
@@ -66,16 +66,16 @@ arrayAppenderSuite.add("test default appender overflow implementation", assert =
   const {trace, getValue, reset} = Appender(1);
   const result = trace(msg1);
   assert.is(getValue().length, 1);
-  assert.is(result, True);
+  assert.is(result, T);
   const result2 = trace(msg1);
   assert.is(getValue().length, 2);
-  assert.is(result2, True);
+  assert.is(result2, T);
 
   // should trigger cache eviction & delete first element
   const result3 = trace(msg2);
   assert.is(getValue().length, 1);
   assert.is(getValue()[0], msg2);
-  assert.is(result3, True);
+  assert.is(result3, T);
   reset();
 });
 

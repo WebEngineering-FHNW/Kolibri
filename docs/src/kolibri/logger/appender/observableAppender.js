@@ -1,25 +1,16 @@
-export { Appender }
+export { Appender}
 
-import { Pair }                   from "../../../../../docs/src/kolibri/stdlib.js"
-import { Observable }             from "../../../../../docs/src/kolibri/observable.js";
-import { emptyStack, push, size } from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import {Pair}                                                            from "../../../../../docs/src/kolibri/stdlib.js";
 import {
-  False,
-  True,
-  jsNum,
-  LazyIf,
-  Then,
-  Else,
-  id,
-} from "../lamdaCalculus.js";
+  Observable
+}                                                                        from "../../../../../docs/src/kolibri/observable.js";
 import {
-  LOG_DEBUG,
-  LOG_ERROR,
-  LOG_FATAL,
-  LOG_INFO,
-  LOG_TRACE,
-  LOG_WARN,
-} from "../logger.js";
+  emptyStack,
+  push,
+  size
+}                                                                        from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import {Else, id, jsNum, LazyIf, Then, True,}                            from "../lamdaCalculus.js";
+import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN,} from "../logger.js";
 
 const MAX_STACK_ELEMENTS    = Number.MAX_SAFE_INTEGER -1;
 const MIN_STACK_SIZE        = 2;
@@ -145,7 +136,7 @@ const fatal = appenderCallback(LOG_FATAL);
  * @private
  */
 const full = limit =>
-  limit === jsNum(size(logObservable.getValue())) ? True: False;
+  limit === jsNum(size(logObservable.getValue())) ? T : F;
 
 /**
  * Appends the given message to the stack.
@@ -169,7 +160,7 @@ const append = type => msg => limit => evictionStrategy => {
       logObservable.setValue(createNewStack(type)(msg));
     }))
     (Else(() => logObservable.setValue(createNewStack(type)(msg))));
-  return True;
+  return T;
 };
 
 /**

@@ -1,6 +1,6 @@
-export { Appender }
+import {T} from "../lamdaCalculus.js";
 
-import { True } from "../lamdaCalculus.js";
+export { Appender }
 
 /**
  * Provides console appender.
@@ -45,7 +45,7 @@ const getValue = () => statistic;
 const appenderCallback = type => callback => msg => {
   statistic[type] = statistic[type] + 1;
   callback(` (${statistic[type]}) ` + msg);
-  return True;
+  return T;
 };
 
 /**

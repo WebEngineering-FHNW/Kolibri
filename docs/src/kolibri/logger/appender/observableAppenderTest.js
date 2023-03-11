@@ -1,7 +1,7 @@
-import { Appender }               from "./observableAppender.js";
-import { TestSuite }              from "../../../../../docs/src/kolibri/util/test.js";
-import { id, jsNum, snd, True }   from "../lamdaCalculus.js";
-import { emptyStack, head, size } from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import {Appender}               from "./observableAppender.js";
+import {TestSuite}              from "../../../../../docs/src/kolibri/util/test.js";
+import {id, jsNum, snd}         from "../lamdaCalculus.js";
+import {emptyStack, head, size} from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 
 const msg1 = "Andri Wild";
 const msg2 = "Tobias Wyss";
@@ -25,7 +25,7 @@ const obsHead = observable => head(observable.getValue())(snd); // TODO: Update 
 observableAppenderSuite.add("test add debug log to observable appender", assert => {
   const obs     = getValue();
   const result  = debug("debug");
-  assert.is(result, True);
+  assert.is(result, T);
   assert.is(obsHead(obs), "debug");
   // does the stack contain exactly one element?
   assert.is(stackSize(obs), 1);
@@ -36,10 +36,10 @@ observableAppenderSuite.add("The whole stack should be retrieved when observing"
   const obs     = getValue();
   const result  = debug("debug");
   assert.is(obsHead(obs), "debug");
-  assert.is(result, True);
+  assert.is(result, T);
 
   const result2 = trace("trace");
-  assert.is(result2, True);
+  assert.is(result2, T);
   assert.is(obsHead(obs), "trace");
   // The stack should contain two elements
   assert.is(stackSize(obs), 2);
@@ -62,17 +62,17 @@ observableAppenderSuite.add("test default appender overflow implementation", ass
   const {trace, getValue: getObservable, reset} = Appender(1);
   const result = trace(msg1);
   assert.is(stackSize(getObservable()), 1);
-  assert.is(result, True);
+  assert.is(result, T);
 
   const result2 = trace(msg1);
   assert.is(stackSize(getObservable()), 2);
-  assert.is(result2, True);
+  assert.is(result2, T);
 
   // should trigger cache eviction & delete first element
   const result3 = trace(msg2);
   assert.is(stackSize(getObservable()), 1);
   assert.is(obsHead(getObservable()), msg2);
-  assert.is(result3, True);
+  assert.is(result3, T);
   reset();
 });
 

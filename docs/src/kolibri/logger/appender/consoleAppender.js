@@ -1,7 +1,5 @@
 export { Appender}
 
-import {True} from "../lamdaCalculus.js";
-
 /**
  * Provides console appender.
  * Using this appender you are able to log to the console.
@@ -24,7 +22,7 @@ const Appender = () => ({
  */
 const appenderCallback = callback => msg => {
   callback(msg);
-  return True;
+  return T;
 };
 
 /**
