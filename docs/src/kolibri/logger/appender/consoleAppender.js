@@ -20,7 +20,7 @@ const Appender = () => ({
 });
 
 /**
- * @type { (Consumer) => AppendCallback }
+ * @type { (ConsumerType) => AppendCallback }
  */
 const appenderCallback = callback => msg => {
   callback(msg);
