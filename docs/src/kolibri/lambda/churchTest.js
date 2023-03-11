@@ -5,7 +5,8 @@ import {
         beq,
         beta,
         c, Choice,
-        church,
+        churchNum,
+        churchBool,
         cmp,
         curry,
         either,
@@ -15,6 +16,7 @@ import {
         id,
         imp,
         isZero,
+        jsBool,
         jsNum,
         Just,
         kite,
@@ -111,11 +113,14 @@ churchSuite.add("flip", assert => {
 
 
 churchSuite.add("boolean", assert => {
-        const bool = x => x(true)(false); // only for easier testing
-        const veq  = x => y => bool(beq(x)(y)); // value equality
 
-        assert.isTrue(   bool(T) );   // sanity checks
-        assert.isTrue( ! bool(F) );
+        assert.isTrue(   jsBool(churchBool(true)));
+        assert.isTrue( ! jsBool(churchBool(false)));
+
+        const veq  = x => y => jsBool(beq(x)(y)); // value equality
+
+        assert.isTrue(   jsBool(T) );   // sanity checks
+        assert.isTrue( ! jsBool(F) );
         assert.isTrue(   veq(T)(T) );
         assert.isTrue( ! veq(T)(F) );
         assert.isTrue( ! veq(F)(T) );
@@ -221,7 +226,7 @@ churchSuite.add("numbers", assert => {
 
         assert.is(jsNum(pow(n0)(n0) )              , 1); // 0^0  // Ha !!!
 
-        assert.isTrue (jsNum(church(42) ) === 42 );
+        assert.isTrue (jsNum(churchNum(42) ) === 42 );
 
     }
 );
@@ -229,17 +234,17 @@ churchSuite.add("numbers", assert => {
 churchSuite.add("number operations", assert => {
 
         const sval = cn => cn(s => 'I' + s)('');
-        assert.is( sval(church(10)) , 'IIIIIIIIII');
+        assert.is(sval(churchNum(10)) , 'IIIIIIIIII');
 
         const inc = x => x + 1;
         const qval = cn => cn(n => cn(inc)(n))(0); // square by cont adding
-        assert.is( qval(church(9)) , 81 );
+        assert.is(qval(churchNum(9)) , 81 );
 
         const aval = cn => cn(a => a.concat(a[a.length-1]+a[a.length-2]) ) ( [0,1] );
-        assert.is( aval(church(10-2)).toString() , '0,1,1,2,3,5,8,13,21,34');  // fibonacci numbers
+        assert.is(aval(churchNum(10 - 2)).toString() , '0,1,1,2,3,5,8,13,21,34');  // fibonacci numbers
 
         const oval = cn => cn(o => ({acc:o.acc+o.i+1, i:o.i+1})  ) ( {acc:0, i:0} );
-        assert.is( oval(church(10)).acc , 55);  // triangle numbers
+        assert.is(oval(churchNum(10)).acc , 55);  // triangle numbers
 
         // Thrush can be used as a one-element closure
         const closure = Th(1);  // closure is now "storing" the value until a function uses it
@@ -256,7 +261,7 @@ churchSuite.add("Pair", assert => {
         assert.is( p(snd)   , 1);  // p(kite)  (pick second element of pair)
 
         const pval = cn => cn(p => Pair(p(fst) + p(snd) + 1)(p(snd) + 1) ) (Pair(0)(0) );
-        assert.is( pval(church(10))(fst) , 55);  // triangle numbers
+        assert.is(pval(churchNum(10))(fst) , 55);  // triangle numbers
 
     }
 );

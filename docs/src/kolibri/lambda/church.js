@@ -8,9 +8,10 @@
 
 export {
     id, beta, konst, c, flip, kite, cmp, cmp2,
-    T, F, and, not, beq, or, xor, imp, rec,
-    n0, n1, n2, n3, n4, n5,
-    succ, plus, mult, pow, isZero, church, jsNum,
+    T, F, and, not, beq, or, xor, imp, jsBool, churchBool, rec,
+    n0, n1, n2, n3, n4, n5, n6, n7, n8, n9,
+    succ, plus, mult, pow, isZero, churchNum, jsNum,
+    leq, eq, pred, minus,
     Pair, fst, snd,
     Tuple, Choice,
     either, Left, Right,
@@ -142,12 +143,18 @@ const Choice = n => { // number of constructors
  * @type     { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
  */
 /**
+ * @typedef PairType
+ * @template _T_
+ * @template _U_
+ * @type {  (x: _T_) => (y: _U_) => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
+ */
+/**
  * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
  * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
  * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
  * @haskell a -> b -> (a -> b -> a|b) -> a|b
  * @pure    if the selector function is pure, which it usually is
- * @type    {  <_T_, _U_> (x: _T_) => (y: _U_) => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
+ * @type    PairType<_T_, _U_>
  * @constructor
  * @example
  * const dierk = Pair("Dierk")("König");
@@ -364,6 +371,18 @@ const xor = x => y => cmp2 (not) (beq) (x) (y) ; // we cannot eta reduce since t
 const imp = x => flip(x) (not(x)) ;
 
 /**
+ * Convert a boolean lambda expression to a javascript boolean value.
+ * @type { (b:ChurchBooleanType) => Boolean }
+ */
+const jsBool = b => b(true)(false);
+
+/**
+ * Convert a javascript boolean value to a boolean lambda expression.
+ * @type { (jsB:Boolean) => ChurchBooleanType }
+ */
+const churchBool = jsB => /** @type {ChurchBooleanType} */ jsB ? T : F;
+
+/**
  * Calling the function f recursively.
  * @type { <_T_> (f: (_T_) => _T_) => _T_ }
  */
@@ -415,6 +434,26 @@ const n4 = succ(n3);
  * @type {ChurchNumberType}
  */
 const n5 = succ(n4);
+/**
+ * The number six in the church encoding.
+ * @type {ChurchNumberType}
+ */
+const n6 = succ(n5);
+/**
+ * The number seven in the church encoding.
+ * @type {ChurchNumberType}
+ */
+const n7 = succ(n6);
+/**
+ * The number eight in the church encoding.
+ * @type {ChurchNumberType}
+ */
+const n8 = succ(n7);
+/**
+ * The number nine in the church encoding.
+ * @type {ChurchNumberType}
+ */
+const n9 = succ(n8);
 
 /**
  * The plus operation on peano numbers in the church encoding.
@@ -442,15 +481,55 @@ const isZero = cn => /** @type { ChurchBooleanType } **/ cn (c(F)) (T); // We ne
 
 /**
  * Convert a js number to a church numeral.
+ * Only works for non-negative integral numbers.
  * @type { (n:Number) => ChurchNumberType }
  */
-const church = n => n === 0 ? n0 : succ(church(n-1));
+const churchNum = n => n === 0 ? n0 : succ(churchNum(n - 1));
 
 /**
  * Convert a church numeral to a js number.
  * @type { (ChurchNumberType) => Number }
  */
 const jsNum = cn => /** @type { Number } */ cn (n => n+1) (0); // We need a cast since we don't return a church numeral.
+
+
+
+/**
+ * phi combinator. Used internally for minus of church numbers.
+ * Creates a new pair, replace first value with the second and increase the second value
+ * @private
+ * @type { (p:PairType<ChurchNumberType, ChurchNumberType>) => Pair<ChurchNumberType, ChurchNumberType> }
+ */
+const phi = p => Pair(p(snd))(succ(p(snd)));
+
+
+/**
+ * "less-than-or-equal-to" with church numbers
+ * @type { (n:ChurchNumberType) => (k:ChurchNumberType) => ChurchBooleanType }
+ */
+const leq = n => k => isZero(minus(n)(k));
+
+/**
+ * "equal-to" with church numbers.
+ * @type { (n:ChurchNumberType) => (k:ChurchNumberType) => ChurchBooleanType }
+ */
+const eq = n => k => and(leq(n)(k))(leq(k)(n));
+
+/**
+ * Predecessor of a church number. Opposite of succ.
+ * Minimum is zero. Is needed for "minus".
+ * @type { (n:ChurchNumberType) => ChurchNumberType }
+ */
+const pred = n => n(phi)(Pair(n0)(n0))(fst);
+
+/**
+ * Subtraction with two Church-Numbers
+ * @type { (n:ChurchNumberType) => (k:ChurchNumberType) => ChurchNumberType }
+ */
+const minus = n => k => k(pred)(n);
+
+
+
 
 /**
  * @callback HandleLeftCallback
