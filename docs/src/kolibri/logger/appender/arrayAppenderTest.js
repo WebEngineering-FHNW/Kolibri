@@ -1,6 +1,6 @@
 import {TestSuite} from "../../util/test.js";
-import {Appender}  from "./arrayAppender.js";
-import {id}        from "../../lambda/church.js";
+import {Appender} from "./arrayAppender.js";
+import {id, T}    from "../../lambda/church.js";
 
 const { trace, debug, info, warn, error, fatal, getValue, reset } = Appender();
 

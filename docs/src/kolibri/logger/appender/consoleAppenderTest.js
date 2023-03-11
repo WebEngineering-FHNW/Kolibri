@@ -1,4 +1,4 @@
-import {TestSuite} from "../../../../../docs/src/kolibri/util/test.js";
+import {TestSuite} from "../../util/test.js";
 import {Appender}  from "./consoleAppender.js";
 
 const { trace, debug, info, warn, error, fatal } = Appender();

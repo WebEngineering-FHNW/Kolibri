@@ -1,7 +1,7 @@
 export { LogUiController }
 
 import { LogUiModel }       from "./logUiModel.js";
-import { fst, snd, Pair }   from "../lambda/church.js";
+import { fst, snd, Pair }   from "../../lambda/church.js";
 import {
   LOG_DEBUG,
   LOG_ERROR,

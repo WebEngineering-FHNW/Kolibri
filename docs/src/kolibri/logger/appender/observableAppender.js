@@ -3,9 +3,9 @@ export { Appender}
 import { Observable }                from "../../observable.js";
 
 // todo dk: do not rely on contrib
-import { emptyStack, push, size }    from "../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
-import { Pair, id, T, LazyIf }       from "../../lambda/church.js";
-import { jsNum }                     from "../../lambda/churchNumbers.js";
+import { emptyStack, push, size } from "../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
+import {Pair, id, T, LazyIf, F}   from "../../lambda/church.js";
+import { jsNum }                  from "../../lambda/churchNumbers.js";
 import { LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN,} from "../logger.js";
 
 const MAX_STACK_ELEMENTS    = Number.MAX_SAFE_INTEGER -1;
@@ -83,7 +83,7 @@ const reset = () => {
  *          (number)                  =>
  *          (onOverflow: *)           =>
  *          (msg: String)             =>
- *          churchBoolean
+ *          ChurchBooleanType
  *      }
  */
 const appenderCallback = type => limit => onOverflow => msg =>
@@ -142,7 +142,7 @@ const full = limit =>
  *        (msg: String) =>
  *        (limit: Number) =>
  *        (evictionStrategy: UnaryOperation.<IObservable.<stack>>) =>
- *        churchBoolean
+ *        ChurchBooleanType
  * }
  */
 const append = type => msg => limit => evictionStrategy => {

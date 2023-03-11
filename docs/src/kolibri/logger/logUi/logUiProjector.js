@@ -4,9 +4,9 @@ export {
   loggingSelectProjector,
 }
 
-import { dom }        from "../../../../../docs/src/kolibri/util/dom.js"
-import { fst, snd }   from "../../../../../docs/src/kolibri/stdlib.js";
-import { forEach }    from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import { dom }      from "../../util/dom.js"
+import { fst, snd } from "../../lambda/church.js";
+import { forEach }  from "../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
 import {
   LOG_TRACE,
   LOG_DEBUG,

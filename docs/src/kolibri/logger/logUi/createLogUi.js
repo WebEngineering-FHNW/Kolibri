@@ -1,11 +1,11 @@
 export { createLogUi }
 
-import { dom }                    from "../../../../../docs/src/kolibri/util/dom.js"
-import { shadowCss }              from "../../../../../docs/src/kolibri/style/kolibriStyle.js";
+import { dom }                    from "../../util/dom.js"
+import { shadowCss }              from "../../style/kolibriStyle.js";
 import { LogUiController }        from "./logUiController.js";
-import { setLoggingContext }       from "../logger.js";
+import { setLoggingContext }      from "../logger.js";
 import { projectDebounceInput }   from "./../../debounceInput/simpleInputProjector.js";
-import { SimpleInputController }  from "../../../../../docs/src/kolibri/projector/simpleForm/simpleInputController.js";
+import { SimpleInputController }  from "../../projector/simpleForm/simpleInputController.js";
 import { loggingSelectProjector } from "./logUiProjector.js";
 import { LogMessagesView, projectLogLevelControls } from "./logView.js";
 

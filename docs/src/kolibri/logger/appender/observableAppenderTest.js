@@ -1,7 +1,7 @@
 import {Appender}               from "./observableAppender.js";
-import {TestSuite}              from "../../util/test.js";
-import {id, snd}                from "../../lambda/church.js";
-import {jsNum}                  from "../../lambda/churchNumbers.js";
+import {TestSuite}  from "../../util/test.js";
+import {id, snd, T} from "../../lambda/church.js";
+import {jsNum}      from "../../lambda/churchNumbers.js";
 // todo dk: get rid of contrib dependency
 import {emptyStack, head, size} from "../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
 

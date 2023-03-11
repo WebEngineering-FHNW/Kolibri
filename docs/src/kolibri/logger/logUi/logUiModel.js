@@ -1,9 +1,9 @@
 export { LogUiModel }
 
-import { Appender }     from "../appender/observableAppender.js";
-import { Observable }   from "../../../../../docs/src/kolibri/observable.js";
-import { filter }       from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import { Pair }         from "../../../../../docs/src/kolibri/stdlib.js"
+import { Appender }   from "../appender/observableAppender.js";
+import { Observable } from "../../observable.js";
+import { filter } from "../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
+import { Pair }   from "../../lambda/church.js"
 import {
   LOG_DEBUG,
   LOG_ERROR,
@@ -11,7 +11,7 @@ import {
   LOG_INFO,
   LOG_TRACE,
   LOG_WARN
-} from "../logger.js";
+}                 from "../logger.js";
 
 /**
  * The model manages the data held in the observable.
