@@ -23,8 +23,8 @@ const DEFAULT_CACHE_EVICTION_STRATEGY  = currentValue => {
  * Pushes all log messages into an array.
  * Use {@link getValue} to get the latest array content
  * and use {@link reset} to clear the array.
- * @param { Number                   } limit           - the max amount of log messages to keep.
- * @param { UnaryOperation<String[]> } cacheEvictionStrategy  - This function is called, as soon as the
+ * @param { Number                      } limit           - the max amount of log messages to keep.
+ * @param { UnaryOperatorType<String[]> } cacheEvictionStrategy  - This function is called, as soon as the
  *      defined limit of log messages is reached. You obtain the current appender
  *      value. Return a new value which will be used as the new value of this appender.
  *      If this parameter is not set, then all log messages until now will be discarded.
