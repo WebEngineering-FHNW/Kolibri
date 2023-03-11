@@ -63,7 +63,7 @@
  * Logs a given message.
  * @callback Log
  * @param { LogMeType }
- * @returns churchBoolean - {@link True} if the logging was successful
+ * @returns churchBoolean - {@link T} if the logging was successful
  *
  */
 
@@ -75,7 +75,7 @@
 
 /**
  * A callback which appends log messages in a desired way.
- * If the message has been appended successfully, {@link True} is returned.
+ * If the message has been appended successfully, {@link T} is returned.
  * @callback AppendCallback
  * @param { !String } message
  * @impure since appending a message always has side effects.
@@ -83,6 +83,6 @@
  * @example
  * const append = msg => {
  *  console.log(msg);
- *  return True;
+ *  return T;
  * }
  */

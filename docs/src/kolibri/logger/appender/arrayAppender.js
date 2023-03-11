@@ -107,7 +107,7 @@ const appenderCallback = limit => onOverflow => msg =>
     (Else(() => append(msg)(limit)(    id    )));
 
 /**
- * Returns {@link True} if the appender array equals the limit.
+ * Returns {@link T} if the appender array equals the limit.
  * @param { number } limit
  * @returns churchBoolean
  * @private

@@ -9,7 +9,7 @@ import {
   push,
   size
 }                                                                        from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import {Else, id, jsNum, LazyIf, Then, True,}                            from "../lamdaCalculus.js";
+import {Else, id, jsNum, LazyIf, Then, T,}                            from "../lamdaCalculus.js";
 import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN,} from "../logger.js";
 
 const MAX_STACK_ELEMENTS    = Number.MAX_SAFE_INTEGER -1;
@@ -130,7 +130,7 @@ const fatal = appenderCallback(LOG_FATAL);
 
 
 /**
- * Returns {@link True} if the stack equals the limit.
+ * Returns {@link T} if the stack equals the limit.
  * @param { number } limit
  * @returns churchBoolean
  * @private

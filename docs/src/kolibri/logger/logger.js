@@ -82,7 +82,7 @@ const messageShouldBeLogged = loggerLevel => context =>
       (contextActivated (context)    );
 
 /**
- * Returns {@link True} if the first {@link LogLevelType} parameter is smaller than the second {@link LogLevelType} parameter.
+ * Returns {@link T} if the first {@link LogLevelType} parameter is smaller than the second {@link LogLevelType} parameter.
  * @function
  * @type { (loggerLevel: LogLevelType) => churchBoolean }
  * @private
@@ -90,7 +90,7 @@ const messageShouldBeLogged = loggerLevel => context =>
 const logLevelActivated = loggerLevel => leq(loggingLevel(fst))(loggerLevel(fst));
 
 /**
- * Returns {@link True} if the {@link loggingContext} is a prefix of the given {@link String} parameter.
+ * Returns {@link T} if the {@link loggingContext} is a prefix of the given {@link String} parameter.
  * @function
  * @param   { String } context
  * @return  {ChurchBooleanType}
