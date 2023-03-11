@@ -4,14 +4,11 @@ import {
         n0, n1, n2, n3, n4, n5, n6, n7, n8, n9,
         succ, plus, mult, pow, isZero, churchNum, jsNum,
         leq, eq, pred, minus
-} from "./churchNumbers.js";
+}             from "./churchNumbers.js";
+import {F, T} from "./church.js";
 
 
 const churchNumberSuite = TestSuite("church numbers");
-
-
-
-
 
 churchNumberSuite.add("numbers", assert => {
 
@@ -46,6 +43,36 @@ churchNumberSuite.add("numbers", assert => {
 );
 
 churchNumberSuite.add("number operations", assert => {
+
+        assert.is(isZero(n0), T) ;
+        assert.is(isZero(n6), F) ;
+
+        assert.is(eq(n7)(n7), T) ;
+        assert.is(eq(n8)(n9), F) ;
+
+        assert.is(leq(n7)(n7), T) ;
+        assert.is(leq(n0)(n9), T) ;
+        assert.is(leq(n2)(n1), F) ;
+
+        assert.is( eq(n5)(pred(n6)), T);
+        assert.is( eq(n5)(pred(n5)), F);
+
+        assert.is( eq(n2)(minus(n6)(n4)), T);
+        assert.is( eq(n2)(minus(n2)(n0)), T);
+        assert.is( eq(n2)(minus(n6)(n0)), F);
+
+        const rand = Math.floor(Math.random() * 100);
+        assert.is( eq(churchNum(rand))(churchNum(rand)),   T);
+        assert.is( eq(churchNum(rand))(churchNum(rand+1)), F);
+        assert.is( jsNum(churchNum(rand)), rand);
+        assert.is( eq( succ(churchNum(rand))) (churchNum(rand)), F);
+        assert.is( eq( pred(churchNum(rand))) (churchNum(rand)), F);
+        assert.is( eq( pred(succ(churchNum(rand)))) (churchNum(rand)), T);
+        assert.is( eq( succ(pred(churchNum(rand)))) (churchNum(rand)), T);
+    }
+);
+
+churchNumberSuite.add("number iterations", assert => {
 
         const sval = cn => cn(s => 'I' + s)('');
         assert.is(sval(churchNum(10)) , 'IIIIIIIIII');
