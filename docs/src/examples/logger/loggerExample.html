@@ -5,14 +5,48 @@
     <title>Logger Example</title>
     <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
     <link rel="stylesheet" href="../../../css/kolibri-base.css">
-    <link rel="stylesheet" href="example.css">
+    <style>
+        .twoColumns {
+            display:                inline-grid;
+            grid-template-columns:  repeat(2, 1fr);
+            gap:                    .5rem 2rem;
+        }
+        main > div {
+            margin-bottom:  1.5rem;
+        }
+        button {
+            margin-right:   2rem;
+        }
+
+        .tooltip {
+            cursor:     help;
+            position:   relative;
+            color:      var(--kolibri-color-output);
+        }
+
+        .tooltip .tooltip-content {
+            display:    none;
+            position:   absolute;
+            left:       0;
+            background: var(--kolibri-color-output);
+            color:      aliceblue;
+            padding:    1em;
+            min-width:  20em;
+            border-radius: .6em;
+            z-index:    1;
+            pointer-events: none;
+        }
+        .tooltip:hover .tooltip-content {
+            display:    initial;
+        }
+    </style>
 </head>
 <body>
 <header>
     <h1>Logger Example Page</h1>
 </header>
-
-<div class="container">
+<main>
+<div class="twoColumns">
 
     <fieldset>
         <legend>Select a Logging Level</legend>
@@ -76,7 +110,9 @@
             </label>
         </div>
     </fieldset>
+</div>
 
+<div class="twoColumns">
     <div>
         <label for="context-logger">Logger context:</label>
     </div>
@@ -100,28 +136,35 @@
     <div>
         <input type="text" id="log-msg" value="Log Message">
     </div>
+</div>
 
-    <div class="twoColumnItem">
-        <button style="color:black"         id="btn-trace">Trace</button>
-        <button style="color:green"         id="btn-debug">Debug</button>
-        <button style="color:blue"          id="btn-info"> Info</button>
-        <button style="color:orange"        id="btn-warn"> Warn</button>
-        <button style="color:red"           id="btn-error">Error</button>
-        <button style="color:blueviolet"    id="btn-fatal">Fatal</button>
+<div >
+    Use the buttons below to log messages at the level
+    that is indicated on the button.
+</div>
+
+<div >
+    <button style="color:black"         id="btn-trace">Trace</button>
+    <button style="color:green"         id="btn-debug">Debug</button>
+    <button style="color:blue"          id="btn-info"> Info</button>
+    <button style="color:orange"        id="btn-warn"> Warn</button>
+    <button style="color:red"           id="btn-error">Error</button>
+    <button style="color:blueviolet"    id="btn-fatal">Fatal</button>
+</div>
+
+<div >
+    <div>
+        <label for="log-output">Log Output:</label>
     </div>
-
-    <div class="twoColumnItem">
-        <div>
-            <label for="log-output">Log Output:</label>
-        </div>
-        <div>
-            <textarea id="log-output" name="output-area" rows="5" cols="60"></textarea>
-        </div>
-        <div>
-            <button id="btn-reset">Reset all Loggers</button>
-        </div>
+    <div>
+        <textarea id="log-output" name="output-area" rows="8" cols="80"></textarea>
+    </div>
+    <div>
+        <button id="btn-reset">Reset all Loggers</button>
     </div>
 </div>
+
+</main>
 
 <script src="loggerExample.js" type="module"></script>
 
