@@ -244,9 +244,6 @@ churchSuite.add("lazy", assert => {
         const bad3  = () => y=true;
         T (good3) (bad3) ();
         assert.isTrue(x === true && y === false);
-
-        // todo dk: try with Thrush
-
     }
 );
 

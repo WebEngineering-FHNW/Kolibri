@@ -2,7 +2,6 @@ export {
   LazyIf,
   Then,
   Else,
-  lazy,
 }
 
 import {id, c, T, F, churchBool, jsBool} from "../lambda/church.js";
@@ -20,7 +19,6 @@ export {
   jsNum,
 } from "../lambda/churchNumbers.js";
 
-const lazy = c;
 
 /**
  * Syntactic sugar for creating an If-Then-Else-Construct for lazy Evaluation - it avoid that JavaScript eagerly evaluate both cases (then and else)

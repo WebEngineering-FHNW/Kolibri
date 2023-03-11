@@ -6,21 +6,27 @@
 // typedefs
 
 /**
- * A Loglevel is a {@link Pair}, which consists of a {@link churchNumber} interpreted as level
+ * A Loglevel is a {@link Pair}, which consists of a {@link ChurchNumberType} interpreted as level
  * and a {@link String} interpreted as label.
  * Given a {@link PairSelectorType}, either the level or the label can be selected.
  *
  * @typedef LogLevelType
- * @type { (PairSelectorType) => churchNumber | String }
+ * @type { (PairSelectorType) => ChurchNumberType | String }
+ */
+
+/**
+ * @typedef ProducerType
+ * @template _U_
+ * @type { (...x) => _U_ }
  */
 
 /**
  * LogMe is something that can be logged.
  * It represents a log message.
  * To log a simple message, just use a {@link String}.
- * If the log message is based on some calculations, you should consider to use a {@link Producer},
+ * If the log message is based on some calculations, you should consider to use a {@link ProducerType},
  * because the message can be lazy evaluated.
- * @typedef {String | Producer<String>} LogMeType
+ * @typedef {String | ProducerType<String>} LogMeType
  */
 
 /**
@@ -30,8 +36,8 @@
  * @template MyTemplate
  * @property { AppendCallback } trace - Defines the appending strategy for the {@link LOG_TRACE}-level messages.
  * @property { AppendCallback } debug - Defines the appending strategy for the {@link LOG_DEBUG}-level messages.
- * @property { AppendCallback } info - Defines the appending strategy for the {@link LOG_INFO}-level messages.
- * @property { AppendCallback } warn - Defines the appending strategy for the {@link LOG_WARN}-level messages.
+ * @property { AppendCallback } info  - Defines the appending strategy for the {@link LOG_INFO}-level messages.
+ * @property { AppendCallback } warn  - Defines the appending strategy for the {@link LOG_WARN}-level messages.
  * @property { AppendCallback } error - Defines the appending strategy for the {@link LOG_ERROR}-level messages.
  * @property { AppendCallback } fatal - Defines the appending strategy for the {@link LOG_FATAL}-level messages.
  * @property { function(String=): MyTemplate} getValue - Some appender may produce a result, that can be collected using getValue.
@@ -63,7 +69,7 @@
  * Logs a given message.
  * @callback Log
  * @param { LogMeType }
- * @returns churchBoolean - {@link T} if the logging was successful
+ * @returns { ChurchBooleanType } - {@link T} if the logging was successful
  *
  */
 
@@ -79,7 +85,7 @@
  * @callback AppendCallback
  * @param { !String } message
  * @impure since appending a message always has side effects.
- * @returns { churchBoolean }
+ * @returns { ChurchBooleanType }
  * @example
  * const append = msg => {
  *  console.log(msg);

@@ -1,5 +1,5 @@
 import {TestSuite}      from "../util/test.js";
-import {F, id, lazy, T} from "./lamdaCalculus.js";
+import {F, id, T}       from "./lamdaCalculus.js";
 import {Appender}       from "./appender/arrayAppender.js";
 import {Appender as CountAppender} from "./appender/countAppender.js";
 import {
@@ -151,7 +151,7 @@ loggerSuite.add("test lazy evaluation, logger should log", assert => {
   setLoggingLevel(LOG_DEBUG);
   const debug = debugLogger("ch.fhnw.test");
 
-  const result = debug(lazy(logMessage));
+  const result = debug( _=> logMessage);
   assert.is(result, T);
   assert.is(appender.getValue()[0], logMessage);
 });
@@ -162,7 +162,7 @@ loggerSuite.add("test lazy evaluation, logger should not log and function should
   setLoggingLevel(LOG_NOTHING);
   const debug = debugLogger("ch.fhnw.test");
 
-  const result = debug(lazy(logMessage));
+  const result = debug( _=> logMessage);
   assert.is(result, F);
   assert.is(appender.getValue().length, 0);
 });
