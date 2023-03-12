@@ -1,7 +1,7 @@
 import {Appender}               from "./observableAppender.js";
-import {TestSuite}  from "../../util/test.js";
-import {id, snd, T} from "../../lambda/church.js";
-import {jsNum}      from "../../lambda/churchNumbers.js";
+import {TestSuite}              from "../../util/test.js";
+import {id, snd, T}             from "../../lambda/church.js";
+import {jsNum}                  from "../../lambda/churchNumbers.js";
 // todo dk: get rid of contrib dependency
 import {emptyStack, head, size} from "../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
 
@@ -13,13 +13,13 @@ const { trace, debug, getValue, reset } = Appender();
 
 /**
  *
- * @param   { IObservable.<stack> } observable
+ * @param   { IObservable } observable
  * @returns { number }
  */
 const stackSize = observable => jsNum(size(observable.getValue()));
 /**
  *
- * @param   { IObservable.<stack> } observable
+ * @param   { IObservable } observable
  * @returns { String }
  */
 const obsHead = observable => head(observable.getValue())(snd); // TODO: Update head documentation (return value)

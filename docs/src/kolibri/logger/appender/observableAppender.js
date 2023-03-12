@@ -1,11 +1,11 @@
 export { Appender}
 
-import { Observable }                from "../../observable.js";
+import { Observable }                       from "../../observable.js";
 
 // todo dk: do not rely on contrib
-import { emptyStack, push, size } from "../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
-import {Pair, id, T, LazyIf, F}   from "../../lambda/church.js";
-import { jsNum }                  from "../../lambda/churchNumbers.js";
+import { emptyStack, push, size }           from "../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
+import {Pair, id, T, LazyIf, churchBool}    from "../../lambda/church.js";
+import { jsNum }                            from "../../lambda/churchNumbers.js";
 import { LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN,} from "../logger.js";
 
 const MAX_STACK_ELEMENTS    = Number.MAX_SAFE_INTEGER -1;
@@ -17,8 +17,8 @@ const OVERFLOW_LOG_MESSAGE  =
 /**
  * This is the default function that gets called when the defined limit has been reached.
  * It will empty the whole stack.
- * @param   { IObservable<stack> } currentValue
- * @returns { IObservable<stack> }
+ * @param   { IObservable } currentValue
+ * @returns { IObservable }
  */
 const DEFAULT_CACHE_EVICTION_STRATEGY =  currentValue => {
   // clear stack
@@ -31,11 +31,11 @@ const DEFAULT_CACHE_EVICTION_STRATEGY =  currentValue => {
  * Use {@link getValue} to get the observable and register yourself on changes
  * and use {@link reset} to clear the array.
  * @param { Number                                } limit           - the max amount of log messages to keep.
- * @param { UnaryOperatorType<IObservable<stack>> } cacheEvictionStrategy  - This function is called, as soon as the
+ * @param { UnaryOperatorType<IObservable>        } cacheEvictionStrategy  - This function is called, as soon as the
  *      defined limit of log messages is reached. You obtain the current appender
  *      value. Return a new value which will be used as the new value of this appender.
  *      If this parameter is not set, then all log messages until now will be discarded.
- * @returns { AppenderType.<IObservable<stack>> }
+ * @returns { AppenderType.<IObservable> }
  */
 const Appender = (limit = MAX_STACK_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
   // make sure, the stack is not defined too small.
@@ -54,26 +54,28 @@ const Appender = (limit = MAX_STACK_ELEMENTS, cacheEvictionStrategy = DEFAULT_CA
 
 /**
  *
- * @type { IObservable<stack> }
+ * @type { IObservable }
  */
 let logObservable = Observable(emptyStack);
 
 /**
  * This appender returns an observable containing a stack
  * @function
- * @returns { IObservable<stack> }
+ * @returns { IObservable }
  */
 const getValue = () => logObservable;
 
 /**
- *
- * @return { IObservable<stack> }
+ * @caution Since calling "reset" provides a new observable, you have to register yourself again on the new observable.
+ * @return { IObservable } - a new observable
  */
+// todo dk: who will be notified about which events?
+// what about unsubscription?
 const reset = () => {
   const lastValue = logObservable.getValue();
   logObservable.setValue(emptyStack);
   // copy observable
-  return Observable(lastValue);
+  return Observable(lastValue); // todo dk: what about the old observable? Memory leak?
 };
 
 /**
@@ -127,12 +129,12 @@ const fatal = appenderCallback(LOG_FATAL);
 
 /**
  * Returns {@link T} if the stack equals the limit.
- * @param { number } limit
- * @returns churchBoolean
+ * @param { Number } limit
+ * @returns ChurchBooleanType
  * @private
  */
 const full = limit =>
-  limit === jsNum(size(logObservable.getValue())) ? T : F;
+  churchBool( limit === jsNum(size(logObservable.getValue()))); // todo dk: be more defensive
 
 /**
  * Appends the given message to the stack.
@@ -141,7 +143,7 @@ const full = limit =>
  *        (type: PrioritySupplier) =>
  *        (msg: String) =>
  *        (limit: Number) =>
- *        (evictionStrategy: UnaryOperatorType<IObservable<stack>>) =>
+ *        (evictionStrategy: UnaryOperatorType<IObservable>) =>
  *        ChurchBooleanType
  * }
  */
@@ -156,7 +158,7 @@ const append = type => msg => limit => evictionStrategy => {
       logObservable.setValue(createNewStack(type)(msg));
     })
     (() => logObservable.setValue(createNewStack(type)(msg)));
-  return T;
+  return /** @type {ChurchBooleanType} */ T;
 };
 
 /**
