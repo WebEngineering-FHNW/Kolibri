@@ -16,15 +16,15 @@ const Appender = () => ({
   error,
   fatal,
   getValue: () => { /* Nothing to do */ },
-  reset: () => { /* Nothing to do */ }
+  reset:    () => { /* Nothing to do */ }
 });
 
 /**
- * @type { (ConsumerType) => AppendCallback }
+ * @type { (AppendCallback) => (String) => ChurchBooleanType }
  */
 const appenderCallback = callback => msg => {
   callback(msg);
-  return T;
+  return /** @type {ChurchBooleanType} */ T; // logging a string to the console cannot fail
 };
 
 /**

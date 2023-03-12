@@ -1,7 +1,7 @@
 import {TestSuite}      from "../util/test.js";
 import {F, id, T}       from "../lambda/church.js";
-import {Appender}       from "./appender/arrayAppender.js";
-import {Appender as CountAppender} from "./appender/countAppender.js";
+import {Appender as ArrayAppender } from "./appender/arrayAppender.js";
+import {Appender as CountAppender } from "./appender/countAppender.js";
 import {
   addToAppenderList,
   debugLogger,
@@ -13,12 +13,13 @@ import {
   setLoggingContext,
   setLoggingLevel,
   setMessageFormatter,
+  messageFormatter,
 }                                  from "./logger.js";
 
-const logMessage  = "hello world";
+const logMessage  = "log message from loggerTest.js";
 
 const beforeStart = () => {
-  const appender = Appender();
+  const appender = ArrayAppender();
   appender.reset();
   setLoggingContext("ch.fhnw.test");
   setLoggingLevel(LOG_DEBUG);
@@ -154,6 +155,34 @@ loggerSuite.add("test lazy evaluation, logger should log", assert => {
   const result = debug( _=> logMessage);
   assert.is(result, T);
   assert.is(appender.getValue()[0], logMessage);
+});
+
+loggerSuite.add("test lazy evaluation, error in lazy eval", assert => {
+  const { appender } = beforeStart();
+
+  setLoggingLevel(LOG_DEBUG);
+  const debug = debugLogger("ch.fhnw.test");
+
+  const result = debug( _=> {
+    throw new Error("error in lazy eval");
+  });
+  assert.is(result, F);
+  assert.is(appender.getValue()[0], `Error: cannot evaluate log message!`);
+});
+
+loggerSuite.add("test error in message formatting code", assert => {
+  const { appender } = beforeStart();
+  const badFormatter = ctx => lvl => msg => { throw new Error("error in message formatting code");};
+  const oldFormatter = messageFormatter;
+  setMessageFormatter(badFormatter);
+
+  setLoggingLevel(LOG_DEBUG);
+  const debug = debugLogger("ch.fhnw.test");
+  const result = debug( logMessage);
+  assert.is(result, F);
+  assert.is(appender.getValue()[0], "Error: cannot format log message!");
+
+  setMessageFormatter(oldFormatter);
 });
 
 loggerSuite.add("test lazy evaluation, logger should not log and function should not be evaluated", assert => {

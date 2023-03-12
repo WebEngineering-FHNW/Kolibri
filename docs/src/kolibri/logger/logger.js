@@ -24,7 +24,8 @@ export {
   addToAppenderList,
   removeFromAppenderList,
   getAppenderList,
-  setMessageFormatter
+  setMessageFormatter,
+  messageFormatter,
 }
 
 /**
@@ -84,10 +85,25 @@ const logger = loggerLevel => loggerContext => msg =>
         appenderList
             .map(appender => {
               const  levelName     = loggerLevel(name);
-              const  levelCallback = appender[levelName.toLowerCase()];
-              return levelCallback(formatMsg(loggerContext)(levelName)(evaluateMessage(msg)))
+              const  levelCallback = appender[levelName.toLowerCase()]; // todo dk: why the appender by level name?
+              let    success = T;
+              let    evaluatedMessage = "Error: cannot evaluate log message!";
+              try {
+                evaluatedMessage = evaluateMessage(msg);                                    // message eval can fail
+              } catch (e) {
+                success = F;
+              }
+              let formattedMessage = "Error: cannot format log message!";
+              try {
+                  formattedMessage = messageFormatter(loggerContext)(levelName)(evaluatedMessage); // formatting can fail
+              } catch (e) {
+                  success = F;
+              }
+              // because of eager evaluation, a possible eval or formatting error message will be logged
+              // at the current level, context, and appender and will thus be visible. See test case.
+              return and (success) (levelCallback(formattedMessage)) ;
             })
-            .reduce((acc, cur) => and(acc)(cur), T) // every() for array of churchBooleans
+            .reduce((acc, cur) => and (acc) (cur), /** @type {ChurchBooleanType }*/ T) // every() for array of churchBooleans
   )
   ( _=> F);
 
@@ -319,7 +335,7 @@ const getLoggingLevel = () => loggingLevel;
  * The formatting function used in this logging environment.
  * @type { FormatLogMessage }
  */
-let formatMsg = _context => _logLevel => id;
+let messageFormatter = _context => _logLevel => id;
 
 /**
  * This function can be used to specify a custom function to format the log message.
@@ -333,4 +349,6 @@ let formatMsg = _context => _logLevel => id;
  * setMessageFormatter(formatLogMsg);
  */
 const setMessageFormatter = formattingFunction =>
-  formatMsg = formattingFunction;
+  messageFormatter = formattingFunction;
+
+

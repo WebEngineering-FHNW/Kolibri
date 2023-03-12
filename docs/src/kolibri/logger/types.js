@@ -91,10 +91,14 @@
  */
 
 /**
+ * @typedef { UnaryOperatorType<Array<String>> } CacheEvictionStrategyType
+ */
+
+/**
  * A callback which appends log messages in a desired way.
  * If the message has been appended successfully, {@link T} is returned.
  * @callback AppendCallback
- * @param { !String } message
+ * @param { !String } message - appender work on a string, any lazy evaluation has to be done before
  * @impure since appending a message always has side effects.
  * @returns { ChurchBooleanType }
  * @example

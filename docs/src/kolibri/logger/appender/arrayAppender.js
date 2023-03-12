@@ -1,6 +1,12 @@
+/**
+ * @module logger/appender/arrayAppender
+ * Provides an {@link AppenderType} that stores all log messages in an array.
+ * Since many log messages might be generated, we need a strategy to evict old log messages.
+ */
+
 export { Appender}
 
-import { id, T, F, LazyIf } from "../../lambda/church.js";
+import {id, T, LazyIf, churchBool} from "../../lambda/church.js";
 
 const MAX_ARRAY_ELEMENTS    = Number.MAX_SAFE_INTEGER - 1;
 const MIN_ARRAY_LENGTH      = 2;
@@ -8,19 +14,18 @@ const OVERFLOW_LOG_MESSAGE  =
   "LOG ERROR: Despite running the chosen eviction strategy, the array was full! The first third of the log messages have been deleted!";
 
 /**
- * @param {String[]} currentValue
- * @returns String[]
+ * @type { CacheEvictionStrategyType }
  * @pure
  */
-const DEFAULT_CACHE_EVICTION_STRATEGY  = currentValue => {
-  const oneThirdIndex = Math.round(currentValue.length / 3);
+const DEFAULT_CACHE_EVICTION_STRATEGY  = cache => {
+  const oneThirdIndex = Math.round(cache.length / 3);
   // if oneThird is smaller than the minimum of the array length, slice the whole array.
   const deleteUntilIndex = oneThirdIndex > MIN_ARRAY_LENGTH ? oneThirdIndex: MIN_ARRAY_LENGTH;
-  return currentValue.slice(deleteUntilIndex);
+  return cache.slice(deleteUntilIndex);
 };
 
 /**
- * Pushes all log messages into an array.
+ * Logs all log messages to an array.
  * Use {@link getValue} to get the latest array content
  * and use {@link reset} to clear the array.
  * @param { Number                      } limit           - the max amount of log messages to keep.
@@ -86,17 +91,19 @@ const reset = () => {
 };
 
 /**
- *
  * @returns {Array<String>} - The current value of the appender string
  */
 const getValue = () => appenderArray;
+
 /**
  * Appends the next log message to the array.
+ * @private
  * @param limit
  * @type  {
- *          (limit: number) =>
- *          (onLimitReached: unaryOperation<String[]>) =>
- *          churchBoolean
+ *          (limit:          Number) =>
+ *          (onOverflow:     CacheEvictionStrategyType) =>
+ *          (msg:            LogMessageType) =>
+ *          ChurchBooleanType
  *        }
  */
 const appenderCallback = limit => onOverflow => msg =>
@@ -107,23 +114,24 @@ const appenderCallback = limit => onOverflow => msg =>
     (() => append(msg)(limit)(    id    ));
 
 /**
- * Returns {@link T} if the appender array equals the limit.
- * @param { number } limit
- * @returns churchBoolean
+ * Returns {@link T} if the appender array length hits the limit.
+ * @param { Number } limit
+ * @returns ChurchBooleanType
  * @private
  */
-const full = limit =>
-  limit === appenderArray.length ? T : F;
+const full = limit => churchBool(limit <= appenderArray.length);
+
 
 
 /**
  * Appends the given message to the array.
  * If the array length equals the param limit, the array cache will be evicted using the defined eviction strategy.
+ * @private
  * @type  {
- *          (msg: String!) =>
- *          (limit: number!) =>
- *          (evictionStrategy: unaryOperation<String[]>!) =>
- *          churchBoolean
+ *          (msg: LogMessageType!) =>
+ *          (limit: Number!) =>
+ *          (evictionStrategy: CacheEvictionStrategyType!) =>
+ *          ChurchBooleanType
  *        }
  */
 const append = msg => limit => evictionStrategy => {
@@ -137,5 +145,5 @@ const append = msg => limit => evictionStrategy => {
       appenderArray.push(msg)
     })
     (() => appenderArray.push(msg));
-  return T;
+  return /** @type {ChurchBooleanType} */ T;
 };

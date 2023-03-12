@@ -4,7 +4,7 @@ import {id, T}    from "../../lambda/church.js";
 
 const { trace, debug, info, warn, error, fatal, getValue, reset } = Appender();
 
-reset(); // clear the state of the appender since it is a singleton
+reset(); // clears the state of the appender
 
 const msg1 = "Tobias Wyss";
 const msg2 = "Andri Wild";
