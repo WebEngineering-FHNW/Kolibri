@@ -16,8 +16,8 @@ import {
 
 import { Appender as ArrayAppender }   from "../../kolibri/logger/appender/arrayAppender.js";
 import { Appender as ConsoleAppender } from "../../kolibri/logger/appender/consoleAppender.js";
-import { Appender as CountAppender }   from "../../kolibri/logger/appender/countAppender.js";
-import { LogFactory }                  from "../../kolibri/logger/logFactory.js";
+import { Appender as CountAppender } from "../../kolibri/logger/appender/countAppender.js";
+import { LoggerFactory }             from "../../kolibri/logger/loggerFactory.js";
 
 const LOGGER_CONTEXT           = "ch.fhnw.sample.logger";
 const INITIAL_LOGGING_CONTEXT  = "ch.fhnw";
@@ -40,7 +40,7 @@ const levelList       = document.getElementsByName("log-level");
 const output          = document.getElementById   ("log-output");
 
 
-const logger          = LogFactory(LOGGER_CONTEXT);
+const logger          = LoggerFactory(LOGGER_CONTEXT);
 const logLevels       = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING];
 const appender        = [consoleAppender, arrayAppender, countAppender];
 

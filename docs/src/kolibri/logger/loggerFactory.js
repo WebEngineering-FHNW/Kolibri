@@ -1,4 +1,8 @@
-export { LogFactory }
+/**
+ * @module logger/loggerFactory
+ * Public convenience API for creating loggers.
+ */
+export { LoggerFactory }
 
 import {
   traceLogger,
@@ -10,16 +14,16 @@ import {
 } from "./logger.js";
 
 /**
- * Constructs logger for each log levels using the given parameters.
- * @param { String } context - The origin of the log statement
+ * Constructs a logger for each log level using the given context.
+ * @param { LogContextType } context
  * @returns { LoggerType }
  * @constructor
  * @example
- * const { trace, debug } = LogFactory("ch.fhnw");
+ * const { trace, debug } = LoggerFactory("ch.fhnw");
  * trace("Tobias Wyss") // a log message appended on the loglevel {@link LOG_TRACE}
- * debug("Andri Wild") // a log message appended on the loglevel {@link LOG_DEBUG}
+ * debug("Andri Wild")  // a log message appended on the loglevel {@link LOG_DEBUG}
  */
-const LogFactory = context => ({
+const LoggerFactory = context => /** @type { LoggerType } */({
       trace:  traceLogger(context),
       debug:  debugLogger(context),
       info:   infoLogger (context),

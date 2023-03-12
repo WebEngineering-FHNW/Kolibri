@@ -6,6 +6,14 @@
 // typedefs
 
 /**
+ * @typedef { String } LogContextType
+ * The LogContextType is a {@link String} that has a special meaning for both,
+ * the logger (setting the context for which the log will appear) and
+ * the logging (setting the filter for which logs currently appear).
+ * Logs will appear if the logging context is a prefix of the logger context.
+ */
+
+/**
  * A Loglevel is a {@link Pair}, which consists of a {@link ChurchNumberType} interpreted as level
  * and a {@link String} interpreted as label.
  * Given a {@link PairSelectorType}, either the level or the label can be selected.

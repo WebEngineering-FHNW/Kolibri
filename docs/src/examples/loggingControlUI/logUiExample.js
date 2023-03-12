@@ -1,7 +1,7 @@
 import { Appender as ObservableAppender }         from "../../kolibri/logger/appender/observableAppender.js";
-import { Appender as ConsoleAppender }            from "../../kolibri/logger/appender/consoleAppender.js";
-import { LogFactory }                             from "../../kolibri/logger/logFactory.js";
-import { createLogUi }                            from "../../kolibri/logger/logUi/createLogUi.js";
+import { Appender as ConsoleAppender } from "../../kolibri/logger/appender/consoleAppender.js";
+import { LoggerFactory }               from "../../kolibri/logger/loggerFactory.js";
+import { createLogUi }                 from "../../kolibri/logger/logUi/createLogUi.js";
 import { addToAppenderList, setMessageFormatter } from "../../kolibri/logger/logger.js";
 
 const consoleAppender     = ConsoleAppender();
@@ -15,8 +15,8 @@ const formatLogMsg = context => logLevel => logMessage => {
 setMessageFormatter(formatLogMsg);
 addToAppenderList(observableAppender, consoleAppender);
 
-const logger1 = LogFactory("ch.fhnw");
-const logger2 = LogFactory("ch.fhnw.ip5");
+const logger1 = LoggerFactory("ch.fhnw");
+const logger2 = LoggerFactory("ch.fhnw.ip5");
 
 const container = document.getElementById("container");
 
