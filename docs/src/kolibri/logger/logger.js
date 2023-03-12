@@ -28,26 +28,47 @@ export {
 }
 
 /**
- * Yields a custom configured log function.
- * Processes all log-actions which have a {@link LogLevelType} equals or beneath
+ * Getter for the church numeral value of a log level.
+ * @private
+ */
+const levelNum = fst;
+
+/**
+ * Getter for the name of a log level.
+ * @private
+ */
+const name = snd;
+
+/**
+ * Yields a configured log function called "logger".
+ * Processes all log actions, which have a {@link LogLevelType} equals or beneath
  * the {@link LogLevelType} returned by the function "loggingLevel".
  *
- * Furthermore, each log statement has a context. The log message will only be logged, if the loggingContext
- * (set with {@link setLoggingContext}) has the same prefix as the log message's context.
+ * Furthermore, each log statement has a context, see {@link LogContextType}.
+ * The log message will only be logged, if the loggingContext
+ * (set with {@link setLoggingContext}) is a prefix of the logger context.
  *
- * The result of the callback function {@link FormatLogMessage} will be logged using the given {@link AppendCallback AppendCallback's}.
+ * The result of the callback function {@link FormatLogMessage}
+ * will be logged using the given {@link AppendCallback AppendCallback's}.
  *
- * What's the difference between loggerLevel vs loggingLevel:
- * loggerLevel is the level of the respective logger
- * loggingLevel is the level at which logging is currently taking place.
+ * What's the difference between "logger" and "logging" and "log"?
+ *
+ * Every abstraction (level, context, etc.) that starts with "logger"
+ * applies to the _use_ of the log facility in application code.
+ *
+ * Every abstraction (level, context, etc.) the starts with "logging"
+ * applies to the current state or _configuration_ of the log facility that
+ * determines which log statements should currently appear.
+ *
+ * The word "log" is used when the abstraction can be used for both, the logger and the logging
  *
  * @function
  * @pure if the {@link AppendCallback AppendCallback's} in the appender list and the parameter msgFormatter of type {@link FormatLogMessage} are pure.
  * @type    {
- *               (loggerLevel:      LogLevelType)
- *            => (loggerContext:    String)
+ *               (loggerLevel:      LogLevelChoice)
+ *            => (loggerContext:    LogContextType)
  *            => (msg:              LogMeType)
- *            => churchBoolean
+ *            => ChurchBooleanType
  *          }
  * @private
  * @example
@@ -59,52 +80,57 @@ const logger = loggerLevel => loggerContext => msg =>
   LazyIf(
       messageShouldBeLogged(loggerLevel)(loggerContext)
   )
-  (() =>
+  ( _=>
         appenderList
             .map(appender => {
-              const levelName = loggerLevel(snd);
-              const levelCallback = appender[levelName.toLowerCase()];
+              const  levelName     = loggerLevel(name);
+              const  levelCallback = appender[levelName.toLowerCase()];
               return levelCallback(formatMsg(loggerContext)(levelName)(evaluateMessage(msg)))
             })
             .reduce((acc, cur) => and(acc)(cur), T) // every() for array of churchBooleans
   )
-  (() => F);
+  ( _=> F);
 
 /**
- * Decides if a message fulfills the conditions to be logged.
+ * Decides if a logger fulfills the conditions to be logged.
  * @function
- * @type { (loggerLevel: LogLevelType) => (context: String) => churchBoolean }
+ * @type { (loggerLevel: LogLevelType) => (loggerContext: LogContextType) => ChurchBooleanType }
  * @private
  */
-const messageShouldBeLogged = loggerLevel => context =>
-  and (logLevelActivated(loggerLevel))
-      (contextActivated (context)    );
+const messageShouldBeLogged = loggerLevel => loggerContext =>
+  and (logLevelActivated(loggerLevel)   )
+      (contextActivated (loggerContext) );
 
 /**
- * Returns {@link T} if the first {@link LogLevelType} parameter is smaller than the second {@link LogLevelType} parameter.
+ * Returns {@link T} if the current logging level is less than or equal to the logger level.
  * @function
- * @type { (loggerLevel: LogLevelType) => churchBoolean }
+ * @type { (loggerLevel: LogLevelChoice) => ChurchBooleanType }
  * @private
  */
-const logLevelActivated = loggerLevel => leq(loggingLevel(fst))(loggerLevel(fst));
+const logLevelActivated = loggerLevel => leq (loggingLevel(levelNum)) (loggerLevel(levelNum));
 
 /**
- * Returns {@link T} if the {@link loggingContext} is a prefix of the given {@link String} parameter.
+ * Returns {@link T} if the {@link loggingContext} is a prefix of the logger context.
  * @function
- * @param   { String } context
- * @return  {ChurchBooleanType}
+ * @param   { LogContextType } loggerContext
+ * @return  { ChurchBooleanType }
  * @private
  */
-const contextActivated = context => churchBool(context.startsWith(loggingContext));
+const contextActivated = loggerContext => churchBool(loggerContext.startsWith(loggingContext));
 
 /**
  * if the param "msg" is a function, it's result will be returned.
  * Otherwise, the parameter itself will be returned.
- * @param   { !LogMeType} msg - the message to evaluate
+ * This allows for both eager and lazy log messages.
+ * @param   { !LogMeType } msg - the message to evaluate
  * @returns { String } the evaluated message
  * @private
  */
 const evaluateMessage = msg => msg instanceof Function ? msg() : msg;
+
+/**
+ * @typedef {PairType<ChurchNumberType, String>} LogLevelType
+ */
 
 /**
  * The logging level "trace"
@@ -148,6 +174,10 @@ const LOG_FATAL = Pair(n5)("FATAL");
  * @returns { LogLevelType }
  */
 const LOG_NOTHING = Pair(n9)("NOTHING");
+
+/**
+ * @typedef { LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING} LogLevelChoice
+ */
 
 /**
  * Creates a new logger at log level {@link LOG_TRACE}.
@@ -206,13 +236,13 @@ const fatalLogger = logger(LOG_FATAL);
 /**
  * This is a state.
  * The currently active {@link AppenderType AppenderType's}.
- * @type { AppenderType[] }
+ * @type { Array<AppenderType> }
  */
 const appenderList = [];
 
 /**
  * Adds one or multiple {@link AppenderType AppenderType's} to the appender list.
- * @param newAppender
+ * @param { ...AppenderType } newAppender
  */
 const addToAppenderList = (...newAppender) => newAppender.forEach(app => appenderList.push(app));
 
@@ -235,9 +265,9 @@ const getAppenderList = () => [...appenderList];
 
 /**
  * This is a state.
- * The currently activated logging context.
- * Only messages whose context have this prefix are logged.
- * @type { String }
+ * The currently active logging context.
+ * Only loggers whose context have this prefix are logged.
+ * @type { LogContextType }
  * @private
  */
 let loggingContext = "";
@@ -245,25 +275,25 @@ let loggingContext = "";
 /**
  * This function can be used to define a logging context for the logging framework.
  * Messages will only be logged, if the logger context is more specific than the logging context.
- * @param { String } context - the newly set context to log
+ * @param { LogContextType } newLoggingContext - the newly set context to log
  * @example
  * setLoggingContext("ch.fhnw");
  * // logging context is now set to "ch.fhnw"
- * // messages with the context "ch.fhnw*" will be logged, all other messages will be ignored.
+ * // loggers with the context "ch.fhnw*" will be logged, all other messages will be ignored.
  */
-const setLoggingContext = context => loggingContext = context;
+const setLoggingContext = newLoggingContext => loggingContext = newLoggingContext;
 
 // noinspection JSUnusedGlobalSymbols
 /**
  * Getter for the logging context.
- * @return { String } - the current logging context
+ * @return { LogContextType } - the current logging context
  */
 const getLoggingContext = () => loggingContext;
 
 /**
  * This is a state.
- * The currently activated logging level.
- * Only messages whose have at least this log level are logged.
+ * The currently active logging level.
+ * Only messages from loggers whose have at least this log level are logged.
  * Default log level is {@link LOG_DEBUG}.
  * @type { LogLevelType }
  * @private
@@ -273,15 +303,15 @@ let loggingLevel = LOG_DEBUG;
 /**
  * This function can be used to set the logging level for the logging framework.
  * Only messages whose have at least the set log level are logged.
- * @param { LogLevelType } level
+ * @param { LogLevelChoice } newLoggingLevel
  * @example
  * setLoggingLevel(LOG_DEBUG);
  */
-const setLoggingLevel = level => loggingLevel = level;
+const setLoggingLevel = newLoggingLevel => loggingLevel = newLoggingLevel;
 
 /**
  * Getter for the loggingLevel.
- * @return { LogLevelType } - the current logging level
+ * @return { LogLevelChoice } - the currently active logging level
  */
 const getLoggingLevel = () => loggingLevel;
 

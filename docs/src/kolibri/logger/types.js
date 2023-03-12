@@ -14,15 +14,6 @@
  */
 
 /**
- * A Loglevel is a {@link Pair}, which consists of a {@link ChurchNumberType} interpreted as level
- * and a {@link String} interpreted as label.
- * Given a {@link PairSelectorType}, either the level or the label can be selected.
- *
- * @typedef LogLevelType
- * @type { (PairSelectorType) => ChurchNumberType | String }
- */
-
-/**
  * @typedef ProducerType
  * @template _U_
  * @type { (...x) => _U_ }
@@ -45,7 +36,7 @@
  * It represents a log message.
  * To log a simple message, just use a {@link String}.
  * If the log message is based on some calculations, you should consider to use a {@link ProducerType},
- * because the message can be lazy evaluated.
+ * because the message can be lazily evaluated.
  * @typedef {String | ProducerType<String>} LogMeType
  */
 
