@@ -11,7 +11,7 @@ import "./presentationModelTest.js";
 import "./logger/loggerTest.js";
 import "./logger/appender/arrayAppenderTest.js";
 import "./logger/appender/consoleAppenderTest.js";
-// import "./logger/appender/countAppenderTest.js";
+import "./logger/appender/countAppenderTest.js";
 // import "./logger/appender/observableAppenderTest.js";
 
 import "./rest/restClientTest.js";

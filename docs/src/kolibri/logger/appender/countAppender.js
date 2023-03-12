@@ -3,8 +3,8 @@ import { T } from "../../lambda/church.js";
 export { Appender }
 
 /**
- * Provides console appender.
- * @returns { AppenderType<Object> }
+ * Provides an appender that logs to the console how many log messages have been issued on the various levels.
+ * @returns { AppenderType<StatisticType> }
  * @constructor
  */
 const Appender = () => ({
@@ -19,14 +19,17 @@ const Appender = () => ({
 });
 
 /**
- *
- * @type { {warn: number, trace: number, debug: number, error: number, info: number, fatal: number} }
+ * @typedef { {warn: Number, trace: Number, debug: Number, error: Number, info: Number, fatal: Number} } StatisticType
+ */
+
+/**
+ * @type { StatisticType }
  */
 let statistic = { trace: 0, debug: 0, info: 0, warn: 0, error: 0, fatal: 0};
 
 /**
  * Resets the values of all level to zero.
- * @return { {warn: number, trace: number, debug: number, error: number, info: number, fatal: number} }
+ * @return { StatisticType }
  */
 const reset = () => {
   statistic = { trace: 0, debug: 0, info: 0, warn: 0, error: 0, fatal: 0 };
@@ -35,17 +38,17 @@ const reset = () => {
 
 /**
  * Returns an object with summarized counter values.
- * @returns { {warn: number, trace: number, debug: number, error: number, info: number, fatal: number} }
+ * @returns { StatisticType }
  */
 const getValue = () => statistic;
 
 /**
- * @type { (String) => (ConsumerType) => (String) => churchBoolean }
+ * @type { (String) => (callback:ConsumerType<String>) => (String) => ChurchBooleanType }
  */
 const appenderCallback = type => callback => msg => {
   statistic[type] = statistic[type] + 1;
   callback(` (${statistic[type]}) ` + msg);
-  return T;
+  return /** @type {ChurchBooleanType} */T;
 };
 
 /**
