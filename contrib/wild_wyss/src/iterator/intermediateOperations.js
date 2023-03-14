@@ -32,7 +32,7 @@ export {
  * @function
  * @template _T_
  * @template _U_
- * @pure
+ * @pure iterator will be copied defensively
  * @type {
  *            (mapper: Functor<_U_, _T_>)
  *         => IteratorOperation<_T_>
@@ -58,7 +58,7 @@ const map = mapper => iterator => {
  * Only keeps elements which fulfill the predicate.
  * @function
  * @template _T_
- * @pure
+ * @pure iterator will be copied defensively
  * @type {
  *             (predicate: Predicate<_T_>)
  *          => IteratorOperation<_T_>
@@ -107,7 +107,7 @@ const rejectAll = predicate => iterator =>
  *
  * @function
  * @template _T_
- * @pure
+ * @pure iterator will be copied defensively
  * @type {
  *            (predicate: Predicate<_T_>)
  *         => IteratorOperation<_T_>
@@ -160,7 +160,7 @@ const drop = count => iterator => {
  * Processes the iterator backwards.
  * @template _T_
  * @function
- * @pure
+ * @pure iterator will be copied defensively
  * @type {
  *             (iterator: IteratorType<_T_>)
  *          => IteratorType<_T_>
@@ -179,7 +179,7 @@ const reverse$ = iterator => {
  * Adds the second iterator to the first iterators end.
  * @function
  * @template _T_
- * @pure
+ * @pure it1 and it2 will be copied defensively
  * @type {
  *             (it1: IteratorType<_T_>)
  *          => (it2: IteratorType<_T_>)
@@ -196,7 +196,7 @@ const concat$ = it1 => it2 => ArrayIterator([...it1.copy(), ...it2.copy()]);
  * Adds the given element to the front of the iterator.
  * @function
  * @template _T_
- * @pure
+ * @pure iterator will be copied defensively
  * @type {
  *            (element: _T_)
  *         => IteratorOperation<_T_>

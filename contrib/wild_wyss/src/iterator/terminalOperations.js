@@ -16,7 +16,7 @@ export {
  *
  * _Note_: Two iterators are considered as equal if they contain or create the exactly same values in the same order.
  * @function
- * @pure
+ * @pure it1 and it2 will be copied defensively
  * @type {
  *             (it1: IteratorType<*>)
  *          => (it2: IteratorType<*>)
@@ -105,7 +105,7 @@ const uncons = iterator => {
  * Return the next value without consuming it.
  * @function
  * @template _T_
- * @pure
+ * @pure iterator will be copied defensively
  * @type {
  *              (iterator: IteratorType<_T_>)
  *          =>  _T_
