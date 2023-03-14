@@ -1,7 +1,7 @@
 import {TestSuite} from "../../../../docs/src/kolibri/util/test.js";
 import {arrayEq} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
-import {ArrayIterator, Iterator} from "./iterator.js"
+import {ArrayIterator, ConcatIterator, emptyIterator, Iterator} from "./iterator.js"
 import {fst, snd} from "../../../../docs/src/kolibri/stdlib.js";
 
 
@@ -136,6 +136,17 @@ iteratorSuite.add("test special case map: no mapping after done", assert => {
   const mapped = map(mapper)(it1);
   mapped[Symbol.iterator]().next();
   assert.is(called, false);
+});
+
+iteratorSuite.add("test left/right associativity of mconcat", assert => {
+  const left = mconcat(
+    ArrayIterator([emptyIterator, newIterator(UPPER_ITERATOR_BOUNDARY)])
+  );
+  const right = mconcat(
+    ArrayIterator([newIterator(UPPER_ITERATOR_BOUNDARY), emptyIterator])
+  );
+  assert.is(arrayEq([0,1,2,3,4])([...right]), true);
+  assert.is(arrayEq([0,1,2,3,4])([...left]),  true);
 });
 
 iteratorSuite.run();

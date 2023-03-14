@@ -9,13 +9,14 @@ import {
   TupleIterator,
   ConcatIterator,
   StackIterator,
-  IteratorBuilder,
+  IteratorBuilder, emptyIterator,
 } from "./iterator.js"
 
 import {
-  map,
+  map, mconcat,
   retainAll,
 } from "./intermediateOperations.js";
+
 import {emptyStack, push } from "../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import {Range} from "../range/range.js";
 
@@ -123,6 +124,13 @@ iteratorSuite.add("test purity: ConcatIterator", assert => {
   for (const _ of concatIterator) { /* Exhausting */ }
   assert.is(arrayEq([0,1,2,3,4])([...it1]), true);
   assert.is(arrayEq([0,1,2])    ([...it2]), true);
+});
+
+iteratorSuite.add("test left/right associativity ConcatIterator", assert => {
+  const left =  ConcatIterator(emptyIterator)(newIterator(4));
+  const right = ConcatIterator(newIterator(4))(emptyIterator);
+  assert.is(arrayEq([0,1,2,3,4])([...right]), true);
+  assert.is(arrayEq([0,1,2,3,4])([...left]),  true);
 });
 
 iteratorSuite.add("test typical case: stack iterator", assert => {
