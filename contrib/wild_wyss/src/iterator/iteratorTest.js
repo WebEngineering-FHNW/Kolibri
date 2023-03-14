@@ -51,8 +51,17 @@ iteratorSuite.add("test typical case: pipe", assert => {
 });
 
 iteratorSuite.add("test typical case: ArrayIterator", assert => {
-  const  arrayIterator = ArrayIterator([1,2,3]);
+  const arrayIterator = ArrayIterator([1,2,3]);
   assert.is(arrayEq([1,2,3])([...arrayIterator]), true);
+});
+
+iteratorSuite.add("test iterate on copy: ArrayIterator", assert => {
+  const arr = [1,2,3];
+  const arrayIterator = ArrayIterator(arr);
+  arr.push(4);
+
+  assert.is(arrayEq([1,2,3])([...arrayIterator]), true);
+
 });
 
 iteratorSuite.add("test advanced case: ArrayIterator", assert => {
@@ -62,6 +71,12 @@ iteratorSuite.add("test advanced case: ArrayIterator", assert => {
     retainAll(el => el % 2 === 0)
   );
   assert.is(arrayEq([2,4])([...pipedArrayIterator]), true);
+});
+
+iteratorSuite.add("test array does not exceed", assert => {
+  const arrayIterator      = ArrayIterator([1,2,3]);
+  for (const _ of arrayIterator) { /*exhausting*/ }
+  assert.is(arrayIterator[Symbol.iterator]().next().value, 3);
 });
 
 iteratorSuite.add("test typical case: tuple iterator", assert => {

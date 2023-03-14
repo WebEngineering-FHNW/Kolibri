@@ -114,8 +114,10 @@ const Iterator = (value, incrementFunction, isDoneFunction) => {
  * @returns { IteratorType<_T_> }
  * @constructor
  */
-const ArrayIterator = array =>
-  internalMap(i => array[i])(Iterator(0, x => x + 1, x => x === array.length));
+const ArrayIterator = array =>{
+  const internalArray = [...array];
+  return internalMap(i => internalArray[i])(Iterator(0, x => x + 1, x => x === internalArray.length));
+};
 
 /**
  * @template _T_
@@ -297,10 +299,11 @@ const nextOf = it => it[Symbol.iterator]().next();
  */
 const internalMap = mapper => iterator => {
   const inner = iterator.copy();
-
+  let last;
   const next = () => {
     const { done, value } = nextOf(inner);
-    return { done, value: mapper(value) }
+    if(!done) last = mapper(value);
+    return { done, value: last }
   };
 
   return createIteratorWithArgs(next)(internalMap)(mapper)(inner);
