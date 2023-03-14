@@ -1,6 +1,6 @@
-import {pop, emptyStack, stackEquals} from "../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import { fst, snd }    from "../../../../docs/src/kolibri/stdlib.js";
-import { convertToJsBool } from "../logger/lamdaCalculus.js";
+import { pop, emptyStack, stackEquals } from "../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import { fst, snd }                     from "../../../../docs/src/kolibri/stdlib.js";
+import { convertToJsBool }              from "../logger/lamdaCalculus.js";
 
 export {
   pipe,
@@ -25,11 +25,10 @@ export {
  *        }
  */
 const pipe = iterator => (...transformers) => {
-  let it = iterator.copy(); // TODO: muss das hier kopiert werden, theoretisch könnte hier auch ein iterator übergeben werden
   for (const transformer of transformers) {
-    it = transformer(it);
+    iterator = transformer(iterator);
   }
-  return it;
+  return iterator;
 };
 
 /**
@@ -143,7 +142,7 @@ const TupleIterator = tuple => {
 /**
  * Adds the second iterator to the first iterators end.
  * @template _T_
- * @pure
+ * @pure it1 and it2 will be copied defensively
  * @type {
  *             (it1: IteratorType<_T_>)
  *          => (it2: IteratorType<_T_>)
@@ -151,8 +150,8 @@ const TupleIterator = tuple => {
  *       }
  * @constructor
  * @example
- * const it1     = Iterator(0, inc, stop);
- * const it2     = Iterator(0, inc, stop);
+ * const it1 = Iterator(0, inc, stop);
+ * const it2 = Iterator(0, inc, stop);
  * const concatIterator = ConcatIterator(it1)(it2);
  */
 const ConcatIterator = it1 => it2 => {
@@ -163,8 +162,8 @@ const ConcatIterator = it1 => it2 => {
   const next = () => {
     let result;
     if (!fstDone) {
-      result = nextOf(inner1);
-      fstDone    = result.done;
+      result  = nextOf(inner1);
+      fstDone = result.done;
     }
 
     if (fstDone) {
@@ -172,7 +171,7 @@ const ConcatIterator = it1 => it2 => {
       sndDone = result.done;
     }
     return {
-      done: fstDone && sndDone,
+      done:  fstDone && sndDone,
       value: result.value
     }
   };
@@ -182,7 +181,6 @@ const ConcatIterator = it1 => it2 => {
   return {
     [Symbol.iterator]: () => ({ next }),
     copy,
-
   };
 };
 
