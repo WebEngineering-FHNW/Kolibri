@@ -8,6 +8,7 @@ import {
 } from "./iterator.js";
 
 import { reduce$ } from "./terminalOperations.js";
+import { Pair } from "../../../../docs/src/kolibri/stdlib.js";
 
 export {
   map,
@@ -22,6 +23,8 @@ export {
   take,
   mconcat,
   cycle,
+  zipWith,
+  zip,
 }
 
 /**
@@ -151,7 +154,6 @@ const drop = count => iterator => {
   return createIteratorWithArgs(inner[Symbol.iterator]().next)(drop)(count)(iterator);
 };
 
-
 /**
  * Processes the iterator backwards.
  * @template _T_
@@ -171,7 +173,6 @@ const reverse$ = iterator => {
   return ArrayIterator(values);
 };
 
-// TODO: the iterators should be copied here
 /**
  * Adds the second iterator to the first iterators end.
  * @function
@@ -289,8 +290,16 @@ const mconcat = iterator =>
   reduce$((acc, cur) => ConcatIterator(acc)(cur), emptyIterator)(iterator);
 
 /**
- *
- * @param iterator
+ * {@link cycle Cycle} ties a finite {@link IteratorType} into a circular one, or equivalently, the infinite repetition of the original {@link IteratorType}.
+ * @function
+ * @template _T_
+ * @param { IteratorType<_T_> } iterator
+ * @returns IteratorType<_T_>
+ * @example
+ * const it     = Range(2);
+ * const cycled = cycle(it);
+ * console.log(take(6)(cycled));
+ * // prints: 0, 1, 2, 0, 1, 2
  */
 const cycle = iterator => {
     const origin  = iterator.copy();
@@ -306,3 +315,60 @@ const cycle = iterator => {
 
   return createIterator(next)(cycle)(inner)
 };
+
+/**
+ * {@link zipWith ZipWith} generalises {@link zip} by zipping with the function given as the first argument, instead of a {@link pair} constructor.
+ * @function
+ * @template _T_
+ * @template _U_
+ * @type {
+ *             (zipper: BiFunction<_T_, _T_, _U_>)
+ *          => (it1: IteratorType<_T_>)
+ *          => (it2: IteratorType<_T_>)
+ *          => IteratorType<_U_>
+ * }
+ * @example
+ * const it1 = Range(2);
+ * const it2 = Range(2, 4);
+ * const zipped = zipWith((i,j) => [i,j])(it1)(it2);
+ * console.log(...zipped)1;
+ * // prints: [0,2], [1,3], [2,4]
+ */
+const zipWith = zipper => it1 => it2 => {
+  const inner1 = it1.copy();
+  const inner2 = it2.copy();
+
+  const next = () => {
+    const { done: done1, value: value1 } = nextOf(inner1);
+    const { done: done2, value: value2 } = nextOf(inner2);
+    return {
+      done:  done1 || done2,
+      value: zipper(value1, value2)
+    };
+  };
+
+  const copy = () => zipWith(zipper)(inner1)(inner2);
+  return {
+    [Symbol.iterator]: () => ({ next }),
+    copy,
+  };
+};
+
+/**
+ * Zip takes two {@link IteratorType Iterators} and returns a {@link IteratorType iterator} of corresponding pairs.
+ * @function
+ * @template _T_
+ * @template _U_
+ * @type {
+ *             (it1: IteratorType<_T_>)
+ *          => (it2: IteratorType<_T_>)
+ *          => IteratorType<_U_>
+ * }
+ * @example
+ * const it1 = Range(2);
+ * const it2 = Range(2, 4);
+ * const zipped = zipWith((i,j) => [i,j])(it1)(it2);
+ * console.log(...zipped);
+ * // prints: [0,2], [1,3], [2,4]
+ */
+const zip = it1 => it2 => zipWith((i,j) => Pair(i)(j))(it1)(it2);
