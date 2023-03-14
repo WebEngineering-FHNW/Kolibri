@@ -126,11 +126,18 @@ iteratorSuite.add("test purity: ConcatIterator", assert => {
   assert.is(arrayEq([0,1,2])    ([...it2]), true);
 });
 
-iteratorSuite.add("test left/right associativity ConcatIterator", assert => {
+iteratorSuite.add("test left/right associativity ConcatIterator with emptyIterator", assert => {
   const left =  ConcatIterator(emptyIterator)(newIterator(4));
   const right = ConcatIterator(newIterator(4))(emptyIterator);
   assert.is(arrayEq([0,1,2,3,4])([...right]), true);
   assert.is(arrayEq([0,1,2,3,4])([...left]),  true);
+});
+
+iteratorSuite.add("test left/right associativity ConcatIterator", assert => {
+  const left  = ConcatIterator(ConcatIterator(newIterator(2))(newIterator(1)))(newIterator(3));
+  const right = ConcatIterator(newIterator(2))(ConcatIterator(newIterator(1))(newIterator(3)));
+
+  assert.is(arrayEq([...right])([...left]),  true);
 });
 
 iteratorSuite.add("test typical case: stack iterator", assert => {
