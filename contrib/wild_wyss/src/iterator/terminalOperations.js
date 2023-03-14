@@ -1,6 +1,6 @@
 import { arrayEq } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { nextOf } from "./iterator.js";
-import { Pair } from "../../../../docs/src/kolibri/stdlib.js";
+import { nextOf }  from "./iterator.js";
+import { Pair }    from "../../../../docs/src/kolibri/stdlib.js";
 
 export {
   reduce$,
@@ -51,7 +51,7 @@ const isEmpty = iterator => head(iterator) === undefined;
  * @function
  * @template _T_
  * @type {
- *             (accumulationFn: BinaryOperation<_T_>, start: _T_)
+ *             (accumulationFn: BiOperation<_T_>, start: _T_)
  *          => (iterator: IteratorType<_T_>)
  *          => _T_
  *       }
@@ -66,11 +66,6 @@ const reduce$ = (accumulationFn, start) => iterator => {
   return accumulator;
 };
 
-
-/* TODO: ist das die richtige Art die Operation zu implemeniteren?
-    sollte hier besser auf currying verzichtet werdne? macht es
-    Sinn hier wieder einen Iterator zurück zugeben damit man die Funktion pipen kann?
-*/
 /**
  * Executes the callback for each element.
  * @function

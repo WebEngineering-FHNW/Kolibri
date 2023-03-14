@@ -10,12 +10,22 @@
 /**
  * A callback which takes two arguments of type {@link _A_} and transforms it to {@link _A_}.
  * @template _A_
- * @callback BinaryOperation
+ * @callback BiOperation
  * @param   { _A_ } value1
  * @param   { _A_ } value2
  * @returns { _A_ }
  */
 
+/**
+ * A callback which takes two arguments of type {@link _T_} and {@link _U_} and transforms it to {@link _R_}.
+ * @template _T_
+ * @template _U_
+ * @template _R_
+ * @callback BiFunction
+ * @param   { _T_ } value1
+ * @param   { _U_ } value2
+ * @returns { _R_ }
+ */
 /**
  * A callback which takes one argument of type {@link _A_} and transforms it to {@link _A_}.
  * @template _A_
