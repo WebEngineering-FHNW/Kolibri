@@ -1,14 +1,12 @@
-import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
-import { arrayEq }   from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import {TestSuite} from "../../../../docs/src/kolibri/util/test.js";
+import {arrayEq} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 import {ArrayIterator, Iterator} from "./iterator.js"
-import { fst, snd }              from "../../../../docs/src/kolibri/stdlib.js";
+import {fst, snd} from "../../../../docs/src/kolibri/stdlib.js";
 
 
 import {
   concat$,
-  zipWith,
-  zip,
   cons,
   cycle,
   drop,
@@ -20,6 +18,8 @@ import {
   reverse$,
   take,
   takeWhile,
+  zip,
+  zipWith,
 } from "./intermediateOperations.js";
 
 /**
@@ -31,6 +31,13 @@ const newIterator = limit => Iterator(0, current => current + 1, current => curr
 
 const iteratorSuite = TestSuite("IntermediateOperations");
 const UPPER_ITERATOR_BOUNDARY = 4;
+
+const testSimple = op => expected => assert => {
+  const it       = newIterator(UPPER_ITERATOR_BOUNDARY);
+  const operated = op(it);
+  assert.is(arrayEq(expected)([...operated]), true)
+};
+
 /**
  * Checks if a given operation does not modify the underlying iterator.
  */
@@ -45,12 +52,6 @@ const testCopy = op => assert => {
   const copied   = op(newIterator(UPPER_ITERATOR_BOUNDARY)).copy();
 
   assert.is(arrayEq([...expected])([...copied]), true);
-};
-
-const testSimple = op => expected => assert => {
-  const it       = newIterator(UPPER_ITERATOR_BOUNDARY);
-  const operated = op(it);
-  assert.is(arrayEq(expected)([...operated]), true)
 };
 
 const mconcatInit = _ => mconcat(ArrayIterator([
@@ -126,6 +127,15 @@ iteratorSuite.add("test typical case: zip", assert => {
     assert.is(zipped[i](fst), i);
     assert.is(zipped[i](snd), mapper(i));
   }
+});
+
+iteratorSuite.add("test special case map: no mapping after done", assert => {
+  let called = false;
+  const mapper = _ => called = true;
+  const it1 = Iterator(true, _ => true, _ => true);
+  const mapped = map(mapper)(it1);
+  mapped[Symbol.iterator]().next();
+  assert.is(called, false);
 });
 
 iteratorSuite.run();

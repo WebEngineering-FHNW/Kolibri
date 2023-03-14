@@ -299,11 +299,11 @@ const nextOf = it => it[Symbol.iterator]().next();
  */
 const internalMap = mapper => iterator => {
   const inner = iterator.copy();
-  let last;
+  let mappedValue;
   const next = () => {
     const { done, value } = nextOf(inner);
-    if(!done) last = mapper(value);
-    return { done, value: last }
+    if(!done) mappedValue = mapper(value);
+    return { done, value: mappedValue }
   };
 
   return createIteratorWithArgs(next)(internalMap)(mapper)(inner);

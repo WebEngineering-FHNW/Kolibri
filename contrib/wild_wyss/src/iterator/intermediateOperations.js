@@ -43,10 +43,12 @@ export {
  */
 const map = mapper => iterator => {
   const inner = iterator.copy();
+  let mappedValue;
 
   const next = () => {
     const { done, value } = nextOf(inner);
-    return { done, value: mapper(value) }
+    if(!done) mappedValue = mapper(value);
+    return { done, value: mappedValue }
   };
 
   return createIteratorWithArgs(next)(map)(mapper)(inner);
