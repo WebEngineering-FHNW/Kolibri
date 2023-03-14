@@ -12,6 +12,7 @@ export {
   TupleIterator,
   ConcatIterator,
   StackIterator,
+  IteratorBuilder,
   emptyIterator,
 }
 
@@ -307,4 +308,36 @@ const internalMap = mapper => iterator => {
   };
 
   return createIteratorWithArgs(next)(internalMap)(mapper)(inner);
+};
+
+const AwesomeIterator = elements => {
+
+  return {
+
+  }
+};
+const IteratorBuilder = (start = emptyIterator) => {
+
+  let base = start;
+
+  const elements = [];
+  const add = (...args) => {
+    for (const value of args) {
+      if(value[Symbol.iterator] === undefined){
+        elements.push(value);
+      } else {
+       if(elements.length !== 0){
+         base = ConcatIterator(ArrayIterator(elements))(value);
+         elements.splice(0, elements.length);
+       }
+      }
+    }
+  };
+
+  const build = () => ConcatIterator(base)(ArrayIterator(elements));
+
+  return {
+    add,
+    build,
+  }
 };
