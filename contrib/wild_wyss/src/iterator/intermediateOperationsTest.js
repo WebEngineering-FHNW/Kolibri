@@ -215,15 +215,32 @@ iteratorSuite.add("test advanced case: zip one iterator is shorter", assert => {
   assert.is([...zipped2].length, 3);
 });
 
-iteratorSuite.add("test left/right identity of mconcat", assert => {
-  const left = mconcat(
-    ArrayIterator([emptyIterator, newIterator(UPPER_ITERATOR_BOUNDARY)])
-  );
-  const right = mconcat(
-    ArrayIterator([newIterator(UPPER_ITERATOR_BOUNDARY), emptyIterator])
-  );
-  assert.is(arrayEq([0,1,2,3,4])([...right]), true);
-  assert.is(arrayEq([0,1,2,3,4])([...left]),  true);
+iteratorSuite.add("test left/right neutrality: mconcat", assert => {
+  const left  = mconcat(ArrayIterator([emptyIterator, newIterator(UPPER_ITERATOR_BOUNDARY)]));
+  const right = mconcat(ArrayIterator([newIterator(UPPER_ITERATOR_BOUNDARY), emptyIterator]));
+  const expected = [0,1,2,3,4];
+  assert.is(arrayEq(expected)([...right]), true);
+  assert.is(arrayEq(expected)([...left]),  true);
+});
+
+iteratorSuite.add("test left/right associativity: mconcat", assert => {
+  const it1   = newIterator(1);
+  const it2   = newIterator(2);
+  const it3   = newIterator(3);
+  const left  = mconcat(ArrayIterator([mconcat(ArrayIterator([it1, it2])), it3]));
+  const right = mconcat(ArrayIterator([it1, mconcat(ArrayIterator([it2, it3]))]));
+  const expected = [0,1,0,1,2,0,1,2,3];
+  assert.is(arrayEq(expected)([...right]), true);
+  assert.is(arrayEq(expected)([...left]),  true);
+});
+
+iteratorSuite.add("test infinity: mconcat", assert => {
+  const endless      = Iterator(0, i => i + 1, _ => false);
+  const iterator     = newIterator(UPPER_ITERATOR_BOUNDARY);
+  const concatenated = mconcat(ArrayIterator([endless, iterator]));
+  take(10)(concatenated); // consume a few elements
+  // appended iterator should be untouched
+  assert.is(arrayEq([0,1,2,3,4])([...iterator]),  true);
 });
 
 iteratorSuite.run();

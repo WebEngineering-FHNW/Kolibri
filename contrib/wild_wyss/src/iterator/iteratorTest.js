@@ -14,7 +14,7 @@ import {
 
 import {
   map, mconcat,
-  retainAll,
+  retainAll, take,
 } from "./intermediateOperations.js";
 
 import {emptyStack, push } from "../../../p6_brodwolf_andermatt/src/stack/stack.js";
@@ -126,18 +126,29 @@ iteratorSuite.add("test purity: ConcatIterator", assert => {
   assert.is(arrayEq([0,1,2])    ([...it2]), true);
 });
 
-iteratorSuite.add("test left/right associativity ConcatIterator with emptyIterator", assert => {
+iteratorSuite.add("test left/right neutrality: ConcatIterator", assert => {
   const left =  ConcatIterator(emptyIterator)(newIterator(4));
   const right = ConcatIterator(newIterator(4))(emptyIterator);
-  assert.is(arrayEq([0,1,2,3,4])([...right]), true);
-  assert.is(arrayEq([0,1,2,3,4])([...left]),  true);
+  const expected = [0,1,2,3,4];
+  assert.is(arrayEq(expected)([...right]), true);
+  assert.is(arrayEq(expected)([...left]),  true);
 });
 
-iteratorSuite.add("test left/right associativity ConcatIterator", assert => {
+iteratorSuite.add("test left/right associativity: ConcatIterator", assert => {
   const left  = ConcatIterator(ConcatIterator(newIterator(2))(newIterator(1)))(newIterator(3));
   const right = ConcatIterator(newIterator(2))(ConcatIterator(newIterator(1))(newIterator(3)));
+  const expected = [0,1,2,0,1,0,1,2,3];
+  assert.is(arrayEq(expected)([...right]), true);
+  assert.is(arrayEq(expected)([...left]),  true);
+});
 
-  assert.is(arrayEq([...right])([...left]),  true);
+iteratorSuite.add("test infinity: ConcatIterator", assert => {
+  const endless      = Iterator(0, i => i + 1, _ => false);
+  const iterator     = newIterator(2);
+  const concatenated = ConcatIterator(endless)(iterator);
+  take(10)(concatenated); // consume a few elements
+  // appended iterator should be untouched
+  assert.is(arrayEq([0,1,2])([...iterator]),  true);
 });
 
 iteratorSuite.add("test typical case: stack iterator", assert => {
