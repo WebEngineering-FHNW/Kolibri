@@ -53,7 +53,30 @@ const testCopy = op => assert => {
 
   assert.is(arrayEq([...expected])([...copied]), true);
 };
+/**
+ * Since there is no guarantee that the value of the iterator is existing when done is true,
+ * it must be ensured that the callback function is not called after that.
+ * @type {
+ *         (op: (number) => IteratorOperation<number>)
+ *      => (callback: (el: number) => any)
+ *      => (assert: any)
+ *      => void
+ * }
+ */
+const testCBNotCalledAfterDone = op => callback => assert => {
+  let called = false;
+  const it = Iterator(0, _ => 0, _ => true);
+  const operated = op(el => {
+    // since this iterator is empty, called should never be set to true
+    called = true;
+    return callback(el)
+  })(it);
 
+  for (const _ of operated) { /* exhausting */ }
+  assert.is(called, false);
+};
+
+// bootstrap operations for tests
 const mconcatInit = _ => mconcat(ArrayIterator([
   newIterator(2),
   newIterator(2),
@@ -67,12 +90,8 @@ const cycleInit = _ => {
   return take(9)(cycled);
 };
 
+// operations which take values as argumnets
 [
-  ["map",           map(el => 2 * el),                 [0, 2, 4, 6, 8],           ],
-  ["retainAll",     retainAll(el => el % 2 === 0),     [0, 2, 4],                 ],
-  ["rejectAll",     rejectAll(el => el % 2 === 0),     [1, 3],                    ],
-  ["dropWhile",     dropWhile(el => el < 2),           [2, 3, 4],                 ],
-  ["takeWhile",     takeWhile(el => el < 2),           [0, 1],                    ],
   ["drop",          drop(2),                           [2, 3, 4],                 ],
   ["take",          take(2),                           [0, 1],                    ],
   ["reverse$",      reverse$,                          [4, 3, 2, 1, 0],           ],
@@ -86,6 +105,21 @@ const cycleInit = _ => {
   iteratorSuite.add(`test simple: ${name}`,  testSimple (op)(expected));
   iteratorSuite.add(`test copy: ${name}`,    testCopy   (op));
   iteratorSuite.add(`test purity: ${name}.`, testPurity (op));
+});
+
+// operations which take callbacks as arguments
+[
+  ["map",           map,        (el => 2 * el),           [0, 2, 4, 6, 8],           ],
+  ["retainAll",     retainAll,  (el => el % 2 === 0),     [0, 2, 4],                 ],
+  ["rejectAll",     rejectAll,  (el => el % 2 === 0),     [1, 3],                    ],
+  ["dropWhile",     dropWhile,  (el => el < 2),           [2, 3, 4],                 ],
+  ["takeWhile",     takeWhile,  (el => el < 2),           [0, 1],                    ],
+].forEach(el => {
+  const [ name, op, callback, expected ] = el;
+  iteratorSuite.add(`test simple: ${name}`,                           testSimple(op(callback))(expected));
+  iteratorSuite.add(`test copy: ${name}`,                             testCopy(op(callback)));
+  iteratorSuite.add(`test purity: ${name}.`,                          testPurity(op(callback)));
+  iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(op)(callback));
 });
 
 iteratorSuite.add("test advanced case: takeWhile inner iterator is shorter", assert => {
@@ -129,16 +163,7 @@ iteratorSuite.add("test typical case: zip", assert => {
   }
 });
 
-iteratorSuite.add("test special case map: no mapping after done", assert => {
-  let called = false;
-  const mapper = _ => called = true;
-  const it1 = Iterator(true, _ => true, _ => true);
-  const mapped = map(mapper)(it1);
-  mapped[Symbol.iterator]().next();
-  assert.is(called, false);
-});
-
-iteratorSuite.add("test left/right associativity of mconcat", assert => {
+iteratorSuite.add("test left/right identity of mconcat", assert => {
   const left = mconcat(
     ArrayIterator([emptyIterator, newIterator(UPPER_ITERATOR_BOUNDARY)])
   );

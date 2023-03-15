@@ -47,7 +47,7 @@ const map = mapper => iterator => {
 
   const next = () => {
     const { done, value } = nextOf(inner);
-    if(!done) mappedValue = mapper(value);
+    if (!done) mappedValue = mapper(value);
     return { done, value: mappedValue }
   };
 
@@ -74,7 +74,7 @@ const retainAll = predicate => iterator => {
   const next = () => {
     const applyFilter  = current => {
       const { done, value } = current;
-      const result = predicate(value) || done;
+      const result = done || predicate(value);
       return result ? { done, value } : applyFilter(nextOf(inner));
     };
 
@@ -123,7 +123,7 @@ const dropWhile = predicate => iterator => {
   const next = () => {
     let { done, value } = nextOf(inner);
 
-    while(predicate(value) && !done) {
+    while(!done && predicate(value)) {
       const n = nextOf(inner);
       done    = n.done;
       value   = n.value;
