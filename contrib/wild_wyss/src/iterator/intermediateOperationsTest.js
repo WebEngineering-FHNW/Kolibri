@@ -1,8 +1,8 @@
-import {TestSuite} from "../../../../docs/src/kolibri/util/test.js";
-import {arrayEq} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
+import { arrayEq } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
-import {ArrayIterator, ConcatIterator, emptyIterator, Iterator} from "./iterator.js"
-import {Pair, fst, snd} from "../../../../docs/src/kolibri/stdlib.js";
+import { ArrayIterator, emptyIterator, Iterator } from "./iterator.js"
+import { Pair, fst, snd } from "../../../../docs/src/kolibri/stdlib.js";
 
 
 import {
@@ -32,6 +32,19 @@ const newIterator = limit => Iterator(0, current => current + 1, current => curr
 const iteratorSuite = TestSuite("IntermediateOperations");
 const UPPER_ITERATOR_BOUNDARY = 4;
 
+/**
+ * Tests if a given operation applicated on an iterator proccesses the expected result.
+ * Optionally an evaulation function can be passed to compare the created array using the operation and the expected array.
+ * @function
+ * @template _T_
+ * @type {
+ *         (op: (number) => IteratorType<_T_>)
+ *      => (expected: Array<_T_>)
+ *      => (evalFn?: (expected: Array<_T_>) => (actual: Array<_T_> ) => boolean)
+ *      => (assert: any)
+ *      => void
+ * }
+ */
 const testSimple = op => expected => (evalFn = arrayEq) => assert => {
   const it       = newIterator(UPPER_ITERATOR_BOUNDARY);
   const operated = op(it);
@@ -40,6 +53,11 @@ const testSimple = op => expected => (evalFn = arrayEq) => assert => {
 
 /**
  * Checks if a given operation does not modify the underlying iterator.
+ * @type {
+ *         (op: (number) => IteratorType<number>)
+ *      => (assert: any)
+ *      => void
+ * }
  */
 const testPurity = op => assert => {
   const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
@@ -47,12 +65,23 @@ const testPurity = op => assert => {
   assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
 };
 
+/**
+ * Tests if the copy function of a given operation works as intended.
+ * Optionally an evaulation function can be passed to compare the created array using the operation and the expected array.
+ * @type {
+ *         (op: (number) => IteratorType<number>)
+ *      => (evalFn?: (expected: Array<any>) => (actual: Array<any> ) => boolean)
+ *      => (assert: any)
+ *      => void
+ * }
+ */
 const testCopy = op => (evalFn = arrayEq) => assert => {
   const expected = op(newIterator(UPPER_ITERATOR_BOUNDARY));
   const copied   = op(newIterator(UPPER_ITERATOR_BOUNDARY)).copy();
 
   assert.is(evalFn([...expected])([...copied]), true);
 };
+
 /**
  * Since there is no guarantee that the value of the iterator is existing when done is true,
  * it must be ensured that the callback function is not called after that.
