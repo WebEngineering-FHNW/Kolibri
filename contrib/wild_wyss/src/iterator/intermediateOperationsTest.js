@@ -240,7 +240,11 @@ iteratorSuite.add("test infinity: mconcat", assert => {
   const concatenated = mconcat(ArrayIterator([endless, iterator]));
   take(10)(concatenated); // consume a few elements
   // appended iterator should be untouched
-  assert.is(arrayEq([0,1,2,3,4])([...iterator]),  true);
+  assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
 });
 
+iteratorSuite.add("test empty: mconcat", assert => {
+  const concatenated = mconcat(ArrayIterator([emptyIterator]));
+  assert.is(arrayEq([])([...concatenated]), true);
+});
 iteratorSuite.run();

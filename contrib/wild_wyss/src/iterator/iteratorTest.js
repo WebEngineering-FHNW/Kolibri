@@ -151,6 +151,11 @@ iteratorSuite.add("test infinity: ConcatIterator", assert => {
   assert.is(arrayEq([0,1,2])([...iterator]),  true);
 });
 
+iteratorSuite.add("test empty: ConcatIterator", assert => {
+  const concatenated = ConcatIterator(emptyIterator)(emptyIterator);
+  assert.is(arrayEq([])([...concatenated]),  true);
+});
+
 iteratorSuite.add("test typical case: stack iterator", assert => {
   const stack = push(push(push(emptyStack)(1))(2))(3);
 
