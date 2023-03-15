@@ -90,6 +90,11 @@ const cycleInit = _ => {
   return take(9)(cycled);
 };
 
+const zipWithInit = zipper => {
+  const it1 = newIterator(UPPER_ITERATOR_BOUNDARY);
+  return zipWith(zipper)(it1);
+};
+
 // operations which take values as argumnets
 [
   ["drop",          drop(2),                           [2, 3, 4],                 ],
@@ -114,6 +119,7 @@ const cycleInit = _ => {
   ["rejectAll",     rejectAll,  (el => el % 2 === 0),     [1, 3],                    ],
   ["dropWhile",     dropWhile,  (el => el < 2),           [2, 3, 4],                 ],
   ["takeWhile",     takeWhile,  (el => el < 2),           [0, 1],                    ],
+  ["zipWith",       zipWithInit,((i, j) => i + j),        [0, 2, 4, 6, 8]            ],
 ].forEach(el => {
   const [ name, op, callback, expected ] = el;
   iteratorSuite.add(`test simple: ${name}`,                           testSimple(op(callback))(expected));
@@ -136,17 +142,23 @@ iteratorSuite.add("test advanced case: dropWhile inner iterator is shorter", ass
   assert.is(arrayEq([0, 1, 2, 3, 4])([...some]), true);
 });
 
-iteratorSuite.add("test typical case: zipWith", assert => {
-  const mapper = el => el * 2;
-
+iteratorSuite.add("test advanced case: zipWith one iterator is shorter", assert => {
+  let iterationCount = 0;
+  // the inner iterator stops before the outer
   const it1 = newIterator(UPPER_ITERATOR_BOUNDARY);
-  const it2 = map(mapper)(newIterator(UPPER_ITERATOR_BOUNDARY));
+  const it2 = newIterator(2);
+  const zipper = (i, j) => {
+    iterationCount++;
+    return i + j;
+  };
+  const zipped1 = zipWith(zipper)(it2)(it1); // first iterator is shorter
+  const zipped2 = zipWith(zipper)(it1)(it2); // second iterator is shorter
 
-  const zipped = [...zipWith((i, j) => [i, j])(it1)(it2)];
+  for (const _ of zipped1) { /* Exhausting*/ }
+  assert.is(iterationCount, 3);
 
-  for (let i = 0; i <= UPPER_ITERATOR_BOUNDARY; i++) {
-    assert.is(arrayEq([i, mapper(i)])(zipped[i]), true)
-  }
+  for (const _ of zipped2) { /* Exhausting*/ }
+  assert.is(iterationCount, 6);
 });
 
 iteratorSuite.add("test typical case: zip", assert => {
