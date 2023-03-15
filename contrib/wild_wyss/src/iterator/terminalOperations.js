@@ -35,7 +35,7 @@ const eq$ = it1 => it2 =>
  * Returns true, if the iterators head is undefined.
  * @function
  * @template _T_
- * @pure
+ * @pure iterator will be copied defensively
  * @type {
  *            (iterator: IteratorType<_T_>)
  *         => Boolean
@@ -50,6 +50,7 @@ const isEmpty = iterator => head(iterator) === undefined;
  * Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
  * @function
  * @template _T_
+ * @pure iterator will be copied defensively
  * @type {
  *             (accumulationFn: BiOperation<_T_>, start: _T_)
  *          => (iterator: IteratorType<_T_>)
@@ -70,6 +71,7 @@ const reduce$ = (accumulationFn, start) => iterator => {
  * Executes the callback for each element.
  * @function
  * @template _T_
+ * @pure iterator will be copied defensively
  * @type {
  *            (callback: Consumer<_T_>)
  *         => (it: IteratorType<_T_>)
@@ -88,6 +90,7 @@ const forEach$ = callback => iterator => {
  * @template _T_
  * @param   { IteratorType<_T_> } iterator
  * @returns { (s: pairSelector) => (_T_ |IteratorType<_T_>) }
+ * @pure iterator will be copied defensively
  * @example
  * const it     = Iterator(0, inc, stop);
  * const result = uncons(it);

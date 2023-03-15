@@ -167,7 +167,7 @@ const drop = count => iterator => {
  *       }
  * @example
  * const it       = Iterator(0, inc, stop);
- * const reversed = reverse(it);
+ * const reversed = reverse$(it);
  */
 const reverse$ = iterator => {
   const values = [...iterator.copy()].reverse();
@@ -224,6 +224,7 @@ const cons = element => iterator => {
  * Proceeds with the iteration until the predicate becomes true
  * @function
  * @template _T_
+ * @pure iterator will be copied defensively
  * @type {
  *            (predicate: (_T_) => Boolean)
  *         => IteratorOperation<_T_>
@@ -252,6 +253,7 @@ const takeWhile = predicate => iterator => {
  * Stop after so many elements
  * @function
  * @template _T_
+ * @pure iterator will be copied defensively
  * @type {
  *            (count: Number)
  *         => IteratorOperation<_T_>
@@ -272,6 +274,7 @@ const take = count => iterator => {
 /**
  * @function
  * @template _T_
+ * @pure both iterators will be copied defensively
  * @param { IteratorType<IteratorType<_T_>> } iterator -
  * @returns IteratorType<_T_>
  * @example
@@ -295,6 +298,7 @@ const mconcat = iterator =>
  * {@link cycle Cycle} ties a finite {@link IteratorType} into a circular one, or equivalently, the infinite repetition of the original {@link IteratorType}.
  * @function
  * @template _T_
+ * @pure iterator will be copied defensively
  * @param { IteratorType<_T_> } iterator
  * @returns IteratorType<_T_>
  * @example
@@ -321,6 +325,7 @@ const cycle = iterator => {
 /**
  * {@link zipWith ZipWith} generalises {@link zip} by zipping with the function given as the first argument, instead of a {@link pair} constructor.
  * @function
+ * @pure both iterators will be copied defensively
  * @template _T_
  * @template _U_
  * @type {
@@ -359,6 +364,7 @@ const zipWith = zipper => it1 => it2 => {
 /**
  * Zip takes two {@link IteratorType Iterators} and returns a {@link IteratorType iterator} of corresponding pairs.
  * @function
+ * @pure both iterators will be copied defensively
  * @template _T_
  * @template _U_
  * @type {
@@ -366,7 +372,7 @@ const zipWith = zipper => it1 => it2 => {
  *          => (it2: IteratorType<_T_>)
  *          => IteratorType<_U_>
  * }
- * @example
+ * @exampl
  * const it1 = Range(2);
  * const it2 = Range(2, 4);
  * const zipped = zipWith((i,j) => [i,j])(it1)(it2);
