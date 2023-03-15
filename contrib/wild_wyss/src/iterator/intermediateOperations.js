@@ -350,6 +350,7 @@ const zipWith = zipper => it1 => it2 => {
     const { done: done1, value: value1 } = nextOf(inner1);
     const { done: done2, value: value2 } = nextOf(inner2);
     const done = done1 || done2;
+
     if (!done) zippedValue = zipper(value1, value2);
 
     return {
