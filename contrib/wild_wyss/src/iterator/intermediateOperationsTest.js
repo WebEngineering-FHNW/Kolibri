@@ -234,13 +234,18 @@ iteratorSuite.add("test left/right associativity: mconcat", assert => {
   assert.is(arrayEq(expected)([...left]),  true);
 });
 
-iteratorSuite.add("test infinity: mconcat", assert => {
-  const endless      = Iterator(0, i => i + 1, _ => false);
-  const iterator     = newIterator(UPPER_ITERATOR_BOUNDARY);
-  const concatenated = mconcat(ArrayIterator([endless, iterator]));
-  take(10)(concatenated); // consume a few elements
-  // appended iterator should be untouched
-  assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
+iteratorSuite.add("test concat with infinity: mconcat", assert => {
+  let called  = false;
+  let counter = 0;
+
+  const endless                = Iterator(0, i => i + 1, _ => false);
+  const iteratorWithSideEffect = Iterator(false, _ => called = true, _ => false)
+  const concatenated           = mconcat(ArrayIterator([endless, iteratorWithSideEffect]));
+
+  for (const _ of concatenated) {
+    if (counter++ > 10) break; // consume a few elements
+  }
+  assert.is(called, false);
 });
 
 iteratorSuite.add("test empty: mconcat", assert => {
