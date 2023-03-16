@@ -176,6 +176,9 @@ const reverse$ = iterator => {
 
 /**
  * Adds the given element to the front of the iterator.
+ * _Note_:
+ * Since cons creates a copy of the {@link IteratorType}, it's better to use {@link IteratorBuilderType},
+ * if you want to add many elements (more than 100).
  * @function
  * @template _T_
  * @pure iterator will be copied defensively

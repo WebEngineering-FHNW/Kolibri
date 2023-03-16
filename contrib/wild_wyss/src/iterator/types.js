@@ -13,6 +13,14 @@
  * @property { () => IteratorType<_T_> }                        copy - creates a copy of this {@link IteratorType}
  */
 
+/**
+ * @template _T_
+ * @typedef IteratorBuilderType
+ * @property { InsertIntoBuilder<_T_> } prepend - adds one or more elements to the beginning of the {@link IteratorBuilderType}
+ * @property { InsertIntoBuilder<_T_> } append  - adds one or more elements to the end of the {@link IteratorBuilderType}
+ * @property { () => IteratorType<_T_> } build  - starts the built phase and returns an {@link IteratorType} which iterates over the added elements
+ */
+
 // callbacks
 /**
  * Defines a single operation to decorate an existing {@link IteratorType}.
@@ -38,3 +46,13 @@
  * @param Array<_T_>
  * @returns any
  */
+
+/**
+ * Adds multiple elements to this {@link IteratorBuilderType}.
+ * @template _T_
+ * @callback InsertIntoBuilder
+ * @param   { ...(_T_ | IteratorType<_T_>) } args
+ * @returns IteratorBuilderType<_T_>
+ */
+
+
