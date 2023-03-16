@@ -47,7 +47,7 @@ const LogUiModel = () => {
     messageListeners.forEach(cb => cb(filtered));
   };
 
-  return {
+  return /** @type {LogUiModelType} */{
     onChangeActiveLogLevel: logLevelFilterStates.onChange,
     setActiveLogLevel:      logLevelFilterStates.setValue,
 

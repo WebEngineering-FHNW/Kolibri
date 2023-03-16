@@ -29,7 +29,7 @@ const DEFAULT_CACHE_EVICTION_STRATEGY  = cache => {
  * Use {@link getValue} to get the latest array content
  * and use {@link reset} to clear the array.
  * @param { Number                      } limit           - the max amount of log messages to keep.
- * @param { UnaryOperatorType<String[]> } cacheEvictionStrategy  - This function is called, as soon as the
+ * @param { CacheEvictionStrategyType } cacheEvictionStrategy  - This function is called, as soon as the
  *      defined limit of log messages is reached. You obtain the current appender
  *      value. Return a new value which will be used as the new value of this appender.
  *      If this parameter is not set, then all log messages until now will be discarded.
@@ -102,7 +102,7 @@ const getValue = () => appenderArray;
  * @type  {
  *          (limit:          Number) =>
  *          (onOverflow:     CacheEvictionStrategyType) =>
- *          (msg:            LogMessageType) =>
+ *          (msg:            LogMeType) =>
  *          ChurchBooleanType
  *        }
  */
@@ -128,19 +128,19 @@ const full = limit => churchBool(limit <= appenderArray.length);
  * If the array length equals the param limit, the array cache will be evicted using the defined eviction strategy.
  * @private
  * @type  {
- *          (msg: LogMessageType!) =>
- *          (limit: Number!) =>
- *          (evictionStrategy: CacheEvictionStrategyType!) =>
+ *          (msg: !LogMeType) =>
+ *          (limit: !Number) =>
+ *          (evictionStrategy: !CacheEvictionStrategyType) =>
  *          ChurchBooleanType
  *        }
  */
 const append = msg => limit => evictionStrategy => {
   // evict the array using the given evictionStrategy
-  appenderArray = evictionStrategy(appenderArray);
+  appenderArray =  /** @type {Array<String>} */ evictionStrategy(appenderArray);
   LazyIf(full(limit))
     (() => {
       // if array is full, despite using the set eviction strategy, use the default eviction strategy to make space.
-      appenderArray = DEFAULT_CACHE_EVICTION_STRATEGY(appenderArray);
+      appenderArray = /** @type {Array<String>} */DEFAULT_CACHE_EVICTION_STRATEGY(appenderArray);
       appenderArray.push(OVERFLOW_LOG_MESSAGE);
       appenderArray.push(msg)
     })

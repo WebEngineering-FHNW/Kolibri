@@ -28,10 +28,10 @@ let counter = 0;
 /**
  * Projection function that creates a view for input purposes, binds the information that is available through
  * the inputController, and returns the generated views.
- * @typedef { (formClassName:!String, inputController:!SimpleInputControllerType<_T_>, timeout:?Number)
- *               => [HTMLLabelElement, HTMLInputElement]
- *          } InputProjector<_T_>
- * @template _T_
+ * @typedef { <_T_>
+ *     (formClassName:!String, inputController:!SimpleInputControllerType<_T_>, timeout:?Number)
+ *      => [HTMLLabelElement, HTMLInputElement]
+ *     } InputProjector<_T_>
  * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
  */
 
@@ -41,7 +41,8 @@ let counter = 0;
  * @type { (eventType:EventTypeString) => InputProjector<_T_> }
  * @template _T_
  */
-const projectInput = (eventType) => (formClassName, inputController, timeout = 0) => {
+const projectInput = (eventType) =>
+    (formClassName, inputController, timeout = 0) => {
     if( ! inputController) {
         console.error("no inputController in input projector."); // be defensive
         return;
@@ -85,8 +86,8 @@ const projectInput = (eventType) => (formClassName, inputController, timeout = 0
         inputController.onValueChanged(val => inputElement.value = /** @type { * } */ val);
     }
 
-    inputController.onLabelChanged (label => {
-        labelElement.textContent = label;
+    inputController.onLabelChanged (  label => {
+        labelElement.textContent = /** @type {String} */ label;
         inputElement.setAttribute("title", label);
     });
     inputController.onNameChanged  (name  => inputElement.setAttribute("name", name || id));

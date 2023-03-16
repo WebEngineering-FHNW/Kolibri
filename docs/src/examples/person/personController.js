@@ -11,20 +11,20 @@ import { Person, reset }                from "./person.js"
 export { ListController, SelectionController }
 
 /**
- * @typedef ListControllerType<T>
- * @template T
- * @property { (observableListCallback) => void } onModelAdd
- * @property { (observableListCallback) => void } onModelRemove
- * @property { (model:T) => void }                removeModel
+ * @typedef ListControllerType<_T_>
+ * @template _T_
+ * @property { (cb:ConsumerType<_T_>) => void } onModelAdd
+ * @property { (cb:ConsumerType<_T_>) => void } onModelRemove
+ * @property { (model:_T_) => void }                removeModel
  * @property { ()  => void }                      addModel - add a newly created model
  */
 
 /**
  * ListController maintains an observable list of arbitrary models.
  * In order to construct models, it takes a modelConstructor as parameter.
- * @template T
- * @param  { () => T } modelConstructor - a constructor for models that are to be maintained here.
- * @return { ListControllerType<T> }
+ * @template _T_
+ * @param  { () => _T_ } modelConstructor - a constructor for models that are to be maintained here.
+ * @return { ListControllerType<_T_> }
  * @constructor
  */
 const ListController = modelConstructor => {
@@ -53,21 +53,21 @@ noSelection.lastname .getObs(EDITABLE).setValue(false);
 noSelection.detailed .getObs(VALUE)   .setValue(false);    // detail view can fold
 
 /**
- * @typedef SelectionControllerType<T>
- * @template T
- * @property { (T) => void } setSelectedModel
- * @property { ()  => T    } getSelectedModel
- * @property { () => void  } clearSelection
- * @property { (callback: onValueChangeCallback<T>) => void } onModelSelected
+ * @typedef SelectionControllerType<_T_>
+ * @template _T_
+ * @property { (_T_) => void } setSelectedModel
+ * @property { ()  => _T_    } getSelectedModel
+ * @property { () => void  }   clearSelection
+ * @property { (cb: ValueChangeCallback<_T_>) => void } onModelSelected
  */
 
 /**
  * SelectionController takes a model that will serve as a representative of a selection.
  * Listeners to selection changes will react by synchronizing with the selection -
  * of by means of copying the qualifiers and thus allowing multi-way updates without unbind/rebind.
- * @template T
- * @param  { T } model - the model that is to represent the selection
- * @return { SelectionControllerType<T>}
+ * @template _T_
+ * @param  { _T_ } model - the model that is to represent the selection
+ * @return { SelectionControllerType<_T_>}
  * @constructor
  */
 const SelectionController = model => {

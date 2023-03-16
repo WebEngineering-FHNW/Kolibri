@@ -327,7 +327,7 @@ const setLoggingLevel = newLoggingLevel => loggingLevel = newLoggingLevel;
 
 /**
  * Getter for the loggingLevel.
- * @return { LogLevelChoice } - the currently active logging level
+ * @return { LogLevelType } - the currently active logging level
  */
 const getLoggingLevel = () => loggingLevel;
 

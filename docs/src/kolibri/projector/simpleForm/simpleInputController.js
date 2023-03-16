@@ -10,12 +10,12 @@ export { SimpleInputController, SimpleAttributeInputController }
  * @property { (_T_) => void }              setValue
  * @property { ()  => String}               getType
  * @property { (valid: !Boolean) => void }  setValid
- * @property { (converter: Converter<_T_>)                => void } setConverter
- * @property { (callback: onValueChangeCallback<String>)  => void } onLabelChanged
- * @property { (callback: onValueChangeCallback<Boolean>) => void } onValidChanged
- * @property { (callback: onValueChangeCallback<_T_>)     => void } onValueChanged
- * @property { (callback: onValueChangeCallback<String>)  => void } onNameChanged
- * @property { (callback: onValueChangeCallback<Boolean>) => void } onEditableChanged
+ * @property { (converter: Converter<_T_>)        => void } setConverter
+ * @property { (cb: ValueChangeCallback<String>)  => void } onLabelChanged
+ * @property { (cb: ValueChangeCallback<Boolean>) => void } onValidChanged
+ * @property { (cb: ValueChangeCallback<_T_>)     => void } onValueChanged
+ * @property { (cb: ValueChangeCallback<String>)  => void } onNameChanged
+ * @property { (cb: ValueChangeCallback<Boolean>) => void } onEditableChanged
  */
 
 /**

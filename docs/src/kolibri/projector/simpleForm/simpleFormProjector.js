@@ -49,7 +49,7 @@ const projectForm = formController => {
     /** @type { HTMLFormElement } */ const form = elements[0];
     const fieldset = form.children[0];
 
-    formController.forEach(inputController => fieldset.append(...projectChangeInput(FORM_CLASS_NAME, inputController)));
+    formController.forEach(inputController => fieldset.append(...projectChangeInput(FORM_CLASS_NAME, inputController, 0)));
 
     return [form];
 };

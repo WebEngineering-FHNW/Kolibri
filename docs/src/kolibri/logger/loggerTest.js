@@ -172,7 +172,7 @@ loggerSuite.add("test lazy evaluation, error in lazy eval", assert => {
 
 loggerSuite.add("test error in message formatting code", assert => {
   const { appender } = beforeStart();
-  const badFormatter = ctx => lvl => msg => { throw new Error("error in message formatting code");};
+  const badFormatter = _ctx => _lvl => _msg => { throw new Error("error in message formatting code");};
   const oldFormatter = messageFormatter;
   setMessageFormatter(badFormatter);
 

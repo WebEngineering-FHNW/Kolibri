@@ -149,7 +149,7 @@ const full = limit =>
  */
 const append = type => msg => limit => evictionStrategy => {
   // evict the stack using the given evictionStrategy
-  logObservable = evictionStrategy(logObservable);
+  logObservable = /** @type {IObservable} */ evictionStrategy(logObservable);
   LazyIf(full(limit))
     ( () => {
       // if the stack is full, despite using the set eviction strategy, use the default eviction strategy to make space.

@@ -24,9 +24,9 @@ export { Attribute, QualifiedAttribute,
 
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
- * @template T
+ * @template _T_
  * @param {AttributeType<String>} attribute
- * @return T
+ * @return _T_
  */
 const valueOf = attribute => attribute.getObs(VALUE).getValue();
 
@@ -54,14 +54,14 @@ const presentationModelFromAttributeNames = attributeNames => {
 
 /**
  * @typedef ModelWorldType
- * @template T
- * @property { ( getQualifier:function():String, name:ObservableTypeString, observable: IObservable<T> ) => void } update -
+ * @template _T_
+ * @property { ( getQualifier:function():String, name:ObservableTypeString, observable: IObservable<_T_> ) => void } update -
  *              update the value of the named observableType for all attributes that have the same qualifier.
  *              Add the respective observable if it not yet known.
- * @property { (qualifier:String, newQualifier:String, observables:Object<String, IObservable<T>>) => void} updateQualifier -
+ * @property { (qualifier:String, newQualifier:String, observables:Object<String, IObservable<_T_>>) => void} updateQualifier -
  *              handle the change when an attribute changes its qualifier such that all respective
  *              internal indexes need to be updated, their values are updated, and nullish newQualifier leads to removal.
- * @property { (qualifier:String) => T} readQualifierValue
+ * @property { (qualifier:String) => _T_} readQualifierValue
  */
 
 /**
@@ -144,9 +144,9 @@ const readQualifierValue = modelWorld.readQualifierValue; // specific export
  * Convenience constructor of an {@link Attribute} that builds its initial value from already existing qualified values (if any)
  * instead of overriding possibly existing qualified values with the constructor value.
  * @constructor
- * @template T
+ * @template _T_
  * @param { String } qualifier - mandatory. Nullish values make no sense here since one can use {@link Attribute}.
- * @return { AttributeType<T> }
+ * @return { AttributeType<_T_> }
  * @impure since it changes the ModelWorld.
  * @example
  * const firstNameAttr = QualifiedAttribute("Person.4711.firstname"); // attr is set to existing values, if any.
@@ -155,17 +155,17 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
 
 /**
  * @callback Converter
- * @template T
+ * @template _T_
  * @param    { * } value - the raw value that is to be converted
- * @return   { T }     - the converted value
+ * @return   { _T_ }     - the converted value
  * @example
  * dateAttribute.setConverter( date => date.toISOString() ); // external: Date, internal: String
  */
 
 /**
  * @callback Validator
- * @template T
- * @param    { T } value
+ * @template _T_
+ * @param    { _T_ } value
  * @return   { Boolean } - whether the given value is considered valid.
  * @example
  * dateAttribute.setValidator( date => date > Date.now()); // only future dates are considered valid
@@ -173,16 +173,16 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
 
 /**
  * @typedef  AttributeType
- * @template T
+ * @template _T_
  * @property { (name:ObservableTypeString, initValue:*=null) => IObservable} getObs - returns the {@link IObservable}
  *              for the given name and creates a new one if needed with the optional initValue.
- *              The initValue is of type T for the VALUE observable can be different for others, e.g. the
+ *              The initValue is of type _T_ for the VALUE observable can be different for others, e.g. the
  *              VALID observable is of type Boolean.
  * @property { (name:ObservableTypeString) =>  Boolean } hasObs - true if an {@link Observable}
  *              for the given name has already been created, false otherwise.
  * @property { (value:*) => void } setConvertedValue - sets the value for the {@link VALUE} observable
- *              after piping the value through the optional converter. The value is not of type T since
- *              the converter might convert any type to T.
+ *              after piping the value through the optional converter. The value is not of type _T_ since
+ *              the converter might convert any type to _T_.
  * @property { (converter:!Converter) => void } setConverter - use specialized converter, default is {@link id},
  *              converters are not allowed to be nullish.
  *              There can only ever be at most one converter on an attribute.
@@ -196,12 +196,12 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
  */
 /**
  * Constructor that creates a new attribute with a value and an optional qualifier.
- * @template T
- * @param  { T } value              - the initial value
+ * @template _T_
+ * @param  { _T_ } value              - the initial value
  * @param  { String } [qualifier]   - the optional qualifier. If provided and non-nullish it will put the attribute
  *          in the ModelWorld and all existing attributes with the same qualifier will be updated to the initial value.
  *          In case that the automatic update is to be omitted, consider using {@link QualifiedAttribute}.
- * @return { AttributeType<T> }
+ * @return { AttributeType<_T_> }
  * @constructor
  * @impure since it changes the ModelWorld in case of a given non-nullish qualifier.
  * @example
@@ -223,9 +223,9 @@ const Attribute = (value, qualifier) => {
 
     const makeObservable = (name, initValue) => {
 
-        const observable = Observable(initValue); // we might observe more types than just T, for example VALID: Boolean
+        const observable = Observable(initValue); // we might observe more types than just _T_, for example VALID: Boolean
 
-        // noinspection JSValidateTypes // issue with T as generic parameter for the observed value and other observed types
+        // noinspection JSValidateTypes // issue with _T_ as generic parameter for the observed value and other observed types
         observables[name] = observable;
         // noinspection JSCheckFunctionSignatures
         observable.onChange( _ => modelWorld.update(getQualifier, name, observable) );

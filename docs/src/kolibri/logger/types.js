@@ -14,24 +14,6 @@
  */
 
 /**
- * @typedef ProducerType
- * @template _U_
- * @type { (...x) => _U_ }
- */
-
-/**
- * @typedef ConsumerType
- * @template _T_
- * @type { (_T_) => void }
- */
-
-/**
- * @typedef UnaryOperatorType
- * @template _T_
- * @type { (_T_) => _T_ }
- */
-
-/**
  * LogMe is something that can be logged.
  * It represents a log message.
  * To log a simple message, just use a {@link String}.
