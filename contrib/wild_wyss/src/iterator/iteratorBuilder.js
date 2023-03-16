@@ -14,7 +14,7 @@ const IteratorBuilder = (start = emptyIterator) => {
     return builder;
   };
 
-  const build = () => InternalBuilder(elements);
+  const build   = () => InternalBuilder(elements);
 
   const builder = { append, prepend, build };
 
@@ -22,30 +22,35 @@ const IteratorBuilder = (start = emptyIterator) => {
 };
 
 const InternalBuilder = (elements, currentIdx = 0) => {
-
   let currentIterator = emptyIterator;
+
   const next = () => {
     // early return, if all elements have been processed
-    if(currentIdx === elements.length) return { done: true, value: undefined };
+    if (currentIdx === elements.length) return { done: true, value: undefined };
 
     const value = elements[currentIdx];
-    if(!value ||  value[Symbol.iterator] === undefined){
+
+    if (!isIterable(value)) {
       currentIdx++;
       return { done: false, value };
-    } else {
-      if(currentIterator === emptyIterator) currentIterator = value.copy();
-      const result = nextOf(currentIterator);
-
-      if(result.done) {
-        currentIterator = emptyIterator;
-        currentIdx++;
-        return next();
-      }
-      return result;
     }
+
+    if (currentIterator === emptyIterator) currentIterator = value.copy(); // defensively copy the iterator
+    const result = nextOf(currentIterator);
+
+    if (result.done) {
+      currentIterator = emptyIterator;
+      currentIdx++;
+      return next();
+    }
+
+    return result;
   };
+
   return {
     [Symbol.iterator]: () => ({ next }),
     copy: () => InternalBuilder(elements, currentIdx),
   }
 };
+
+const isIterable = value => value && value[Symbol.iterator] !== undefined;
