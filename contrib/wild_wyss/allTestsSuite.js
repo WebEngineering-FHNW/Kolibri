@@ -13,6 +13,7 @@ import "./src/logger/logUi/logUiControllerTest.js"
 import "./src/iterator/iteratorTest.js"
 import "./src/iterator/intermediateOperationsTest.js"
 import "./src/iterator/terminalOperationsTest.js"
+import "./src/iterator/iteratorBuilderTest.js"
 
 // range
 import "./src/range/rangeTest.js"

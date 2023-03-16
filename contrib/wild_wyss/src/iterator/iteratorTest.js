@@ -1,7 +1,8 @@
-import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
-import { arrayEq }   from "../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { Tuple }     from "../../../../docs/src/kolibri/stdlib.js";
-
+import { TestSuite }        from "../../../../docs/src/kolibri/util/test.js";
+import { arrayEq }          from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { Tuple }            from "../../../../docs/src/kolibri/stdlib.js";
+import { map, retainAll }   from "./intermediateOperations.js";
+import { emptyStack, push } from "../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import {
   pipe,
   Iterator,
@@ -9,16 +10,8 @@ import {
   TupleIterator,
   ConcatIterator,
   StackIterator,
-  IteratorBuilder, emptyIterator,
+  emptyIterator,
 } from "./iterator.js"
-
-import {
-  map, mconcat,
-  retainAll, take,
-} from "./intermediateOperations.js";
-
-import {emptyStack, push } from "../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import {Range} from "../range/range.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
@@ -175,24 +168,6 @@ iteratorSuite.add("test copy: StackIterator", assert => {
   const copy = stackIterator.copy();
   for (const _ of stackIterator) { /* Exhausting */ }
   assert.is(arrayEq([3,2,1])([...copy]), true);
-});
-
-iteratorSuite.add("test iterator builder", assert => {
-  const builder = IteratorBuilder();
-  builder.add(1);
-  builder.add(2, 3);
-  const it = builder.build();
-  assert.is(arrayEq([1,2,3])([...it]), true);
-});
-
-iteratorSuite.add("test iterator builder", assert => {
-  const iterator = Range(1, 3);
-  const builder = IteratorBuilder();
-  builder.add(0);
-  builder.add(iterator);
-  builder.add(4);
-  const it = builder.build();
-  assert.is(arrayEq([0,1,2,3,4])([...it]), true);
 });
 
 iteratorSuite.run();
