@@ -1,12 +1,11 @@
 import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
-import { arrayEq } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { arrayEq }   from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 import { ArrayIterator, emptyIterator, Iterator } from "./iterator.js"
 import { Pair, fst, snd } from "../../../../docs/src/kolibri/stdlib.js";
 
 
 import {
-  concat$,
   cons,
   cycle,
   drop,
@@ -98,7 +97,7 @@ const testCBNotCalledAfterDone = op => callback => assert => {
   const operated = op(el => {
     // since this iterator is empty, called should never be set to true
     called = true;
-    return callback(el)
+    return callback(el);
   })(it);
 
   for (const _ of operated) { /* exhausting */ }
@@ -143,8 +142,6 @@ const expectedZipResult = [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(
   ["drop",          drop(2),                           [2, 3, 4],                 ],
   ["take",          take(2),                           [0, 1],                    ],
   ["reverse$",      reverse$,                          [4, 3, 2, 1, 0],           ],
-  ["concat$ (fst)", concat$(newIterator(1)),           [0, 1, 0, 1, 2, 3, 4],     ],
-  ["concat$ (snd)", it => concat$(it)(newIterator(1)), [0, 1, 2, 3, 4, 0, 1],     ],
   ["cons",          cons(2),                           [2, 0, 1, 2, 3, 4],        ],
   ["mconcat",       mconcatInit,                       [0, 1, 2, 0, 1, 2, 0, 1, 2]],
   ["cycle",         cycleInit,                         [0, 1, 2, 0, 1, 2, 0, 1, 2]],

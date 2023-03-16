@@ -17,7 +17,6 @@ export {
   dropWhile,
   drop,
   reverse$,
-  concat$,
   cons,
   takeWhile,
   take,
@@ -174,23 +173,6 @@ const reverse$ = iterator => {
 
   return ArrayIterator(values);
 };
-
-/**
- * Adds the second iterator to the first iterators end.
- * @function
- * @template _T_
- * @pure it1 and it2 will be copied defensively
- * @type {
- *             (it1: IteratorType<_T_>)
- *          => (it2: IteratorType<_T_>)
- *          => IteratorType<_T_>
- *       }
- * @example
- * const it1     = Iterator(0, inc, stop);
- * const it2     = Iterator(0, inc, stop);
- * const concat = concat$(it1)(it2);
- */
-const concat$ = it1 => it2 => ArrayIterator([...it1.copy(), ...it2.copy()]);
 
 /**
  * Adds the given element to the front of the iterator.
