@@ -1,9 +1,9 @@
 export { LogUiModel }
 
-import { Appender }   from "../appender/observableAppender.js";
+import { Appender as ArrayAppender }   from "../appender/arrayAppender.js";
+import { Appender as ObservableAppender }   from "../appender/observableAppender.js";
 import { Observable } from "../../observable.js";
-import { filter } from "../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
-import { Pair }   from "../../lambda/church.js"
+import {Pair, snd}    from "../../lambda/church.js"
 import {
   LOG_DEBUG,
   LOG_ERROR,
@@ -11,7 +11,7 @@ import {
   LOG_INFO,
   LOG_TRACE,
   LOG_WARN
-}                 from "../logger.js";
+}                     from "../logger.js";
 
 /**
  * The model manages the data held in the observable.
@@ -21,7 +21,12 @@ import {
  */
 const LogUiModel = () => {
 
-  const appender = Appender();
+  let logListener = loglevel => {
+    console.log("default LogListener called with " + loglevel(snd));
+  };
+
+  const arrayAppender      = ArrayAppender();
+  const observableAppender = ObservableAppender(arrayAppender)( logListener );
 
   const levels = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL];
   const logLevelFilterStates = Observable( levels.map(level => Pair(level)(true)));
@@ -42,12 +47,12 @@ const LogUiModel = () => {
    * @param { (PairSelectorType) => LogLevelType | String } predicate
    */
   const filterAndNotify = predicate => {
-    const stack     = appender.getValue().getValue();
-    const filtered  =  filter(predicate)(stack);
+    const array     = observableAppender.getValue();
+    const filtered  = array.filter( pair => pair(predicate));
     messageListeners.forEach(cb => cb(filtered));
   };
 
-  return /** @type {LogUiModelType} */{
+  return /** @type {LogUiModelType} */ {
     onChangeActiveLogLevel: logLevelFilterStates.onChange,
     setActiveLogLevel:      logLevelFilterStates.setValue,
 
@@ -58,8 +63,8 @@ const LogUiModel = () => {
     getTextFilter:          filterText.getValue,
 
     onMessagesChange:       onFilteredMessagesChange,
-    onNewLogMessage:        appender.getValue().onChange,
-    resetLogMessages:       appender.reset,
+    onNewLogMessage:        newListener => logListener = newListener,
+    resetLogMessages:       observableAppender.reset,
 
     filterAndNotify,
   }

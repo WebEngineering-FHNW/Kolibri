@@ -26,15 +26,15 @@
  * Provides appender for loglevel types  "trace", "debug", "info", "warn", "error" & "fatal".
  * Some appender may have a result, that can be collected using the getValue function.
  * @typedef { object } AppenderType
- * @template MyTemplate
+ * @template _ValueType_
  * @property { AppendCallback } trace - Defines the appending strategy for the {@link LOG_TRACE}-level messages.
  * @property { AppendCallback } debug - Defines the appending strategy for the {@link LOG_DEBUG}-level messages.
  * @property { AppendCallback } info  - Defines the appending strategy for the {@link LOG_INFO}-level messages.
  * @property { AppendCallback } warn  - Defines the appending strategy for the {@link LOG_WARN}-level messages.
  * @property { AppendCallback } error - Defines the appending strategy for the {@link LOG_ERROR}-level messages.
  * @property { AppendCallback } fatal - Defines the appending strategy for the {@link LOG_FATAL}-level messages.
- * @property { function(String=): MyTemplate} getValue - Some appender may produce a result, that can be collected using getValue.
- * @property { function(): MyTemplate } reset - Clean up the appender result. The next call of getValue returns the default value.
+ * @property { function(String=): _ValueType_} getValue - Some appender may produce a result, that can be collected using getValue.
+ * @property { function(): _ValueType_ } reset - Clean up the appender result. The next call of getValue returns the default value.
  */
 
 /**

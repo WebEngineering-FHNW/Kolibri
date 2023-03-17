@@ -1,113 +1,33 @@
-import {Appender}               from "./observableAppender.js";
-import {TestSuite}              from "../../util/test.js";
-import {id, snd, T}             from "../../lambda/church.js";
-import {jsNum}                  from "../../lambda/churchNumbers.js";
-// todo dk: get rid of contrib dependency
-import {emptyStack, head, size} from "../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
+import {Appender as ArrayAppender}      from "./arrayAppender.js";
+import {Appender as ObservableAppender} from "./observableAppender.js";
+import {TestSuite}                      from "../../util/test.js";
+import {LOG_DEBUG, LOG_NOTHING}         from "../logger.js";
 
-const msg1 = "Andri Wild";
-const msg2 = "Tobias Wyss";
+const msg1 = "Some Log Message";
 
 const observableAppenderSuite = TestSuite("Observable Appender");
-const { trace, debug, getValue, reset } = Appender();
 
-/**
- *
- * @param   { IObservable } observable
- * @returns { number }
- */
-const stackSize = observable => jsNum(size(observable.getValue()));
-/**
- *
- * @param   { IObservable } observable
- * @returns { String }
- */
-const obsHead = observable => head(observable.getValue())(snd); // TODO: Update head documentation (return value)
-
-observableAppenderSuite.add("test add debug log to observable appender", assert => {
-  const obs     = getValue();
-  const result  = debug("debug");
-  assert.is(result, T);
-  assert.is(obsHead(obs), "debug");
-  // does the stack contain exactly one element?
-  assert.is(stackSize(obs), 1);
-  reset();
+const arrayAppender      = ArrayAppender();
+let level;
+let msg;
+const observableAppender = ObservableAppender(arrayAppender)((newLevel, newMsg) => {
+    level = newLevel;
+    msg   = newMsg;
 });
+const {debug, getValue, reset} = observableAppender;
 
-observableAppenderSuite.add("The whole stack should be retrieved when observing", assert => {
-  const obs     = getValue();
-  const result  = debug("debug");
-  assert.is(obsHead(obs), "debug");
-  assert.is(result, T);
-
-  const result2 = trace("trace");
-  assert.is(result2, T);
-  assert.is(obsHead(obs), "trace");
-  // The stack should contain two elements
-  assert.is(stackSize(obs), 2);
-  reset();
-});
-
-observableAppenderSuite.add("The reset function should clear the stack", assert => {
-  const obs = getValue();
-  debug("debug");
-
-  const lastStack = reset();
-  // does the stack contain no elements after reset?
-  assert.is(stackSize(obs), 0);
-  // Is the previous log message in the stack returned by reset?
-  assert.is(obsHead(lastStack), "debug")
-});
-
-observableAppenderSuite.add("test default appender overflow implementation", assert => {
-  // limit will be lifted to at least 2
-  const {trace, getValue: getObservable, reset} = Appender(1);
-  const result = trace(msg1);
-  assert.is(stackSize(getObservable()), 1);
-  assert.is(result, T);
-
-  const result2 = trace(msg1);
-  assert.is(stackSize(getObservable()), 2);
-  assert.is(result2, T);
-
-  // should trigger cache eviction & delete first element
-  const result3 = trace(msg2);
-  assert.is(stackSize(getObservable()), 1);
-  assert.is(obsHead(getObservable()), msg2);
-  assert.is(result3, T);
-  reset();
-});
-
-observableAppenderSuite.add("test custom limit implementation", assert => {
-  let value;
-  const onLimitReached = obs => {
-    value = obs.getValue();
-    obs.setValue(emptyStack);
-    return obs;
-  };
-  const {trace, reset, getValue: getObservable} = Appender(1, onLimitReached);
-  trace(msg1);
-  trace(msg1);
-  trace(msg2);
-  assert.is(jsNum(size(value)), 2);
-  assert.is(jsNum(size(value)), 2);
-  assert.is(obsHead(getObservable()), msg2);
-  assert.is(stackSize(getObservable()), 1);
-  reset();
-});
-
-observableAppenderSuite.add(
-  "test appender should fallback to default eviction strategy, if array reaches limit and has not been cleaned up.",
-  assert => {
-    const {trace, getValue: getObservable, reset} = Appender(2, id);
-    trace(msg1);
-    trace(msg1);
-
-    // should trigger default eviction strategy on next log statement
-    trace(msg2);
-    assert.is(stackSize(getObservable()), 2);
-    assert.is(obsHead(getObservable()), msg2);
+observableAppenderSuite.add("Observable Appender setup", assert => {
+    assert.is(level, undefined);
+    assert.is(msg, undefined);
+    assert.is(arrayAppender.getValue().length, 0);
+    debug(msg1);
+    assert.is(level, LOG_DEBUG);
+    assert.is(msg, msg1);
+    assert.is(arrayAppender.getValue().length, 1);
+    assert.is(arrayAppender.getValue(), observableAppender.getValue());
     reset();
-  });
+    assert.is(level, LOG_NOTHING);
+    assert.is(getValue().length, 0);
+});
 
 observableAppenderSuite.run();
