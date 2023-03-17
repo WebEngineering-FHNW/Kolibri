@@ -1,22 +1,21 @@
-import {projectDebounceInput} from "../../projector/simpleForm/simpleInputProjector.js";
+import {projectDebounceInput}                     from "../../projector/simpleForm/simpleInputProjector.js";
+import {dom}                                      from "../../util/dom.js";
+import {shadowCss}                                from "../../style/kolibriStyle.js";
+import {LogUiController}                          from "./logUiController.js";
+import {setLoggingContext}                        from "../logger.js";
+import {SimpleInputController}                    from "../../projector/simpleForm/simpleInputController.js";
+import {loggingSelectProjector}                   from "./logUiProjector.js";
+import {LogMessagesView, projectLogLevelControls} from "./logView.js";
 
 export { createLogUi }
-
-import { dom }                    from "../../util/dom.js"
-import { shadowCss }              from "../../style/kolibriStyle.js";
-import { LogUiController }        from "./logUiController.js";
-import { setLoggingContext }      from "../logger.js";
-import { SimpleInputController }  from "../../projector/simpleForm/simpleInputController.js";
-import { loggingSelectProjector } from "./logUiProjector.js";
-import { LogMessagesView, projectLogLevelControls } from "./logView.js";
-
 
 /**
  * Creates the log ui on a given html element.
  *
  * @param { HTMLElement } rootElement
+ * @param { String }      cssStyleUrl - url to the css file that is used for styling the log ui
  */
-const createLogUi = rootElement => {
+const createLogUi = (rootElement, cssStyleUrl) => {
 
   rootElement.classList.add("container");
 
@@ -56,7 +55,7 @@ const createLogUi = rootElement => {
   filterSection.append(loggerLevelFilterRoot);
 
   const styleRoot = document.createElement("STYLE");
-  styles(styleRoot);
+  styleRoot.innerHTML = ` @import "${cssStyleUrl}"; /* inserted by createLogUi.js */ `;
 
   rootElement.append(
       styleRoot,
@@ -66,9 +65,5 @@ const createLogUi = rootElement => {
   );
 };
 
-const styles = styleElement => {
 
-  styleElement.innerHTML = `
-      @import "../logUi.css";
-  `
-};
+

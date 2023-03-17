@@ -20,7 +20,7 @@ const logger2 = LoggerFactory("ch.fhnw.ip5");
 
 const container = document.getElementById("container");
 
-createLogUi(container);
+createLogUi(container, "../../../css/kolibri-logging-control.css");
 
 setInterval(() => {
   const loggers = [
