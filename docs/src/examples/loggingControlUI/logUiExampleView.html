@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ui Logger Example Page</title>
+    <title>Logging Control</title>
     <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
     <link rel="stylesheet"    type="text/css"  href="../../../css/kolibri-base.css">
     <style>
         .sidebar {
+            --sidebar-width: 50em;
             position: absolute;
             background: white;
             top: 0;
             height: 100%;
-            right: -605px;
-            width: 600px;
+            right: calc(var(--sidebar-width) * -1);
+            width: var(--sidebar-width);
             padding: 20px;
             transition: 0.3s;
             border-left: 3px solid var(--kolibri-color-shadow);
@@ -66,7 +67,7 @@
 </head>
 <body>
     <div class="sidebar" id="sidebar" >
-        <div><h2>Ui Logger</h2></div>
+        <div><h2>Logging Control Panel</h2></div>
         <div class="toggleButton" id="btn" onclick="move()">
             <img src="../../../img/logo/logo.svg" alt="kolibri-logo" id="sliderButton" />
         </div>

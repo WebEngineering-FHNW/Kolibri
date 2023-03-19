@@ -1,105 +1,82 @@
-export { LogUiController }
-
-import { LogUiModel }       from "./logUiModel.js";
-import { fst, snd, Pair }   from "../../lambda/church.js";
+import { Appender as CountAppender }              from "../appender/countAppender.js";
+import { Appender as ObservableAppender }                            from "../appender/observableAppender.js";
+import {addToAppenderList, getLoggingContext, getLoggingLevel, name} from "../logger.js";
 import {
   LOG_DEBUG,
   LOG_ERROR,
   LOG_FATAL,
-  LOG_INFO,
+  LOG_INFO, LOG_NOTHING,
   LOG_TRACE,
   LOG_WARN,
   setLoggingContext,
   setLoggingLevel
-} from "../logger.js";
+}                                                                    from "../logger.js";
+import {SimpleInputController} from "../../projector/simpleForm/simpleInputController.js";
+import {Observable}            from "../../observable.js";
+
+export { LogUiController }
+/**
+ * @typedef LogUiControllerType
+ * @property { SimpleInputControllerType<String> } loggingContextController
+ * @property { SimpleInputControllerType<String> } loggingLevelController
+ * @property { SimpleInputControllerType<String> } lastLogMessageController
+ */
 
 /**
  * Processes the actions from the user interface and manages the model.
- *
- * @return  { LogUiControllerType }
+ * It allows the view to bind against the model.
+ * @return { LogUiControllerType }
  * @constructor
+ * @impure It adds an observable appender to the list of appenders.
  */
 const LogUiController = () => {
 
-  const model = LogUiModel();
+  const loggingContextController = SimpleInputController({
+    value:  getLoggingContext(),
+    label:  "Logging Context",
+    name:   "loggingContext",
+    type:   "text",
+  });
 
-  /**
-   * Set a new state of a given {@link LogLevelType}.
-   * @param { LogLevelFilterType } logLevelToFlip
-   */
-  const flipLogLevel = logLevelToFlip => {
-    const allLogLevels = updateLogLevelState(logLevelToFlip);
-    model.setActiveLogLevel(allLogLevels);
+  const loggingLevelController = SimpleInputController({
+    value:  getLoggingLevel()(name),
+    label:  "Logging Level",
+    name:   "loggingLevel",
+    type:   "text", // well, it's a select, but we don't have a select controller yet
+  });
+  // when the string of the context changes, we need to update the global logging context
+  loggingContextController.onValueChanged(contextStr => setLoggingContext(contextStr));
+
+  const lastLogMessageController = SimpleInputController({
+    value:  "no message, yet",
+    label:  "Last Log Message",
+    name:   "lastLogMessage",
+    type:   "text",
+  });
+  const observableAppender = ObservableAppender(CountAppender())((level, msg) => {
+    lastLogMessageController.setValue(msg);
+  });
+  addToAppenderList(observableAppender);
+
+  const setLoggingLevelByString = levelStr => {
+    switch (levelStr) {
+      case LOG_TRACE  (name):  setLoggingLevel(LOG_TRACE  ); break;
+      case LOG_DEBUG  (name):  setLoggingLevel(LOG_DEBUG  ); break;
+      case LOG_INFO   (name):  setLoggingLevel(LOG_INFO   ); break;
+      case LOG_WARN   (name):  setLoggingLevel(LOG_WARN   ); break;
+      case LOG_ERROR  (name):  setLoggingLevel(LOG_ERROR  ); break;
+      case LOG_FATAL  (name):  setLoggingLevel(LOG_FATAL  ); break;
+      case LOG_NOTHING(name):  setLoggingLevel(LOG_NOTHING); break;
+      default: throw new Error(`Unknown logging level: ${levelStr}`);
+    }
   };
-
-  /**
-   * Changes the state of a given {@link LogLevelType}.
-   * @param { LogLevelFilterType } logLevelToFlip
-   */
-  const updateLogLevelState = logLevelToFlip =>
-      model.getAvailableLogLevels().map(
-          logLevel => logLevel(fst) === logLevelToFlip(fst)
-              ? Pair(logLevel(fst))(!logLevel(snd))
-              : logLevel
-      );
-
-  /**
-   * Checks whether a message matches the set filter.
-   * @param   { (PairSelectorType) => LogLevelType | String } levelMessagePair
-   * @return  { boolean }
-   */
-  const filter = levelMessagePair => {
-    const logLevel          = levelMessagePair(fst);
-    const levelLabel        = logLevel(snd);
-    const activeLogLevels   = model.getAvailableLogLevels()
-      .filter(level => true === level(snd))
-      .map(level => level(fst)(snd));
-
-    return activeLogLevels.includes(levelLabel)
-      && messageIncludes(levelMessagePair(snd));
-  };
-
-  /**
-   * Checks if a given text occurs in a log message.
-   * @param   { String } text
-   * @return  { boolean }
-   */
-  const messageIncludes = text => {
-    const textOfInterest  = model.getTextFilter().toLowerCase();
-    const logMessage      = text.toLowerCase();
-    return logMessage.includes(textOfInterest);
-  };
-
-  /**
-   * Sets the active logging level according to its string representation.
-   * @param { String } levelString
-   */
-  const setLoggingLevelByString = levelString => {
-    const newLoggingLevel = [LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL]
-        .filter(lvl => {
-          const lvlString =  /** @type String */ lvl(snd);
-          return lvlString === levelString;
-        });
-      setLoggingLevel(newLoggingLevel[0])
-  };
-
-  model.onNewLogMessage(        () => model.filterAndNotify(filter));
-  model.onChangeActiveLogLevel( () => model.filterAndNotify(filter));
-  model.onTextFilterChange(     () => model.filterAndNotify(filter));
+  // when the logging level string changes, we need to set the global logging level
+  loggingLevelController.onValueChanged(setLoggingLevelByString);
 
   return {
-    onChangeActiveLogLevel: model.onChangeActiveLogLevel,
-
-    onMessagesChange:       model.onMessagesChange,
-    resetLogMessages:       model.resetLogMessages,
-
-    onTextFilterChange:     model.onTextFilterChange,
-    setTextFilter:          model.setTextFilter,
-    getTextFilter:          model.getTextFilter,
-
-    setLoggingContext,
-    setLoggingLevelByString,
-    flipLogLevel,
+    loggingContextController,
+    loggingLevelController,
+    lastLogMessageController,
   }
 };
 

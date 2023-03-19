@@ -10,7 +10,7 @@ export { SimpleInputModel }
  * @property { !_T_ } value      - mandatory value, will become the input value, defaults to undefined
  * @property { ?String } label - optional label, defaults to undefined
  * @property { ?String } name  - optional name that reflects the name attribute of an input element, used in forms
- * @property { InputTypeString } type - optional type, allowed values are
+ * @property { ?InputTypeString } type - optional type, allowed values are
  *              the values of the HTML Input element's "type" attribute. Defaults to "text".
  */
 

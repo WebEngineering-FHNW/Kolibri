@@ -1,27 +1,27 @@
-import { Appender as ObservableAppender }         from "../../kolibri/logger/appender/observableAppender.js";
-import { Appender as ConsoleAppender } from "../../kolibri/logger/appender/consoleAppender.js";
-import { LoggerFactory }               from "../../kolibri/logger/loggerFactory.js";
-import { createLogUi }                 from "../../kolibri/logger/logUi/createLogUi.js";
-import { addToAppenderList, setMessageFormatter } from "../../kolibri/logger/logger.js";
+import {Appender as ConsoleAppender}            from "../../kolibri/logger/appender/consoleAppender.js";
+import {LoggerFactory}                          from "../../kolibri/logger/loggerFactory.js";
+import {logUiView}                              from "../../kolibri/logger/logUi/logUiView.js";
+import {addToAppenderList, setMessageFormatter} from "../../kolibri/logger/logger.js";
+import {LogUiController}                        from "../../kolibri/logger/logUi/logUiController.js";
 
-const consoleAppender     = ConsoleAppender();
-const observableAppender  = ObservableAppender();
-
+// note: this might later be modifiable through the UI
 const formatLogMsg = context => logLevel => logMessage => {
   const date = new Date().toISOString();
   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
 };
 
+// assume we have same logging configuration that we want to control
 setMessageFormatter(formatLogMsg);
-addToAppenderList(observableAppender, consoleAppender);
+addToAppenderList(ConsoleAppender());
 
+// create the UI that allows to control the logging
+const controller  = LogUiController();
+const container   = document.getElementById("container");
+logUiView(controller, container, "../../../css/kolibri-logging-control.css");
+
+// create some random log messages on different loggers with different log levels and messages, just for demo purposes
 const logger1 = LoggerFactory("ch.fhnw");
 const logger2 = LoggerFactory("ch.fhnw.ip5");
-
-const container = document.getElementById("container");
-
-createLogUi(container, "../../../css/kolibri-logging-control.css");
-
 setInterval(() => {
   const loggers = [
       logger1.trace, logger1.debug, logger1.info, logger1.warn, logger1.error, logger1.fatal,

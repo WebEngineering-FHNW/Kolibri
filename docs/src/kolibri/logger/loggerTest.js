@@ -18,7 +18,7 @@ import {
 
 const logMessage  = "log message from loggerTest.js";
 
-const beforeStart = () => {
+const beforeStart = () => {  // todo dk: the logger tests have to reset the logging level after each test
   const appender = ArrayAppender();
   appender.reset();
   setLoggingContext("ch.fhnw.test");

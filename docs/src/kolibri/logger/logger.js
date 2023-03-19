@@ -26,19 +26,28 @@ export {
   getAppenderList,
   setMessageFormatter,
   messageFormatter,
+  levelNum,
+  name
 }
 
 /**
- * Getter for the church numeral value of a log level.
+ * Alias for the use of the {@link Pair} constructor as a {@link LogLevelType}.
+ * @type { LogLevelType }
  * @private
+ */
+const LogLevel = Pair;
+
+/**
+ * Getter for the church numeral value of a log level.
+ * @type { (LogLevelType) => ChurchNumberType }
  */
 const levelNum = fst;
 
 /**
  * Getter for the name of a log level.
- * @private
+ * @type { (LogLevelType) => String }
  */
-const name = snd;
+const name = /** @type { (LogLevelType) => String } */ snd;
 
 /**
  * Yields a configured log function called "logger".
@@ -152,47 +161,47 @@ const evaluateMessage = msg => msg instanceof Function ? msg() : msg;
  * The logging level "trace"
  * @returns { LogLevelType }
  */
-const LOG_TRACE = Pair(n0)("TRACE");
+const LOG_TRACE = LogLevel(n0)("TRACE");
 
 /**
  * The logging level "debug"
  * @returns { LogLevelType }
  */
-const LOG_DEBUG = Pair(n1)("DEBUG");
+const LOG_DEBUG = LogLevel(n1)("DEBUG");
 
 /**
  * The logging level "info"
  * @returns { LogLevelType }
  */
-const LOG_INFO = Pair(n2)("INFO");
+const LOG_INFO = LogLevel(n2)("INFO");
 
 /**
  * The logging level "warn"
  * @returns { LogLevelType }
  */
-const LOG_WARN = Pair(n3)("WARN");
+const LOG_WARN = LogLevel(n3)("WARN");
 
 /**
  * The logging level "error"
  * @returns { LogLevelType }
  */
-const LOG_ERROR = Pair(n4)("ERROR");
+const LOG_ERROR = LogLevel(n4)("ERROR");
 
 /**
  * The logging level "fatal"
  * @returns { LogLevelType }
  */
-const LOG_FATAL = Pair(n5)("FATAL");
+const LOG_FATAL = LogLevel(n5)("FATAL");
 
 /**
  * The logging level "nothing".
  * Disables the logging level completely.
  * @returns { LogLevelType }
  */
-const LOG_NOTHING = Pair(n9)("NOTHING");
+const LOG_NOTHING = LogLevel(n9)("NOTHING");
 
 /**
- * @typedef { LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL, LOG_NOTHING} LogLevelChoice
+ * @typedef { LOG_TRACE | LOG_DEBUG | LOG_INFO | LOG_WARN | LOG_ERROR | LOG_FATAL | LOG_NOTHING } LogLevelChoice
  */
 
 /**
@@ -314,7 +323,7 @@ const getLoggingContext = () => loggingContext;
  * @type { LogLevelType }
  * @private
  */
-let loggingLevel = LOG_DEBUG;
+let loggingLevel = LOG_DEBUG;  // todo dk: we should have LOG_NOTHING as default
 
 /**
  * This function can be used to set the logging level for the logging framework.
