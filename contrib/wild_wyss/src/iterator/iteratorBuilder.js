@@ -1,6 +1,9 @@
 export { IteratorBuilder }
 import { emptyIterator, nextOf } from "./iterator.js";
 
+
+const ALREADY_BUILT_ERROR = "Unsupported operation: Iterator has already been built!";
+
 /**
  * A mutable builder for an {@link IteratorType}.
  * This allows the creation of an {@link IteratorType} by generating elements individually and adding them to the Builder (without the copying overhead that comes from using {@link cons}).
@@ -17,6 +20,7 @@ import { emptyIterator, nextOf } from "./iterator.js";
  * @template _T_
  * @param  { IteratorType<_T_> } start
  * @returns { IteratorBuilderType<_T_> }
+ * @throws { string } if any method on this {@link IteratorBuilderType} is called when the iterator is in built phase.
  * @constructor
  * @example
  * const range = Range(3);
@@ -36,22 +40,30 @@ const IteratorBuilder = (start = emptyIterator) => {
   let built      = false;
 
   const append  = (...args) => {
-    if (!built) elements.push(...args);
+    checkIfBuilt();
+    elements.push(...args);
     return builder;
   };
 
   const prepend  = (...args) => {
-    if (!built) elements.unshift(...args);
+    checkIfBuilt();
+    elements.unshift(...args);
     return builder;
   };
 
   const build = () => {
-    if (built) return emptyIterator;
+    checkIfBuilt();
     built = true;
     return InternalIterator(elements);
   };
 
   const builder = { append, prepend, build };
+
+  const checkIfBuilt = () => {
+    if (built) {
+      throw new Error(ALREADY_BUILT_ERROR);
+    }
+  };
 
   return builder;
 };

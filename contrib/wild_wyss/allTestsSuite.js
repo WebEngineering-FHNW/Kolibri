@@ -21,8 +21,6 @@ import "./src/range/rangeTest.js"
 // focusring
 import "./src/focusring/focusRingTest.js"
 
-// import "./src/iterator/performanceTest.js"
-
-total.onChange( value => document.getElementById('grossTotal').textContent = "" + value + " tests done.");
+total.onChange(value => document.getElementById('grossTotal').textContent = "" + value + " tests done.");
 
 document.querySelector("footer").textContent = "Built with Kolibri " + versionInfo;

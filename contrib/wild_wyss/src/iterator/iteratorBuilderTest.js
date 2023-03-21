@@ -103,21 +103,42 @@ iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert =>
 iteratorBuilderSuite.add("test build two times: IteratorBuilder", assert => {
   const builder = IteratorBuilder(Range(3));
   const it1 = builder.build();
-  const it2 = builder.build();
+  try {
+    builder.build();
+    assert.isTrue(false); // should never be reached
+  } catch (e) {
+    assert.is(e.message, "Unsupported operation: Iterator has already been built!");
+  }
 
   assert.is(arrayEq([0,1,2,3])([...it1]), true);
-  assert.is(it2, emptyIterator);
 });
 
-iteratorBuilderSuite.add("test add after build: IteratorBuilder", assert => {
+iteratorBuilderSuite.add("test append after build: IteratorBuilder", assert => {
   const builder = IteratorBuilder(Range(3));
   const it1 = builder.build();
-  builder.append(4,5,6)
-    .prepend(-3 -2,-1);
-  const it2 = builder.build();
 
+  try {
+    builder.append(4,5,6)
+  } catch (e) {
+    assert.is(e.message, "Unsupported operation: Iterator has already been built!");
+  }
+
+  // nothing should happen to the previous built iterator
   assert.is(arrayEq([0,1,2,3])([...it1]), true);
-  assert.is(it2, emptyIterator);
+});
+
+iteratorBuilderSuite.add("test prepend after build: IteratorBuilder", assert => {
+  const builder = IteratorBuilder(Range(3));
+  const it1 = builder.build();
+
+  try {
+    builder.prepend(4,5,6)
+  } catch (e) {
+    assert.is(e.message, "Unsupported operation: Iterator has already been built!");
+  }
+
+  // nothing should happen to the previous built iterator
+  assert.is(arrayEq([0,1,2,3])([...it1]), true);
 });
 
 iteratorBuilderSuite.run();
