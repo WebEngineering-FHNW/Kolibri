@@ -48,7 +48,7 @@ const IteratorBuilder = (start = emptyIterator) => {
   const build = () => {
     if (built) return emptyIterator;
     built = true;
-    return InternalBuilder(elements);
+    return InternalIterator(elements);
   };
 
   const builder = { append, prepend, build };
@@ -57,13 +57,14 @@ const IteratorBuilder = (start = emptyIterator) => {
 };
 
 /**
+ * Creates an {@link IteratorType } from the given elements
  * @template _T_
- * @param   { ( _T_ | IteratorType<_T_>)[] } elements
- * @param   { ?Number }                       currentIdx
+ * @param   { ( _T_ | IteratorType<_T_>)[] }  elements   - these elements will be iterated
+ * @param   { ?Number }                       currentIdx - The index of the element that should be returned first
  * @returns { IteratorType<_T_> }
  * @constructor
  */
-const InternalBuilder = (elements, currentIdx = 0) => {
+const InternalIterator = (elements, currentIdx = 0) => {
   let currentIterator = emptyIterator;
 
   const next = () => {
@@ -95,7 +96,7 @@ const InternalBuilder = (elements, currentIdx = 0) => {
 
   return {
     [Symbol.iterator]: () => ({ next }),
-    copy: () => InternalBuilder(elements, currentIdx),
+    copy: () => InternalIterator(elements, currentIdx),
   }
 };
 
