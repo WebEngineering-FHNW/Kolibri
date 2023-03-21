@@ -11,7 +11,7 @@ import { emptyIterator, nextOf } from "./iterator.js";
  *
  * **Consider the following:**
  * - Passed {@link IteratorType} will not be copied automatically (to save performance). Copy them manually if needed.
- * - Build may only be called once. After the first time, build() returns an {@link emptyIterator}.
+ * - Build must only be called at most once. After the first time, build() returns an {@link emptyIterator}.
  * - After build has been called, no elements can be added.
  *
  * @template _T_
@@ -28,6 +28,10 @@ import { emptyIterator, nextOf } from "./iterator.js";
  * // [...it] === [0,1,2,3,4,5,6,7]
  */
 const IteratorBuilder = (start = emptyIterator) => {
+  /**
+   * @template _T_
+   * @type { Array<IteratorType<_T_> | _T_> }
+   */
   const elements = [start];
   let built      = false;
 
@@ -66,6 +70,10 @@ const InternalBuilder = (elements, currentIdx = 0) => {
     // early return, if all elements have been processed
     if (currentIdx === elements.length) return { done: true, value: undefined };
 
+    /**
+     * @template _T_
+     * @type {_T_| IteratorType<_T_>}
+     */
     const value = elements[currentIdx];
 
     if (!isIterable(value)) {
@@ -79,7 +87,7 @@ const InternalBuilder = (elements, currentIdx = 0) => {
     if (result.done) {
       currentIterator = emptyIterator;
       currentIdx++;
-      return next();
+      return next(); // recursive call, might be optimized later
     }
 
     return result;

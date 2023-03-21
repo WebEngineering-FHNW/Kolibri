@@ -40,7 +40,6 @@ iteratorBuilderSuite.add("test varargs: IteratorBuilder", assert => {
     .build();
   assert.is(arrayEq([0,1,2,3,4,5,6,7,8,9,10,11])([...it]), true);
 });
-// copy, empty, infinity, purity, combinations, undefined
 
 iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert => {
   const it = IteratorBuilder()
@@ -63,8 +62,10 @@ iteratorBuilderSuite.add("test copy index: IteratorBuilder", assert => {
   const it = IteratorBuilder()
     .append(1,2,3)
     .build();
-  for (const element of it) {
-    if(element === 2) break;
+  for (const element of it) { // take 2
+    if (element === 2) {
+      break;
+    }
   }
   const copy = it.copy();
   assert.is(arrayEq([3])([...copy]), true);
@@ -82,7 +83,12 @@ iteratorBuilderSuite.add("test infinity: IteratorBuilder", assert => {
     .append(sideEffect)
     .build();
 
-  for (const _ of it) if (counter++ > 10) break;
+  for (const _ of it) {
+    counter++;
+    if (counter > 10) {
+     break;
+    }
+  }
 
   assert.is(called, false);
 });
