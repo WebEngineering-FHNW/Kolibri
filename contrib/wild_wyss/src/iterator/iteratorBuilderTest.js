@@ -1,9 +1,8 @@
 import { arrayEq }          from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Range }            from "../range/range.js";
-import {emptyIterator, Iterator} from "./iterator.js";
+import { Iterator }         from "./iterator.js";
 import { TestSuite }        from "../../../../docs/src/kolibri/util/test.js";
 import { IteratorBuilder }  from "./iteratorBuilder.js";
-import {eq$} from "./terminalOperations.js";
 
 
 const iteratorBuilderSuite = TestSuite("IteratorBuilder");
@@ -13,12 +12,12 @@ iteratorBuilderSuite.add("test basic: IteratorBuilder", assert => {
     .append(1)
     .append(2, 3)
     .build();
-  assert.is(arrayEq([1,2,3])([...it]), true);
+  assert.isTrue(arrayEq([1,2,3])([...it]));
 });
 
 iteratorBuilderSuite.add("test no start iterator: IteratorBuilder", assert => {
   const iterator = IteratorBuilder().build();
-  assert.is(arrayEq([])([...iterator]), true);
+  assert.isTrue(arrayEq([])([...iterator]));
 });
 
 iteratorBuilderSuite.add("test add values and iterator: IteratorBuilder", assert => {
@@ -28,7 +27,7 @@ iteratorBuilderSuite.add("test add values and iterator: IteratorBuilder", assert
     .append(range)
     .append(4)
     .build();
-  assert.is(arrayEq([0,1,2,3,4])([...it]), true);
+  assert.isTrue(arrayEq([0,1,2,3,4])([...it]));
 });
 
 iteratorBuilderSuite.add("test varargs: IteratorBuilder", assert => {
@@ -38,7 +37,7 @@ iteratorBuilderSuite.add("test varargs: IteratorBuilder", assert => {
     .append(iterator,6,7,8)
     .append(9,10,11)
     .build();
-  assert.is(arrayEq([0,1,2,3,4,5,6,7,8,9,10,11])([...it]), true);
+  assert.isTrue(arrayEq([0,1,2,3,4,5,6,7,8,9,10,11])([...it]));
 });
 
 iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert => {
@@ -46,7 +45,7 @@ iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert =>
     .append(undefined)
     .append(null)
     .build();
-  assert.is(arrayEq([undefined, null])([...it]), true);
+  assert.isTrue(arrayEq([undefined, null])([...it]));
 });
 
 iteratorBuilderSuite.add("test copy: IteratorBuilder", assert => {
@@ -54,8 +53,8 @@ iteratorBuilderSuite.add("test copy: IteratorBuilder", assert => {
     .append(1,2,3)
     .build();
   const copy = it.copy();
-  assert.is(arrayEq([1,2,3])([...copy]), true);
-  assert.is(arrayEq([1,2,3])([...it]),   true);
+  assert.isTrue(arrayEq([1,2,3])([...copy]));
+  assert.isTrue(arrayEq([1,2,3])([...it]));
 });
 
 iteratorBuilderSuite.add("test copy index: IteratorBuilder", assert => {
@@ -68,8 +67,8 @@ iteratorBuilderSuite.add("test copy index: IteratorBuilder", assert => {
     }
   }
   const copy = it.copy();
-  assert.is(arrayEq([3])([...copy]), true);
-  assert.is(arrayEq([3])([...it]),   true);
+  assert.isTrue(arrayEq([3])([...copy]));
+  assert.isTrue(arrayEq([3])([...it]));
 });
 
 iteratorBuilderSuite.add("test infinity: IteratorBuilder", assert => {
@@ -97,7 +96,7 @@ iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert =>
   const it = IteratorBuilder(Range(3, 5))
     .prepend(0,1,2)
     .build();
-  assert.is(arrayEq([0,1,2,3,4,5])([...it]), true);
+  assert.isTrue(arrayEq([0,1,2,3,4,5])([...it]));
 });
 
 iteratorBuilderSuite.add("test build two times: IteratorBuilder", assert => {
@@ -110,7 +109,7 @@ iteratorBuilderSuite.add("test build two times: IteratorBuilder", assert => {
     assert.is(e.message, "Unsupported operation: Iterator has already been built!");
   }
 
-  assert.is(arrayEq([0,1,2,3])([...it1]), true);
+  assert.isTrue(arrayEq([0,1,2,3])([...it1]));
 });
 
 iteratorBuilderSuite.add("test append after build: IteratorBuilder", assert => {
@@ -124,7 +123,7 @@ iteratorBuilderSuite.add("test append after build: IteratorBuilder", assert => {
   }
 
   // nothing should happen to the previous built iterator
-  assert.is(arrayEq([0,1,2,3])([...it1]), true);
+  assert.isTrue(arrayEq([0,1,2,3])([...it1]));
 });
 
 iteratorBuilderSuite.add("test prepend after build: IteratorBuilder", assert => {
@@ -138,7 +137,7 @@ iteratorBuilderSuite.add("test prepend after build: IteratorBuilder", assert => 
   }
 
   // nothing should happen to the previous built iterator
-  assert.is(arrayEq([0,1,2,3])([...it1]), true);
+  assert.isTrue(arrayEq([0,1,2,3])([...it1]));
 });
 
 iteratorBuilderSuite.run();

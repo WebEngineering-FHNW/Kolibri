@@ -47,7 +47,7 @@ const UPPER_ITERATOR_BOUNDARY = 4;
 const testSimple = op => expected => (evalFn = arrayEq) => assert => {
   const it       = newIterator(UPPER_ITERATOR_BOUNDARY);
   const operated = op(it);
-  assert.is(evalFn([...expected])([...operated]), true)
+  assert.isTrue(evalFn([...expected])([...operated]));
 };
 
 /**
@@ -61,7 +61,7 @@ const testSimple = op => expected => (evalFn = arrayEq) => assert => {
 const testPurity = op => assert => {
   const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
   op(iterator);
-  assert.is(arrayEq([0,1,2,3,4])([...iterator]), true);
+  assert.isTrue(arrayEq([0,1,2,3,4])([...iterator]));
 };
 
 /**
@@ -78,7 +78,7 @@ const testCopy = op => (evalFn = arrayEq) => assert => {
   const expected = op(newIterator(UPPER_ITERATOR_BOUNDARY));
   const copied   = op(newIterator(UPPER_ITERATOR_BOUNDARY)).copy();
 
-  assert.is(evalFn([...expected])([...copied]), true);
+  assert.isTrue(evalFn([...expected])([...copied]));
 };
 
 /**
@@ -173,14 +173,14 @@ iteratorSuite.add("test advanced case: takeWhile inner iterator is shorter", ass
   // the inner iterator stops before the outer
   const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
   const some = takeWhile(_ => true)(iterator);
-  assert.is(arrayEq([0, 1, 2, 3, 4])([...some]), true);
+  assert.isTrue(arrayEq([0, 1, 2, 3, 4])([...some]));
 });
 
 iteratorSuite.add("test advanced case: dropWhile inner iterator is shorter", assert => {
   // the inner iterator stops before the outer
   const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
   const some = dropWhile(_ => false)(iterator);
-  assert.is(arrayEq([0, 1, 2, 3, 4])([...some]), true);
+  assert.isTrue(arrayEq([0, 1, 2, 3, 4])([...some]));
 });
 
 iteratorSuite.add("test advanced case: zipWith one iterator is shorter", assert => {
@@ -216,8 +216,8 @@ iteratorSuite.add("test left/right neutrality: mconcat", assert => {
   const left  = mconcat(ArrayIterator([emptyIterator, newIterator(UPPER_ITERATOR_BOUNDARY)]));
   const right = mconcat(ArrayIterator([newIterator(UPPER_ITERATOR_BOUNDARY), emptyIterator]));
   const expected = [0,1,2,3,4];
-  assert.is(arrayEq(expected)([...right]), true);
-  assert.is(arrayEq(expected)([...left]),  true);
+  assert.isTrue(arrayEq(expected)([...right]));
+  assert.isTrue(arrayEq(expected)([...left]));
 });
 
 iteratorSuite.add("test left/right associativity: mconcat", assert => {
@@ -227,8 +227,8 @@ iteratorSuite.add("test left/right associativity: mconcat", assert => {
   const left  = mconcat(ArrayIterator([mconcat(ArrayIterator([it1, it2])), it3]));
   const right = mconcat(ArrayIterator([it1, mconcat(ArrayIterator([it2, it3]))]));
   const expected = [0,1,0,1,2,0,1,2,3];
-  assert.is(arrayEq(expected)([...right]), true);
-  assert.is(arrayEq(expected)([...left]),  true);
+  assert.isTrue(arrayEq(expected)([...right]));
+  assert.isTrue(arrayEq(expected)([...left]));
 });
 
 iteratorSuite.add("test concat with infinity: mconcat", assert => {
@@ -247,6 +247,6 @@ iteratorSuite.add("test concat with infinity: mconcat", assert => {
 
 iteratorSuite.add("test empty: mconcat", assert => {
   const concatenated = mconcat(ArrayIterator([emptyIterator]));
-  assert.is(arrayEq([])([...concatenated]), true);
+  assert.isTrue(arrayEq([])([...concatenated]));
 });
 iteratorSuite.run();
