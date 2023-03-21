@@ -1,7 +1,6 @@
 import { TestSuite }        from "../../../../docs/src/kolibri/util/test.js";
 import { arrayEq }          from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Tuple }            from "../../../../docs/src/kolibri/stdlib.js";
-import { map, retainAll }   from "./intermediateOperations.js";
 import { emptyStack, push } from "../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import {
   pipe,
@@ -11,19 +10,21 @@ import {
   ConcatIterator,
   StackIterator,
   emptyIterator,
+  map,
+  retainAll,
 } from "./iterator.js"
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
 const iteratorSuite = TestSuite("Iterator");
 
-iteratorSuite.add("test typical case: Iterator", assert => {
+iteratorSuite.add("test typical case: Constructors", assert => {
   const iterator = Iterator(0, current => current + 1, current => current > 5);
   assert.is(arrayEq([0, 1, 2, 3, 4, 5])([...iterator]), true);
   assert.is(arrayEq([])([...iterator]), true);
 });
 
-iteratorSuite.add("test copy: Iterator", assert => {
+iteratorSuite.add("test copy: Constructors", assert => {
   const iterator = Iterator(0, current => current + 1, current => current > 5);
   const copy = iterator.copy();
   assert.is(arrayEq([0, 1, 2, 3, 4, 5])([...copy]), true);

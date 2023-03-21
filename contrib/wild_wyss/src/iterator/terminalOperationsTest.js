@@ -1,17 +1,17 @@
-import { TestSuite }                from "../../../../docs/src/kolibri/util/test.js";
-import { arrayEq }                  from "../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { fst, snd }                 from "../../../../docs/src/kolibri/stdlib.js";
-import { ArrayIterator, Iterator }  from "./iterator.js"
+import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
+import { arrayEq }   from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { fst, snd }  from "../../../../docs/src/kolibri/stdlib.js";
 import {
+  ArrayIterator,
+  Iterator,
   eq$,
   head,
   isEmpty,
   reduce$,
   forEach$,
-  uncons
-} from "./terminalOperations.js";
-
-import { map } from "./intermediateOperations.js";
+  uncons,
+  map,
+} from "./iterator.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 

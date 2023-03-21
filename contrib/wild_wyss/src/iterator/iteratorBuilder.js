@@ -2,7 +2,7 @@ export { IteratorBuilder }
 import { emptyIterator, nextOf } from "./iterator.js";
 
 
-const ALREADY_BUILT_ERROR = "Unsupported operation: Iterator has already been built!";
+const ALREADY_BUILT_ERROR = "Unsupported operation: Constructors has already been built!";
 
 /**
  * A mutable builder for an {@link IteratorType}.

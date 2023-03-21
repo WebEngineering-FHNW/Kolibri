@@ -23,8 +23,8 @@ export {
  *          => Boolean
  *       }
  * @example
- * const it1    = Iterator(0, inc, stop);
- * const it2    = Iterator(0, inc, stop);
+ * const it1    = Constructors(0, inc, stop);
+ * const it2    = Constructors(0, inc, stop);
  * const result = eq$(it1)(it2);
  */
 const eq$ = it1 => it2 =>
@@ -41,7 +41,7 @@ const eq$ = it1 => it2 =>
  *         => Boolean
  *       }
  * @example
- * const it     = Iterator(0, inc, stop);
+ * const it     = Constructors(0, inc, stop);
  * const result = isEmpty(it);
  */
 const isEmpty = iterator => head(iterator) === undefined;
@@ -92,7 +92,7 @@ const forEach$ = callback => iterator => {
  * @returns { (s: pairSelector) => (_T_ |IteratorType<_T_>) }
  * @pure iterator will be copied defensively
  * @example
- * const it     = Iterator(0, inc, stop);
+ * const it     = Constructors(0, inc, stop);
  * const result = uncons(it);
  * const head   = result(fst); // 0
  * const tail   = result(snd); // 1, 2, 3, ...
@@ -114,7 +114,7 @@ const uncons = iterator => {
  *          =>  _T_
  *       }
  * @example
- * const it     = Iterator(0, inc, stop);
+ * const it     = Constructors(0, inc, stop);
  * const result = head(it);
  */
 const head = iterator => {

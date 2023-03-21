@@ -1,8 +1,7 @@
-import { arrayEq }          from "../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { Range }            from "../range/range.js";
-import { Iterator }         from "./iterator.js";
-import { TestSuite }        from "../../../../docs/src/kolibri/util/test.js";
-import { IteratorBuilder }  from "./iteratorBuilder.js";
+import { arrayEq }                    from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { Range }                      from "../range/range.js";
+import { TestSuite }                  from "../../../../docs/src/kolibri/util/test.js";
+import { IteratorBuilder, Iterator }  from "./iterator.js";
 
 
 const iteratorBuilderSuite = TestSuite("IteratorBuilder");
@@ -106,7 +105,7 @@ iteratorBuilderSuite.add("test build two times: IteratorBuilder", assert => {
     builder.build();
     assert.isTrue(false); // should never be reached
   } catch (e) {
-    assert.is(e.message, "Unsupported operation: Iterator has already been built!");
+    assert.is(e.message, "Unsupported operation: Constructors has already been built!");
   }
 
   assert.isTrue(arrayEq([0,1,2,3])([...it1]));
@@ -119,7 +118,7 @@ iteratorBuilderSuite.add("test append after build: IteratorBuilder", assert => {
   try {
     builder.append(4,5,6)
   } catch (e) {
-    assert.is(e.message, "Unsupported operation: Iterator has already been built!");
+    assert.is(e.message, "Unsupported operation: Constructors has already been built!");
   }
 
   // nothing should happen to the previous built iterator
@@ -133,7 +132,7 @@ iteratorBuilderSuite.add("test prepend after build: IteratorBuilder", assert => 
   try {
     builder.prepend(4,5,6)
   } catch (e) {
-    assert.is(e.message, "Unsupported operation: Iterator has already been built!");
+    assert.is(e.message, "Unsupported operation: Constructors has already been built!");
   }
 
   // nothing should happen to the previous built iterator

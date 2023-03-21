@@ -1,8 +1,10 @@
-import { TestSuite }        from "../../../../docs/src/kolibri/util/test.js";
-import { emptyIterator }    from "./iterator.js";
-import { cons }             from "./intermediateOperations.js";
-import { reduce$ }          from "./terminalOperations.js";
-import { IteratorBuilder }  from "./iteratorBuilder.js";
+import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
+import {
+  cons,
+  reduce$,
+  IteratorBuilder,
+  emptyIterator,
+} from "./iterator.js";
 
 const performanceSuite = TestSuite("PerformanceTest");
 

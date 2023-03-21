@@ -5,9 +5,9 @@ import {
   createIterator,
   emptyIterator,
   nextOf,
+  reduce$,
 } from "./iterator.js";
 
-import { reduce$ } from "./terminalOperations.js";
 import { Pair } from "../../../../docs/src/kolibri/stdlib.js";
 
 export {
@@ -37,7 +37,7 @@ export {
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it     = Iterator(0, inc, stop);
+ * const it     = Constructors(0, inc, stop);
  * const mapped = map(el => el * 2)(it);
  */
 const map = mapper => iterator => {
@@ -63,7 +63,7 @@ const map = mapper => iterator => {
  *          => IteratorOperation<_T_>
  *       }
  * @example
- * const it     = Iterator(0, inc, stop);
+ * const it     = Constructors(0, inc, stop);
  * // just keep even numbers
  * const filtered = retainAll(el => el % 2 === 0)(it);
  */
@@ -93,7 +93,7 @@ const retainAll = predicate => iterator => {
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it     = Iterator(0, inc, stop);
+ * const it     = Constructors(0, inc, stop);
  * // reject even numbers
  * const filtered = retainAll(el => el % 2 === 0)(it);
  */
@@ -112,7 +112,7 @@ const rejectAll = predicate => iterator =>
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it      = Iterator(0, inc, stop);
+ * const it      = Constructors(0, inc, stop);
  * // discard all elements until one element is bigger or equal to 2.
  * const dropped = dropWhile(el => el < 2)(it);
  */
@@ -145,7 +145,7 @@ const dropWhile = predicate => iterator => {
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it      = Iterator(0, inc, stop);
+ * const it      = Constructors(0, inc, stop);
  * const dropped = drop(2)(it);
  */
 const drop = count => iterator => {
@@ -165,7 +165,7 @@ const drop = count => iterator => {
  *          => IteratorType<_T_>
  *       }
  * @example
- * const it       = Iterator(0, inc, stop);
+ * const it       = Constructors(0, inc, stop);
  * const reversed = reverse$(it);
  */
 const reverse$ = iterator => {
@@ -187,7 +187,7 @@ const reverse$ = iterator => {
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it       = Iterator(0, inc, stop);
+ * const it       = Constructors(0, inc, stop);
  * const element  = 1;
  * const iterator = cons(element)(it);
  */
@@ -215,7 +215,7 @@ const cons = element => iterator => {
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it      = Iterator(0, inc, stop);
+ * const it      = Constructors(0, inc, stop);
  * // keep all elements until one element is bigger or equal to 2.
  * const dropped = takeWhile(el => el < 2)(it);
  */
@@ -244,7 +244,7 @@ const takeWhile = predicate => iterator => {
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it      = Iterator(0, inc, stop);
+ * const it      = Constructors(0, inc, stop);
  * // only keep the next 4 elements, ignore the others
  * const dropped = take(4)(it);
  */

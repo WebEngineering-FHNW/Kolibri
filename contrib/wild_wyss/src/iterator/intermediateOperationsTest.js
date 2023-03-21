@@ -1,11 +1,13 @@
 import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
 import { arrayEq }   from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
-import { ArrayIterator, emptyIterator, Iterator } from "./iterator.js"
 import { Pair, fst, snd } from "../../../../docs/src/kolibri/stdlib.js";
 
 
 import {
+  ArrayIterator,
+  emptyIterator,
+  Iterator,
   cons,
   cycle,
   drop,
@@ -19,7 +21,7 @@ import {
   takeWhile,
   zip,
   zipWith,
-} from "./intermediateOperations.js";
+} from "./iterator.js";
 
 /**
  *
