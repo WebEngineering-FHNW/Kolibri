@@ -313,11 +313,12 @@ const cycle = iterator => {
  * @pure both iterators will be copied defensively
  * @template _T_
  * @template _U_
+ * @template _V_
  * @type {
- *             (zipper: BiFunction<_T_, _T_, _U_>)
+ *             (zipper: BiFunction<_T_, _U_, _V_>)
  *          => (it1: IteratorType<_T_>)
- *          => (it2: IteratorType<_T_>)
- *          => IteratorType<_U_>
+ *          => (it2: IteratorType<_U_>)
+ *          => IteratorType<_V_>
  * }
  * @example
  * const it1 = Range(2);
@@ -329,6 +330,10 @@ const cycle = iterator => {
 const zipWith = zipper => it1 => it2 => {
   const inner1 = it1.copy();
   const inner2 = it2.copy();
+  /**
+   * @template _V_
+   * @type _V_
+   * */
   let zippedValue;
 
   const next = () => {
@@ -340,6 +345,9 @@ const zipWith = zipper => it1 => it2 => {
 
     return {
       done:  done,
+      /**
+       * @template _V_
+       * @type _V_  */
       value: zippedValue
     };
   };
@@ -359,14 +367,20 @@ const zipWith = zipper => it1 => it2 => {
  * @template _U_
  * @type {
  *             (it1: IteratorType<_T_>)
- *          => (it2: IteratorType<_T_>)
- *          => IteratorType<_U_>
+ *          => (it2: IteratorType<_U_>)
+ *          => IteratorType<PairType>
  * }
- * @exampl
+ * @example
  * const it1 = Range(2);
  * const it2 = Range(2, 4);
- * const zipped = zipWith((i,j) => [i,j])(it1)(it2);
- * console.log(...zipped);
- * // prints: [0,2], [1,3], [2,4]
+ * const zipped = zip(it1)(it2);
+ * console.log([...zipped].map(snd));
+ * // prints: 2, 3, 4
  */
 const zip = it1 => it2 => zipWith((i,j) => Pair(i)(j))(it1)(it2);
+
+
+/**
+ * @see {@link Pair} to see how a Pair works.
+ * @typedef PairType
+ */
