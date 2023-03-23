@@ -116,7 +116,8 @@ iteratorBuilderSuite.add("test append after build: IteratorBuilder", assert => {
   const it1 = builder.build();
 
   try {
-    builder.append(4,5,6)
+    builder.append(4,5,6);
+    assert.isTrue(false); // should never be reached
   } catch (e) {
     assert.is(e.message, "Unsupported operation: Constructors has already been built!");
   }
@@ -130,7 +131,8 @@ iteratorBuilderSuite.add("test prepend after build: IteratorBuilder", assert => 
   const it1 = builder.build();
 
   try {
-    builder.prepend(4,5,6)
+    builder.prepend(4,5,6);
+    assert.isTrue(false); // should never be reached
   } catch (e) {
     assert.is(e.message, "Unsupported operation: Constructors has already been built!");
   }

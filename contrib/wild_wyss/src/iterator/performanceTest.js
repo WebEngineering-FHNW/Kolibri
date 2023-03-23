@@ -24,16 +24,17 @@ performanceSuite.add("compare IteratorBuilder and cons: IteratorBuilder 1000x fa
     return reduce$( (acc, cur) => acc + cur, 0)(consed);
   }, "Cons");
 
-  assert.is(consTime / 1000 > builderTime, true);
+  assert.isTrue(consTime / 1000 > builderTime);
 
 });
 
 const measure = (workLoad, name) => {
-  const now = performance.now();
-  const result = workLoad();
-  const then = performance.now();
+  const now         = performance.now();
+  const result      = workLoad();
+  const then        = performance.now();
   const runningTime = then - now;
-  console.log(name, " took " , runningTime, "ms and produced following result: ", result);
+  console.log(name, " took ", runningTime, "ms and produced following result: ", result);
   return runningTime;
 };
+
 performanceSuite.run();
