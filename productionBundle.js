@@ -1062,8 +1062,8 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
 /**
  * Constructor that creates a new attribute with a value and an optional qualifier.
  * @template _T_
- * @param  { _T_ } value              - the initial value
- * @param  { String } [qualifier]   - the optional qualifier. If provided and non-nullish it will put the attribute
+ * @param  { _T_ }     value       - the initial value
+ * @param  { String? } qualifier   - the optional qualifier. If provided and non-nullish it will put the attribute
  *          in the ModelWorld and all existing attributes with the same qualifier will be updated to the initial value.
  *          In case that the automatic update is to be omitted, consider using {@link QualifiedAttribute}.
  * @return { AttributeType<_T_> }
@@ -1404,7 +1404,7 @@ let counter = 0;
  * Projection function that creates a view for input purposes, binds the information that is available through
  * the inputController, and returns the generated views.
  * @typedef { <_T_>
- *     (formClassName:!String, inputController:!SimpleInputControllerType<_T_>, timeout:?Number)
+ *     (inputController: !SimpleInputControllerType<_T_>, formCssClassName: !String, )
  *      => [HTMLLabelElement, HTMLInputElement]
  *     } InputProjector<_T_>
  * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
@@ -1413,16 +1413,15 @@ let counter = 0;
 /**
  * Implementation for the exported {@link projectInstantInput} and {@link projectChangeInput} function.
  * @private
- * @type { (eventType:EventTypeString) => InputProjector<_T_> }
- * @template _T_
+ * @type { <_T_> (timeout: Number) => (eventType: EventTypeString) => InputProjector<_T_> }
  */
-const projectInput = (eventType) =>
-    (formClassName, inputController, timeout = 0) => {
+const projectInput = (timeout = 0) => (eventType) =>
+    (inputController, formCssClassName) => {
     if( ! inputController) {
         console.error("no inputController in input projector."); // be defensive
         return;
     }
-    const id = formClassName + "-id-" + (counter++);
+    const id = formCssClassName + "-id-" + (counter++);
     // create view
     const elements = dom(`
         <label for="${id}"></label>
@@ -1485,7 +1484,7 @@ const projectInput = (eventType) =>
  * @example
  * const [labelElement, spanElement] = projectChangeInput(controller);
  */
-const projectChangeInput  = projectInput(CHANGE);
+const projectChangeInput = projectInput(0)(CHANGE);
 
 /**
  * An {@link InputProjector} that binds the input on any change instantly.
@@ -1497,7 +1496,7 @@ const projectChangeInput  = projectInput(CHANGE);
  * @example
  * const [labelElement, spanElement] = projectInstantInput(controller);
  */
-const projectInstantInput = projectInput(INPUT);
+const projectInstantInput = projectInput(0)(INPUT);
 
 /**
  * An {@link InputProjector} that binds the input on any change with a given delay in milliseconds such that
@@ -1505,12 +1504,12 @@ const projectInstantInput = projectInput(INPUT);
  * Each keystroke triggers the defined timeout. If the timeout is still pending while a key is pressed,
  * it is reset and starts from the beginning. After the timeout expires, the underlying model is updated.
  * @constant
- * @template _T_
- * @type { InputProjector<_T_> }
+ * @type { <_T_> (quietTimeMs: Number) => InputProjector<_T_> }
  * @example
- * const [labelElement, spanElement] = projectDebounceInput(controller, 200);
+ * // waits for a quiet time of 200 ms before updating
+ * const [label, input] = projectDebounceInput(200)(controller, "Wyss");
  */
-const projectDebounceInput = projectInput(INPUT);/**
+const projectDebounceInput = (quietTimeMs) => projectInput(quietTimeMs)(INPUT);/**
  * @module projector/simpleForm/simpleFormProjector
  *
  * Following the projector pattern, this module exports the projection function
@@ -1555,7 +1554,7 @@ const projectForm = formController => {
     /** @type { HTMLFormElement } */ const form = elements[0];
     const fieldset = form.children[0];
 
-    formController.forEach(inputController => fieldset.append(...projectChangeInput(FORM_CLASS_NAME, inputController, 0)));
+    formController.forEach(inputController => fieldset.append(...projectChangeInput(inputController, FORM_CLASS_NAME)));
 
     return [form];
 };
@@ -2561,9 +2560,9 @@ const logUiView = (logUiController, rootElement, cssStyleUrl) => {
     <div class="config controlArea" style="box-shadow: ${shadowCss}"></div>
   `);
 
-  configSection.append(...projectDebounceInput("context", logUiController.loggingContextController, 200));
+  configSection.append(...projectDebounceInput(200)(logUiController.loggingContextController, "context"));
   configSection.append(...projectLoggingChoice(logUiController.loggingLevelController));
-  configSection.append(...projectInstantInput("lastLogMessage", logUiController.lastLogMessageController, 0));
+  configSection.append(...projectInstantInput(logUiController.lastLogMessageController, "lastLogMessage"));
 
   const [styleElement] = dom(`
         <link rel="stylesheet" type="text/css"  href="${cssStyleUrl}"
@@ -2574,9 +2573,6 @@ const logUiView = (logUiController, rootElement, cssStyleUrl) => {
 
   rootElement.append(configSection);
 };/**
- * @typedef LogLevelFilterType
- * @type { (PairSelectorType) => LogLevelType | boolean }
- *//**
  * @typedef LogUiControllerType
  * @property { SimpleInputControllerType<String> } loggingContextController
  * @property { SimpleInputControllerType<String> } loggingLevelController
@@ -2860,9 +2856,9 @@ const report = (origin, results, messages) => {
  * @param { !String } html - HTML string of the to-be-appended DOM
  * @private
  */
-const write = html => out.append(...dom(html));const release     = "0.1.51";
+const write = html => out.append(...dom(html));const release     = "0.2.0";
 
-const dateStamp   = "2023-03-24 T 14:04:28 MEZ";
+const dateStamp   = "2023-03-24 T 20:22:26 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
