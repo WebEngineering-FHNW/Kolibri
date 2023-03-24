@@ -1,0 +1,29 @@
+name: Bundling with node/npm/rollup
+run-name: ${{ github.actor }} is bundling
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        cd docs/production
+        npx rollup -o productionBundle.js -f es production.js --no-treeshake --compact
+
+    - name: Deploy bundle to github pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: util # The folder the action should deploy.

@@ -7,6 +7,13 @@ Anyway, sometimes it is nice to have a bundled and/or minified version for distr
 Install node and [rollup](https://rollupjs.org).
 
 Make sure that production.js imports all modules that should be part of the distribution.
+Consider using
+        find $PWD -name '*.js' | grep -v Test.js
+
+> **Warning**
+> The code below will execute arbitrary and possibly harmful code. 
+> Better use GitHub actions for this (public repos only since the code might be spied at).
+> Otherwise make sure that it runs under a user with limited privileges.
 
 ### Bundle with 
         cd production
