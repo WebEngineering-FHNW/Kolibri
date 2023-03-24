@@ -28,3 +28,10 @@ that can be imported in IntelliJIDEA under Preferences -> Inspection Profile.
 
 The goal is to never push code that causes any inspection findings.
 Some perceived typos (unknown words) might remain that you can safely add to your local dictionary.
+
+## Automatic Bundling
+Every push to the repo automatically creates a production bundle via a 
+[GitHub action](https://github.com/WebEngineering-FHNW/Kolibri/actions)
+and deploys the bundle 
+[here](https://raw.githubusercontent.com/WebEngineering-FHNW/Kolibri/gh-pages/productionBundle.js) 
+.
