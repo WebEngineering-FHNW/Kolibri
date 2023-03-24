@@ -41,7 +41,7 @@ const n3 = f => x => f(f(f(x)));
 
 /**
  * The successor function for the church encoding of numbers.
- * @type { (x:ChurchNumberType) => ChurchNumberType }
+ * @type { (n:ChurchNumberType) => ChurchNumberType }
  */
 const succ = n => ( f => cmp(f) (n(f)) );
 
@@ -78,25 +78,25 @@ const n9 = succ(n8);
 
 /**
  * The plus operation on peano numbers in the church encoding.
- * @type { (x:ChurchNumberType) => (y:ChurchNumberType) => ChurchNumberType }
+ * @type { (ChurchNumberType) => (ChurchNumberType) => ChurchNumberType }
  */
 const plus = cn1 => cn2 => cn2(succ)(cn1)  ;
 
 /**
  * The multiplication operation on peano numbers in the church encoding.
- * @type { (x:ChurchNumberType) => (y:ChurchNumberType) => ChurchNumberType }
+ * @type { (ChurchNumberType) => (ChurchNumberType) => ChurchNumberType }
  */
 const mult = cmp;
 
 /**
  * The power operation on peano numbers in the church encoding.
- * @type { (x:ChurchNumberType) => (y:ChurchNumberType) => ChurchNumberType }
+ * @type { (ChurchNumberType) => (ChurchNumberType) => ChurchNumberType }
  */
 const pow = cn1 => cn2 => cn2 (cn1) ;
 
 /**
  * The is-zero check on peano numbers in the church encoding.
- * @type { (x:ChurchNumberType) => ChurchBooleanType }
+ * @type { (ChurchNumberType) => ChurchBooleanType }
  */
 const isZero = cn => /** @type { ChurchBooleanType } **/ cn (c(F)) (T); // We need a cast since we don't return a church numeral.
 
