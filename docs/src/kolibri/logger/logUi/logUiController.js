@@ -12,7 +12,6 @@ import {
   setLoggingLevel
 }                                                                    from "../logger.js";
 import {SimpleInputController} from "../../projector/simpleForm/simpleInputController.js";
-import {Observable}            from "../../observable.js";
 
 export { LogUiController }
 /**
@@ -53,9 +52,10 @@ const LogUiController = () => {
     name:   "lastLogMessage",
     type:   "text",
   });
-  const observableAppender = ObservableAppender(CountAppender())((level, msg) => {
-    lastLogMessageController.setValue(msg);
-  });
+  const observableAppender = ObservableAppender
+    ( CountAppender() )
+    ( (level, msg) => lastLogMessageController.setValue(msg));
+
   addToAppenderList(observableAppender);
 
   const setLoggingLevelByString = levelStr => {

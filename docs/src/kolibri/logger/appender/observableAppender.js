@@ -22,8 +22,8 @@ export { Appender}
  *     AppenderType<_T_>
  * }
  */
-const Appender = appender => listener => {
-  return /** @type {AppenderType} */ {
+const Appender = appender => listener => (
+  /** @type {AppenderType} */ {
     trace:  arg => { const x = appender.trace(arg); listener(LOG_TRACE, arg); return x },
     debug:  arg => { const x = appender.debug(arg); listener(LOG_DEBUG, arg); return x },
     info:   arg => { const x = appender.info (arg); listener(LOG_INFO , arg); return x },
@@ -32,5 +32,5 @@ const Appender = appender => listener => {
     fatal:  arg => { const x = appender.fatal(arg); listener(LOG_FATAL, arg); return x },
     reset:  ()  => { const x = appender.reset();  listener(LOG_NOTHING); return x }, // we notify via log nothing to indicate the reset
     getValue: appender.getValue
-  };
-};
+  });
+

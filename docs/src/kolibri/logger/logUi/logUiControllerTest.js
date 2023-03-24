@@ -4,7 +4,7 @@ import {
   getLoggingLevel,
   setLoggingLevel,
   name,
-  LOG_INFO, LOG_NOTHING, LOG_DEBUG,
+  LOG_INFO, LOG_DEBUG,
 } from "../logger.js";
 
 const logUiControllerSuite = TestSuite("LogUiController");
