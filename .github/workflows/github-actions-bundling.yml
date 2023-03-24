@@ -26,4 +26,4 @@ jobs:
     - name: Deploy bundle to github pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        folder: util # The folder the action should deploy.
+        folder: docs/production # The folder the action should deploy.
