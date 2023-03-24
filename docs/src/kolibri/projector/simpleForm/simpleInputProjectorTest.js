@@ -1,7 +1,7 @@
-import {asyncTest, TestSuite} from "../../util/test.js";
-import { fireChangeEvent }    from "../../util/dom.js";
-import { projectChangeInput }        from "./simpleInputProjector.js";
-import { SimpleInputController }     from "./simpleInputController.js";
+import {asyncTest, TestSuite}                     from "../../util/test.js";
+import {fireChangeEvent, fireEvent, INPUT}        from "../../util/dom.js";
+import {projectChangeInput, projectDebounceInput} from "./simpleInputProjector.js";
+import { SimpleInputController }                  from "./simpleInputController.js";
 
 const simpleInputProjectorSuite = TestSuite("projector/simpleForm/simpleInputProjector");
 
@@ -17,7 +17,7 @@ simpleInputProjectorSuite.add("binding", assert => {
         name:   "text",
         type:   "text",
     });
-    const [labelElement, spanElement] = projectChangeInput("TEST", controller, 0);
+    const [labelElement, spanElement] = projectChangeInput(controller, "TEST");
     const inputElement = spanElement.querySelector("input");
     assert.is(labelElement.getAttribute("for"),     inputElement.getAttribute("id"));
     assert.is(spanElement .getAttribute("data-id"), inputElement.getAttribute("id"));
@@ -42,7 +42,7 @@ simpleInputProjectorSuite.add("checkbox", assert => {
         type:   "checkbox",
     });
 
-    const [labelElement, spanElement] = projectChangeInput("TEST", controller, 0);
+    const [labelElement, spanElement] = projectChangeInput(controller, "TEST");
     const inputElement = spanElement.querySelector("input");
     assert.is(labelElement.getAttribute("for"), inputElement.getAttribute("id"));
 
@@ -74,7 +74,7 @@ simpleInputProjectorSuite.add("time", assert => {
         name:   "time",
         type:   "time",
     });
-    const [labelElement, spanElement] = projectChangeInput("TEST", controller, 0);
+    const [labelElement, spanElement] = projectChangeInput(controller, "TEST");
     const inputElement = spanElement.querySelector("input");
     assert.is(labelElement.getAttribute("for"), inputElement.getAttribute("id"));
 
@@ -107,12 +107,12 @@ asyncTest("projector/simpleForm/debounce (async)", assert => {
     });
     const debounceTimeMs= 100;
     const waitForDebounceTimeMs = debounceTimeMs * 2;
-    const [_, spanElement] = projectChangeInput("TEST", controller, debounceTimeMs);
+    const [_, spanElement] = projectDebounceInput(debounceTimeMs)(controller, "TEST");
     const inputElement = spanElement.querySelector("input");
 
     return new Promise(resolve => {    // test the binding
         inputElement.value = "new value";
-        fireChangeEvent(inputElement);
+        fireEvent(inputElement, INPUT);
         assert.is(controller.getValue(), "Text"); // value is not yet set
 
         setTimeout( () => {

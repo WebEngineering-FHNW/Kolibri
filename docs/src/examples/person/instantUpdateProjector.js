@@ -113,7 +113,7 @@ const projectListItem = (listController, selectionController, model, attributeNa
     attributeNames.forEach( attributeName => {
 
         const inputController = SimpleAttributeInputController(model[attributeName]);
-        const [labelElement, spanElement] = projectInstantInput("ListItem", inputController, 0);
+        const [labelElement, spanElement] = projectInstantInput(inputController, "ListItem");
         const inputElement   = spanElement.querySelector("input");
         inputElement.onfocus = _ => selectionController.setSelectedModel(model);
         // id's have been dynamically generated, but we have to change that
@@ -153,7 +153,7 @@ const projectForm = (detailController, detailCard, model, attributeNames) => {
     /** @type { HTMLFormElement } */ const form = elements[0];
     const div = form.children[0];
 
-    personInputControllers.forEach(inputController => div.append(...projectInstantInput(detailClassName, inputController, 0)));
+    personInputControllers.forEach(inputController => div.append(...projectInstantInput(inputController, detailClassName)));
 
     model.detailed.getObs(VALUE).onChange( newValue => {
         if (newValue) {

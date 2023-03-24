@@ -197,8 +197,8 @@ const QualifiedAttribute = qualifier => Attribute(readQualifierValue(qualifier),
 /**
  * Constructor that creates a new attribute with a value and an optional qualifier.
  * @template _T_
- * @param  { _T_ } value              - the initial value
- * @param  { String } [qualifier]   - the optional qualifier. If provided and non-nullish it will put the attribute
+ * @param  { _T_ }     value       - the initial value
+ * @param  { String? } qualifier   - the optional qualifier. If provided and non-nullish it will put the attribute
  *          in the ModelWorld and all existing attributes with the same qualifier will be updated to the initial value.
  *          In case that the automatic update is to be omitted, consider using {@link QualifiedAttribute}.
  * @return { AttributeType<_T_> }

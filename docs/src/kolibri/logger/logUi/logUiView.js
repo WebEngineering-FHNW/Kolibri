@@ -19,9 +19,9 @@ const logUiView = (logUiController, rootElement, cssStyleUrl) => {
     <div class="config controlArea" style="box-shadow: ${shadowCss}"></div>
   `);
 
-  configSection.append(...projectDebounceInput("context", logUiController.loggingContextController, 200));
+  configSection.append(...projectDebounceInput(200)(logUiController.loggingContextController, "context"));
   configSection.append(...projectLoggingChoice(logUiController.loggingLevelController));
-  configSection.append(...projectInstantInput("lastLogMessage", logUiController.lastLogMessageController, 0));
+  configSection.append(...projectInstantInput(logUiController.lastLogMessageController, "lastLogMessage"));
 
   const [styleElement] = dom(`
         <link rel="stylesheet" type="text/css"  href="${cssStyleUrl}"

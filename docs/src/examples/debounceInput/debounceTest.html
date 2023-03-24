@@ -24,7 +24,7 @@
     type:   "text",
   });
 
-    const [label, input] = projectDebounceInput("Wyss", controller, 200);
+    const [label, input] = projectDebounceInput(200)(controller, "Wyss");
 
     const el        = document.getElementById("input");
     const button    = document.getElementById("btn");

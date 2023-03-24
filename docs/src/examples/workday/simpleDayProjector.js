@@ -9,10 +9,10 @@ export { projectDay }
  * @return {[HTMLDivElement, HTMLDivElement]} - array of div elements for am and pm
  */
 const projectDay = dayController => {
-    const [amStartViewLabel ,amStartViewInput] =  projectChangeInput("DAY", dayController.amStartCtrl, 0);
-    const [amEndViewLabel   ,amEndViewInput  ] =  projectChangeInput("DAY", dayController.amEndCtrl, 0);
-    const [pmStartViewLabel ,pmStartViewInput] =  projectChangeInput("DAY", dayController.pmStartCtrl, 0);
-    const [pmEndViewLabel   ,pmEndViewInput  ] =  projectChangeInput("DAY", dayController.pmEndCtrl, 0);
+    const [amStartViewLabel ,amStartViewInput] =  projectChangeInput(dayController.amStartCtrl, "DAY" );
+    const [amEndViewLabel   ,amEndViewInput  ] =  projectChangeInput(dayController.amEndCtrl,   "DAY" );
+    const [pmStartViewLabel ,pmStartViewInput] =  projectChangeInput(dayController.pmStartCtrl, "DAY" );
+    const [pmEndViewLabel   ,pmEndViewInput  ] =  projectChangeInput(dayController.pmEndCtrl,   "DAY" );
 
     // create layout from a template and put the pieces in through replacement.
     // this is not the most efficient way, but it gives a good overview where things go.
