@@ -2856,9 +2856,9 @@ const report = (origin, results, messages) => {
  * @param { !String } html - HTML string of the to-be-appended DOM
  * @private
  */
-const write = html => out.append(...dom(html));const release     = "0.2.0";
+const write = html => out.append(...dom(html));const release     = "0.2.1";
 
-const dateStamp   = "2023-03-24 T 20:22:26 MEZ";
+const dateStamp   = "2023-03-25 T 13:40:01 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
