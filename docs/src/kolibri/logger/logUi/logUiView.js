@@ -1,9 +1,11 @@
-import {projectDebounceInput, projectInstantInput} from "../../projector/simpleForm/simpleInputProjector.js";
-import {dom}                                       from "../../util/dom.js";
-import {shadowCss}                                from "../../style/kolibriStyle.js";
-import {projectLoggingChoice}                     from "./logUiProjector.js";
+import { InputProjector}        from "../../projector/simpleForm/simpleInputProjector.js";
+import { dom }                  from "../../util/dom.js";
+import { shadowCss }            from "../../style/kolibriStyle.js";
+import { projectLoggingChoice } from "./logUiProjector.js";
 
 export { logUiView }
+
+const {projectDebounceInput, projectInstantInput} = InputProjector;
 
 /**
  * Creates the log ui under a given html element.

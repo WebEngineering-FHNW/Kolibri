@@ -14,8 +14,8 @@
 
 <script type="module">
 
-  import {SimpleInputController} from "../../kolibri/projector/simpleForm/simpleInputController.js";
-  import {projectDebounceInput}  from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
+  import { SimpleInputController } from "../../kolibri/projector/simpleForm/simpleInputController.js";
+  import { InputProjector }        from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
 
   const controller = SimpleInputController({
     value:  "Tobias",
@@ -24,7 +24,7 @@
     type:   "text",
   });
 
-    const [label, input] = projectDebounceInput(200)(controller, "Wyss");
+    const [label, input] = InputProjector.projectDebounceInput(200)(controller, "Wyss");
 
     const el        = document.getElementById("input");
     const button    = document.getElementById("btn");

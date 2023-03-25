@@ -1,7 +1,9 @@
-import {asyncTest, TestSuite}                     from "../../util/test.js";
-import {fireChangeEvent, fireEvent, INPUT}        from "../../util/dom.js";
-import {projectChangeInput, projectDebounceInput} from "./simpleInputProjector.js";
-import { SimpleInputController }                  from "./simpleInputController.js";
+import { asyncTest, TestSuite }                 from "../../util/test.js";
+import { fireChangeEvent, fireEvent, INPUT }    from "../../util/dom.js";
+import { InputProjector }                       from "./simpleInputProjector.js";
+import { SimpleInputController }                from "./simpleInputController.js";
+
+const { projectChangeInput, projectDebounceInput } = InputProjector;
 
 const simpleInputProjectorSuite = TestSuite("projector/simpleForm/simpleInputProjector");
 

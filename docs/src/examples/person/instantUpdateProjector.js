@@ -1,6 +1,6 @@
 import { dom }                              from "../../kolibri/util/dom.js";
 import { VALUE }                            from "../../kolibri/presentationModel.js";
-import { projectInstantInput }              from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
+import { InputProjector }                   from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
 import { SimpleAttributeInputController }   from "../../kolibri/projector/simpleForm/simpleInputController.js";
 
 export { projectListItem, selectListItemForModel, removeListItemForModel, projectForm,  masterClassName, pageCss }
@@ -113,7 +113,7 @@ const projectListItem = (listController, selectionController, model, attributeNa
     attributeNames.forEach( attributeName => {
 
         const inputController = SimpleAttributeInputController(model[attributeName]);
-        const [labelElement, spanElement] = projectInstantInput(inputController, "ListItem");
+        const [labelElement, spanElement] = InputProjector.projectInstantInput(inputController, "ListItem");
         const inputElement   = spanElement.querySelector("input");
         inputElement.onfocus = _ => selectionController.setSelectedModel(model);
         // id's have been dynamically generated, but we have to change that
@@ -153,7 +153,8 @@ const projectForm = (detailController, detailCard, model, attributeNames) => {
     /** @type { HTMLFormElement } */ const form = elements[0];
     const div = form.children[0];
 
-    personInputControllers.forEach(inputController => div.append(...projectInstantInput(inputController, detailClassName)));
+    personInputControllers.forEach( inputController =>
+        div.append(...InputProjector.projectInstantInput(inputController, detailClassName)));
 
     model.detailed.getObs(VALUE).onChange( newValue => {
         if (newValue) {

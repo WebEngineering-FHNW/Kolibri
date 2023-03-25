@@ -1,7 +1,9 @@
-import { dom }               from "../../kolibri/util/dom.js";
-import { projectChangeInput} from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
+import { dom }            from "../../kolibri/util/dom.js";
+import { InputProjector } from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
 
 export { DayProjector }
+
+const { projectChangeInput } = InputProjector;
 
 /**
  * @type { DayProjectionType }

@@ -4,7 +4,7 @@ import {EDITABLE, LABEL, NAME, TYPE, VALID, VALUE} from "../../presentationModel
 export { SimpleInputController, SimpleAttributeInputController }
 
 /**
- * @typedef { object } SimpleInputControllerType<_T_>
+ * @typedef { object } SimpleInputControllerType
  * @template _T_
  * @property { ()  => _T_ }                 getValue
  * @property { (_T_) => void }              setValue
