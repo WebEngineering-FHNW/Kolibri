@@ -418,6 +418,50 @@ const totalMinutesToTimeString = totalMinutes => {
     const minute = totalMinutes % 60;
     return String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0");
 };/**
+ * Projection function that creates a view for input purposes, binds the information that is available through
+ * the inputController, and returns the generated views.
+
+ * @typedef { <_T_>
+ *     (inputController: !SimpleInputControllerType<_T_>, formCssClassName: !String )
+ *      => [HTMLLabelElement, HTMLInputElement]
+ *     } InputProjectionType
+ * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
+ * @note   in the future we might want to depend on a more general controller than SimpleInputControllerType.
+ */
+
+/**
+ * An {@link InputProjectionType} that binds the input on value change.
+ * Depending on the control and how the browser handles it, this might require a user action to confirm the
+ * finalization of the value change like pressing the enter key or leaving the input field.
+ * The signature is the same as for {@link InstantInputProjectionType} but the meaning is different.
+ * @template _T_
+ * @typedef { InputProjectionType<_T_> } ChangeInputProjectionType
+ */
+
+/**
+ * An {@link InputProjectionType} that binds the input on any change instantly.
+ * Depending on the control and how the browser handles it, this might result in each keystroke in a
+ * text field leading to instant update of the underlying model.
+ * The signature is the same as for {@link ChangeInputProjectionType} but the meaning is different.
+ * @template _T_
+ * @typedef { InputProjectionType<_T_> } InstantInputProjectionType
+ */
+
+/**
+ * A constructor for an {@link InputProjectionType} that binds the input on any change with a given delay in milliseconds such that
+ * a quick succession of keystrokes is not interpreted as input until there is some quiet time.
+ * Each keystroke triggers the defined timeout. If the timeout is still pending while a key is pressed,
+ * it is reset and starts from the beginning. After the timeout expires, the underlying model is updated.
+ * @typedef { <_T_> (quietTimeMs: !Number) => InputProjectionType<_T_> } DebounceInputProjectionType
+ */
+
+/**
+ * Interface for {@link InputProjectionType}s.
+ * @typedef IInputProjector
+ * @property { ChangeInputProjectionType   } projectChangeInput
+ * @property { InstantInputProjectionType  } projectInstantInput
+ * @property { DebounceInputProjectionType } projectDebounceInput
+ *//**
  * @module lambda/church
  * Church encoding of the lambda calculus in JavaScript
  * to the extent that we need it in Kolibri.
@@ -1381,9 +1425,9 @@ const dangerLight       = pink200;
 const dangerBg          = pink100;/**
  * @module projector/simpleForm/simpleInputProjector
  *
- * Following the projector pattern, this module exports projection functions
- * ({@link projectChangeInput} and {@link projectInstantInput}) that create respective views
- * and bind underlying models.
+ * Following the projector pattern, this module exports an implementation of the {@link IInputProjector}
+ * interface with projection functions
+ * that create respective views and bind underlying models.
  * Following classical MVC, the binding is available solely through a controller.
  *
  * Projectors are _compositional_. Projecting a form means projecting multiple inputs.
@@ -1394,28 +1438,18 @@ const dangerBg          = pink100;/**
  */
 
 /**
- * Internal mutable singleton state to produce unique id values for the label-input pairs.
  * @private
+ * Internal mutable singleton state to produce unique id values for the label-input pairs.
  * @type { Number }
  */
 let counter = 0;
 
 /**
- * Projection function that creates a view for input purposes, binds the information that is available through
- * the inputController, and returns the generated views.
- * @typedef { <_T_>
- *     (inputController: !SimpleInputControllerType<_T_>, formCssClassName: !String, )
- *      => [HTMLLabelElement, HTMLInputElement]
- *     } InputProjector<_T_>
- * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
- */
-
-/**
- * Implementation for the exported {@link projectInstantInput} and {@link projectChangeInput} function.
  * @private
- * @type { <_T_> (timeout: Number) => (eventType: EventTypeString) => InputProjector<_T_> }
+ * Implementation for the exported projection functions. Configured via curried parameters.
+ * @type { <_T_> (timeout: Number) => (eventType: EventTypeString) => InputProjectionType<_T_> }
  */
-const projectInput = (timeout = 0) => (eventType) =>
+const projectInput = (timeout) => (eventType) =>
     (inputController, formCssClassName) => {
     if( ! inputController) {
         console.error("no inputController in input projector."); // be defensive
@@ -1475,41 +1509,39 @@ const projectInput = (timeout = 0) => (eventType) =>
 };
 
 /**
- * An {@link InputProjector} that binds the input on value change.
- * Depending on the control and how the browser handles it, this might require a user action to confirm the
- * finalization of the value change like pressing the enter key or leaving the input field.
- * @constant
  * @template _T_
- * @type { InputProjector<_T_> }
+ * @type { ChangeInputProjectionType<_T_> }
  * @example
  * const [labelElement, spanElement] = projectChangeInput(controller);
  */
 const projectChangeInput = projectInput(0)(CHANGE);
 
 /**
- * An {@link InputProjector} that binds the input on any change instantly.
- * Depending on the control and how the browser handles it, this might result in each keystroke in a
- * text field leading to instant update of the underlying model.
- * @constant
  * @template _T_
- * @type { InputProjector<_T_> }
+ * @type { InstantInputProjectionType<_T_> }
  * @example
  * const [labelElement, spanElement] = projectInstantInput(controller);
  */
-const projectInstantInput = projectInput(0)(INPUT);
+const projectInstantInput$1 = projectInput(0)(INPUT);
 
 /**
- * An {@link InputProjector} that binds the input on any change with a given delay in milliseconds such that
- * a quick succession of keystrokes is not interpreted as input until there is some quiet time.
- * Each keystroke triggers the defined timeout. If the timeout is still pending while a key is pressed,
- * it is reset and starts from the beginning. After the timeout expires, the underlying model is updated.
- * @constant
- * @type { <_T_> (quietTimeMs: Number) => InputProjector<_T_> }
+ * @template _T_
+ * @type { DebounceInputProjectionType<_T_> }
  * @example
  * // waits for a quiet time of 200 ms before updating
  * const [label, input] = projectDebounceInput(200)(controller, "Wyss");
  */
-const projectDebounceInput = (quietTimeMs) => projectInput(quietTimeMs)(INPUT);/**
+const projectDebounceInput$1 = (quietTimeMs) => projectInput(quietTimeMs)(INPUT);
+
+/**
+ * Namespace object for the {@link IInputProjector} functions.
+ * @type { IInputProjector }
+ */
+const InputProjector = {
+    projectInstantInput: projectInstantInput$1,
+    projectChangeInput,
+    projectDebounceInput: projectDebounceInput$1
+};/**
  * @module projector/simpleForm/simpleFormProjector
  *
  * Following the projector pattern, this module exports the projection function
@@ -1554,7 +1586,8 @@ const projectForm = formController => {
     /** @type { HTMLFormElement } */ const form = elements[0];
     const fieldset = form.children[0];
 
-    formController.forEach(inputController => fieldset.append(...projectChangeInput(inputController, FORM_CLASS_NAME)));
+    formController.forEach( inputController =>
+       fieldset.append(...InputProjector.projectChangeInput(inputController, FORM_CLASS_NAME)));
 
     return [form];
 };
@@ -1576,7 +1609,7 @@ const FORM_CSS = `
         box-shadow:      ${shadowCss}                          
     }
 `;/**
- * @typedef { object } SimpleInputControllerType<_T_>
+ * @typedef { object } SimpleInputControllerType
  * @template _T_
  * @property { ()  => _T_ }                 getValue
  * @property { (_T_) => void }              setValue
@@ -2546,7 +2579,9 @@ const projectLoggingChoice = loggingLevelController => {
   select.onchange = _event => loggingLevelController.setValue(select.value);
 
   return /** @type { [HTMLLabelElement, HTMLSelectElement] } */ [label, select];
-};/**
+};const {projectDebounceInput, projectInstantInput} = InputProjector;
+
+/**
  * Creates the log ui under a given html element.
  * @param { LogUiControllerType } logUiController
  * @param { HTMLElement } rootElement
@@ -2856,9 +2891,9 @@ const report = (origin, results, messages) => {
  * @param { !String } html - HTML string of the to-be-appended DOM
  * @private
  */
-const write = html => out.append(...dom(html));const release     = "0.2.2";
+const write = html => out.append(...dom(html));const release     = "0.2.3";
 
-const dateStamp   = "2023-03-25 T 15:01:06 MEZ";
+const dateStamp   = "2023-03-25 T 18:20:37 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
