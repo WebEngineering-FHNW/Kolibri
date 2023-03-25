@@ -1,12 +1,10 @@
 import { dom }               from "../../kolibri/util/dom.js";
 import { projectChangeInput} from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
 
-export { projectDay }
+export { DayProjector }
 
 /**
- * Creating views and bindings for a day from projecting simple inputs.
- * @param  { DayControllerType } dayController
- * @return {[HTMLDivElement, HTMLDivElement]} - array of div elements for am and pm
+ * @type { DayProjectionType }
  */
 const projectDay = dayController => {
     const [amStartViewLabel ,amStartViewInput] =  projectChangeInput(dayController.amStartCtrl, "DAY" );
@@ -42,3 +40,9 @@ const projectDay = dayController => {
     return [amDiv, pmDiv]
 };
 
+/**
+ * @type { IDayProjector }
+ */
+const DayProjector = {
+    projectDay
+};

@@ -1,7 +1,7 @@
 import { dom }                       from "../../kolibri/util/dom.js";
 import { totalMinutesToTimeString }  from "../../kolibri/projector/projectorUtils.js"
 import { DayController }             from "../workday/dayController.js";
-import { projectDay }                from "../workday/simpleDayProjector.js";
+import { DayProjector }              from "../workday/simpleDayProjector.js";
 
 export { WeekProjector }
 
@@ -36,7 +36,7 @@ const projectWeek = weekController => {
  * */
 const projectDayWithTotal = (dayController, weekDay) => {
 
-    const am_pm   = projectDay(dayController);
+    const am_pm = DayProjector.projectDay(dayController);
     /** @type HTMLDivElement */ const amDiv = am_pm[0];
     /** @type HTMLDivElement */ const pmDiv = am_pm[1];
     /** @type HTMLDivElement */ const weekDayElement = dom(`<div>${weekDay}</div>`)[0];
