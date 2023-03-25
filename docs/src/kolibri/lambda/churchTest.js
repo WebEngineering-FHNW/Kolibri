@@ -132,33 +132,33 @@ churchSuite.add("boolean", assert => {
     }
 );
 
-churchSuite.add("bool distr rule", assert => {
+churchSuite.add("bool distribution rule", assert => {
 
         // conjunctive normal form
         // (a or b) and (a or c) = a or (b and c)
-        const conjNF = a => b => c =>  beq (and (or(a)(b)) (or(a)(c)))  (or (a) (and(b)(c)));
+        const conjunctiveNormalForm = a => b => c =>  beq (and (or(a)(b)) (or(a)(c)))  (or (a) (and(b)(c)));
 
-        assert.is( T, conjNF(F)(F)(F) );
-        assert.is( T, conjNF(F)(F)(T) );
-        assert.is( T, conjNF(F)(T)(F) );
-        assert.is( T, conjNF(F)(T)(T) );
-        assert.is( T, conjNF(T)(F)(F) );
-        assert.is( T, conjNF(T)(F)(T) );
-        assert.is( T, conjNF(T)(T)(F) );
-        assert.is( T, conjNF(T)(T)(T) );
+        assert.is( T, conjunctiveNormalForm(F)(F)(F) );
+        assert.is( T, conjunctiveNormalForm(F)(F)(T) );
+        assert.is( T, conjunctiveNormalForm(F)(T)(F) );
+        assert.is( T, conjunctiveNormalForm(F)(T)(T) );
+        assert.is( T, conjunctiveNormalForm(T)(F)(F) );
+        assert.is( T, conjunctiveNormalForm(T)(F)(T) );
+        assert.is( T, conjunctiveNormalForm(T)(T)(F) );
+        assert.is( T, conjunctiveNormalForm(T)(T)(T) );
 
         // disjunctive normal form
         // (a and b) or (a and c) = a and (b or c)
-        const disjNF = a => b => c =>  beq (or (and(a)(b)) (and(a)(c)))  (and (a) (or(b)(c)));
+        const disjunctiveNormalForm = a => b => c =>  beq (or (and(a)(b)) (and(a)(c)))  (and (a) (or(b)(c)));
 
-        assert.is( T, disjNF(F)(F)(F) );
-        assert.is( T, disjNF(F)(F)(T) );
-        assert.is( T, disjNF(F)(T)(F) );
-        assert.is( T, disjNF(F)(T)(T) );
-        assert.is( T, disjNF(T)(F)(F) );
-        assert.is( T, disjNF(T)(F)(T) );
-        assert.is( T, disjNF(T)(T)(F) );
-        assert.is( T, disjNF(T)(T)(T) );
+        assert.is( T, disjunctiveNormalForm(F)(F)(F) );
+        assert.is( T, disjunctiveNormalForm(F)(F)(T) );
+        assert.is( T, disjunctiveNormalForm(F)(T)(F) );
+        assert.is( T, disjunctiveNormalForm(F)(T)(T) );
+        assert.is( T, disjunctiveNormalForm(T)(F)(F) );
+        assert.is( T, disjunctiveNormalForm(T)(F)(T) );
+        assert.is( T, disjunctiveNormalForm(T)(T)(F) );
+        assert.is( T, disjunctiveNormalForm(T)(T)(T) );
 
     }
 );

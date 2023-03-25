@@ -74,15 +74,15 @@ churchNumberSuite.add("number operations", assert => {
 
 churchNumberSuite.add("number iterations", assert => {
 
-        const sval = cn => cn(s => 'I' + s)('');
-        assert.is(sval(churchNum(10)) , 'IIIIIIIIII');
+        const sequence = cn => cn(s => 'I' + s)('');
+        assert.is(sequence(churchNum(10)) , 'I'.repeat(10));
 
         const inc = x => x + 1;
-        const qval = cn => cn(n => cn(inc)(n))(0); // square by cont adding
-        assert.is(qval(churchNum(9)) , 81 );
+        const squareValue = cn => cn(n => cn(inc)(n))(0); // square by cont adding
+        assert.is(squareValue(churchNum(9)) , 81 );
 
-        const aval = cn => cn(a => a.concat(a[a.length-1]+a[a.length-2]) ) ( [0,1] );
-        assert.is(aval(churchNum(10 - 2)).toString() , '0,1,1,2,3,5,8,13,21,34');  // fibonacci numbers
+        const fibValue = cn => cn(a => a.concat(a[a.length-1]+a[a.length-2]) ) ( [0,1] );
+        assert.is(fibValue(churchNum(10 - 2)).toString() , '0,1,1,2,3,5,8,13,21,34');  // fibonacci numbers
 
         const oval = cn => cn(o => ({acc:o.acc+o.i+1, i:o.i+1})  ) ( {acc:0, i:0} );
         assert.is(oval(churchNum(10)).acc , 55);  // triangle numbers
