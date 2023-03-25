@@ -30,8 +30,8 @@ const WeekModel = () => {
 
 /**
  * @typedef WeekControllerType
- * @property { (dayController: !DayControllerType )       => void } addDayController
- * @property { (cb: !ValueChangeCallback<Number>) => void }         onTotalWeekMinutesChanged
+ * @property { (dayController: !DayControllerType )  => void } addDayController
+ * @property { (cb: !ValueChangeCallback<Number>)    => void } onTotalWeekMinutesChanged
  */
 
 /**

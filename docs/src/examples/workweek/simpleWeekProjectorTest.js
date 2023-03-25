@@ -1,8 +1,10 @@
 import { TestSuite }       from "../../kolibri/util/test.js";
 
 import { WeekController }  from "./weekController.js";
-import { projectWeek }     from "./simpleWeekProjector.js";
+import { WeekProjector }   from "./simpleWeekProjector.js";
 import { fireChangeEvent } from "../../kolibri/util/dom.js";
+
+const { projectWeek} = WeekProjector;
 
 const simpleWeekProjectorSuite = TestSuite("examples/workweek/simpleWeekProjector");
 
