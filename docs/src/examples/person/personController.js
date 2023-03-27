@@ -15,8 +15,8 @@ export { ListController, SelectionController }
  * @template _T_
  * @property { (cb:ConsumerType<_T_>) => void } onModelAdd
  * @property { (cb:ConsumerType<_T_>) => void } onModelRemove
- * @property { (model:_T_) => void }                removeModel
- * @property { ()  => void }                      addModel - add a newly created model
+ * @property { (model:_T_) => void }            removeModel
+ * @property { ()  => void }                    addModel - add a newly created model
  */
 
 /**
@@ -44,13 +44,19 @@ const ListController = modelConstructor => {
  * Null-Object Pattern.
  * @private
  */
-const noSelection = reset(Person());
-noSelection.firstname.setQualifier("Person.none.firstname");
-noSelection.lastname .setQualifier("Person.none.lastname");
-noSelection.detailed .setQualifier("Person.none.detailed");
-noSelection.firstname.getObs(EDITABLE).setValue(false); // the non-selection is not editable
-noSelection.lastname .getObs(EDITABLE).setValue(false);
-noSelection.detailed .getObs(VALUE)   .setValue(false);    // detail view can fold
+const createNoSelection = () => {
+    const result = reset(Person());
+    result.firstname.setQualifier("Person.none.firstname");
+    result.lastname .setQualifier("Person.none.lastname");
+    result.detailed .setQualifier("Person.none.detailed");
+    result.firstname.getObs(EDITABLE).setValue(false); // the non-selection is not editable
+    result.lastname .getObs(EDITABLE).setValue(false);
+    result.detailed .getObs(VALUE)   .setValue(false);    // detail view can fold
+    return result
+};
+const noSelection = createNoSelection(); // the value to pass around, it's qualifiers might get changed
+createNoSelection(); // create a second noSelection that can never be passed around and keeps the attributes in the ModelWorld
+                     // dk: we should find a nicer way to do that.
 
 /**
  * @typedef SelectionControllerType<_T_>
