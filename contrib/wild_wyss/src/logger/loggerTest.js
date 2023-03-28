@@ -8,7 +8,7 @@ import {
   LOG_NOTHING,
   LOG_TRACE,
   LOG_WARN,
-  setGlobalContext,
+  setLoggingContext,
   setLoggingLevel,
   addToAppenderList,
   removeFromAppenderList, setMessageFormatter,
@@ -19,7 +19,7 @@ const logMessage  = "hello world";
 const beforeStart = () => {
   const appender = Appender();
   appender.reset();
-  setGlobalContext("ch.fhnw.test");
+  setLoggingContext("ch.fhnw.test");
   setLoggingLevel(LOG_DEBUG);
   addToAppenderList(appender);
   return { appender }
@@ -126,7 +126,7 @@ loggerSuite.add("test context tag formatted log message", assert => {
 loggerSuite.add("test context, logger should not log", assert => {
   const { appender } = beforeStart();
   setLoggingLevel(LOG_DEBUG);
-  setGlobalContext("ch.fhnw.test");
+  setLoggingContext("ch.fhnw.test");
   const debug = debugLogger("ch.fhnw");
 
   const result = debug(logMessage);

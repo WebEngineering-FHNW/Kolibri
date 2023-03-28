@@ -4,18 +4,18 @@ import {EDITABLE, LABEL, NAME, TYPE, VALID, VALUE} from "../../presentationModel
 export { SimpleInputController, SimpleAttributeInputController }
 
 /**
- * @typedef { object } SimpleInputControllerType<T>
- * @template T
- * @property { ()  => T }                   getValue
- * @property { (T) => void }                setValue
+ * @typedef { object } SimpleInputControllerType
+ * @template _T_
+ * @property { ()  => _T_ }                 getValue
+ * @property { (_T_) => void }              setValue
  * @property { ()  => String}               getType
  * @property { (valid: !Boolean) => void }  setValid
- * @property { (converter: Converter<T>)                  => void } setConverter
- * @property { (callback: onValueChangeCallback<String>)  => void } onLabelChanged
- * @property { (callback: onValueChangeCallback<Boolean>) => void } onValidChanged
- * @property { (callback: onValueChangeCallback<T>)       => void } onValueChanged
- * @property { (callback: onValueChangeCallback<String>)  => void } onNameChanged
- * @property { (callback: onValueChangeCallback<Boolean>) => void } onEditableChanged
+ * @property { (converter: Converter<_T_>)        => void } setConverter
+ * @property { (cb: ValueChangeCallback<String>)  => void } onLabelChanged
+ * @property { (cb: ValueChangeCallback<Boolean>) => void } onValidChanged
+ * @property { (cb: ValueChangeCallback<_T_>)     => void } onValueChanged
+ * @property { (cb: ValueChangeCallback<String>)  => void } onNameChanged
+ * @property { (cb: ValueChangeCallback<Boolean>) => void } onEditableChanged
  */
 
 /**
@@ -24,9 +24,9 @@ export { SimpleInputController, SimpleAttributeInputController }
  * controller needs to see.
  * While controllers might contain business logic, this basic controller does not contain any.
  * @constructor
- * @template T
+ * @template _T_
  * @param  { InputAttributes } args
- * @return { SimpleInputControllerType<T> }
+ * @return { SimpleInputControllerType<_T_> }
  * @example
  *     const controller = SimpleInputController({
          value:  "Dierk",

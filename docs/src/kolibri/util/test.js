@@ -21,10 +21,10 @@ const total = Observable(0);
 const addToTotal = num => total.setValue( num + total.getValue());
 
 /** @typedef equalityCheckFunction
- * @template T
+ * @template _T_
  * @function
- * @param { T } actual
- * @param { T } expected
+ * @param { _T_ } actual
+ * @param { _T_ } expected
  * @return void
  * */
 

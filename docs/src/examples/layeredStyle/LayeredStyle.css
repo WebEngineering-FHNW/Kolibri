@@ -1,0 +1,28 @@
+/* Use this line if the kolibri defaults should have precedence.
+   Otherwise,
+      just comment out the line, or
+      move example-application to the end of the list (which allows overriding despite lower specificity), or
+      use no layers at all.
+*/
+
+@layer example-application, kolibri-light-colors, kolibri-light-fonts, kolibri-base;
+
+/* note: some tools issue a warning here that imports should be at the top.
+   This is not true for the @layer syntax.
+   It also must be in this sequence or it won't work.
+ */
+@import "../../../css/kolibri-light-colors.css" layer(kolibri-light-colors);
+@import "../../../css/kolibri-light-fonts.css"  layer(kolibri-light-fonts);
+@import "../../../css/kolibri-base.css"         layer(kolibri-base);
+
+@layer example-application {
+    /* put all rules here that shall not accidentally overwrite the kolibri defaults */
+    h1 {
+        color: red; /* would override kolibri-base.css even though it has lower specificity! */
+    }
+}
+
+/* uncomment this block to override all of the above */
+/*h1 {*/
+/*    color: green;*/
+/*}*/

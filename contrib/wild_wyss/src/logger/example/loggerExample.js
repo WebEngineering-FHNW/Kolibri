@@ -6,7 +6,7 @@ import {
   LOG_NOTHING,
   LOG_TRACE,
   LOG_WARN,
-  setGlobalContext,
+  setLoggingContext,
   setLoggingLevel,
   addToAppenderList,
   removeFromAppenderList,
@@ -19,15 +19,15 @@ import { Appender as ConsoleAppender }  from "../appender/consoleAppender.js";
 import { Appender as CountAppender }    from "../appender/countAppender.js";
 import { LogFactory }                   from "../logFactory.js";
 
-const LOGGER_CONTEXT          = "ch.fhnw.sample.logger";
-const INITIAL_GLOBAL_CONTEXT  = "ch.fhnw";
+const LOGGER_CONTEXT           = "ch.fhnw.sample.logger";
+const INITIAL_LOGGING_CONTEXT  = "ch.fhnw";
 
 const formatLogMsg = context => logLevel => logMessage => {
   const date = new Date().toISOString();
   return `${context}: [${logLevel}] ${date}: ${logMessage}`;
 };
 
-setGlobalContext(INITIAL_GLOBAL_CONTEXT);
+setLoggingContext(INITIAL_LOGGING_CONTEXT);
 setLoggingLevel(LOG_DEBUG);
 setMessageFormatter(formatLogMsg);
 
@@ -58,7 +58,7 @@ document.getElementById("btn-fatal").onclick = () => log("fatal");
 document.getElementById("btn-reset").onclick = reset;
 
 document.getElementById("context-global").addEventListener("input", event =>
-    setGlobalContext(event.target.value)
+    setLoggingContext(event.target.value)
 );
 
 const log = lvl => {

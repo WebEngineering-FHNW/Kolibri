@@ -22,8 +22,8 @@ export {
   warnLogger,
   errorLogger,
   fatalLogger,
-  setGlobalContext,
-  getGlobalContext,
+  setLoggingContext,
+  getLoggingContext,
   setLoggingLevel,
   getLoggingLevel,
   addToAppenderList,
@@ -37,8 +37,8 @@ export {
  * Processes all log-actions which have a {@link LogLevelType} equals or beneath
  * the {@link LogLevelType} returned by the function "loggingLevel".
  *
- * Furthermore, each log statement has a context. The log message will only be logged, if the globalContext
- * (set with {@link setGlobalContext}) has the same prefix as the log message's context.
+ * Furthermore, each log statement has a context. The log message will only be logged, if the loggingContext
+ * (set with {@link setLoggingContext}) has the same prefix as the log message's context.
  *
  * The result of the callback function {@link FormatLogMessage} will be logged using the given {@link AppendCallback AppendCallback's}.
  *
@@ -50,7 +50,7 @@ export {
  * @pure if the {@link AppendCallback AppendCallback's} in the appender list and the parameter msgFormatter of type {@link FormatLogMessage} are pure.
  * @type    {
  *               (loggerLevel:      LogLevelType)
- *            => (context:          String)
+ *            => (loggerContext:    String)
  *            => (msg:              LogMeType)
  *            => churchBoolean
  *          }
@@ -60,16 +60,16 @@ export {
  * log("Andri Wild");
  * // logs "Andri Wild" to console
  */
-const logger = loggerLevel => context => msg =>
+const logger = loggerLevel => loggerContext => msg =>
   LazyIf(
-      messageShouldBeLogged(loggerLevel)(context)
+      messageShouldBeLogged(loggerLevel)(loggerContext)
   )
   (Then(() =>
         appenderList
             .map(appender => {
               const levelName = loggerLevel(snd);
               const levelCallback = appender[levelName.toLowerCase()];
-              return levelCallback(formatMsg(context)(levelName)(evaluateMessage(msg)))
+              return levelCallback(formatMsg(loggerContext)(levelName)(evaluateMessage(msg)))
             })
             .reduce((acc, cur) => and(acc)(cur), True)) // every() for array of churchBooleans
   )
@@ -94,13 +94,13 @@ const messageShouldBeLogged = loggerLevel => context =>
 const logLevelActivated = loggerLevel => leq(loggingLevel(fst))(loggerLevel(fst));
 
 /**
- * Returns {@link True} if the {@link globalContext} is a prefix of the given {@link String} parameter.
+ * Returns {@link True} if the {@link loggingContext} is a prefix of the given {@link String} parameter.
  * @function
  * @param   { String } context
  * @return  { churchBoolean }
  * @private
  */
-const contextActivated = context => toChurchBoolean(context.startsWith(globalContext));
+const contextActivated = context => toChurchBoolean(context.startsWith(loggingContext));
 
 /**
  * if the param "msg" is a function, it's result will be returned.
@@ -240,30 +240,30 @@ const getAppenderList = () => [...appenderList];
 
 /**
  * This is a state.
- * The currently activated log context.
+ * The currently activated logging context.
  * Only messages whose context have this prefix are logged.
  * @type { String }
  * @private
  */
-let globalContext = "";
+let loggingContext = "";
 
 /**
- * This function can be used to define a global context for the logging framework.
- * Messages will only be logged, if the current context is more specific than the global context.
+ * This function can be used to define a logging context for the logging framework.
+ * Messages will only be logged, if the logger context is more specific than the logging context.
  * @param { String } context - the newly set context to log
  * @example
- * setGlobalContext("ch.fhnw");
- * // global logger context is now set to "ch.fhnw"
+ * setLoggingContext("ch.fhnw");
+ * // logging context is now set to "ch.fhnw"
  * // messages with the context "ch.fhnw*" will be logged, all other messages will be ignored.
  */
-const setGlobalContext = context => globalContext = context;
+const setLoggingContext = context => loggingContext = context;
 
 // noinspection JSUnusedGlobalSymbols
 /**
- * Getter for the global Context.
- * @return { String } - the current global context
+ * Getter for the logging context.
+ * @return { String } - the current logging context
  */
-const getGlobalContext = () => globalContext;
+const getLoggingContext = () => loggingContext;
 
 /**
  * This is a state.
@@ -276,7 +276,7 @@ const getGlobalContext = () => globalContext;
 let loggingLevel = LOG_DEBUG;
 
 /**
- * This function can be used to set the global logging level for the logging framework.
+ * This function can be used to set the logging level for the logging framework.
  * Only messages whose have at least the set log level are logged.
  * @param { LogLevelType } level
  * @example

@@ -9,7 +9,7 @@ import {
   LOG_INFO,
   LOG_TRACE,
   LOG_WARN,
-  setGlobalContext,
+  setLoggingContext,
   setLoggingLevel
 } from "../logger.js";
 
@@ -97,7 +97,7 @@ const LogUiController = () => {
     setTextFilter:          model.setTextFilter,
     getTextFilter:          model.getTextFilter,
 
-    setGlobalContext,
+    setLoggingContext,
     setLoggingLevelByString,
     flipLogLevel,
   }
