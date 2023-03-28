@@ -1,4 +1,4 @@
-import { TestSuite }  from "../../../../../docs/src/kolibri/util/test.js";
+import { TestSuite }  from "../../test/test.js";
 import { Appender }   from "./consoleAppender.js";
 import { True }       from "../lamdaCalculus.js";
 

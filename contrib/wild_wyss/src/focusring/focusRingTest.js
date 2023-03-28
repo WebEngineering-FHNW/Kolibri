@@ -1,4 +1,4 @@
-import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
+import { TestSuite } from "../test/test.js";
 import { FocusRing } from "./focusRing.js";
 import { Range }     from "../range/range.js";
 

@@ -1,4 +1,4 @@
-import { TestSuite } from "../../../../docs/src/kolibri/util/test.js";
+import { TestSuite } from "../test/test.js";
 import { arrayEq }   from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { fst, snd }  from "../../../../docs/src/kolibri/stdlib.js";
 import {

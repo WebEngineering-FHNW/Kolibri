@@ -1,4 +1,4 @@
-import { TestSuite }                  from "../../../../docs/src/kolibri/util/test.js";
+import { TestSuite }                  from "../test/test.js";
 import { id, lazy, True, False }      from "./lamdaCalculus.js";
 import { Appender }                   from "./appender/arrayAppender.js";
 import { Appender as CountAppender }  from "./appender/countAppender.js";

@@ -1,5 +1,5 @@
 import { Range }      from "./range.js"
-import { TestSuite }  from "../../../../docs/src/kolibri/util/test.js";
+import { TestSuite }  from "../test/test.js";
 
 const rangeSuite = TestSuite("Range");
 

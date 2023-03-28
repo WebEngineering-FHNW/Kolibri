@@ -1,4 +1,4 @@
-import { total } from "../../docs/src/kolibri/util/test.js";
+import { total } from "./src/test/test.js";
 import { versionInfo } from "../../docs/src/kolibri/version.js";
 
 // logger

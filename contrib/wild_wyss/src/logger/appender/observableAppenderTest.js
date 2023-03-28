@@ -1,5 +1,5 @@
 import { Appender }               from "./observableAppender.js";
-import { TestSuite }              from "../../../../../docs/src/kolibri/util/test.js";
+import { TestSuite }              from "../../test/test.js";
 import { id, jsNum, snd, True }   from "../lamdaCalculus.js";
 import { emptyStack, head, size } from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 

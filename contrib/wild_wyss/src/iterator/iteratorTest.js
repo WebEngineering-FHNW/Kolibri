@@ -1,4 +1,4 @@
-import { TestSuite }        from "../../../../docs/src/kolibri/util/test.js";
+import { TestSuite }        from "../test/test.js";
 import { arrayEq }          from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Tuple }            from "../../../../docs/src/kolibri/stdlib.js";
 import { emptyStack, push } from "../../../p6_brodwolf_andermatt/src/stack/stack.js";

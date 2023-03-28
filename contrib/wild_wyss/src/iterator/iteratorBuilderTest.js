@@ -1,6 +1,6 @@
 import { arrayEq }                    from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Range }                      from "../range/range.js";
-import { TestSuite }                  from "../../../../docs/src/kolibri/util/test.js";
+import { TestSuite }                  from "../test/test.js";
 import { IteratorBuilder, Iterator }  from "./iterator.js";
 
 
@@ -101,27 +101,17 @@ iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert =>
 iteratorBuilderSuite.add("test build two times: IteratorBuilder", assert => {
   const builder = IteratorBuilder(Range(3));
   const it1 = builder.build();
-  try {
-    builder.build();
-    assert.isTrue(false); // should never be reached
-  } catch (e) {
-    assert.is(e.message, "Unsupported operation: Constructors has already been built!");
-  }
 
+  assert.throws(() => builder.build(), "Unsupported operation: Constructors has already been built!");
   assert.isTrue(arrayEq([0,1,2,3])([...it1]));
 });
+
 
 iteratorBuilderSuite.add("test append after build: IteratorBuilder", assert => {
   const builder = IteratorBuilder(Range(3));
   const it1 = builder.build();
 
-  try {
-    builder.append(4,5,6);
-    assert.isTrue(false); // should never be reached
-  } catch (e) {
-    assert.is(e.message, "Unsupported operation: Constructors has already been built!");
-  }
-
+  assert.throws(() => builder.append(4,5,6), "Unsupported operation: Constructors has already been built!");
   // nothing should happen to the previous built iterator
   assert.isTrue(arrayEq([0,1,2,3])([...it1]));
 });
@@ -130,12 +120,7 @@ iteratorBuilderSuite.add("test prepend after build: IteratorBuilder", assert => 
   const builder = IteratorBuilder(Range(3));
   const it1 = builder.build();
 
-  try {
-    builder.prepend(4,5,6);
-    assert.isTrue(false); // should never be reached
-  } catch (e) {
-    assert.is(e.message, "Unsupported operation: Constructors has already been built!");
-  }
+  assert.throws(() => builder.prepend(4,5,6), "Unsupported operation: Constructors has already been built!");
 
   // nothing should happen to the previous built iterator
   assert.isTrue(arrayEq([0,1,2,3])([...it1]));
