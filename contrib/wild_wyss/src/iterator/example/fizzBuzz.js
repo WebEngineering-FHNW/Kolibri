@@ -22,16 +22,17 @@ const Rule = (nr = 0, text = "") => {
 };
 
 const FizzBuzzModel = () => {
-  const values  = [];
-  const rules   = ObservableList(values);
+  const rules   = Observable([]);
   const result  = Observable(emptyIterator);
 
+  const addRule = rule => rules.setValue([...rules.getValue(), rule]);
+  const delRule = rule => rules.setValue([...rules.getValue().filter(r => r !== rule)]);
+
   return {
-    add:            rules.add,
-    del:            rules.del,
-    rulesSnapshot:  () => [...values],
-    onRuleAdd:      rules.onAdd,
-    onRuleDel:      rules.onDel,
+    addRule,
+    delRule,
+    rulesSnapshot:  rules.getValue,
+    onRulesChange:  rules.onChange,
     setResult:      result.setValue,
     onResultChange: result.onChange
   }
@@ -39,8 +40,7 @@ const FizzBuzzModel = () => {
 
 const Controller = () => {
   const model       = FizzBuzzModel();
-  const addRule     = (nr, text) => model.add(Rule(nr,text));
-  const removeRule  = rule => model.del(rule);
+  const addRule     = (nr, text) => model.addRule(Rule(nr,text));
 
   const infinitNumbers = _.Iterator(1, i => i + 1, _ => false);
 
@@ -71,13 +71,11 @@ const Controller = () => {
   return {
     buildFizzBuzz,
     addRule,
-    removeRule,
-    onRuleAdd:      model.onRuleAdd,
-    onRuleDel:      model.onRuleDel,
+    delRule:        model.delRule,
+    onRulesChange:  model.onRulesChange,
     onResultChange: model.onResultChange
   }
 };
-
 
 const View = (controller, rootElement) => {
   const [addButton]     = dom(`<button>Add Rule</button>`);
@@ -85,44 +83,43 @@ const View = (controller, rootElement) => {
   const [rulesRoot]     = dom(`<div></div>`);
   const [resultElement] = dom(`<ol></ol>`);
 
-  const render = rule => ruleProjector(rule, rulesRoot);
+  const renderRules = rules => {
+    const ruleElements = rules.map(rule => ruleProjector(rule));
+    rulesRoot.replaceChildren(...ruleElements);
+  };
 
-  resultProjector(controller, resultElement);
+  const renderResult = result => resultElement.replaceChildren(...resultProjector(result));
 
-  controller.onRuleAdd(render);
+  controller.onRulesChange (renderRules);
+  controller.onResultChange(renderResult);
   addButton  .onclick = () => controller.addRule();
   buildButton.onclick = () => controller.buildFizzBuzz();
   rootElement.append(rulesRoot, addButton, buildButton, resultElement);
 };
 
-const resultProjector = (controller, rootElement) => {
-  controller.onResultChange(res => {
-   rootElement.innerHTML = '';
-   rootElement.append(..._.map(el => dom(`<li>${el}</li>`)[0])(res));
-  });
-};
+const resultProjector = result => [..._.map(el => dom(`<li>${el}</li>`)[0])(result)];
 
-const ruleNrProjector = (rule, rootElement) => {
+const ruleNrProjector = rule => {
   const [numberInput] = dom(`<input type="number" value="${rule.getNr()}">`);
   numberInput.oninput = () => rule.setNr(Number(numberInput.value));
 
   rule.onNrChanged(newValue => numberInput.value = newValue);
-  rootElement.appendChild(numberInput);
+  return numberInput;
 };
 
-const ruleTextProjector = (rule, rootElement)  => {
+const ruleTextProjector = rule => {
   const [textInput]  = dom(`<input value="${rule.getText()}">`);
   textInput.onchange = () => rule.setText(textInput.value);
 
   rule.onTextChanged(newValue => textInput.value = newValue);
-  rootElement.appendChild(textInput);
+  return textInput;
 };
 
-const ruleProjector = (rule, rootElement) => {
+const ruleProjector = rule => {
   const container = document.createElement("DIV");
-
-  ruleNrProjector  (rule, container);
-  ruleTextProjector(rule, container);
-
-  rootElement.appendChild(container);
+  container.append(
+    ruleNrProjector(rule),
+    ruleTextProjector(rule)
+  );
+  return container;
 };
