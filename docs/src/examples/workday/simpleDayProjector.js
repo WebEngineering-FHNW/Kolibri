@@ -1,18 +1,18 @@
-import { dom }               from "../../kolibri/util/dom.js";
-import { projectChangeInput} from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
+import { dom }            from "../../kolibri/util/dom.js";
+import { InputProjector } from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
 
-export { projectDay }
+export { DayProjector }
+
+const { projectChangeInput } = InputProjector;
 
 /**
- * Creating views and bindings for a day from projecting simple inputs.
- * @param  { DayControllerType } dayController
- * @return {[HTMLDivElement, HTMLDivElement]} - array of div elements for am and pm
+ * @type { DayProjectionType }
  */
 const projectDay = dayController => {
-    const [amStartViewLabel ,amStartViewInput] =  projectChangeInput("DAY", dayController.amStartCtrl);
-    const [amEndViewLabel   ,amEndViewInput  ] =  projectChangeInput("DAY", dayController.amEndCtrl);
-    const [pmStartViewLabel ,pmStartViewInput] =  projectChangeInput("DAY", dayController.pmStartCtrl);
-    const [pmEndViewLabel   ,pmEndViewInput  ] =  projectChangeInput("DAY", dayController.pmEndCtrl);
+    const [amStartViewLabel ,amStartViewInput] =  projectChangeInput(dayController.amStartCtrl, "DAY" );
+    const [amEndViewLabel   ,amEndViewInput  ] =  projectChangeInput(dayController.amEndCtrl,   "DAY" );
+    const [pmStartViewLabel ,pmStartViewInput] =  projectChangeInput(dayController.pmStartCtrl, "DAY" );
+    const [pmEndViewLabel   ,pmEndViewInput  ] =  projectChangeInput(dayController.pmEndCtrl,   "DAY" );
 
     // create layout from a template and put the pieces in through replacement.
     // this is not the most efficient way, but it gives a good overview where things go.
@@ -42,3 +42,9 @@ const projectDay = dayController => {
     return [amDiv, pmDiv]
 };
 
+/**
+ * @type { IDayProjector }
+ */
+const DayProjector = {
+    projectDay
+};

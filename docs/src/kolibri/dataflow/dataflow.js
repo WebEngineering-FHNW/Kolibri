@@ -7,16 +7,16 @@ export { DataFlowVariable, Scheduler }
 
 /**
  * @callback createValueCallback
- * @template T
- * @type { () => T }
+ * @template _T_
+ * @type { () => _T_ }
  */
 /**
  * A dataflow abstraction that takes a function that specifies how to create a value and returns a
  * function that returns that value. The callback will be only called when needed and not more than once.
  * In other contexts known as "lazy" or "thunk".
- * @template T
+ * @template _T_
  * @param { !createValueCallback } createValue - will be called when needed and not more than once. Mandatory.
- * @return { () => T }
+ * @return { () => _T_ }
  * @constructor
  * @example
  *     const x = DataFlowVariable(() => y() + 1);

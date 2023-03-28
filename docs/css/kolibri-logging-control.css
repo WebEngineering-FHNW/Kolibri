@@ -1,0 +1,162 @@
+@import "kolibri-base.css";
+@import "kolibri-light-colors.css";
+@import "kolibri-light-fonts.css";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+}
+
+.controlArea {
+    padding: 2rem;
+    align-items: center;
+}
+
+.config {
+    display: inline-grid;
+    grid-template-columns: 0.5fr 1fr;
+    grid-gap: 0.5rem;
+    box-shadow: var(--kolibri-box-shadow),
+}
+
+.filter {
+    display: inline-grid;
+    grid-template-columns: 0.5fr 1fr;
+    grid-gap: 0.5rem;
+}
+
+.twoColumnItem {
+    grid-column-end: span 2;
+}
+
+.controls {
+    display: inline-flex;
+    justify-content: center;
+    margin: 0.5rem 0 0.5rem 0;
+}
+
+.messageArea {
+    background: var(--kolibri-color-shadow);
+    padding: 1rem;
+    overflow: scroll;
+    height: 100vh;
+}
+
+.logMessage {
+    white-space: pre-wrap;
+}
+
+input[type="text"], input[type="select"] {
+    box-sizing: border-box;
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 16px;
+    gap: 12px;
+    /* Kolibri-Light/Monochrome/--kb-color-label */
+    border: 1px solid var(--kb-color-rgb-purple-300);
+    border-radius: 4px;
+    width: 100%;
+}
+
+input[type="select"] {
+    background-color: var(--kolibri-color-output);
+    alignment: left;
+}
+
+.textLabel {
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 16px;
+    gap: 12px;
+}
+
+.loglevelButton {
+    display: inline-flex;
+    justify-content: center;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: white;
+    background: var(--kolibri-color-output);
+    margin: 5px;
+    border-radius: 100px;
+    padding: 10px;
+    transition: 0.2s;
+}
+
+.loglevelButton:active {
+    background: var(--kolibri-color-shadow);
+}
+
+.loglevelButton:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.loglevelButton input[type=checkbox]{
+    height: 0;
+    width: 0;
+    visibility: hidden;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.checkedToggleButton {
+    background: var(--kolibri-color-neutral);
+    color: var(--kolibri-color-output);
+}
+
+.resetButton  {
+    /* Auto layout */
+    display: inline-flex;
+    position: sticky;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 16px;
+    gap: 16px;
+
+    width: 70px;
+    height: 40px;
+    left: 450px;
+    top: 5px;
+
+    /* Kolibri-Light/Danger/--kb-danger-accent */
+    background: var(--kolibri-color-accent);
+    border-radius: 10px;
+    /*border: 1px solid white;*/
+    font-size: var(--kb-font-rubik-light-regular);
+    font-weight: bold;
+    color: white;
+
+    cursor: pointer;
+}
+
+.highlighted {
+    background: var(--kb-color-hsl-yellow-500);
+    font-weight: bold;
+}
+
+.WARN {
+    background: var(--kb-color-hsl-yellow-200);
+}
+
+.ERROR {
+    background: var(--kb-color-rgb-pink-200);
+}
+
+.FATAL {
+    background: var(--kb-color-rgb-label);
+    font-weight: bold;
+    color: white;
+}
+
+.FATAL .highlighted {
+    color: black;
+}

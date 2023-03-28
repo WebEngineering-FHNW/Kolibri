@@ -1,15 +1,13 @@
 import { dom }                       from "../../kolibri/util/dom.js";
 import { totalMinutesToTimeString }  from "../../kolibri/projector/projectorUtils.js"
 import { DayController }             from "../workday/dayController.js";
-import { projectDay }                from "../workday/simpleDayProjector.js";
+import { DayProjector }              from "../workday/simpleDayProjector.js";
 
-export { projectDayWithTotal, projectWeek }
+export { WeekProjector }
 
 /**
- * Create all the views and bindings for a week including a final row for the total.
- * @param  { !WeekControllerType } weekController
- * @return { Array<HTMLDivElement> }
- */
+ * @type { WeekProjectionType }
+ * */
 const projectWeek = weekController => {
     const allWeekElements = [];
     ["Mon", "Tue", "Wed", "Thu", "Fri"].forEach( day => {
@@ -34,15 +32,11 @@ const projectWeek = weekController => {
 };
 
 /**
- * Create the views and bindings for a day within a week with a weekday indicator in the front and
- * a total daily work time at the end.
- * @param  { !DayControllerType } dayController
- * @param  { !String } weekDay - string for the day of the week, must be unique within a week
- * @return {[HTMLDivElement,HTMLDivElement,HTMLDivElement,HTMLDivElement]} - four DIVs for weekday, am, pm, and total
- */
+ * @type { DayWithTotalProjectionType }
+ * */
 const projectDayWithTotal = (dayController, weekDay) => {
 
-    const am_pm   = projectDay(dayController);
+    const am_pm = DayProjector.projectDay(dayController);
     /** @type HTMLDivElement */ const amDiv = am_pm[0];
     /** @type HTMLDivElement */ const pmDiv = am_pm[1];
     /** @type HTMLDivElement */ const weekDayElement = dom(`<div>${weekDay}</div>`)[0];
@@ -62,4 +56,12 @@ const projectDayWithTotal = (dayController, weekDay) => {
     );
 
     return [weekDayElement, amDiv, pmDiv, totalElement]
+};
+
+/**
+ * @type { IWeekProjector }
+ * */
+const WeekProjector = {
+    projectDayWithTotal,
+    projectWeek
 };
