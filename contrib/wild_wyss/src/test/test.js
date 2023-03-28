@@ -29,13 +29,22 @@ const addToTotal = num => total.setValue( num + total.getValue());
  * */
 
 /**
+ * @callback AssertThrows
+ * @param { () => void } functionUnderTest - this function should throw an error
+ * @param { String = ""} expectedErrorMsg  - if set, the thrown errors message will be compared to this string
+ * @returns void
+ */
+
+/**
  * @typedef  { Object }  AssertType
  * @property { Array<String> }         messages - stores all assertions messages, one for each entry in "results"
  * @property { Array<Boolean> }        results  - stores all assertion results
  * @property { (Boolean)  => void }    isTrue   - assert that expression is true, side effects "results" and "messages"
  * @property { equalityCheckFunction } is       - assert that two expressions are equal,
  *                                                side effects "results" and "messages", and
- *                                                logs an error to the console incl. stack trace in case of failure.
+ *                                                logs an error to the console incl. stack trace in case of failure
+ * @property { AssertThrows }          throws   - assert that the given function throws an exception,
+ *                                                logs an error to the console incl. stack trace in case of failure
  */
 
 /**
