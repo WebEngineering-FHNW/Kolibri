@@ -57,9 +57,8 @@ document.getElementById("btn-error").onclick = () => log("error");
 document.getElementById("btn-fatal").onclick = () => log("fatal");
 document.getElementById("btn-reset").onclick = reset;
 
-document.getElementById("context-global").addEventListener("input", event =>
-    setLoggingContext(event.target.value)
-);
+const globalContext = document.getElementById("context-global");
+globalContext.addEventListener("input", _ => setLoggingContext(globalContext.value));
 
 const log = lvl => {
   updateLevel();
