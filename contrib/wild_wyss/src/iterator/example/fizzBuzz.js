@@ -2,7 +2,7 @@ import { dom }                        from "../../../../../docs/src/kolibri/util
 import * as _                         from "../iterator.js";
 import {emptyIterator}                from "../iterator.js";
 import { Attribute, VALUE }           from "../../../../../docs/src/kolibri/presentationModel.js";
-import { Observable, ObservableList } from "../../../../../docs/src/kolibri/observable.js";
+import { Observable } from "../../../../../docs/src/kolibri/observable.js";
 
 export { Controller, View }
 
@@ -22,8 +22,10 @@ const Rule = (nr = 0, text = "") => {
 };
 
 const FizzBuzzModel = () => {
-  const rules   = Observable([]);
-  const result  = Observable(emptyIterator);
+  const rules         = Observable([]);
+  const result        = Observable(emptyIterator);
+  const upperBoundary = Observable(30);
+  const lowerBoundary = Observable(0);
 
   const addRule = rule => rules.setValue([...rules.getValue(), rule]);
   const delRule = rule => rules.setValue([...rules.getValue().filter(r => r !== rule)]);
@@ -31,16 +33,22 @@ const FizzBuzzModel = () => {
   return {
     addRule,
     delRule,
-    rulesSnapshot:  rules.getValue,
-    onRulesChange:  rules.onChange,
-    setResult:      result.setValue,
-    onResultChange: result.onChange
+    rulesSnapshot:         rules.getValue,
+    onRulesChange:         rules.onChange,
+    setResult:             result.setValue,
+    onResultChange:        result.onChange,
+    setUpperBoundary:      upperBoundary.setValue,
+    setLowerBoundary:      lowerBoundary.setValue,
+    getUpperBoundary:      upperBoundary.getValue,
+    getLowerBoundary:      lowerBoundary.getValue,
+    onUpperBoundaryChange: upperBoundary.onChange,
+    onLowerBoundaryChange: lowerBoundary.onChange,
   }
 };
 
 const Controller = () => {
-  const model       = FizzBuzzModel();
-  const addRule     = (nr, text) => model.addRule(Rule(nr,text));
+  const model   = FizzBuzzModel();
+  const addRule = (nr, text) => model.addRule(Rule(nr,text));
 
   const infinitNumbers = _.Iterator(1, i => i + 1, _ => false);
 
@@ -62,18 +70,45 @@ const Controller = () => {
       _.reverse$,
       _.reduce$((acc, cur) => _.zipWith((a, b) => a + b)(acc)(cur), baseLine), // combine to single iterator
       _.zipWith((numbers, pattern) => pattern === "" ? String(numbers) : pattern)(infinitNumbers), // add numbers where no text is present
-      _.take(40),
+      _.take(model.getUpperBoundary()),
+      _.drop(model.getLowerBoundary()),
     );
 
     model.setResult(fizzBuzz);
   };
 
+  model.onUpperBoundaryChange((value, oldValue) => {
+    if (value < 0) model.setUpperBoundary(oldValue);
+    if (value < model.getLowerBoundary()){
+      const newLower = model.getLowerBoundary() - (oldValue - value);
+      model.setLowerBoundary(newLower < 0 ? 0 : newLower);
+    }
+    buildFizzBuzz();
+  });
+
+  model.onLowerBoundaryChange((value, oldValue) => {
+    if (value < 0) model.setLowerBoundary(oldValue);
+    if (value > model.getUpperBoundary()){
+     const newUpper = model.getUpperBoundary() + (value - oldValue);
+     model.setUpperBoundary(newUpper);
+    }
+    buildFizzBuzz();
+  });
+
+  model.onRulesChange        (buildFizzBuzz);
+
   return {
     buildFizzBuzz,
     addRule,
-    delRule:        model.delRule,
-    onRulesChange:  model.onRulesChange,
-    onResultChange: model.onResultChange
+    delRule:               model.delRule,
+    onRulesChange:         model.onRulesChange,
+    onResultChange:        model.onResultChange,
+    getUpperBoundary:      model.getUpperBoundary,
+    getLowerBoundary:      model.getLowerBoundary,
+    setUpperBoundary:      model.setUpperBoundary,
+    setLowerBoundary:      model.setLowerBoundary,
+    onLowerBoundaryChange: model.onLowerBoundaryChange,
+    onUpperBoundaryChange: model.onUpperBoundaryChange,
   }
 };
 
@@ -81,23 +116,47 @@ const View = (controller, rootElement) => {
   const [addButton]     = dom(`<button>Add Rule</button>`);
   const [buildButton]   = dom(`<button>Build</button>`);
   const [rulesRoot]     = dom(`<div></div>`);
-  const [resultElement] = dom(`<ol></ol>`);
+  const [resultRoot]    = dom(`<div></div>`);
 
   const renderRules = rules => {
     const ruleElements = rules.map(rule => ruleProjector(rule));
     rulesRoot.replaceChildren(...ruleElements);
   };
 
-  const renderResult = result => resultElement.replaceChildren(...resultProjector(result));
+  const renderResult = result => resultRoot.replaceChildren(resultProjector(controller, result));
+
+  const sliders = boundaryProjector(controller);
 
   controller.onRulesChange (renderRules);
   controller.onResultChange(renderResult);
+  controller.buildFizzBuzz();
+
   addButton  .onclick = () => controller.addRule();
-  buildButton.onclick = () => controller.buildFizzBuzz();
-  rootElement.append(rulesRoot, addButton, buildButton, resultElement);
+  rootElement.append(rulesRoot, sliders, addButton, buildButton, resultRoot);
 };
 
-const resultProjector = result => [..._.map(el => dom(`<li>${el}</li>`)[0])(result)];
+const boundaryProjector = controller => {
+  const [container]  = dom(`<div></div>`);
+  const [labelUpper] = dom(`<label for="upperSlider">max: </label>`);
+  const [labelLower] = dom(`<label for="lowerSlider">min: </label>`);
+  const [upperInput] = dom(`<input type="number" value="${controller.getUpperBoundary()}" id="upperSlider">`);
+  const [lowerInput] = dom(`<input type="number" value="${controller.getLowerBoundary()}" id="lowerSlider">`);
+
+  upperInput.onchange = _ => controller.setUpperBoundary(Number(upperInput.value));
+  lowerInput.onchange = _ => controller.setLowerBoundary(Number(lowerInput.value));
+
+  controller.onLowerBoundaryChange(value => lowerInput.value = value);
+  controller.onUpperBoundaryChange(value => upperInput.value = value);
+
+  container.append(labelLower, lowerInput, labelUpper, upperInput);
+  return container;
+};
+
+const resultProjector = (controller, result) => {
+  const [numberedList] = dom(`<ol start="${controller.getLowerBoundary() + 1}"></ol>`);
+  numberedList.append(..._.map(el => dom(`<li>${el}</li>`)[0])(result));
+  return numberedList;
+};
 
 const ruleNrProjector = rule => {
   const [numberInput] = dom(`<input type="number" value="${rule.getNr()}">`);
