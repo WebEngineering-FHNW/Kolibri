@@ -56,7 +56,7 @@ const addToTotal = num => total.setValue( num + total.getValue());
  * @impure assembles test results.
  */
 const Assert = () => {
-    /** @type Array<Boolean> */ const results  = []; // [Bool], true if test passed, false otherwise
+    /** @type Array<Boolean> */ const results  = []; // true if test passed, false otherwise
     /** @type Array<String> */  const messages = [];
     return {
         results,

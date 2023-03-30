@@ -3,7 +3,26 @@ import { FizzBuzzModel, Rule } from "./fizzBuzzModel.js";
 
 export { FizzBuzzController }
 
+/**
+ *
+ * @typedef FizzBuzzControllerType
+ * @property { () => Number }                                               getLowerBoundary
+ * @property { (value: Number) => void }                                    setLowerBoundary
+ * @property { () => Number }                                               getUpperBoundary
+ * @property { (value: Number) => void }                                    setUpperBoundary
+ * @property { (nr: Number = 0, text: String = "") => void }                addRule
+ * @property { (nr: Number) => void }                                       delRule
+ * @property { (cb: ValueChangeCallback<IteratorType<RuleType>>) => void }  onResultChange
+ * @property { (cb: ValueChangeCallback<Array<RuleType>>) => void }         onRulesChange
+ * @property { (cb: ValueChangeCallback<Number>) => void }                  onLowerBoundaryChange
+ * @property { (cb: ValueChangeCallback<Number>) => void }                  onUpperBoundaryChange
+ */
 
+/**
+ *
+ * @returns { FizzBuzzControllerType }
+ * @constructor
+ */
 const FizzBuzzController = () => {
   const model   = FizzBuzzModel();
   const addRule = (nr, text) =>{

@@ -3,27 +3,35 @@ import * as _  from "../iterator.js";
 
 export { FizzBuzzView }
 
+/**
+ *
+ * @param { FizzBuzzControllerType } controller
+ * @param { HTMLElement } rootElement
+ */
 const FizzBuzzView = (controller, rootElement) => {
   const [addButton]     = dom(`<button>Add Rule</button>`);
   const [rulesRoot]     = dom(`<div></div>`);
   const [resultRoot]    = dom(`<div></div>`);
 
-  const renderRules = rules => {
+  const boundaryElements = boundaryProjector(controller);
+  const renderResult     = result => resultRoot.replaceChildren(resultProjector(controller, result));
+  const renderRules      = rules => {
     const ruleElements = rules.map(rule => ruleProjector(rule));
     rulesRoot.replaceChildren(...ruleElements);
   };
 
-  const renderResult = result => resultRoot.replaceChildren(resultProjector(controller, result));
-
-  const sliders = boundaryProjector(controller);
 
   controller.onRulesChange (renderRules);
   controller.onResultChange(renderResult);
 
   addButton  .onclick = () => controller.addRule();
-  rootElement.append(rulesRoot, sliders, addButton, resultRoot);
+  rootElement.append(rulesRoot, boundaryElements, addButton, resultRoot);
 };
 
+/**
+ * @param   { FizzBuzzControllerType } controller
+ * @returns { HTMLElement }
+ */
 const boundaryProjector = controller => {
   const [container]  = dom(`<div></div>`);
   const [labelUpper] = dom(`<label for="upperSlider">to: </label>`);
@@ -41,12 +49,22 @@ const boundaryProjector = controller => {
   return container;
 };
 
+/**
+ *
+ * @param   { FizzBuzzControllerType } controller
+ * @param   { IteratorType<RuleType> } result
+ * @returns { HTMLElement }
+ */
 const resultProjector = (controller, result) => {
   const [numberedList] = dom(`<ol start="${controller.getLowerBoundary()}"></ol>`);
   numberedList.append(..._.map(el => dom(`<li>${el}</li>`)[0])(result));
   return numberedList;
 };
 
+/**
+ * @param   { RuleType } rule
+ * @returns { HTMLElement }
+ */
 const ruleNrProjector = rule => {
   const [numberInput] = dom(`<input type="number" value="${rule.getNr()}">`);
   numberInput.oninput = () => rule.setNr(Number(numberInput.value));
@@ -55,6 +73,11 @@ const ruleNrProjector = rule => {
   return numberInput;
 };
 
+
+/**
+ * @param   { RuleType } rule
+ * @returns { HTMLElement }
+ */
 const ruleTextProjector = rule => {
   const [textInput]  = dom(`<input value="${rule.getText()}">`);
   textInput.onchange = () => rule.setText(textInput.value);
@@ -63,6 +86,10 @@ const ruleTextProjector = rule => {
   return textInput;
 };
 
+/**
+ * @param   { RuleType } rule
+ * @returns { HTMLElement }
+ */
 const ruleProjector = rule => {
   const container = document.createElement("DIV");
   container.append(
