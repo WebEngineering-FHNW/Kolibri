@@ -1,5 +1,6 @@
 import { dom } from "../../../../../docs/src/kolibri/util/dom.js";
 import * as _  from "../iterator.js";
+import {iteratorProjector} from "../projector/iteratorProjector.js";
 
 export { FizzBuzzView }
 
@@ -56,7 +57,7 @@ const boundaryProjector = controller => {
  */
 const resultProjector = (controller, result) => {
   const [numberedList] = dom(`<ol start="${controller.getLowerBoundary()}"></ol>`);
-  numberedList.append(... _.map(row => dom(`<li>${row}</li>`)[0])(result));
+  numberedList.append(...iteratorProjector(result)(row => dom(`<li>${row}</li>`)[0]).children);
   return numberedList;
 };
 
