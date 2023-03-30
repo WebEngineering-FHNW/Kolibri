@@ -13,6 +13,7 @@ export {
   ConcatIterator,
   StackIterator,
   emptyIterator,
+  FibonacciIterator,
 }
 
 /**
@@ -266,4 +267,28 @@ const internalMap = mapper => iterator => {
   };
 
   return createIteratorWithArgs(next)(internalMap)(mapper)(inner);
+};
+
+
+const FibonacciIterator = () => {
+
+  const InternalFibonacciIterator = (last = 0, secondLast = 0) => {
+
+    const next = () => {
+      let current = last + secondLast;
+      if (current === 0) current = 1;
+      secondLast = last;
+      last = current;
+      return { done: false, value: current };
+    };
+
+    const copy = () => InternalFibonacciIterator(last, secondLast);
+
+    return {
+      [Symbol.iterator]: () => ({ next }),
+      copy,
+    };
+  };
+
+  return InternalFibonacciIterator();
 };

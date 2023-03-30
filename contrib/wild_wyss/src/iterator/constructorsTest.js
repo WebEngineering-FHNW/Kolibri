@@ -11,7 +11,9 @@ import {
   StackIterator,
   emptyIterator,
   map,
-  retainAll,
+  take,
+  drop,
+  retainAll, FibonacciIterator, dropWhile,
 } from "./iterator.js"
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
@@ -171,4 +173,28 @@ iteratorSuite.add("test copy: StackIterator", assert => {
   assert.is(arrayEq([3,2,1])([...copy]), true);
 });
 
+iteratorSuite.add("test typical: FibonacciIterator", assert => {
+  const iterator = FibonacciIterator();
+  const result = take(8)(iterator);
+  assert.is(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...result]), true);
+});
+
+iteratorSuite.add("test copy: FibonacciIterator", assert => {
+  const iterator = FibonacciIterator();
+  const result   = take(8)(iterator);
+  const copy     = result.copy();
+  assert.is(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...result]), true);
+  assert.is(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...copy]), true);
+});
+
+iteratorSuite.add("test copy on used iterator: FibonacciIterator", assert => {
+  const iterator = FibonacciIterator();
+  const result   =  drop(1)(iterator);
+  for (const elem of result) {
+    if(elem !== 1) break;
+  }
+  const copy = result.copy();
+  assert.is(arrayEq([3, 5, 8, 13, 21])([...take(5)(result)]), true);
+  assert.is(arrayEq([3, 5, 8, 13, 21])([...take(5)(copy)]), true);
+});
 iteratorSuite.run();
