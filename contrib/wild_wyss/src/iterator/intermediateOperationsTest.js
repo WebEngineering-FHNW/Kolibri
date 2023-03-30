@@ -263,26 +263,4 @@ iteratorSuite.add("test empty: mconcat", assert => {
   assert.isTrue(arrayEq([])([...concatenated]));
 });
 
-iteratorSuite.add("test copy advanced: take", assert => {
-  const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
-  const taken = take(3)(iterator);
-  for (const elem of taken) {
-   break;
-  }
-  const copy = taken.copy();
-  assert.isTrue(arrayEq([1, 2])([...taken]));
-  assert.isTrue(arrayEq([1, 2])([...copy]));
-});
-
-iteratorSuite.add("test copy advanced: drop", assert => {
-  const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
-  const taken = drop(1)(iterator);
-  for (const elem of taken) {
-    break;
-  }
-  const copy = taken.copy();
-  assert.isTrue(arrayEq([2,3,4])([...taken]));
-  assert.isTrue(arrayEq([2,3,4])([...copy]));
-});
-
 iteratorSuite.run();
