@@ -159,25 +159,51 @@ const dropOld = count => iterator => {
   };
 };
 
-const drop = count => iterator => {
-  const inner = iterator.copy();
+// ???????
+const dropMinus = count => iterator => {
+    const inner = iterator.copy();
 
-  const next = () => {
-    let { done, value } = nextOf(inner);
+    const next = () => {
+      let { done, value } = nextOf(inner);
 
-    while (!done && count-- > 0) {
-      const n = nextOf(inner);
-      done = n.done;
-      value = n.value;
+      while (!done && count-- > 0) {
+        const n = nextOf(inner);
+        done = n.done;
+        value = n.value;
+      }
+
+      return { done, value }
+    };
+
+    return {
+      [Symbol.iterator]: () => ({ next }),
+      copy: () => dropMinus(count)(iterator)
     }
+};
 
-    return { done, value }
+const drop = count => iterator => {
+
+  const internalDrop = start => count => iterator => {
+    const inner = iterator.copy();
+
+    const next = () => {
+      let { done, value } = nextOf(inner);
+
+      while (!done && start++ < count) {
+        const n = nextOf(inner);
+        done = n.done;
+        value = n.value;
+      }
+
+      return { done, value }
+    };
+
+    return {
+      [Symbol.iterator]: () => ({ next }),
+      copy: () => internalDrop(start)(count)(inner),
+    }
   };
-
-  return {
-    [Symbol.iterator]: () => ({ next }),
-    copy: () => drop(count)(inner),
-  }
+  return internalDrop(0)(count)(iterator);
 };
 
 /**
@@ -218,16 +244,19 @@ const reverse$ = iterator => {
  */
 const cons = element => iterator => {
   const inner = iterator.copy();
+  let value = element;
 
-  let isReturned = false;
   const next = () => {
-    if (!isReturned) {
-      isReturned = true;
+    if (value !== undefined) {
+      value = undefined;
       return { done: false, value: element };
     }
     return nextOf(inner);
   };
-  return createIteratorWithArgs(next)(cons)(element)(inner);
+  return {
+    [Symbol.iterator]: () => ({ next }),
+    copy: () => cons(value)(inner)
+  }
 };
 
 /**
@@ -274,20 +303,24 @@ const takeWhile = predicate => iterator => {
  * const dropped = take(4)(it);
  */
 const take = count => iterator => {
+
+  const internalTake = start => count => iterator => {
     const inner = iterator.copy();
 
     const next = () => {
       const el = nextOf(inner);
       // the iterator finishes, when the predicate does not return true anymore,
       // or the previous iterator has no more elements left
-      const done = el.done || count-- === 0;
+      const done = el.done || start++ >= count;
       return  { value: el.value, done };
     };
 
     return {
-      [Symbol.iterator]: () => ({next}),
-      copy: () => take(count)(inner)
+      [Symbol.iterator]: () => ({ next }),
+      copy: () => internalTake(start)(count)(inner)
     };
+  };
+  return internalTake(0)(count)(iterator);
 };
 
 /**
@@ -327,8 +360,14 @@ const mconcat = iterator =>
  * // prints: 0, 1, 2, 0, 1, 2
  */
 const cycle = iterator => {
-    const origin  = iterator.copy();
-    let inner     = origin.copy();
+
+  // internalCycle is used to create a proper copy and makes sure the following points:
+  // - continue from the current value of the underlying iterator (and not from the first value of the origin iterator)
+  // - that the iterator works on the full range of the original iterator when the next cycle begins
+  const internalCycle = original => current => {
+
+    const origin  = original.copy();
+    let inner     = current.copy();
 
     const next = () => {
       const result = nextOf(inner);
@@ -336,9 +375,14 @@ const cycle = iterator => {
 
       inner = origin.copy();
       return nextOf(inner);
-  };
+    };
 
-  return createIterator(next)(cycle)(inner)
+    return {
+      [Symbol.iterator]: () => ({ next }),
+      copy: () => internalCycle(origin)(inner),
+    }
+  };
+  return internalCycle(iterator)(iterator);
 };
 
 /**
