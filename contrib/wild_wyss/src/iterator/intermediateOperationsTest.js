@@ -178,6 +178,7 @@ const expectedZipResult = [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(
   const [ name, op, callback, expected, evalFn] = el;
   iteratorSuite.add(`test simple: ${name}`,                           testSimple(op(callback))(expected)(evalFn));
   iteratorSuite.add(`test copy: ${name}`,                             testCopy(op(callback))(evalFn));
+  iteratorSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(op(callback))(evalFn));
   iteratorSuite.add(`test purity: ${name}.`,                          testPurity(op(callback)));
   iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(op)(callback));
 });
