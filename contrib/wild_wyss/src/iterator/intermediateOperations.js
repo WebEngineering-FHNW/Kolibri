@@ -148,11 +148,36 @@ const dropWhile = predicate => iterator => {
  * const it      = Constructors(0, inc, stop);
  * const dropped = drop(2)(it);
  */
-const drop = count => iterator => {
-  let i = 0;
+const dropOld = count => iterator => {
+  // next wird auf inner aufgerufen ( dieser ruft next() auf der Kopie von iterator auf)
+  // wird drop kopiert, verschwindet die INformation, das shcon mal next aufgerufen wurde.
+  const inner = dropWhile(_ => count-- > 0)(iterator);
 
-  const inner = dropWhile(_ => i++ < count)(iterator);
-  return createIteratorWithArgs(inner[Symbol.iterator]().next)(drop)(count)(iterator);
+  return {
+   [Symbol.iterator]: () => ({next: () => nextOf(inner)}),
+     copy: () => dropOld(count)(iterator)
+  };
+};
+
+const drop = count => iterator => {
+  const inner = iterator.copy();
+
+  const next = () => {
+    let { done, value } = nextOf(inner);
+
+    while (!done && count-- > 0) {
+      const n = nextOf(inner);
+      done = n.done;
+      value = n.value;
+    }
+
+    return { done, value }
+  };
+
+  return {
+    [Symbol.iterator]: () => ({ next }),
+    copy: () => drop(count)(inner),
+  }
 };
 
 /**
@@ -249,11 +274,20 @@ const takeWhile = predicate => iterator => {
  * const dropped = take(4)(it);
  */
 const take = count => iterator => {
-  let i = 0;
-  // just returning takeWhile would break copy, since the state of i would be the same for all copies
-  const inner = takeWhile(_ => i++ < count)(iterator);
+    const inner = iterator.copy();
 
-  return createIteratorWithArgs(inner[Symbol.iterator]().next)(take)(count)(iterator);
+    const next = () => {
+      const el = nextOf(inner);
+      // the iterator finishes, when the predicate does not return true anymore,
+      // or the previous iterator has no more elements left
+      const done = el.done || count-- === 0;
+      return  { value: el.value, done };
+    };
+
+    return {
+      [Symbol.iterator]: () => ({next}),
+      copy: () => take(count)(inner)
+    };
 };
 
 /**

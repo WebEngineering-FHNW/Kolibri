@@ -79,8 +79,18 @@ const testPurity = op => assert => {
 const testCopy = op => (evalFn = arrayEq) => assert => {
   const expected = op(newIterator(UPPER_ITERATOR_BOUNDARY));
   const copied   = op(newIterator(UPPER_ITERATOR_BOUNDARY)).copy();
-
   assert.isTrue(evalFn([...expected])([...copied]));
+};
+
+
+const testCopyAfterConsumption = op => (evalFn = arrayEq) => assert => {
+  const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
+  const operated = op(iterator);
+  for (const elem of operated) {
+    break; // consume one element
+  }
+  const copy = operated.copy();
+  assert.isTrue(evalFn([...operated])([...copy]));
 };
 
 /**
@@ -150,9 +160,10 @@ const expectedZipResult = [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(
   ["zip",           zipInit,                           expectedZipResult,         zipEvaluation]
 ].forEach(el => {
   const [ name, op, expected, evalFn ] = el;
-  iteratorSuite.add(`test simple: ${name}`,  testSimple (op)(expected)(evalFn));
-  iteratorSuite.add(`test copy: ${name}`,    testCopy   (op)(evalFn));
-  iteratorSuite.add(`test purity: ${name}.`, testPurity (op));
+  iteratorSuite.add(`test simple: ${name}`,                 testSimple              (op)(expected)(evalFn));
+  iteratorSuite.add(`test copy: ${name}`,                   testCopy                (op)(evalFn));
+  iteratorSuite.add(`test copy after consumption: ${name}`, testCopyAfterConsumption(op)(evalFn));
+  iteratorSuite.add(`test purity: ${name}.`,                testPurity              (op));
 });
 
 // operations which take callbacks as arguments
@@ -251,4 +262,27 @@ iteratorSuite.add("test empty: mconcat", assert => {
   const concatenated = mconcat(ArrayIterator([emptyIterator]));
   assert.isTrue(arrayEq([])([...concatenated]));
 });
+
+iteratorSuite.add("test copy advanced: take", assert => {
+  const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
+  const taken = take(3)(iterator);
+  for (const elem of taken) {
+   break;
+  }
+  const copy = taken.copy();
+  assert.isTrue(arrayEq([1, 2])([...taken]));
+  assert.isTrue(arrayEq([1, 2])([...copy]));
+});
+
+iteratorSuite.add("test copy advanced: drop", assert => {
+  const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
+  const taken = drop(1)(iterator);
+  for (const elem of taken) {
+    break;
+  }
+  const copy = taken.copy();
+  assert.isTrue(arrayEq([2,3,4])([...taken]));
+  assert.isTrue(arrayEq([2,3,4])([...copy]));
+});
+
 iteratorSuite.run();
