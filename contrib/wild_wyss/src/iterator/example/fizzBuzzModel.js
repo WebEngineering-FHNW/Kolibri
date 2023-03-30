@@ -4,6 +4,23 @@ import { emptyIterator }    from "../constructors.js";
 
 export { FizzBuzzModel, Rule }
 
+/**
+ * @typedef RuleType
+ * @property { () => Number }                               getNr
+ * @property { (nr: Number) => void }                       setNr
+ * @property { () => String }                               getText
+ * @property { (text: String) => void }                     setText
+ * @property { (cb: ValueChangeCallback<Number> ) => void } onNrChanged
+ * @property { (cb: ValueChangeCallback<String> ) => void } onTextChanged
+ */
+
+/**
+ *
+ * @param nr
+ * @param text
+ * @returns { RuleType }
+ * @constructor
+ */
 const Rule = (nr = 1, text = "change me") => {
   const nrAttr    = Attribute(nr);
   const textAttr  = Attribute(text);
@@ -18,6 +35,22 @@ const Rule = (nr = 1, text = "change me") => {
   }
 };
 
+/**
+ * @typedef FizzBuzzModelType
+ *
+ * @property { () => Array<RuleType> }                                      rulesSnapshot
+ * @property { () => Number }                                               getLowerBoundary
+ * @property { (value: Number) => void }                                    setLowerBoundary
+ * @property { () => Number }                                               getUpperBoundary
+ * @property { (value: Number) => void }                                    setUpperBoundary
+ * @property { (nr: Number, text: String) => void }                         addRule
+ * @property { (nr: Number) => void }                                       delRule
+ * @property { (cb: ValueChangeCallback<IteratorType<RuleType>>) => void }  onResultChange
+ * @property { (result: IteratorType<RuleType>) => void }                   setResult
+ * @property { (cb: ValueChangeCallback<Array<RuleType>>) => void }         onRulesChange
+ * @property { (cb: ValueChangeCallback<Number>) => void }                  onLowerBoundaryChange
+ * @property { (cb: ValueChangeCallback<Number>) => void }                  onUpperBoundaryChange
+ */
 const FizzBuzzModel = () => {
   const rules         = Observable([]);
   const result        = Observable(emptyIterator);
