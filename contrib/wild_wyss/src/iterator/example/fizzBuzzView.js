@@ -20,7 +20,6 @@ const FizzBuzzView = (controller, rootElement) => {
     rulesRoot.replaceChildren(...ruleElements);
   };
 
-
   controller.onRulesChange (renderRules);
   controller.onResultChange(renderResult);
 
@@ -57,7 +56,7 @@ const boundaryProjector = controller => {
  */
 const resultProjector = (controller, result) => {
   const [numberedList] = dom(`<ol start="${controller.getLowerBoundary()}"></ol>`);
-  numberedList.append(..._.map(el => dom(`<li>${el}</li>`)[0])(result));
+  numberedList.append(... _.map(row => dom(`<li>${row}</li>`)[0])(result));
   return numberedList;
 };
 
