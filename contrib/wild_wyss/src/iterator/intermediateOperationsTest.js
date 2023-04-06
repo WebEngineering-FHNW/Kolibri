@@ -49,7 +49,6 @@ const UPPER_ITERATOR_BOUNDARY = 4;
 const testSimple = op => expected => (evalFn = arrayEq) => assert => {
   const it       = newIterator(UPPER_ITERATOR_BOUNDARY);
   const operated = op(it);
-  console.log(...operated.copy());
   assert.isTrue(evalFn([...expected])([...operated]));
 };
 

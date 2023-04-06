@@ -273,6 +273,15 @@ const internalMap = mapper => iterator => {
   return createIteratorWithArgs(next)(internalMap)(mapper)(inner);
 };
 
+/**
+ * Generates the Fibonacci sequence.
+ * @returns { IteratorType<Number> }
+ * @constructor
+ * @example
+ * const iterator = FibonacciIterator();
+ * const result = take(8)(iterator);
+ * console.log(...result); // prints 1, 1, 2, 3, 5, 8, 13, 21 to the console
+ */
 const FibonacciIterator = () => {
 
   const FibonacciIteratorFactory = (last = 0, secondLast = 0) => {
