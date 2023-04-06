@@ -13,7 +13,7 @@ import {
   map,
   take,
   drop,
-  retainAll, FibonacciIterator, dropWhile,
+  retainAll, FibonacciIterator, dropWhile, AngleIterator,
 } from "./iterator.js"
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
@@ -22,22 +22,22 @@ const iteratorSuite = TestSuite("Iterator");
 
 iteratorSuite.add("test typical case: Constructors", assert => {
   const iterator = Iterator(0, current => current + 1, current => current > 5);
-  assert.is(arrayEq([0, 1, 2, 3, 4, 5])([...iterator]), true);
-  assert.is(arrayEq([])([...iterator]), true);
+  assert.isTrue(arrayEq([0, 1, 2, 3, 4, 5])([...iterator]));
+  assert.isTrue(arrayEq([])([...iterator]));
 });
 
 iteratorSuite.add("test copy: Constructors", assert => {
   const iterator = Iterator(0, current => current + 1, current => current > 5);
   const copy = iterator.copy();
-  assert.is(arrayEq([0, 1, 2, 3, 4, 5])([...copy]), true);
-  assert.is(arrayEq([0, 1, 2, 3, 4, 5])([...iterator]), true);
+  assert.isTrue(arrayEq([0, 1, 2, 3, 4, 5])([...copy]));
+  assert.isTrue(arrayEq([0, 1, 2, 3, 4, 5])([...iterator]));
 });
 
 iteratorSuite.add("test special case: no increment after done", assert => {
   let result = true;
   const iterator = Iterator(true, _ => result = false, _ => true);
   for (const iteratorElement of iterator) { /* exhausting iterator */ }
-  assert.is(result, true);
+  assert.isTrue(result);
 });
 
 iteratorSuite.add("test typical case: pipe", assert => {
@@ -47,12 +47,12 @@ iteratorSuite.add("test typical case: pipe", assert => {
     retainAll(el => el % 2 === 0)
   );
 
-  assert.is(arrayEq([2,4])([...piped]), true);
+  assert.isTrue(arrayEq([2,4])([...piped]));
 });
 
 iteratorSuite.add("test typical case: ArrayIterator", assert => {
   const arrayIterator = ArrayIterator([1,2,3]);
-  assert.is(arrayEq([1,2,3])([...arrayIterator]), true);
+  assert.isTrue(arrayEq([1,2,3])([...arrayIterator]));
 });
 
 iteratorSuite.add("test iterate on copy: ArrayIterator", assert => {
@@ -60,7 +60,7 @@ iteratorSuite.add("test iterate on copy: ArrayIterator", assert => {
   const arrayIterator = ArrayIterator(arr);
   arr.push(4);
 
-  assert.is(arrayEq([1,2,3])([...arrayIterator]), true);
+  assert.isTrue(arrayEq([1,2,3])([...arrayIterator]));
 
 });
 
@@ -70,7 +70,7 @@ iteratorSuite.add("test advanced case: ArrayIterator", assert => {
     map(i => i + 1),
     retainAll(el => el % 2 === 0)
   );
-  assert.is(arrayEq([2,4])([...pipedArrayIterator]), true);
+  assert.isTrue(arrayEq([2,4])([...pipedArrayIterator]));
 });
 
 iteratorSuite.add("test array does not exceed", assert => {
@@ -83,7 +83,7 @@ iteratorSuite.add("test typical case: tuple iterator", assert => {
   const [ Triple ]    = Tuple(3);
   const triple        = Triple(1)(2)(3);
   const tupleIterator = TupleIterator(triple);
-  assert.is(arrayEq([1,2,3])([...tupleIterator]), true);
+  assert.isTrue(arrayEq([1,2,3])([...tupleIterator]));
 });
 
 iteratorSuite.add("test advanced case: tuple iterator", assert => {
@@ -94,14 +94,14 @@ iteratorSuite.add("test advanced case: tuple iterator", assert => {
     map(i => i + 1),
     retainAll(el => el % 2 === 0)
   );
-  assert.is(arrayEq([2,4])([...pipedTupleIterator]), true);
+  assert.isTrue(arrayEq([2,4])([...pipedTupleIterator]));
 });
 
 iteratorSuite.add("test typical case: ConcatIterator", assert => {
   const it1 = newIterator(4);
   const it2 = newIterator(2);
   const concatIterator = ConcatIterator(it1)(it2);
-  assert.is(arrayEq([0,1,2,3,4,0,1,2])([...concatIterator]), true);
+  assert.isTrue(arrayEq([0,1,2,3,4,0,1,2])([...concatIterator]));
 });
 
 iteratorSuite.add("test copy: ConcatIterator", assert => {
@@ -110,7 +110,7 @@ iteratorSuite.add("test copy: ConcatIterator", assert => {
   const concatIterator = ConcatIterator(it1)(it2);
   const copy = concatIterator.copy();
   for (const _ of concatIterator) { /* Exhausting */ }
-  assert.is(arrayEq([0,1,2,3,4,0,1,2])([...copy]), true);
+  assert.isTrue(arrayEq([0,1,2,3,4,0,1,2])([...copy]));
 });
 
 iteratorSuite.add("test purity: ConcatIterator", assert => {
@@ -118,15 +118,15 @@ iteratorSuite.add("test purity: ConcatIterator", assert => {
   const it2 = newIterator(2);
   const concatIterator = ConcatIterator(it1)(it2);
   for (const _ of concatIterator) { /* Exhausting */ }
-  assert.is(arrayEq([0,1,2,3,4])([...it1]), true);
-  assert.is(arrayEq([0,1,2])    ([...it2]), true);
+  assert.isTrue(arrayEq([0,1,2,3,4])([...it1]));
+  assert.isTrue(arrayEq([0,1,2])    ([...it2]));
 });
 
 iteratorSuite.add("test left/right neutrality: ConcatIterator", assert => {
   const left =  ConcatIterator(emptyIterator)(newIterator(4));
   const right = ConcatIterator(newIterator(4))(emptyIterator);
   const expected = [0,1,2,3,4];
-  assert.is(arrayEq(expected)([...right]), true);
+  assert.isTrue(arrayEq(expected)([...right]));
   assert.is(arrayEq(expected)([...left]),  true);
 });
 
@@ -134,7 +134,7 @@ iteratorSuite.add("test left/right associativity: ConcatIterator", assert => {
   const left  = ConcatIterator(ConcatIterator(newIterator(2))(newIterator(1)))(newIterator(3));
   const right = ConcatIterator(newIterator(2))(ConcatIterator(newIterator(1))(newIterator(3)));
   const expected = [0,1,2,0,1,0,1,2,3];
-  assert.is(arrayEq(expected)([...right]), true);
+  assert.isTrue(arrayEq(expected)([...right]));
   assert.is(arrayEq(expected)([...left]),  true);
 });
 
@@ -161,7 +161,7 @@ iteratorSuite.add("test typical case: stack iterator", assert => {
   const stack = push(push(push(emptyStack)(1))(2))(3);
 
   const stackIterator = StackIterator(stack);
-  assert.is(arrayEq([3,2,1])([...stackIterator]), true);
+  assert.isTrue(arrayEq([3,2,1])([...stackIterator]));
 });
 
 iteratorSuite.add("test copy: StackIterator", assert => {
@@ -170,21 +170,21 @@ iteratorSuite.add("test copy: StackIterator", assert => {
   const stackIterator = StackIterator(stack);
   const copy = stackIterator.copy();
   for (const _ of stackIterator) { /* Exhausting */ }
-  assert.is(arrayEq([3,2,1])([...copy]), true);
+  assert.isTrue(arrayEq([3,2,1])([...copy]));
 });
 
 iteratorSuite.add("test typical: FibonacciIterator", assert => {
   const iterator = FibonacciIterator();
   const result = take(8)(iterator);
-  assert.is(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...result]), true);
+  assert.isTrue(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...result]));
 });
 
 iteratorSuite.add("test copy: FibonacciIterator", assert => {
   const iterator = FibonacciIterator();
   const result   = take(8)(iterator);
   const copy     = result.copy();
-  assert.is(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...result]), true);
-  assert.is(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...copy]), true);
+  assert.isTrue(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...result]));
+  assert.isTrue(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...copy]));
 });
 
 iteratorSuite.add("test copy on used iterator: FibonacciIterator", assert => {
@@ -194,7 +194,13 @@ iteratorSuite.add("test copy on used iterator: FibonacciIterator", assert => {
     if(elem !== 1) break;
   }
   const copy = result.copy();
-  assert.is(arrayEq([3, 5, 8, 13, 21])([...take(5)(result)]), true);
-  assert.is(arrayEq([3, 5, 8, 13, 21])([...take(5)(copy)]), true);
+  assert.isTrue(arrayEq([3, 5, 8, 13, 21])([...take(5)(result)]));
+  assert.isTrue(arrayEq([3, 5, 8, 13, 21])([...take(5)(copy)]));
 });
+
+iteratorSuite.add("test typical case: AngleIterator", assert => {
+  const iterator = AngleIterator(4);
+  assert.isTrue(arrayEq([0, 90, 180, 270])([...iterator]));
+});
+
 iteratorSuite.run();

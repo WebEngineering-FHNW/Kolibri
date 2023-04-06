@@ -1,6 +1,8 @@
 import { pop, emptyStack, stackEquals } from "../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import { fst, snd }                     from "../../../../docs/src/kolibri/stdlib.js";
 import { convertToJsBool }              from "../logger/lamdaCalculus.js";
+import {Range} from "../range/range.js";
+import {take} from "./intermediateOperations.js";
 
 export {
   pipe,
@@ -14,6 +16,7 @@ export {
   StackIterator,
   emptyIterator,
   FibonacciIterator,
+  AngleIterator,
 }
 
 /**
@@ -230,6 +233,7 @@ const createIteratorWithArgs = next => operation => (...args) => innerIterator =
  *         => IteratorType<_T_>
  *       }
  */
+
 const createIterator = next => operation => innerIterator => {
   const copy = () => operation(innerIterator);
 
@@ -269,10 +273,9 @@ const internalMap = mapper => iterator => {
   return createIteratorWithArgs(next)(internalMap)(mapper)(inner);
 };
 
-
 const FibonacciIterator = () => {
 
-  const InternalFibonacciIterator = (last = 0, secondLast = 0) => {
+  const FibonacciIteratorFactory = (last = 0, secondLast = 0) => {
 
     const next = () => {
       let current = last + secondLast;
@@ -282,7 +285,7 @@ const FibonacciIterator = () => {
       return { done: false, value: current };
     };
 
-    const copy = () => InternalFibonacciIterator(last, secondLast);
+    const copy = () => FibonacciIteratorFactory(last, secondLast);
 
     return {
       [Symbol.iterator]: () => ({ next }),
@@ -290,5 +293,19 @@ const FibonacciIterator = () => {
     };
   };
 
-  return InternalFibonacciIterator();
+  return FibonacciIteratorFactory();
 };
+
+/**
+ * Creates an iterator which returns evenly spaced angles between 0 and 360.
+ *
+ * @param { Number } count - the number of angles to create.
+ * @returns { IteratorType<Number> }
+ * @constructor
+ * @example
+ * const iterator = AngleIterator(4);
+ * console.log(...iterator); // logs 0, 90, 180, 270 to the console
+ */
+const AngleIterator = count =>
+  // since the Range includes the upper boundary, take assures, that the desired number of angles are returned.
+  take(count)(Range(0, 360, 360 / count));
