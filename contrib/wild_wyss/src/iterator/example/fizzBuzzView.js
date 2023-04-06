@@ -1,6 +1,5 @@
-import { dom } from "../../../../../docs/src/kolibri/util/dom.js";
-import * as _  from "../iterator.js";
-import {iteratorProjector} from "../projector/iteratorProjector.js";
+import { dom }               from "../../../../../docs/src/kolibri/util/dom.js";
+import { iteratorProjector } from "../projector/iteratorProjector.js";
 
 export { FizzBuzzView }
 
@@ -10,13 +9,13 @@ export { FizzBuzzView }
  * @param { HTMLElement } rootElement
  */
 const FizzBuzzView = (controller, rootElement) => {
-  const [addButton]     = dom(`<button>Add Rule</button>`);
-  const [rulesRoot]     = dom(`<div></div>`);
-  const [resultRoot]    = dom(`<div></div>`);
+  const [addButton]                  = dom(`<button style="margin-top: 5px">Add Rule</button>`);
+  const [rulesHeader, rulesRoot]     = dom(`<h3>Rules</h3><div></div>`);
+  const [resultHeader, resultRoot]   = dom(`<h3>Result</h3><div></div>`);
 
   const boundaryElements = boundaryProjector(controller);
-  const renderResult     = result => resultRoot.replaceChildren(resultProjector(controller, result));
-  const renderRules      = rules => {
+  const renderResult = result => resultRoot.replaceChildren(resultProjector(controller, result));
+  const renderRules  = rules => {
     const ruleElements = rules.map(rule => ruleProjector(rule));
     rulesRoot.replaceChildren(...ruleElements);
   };
@@ -25,7 +24,7 @@ const FizzBuzzView = (controller, rootElement) => {
   controller.onResultChange(renderResult);
 
   addButton  .onclick = () => controller.addRule();
-  rootElement.append(rulesRoot, boundaryElements, addButton, resultRoot);
+  rootElement.append(rulesHeader, rulesRoot, addButton, boundaryElements, resultHeader, resultRoot);
 };
 
 /**
@@ -34,10 +33,12 @@ const FizzBuzzView = (controller, rootElement) => {
  */
 const boundaryProjector = controller => {
   const [container]  = dom(`<div></div>`);
-  const [labelUpper] = dom(`<label for="upperSlider">to: </label>`);
-  const [labelLower] = dom(`<label for="lowerSlider">from: </label>`);
-  const [upperInput] = dom(`<input type="number" value="${controller.getUpperBoundary()}" id="upperSlider">`);
-  const [lowerInput] = dom(`<input type="number" value="${controller.getLowerBoundary()}" id="lowerSlider">`);
+  const [header]     = dom(`<h3>Range</h3>`);
+  const [body]       = dom(`<div class="rangeGrid"></div>`);
+  const [labelUpper] = dom(`<label for="upper">to: </label>`);
+  const [labelLower] = dom(`<label for="lower">from: </label>`);
+  const [upperInput] = dom(`<input type="number" value="${controller.getUpperBoundary()}" id="upper" class="numberInput">`);
+  const [lowerInput] = dom(`<input type="number" value="${controller.getLowerBoundary()}" id="lower" class="numberInput">`);
 
   upperInput.onchange = _ => controller.setUpperBoundary(Number(upperInput.value));
   lowerInput.onchange = _ => controller.setLowerBoundary(Number(lowerInput.value));
@@ -45,7 +46,8 @@ const boundaryProjector = controller => {
   controller.onLowerBoundaryChange(value => lowerInput.value = value);
   controller.onUpperBoundaryChange(value => upperInput.value = value);
 
-  container.append(labelLower, lowerInput, labelUpper, upperInput);
+  body.append(labelLower, lowerInput,labelUpper, upperInput);
+  container.append(header, body);
   return container;
 };
 
@@ -91,7 +93,7 @@ const ruleTextProjector = rule => {
  * @returns { HTMLElement }
  */
 const ruleProjector = rule => {
-  const container = document.createElement("DIV");
+  const [container]= dom(`<div class="rulesGrid"></div>`)
   container.append(
     ruleNrProjector(rule),
     ruleTextProjector(rule)
