@@ -13,7 +13,7 @@ import {
   map,
   take,
   drop,
-  retainAll, FibonacciIterator, dropWhile, AngleIterator,
+  retainAll, FibonacciIterator, dropWhile, AngleIterator, SquareNumberIterator,
 } from "./iterator.js"
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
@@ -201,6 +201,11 @@ iteratorSuite.add("test copy on used iterator: FibonacciIterator", assert => {
 iteratorSuite.add("test typical case: AngleIterator", assert => {
   const iterator = AngleIterator(4);
   assert.isTrue(arrayEq([0, 90, 180, 270])([...iterator]));
+});
+
+iteratorSuite.add("test typical case: SquareNumberIterator", assert => {
+  const iterator = take(5)(SquareNumberIterator());
+  assert.isTrue(arrayEq([1, 4, 9, 16, 25])([...iterator]));
 });
 
 iteratorSuite.run();
