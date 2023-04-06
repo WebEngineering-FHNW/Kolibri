@@ -34,8 +34,8 @@ const iteratorSuite = TestSuite("IntermediateOperations");
 const UPPER_ITERATOR_BOUNDARY = 4;
 
 /**
- * Tests if a given operation applicated on an iterator proccesses the expected result.
- * Optionally an evaulation function can be passed to compare the created array using the operation and the expected array.
+ * Tests if a given operation applicated on an iterator processes the expected result.
+ * Optionally an evaluation function can be passed to compare the created array using the operation and the expected array.
  * @function
  * @template _T_
  * @type {
@@ -49,6 +49,7 @@ const UPPER_ITERATOR_BOUNDARY = 4;
 const testSimple = op => expected => (evalFn = arrayEq) => assert => {
   const it       = newIterator(UPPER_ITERATOR_BOUNDARY);
   const operated = op(it);
+  console.log(...operated.copy());
   assert.isTrue(evalFn([...expected])([...operated]));
 };
 
@@ -68,7 +69,7 @@ const testPurity = op => assert => {
 
 /**
  * Tests if the copy function of a given operation works as intended.
- * Optionally an evaulation function can be passed to compare the created array using the operation and the expected array.
+ * Optionally an evaluation function can be passed to compare the created array using the operation and the expected array.
  * @type {
  *         (op: (number) => IteratorType<number>)
  *      => (evalFn?: (expected: Array<any>) => (actual: Array<any> ) => boolean)
@@ -83,9 +84,11 @@ const testCopy = op => (evalFn = arrayEq) => assert => {
 };
 
 
+
 const testCopyAfterConsumption = op => (evalFn = arrayEq) => assert => {
   const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
   const operated = op(iterator);
+  // noinspection LoopStatementThatDoesntLoopJS
   for (const elem of operated) {
     break; // consume one element
   }
@@ -149,7 +152,7 @@ const zipEvaluation = expectedArray => actualArray => {
 
 const expectedZipResult = [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(4)(4)];
 
-// operations which take values as argumnets
+// operations which take values as arguments
 [
   ["drop",          drop(2),                           [2, 3, 4],                 ],
   ["take",          take(2),                           [0, 1],                    ],
@@ -250,7 +253,7 @@ iteratorSuite.add("test concat with infinity: mconcat", assert => {
   let counter = 0;
 
   const endless                = Iterator(0, i => i + 1, _ => false);
-  const iteratorWithSideEffect = Iterator(false, _ => called = true, _ => false)
+  const iteratorWithSideEffect = Iterator(false, _ => called = true, _ => false);
   const concatenated           = mconcat(ArrayIterator([endless, iteratorWithSideEffect]));
 
   for (const _ of concatenated) {

@@ -2,7 +2,6 @@ import {
   ArrayIterator,
   ConcatIterator,
   createIteratorWithArgs,
-  createIterator,
   emptyIterator,
   nextOf,
   reduce$,
@@ -148,42 +147,17 @@ const dropWhile = predicate => iterator => {
  * const it      = Constructors(0, inc, stop);
  * const dropped = drop(2)(it);
  */
-const dropOld = count => iterator => {
-  // next wird auf inner aufgerufen ( dieser ruft next() auf der Kopie von iterator auf)
-  // wird drop kopiert, verschwindet die INformation, das shcon mal next aufgerufen wurde.
-  const inner = dropWhile(_ => count-- > 0)(iterator);
-
-  return {
-   [Symbol.iterator]: () => ({next: () => nextOf(inner)}),
-     copy: () => dropOld(count)(iterator)
-  };
-};
-
-// ???????
-const dropMinus = count => iterator => {
-    const inner = iterator.copy();
-
-    const next = () => {
-      let { done, value } = nextOf(inner);
-
-      while (!done && count-- > 0) {
-        const n = nextOf(inner);
-        done = n.done;
-        value = n.value;
-      }
-
-      return { done, value }
-    };
-
-    return {
-      [Symbol.iterator]: () => ({ next }),
-      copy: () => dropMinus(count)(iterator)
-    }
-};
-
 const drop = count => iterator => {
 
-  const internalDrop = start => count => iterator => {
+  /**
+   * @type { <_T_>
+   *     (start: Number)
+   *  => (count: Number)
+   *  => (iterator: IteratorType<_T_>)
+   *  => IteratorType<_T_>
+   * }
+   */
+  const dropFactory = start => count => iterator => {
     const inner = iterator.copy();
 
     const next = () => {
@@ -200,10 +174,10 @@ const drop = count => iterator => {
 
     return {
       [Symbol.iterator]: () => ({ next }),
-      copy: () => internalDrop(start)(count)(inner),
+      copy: () => dropFactory(start)(count)(inner),
     }
   };
-  return internalDrop(0)(count)(iterator);
+  return dropFactory(0)(count)(iterator);
 };
 
 /**
@@ -304,7 +278,15 @@ const takeWhile = predicate => iterator => {
  */
 const take = count => iterator => {
 
-  const internalTake = start => count => iterator => {
+  /**
+   * @type { <_T_>
+   *     (start: Number)
+   *  => (count: Number)
+   *  => (iterator: IteratorType<_T_>)
+   *  => IteratorType<_T_>
+   * }
+   */
+  const takeFactory = start => count => iterator => {
     const inner = iterator.copy();
 
     const next = () => {
@@ -312,15 +294,15 @@ const take = count => iterator => {
       // the iterator finishes, when the predicate does not return true anymore,
       // or the previous iterator has no more elements left
       const done = el.done || start++ >= count;
-      return  { value: el.value, done };
+      return { value: el.value, done };
     };
 
     return {
       [Symbol.iterator]: () => ({ next }),
-      copy: () => internalTake(start)(count)(inner)
+      copy: () => takeFactory(start)(count)(inner)
     };
   };
-  return internalTake(0)(count)(iterator);
+  return takeFactory(0)(count)(iterator);
 };
 
 /**
@@ -361,10 +343,10 @@ const mconcat = iterator =>
  */
 const cycle = iterator => {
 
-  // internalCycle is used to create a proper copy and makes sure the following points:
+  // cycleFactory is used to create a proper copy and makes sure the following points:
   // - continue from the current value of the underlying iterator (and not from the first value of the origin iterator)
   // - that the iterator works on the full range of the original iterator when the next cycle begins
-  const internalCycle = original => current => {
+  const cycleFactory = original => current => {
 
     const origin  = original.copy();
     let inner     = current.copy();
@@ -379,10 +361,11 @@ const cycle = iterator => {
 
     return {
       [Symbol.iterator]: () => ({ next }),
-      copy: () => internalCycle(origin)(inner),
+      copy: () => cycleFactory(origin)(inner),
     }
   };
-  return internalCycle(iterator)(iterator);
+
+  return cycleFactory(iterator)(iterator);
 };
 
 /**
@@ -446,7 +429,7 @@ const zipWith = zipper => it1 => it2 => {
  * @type {
  *             (it1: IteratorType<_T_>)
  *          => (it2: IteratorType<_U_>)
- *          => IteratorType<PairType>
+ *          => IteratorType<PairType<_T_, _U_>>
  * }
  * @example
  * const it1 = Range(2);
@@ -456,9 +439,3 @@ const zipWith = zipper => it1 => it2 => {
  * // prints: 2, 3, 4
  */
 const zip = it1 => it2 => zipWith((i,j) => Pair(i)(j))(it1)(it2);
-
-
-/**
- * @see {@link Pair} to see how a Pair works.
- * @typedef PairType
- */
