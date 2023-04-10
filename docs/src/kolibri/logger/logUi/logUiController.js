@@ -1,16 +1,22 @@
 import { Appender as CountAppender }              from "../appender/countAppender.js";
 import { Appender as ObservableAppender }                            from "../appender/observableAppender.js";
-import {addToAppenderList, getLoggingContext, getLoggingLevel, name} from "../logger.js";
 import {
+  getLoggingLevel,
+  setLoggingLevel,
+  getLoggingContext,
+  setLoggingContext,
+  addToAppenderList
+}                                                                    from "../logging.js";
+import {
+  LOG_TRACE,
   LOG_DEBUG,
+  LOG_INFO,
+  LOG_WARN,
   LOG_ERROR,
   LOG_FATAL,
-  LOG_INFO, LOG_NOTHING,
-  LOG_TRACE,
-  LOG_WARN,
-  setLoggingContext,
-  setLoggingLevel
-}                                                                    from "../logger.js";
+  LOG_NOTHING,
+  name
+}                                                                    from "../logLevel.js";
 import {SimpleInputController} from "../../projector/simpleForm/simpleInputController.js";
 
 export { LogUiController }

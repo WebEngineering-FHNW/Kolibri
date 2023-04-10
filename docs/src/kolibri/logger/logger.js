@@ -1,53 +1,17 @@
-import { fst, Pair, snd, and, id, T, F, churchBool, LazyIf }  from "../lambda/church.js";
-import { leq, n0, n1, n2, n3, n4, n5, n9, }                   from "../lambda/churchNumbers.js";
+import { and, T, F, churchBool, LazyIf }                          from "../lambda/church.js";
+import { leq}                                       from "../lambda/churchNumbers.js";
+import {getAppenderList, getLoggingContext, getLoggingLevel, getMessageFormatter} from "./logging.js";
+import {levelNum, name, LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN} from "./logLevel.js";
 
-import {removeItem} from "../util/arrayFunctions.js";
 
 export {
-  LOG_TRACE,
-  LOG_DEBUG,
-  LOG_INFO,
-  LOG_WARN,
-  LOG_ERROR,
-  LOG_FATAL,
-  LOG_NOTHING,
   traceLogger,
   debugLogger,
   infoLogger,
   warnLogger,
   errorLogger,
   fatalLogger,
-  setLoggingContext,
-  getLoggingContext,
-  setLoggingLevel,
-  getLoggingLevel,
-  addToAppenderList,
-  removeFromAppenderList,
-  getAppenderList,
-  setMessageFormatter,
-  messageFormatter,
-  levelNum,
-  name
 }
-
-/**
- * Alias for the use of the {@link Pair} constructor as a {@link LogLevelType}.
- * @type { LogLevelType }
- * @private
- */
-const LogLevel = Pair;
-
-/**
- * Getter for the church numeral value of a log level.
- * @type { (LogLevelType) => ChurchNumberType }
- */
-const levelNum = fst;
-
-/**
- * Getter for the name of a log level.
- * @type { (LogLevelType) => String }
- */
-const name = /** @type { (LogLevelType) => String } */ snd;
 
 /**
  * Yields a configured log function called "logger".
@@ -91,7 +55,7 @@ const logger = loggerLevel => loggerContext => msg =>
       messageShouldBeLogged(loggerLevel)(loggerContext)
   )
   ( _=>
-        appenderList
+        getAppenderList()
             .map(appender => {
               const  levelName     = loggerLevel(name);
               const  levelCallback = appender[levelName.toLowerCase()]; // todo dk: why the appender by level name?
@@ -104,7 +68,7 @@ const logger = loggerLevel => loggerContext => msg =>
               }
               let formattedMessage = "Error: cannot format log message!";
               try {
-                  formattedMessage = messageFormatter(loggerContext)(levelName)(evaluatedMessage); // formatting can fail
+                  formattedMessage = getMessageFormatter()(loggerContext)(levelName)(evaluatedMessage); // formatting can fail
               } catch (e) {
                   success = F;
               }
@@ -132,16 +96,16 @@ const messageShouldBeLogged = loggerLevel => loggerContext =>
  * @type { (loggerLevel: LogLevelChoice) => ChurchBooleanType }
  * @private
  */
-const logLevelActivated = loggerLevel => leq (loggingLevel(levelNum)) (loggerLevel(levelNum));
+const logLevelActivated = loggerLevel => leq (getLoggingLevel()(levelNum)) (loggerLevel(levelNum));
 
 /**
- * Returns {@link T} if the {@link loggingContext} is a prefix of the logger context.
+ * Returns {@link T} if the {@link getLoggingContext} is a prefix of the logger context.
  * @function
  * @param   { LogContextType } loggerContext
  * @return  { ChurchBooleanType }
  * @private
  */
-const contextActivated = loggerContext => churchBool(loggerContext.startsWith(loggingContext));
+const contextActivated = loggerContext => churchBool(loggerContext.startsWith(getLoggingContext()));
 
 /**
  * if the param "msg" is a function, it's result will be returned.
@@ -152,57 +116,6 @@ const contextActivated = loggerContext => churchBool(loggerContext.startsWith(lo
  * @private
  */
 const evaluateMessage = msg => msg instanceof Function ? msg() : msg;
-
-/**
- * @typedef {PairType<ChurchNumberType, String>} LogLevelType
- */
-
-/**
- * The logging level "trace"
- * @returns { LogLevelType }
- */
-const LOG_TRACE = LogLevel(n0)("TRACE");
-
-/**
- * The logging level "debug"
- * @returns { LogLevelType }
- */
-const LOG_DEBUG = LogLevel(n1)("DEBUG");
-
-/**
- * The logging level "info"
- * @returns { LogLevelType }
- */
-const LOG_INFO = LogLevel(n2)("INFO");
-
-/**
- * The logging level "warn"
- * @returns { LogLevelType }
- */
-const LOG_WARN = LogLevel(n3)("WARN");
-
-/**
- * The logging level "error"
- * @returns { LogLevelType }
- */
-const LOG_ERROR = LogLevel(n4)("ERROR");
-
-/**
- * The logging level "fatal"
- * @returns { LogLevelType }
- */
-const LOG_FATAL = LogLevel(n5)("FATAL");
-
-/**
- * The logging level "nothing".
- * Disables the logging level completely.
- * @returns { LogLevelType }
- */
-const LOG_NOTHING = LogLevel(n9)("NOTHING");
-
-/**
- * @typedef { LOG_TRACE | LOG_DEBUG | LOG_INFO | LOG_WARN | LOG_ERROR | LOG_FATAL | LOG_NOTHING } LogLevelChoice
- */
 
 /**
  * Creates a new logger at log level {@link LOG_TRACE}.
@@ -257,107 +170,3 @@ const errorLogger = logger(LOG_ERROR);
  * // writes "a message to log to console" to the console
  */
 const fatalLogger = logger(LOG_FATAL);
-
-/**
- * This is a state.
- * The currently active {@link AppenderType AppenderType's}.
- * @type { Array<AppenderType> }
- */
-const appenderList = [];
-
-/**
- * Adds one or multiple {@link AppenderType AppenderType's} to the appender list.
- * @param { ...AppenderType } newAppender
- */
-const addToAppenderList = (...newAppender) => newAppender.forEach(app => appenderList.push(app));
-
-/**
- * Removes a given {@link AppenderType} from the current appender list.
- *
- * @param   { AppenderType   } item
- * @returns { AppenderType[] }
- */
-const removeFromAppenderList = item => {
-  // correct type is not recognized here.
-  return /** @type { AppenderType[] }*/ [...removeItem(appenderList)(item)];
-};
-
-/**
- * Returns a copy of the current appender list.
- * @return { AppenderType[] }
- */
-const getAppenderList = () => [...appenderList];
-
-/**
- * This is a state.
- * The currently active logging context.
- * Only loggers whose context have this prefix are logged.
- * @type { LogContextType }
- * @private
- */
-let loggingContext = "";
-
-/**
- * This function can be used to define a logging context for the logging framework.
- * Messages will only be logged, if the logger context is more specific than the logging context.
- * @param { LogContextType } newLoggingContext - the newly set context to log
- * @example
- * setLoggingContext("ch.fhnw");
- * // logging context is now set to "ch.fhnw"
- * // loggers with the context "ch.fhnw*" will be logged, all other messages will be ignored.
- */
-const setLoggingContext = newLoggingContext => loggingContext = newLoggingContext;
-
-// noinspection JSUnusedGlobalSymbols
-/**
- * Getter for the logging context.
- * @return { LogContextType } - the current logging context
- */
-const getLoggingContext = () => loggingContext;
-
-/**
- * This is a state.
- * The currently active logging level.
- * Only messages from loggers whose have at least this log level are logged.
- * Default log level is {@link LOG_DEBUG}.
- * @type { LogLevelType }
- * @private
- */
-let loggingLevel = LOG_DEBUG;  // todo dk: we should have LOG_NOTHING as default
-
-/**
- * This function can be used to set the logging level for the logging framework.
- * Only messages whose have at least the set log level are logged.
- * @param { LogLevelChoice } newLoggingLevel
- * @example
- * setLoggingLevel(LOG_DEBUG);
- */
-const setLoggingLevel = newLoggingLevel => loggingLevel = newLoggingLevel;
-
-/**
- * Getter for the loggingLevel.
- * @return { LogLevelType } - the currently active logging level
- */
-const getLoggingLevel = () => loggingLevel;
-
-/**
- * The formatting function used in this logging environment.
- * @type { FormatLogMessage }
- */
-let messageFormatter = _context => _logLevel => id;
-
-/**
- * This function can be used to specify a custom function to format the log message.
- * When it is set, it will be applied to each log message before it gets logged.
- * @param { FormatLogMessage } formattingFunction
- * @example
- * const formatLogMsg = context => logLevel => logMessage => {
- *   const date = new Date().toISOString();
- *   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
- * }
- * setMessageFormatter(formatLogMsg);
- */
-const setMessageFormatter = formattingFunction =>
-  messageFormatter = formattingFunction;
-
-
