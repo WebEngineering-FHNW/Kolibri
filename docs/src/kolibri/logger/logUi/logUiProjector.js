@@ -1,5 +1,4 @@
 import { dom }      from "../../util/dom.js"
-import { name }     from "../logger.js";
 import {
   LOG_TRACE,
   LOG_DEBUG,
@@ -8,7 +7,8 @@ import {
   LOG_ERROR,
   LOG_FATAL,
   LOG_NOTHING,
-} from "../logger.js";
+  name
+} from "../logLevel.js";
 
 export {
   projectLoggingChoice,

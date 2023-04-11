@@ -6,18 +6,21 @@ import {
   LOG_NOTHING,
   LOG_TRACE,
   LOG_WARN,
+} from "../../kolibri/logger/logLevel.js";
+
+import {
   setLoggingContext,
   setLoggingLevel,
   addToAppenderList,
   removeFromAppenderList,
   getAppenderList,
   setMessageFormatter
-} from "../../kolibri/logger/logger.js";
+} from "../../kolibri/logger/logging.js";
 
 import { Appender as ArrayAppender }   from "../../kolibri/logger/appender/arrayAppender.js";
 import { Appender as ConsoleAppender } from "../../kolibri/logger/appender/consoleAppender.js";
-import { Appender as CountAppender } from "../../kolibri/logger/appender/countAppender.js";
-import { LoggerFactory }             from "../../kolibri/logger/loggerFactory.js";
+import { Appender as CountAppender }   from "../../kolibri/logger/appender/countAppender.js";
+import { LoggerFactory }               from "../../kolibri/logger/loggerFactory.js";
 
 const LOGGER_CONTEXT           = "ch.fhnw.sample.logger";
 const INITIAL_LOGGING_CONTEXT  = "ch.fhnw";

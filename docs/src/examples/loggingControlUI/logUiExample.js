@@ -1,8 +1,10 @@
-import {Appender as ConsoleAppender}            from "../../kolibri/logger/appender/consoleAppender.js";
-import {LoggerFactory}                          from "../../kolibri/logger/loggerFactory.js";
-import {logUiView}                              from "../../kolibri/logger/logUi/logUiView.js";
-import {addToAppenderList, setMessageFormatter} from "../../kolibri/logger/logger.js";
-import {LogUiController}                        from "../../kolibri/logger/logUi/logUiController.js";
+import { Appender as ConsoleAppender }            from "../../kolibri/logger/appender/consoleAppender.js";
+import { LoggerFactory }                          from "../../kolibri/logger/loggerFactory.js";
+import { logUiView }                              from "../../kolibri/logger/logUi/logUiView.js";
+import { LogUiController }                        from "../../kolibri/logger/logUi/logUiController.js";
+import { addToAppenderList, setMessageFormatter } from "../../kolibri/logger/logging.js";
+
+import  "../../kolibri/logger/loggingSupport.js";
 
 // note: this might later be modifiable through the UI
 const formatLogMsg = context => logLevel => logMessage => {
