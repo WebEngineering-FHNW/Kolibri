@@ -25,7 +25,7 @@ export {
 //                                                                -- logging level --
 
 /**
- * This is a state.
+ * This is a singleton state.
  * The currently active logging level.
  * Only messages from loggers whose have at least this log level are logged.
  * Default log level is {@link LOG_INFO}.
@@ -49,12 +49,17 @@ const setLoggingLevel = loggingLevelObs.setValue;
  */
 const getLoggingLevel = loggingLevelObs.getValue;
 
+/**
+ * What to do when the logging level changes.
+ * @impure
+ * @type { (cb:ValueChangeCallback<LogLevelType>) => void }
+ */
 const onLoggingLevelChanged = loggingLevelObs.onChange;
 
 //                                                                -- logging context --
 
 /**
- * This is a state.
+ * This is a singleton state.
  * The currently active logging context.
  * Only loggers whose context have this prefix are logged.
  * @type { IObservable<LogContextType> }
@@ -80,6 +85,11 @@ const setLoggingContext = loggingContextObs.setValue;
  */
 const getLoggingContext = loggingContextObs.getValue;
 
+/**
+ * What to do when the logging context changes.
+ * @impure
+ * @type { (cb:ValueChangeCallback<LogContextType>) => void }
+ */
 const onLoggingContextChanged = loggingContextObs.onChange;
 
 //                                                                -- logging message formatter --
@@ -104,26 +114,39 @@ const messageFormatterObs = Observable(_context => _logLevel => id);
  */
 const setMessageFormatter = messageFormatterObs.setValue;
 
+/**
+ * Returns the current formatting function. Can be useful to store and reset after change.
+ * @type { () => FormatLogMessage }
+ */
 const getMessageFormatter = messageFormatterObs.getValue;
 
+/**
+ * What to do when the log formatting function changes.
+ * @impure
+ * @type { (cb:ValueChangeCallback<FormatLogMessage>) => void }
+ */
 const onMessageFormatterChanged = messageFormatterObs.onChange;
 
 //                                                                -- logging appender list --
 
 /**
+ * This is a singleton state.
  * @private
  * @type { Array<AppenderType> }
  */
 const appenders = [];
 
 /**
- * This is a state.
+ * This is a singleton state.
  * The currently active {@link AppenderType AppenderType's}.
  * @type { IObservableList<AppenderType> }
  * @private
  */
 const appenderListObs = ObservableList(appenders);
 
+/**
+ * @type { () => Array<AppenderType> }
+ */
 const getAppenderList = () => appenders;
 
 /**
@@ -134,11 +157,20 @@ const addToAppenderList = (...newAppender) => newAppender.forEach(app => appende
 
 /**
  * Removes a given {@link AppenderType} from the current appender list.
- *
- * @param   { AppenderType } item
+ * @impure
+ * @param   { AppenderType } appender
  */
 const removeFromAppenderList = appenderListObs.del;
 
+/**
+ * @impure
+ * @type { (cb: ConsumerType<AppenderType>) => void }
+ */
 const onAppenderAdded   = appenderListObs.onAdd;
+
+/**
+ * @impure
+ * @type { (cb: ConsumerType<AppenderType>) => void }
+ */
 const onAppenderRemoved = appenderListObs.onDel;
 
