@@ -589,13 +589,11 @@ const Choice = n => { // number of constructors
  * Only needed internally for the sake of proper JsDoc.
  * @callback PairSelectorType
  * @pure
- * @type     { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
+ * @type { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
  */
 /**
  * @typedef PairType
- * @template _T_
- * @template _U_
- * @type {  (x: _T_) => (y: _U_) => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
+ * @type {  <_T_, _U_>  (x: _T_) => (y: _U_) => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
  */
 /**
  * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
@@ -1262,6 +1260,73 @@ const SimpleInputModel = ({value, label, name, type= TEXT}) => {
 
 
     return /** AttributeType<_T_> */ singleAttr;
+};/**
+ * @typedef { object } SimpleInputControllerType
+ * @template _T_
+ * @property { ()  => _T_ }                 getValue
+ * @property { (_T_) => void }              setValue
+ * @property { ()  => String}               getType
+ * @property { (valid: !Boolean) => void }  setValid
+ * @property { (converter: Converter<_T_>)        => void } setConverter
+ * @property { (cb: ValueChangeCallback<String>)  => void } onLabelChanged
+ * @property { (cb: ValueChangeCallback<Boolean>) => void } onValidChanged
+ * @property { (cb: ValueChangeCallback<_T_>)     => void } onValueChanged
+ * @property { (cb: ValueChangeCallback<String>)  => void } onNameChanged
+ * @property { (cb: ValueChangeCallback<Boolean>) => void } onEditableChanged
+ */
+
+/**
+ * The SimpleInputController gives access to a {@link SimpleInputModel} but in a limited fashion.
+ * It does not expose the underlying {@link Attribute} but only those functions that a user of this
+ * controller needs to see.
+ * While controllers might contain business logic, this basic controller does not contain any.
+ * @constructor
+ * @template _T_
+ * @param  { InputAttributes } args
+ * @return { SimpleInputControllerType<_T_> }
+ * @example
+ *     const controller = SimpleInputController({
+         value:  "Dierk",
+         label:  "First Name",
+         name:   "firstname",
+         type:   "text",
+     });
+ */
+const SimpleInputController = args => SimpleAttributeInputController(SimpleInputModel(args));
+
+const SimpleAttributeInputController = attribute => ( {
+    setValue:          attribute.setConvertedValue,
+    getValue:          attribute.getObs(VALUE).getValue,
+    setValid:          attribute.getObs(VALID).setValue,
+    getType:           attribute.getObs(TYPE).getValue,
+    onValueChanged:    attribute.getObs(VALUE).onChange,
+    onValidChanged:    attribute.getObs(VALID).onChange,
+    onLabelChanged:    attribute.getObs(LABEL).onChange,
+    onNameChanged:     attribute.getObs(NAME).onChange,
+    onEditableChanged: attribute.getObs(EDITABLE).onChange,
+    setConverter:      attribute.setConverter,
+} );/**
+ * @typedef { Array<SimpleInputControllerType> } SimpleFormControllerType
+ */
+
+/**
+ * The SimpleFormController creates as many instances of {@link SimpleInputController} as needed for
+ * the inputs that are specified in the inputAttributesArray.
+ * Note that controllers are compositional by means of function (ctor) composition.
+ * @constructor
+ * @param  { Array<InputAttributes> } inputAttributesArray - Specification of the form to create and bind.
+ * @return { SimpleFormControllerType }
+ * @example
+ *     const controller = SimpleFormController([
+           { value: "Dierk", type: "text"   },
+           { value: 0,       type: "number" },
+       ]);
+ */
+const SimpleFormController = inputAttributesArray => {
+    // noinspection UnnecessaryLocalVariableJS
+    const inputControllers = inputAttributesArray.map(SimpleInputController);
+    // set up any business rules (we do not have any, yet)
+    return inputControllers ;
 };// noinspection JSUnusedLocalSymbols
 
 /**
@@ -1609,73 +1674,6 @@ const FORM_CSS = `
         box-shadow:      ${shadowCss}                          
     }
 `;/**
- * @typedef { object } SimpleInputControllerType
- * @template _T_
- * @property { ()  => _T_ }                 getValue
- * @property { (_T_) => void }              setValue
- * @property { ()  => String}               getType
- * @property { (valid: !Boolean) => void }  setValid
- * @property { (converter: Converter<_T_>)        => void } setConverter
- * @property { (cb: ValueChangeCallback<String>)  => void } onLabelChanged
- * @property { (cb: ValueChangeCallback<Boolean>) => void } onValidChanged
- * @property { (cb: ValueChangeCallback<_T_>)     => void } onValueChanged
- * @property { (cb: ValueChangeCallback<String>)  => void } onNameChanged
- * @property { (cb: ValueChangeCallback<Boolean>) => void } onEditableChanged
- */
-
-/**
- * The SimpleInputController gives access to a {@link SimpleInputModel} but in a limited fashion.
- * It does not expose the underlying {@link Attribute} but only those functions that a user of this
- * controller needs to see.
- * While controllers might contain business logic, this basic controller does not contain any.
- * @constructor
- * @template _T_
- * @param  { InputAttributes } args
- * @return { SimpleInputControllerType<_T_> }
- * @example
- *     const controller = SimpleInputController({
-         value:  "Dierk",
-         label:  "First Name",
-         name:   "firstname",
-         type:   "text",
-     });
- */
-const SimpleInputController = args => SimpleAttributeInputController(SimpleInputModel(args));
-
-const SimpleAttributeInputController = attribute => ( {
-    setValue:          attribute.setConvertedValue,
-    getValue:          attribute.getObs(VALUE).getValue,
-    setValid:          attribute.getObs(VALID).setValue,
-    getType:           attribute.getObs(TYPE).getValue,
-    onValueChanged:    attribute.getObs(VALUE).onChange,
-    onValidChanged:    attribute.getObs(VALID).onChange,
-    onLabelChanged:    attribute.getObs(LABEL).onChange,
-    onNameChanged:     attribute.getObs(NAME).onChange,
-    onEditableChanged: attribute.getObs(EDITABLE).onChange,
-    setConverter:      attribute.setConverter,
-} );/**
- * @typedef { Array<SimpleInputControllerType> } SimpleFormControllerType
- */
-
-/**
- * The SimpleFormController creates as many instances of {@link SimpleInputController} as needed for
- * the inputs that are specified in the inputAttributesArray.
- * Note that controllers are compositional by means of function (ctor) composition.
- * @constructor
- * @param  { Array<InputAttributes> } inputAttributesArray - Specification of the form to create and bind.
- * @return { SimpleFormControllerType }
- * @example
- *     const controller = SimpleFormController([
-           { value: "Dierk", type: "text"   },
-           { value: 0,       type: "number" },
-       ]);
- */
-const SimpleFormController = inputAttributesArray => {
-    // noinspection UnnecessaryLocalVariableJS
-    const inputControllers = inputAttributesArray.map(SimpleInputController);
-    // set up any business rules (we do not have any, yet)
-    return inputControllers ;
-};/**
  * @module logger/appender/arrayAppender
  * Provides an {@link AppenderType} that stores all log messages in an array.
  * Since many log messages might be generated, we need a strategy to evict old log messages.
@@ -1820,472 +1818,104 @@ const append = msg => limit => evictionStrategy => {
     (() => appenderArray.push(msg));
   return /** @type {ChurchBooleanType} */ T;
 };/**
- * @module lambda/churchNumbers
- * Peano numbers in the church encoding and their operations.
+ * Log levels can be compared for equality by instance identity.
+ * See also {@link contains},{@link toString},{@link fromString}.
+ * @pure
+ * @immutable
+ * @typedef { PairSelectorType<Number, String> } LogLevelType
  */
-
-/**
- * Peano numbers in the church encoding.
- * The number n is also immediately an n-loop over its function argument.
- * @typedef { (f:FunctionAtoBType<ChurchNumberType,ChurchNumberType>) => (x:ChurchNumberType) => ChurchNumberType } ChurchNumberType
- */
-
-/**
- * The zero number in the church encoding.
- * @type { ChurchNumberType }
- */
-const n0 = _f => x => x;
-/**
- * The one number in the church encoding.
- * @type { ChurchNumberType }
- */
-const n1 = f => x => f(x);
-/**
- * The two number in the church encoding.
- * @type { ChurchNumberType }
- */
-const n2 = f => x => f(f(x));
-/**
- * The three number in the church encoding.
- * @type { ChurchNumberType }
- */
-const n3 = f => x => f(f(f(x)));
-/** @type { ChurchNumberType } */
-
-/**
- * The successor function for the church encoding of numbers.
- * @type { (n:ChurchNumberType) => ChurchNumberType }
- */
-const succ = n => ( f => cmp(f) (n(f)) );
-
-/**
- * The number four in the church encoding.
- * @type {ChurchNumberType}
- */
-const n4 = succ(n3);
-/**
- * The number five in the church encoding.
- * @type {ChurchNumberType}
- */
-const n5 = succ(n4);
-/**
- * The number six in the church encoding.
- * @type {ChurchNumberType}
- */
-const n6 = succ(n5);
-/**
- * The number seven in the church encoding.
- * @type {ChurchNumberType}
- */
-const n7 = succ(n6);
-/**
- * The number eight in the church encoding.
- * @type {ChurchNumberType}
- */
-const n8 = succ(n7);
-/**
- * The number nine in the church encoding.
- * @type {ChurchNumberType}
- */
-const n9 = succ(n8);
-
-/**
- * The plus operation on peano numbers in the church encoding.
- * @type { (ChurchNumberType) => (ChurchNumberType) => ChurchNumberType }
- */
-const plus = cn1 => cn2 => cn2(succ)(cn1)  ;
-
-/**
- * The multiplication operation on peano numbers in the church encoding.
- * @type { (ChurchNumberType) => (ChurchNumberType) => ChurchNumberType }
- */
-const mult = cmp;
-
-/**
- * The power operation on peano numbers in the church encoding.
- * @type { (ChurchNumberType) => (ChurchNumberType) => ChurchNumberType }
- */
-const pow = cn1 => cn2 => cn2 (cn1) ;
-
-/**
- * The is-zero check on peano numbers in the church encoding.
- * @type { (ChurchNumberType) => ChurchBooleanType }
- */
-const isZero = cn => /** @type { ChurchBooleanType } **/ cn (c(F)) (T); // We need a cast since we don't return a church numeral.
-
-/**
- * Convert a js number to a church numeral.
- * Only works for non-negative integral numbers.
- * @type { (n:Number) => ChurchNumberType }
- */
-const churchNum = n => n === 0 ? n0 : succ(churchNum(n - 1));
-
-/**
- * Convert a church numeral to a js number.
- * @type { (ChurchNumberType) => Number }
- */
-const jsNum = cn => /** @type { Number } */ cn (n => n+1) (0); // We need a cast since we don't return a church numeral.
-
-/**
- * phi combinator. Used internally for minus of church numbers.
- * Creates a new pair, replace first value with the second and increase the second value
- * @private
- * @type { (p:PairType<ChurchNumberType, ChurchNumberType>) => Pair<ChurchNumberType, ChurchNumberType> }
- */
-const phi = p => Pair(p(snd))(succ(p(snd)));
-
-/**
- * "less-than-or-equal-to" with church numbers
- * @type { (n:ChurchNumberType) => (k:ChurchNumberType) => ChurchBooleanType }
- */
-const leq = n => k => isZero(minus(n)(k));
-
-/**
- * "equal-to" with church numbers.
- * @type { (n:ChurchNumberType) => (k:ChurchNumberType) => ChurchBooleanType }
- */
-const eq = n => k => and(leq(n)(k))(leq(k)(n));
-
-/**
- * Predecessor of a church number. Opposite of succ.
- * Minimum is zero. Is needed for "minus".
- * @type { (n:ChurchNumberType) => ChurchNumberType }
- */
-const pred = n => n(phi)(Pair(n0)(n0))(fst);
-
-/**
- * Subtraction with two Church-Numbers
- * @type { (n:ChurchNumberType) => (k:ChurchNumberType) => ChurchNumberType }
- */
-const minus = n => k => k(pred)(n);/**
- * Alias for the use of the {@link Pair} constructor as a {@link LogLevelType}.
- * @type { LogLevelType }
- * @private
- */
-const LogLevel = Pair;
-
-/**
- * Getter for the church numeral value of a log level.
- * @type { (LogLevelType) => ChurchNumberType }
- */
-const levelNum = fst;
-
-/**
- * Getter for the name of a log level.
- * @type { (LogLevelType) => String }
- */
-const name$1 = /** @type { (LogLevelType) => String } */ snd;
-
-/**
- * Yields a configured log function called "logger".
- * Processes all log actions, which have a {@link LogLevelType} equals or beneath
- * the {@link LogLevelType} returned by the function "loggingLevel".
- *
- * Furthermore, each log statement has a context, see {@link LogContextType}.
- * The log message will only be logged, if the loggingContext
- * (set with {@link setLoggingContext}) is a prefix of the logger context.
- *
- * The result of the callback function {@link FormatLogMessage}
- * will be logged using the given {@link AppendCallback AppendCallback's}.
- *
- * What's the difference between "logger" and "logging" and "log"?
- *
- * Every abstraction (level, context, etc.) that starts with "logger"
- * applies to the _use_ of the log facility in application code.
- *
- * Every abstraction (level, context, etc.) the starts with "logging"
- * applies to the current state or _configuration_ of the log facility that
- * determines which log statements should currently appear.
- *
- * The word "log" is used when the abstraction can be used for both, the logger and the logging
- *
- * @function
- * @pure if the {@link AppendCallback AppendCallback's} in the appender list and the parameter msgFormatter of type {@link FormatLogMessage} are pure.
- * @type    {
- *               (loggerLevel:      LogLevelChoice)
- *            => (loggerContext:    LogContextType)
- *            => (msg:              LogMeType)
- *            => ChurchBooleanType
- *          }
- * @private
- * @example
- * const log = logger(LOG_DEBUG)("ch.fhnw");
- * log("Andri Wild");
- * // logs "Andri Wild" to console
- */
-const logger = loggerLevel => loggerContext => msg =>
-  LazyIf(
-      messageShouldBeLogged(loggerLevel)(loggerContext)
-  )
-  ( _=>
-        appenderList
-            .map(appender => {
-              const  levelName     = loggerLevel(name$1);
-              const  levelCallback = appender[levelName.toLowerCase()]; // todo dk: why the appender by level name?
-              let    success = T;
-              let    evaluatedMessage = "Error: cannot evaluate log message!";
-              try {
-                evaluatedMessage = evaluateMessage(msg);                                    // message eval can fail
-              } catch (e) {
-                success = F;
-              }
-              let formattedMessage = "Error: cannot format log message!";
-              try {
-                  formattedMessage = messageFormatter(loggerContext)(levelName)(evaluatedMessage); // formatting can fail
-              } catch (e) {
-                  success = F;
-              }
-              // because of eager evaluation, a possible eval or formatting error message will be logged
-              // at the current level, context, and appender and will thus be visible. See test case.
-              return and (success) (levelCallback(formattedMessage)) ;
-            })
-            .reduce((acc, cur) => and (acc) (cur), /** @type {ChurchBooleanType }*/ T) // every() for array of churchBooleans
-  )
-  ( _=> F);
-
-/**
- * Decides if a logger fulfills the conditions to be logged.
- * @function
- * @type { (loggerLevel: LogLevelType) => (loggerContext: LogContextType) => ChurchBooleanType }
- * @private
- */
-const messageShouldBeLogged = loggerLevel => loggerContext =>
-  and (logLevelActivated(loggerLevel)   )
-      (contextActivated (loggerContext) );
-
-/**
- * Returns {@link T} if the current logging level is less than or equal to the logger level.
- * @function
- * @type { (loggerLevel: LogLevelChoice) => ChurchBooleanType }
- * @private
- */
-const logLevelActivated = loggerLevel => leq (loggingLevel(levelNum)) (loggerLevel(levelNum));
-
-/**
- * Returns {@link T} if the {@link loggingContext} is a prefix of the logger context.
- * @function
- * @param   { LogContextType } loggerContext
- * @return  { ChurchBooleanType }
- * @private
- */
-const contextActivated = loggerContext => churchBool(loggerContext.startsWith(loggingContext));
-
-/**
- * if the param "msg" is a function, it's result will be returned.
- * Otherwise, the parameter itself will be returned.
- * This allows for both eager and lazy log messages.
- * @param   { !LogMeType } msg - the message to evaluate
- * @returns { String } the evaluated message
- * @private
- */
-const evaluateMessage = msg => msg instanceof Function ? msg() : msg;
-
-/**
- * @typedef {PairType<ChurchNumberType, String>} LogLevelType
- */
-
-/**
- * The logging level "trace"
- * @returns { LogLevelType }
- */
-const LOG_TRACE = LogLevel(n0)("TRACE");
-
-/**
- * The logging level "debug"
- * @returns { LogLevelType }
- */
-const LOG_DEBUG = LogLevel(n1)("DEBUG");
-
-/**
- * The logging level "info"
- * @returns { LogLevelType }
- */
-const LOG_INFO = LogLevel(n2)("INFO");
-
-/**
- * The logging level "warn"
- * @returns { LogLevelType }
- */
-const LOG_WARN = LogLevel(n3)("WARN");
-
-/**
- * The logging level "error"
- * @returns { LogLevelType }
- */
-const LOG_ERROR = LogLevel(n4)("ERROR");
-
-/**
- * The logging level "fatal"
- * @returns { LogLevelType }
- */
-const LOG_FATAL = LogLevel(n5)("FATAL");
-
-/**
- * The logging level "nothing".
- * Disables the logging level completely.
- * @returns { LogLevelType }
- */
-const LOG_NOTHING = LogLevel(n9)("NOTHING");
 
 /**
  * @typedef { LOG_TRACE | LOG_DEBUG | LOG_INFO | LOG_WARN | LOG_ERROR | LOG_FATAL | LOG_NOTHING } LogLevelChoice
  */
 
 /**
- * Creates a new logger at log level {@link LOG_TRACE}.
- * @example
- * const trace = traceLogger("ch.fhnw")(_context => _level => id);
- * trace("a message to log to console");
- * // writes "a message to log to console" to the console
- */
-const traceLogger =  logger(LOG_TRACE);
-
-/**
- * Creates a new logger at log level {@link LOG_DEBUG}.
- * @example
- * const debug = debugLogger("ch.fhnw")(_context => _level => id);
- * debug("a message to log to console");
- * // writes "a message to log to console" to the console
- */
-const debugLogger =  logger(LOG_DEBUG);
-
-/**
- * Creates a new logger at log level {@link LOG_INFO}.
- * @example
- * const debug = infoLogger("ch.fhnw")(_context => _level => id);
- * debug("a message to log to console");
- * // writes "a message to log to console" to the console
- */
-const infoLogger = logger(LOG_INFO);
-
-/**
- * Creates a new logger at log level {@link LOG_WARN}.
- * @example
- * const warn = warnLogger("ch.fhnw")(_context => _level => id);
- * warn("a message to log to console");
- * // writes "a message to log to console" to the console
- */
-const warnLogger = logger(LOG_WARN);
-
-/**
- * Creates a new logger at log level {@link LOG_ERROR}.
- * @example
- * const error = errorLogger("ch.fhnw")(_context => _level => id);
- * error("a message to log to console");
- * // writes "a message to log to console" to the console
- */
-const errorLogger = logger(LOG_ERROR);
-
-/**
- * Creates a new logger at log level {@link LOG_FATAL}.
- * @example
- * const fatal = fatalLogger("ch.fhnw")(_context => _level => id);
- * fatal("a message to log to console");
- * // writes "a message to log to console" to the console
- */
-const fatalLogger = logger(LOG_FATAL);
-
-/**
- * This is a state.
- * The currently active {@link AppenderType AppenderType's}.
- * @type { Array<AppenderType> }
- */
-const appenderList = [];
-
-/**
- * Adds one or multiple {@link AppenderType AppenderType's} to the appender list.
- * @param { ...AppenderType } newAppender
- */
-const addToAppenderList = (...newAppender) => newAppender.forEach(app => appenderList.push(app));
-
-/**
- * Removes a given {@link AppenderType} from the current appender list.
- *
- * @param   { AppenderType   } item
- * @returns { AppenderType[] }
- */
-const removeFromAppenderList = item => {
-  // correct type is not recognized here.
-  return /** @type { AppenderType[] }*/ [...removeItem(appenderList)(item)];
-};
-
-/**
- * Returns a copy of the current appender list.
- * @return { AppenderType[] }
- */
-const getAppenderList = () => [...appenderList];
-
-/**
- * This is a state.
- * The currently active logging context.
- * Only loggers whose context have this prefix are logged.
- * @type { LogContextType }
+ * Alias for the use of the {@link Pair} constructor as a {@link LogLevelType}.
+ * @type { PairType<Number, String> }
  * @private
  */
-let loggingContext = "";
+const LogLevel = Pair;
 
 /**
- * This function can be used to define a logging context for the logging framework.
- * Messages will only be logged, if the logger context is more specific than the logging context.
- * @param { LogContextType } newLoggingContext - the newly set context to log
- * @example
- * setLoggingContext("ch.fhnw");
- * // logging context is now set to "ch.fhnw"
- * // loggers with the context "ch.fhnw*" will be logged, all other messages will be ignored.
+ * Getter for the numeric value of a log level.
+ * @private
  */
-const setLoggingContext = newLoggingContext => loggingContext = newLoggingContext;
+const levelNum = fst;
 
-// noinspection JSUnusedGlobalSymbols
 /**
- * Getter for the logging context.
- * @return { LogContextType } - the current logging context
+ * Getter for the name of a log level.
+ * @private
  */
-const getLoggingContext = () => loggingContext;
+const name$1 = snd;
 
 /**
- * This is a state.
- * The currently active logging level.
- * Only messages from loggers whose have at least this log level are logged.
- * Default log level is {@link LOG_DEBUG}.
  * @type { LogLevelType }
- * @private
  */
-let loggingLevel = LOG_DEBUG;  // todo dk: we should have LOG_NOTHING as default
+const LOG_TRACE = LogLevel(0)("TRACE");
 
 /**
- * This function can be used to set the logging level for the logging framework.
- * Only messages whose have at least the set log level are logged.
- * @param { LogLevelChoice } newLoggingLevel
- * @example
- * setLoggingLevel(LOG_DEBUG);
+ * @type { LogLevelType }
  */
-const setLoggingLevel = newLoggingLevel => loggingLevel = newLoggingLevel;
+const LOG_DEBUG = LogLevel(1)("DEBUG");
 
 /**
- * Getter for the loggingLevel.
- * @return { LogLevelType } - the currently active logging level
+ * @type { LogLevelType }
  */
-const getLoggingLevel = () => loggingLevel;
+const LOG_INFO = LogLevel(2)("INFO");
 
 /**
- * The formatting function used in this logging environment.
- * @type { FormatLogMessage }
+ * @type { LogLevelType }
  */
-let messageFormatter = _context => _logLevel => id;
+const LOG_WARN = LogLevel(3)("WARN");
 
 /**
- * This function can be used to specify a custom function to format the log message.
- * When it is set, it will be applied to each log message before it gets logged.
- * @param { FormatLogMessage } formattingFunction
- * @example
- * const formatLogMsg = context => logLevel => logMessage => {
- *   const date = new Date().toISOString();
- *   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
- * }
- * setMessageFormatter(formatLogMsg);
+ * @type { LogLevelType }
  */
-const setMessageFormatter = formattingFunction =>
-  messageFormatter = formattingFunction;/**
+const LOG_ERROR = LogLevel(4)("ERROR");
+
+/**
+ * @type { LogLevelType }
+ */
+const LOG_FATAL = LogLevel(5)("FATAL");
+
+/**
+ * @type { LogLevelType }
+ */
+const LOG_NOTHING = LogLevel(6)("NOTHING");
+
+/**
+ * @type { Array<LogLevelType> }
+ */
+const ALL_LOG_LEVELS = [
+  LOG_TRACE,
+  LOG_DEBUG,
+  LOG_INFO,
+  LOG_WARN,
+  LOG_ERROR,
+  LOG_FATAL,
+  LOG_NOTHING,
+];
+
+/**
+ * Whether the logger will log at the current logging level.
+ * @type { (loggingLevel: LogLevelType, loggerLevel: LogLevelType) => Boolean }
+ */
+const contains = (loggingLevel, loggerLevel) => loggerLevel(levelNum) >= loggingLevel(levelNum);
+
+/**
+ * @type { (logLevel: LogLevelType) => String }
+ */
+const toString = logLevel => logLevel(name$1);
+
+/**
+ * @type { (str: String) => EitherType<String, LogLevelType> }
+ */
+const fromString = str => {
+  const level = ALL_LOG_LEVELS.find(logLevel => logLevel(name$1) === str);
+  return level
+    ? Right(level)
+    : Left(`Unknown log level: "${str}"`);
+};/**
  * @module logger/observableAppender
  * The observable Appender is a decorator for other {@link AppenderType}s that notifies a listener about new log messages or
  * other interesting events.
@@ -2548,7 +2178,343 @@ const fatal = appenderCallback(console.error);/**
  *  console.log(msg);
  *  return T;
  * }
- *//**
+ *///                                                                -- logging level --
+
+/**
+ * This is a singleton state.
+ * The currently active logging level.
+ * Only messages from loggers whose have at least this log level are logged.
+ * Default log level is {@link LOG_INFO}.
+ * @type { IObservable<LogLevelType> }
+ * @private
+ */
+const loggingLevelObs = Observable(LOG_INFO);
+
+/**
+ * This function can be used to set the logging level for the logging framework.
+ * Only messages whose have at least the set log level are logged.
+ * @param { LogLevelChoice } newLoggingLevel
+ * @example
+ * setLoggingLevel(LOG_DEBUG);
+ */
+const setLoggingLevel = loggingLevelObs.setValue;
+
+/**
+ * Getter for the loggingLevel.
+ * @return { LogLevelType } - the currently active logging level
+ */
+const getLoggingLevel = loggingLevelObs.getValue;
+
+/**
+ * What to do when the logging level changes.
+ * @impure
+ * @type { (cb:ValueChangeCallback<LogLevelType>) => void }
+ */
+const onLoggingLevelChanged = loggingLevelObs.onChange;
+
+//                                                                -- logging context --
+
+/**
+ * This is a singleton state.
+ * The currently active logging context.
+ * Only loggers whose context have this prefix are logged.
+ * @type { IObservable<LogContextType> }
+ * @private
+ */
+const loggingContextObs = Observable("");
+
+/**
+ * This function can be used to define a logging context for the logging framework.
+ * Messages will only be logged, if the logger context is more specific than the logging context.
+ * @param { LogContextType } newLoggingContext - the newly set context to log
+ * @example
+ * setLoggingContext("ch.fhnw");
+ * // logging context is now set to "ch.fhnw"
+ * // loggers with the context "ch.fhnw*" will be logged, all other messages will be ignored.
+ */
+const setLoggingContext = loggingContextObs.setValue;
+
+// noinspection JSUnusedGlobalSymbols
+/**
+ * Getter for the logging context.
+ * @return { LogContextType } - the current logging context
+ */
+const getLoggingContext = loggingContextObs.getValue;
+
+/**
+ * What to do when the logging context changes.
+ * @impure
+ * @type { (cb:ValueChangeCallback<LogContextType>) => void }
+ */
+const onLoggingContextChanged = loggingContextObs.onChange;
+
+//                                                                -- logging message formatter --
+
+/**
+ * The formatting function used in this logging environment.
+ * @type { IObservable<FormatLogMessage> }
+ * @private
+ */
+const messageFormatterObs = Observable(_context => _logLevel => id);
+
+/**
+ * This function can be used to specify a custom function to format the log message.
+ * When it is set, it will be applied to each log message before it gets logged.
+ * @param { FormatLogMessage } formattingFunction
+ * @example
+ * const formatLogMsg = context => logLevel => logMessage => {
+ *   const date = new Date().toISOString();
+ *   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
+ * }
+ * setMessageFormatter(formatLogMsg);
+ */
+const setMessageFormatter = messageFormatterObs.setValue;
+
+/**
+ * Returns the current formatting function. Can be useful to store and reset after change.
+ * @type { () => FormatLogMessage }
+ */
+const getMessageFormatter = messageFormatterObs.getValue;
+
+/**
+ * What to do when the log formatting function changes.
+ * @impure
+ * @type { (cb:ValueChangeCallback<FormatLogMessage>) => void }
+ */
+const onMessageFormatterChanged = messageFormatterObs.onChange;
+
+//                                                                -- logging appender list --
+
+/**
+ * This is a singleton state.
+ * @private
+ * @type { Array<AppenderType> }
+ */
+const appenders = [];
+
+/**
+ * This is a singleton state.
+ * The currently active {@link AppenderType AppenderType's}.
+ * @type { IObservableList<AppenderType> }
+ * @private
+ */
+const appenderListObs = ObservableList(appenders);
+
+/**
+ * @type { () => Array<AppenderType> }
+ */
+const getAppenderList = () => appenders;
+
+/**
+ * Adds one or multiple {@link AppenderType AppenderType's} to the appender list.
+ * @param { ...AppenderType } newAppender
+ */
+const addToAppenderList = (...newAppender) => newAppender.forEach(app => appenderListObs.add(app));
+
+/**
+ * Removes a given {@link AppenderType} from the current appender list.
+ * @impure
+ * @param   { AppenderType } appender
+ */
+const removeFromAppenderList = appenderListObs.del;
+
+/**
+ * @impure
+ * @type { (cb: ConsumerType<AppenderType>) => void }
+ */
+const onAppenderAdded   = appenderListObs.onAdd;
+
+/**
+ * @impure
+ * @type { (cb: ConsumerType<AppenderType>) => void }
+ */
+const onAppenderRemoved = appenderListObs.onDel;/**
+ * Yields a configured log function called "logger".
+ * Processes all log actions, which have a {@link LogLevelType} equals or beneath
+ * the {@link LogLevelType} returned by the function "loggingLevel".
+ *
+ * Furthermore, each log statement has a context, see {@link LogContextType}.
+ * The log message will only be logged, if the loggingContext
+ * (set with {@link setLoggingContext}) is a prefix of the logger context.
+ *
+ * The result of the callback function {@link FormatLogMessage}
+ * will be logged using the given {@link AppendCallback AppendCallback's}.
+ *
+ * What's the difference between "logger" and "logging" and "log"?
+ *
+ * Every abstraction (level, context, etc.) that starts with "logger"
+ * applies to the _use_ of the log facility in application code.
+ *
+ * Every abstraction (level, context, etc.) the starts with "logging"
+ * applies to the current state or _configuration_ of the log facility that
+ * determines which log statements should currently appear.
+ *
+ * The word "log" is used when the abstraction can be used for both, the logger and the logging
+ *
+ * @function
+ * @pure if the {@link AppendCallback AppendCallback's} in the appender list and the parameter msgFormatter of type {@link FormatLogMessage} are pure.
+ * @type    {
+ *               (loggerLevel:      LogLevelChoice)
+ *            => (loggerContext:    LogContextType)
+ *            => (msg:              LogMeType)
+ *            => Boolean
+ *          }
+ * @private
+ * @example
+ * const log = logger(LOG_DEBUG)("ch.fhnw");
+ * log("Andri Wild");
+ * // logs "Andri Wild" to console
+ */
+const logger = loggerLevel => loggerContext => msg =>
+  messageShouldBeLogged(loggerLevel)(loggerContext)
+  ? getAppenderList()
+      .map(appender => {
+          const levelName      = toString(loggerLevel);
+          const levelCallback  = appender[levelName.toLowerCase()];
+          let success          = true;
+          let evaluatedMessage = "Error: cannot evaluate log message: '" + msg + "'!";
+          try {
+              evaluatedMessage = evaluateMessage(msg);                                    // message eval can fail
+          } catch (e) {
+              success = false;
+          }
+          let formattedMessage = "Error: cannot format log message! '" + evaluatedMessage + "'!";
+          try {
+              formattedMessage = getMessageFormatter()(loggerContext)(levelName)(evaluatedMessage); // formatting can fail
+          } catch (e) {
+              success = false;
+          }
+          // because of evaluation order, a possible eval or formatting error message will be logged
+          // at the current level, context, and appender and will thus be visible. See test case.
+          return levelCallback(formattedMessage) && success;
+      })
+      .every(id) // all appenders must succeed
+  : false ;
+
+/**
+ * Decides if a logger fulfills the conditions to be logged.
+ * @type { (loggerLevel: LogLevelType) => (loggerContext: LogContextType) => Boolean }
+ * @private
+ */
+const messageShouldBeLogged = loggerLevel => loggerContext =>
+  logLevelActivated(loggerLevel) && contextActivated (loggerContext) ;
+
+/**
+ * Returns whether the loggerLevel will log under the current loggingLevel.
+ * @type { (loggerLevel: LogLevelChoice) => Boolean }
+ * @private
+ */
+const logLevelActivated = loggerLevel => contains(getLoggingLevel(), loggerLevel);
+
+/**
+ * Returns true if the {@link getLoggingContext} is a prefix of the logger context.
+ * @type   { (loggerContext: LogContextType) => Boolean }
+ * @private
+ */
+const contextActivated = loggerContext => loggerContext.startsWith(getLoggingContext());
+
+/**
+ * if the param "msg" is a function, it's result will be returned.
+ * Otherwise, the parameter itself will be returned.
+ * This allows for both eager and lazy log messages.
+ * @param   { !LogMeType } msg - the message to evaluate
+ * @returns { String } the evaluated message
+ * @private
+ */
+const evaluateMessage = msg => msg instanceof Function ? msg() : msg;
+
+/**
+ * Creates a new logger at log level {@link LOG_TRACE}.
+ * @example
+ * const trace = traceLogger("ch.fhnw")(_context => _level => id);
+ * trace("a message to log to console");
+ * // writes "a message to log to console" to the console
+ */
+const traceLogger =  logger(LOG_TRACE);
+
+/**
+ * Creates a new logger at log level {@link LOG_DEBUG}.
+ * @example
+ * const debug = debugLogger("ch.fhnw")(_context => _level => id);
+ * debug("a message to log to console");
+ * // writes "a message to log to console" to the console
+ */
+const debugLogger =  logger(LOG_DEBUG);
+
+/**
+ * Creates a new logger at log level {@link LOG_INFO}.
+ * @example
+ * const debug = infoLogger("ch.fhnw")(_context => _level => id);
+ * debug("a message to log to console");
+ * // writes "a message to log to console" to the console
+ */
+const infoLogger = logger(LOG_INFO);
+
+/**
+ * Creates a new logger at log level {@link LOG_WARN}.
+ * @example
+ * const warn = warnLogger("ch.fhnw")(_context => _level => id);
+ * warn("a message to log to console");
+ * // writes "a message to log to console" to the console
+ */
+const warnLogger = logger(LOG_WARN);
+
+/**
+ * Creates a new logger at log level {@link LOG_ERROR}.
+ * @example
+ * const error = errorLogger("ch.fhnw")(_context => _level => id);
+ * error("a message to log to console");
+ * // writes "a message to log to console" to the console
+ */
+const errorLogger = logger(LOG_ERROR);
+
+/**
+ * Creates a new logger at log level {@link LOG_FATAL}.
+ * @example
+ * const fatal = fatalLogger("ch.fhnw")(_context => _level => id);
+ * fatal("a message to log to console");
+ * // writes "a message to log to console" to the console
+ */
+const fatalLogger = logger(LOG_FATAL);/**
+ * @module logger/loggerFactory
+ * Public convenience API for creating loggers.
+ */
+
+/**
+ * Constructs a logger for each log level using the given context.
+ * @param { LogContextType } context
+ * @returns { LoggerType }
+ * @constructor
+ * @example
+ * const { trace, debug } = LoggerFactory("ch.fhnw");
+ * trace("Tobias Wyss") // a log message appended on the loglevel {@link LOG_TRACE}
+ * debug("Andri Wild")  // a log message appended on the loglevel {@link LOG_DEBUG}
+ */
+const LoggerFactory = context => /** @type { LoggerType } */({
+      trace:  traceLogger(context),
+      debug:  debugLogger(context),
+      info:   infoLogger (context),
+      warn:   warnLogger (context),
+      error:  errorLogger(context),
+      fatal:  fatalLogger(context),
+});/**
+ * Make basic logging controls available in the browser console
+ * by putting them in the window object.
+ * @example
+ * // usually in your starter.js
+ * import "../kolibri/logger/loggingSupport.js"
+ */
+
+window["LOG_TRACE"  ] = LOG_TRACE  ;
+window["LOG_DEBUG"  ] = LOG_DEBUG  ;
+window["LOG_INFO"   ] = LOG_INFO   ;
+window["LOG_WARN"   ] = LOG_WARN   ;
+window["LOG_ERROR"  ] = LOG_ERROR  ;
+window["LOG_FATAL"  ] = LOG_FATAL  ;
+window["LOG_NOTHING"] = LOG_NOTHING;
+
+window["setLoggingLevel"  ] = setLoggingLevel  ;
+window["setLoggingContext"] = setLoggingContext;/**
  * Projects a select to change the global logging level.
  * This is a specialized projector that might later be generalized into a projector that
  * allows choosing from an arbitrary list of values.
@@ -2561,13 +2527,13 @@ const projectLoggingChoice = loggingLevelController => {
   const [label, select] = dom(`
           <label for="loggingLevels"></label>
           <select name="levels" id="loggingLevels">
-            <option          value="${LOG_TRACE(name$1)}"  > ${LOG_TRACE(name$1)}  </option>
-            <option selected value="${LOG_DEBUG(name$1)}"  > ${LOG_DEBUG(name$1)}  </option>
-            <option          value="${LOG_INFO(name$1)}"   > ${LOG_INFO(name$1)}   </option>
-            <option          value="${LOG_WARN(name$1)}"   > ${LOG_WARN(name$1)}   </option>
-            <option          value="${LOG_ERROR(name$1)}"  > ${LOG_ERROR(name$1)}  </option>
-            <option          value="${LOG_FATAL(name$1)}"  > ${LOG_FATAL(name$1)}  </option>
-            <option          value="${LOG_NOTHING(name$1)}"> ${LOG_NOTHING(name$1)}</option>
+            <option          value="${toString(LOG_TRACE)}"  > ${toString(LOG_TRACE)}  </option>
+            <option selected value="${toString(LOG_DEBUG)}"  > ${toString(LOG_DEBUG)}  </option>
+            <option          value="${toString(LOG_INFO)}"   > ${toString(LOG_INFO)}   </option>
+            <option          value="${toString(LOG_WARN)}"   > ${toString(LOG_WARN)}   </option>
+            <option          value="${toString(LOG_ERROR)}"  > ${toString(LOG_ERROR)}  </option>
+            <option          value="${toString(LOG_FATAL)}"  > ${toString(LOG_FATAL)}  </option>
+            <option          value="${toString(LOG_NOTHING)}"> ${toString(LOG_NOTHING)}</option>
           </select> 
   `);
 
@@ -2631,7 +2597,7 @@ const LogUiController = () => {
   });
 
   const loggingLevelController = SimpleInputController({
-    value:  getLoggingLevel()(name$1),
+    value:  toString(getLoggingLevel()),
     label:  "Logging Level",
     name:   "loggingLevel",
     type:   "text", // well, it's a select, but we don't have a select controller yet
@@ -2652,16 +2618,9 @@ const LogUiController = () => {
   addToAppenderList(observableAppender);
 
   const setLoggingLevelByString = levelStr => {
-    switch (levelStr) {
-      case LOG_TRACE  (name$1):  setLoggingLevel(LOG_TRACE  ); break;
-      case LOG_DEBUG  (name$1):  setLoggingLevel(LOG_DEBUG  ); break;
-      case LOG_INFO   (name$1):  setLoggingLevel(LOG_INFO   ); break;
-      case LOG_WARN   (name$1):  setLoggingLevel(LOG_WARN   ); break;
-      case LOG_ERROR  (name$1):  setLoggingLevel(LOG_ERROR  ); break;
-      case LOG_FATAL  (name$1):  setLoggingLevel(LOG_FATAL  ); break;
-      case LOG_NOTHING(name$1):  setLoggingLevel(LOG_NOTHING); break;
-      default: throw new Error(`Unknown logging level: ${levelStr}`);
-    }
+    fromString(levelStr)
+      (msg   => { throw new Error(msg); })
+      (level => setLoggingLevel(level));
   };
   // when the logging level string changes, we need to set the global logging level
   loggingLevelController.onValueChanged(setLoggingLevelByString);
@@ -2672,28 +2631,6 @@ const LogUiController = () => {
     lastLogMessageController,
   }
 };/**
- * @module logger/loggerFactory
- * Public convenience API for creating loggers.
- */
-
-/**
- * Constructs a logger for each log level using the given context.
- * @param { LogContextType } context
- * @returns { LoggerType }
- * @constructor
- * @example
- * const { trace, debug } = LoggerFactory("ch.fhnw");
- * trace("Tobias Wyss") // a log message appended on the loglevel {@link LOG_TRACE}
- * debug("Andri Wild")  // a log message appended on the loglevel {@link LOG_DEBUG}
- */
-const LoggerFactory = context => /** @type { LoggerType } */({
-      trace:  traceLogger(context),
-      debug:  debugLogger(context),
-      info:   infoLogger (context),
-      warn:   warnLogger (context),
-      error:  errorLogger(context),
-      fatal:  fatalLogger(context),
-});/**
  * @module util/test
  * The test "framework", exports the Suite function plus a total of how many assertions have been tested
  */
@@ -2891,9 +2828,9 @@ const report = (origin, results, messages) => {
  * @param { !String } html - HTML string of the to-be-appended DOM
  * @private
  */
-const write = html => out.append(...dom(html));const release     = "0.2.3";
+const write = html => out.append(...dom(html));const release     = "0.2.5";
 
-const dateStamp   = "2023-03-25 T 18:20:37 MEZ";
+const dateStamp   = "2023-04-11 T 16:44:45 MESZ";
 
 const versionInfo = release + " at " + dateStamp;
 
@@ -2991,6 +2928,144 @@ const Th = f => g => g(f);
  * See also {@link Pair}.
  */
 const V = Pair;/**
+ * @module lambda/churchNumbers
+ * Peano numbers in the church encoding and their operations.
+ */
+
+/**
+ * Peano numbers in the church encoding.
+ * The number n is also immediately an n-loop over its function argument.
+ * @typedef { (f:FunctionAtoBType<ChurchNumberType,ChurchNumberType>) => (x:ChurchNumberType) => ChurchNumberType } ChurchNumberType
+ */
+
+/**
+ * The zero number in the church encoding.
+ * @type { ChurchNumberType }
+ */
+const n0 = _f => x => x;
+/**
+ * The one number in the church encoding.
+ * @type { ChurchNumberType }
+ */
+const n1 = f => x => f(x);
+/**
+ * The two number in the church encoding.
+ * @type { ChurchNumberType }
+ */
+const n2 = f => x => f(f(x));
+/**
+ * The three number in the church encoding.
+ * @type { ChurchNumberType }
+ */
+const n3 = f => x => f(f(f(x)));
+/** @type { ChurchNumberType } */
+
+/**
+ * The successor function for the church encoding of numbers.
+ * @type { (n:ChurchNumberType) => ChurchNumberType }
+ */
+const succ = n => ( f => cmp(f) (n(f)) );
+
+/**
+ * The number four in the church encoding.
+ * @type {ChurchNumberType}
+ */
+const n4 = succ(n3);
+/**
+ * The number five in the church encoding.
+ * @type {ChurchNumberType}
+ */
+const n5 = succ(n4);
+/**
+ * The number six in the church encoding.
+ * @type {ChurchNumberType}
+ */
+const n6 = succ(n5);
+/**
+ * The number seven in the church encoding.
+ * @type {ChurchNumberType}
+ */
+const n7 = succ(n6);
+/**
+ * The number eight in the church encoding.
+ * @type {ChurchNumberType}
+ */
+const n8 = succ(n7);
+/**
+ * The number nine in the church encoding.
+ * @type {ChurchNumberType}
+ */
+const n9 = succ(n8);
+
+/**
+ * The plus operation on peano numbers in the church encoding.
+ * @type { (ChurchNumberType) => (ChurchNumberType) => ChurchNumberType }
+ */
+const plus = cn1 => cn2 => cn2(succ)(cn1)  ;
+
+/**
+ * The multiplication operation on peano numbers in the church encoding.
+ * @type { (ChurchNumberType) => (ChurchNumberType) => ChurchNumberType }
+ */
+const mult = cmp;
+
+/**
+ * The power operation on peano numbers in the church encoding.
+ * @type { (ChurchNumberType) => (ChurchNumberType) => ChurchNumberType }
+ */
+const pow = cn1 => cn2 => cn2 (cn1) ;
+
+/**
+ * The is-zero check on peano numbers in the church encoding.
+ * @type { (ChurchNumberType) => ChurchBooleanType }
+ */
+const isZero = cn => /** @type { ChurchBooleanType } **/ cn (c(F)) (T); // We need a cast since we don't return a church numeral.
+
+/**
+ * Convert a js number to a church numeral.
+ * Only works for non-negative integral numbers.
+ * @type { (n:Number) => ChurchNumberType }
+ */
+const churchNum = n => n === 0 ? n0 : succ(churchNum(n - 1));
+
+/**
+ * Convert a church numeral to a js number.
+ * @type { (ChurchNumberType) => Number }
+ */
+const jsNum = cn => /** @type { Number } */ cn (n => n+1) (0); // We need a cast since we don't return a church numeral.
+
+/**
+ * phi combinator. Used internally for minus of church numbers.
+ * Creates a new pair, replace first value with the second and increase the second value
+ * @private
+ * @type { (p:PairType<ChurchNumberType, ChurchNumberType>) => Pair<ChurchNumberType, ChurchNumberType> }
+ */
+const phi = p => Pair(p(snd))(succ(p(snd)));
+
+/**
+ * "less-than-or-equal-to" with church numbers
+ * @type { (n:ChurchNumberType) => (k:ChurchNumberType) => ChurchBooleanType }
+ */
+const leq = n => k => isZero(minus(n)(k));
+
+/**
+ * "equal-to" with church numbers.
+ * @type { (n:ChurchNumberType) => (k:ChurchNumberType) => ChurchBooleanType }
+ */
+const eq = n => k => and(leq(n)(k))(leq(k)(n));
+
+/**
+ * Predecessor of a church number. Opposite of succ.
+ * Minimum is zero. Is needed for "minus".
+ * @type { (n:ChurchNumberType) => ChurchNumberType }
+ */
+const pred = n => n(phi)(Pair(n0)(n0))(fst);
+
+/**
+ * Subtraction with two Church-Numbers
+ * @type { (n:ChurchNumberType) => (k:ChurchNumberType) => ChurchNumberType }
+ */
+const minus = n => k => k(pred)(n);/**
  * Representing the client of an HTTP request.
  * @param { !String } url - the url to fetch as a string. Mandatory.
  * @param { "GET"|"PUT"|"POST"|"DELETE"|"HEAD"|"OPTION" } method - HTTP request method, default: "GET"
