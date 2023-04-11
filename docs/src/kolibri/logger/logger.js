@@ -1,7 +1,6 @@
-import { and, T, F, churchBool, LazyIf }                          from "../lambda/church.js";
-import { leq}                                       from "../lambda/churchNumbers.js";
+import {id}                                                                       from "../lambda/church.js";
 import {getAppenderList, getLoggingContext, getLoggingLevel, getMessageFormatter} from "./logging.js";
-import {levelNum, name, LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN} from "./logLevel.js";
+import {contains, toString, LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN} from "./logLevel.js";
 
 
 export {
@@ -42,7 +41,7 @@ export {
  *               (loggerLevel:      LogLevelChoice)
  *            => (loggerContext:    LogContextType)
  *            => (msg:              LogMeType)
- *            => ChurchBooleanType
+ *            => Boolean
  *          }
  * @private
  * @example
@@ -51,61 +50,52 @@ export {
  * // logs "Andri Wild" to console
  */
 const logger = loggerLevel => loggerContext => msg =>
-  LazyIf(
-      messageShouldBeLogged(loggerLevel)(loggerContext)
-  )
-  ( _=>
-        getAppenderList()
-            .map(appender => {
-              const  levelName     = loggerLevel(name);
-              const  levelCallback = appender[levelName.toLowerCase()]; // todo dk: why the appender by level name?
-              let    success = T;
-              let    evaluatedMessage = "Error: cannot evaluate log message!";
-              try {
-                evaluatedMessage = evaluateMessage(msg);                                    // message eval can fail
-              } catch (e) {
-                success = F;
-              }
-              let formattedMessage = "Error: cannot format log message!";
-              try {
-                  formattedMessage = getMessageFormatter()(loggerContext)(levelName)(evaluatedMessage); // formatting can fail
-              } catch (e) {
-                  success = F;
-              }
-              // because of eager evaluation, a possible eval or formatting error message will be logged
-              // at the current level, context, and appender and will thus be visible. See test case.
-              return and (success) (levelCallback(formattedMessage)) ;
-            })
-            .reduce((acc, cur) => and (acc) (cur), /** @type {ChurchBooleanType }*/ T) // every() for array of churchBooleans
-  )
-  ( _=> F);
+  messageShouldBeLogged(loggerLevel)(loggerContext)
+  ? getAppenderList()
+      .map(appender => {
+          const levelName      = toString(loggerLevel);
+          const levelCallback  = appender[levelName.toLowerCase()];
+          let success          = true;
+          let evaluatedMessage = "Error: cannot evaluate log message: '" + msg + "'!";
+          try {
+              evaluatedMessage = evaluateMessage(msg);                                    // message eval can fail
+          } catch (e) {
+              success = false;
+          }
+          let formattedMessage = "Error: cannot format log message! '" + evaluatedMessage + "'!";
+          try {
+              formattedMessage = getMessageFormatter()(loggerContext)(levelName)(evaluatedMessage); // formatting can fail
+          } catch (e) {
+              success = false;
+          }
+          // because of evaluation order, a possible eval or formatting error message will be logged
+          // at the current level, context, and appender and will thus be visible. See test case.
+          return levelCallback(formattedMessage) && success;
+      })
+      .every(id) // all appenders must succeed
+  : false ;
 
 /**
  * Decides if a logger fulfills the conditions to be logged.
- * @function
- * @type { (loggerLevel: LogLevelType) => (loggerContext: LogContextType) => ChurchBooleanType }
+ * @type { (loggerLevel: LogLevelType) => (loggerContext: LogContextType) => Boolean }
  * @private
  */
 const messageShouldBeLogged = loggerLevel => loggerContext =>
-  and (logLevelActivated(loggerLevel)   )
-      (contextActivated (loggerContext) );
+  logLevelActivated(loggerLevel) && contextActivated (loggerContext) ;
 
 /**
- * Returns {@link T} if the current logging level is less than or equal to the logger level.
- * @function
- * @type { (loggerLevel: LogLevelChoice) => ChurchBooleanType }
+ * Returns whether the loggerLevel will log under the current loggingLevel.
+ * @type { (loggerLevel: LogLevelChoice) => Boolean }
  * @private
  */
-const logLevelActivated = loggerLevel => leq (getLoggingLevel()(levelNum)) (loggerLevel(levelNum));
+const logLevelActivated = loggerLevel => contains(getLoggingLevel(), loggerLevel);
 
 /**
- * Returns {@link T} if the {@link getLoggingContext} is a prefix of the logger context.
- * @function
- * @param   { LogContextType } loggerContext
- * @return  { ChurchBooleanType }
+ * Returns true if the {@link getLoggingContext} is a prefix of the logger context.
+ * @type   { (loggerContext: LogContextType) => Boolean }
  * @private
  */
-const contextActivated = loggerContext => churchBool(loggerContext.startsWith(getLoggingContext()));
+const contextActivated = loggerContext => loggerContext.startsWith(getLoggingContext());
 
 /**
  * if the param "msg" is a function, it's result will be returned.

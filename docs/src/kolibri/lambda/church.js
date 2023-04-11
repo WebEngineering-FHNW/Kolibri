@@ -137,13 +137,11 @@ const Choice = n => { // number of constructors
  * Only needed internally for the sake of proper JsDoc.
  * @callback PairSelectorType
  * @pure
- * @type     { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
+ * @type { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
  */
 /**
  * @typedef PairType
- * @template _T_
- * @template _U_
- * @type {  (x: _T_) => (y: _U_) => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
+ * @type {  <_T_, _U_>  (x: _T_) => (y: _U_) => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
  */
 /**
  * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.

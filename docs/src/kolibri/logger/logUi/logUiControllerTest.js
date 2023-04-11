@@ -1,7 +1,7 @@
 import { TestSuite }        from "../../util/test.js";
 import { LogUiController }  from "./logUiController.js";
 import {
-  name,
+  toString,
   LOG_INFO, LOG_DEBUG,
 } from "../logLevel.js";
 import {
@@ -17,7 +17,7 @@ logUiControllerSuite.add("test setting log level as text", assert => {
   const oldLoggingLevel = getLoggingLevel();
   assert.is(oldLoggingLevel, LOG_INFO);
 
-  logUiController.loggingLevelController.setValue(LOG_DEBUG(name));
+  logUiController.loggingLevelController.setValue(toString(LOG_DEBUG));
   assert.is(getLoggingLevel(), LOG_DEBUG);
 
   setLoggingLevel(oldLoggingLevel);

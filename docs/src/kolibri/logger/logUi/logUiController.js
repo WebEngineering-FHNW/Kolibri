@@ -1,23 +1,14 @@
-import { Appender as CountAppender }              from "../appender/countAppender.js";
-import { Appender as ObservableAppender }                            from "../appender/observableAppender.js";
+import { Appender as CountAppender }            from "../appender/countAppender.js";
+import { Appender as ObservableAppender }       from "../appender/observableAppender.js";
 import {
   getLoggingLevel,
   setLoggingLevel,
   getLoggingContext,
   setLoggingContext,
   addToAppenderList
-}                                                                    from "../logging.js";
-import {
-  LOG_TRACE,
-  LOG_DEBUG,
-  LOG_INFO,
-  LOG_WARN,
-  LOG_ERROR,
-  LOG_FATAL,
-  LOG_NOTHING,
-  name
-}                                                                    from "../logLevel.js";
-import {SimpleInputController} from "../../projector/simpleForm/simpleInputController.js";
+}                                               from "../logging.js";
+import {toString, fromString}                   from "../logLevel.js";
+import { SimpleInputController }                from "../../projector/simpleForm/simpleInputController.js";
 
 export { LogUiController }
 /**
@@ -44,7 +35,7 @@ const LogUiController = () => {
   });
 
   const loggingLevelController = SimpleInputController({
-    value:  getLoggingLevel()(name),
+    value:  toString(getLoggingLevel()),
     label:  "Logging Level",
     name:   "loggingLevel",
     type:   "text", // well, it's a select, but we don't have a select controller yet
@@ -65,16 +56,9 @@ const LogUiController = () => {
   addToAppenderList(observableAppender);
 
   const setLoggingLevelByString = levelStr => {
-    switch (levelStr) {
-      case LOG_TRACE  (name):  setLoggingLevel(LOG_TRACE  ); break;
-      case LOG_DEBUG  (name):  setLoggingLevel(LOG_DEBUG  ); break;
-      case LOG_INFO   (name):  setLoggingLevel(LOG_INFO   ); break;
-      case LOG_WARN   (name):  setLoggingLevel(LOG_WARN   ); break;
-      case LOG_ERROR  (name):  setLoggingLevel(LOG_ERROR  ); break;
-      case LOG_FATAL  (name):  setLoggingLevel(LOG_FATAL  ); break;
-      case LOG_NOTHING(name):  setLoggingLevel(LOG_NOTHING); break;
-      default: throw new Error(`Unknown logging level: ${levelStr}`);
-    }
+    fromString(levelStr)
+      (msg   => { throw new Error(msg); })
+      (level => setLoggingLevel(level));
   };
   // when the logging level string changes, we need to set the global logging level
   loggingLevelController.onValueChanged(setLoggingLevelByString);
