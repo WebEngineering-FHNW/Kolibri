@@ -2514,7 +2514,9 @@ window["LOG_FATAL"  ] = LOG_FATAL  ;
 window["LOG_NOTHING"] = LOG_NOTHING;
 
 window["setLoggingLevel"  ] = setLoggingLevel  ;
-window["setLoggingContext"] = setLoggingContext;/**
+window["setLoggingContext"] = setLoggingContext;let idPostfix = 0; // makes sure we have unique ids in case of many such controls
+
+/**
  * Projects a select to change the global logging level.
  * This is a specialized projector that might later be generalized into a projector that
  * allows choosing from an arbitrary list of values.
@@ -2523,17 +2525,17 @@ window["setLoggingContext"] = setLoggingContext;/**
  * @return  { [HTMLLabelElement, HTMLSelectElement] } - Label & Select Element
  */
 const projectLoggingChoice = loggingLevelController => {
-
+  const id = `loggingLevels-${idPostfix++}`;
   const [label, select] = dom(`
-          <label for="loggingLevels"></label>
-          <select name="levels" id="loggingLevels">
-            <option          value="${toString(LOG_TRACE)}"  > ${toString(LOG_TRACE)}  </option>
-            <option selected value="${toString(LOG_DEBUG)}"  > ${toString(LOG_DEBUG)}  </option>
-            <option          value="${toString(LOG_INFO)}"   > ${toString(LOG_INFO)}   </option>
-            <option          value="${toString(LOG_WARN)}"   > ${toString(LOG_WARN)}   </option>
-            <option          value="${toString(LOG_ERROR)}"  > ${toString(LOG_ERROR)}  </option>
-            <option          value="${toString(LOG_FATAL)}"  > ${toString(LOG_FATAL)}  </option>
-            <option          value="${toString(LOG_NOTHING)}"> ${toString(LOG_NOTHING)}</option>
+          <label for="${id}"></label>
+          <select name="levels" id="${id}">
+            <option value="${toString(LOG_TRACE)}"  > ${toString(LOG_TRACE)}  </option>
+            <option value="${toString(LOG_DEBUG)}"  > ${toString(LOG_DEBUG)}  </option>
+            <option value="${toString(LOG_INFO)}"   > ${toString(LOG_INFO)}   </option>
+            <option value="${toString(LOG_WARN)}"   > ${toString(LOG_WARN)}   </option>
+            <option value="${toString(LOG_ERROR)}"  > ${toString(LOG_ERROR)}  </option>
+            <option value="${toString(LOG_FATAL)}"  > ${toString(LOG_FATAL)}  </option>
+            <option value="${toString(LOG_NOTHING)}"> ${toString(LOG_NOTHING)}</option>
           </select> 
   `);
 
@@ -2545,36 +2547,8 @@ const projectLoggingChoice = loggingLevelController => {
   select.onchange = _event => loggingLevelController.setValue(select.value);
 
   return /** @type { [HTMLLabelElement, HTMLSelectElement] } */ [label, select];
-};const {projectDebounceInput, projectInstantInput} = InputProjector;
-
-/**
- * Creates the log ui under a given html element.
- * @param { LogUiControllerType } logUiController
- * @param { HTMLElement } rootElement
- * @param { String }      cssStyleUrl - url to the css file that is used for styling the log ui
- */
-const logUiView = (logUiController, rootElement, cssStyleUrl) => {
-
-  rootElement.classList.add("container"); // todo dk: be more specific to avoid conflicts with other css
-
-  const [configSection] = dom(`
-    <div class="config controlArea" style="box-shadow: ${shadowCss}"></div>
-  `);
-
-  configSection.append(...projectDebounceInput(200)(logUiController.loggingContextController, "context"));
-  configSection.append(...projectLoggingChoice(logUiController.loggingLevelController));
-  configSection.append(...projectInstantInput(logUiController.lastLogMessageController, "lastLogMessage"));
-
-  const [styleElement] = dom(`
-        <link rel="stylesheet" type="text/css"  href="${cssStyleUrl}"
-              data-note="Dynamically inserted by createLogUi.js." 
-        />
-  `);
-  document.head.append(styleElement);
-
-  rootElement.append(configSection);
 };/**
- * @typedef LogUiControllerType
+ * @typedef LoggingUiControllerType
  * @property { SimpleInputControllerType<String> } loggingContextController
  * @property { SimpleInputControllerType<String> } loggingLevelController
  * @property { SimpleInputControllerType<String> } lastLogMessageController
@@ -2583,11 +2557,27 @@ const logUiView = (logUiController, rootElement, cssStyleUrl) => {
 /**
  * Processes the actions from the user interface and manages the model.
  * It allows the view to bind against the model.
- * @return { LogUiControllerType }
+ * @return { LoggingUiControllerType }
  * @constructor
  * @impure It adds an observable appender to the list of appenders.
  */
-const LogUiController = () => {
+const LoggingUiController = () => {
+
+  const setLoggingLevelByString = levelStr =>
+    fromString(levelStr)
+      (msg   => { throw new Error(msg); })
+      (level => setLoggingLevel(level));
+
+  const loggingLevelController = SimpleInputController({
+    value:  toString(getLoggingLevel()),
+    label:  "Logging Level",
+    name:   "loggingLevel",
+    type:   "text", // we treat the logging level as a string in the presentation layer
+  });
+  // presentation binding: when the logging level string changes, we need to set the global logging level
+  loggingLevelController.onValueChanged(setLoggingLevelByString);
+  // domain binding: when the global logging level changes, we need to update the string of the logging level
+  onLoggingLevelChanged(level => loggingLevelController.setValue(toString(level)));
 
   const loggingContextController = SimpleInputController({
     value:  getLoggingContext(),
@@ -2595,15 +2585,10 @@ const LogUiController = () => {
     name:   "loggingContext",
     type:   "text",
   });
-
-  const loggingLevelController = SimpleInputController({
-    value:  toString(getLoggingLevel()),
-    label:  "Logging Level",
-    name:   "loggingLevel",
-    type:   "text", // well, it's a select, but we don't have a select controller yet
-  });
-  // when the string of the context changes, we need to update the global logging context
+  // presentation binding: when the string of the context changes, we need to update the global logging context
   loggingContextController.onValueChanged(contextStr => setLoggingContext(contextStr));
+  // domain binding: when the global logging context changes, we need to update the string of the logging context
+  onLoggingContextChanged(context => loggingContextController.setValue(context));
 
   const lastLogMessageController = SimpleInputController({
     value:  "no message, yet",
@@ -2617,20 +2602,46 @@ const LogUiController = () => {
 
   addToAppenderList(observableAppender);
 
-  const setLoggingLevelByString = levelStr => {
-    fromString(levelStr)
-      (msg   => { throw new Error(msg); })
-      (level => setLoggingLevel(level));
-  };
-  // when the logging level string changes, we need to set the global logging level
-  loggingLevelController.onValueChanged(setLoggingLevelByString);
+
 
   return {
-    loggingContextController,
     loggingLevelController,
+    loggingContextController,
     lastLogMessageController,
   }
-};/**
+};const {projectDebounceInput, projectInstantInput} = InputProjector;
+
+/**
+ * Creates the log ui as a div and binds the level, context, and message controllers.
+ * @param { LoggingUiControllerType }   logUiController
+ * @return { Array<HTMLDivElement> }
+ * @impure adds the style element to the document head
+ */
+const projectLoggingUi = logUiController => {
+
+  const [configSection] = /** @type { Array<HTMLDivElement> } */ dom(`
+    <div class="logging-ui-config"></div>
+  `);
+
+  configSection.append(...projectDebounceInput(200)(logUiController.loggingContextController, "context"));
+  configSection.append(...projectLoggingChoice(     logUiController.loggingLevelController));
+  configSection.append(...projectInstantInput(      logUiController.lastLogMessageController, "lastLogMessage"));
+
+  return [configSection];
+};
+
+const LOGGING_UI_CSS = `
+  .logging-ui-config {
+      padding:                2rem;
+      display:                grid;
+      grid-template-columns:  auto 1fr;
+      grid-gap:               1em 2em;
+      box-shadow:             ${shadowCss},
+  }
+  .logging-ui-config input {
+      width: 100%;
+  }
+`;/**
  * @module util/test
  * The test "framework", exports the Suite function plus a total of how many assertions have been tested
  */
@@ -2828,9 +2839,9 @@ const report = (origin, results, messages) => {
  * @param { !String } html - HTML string of the to-be-appended DOM
  * @private
  */
-const write = html => out.append(...dom(html));const release     = "0.2.5";
+const write = html => out.append(...dom(html));const release     = "0.2.6";
 
-const dateStamp   = "2023-04-11 T 16:44:45 MESZ";
+const dateStamp   = "2023-04-12 T 17:22:20 MESZ";
 
 const versionInfo = release + " at " + dateStamp;
 
