@@ -1,6 +1,5 @@
 import { TestSuite }       from "../../test/test.js";
 import { arrayEq }         from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { takeWithoutCopy } from "../util/util.js";
 import { Pair, fst, snd }  from "../../../../../docs/src/kolibri/stdlib.js";
 
 import {
@@ -21,6 +20,7 @@ import {
   zip,
   zipWith,
   repeat,
+  bind,
 } from "../iterator.js";
 
 /**
@@ -169,20 +169,24 @@ const expectedZipResult = [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(
   iteratorSuite.add(`test purity: ${name}.`,                testPurity              (op));
 });
 
+const bindFn =
+  el => take(2)(Iterator(el.toString(), _ => _, _ => false));
+
 // operations which take callbacks as arguments
 [
-  ["map",           map,        (el => 2 * el),           [0, 2, 4, 6, 8],           ],
-  ["retainAll",     retainAll,  (el => el % 2 === 0),     [0, 2, 4],                 ],
-  ["rejectAll",     rejectAll,  (el => el % 2 === 0),     [1, 3],                    ],
-  ["dropWhile",     dropWhile,  (el => el < 2),           [2, 3, 4],                 ],
-  ["takeWhile",     takeWhile,  (el => el < 2),           [0, 1],                    ],
-  ["zipWith",       zipWithInit,((i, j) => i + j),        [0, 2, 4, 6, 8]            ],
+  ["map",           map,        (el => 2 * el),           [0, 2, 4, 6, 8],                                  ],
+  ["retainAll",     retainAll,  (el => el % 2 === 0),     [0, 2, 4],                                        ],
+  ["rejectAll",     rejectAll,  (el => el % 2 === 0),     [1, 3],                                           ],
+  ["dropWhile",     dropWhile,  (el => el < 2),           [2, 3, 4],                                        ],
+  ["takeWhile",     takeWhile,  (el => el < 2),           [0, 1],                                           ],
+  ["zipWith",       zipWithInit,((i, j) => i + j),        [0, 2, 4, 6, 8]                                   ],
+  ["bind",          bind,       bindFn,                   ["0", "0", "1", "1", "2", "2", "3", "3", "4", "4"]]
 ].forEach(el => {
   const [ name, op, callback, expected, evalFn] = el;
-  iteratorSuite.add(`test simple: ${name}`,                           testSimple(op(callback))(expected)(evalFn));
-  iteratorSuite.add(`test copy: ${name}`,                             testCopy(op(callback))(evalFn));
+  iteratorSuite.add(`test simple: ${name}`,                           testSimple              (op(callback))(expected)(evalFn));
+  iteratorSuite.add(`test copy: ${name}`,                             testCopy                (op(callback))(evalFn));
   iteratorSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(op(callback))(evalFn));
-  iteratorSuite.add(`test purity: ${name}.`,                          testPurity(op(callback)));
+  iteratorSuite.add(`test purity: ${name}.`,                          testPurity              (op(callback)));
   iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(op)(callback));
 });
 
@@ -263,6 +267,11 @@ iteratorSuite.add("test concat with infinity: mconcat", assert => {
 });
 
 iteratorSuite.add("test empty: mconcat", assert => {
+  const concatenated = mconcat(ArrayIterator([emptyIterator]));
+  assert.isTrue(arrayEq([])([...concatenated]));
+});
+
+iteratorSuite.add("test : mconcat", assert => {
   const concatenated = mconcat(ArrayIterator([emptyIterator]));
   assert.isTrue(arrayEq([])([...concatenated]));
 });
