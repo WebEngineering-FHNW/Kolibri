@@ -132,6 +132,9 @@ const ConcatIterator = it1 => it2 => {
 
   const next = () => {
     let result;
+
+    // Note: Two separate if statements required, because if `fstDone` changes its state to true,
+    //       the second iterator has to be processed. This can not be solved using if else.
     if (!fstDone) {
       result  = nextOf(inner1);
       fstDone = result.done;
