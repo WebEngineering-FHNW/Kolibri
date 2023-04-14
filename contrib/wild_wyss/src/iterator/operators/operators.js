@@ -11,3 +11,4 @@ export * from "./retainAll.js";
 export * from "./mconcat.js";
 export * from "./cycle.js";
 export * from "./map.js";
+export * from "./repeat.js";

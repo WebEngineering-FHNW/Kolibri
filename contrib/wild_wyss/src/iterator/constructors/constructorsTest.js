@@ -2,6 +2,7 @@ import { TestSuite }        from "../../test/test.js";
 import { arrayEq }          from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Tuple }            from "../../../../../docs/src/kolibri/stdlib.js";
 import { emptyStack, push } from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import { takeWithoutCopy }  from "../util/util.js";
 import {
   pipe,
   Iterator,
@@ -16,26 +17,6 @@ import {
 } from "../iterator.js"
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
-
-/**
- * Works exactly as take, but does not copy the iterator.
- * This is useful to test the functionality without the influence of copy.
- * @template _T_
- * @type {
- *         (n: Number)
- *         => (iterator: IteratorType<_T_>)
- *         => Array<_T_>
- * }
- */
-const takeWithoutCopy = n => iterator => {
-  const values = [];
-  let i = 0;
-  for (const element of iterator) {
-    values.push(element);
-    if (++i === n) break;
-  }
-  return values;
-};
 
 const iteratorSuite = TestSuite("Iterator");
 

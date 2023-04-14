@@ -1,7 +1,7 @@
-import { TestSuite } from "../../test/test.js";
-import { arrayEq }   from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
-
-import { Pair, fst, snd } from "../../../../../docs/src/kolibri/stdlib.js";
+import { TestSuite }       from "../../test/test.js";
+import { arrayEq }         from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { takeWithoutCopy } from "../util/util.js";
+import { Pair, fst, snd }  from "../../../../../docs/src/kolibri/stdlib.js";
 
 import {
   ArrayIterator,
@@ -20,6 +20,7 @@ import {
   takeWhile,
   zip,
   zipWith,
+  repeat,
 } from "../iterator.js";
 
 /**
@@ -81,8 +82,6 @@ const testCopy = op => (evalFn = arrayEq) => assert => {
   assert.isTrue(evalFn([...expected])([...copied]));
 };
 
-
-
 const testCopyAfterConsumption = op => (evalFn = arrayEq) => assert => {
   const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
   const operated = op(iterator);
@@ -139,6 +138,8 @@ const zipWithInit = zipper => {
 const zipInit =
   zip(newIterator(UPPER_ITERATOR_BOUNDARY));
 
+const repeatInit = _ => take(6)(repeat(1));
+
 const zipEvaluation = expectedArray => actualArray => {
   let result = true;
   for (let i = 0; i < expectedArray.length; i++) {
@@ -158,6 +159,7 @@ const expectedZipResult = [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(
   ["cons",          cons(2),                           [2, 0, 1, 2, 3, 4],        ],
   ["mconcat",       mconcatInit,                       [0, 1, 2, 0, 1, 2, 0, 1, 2]],
   ["cycle",         cycleInit,                         [0, 1, 2, 0, 1, 2, 0, 1, 2]],
+  ["repeat",        repeatInit,                        [1, 1, 1, 1, 1, 1, ]       ],
   ["zip",           zipInit,                           expectedZipResult,         zipEvaluation]
 ].forEach(el => {
   const [ name, op, expected, evalFn ] = el;
