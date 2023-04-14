@@ -1,5 +1,5 @@
-import { dom }               from "../../../../../docs/src/kolibri/util/dom.js";
-import { iteratorProjector } from "../projector/iteratorProjector.js";
+import { dom }               from "../../../../../../docs/src/kolibri/util/dom.js";
+import { iteratorProjector } from "../../projector/iteratorProjector.js";
 
 export { FizzBuzzView }
 

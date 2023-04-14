@@ -1,4 +1,4 @@
-import * as _                  from "../iterator.js";
+import * as _                  from "../../iterator.js";
 import { FizzBuzzModel, Rule } from "./fizzBuzzModel.js";
 
 export { FizzBuzzController }
