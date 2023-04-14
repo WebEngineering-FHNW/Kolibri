@@ -13,8 +13,8 @@ export { ConcatIterator }
  *       }
  * @constructor
  * @example
- * const it1 = Constructors(0, inc, stop);
- * const it2 = Constructors(0, inc, stop);
+ * const it1 = Iterator(0, inc, stop);
+ * const it2 = Iterator(0, inc, stop);
  * const concatIterator = ConcatIterator(it1)(it2);
  */
 const ConcatIterator = it1 => it2 => {

@@ -15,7 +15,7 @@ export { cons }
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it       = Constructors(0, inc, stop);
+ * const it       = Iterator(0, inc, stop);
  * const element  = 1;
  * const iterator = cons(element)(it);
  */

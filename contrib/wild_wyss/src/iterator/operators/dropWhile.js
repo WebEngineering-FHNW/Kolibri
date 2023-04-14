@@ -13,7 +13,7 @@ export { dropWhile }
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it      = Constructors(0, inc, stop);
+ * const it      = Iterator(0, inc, stop);
  * // discard all elements until one element is bigger or equal to 2.
  * const dropped = dropWhile(el => el < 2)(it);
  */

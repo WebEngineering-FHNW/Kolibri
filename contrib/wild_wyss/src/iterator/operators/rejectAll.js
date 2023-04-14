@@ -12,7 +12,7 @@ export { rejectAll }
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it     = Constructors(0, inc, stop);
+ * const it     = Iterator(0, inc, stop);
  * // reject even numbers
  * const filtered = retainAll(el => el % 2 === 0)(it);
  */

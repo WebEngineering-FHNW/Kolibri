@@ -39,13 +39,13 @@ const takeWithoutCopy = n => iterator => {
 
 const iteratorSuite = TestSuite("Iterator");
 
-iteratorSuite.add("test typical case: Constructors", assert => {
+iteratorSuite.add("test typical case: Iterator", assert => {
   const iterator = Iterator(0, current => current + 1, current => current > 5);
   assert.isTrue(arrayEq([0, 1, 2, 3, 4, 5])([...iterator]));
   assert.isTrue(arrayEq([])([...iterator]));
 });
 
-iteratorSuite.add("test copy: Constructors", assert => {
+iteratorSuite.add("test copy: Iterator", assert => {
   const iterator = Iterator(0, current => current + 1, current => current > 5);
   const copy = iterator.copy();
   assert.isTrue(arrayEq([0, 1, 2, 3, 4, 5])([...copy]));

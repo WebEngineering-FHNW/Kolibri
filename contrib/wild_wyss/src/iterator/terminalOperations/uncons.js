@@ -11,7 +11,7 @@ export { uncons }
  * @returns { (s: PairSelectorType) => (_T_ |IteratorType<_T_>) }
  * @pure iterator will be copied defensively
  * @example
- * const it     = Constructors(0, inc, stop);
+ * const it     = Iterator(0, inc, stop);
  * const result = uncons(it);
  * const head   = result(fst); // 0
  * const tail   = result(snd); // 1, 2, 3, ...

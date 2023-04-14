@@ -33,7 +33,7 @@ const Iterator = (value, incrementFunction, isDoneFunction) => {
 
   /**
    * @template _T_
-   * Returns a copy of this Constructors
+   * Returns a copy of this Iterator
    * @returns {IteratorType<_T_>}
    */
   const copy = () => Iterator(value, incrementFunction, isDoneFunction);

@@ -14,8 +14,8 @@ export { eq$ }
  *          => Boolean
  *       }
  * @example
- * const it1    = Constructors(0, inc, stop);
- * const it2    = Constructors(0, inc, stop);
+ * const it1    = Iterator(0, inc, stop);
+ * const it2    = Iterator(0, inc, stop);
  * const result = eq$(it1)(it2);
  */
 const eq$ = it1 => it2 =>

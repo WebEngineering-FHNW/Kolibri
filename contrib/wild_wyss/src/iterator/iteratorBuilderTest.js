@@ -102,7 +102,7 @@ iteratorBuilderSuite.add("test build two times: IteratorBuilder", assert => {
   const builder = IteratorBuilder(Range(3));
   const it1 = builder.build();
 
-  assert.throws(() => builder.build(), "Unsupported operation: Constructors has already been built!");
+  assert.throws(() => builder.build(), "Unsupported operation: Iterator has already been built!");
   assert.isTrue(arrayEq([0,1,2,3])([...it1]));
 });
 
@@ -111,7 +111,7 @@ iteratorBuilderSuite.add("test append after build: IteratorBuilder", assert => {
   const builder = IteratorBuilder(Range(3));
   const it1 = builder.build();
 
-  assert.throws(() => builder.append(4,5,6), "Unsupported operation: Constructors has already been built!");
+  assert.throws(() => builder.append(4,5,6), "Unsupported operation: Iterator has already been built!");
   // nothing should happen to the previous built iterator
   assert.isTrue(arrayEq([0,1,2,3])([...it1]));
 });
@@ -120,7 +120,7 @@ iteratorBuilderSuite.add("test prepend after build: IteratorBuilder", assert => 
   const builder = IteratorBuilder(Range(3));
   const it1 = builder.build();
 
-  assert.throws(() => builder.prepend(4,5,6), "Unsupported operation: Constructors has already been built!");
+  assert.throws(() => builder.prepend(4,5,6), "Unsupported operation: Iterator has already been built!");
 
   // nothing should happen to the previous built iterator
   assert.isTrue(arrayEq([0,1,2,3])([...it1]));

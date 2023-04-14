@@ -5,7 +5,7 @@
  *
  * Furthermore, the Kolibri defines many of functions of type
  * {@link IteratorOperation} which can be used to
- * transform the elements of this Constructors.
+ * transform the elements of this Iterator.
  *
  * @typedef IteratorType
  * @template _T_

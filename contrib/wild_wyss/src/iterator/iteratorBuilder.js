@@ -5,7 +5,7 @@ import { emptyIterator } from "./iterator.js";
 
 
 
-const ALREADY_BUILT_ERROR_MESSAGE = "Unsupported operation: Constructors has already been built!";
+const ALREADY_BUILT_ERROR_MESSAGE = "Unsupported operation: Iterator has already been built!";
 
 /**
  * A mutable builder for an {@link IteratorType}.

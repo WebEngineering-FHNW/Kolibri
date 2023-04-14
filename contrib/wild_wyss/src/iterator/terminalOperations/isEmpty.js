@@ -13,7 +13,7 @@ export { isEmpty }
  *         => Boolean
  *       }
  * @example
- * const it     = Constructors(0, inc, stop);
+ * const it     = Iterator(0, inc, stop);
  * const result = isEmpty(it);
  */
 const isEmpty = iterator => head(iterator) === undefined;

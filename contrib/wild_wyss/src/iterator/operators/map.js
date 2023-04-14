@@ -13,7 +13,7 @@ export { map }
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it     = Constructors(0, inc, stop);
+ * const it     = Iterator(0, inc, stop);
  * const mapped = map(el => el * 2)(it);
  */
 const map = mapper => iterator => {
