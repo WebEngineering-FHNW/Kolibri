@@ -1,6 +1,6 @@
 import { Attribute, VALUE } from "../../../../../docs/src/kolibri/presentationModel.js";
 import { Observable }       from "../../../../../docs/src/kolibri/observable.js";
-import { emptyIterator }    from "../constructors.js";
+import { emptyIterator }    from "../iterator.js";
 
 export { FizzBuzzModel, Rule }
 
