@@ -61,10 +61,10 @@ iteratorSuite.add("test special case: no increment after done", assert => {
 
 iteratorSuite.add("test typical case: pipe", assert => {
   const iterator = newIterator(4);
-  const piped    = pipe(iterator)(
+  const piped    = pipe(
     map(i => i + 1),
     retainAll(el => el % 2 === 0)
-  );
+  )(iterator);
 
   assert.isTrue(arrayEq([2,4])([...piped]));
 });
@@ -85,10 +85,10 @@ iteratorSuite.add("test iterate on copy: ArrayIterator", assert => {
 
 iteratorSuite.add("test advanced case: ArrayIterator", assert => {
   const arrayIterator      = ArrayIterator([1,2,3]);
-  const pipedArrayIterator = pipe(arrayIterator)(
+  const pipedArrayIterator = pipe(
     map(i => i + 1),
     retainAll(el => el % 2 === 0)
-  );
+  )(arrayIterator);
   assert.isTrue(arrayEq([2,4])([...pipedArrayIterator]));
 });
 
@@ -103,10 +103,10 @@ iteratorSuite.add("test advanced case: tuple iterator", assert => {
   const [ Triple ]    = Tuple(3);
   const triple        = Triple(1)(2)(3);
   const tupleIterator = TupleIterator(triple);
-  const pipedTupleIterator = pipe(tupleIterator)(
+  const pipedTupleIterator = pipe(
     map(i => i + 1),
     retainAll(el => el % 2 === 0)
-  );
+  )(tupleIterator);
   assert.isTrue(arrayEq([2,4])([...pipedTupleIterator]));
 });
 

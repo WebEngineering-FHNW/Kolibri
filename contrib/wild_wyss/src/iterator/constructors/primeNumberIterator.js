@@ -19,12 +19,12 @@ const PrimeNumberIterator = () => {
     const isDivisibleByAnyPrime = candidate => (acc, cur) => acc || candidate % cur === 0;
 
     const next = () => {
-      currentPrime = [...pipe(infiniteRange)(
+      currentPrime = [...pipe(
         dropWhile(candidate =>
             reduce$(isDivisibleByAnyPrime(candidate), false)(primes)
         ),
         take(1),
-      )][0];
+      )(infiniteRange)][0];
 
       primes = cons(currentPrime)(primes);
 
