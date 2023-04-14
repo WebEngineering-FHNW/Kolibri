@@ -2,6 +2,7 @@ export * from "./zip.js";
 export * from "./zipWith.js";
 export * from "./drop.js";
 export * from "./cons.js"
+export * from "./pipe.js";
 export * from "./dropWhile.js";
 export * from "./take.js";
 export * from "./takeWhile.js";

@@ -1,4 +1,3 @@
-export * from "./pipe.js";
 export * from "./iterator.js";
 export * from "./arrayIterator.js";
 export * from "./tupleIterator.js";
