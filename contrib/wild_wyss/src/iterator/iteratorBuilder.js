@@ -80,30 +80,28 @@ const InternalIterator = (elements, currentIdx = 0) => {
   let currentIterator = emptyIterator;
 
   const next = () => {
-    // early return, if all elements have been processed
-    if (currentIdx === elements.length) return { done: true, value: undefined };
+    while (isIterable(elements[currentIdx])) {
+      if (currentIterator === emptyIterator) {
+        // process next iterator
+        currentIterator = elements[currentIdx].copy();
+      }
 
-    /**
-     * @template _T_
-     * @type {_T_| IteratorType<_T_>}
-     */
-    const value = elements[currentIdx];
+      const result = nextOf(currentIterator);
 
-    if (!isIterable(value)) {
-      currentIdx++;
-      return { done: false, value };
+      if (result.done) {
+        currentIterator = emptyIterator;
+        currentIdx++;
+      } else {
+        return result;
+      }
     }
 
-    if (currentIterator === emptyIterator) currentIterator = value.copy(); // defensively copy the iterator
-    const result = nextOf(currentIterator);
-
-    if (result.done) {
-      currentIterator = emptyIterator;
-      currentIdx++;
-      return next(); // recursive call, might be optimized later
+    // if all elements of the iterator have been processed
+    if (currentIdx === elements.length) {
+      return { done: true, value: undefined };
     }
 
-    return result;
+    return { done: false, value: elements[currentIdx++] };
   };
 
   return {
