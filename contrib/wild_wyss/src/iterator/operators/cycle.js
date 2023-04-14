@@ -1,6 +1,7 @@
 import { nextOf } from "../util/util.js";
 
 export { cycle }
+
 /**
  * {@link cycle Cycle} ties a finite {@link IteratorType} into a circular one, or equivalently, the infinite repetition of the original {@link IteratorType}.
  * @function

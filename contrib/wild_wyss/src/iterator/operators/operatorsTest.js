@@ -1,8 +1,7 @@
-import { TestSuite } from "../test/test.js";
-import { arrayEq }   from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { TestSuite } from "../../test/test.js";
+import { arrayEq }   from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
 
-import { Pair, fst, snd } from "../../../../docs/src/kolibri/stdlib.js";
-
+import { Pair, fst, snd } from "../../../../../docs/src/kolibri/stdlib.js";
 
 import {
   ArrayIterator,
@@ -21,7 +20,7 @@ import {
   takeWhile,
   zip,
   zipWith,
-} from "./iterator.js";
+} from "../iterator.js";
 
 /**
  *

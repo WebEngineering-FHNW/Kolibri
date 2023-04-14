@@ -1,4 +1,4 @@
-export * from "./constructors.js";
+export * from "./constructors/constructors.js";
 export * from "./iteratorBuilder.js";
-export * from "./operators.js";
-export * from "./terminalOperations.js";
+export * from "./operators/operators.js";
+export * from "./terminalOperations/terminalOperations.js";

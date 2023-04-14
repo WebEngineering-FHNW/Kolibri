@@ -1,4 +1,4 @@
-import { arrayEq } from "../../../../../docs/src/kolibri/util/arrayFunctions";
+import { arrayEq } from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 export { eq$ }
 

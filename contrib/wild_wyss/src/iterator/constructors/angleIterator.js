@@ -1,5 +1,5 @@
-import { take } from "../operators.js";
-import { Range } from "../../range/range.js";
+import { take }   from "../iterator.js";
+import { Range }  from "../../range/range.js";
 
 export { AngleIterator }
 

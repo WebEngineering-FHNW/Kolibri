@@ -1,5 +1,8 @@
+import { nextOf } from "./util/util.js";
+
 export { IteratorBuilder }
-import { emptyIterator, nextOf } from "./iterator.js";
+import { emptyIterator } from "./iterator.js";
+
 
 
 const ALREADY_BUILT_ERROR_MESSAGE = "Unsupported operation: Constructors has already been built!";

@@ -13,7 +13,7 @@ import {
   map,
   drop,
   retainAll, FibonacciIterator, AngleIterator, SquareNumberIterator, PrimeNumberIterator,
-} from "./iterator.js"
+} from "../iterator.js"
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 

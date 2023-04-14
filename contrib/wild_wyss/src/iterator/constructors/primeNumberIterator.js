@@ -1,6 +1,6 @@
-// noinspection ES6PreferShortImport
-import { Iterator }               from "./constructors.js";
+import { Iterator, pipe } from "./constructors.js";
 import { dropWhile, take, cons }  from "../operators/operators.js";
+// noinspection ES6PreferShortImport
 import { reduce$ }                from "../terminalOperations/terminalOperations.js";
 import { ArrayIterator }          from "./constructors.js";
 
