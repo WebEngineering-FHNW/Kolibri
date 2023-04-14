@@ -1,4 +1,4 @@
-import { nextOf, createIteratorWithArgs } from "../util/util.js";
+import { nextOf } from "../util/util.js";
 
 export { dropWhile }
 
@@ -32,5 +32,8 @@ const dropWhile = predicate => iterator => {
     return { done, value }
   };
 
-  return createIteratorWithArgs(next)(dropWhile)(predicate)(inner);
+  return {
+    [Symbol.iterator]: () => ({ next }),
+    copy: () => dropWhile(predicate)(inner)
+  };
 };

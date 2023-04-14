@@ -1,4 +1,4 @@
-import { nextOf, createIteratorWithArgs } from "../util/util.js";
+import { nextOf } from "../util/util.js";
 
 export { map }
 
@@ -26,5 +26,8 @@ const map = mapper => iterator => {
     return { done, value: mappedValue }
   };
 
-  return createIteratorWithArgs(next)(map)(mapper)(inner);
+  return {
+    [Symbol.iterator]: () => ({ next }),
+    copy: () => map(mapper)(inner)
+  };
 };

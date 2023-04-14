@@ -1,4 +1,4 @@
-import { nextOf, createIteratorWithArgs } from "../util/util.js";
+import { nextOf } from "../util/util.js";
 
 export { takeWhile }
 
@@ -28,5 +28,8 @@ const takeWhile = predicate => iterator => {
     return  { value: el.value, done };
   };
 
-  return createIteratorWithArgs(next)(takeWhile)(predicate)(inner);
+  return {
+    [Symbol.iterator]: () => ({ next }),
+    copy: () => takeWhile(predicate)(inner)
+  };
 };

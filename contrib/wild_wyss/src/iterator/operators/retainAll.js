@@ -1,4 +1,4 @@
-import { nextOf, createIteratorWithArgs } from "../util/util.js";
+import { nextOf } from "../util/util.js";
 
 export { retainAll }
 
@@ -29,5 +29,8 @@ const retainAll = predicate => iterator => {
     return applyFilter(nextOf(inner))
   };
 
-  return createIteratorWithArgs(next)(retainAll)(predicate)(inner);
+  return {
+    [Symbol.iterator]: () => ({ next }),
+    copy: () => retainAll(predicate)(inner)
+  };
 };
