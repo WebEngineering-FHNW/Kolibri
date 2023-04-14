@@ -30,7 +30,7 @@ import {
  */
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
-const iteratorSuite = TestSuite("IntermediateOperations");
+const iteratorSuite = TestSuite("IteratorOperators");
 const UPPER_ITERATOR_BOUNDARY = 4;
 
 /**

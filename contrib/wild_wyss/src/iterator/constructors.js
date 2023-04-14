@@ -2,8 +2,8 @@ import { pop, emptyStack, stackEquals } from "../../../p6_brodwolf_andermatt/src
 import { fst, snd }                     from "../../../../docs/src/kolibri/stdlib.js";
 import { convertToJsBool }              from "../logger/lamdaCalculus.js";
 import { Range }                        from "../range/range.js";
-import {cons, cycle, dropWhile, take} from "./intermediateOperations.js";
-import {reduce$} from "./terminalOperations.js";
+import { cons, dropWhile, take }        from "./operators.js";
+import { reduce$ }                      from "./terminalOperations.js";
 
 export {
   pipe,

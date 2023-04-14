@@ -2,7 +2,7 @@ import { FocusRing }           from "../focusRing.js";
 import { ArrayIterator, pipe } from "../../iterator/iterator.js";
 import { Observable }          from "../../../../../docs/src/kolibri/observable.js"
 import { Range }               from "../../range/range.js";
-import { map }                 from "../../iterator/intermediateOperations.js";
+import { map }                 from "../../iterator/operators.js";
 
 export { SlotMachineController, ROTATION_SPEED }
 

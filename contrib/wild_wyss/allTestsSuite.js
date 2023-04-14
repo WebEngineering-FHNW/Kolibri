@@ -11,7 +11,7 @@ import "./src/logger/logUi/logUiControllerTest.js"
 
 // iterator
 import "./src/iterator/constructorsTest.js"
-import "./src/iterator/intermediateOperationsTest.js"
+import "./src/iterator/operatorsTest.js"
 import "./src/iterator/terminalOperationsTest.js"
 import "./src/iterator/iteratorBuilderTest.js"
 
