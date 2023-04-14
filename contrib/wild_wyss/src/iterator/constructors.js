@@ -2,7 +2,8 @@ import { pop, emptyStack, stackEquals } from "../../../p6_brodwolf_andermatt/src
 import { fst, snd }                     from "../../../../docs/src/kolibri/stdlib.js";
 import { convertToJsBool }              from "../logger/lamdaCalculus.js";
 import { Range }                        from "../range/range.js";
-import { take }                         from "./intermediateOperations.js";
+import {cons, cycle, dropWhile, take} from "./intermediateOperations.js";
+import {reduce$} from "./terminalOperations.js";
 
 export {
   pipe,
@@ -18,6 +19,7 @@ export {
   FibonacciIterator,
   AngleIterator,
   SquareNumberIterator,
+  PrimeNumberIterator,
 }
 
 /**
@@ -264,14 +266,20 @@ const nextOf = it => it[Symbol.iterator]().next();
  */
 const internalMap = mapper => iterator => {
   const inner = iterator.copy();
-  let mappedValue;
+
   const next = () => {
+    let mappedValue;
     const { done, value } = nextOf(inner);
-    if(!done) mappedValue = mapper(value);
+    mappedValue = done ? undefined : mapper(value);
     return { done, value: mappedValue }
+    // return { done, value: mapper(value) }
   };
 
-  return createIteratorWithArgs(next)(internalMap)(mapper)(inner);
+  return {
+    [Symbol.iterator]: () => ({ next }),
+    copy: () => internalMap(mapper)(inner)
+  }
+  // return createIteratorWithArgs(next)(internalMap)(mapper)(inner);
 };
 
 /**
@@ -336,4 +344,44 @@ const SquareNumberIterator = () => {
     result = el + result;
     return result;
   })(odds);
+};
+
+/**
+ * Creates an {@link IteratorType} which generates the sequence of prime numbers.
+ *
+ * @return { IteratorType<Number> }
+ * @constructor
+ * @example
+ * const iterator = PrimeNumberIterator();
+ * console.log(...iterator); // prints: 2, 3, 5, 7, ...
+ */
+const PrimeNumberIterator = () => {
+
+  const PrimeNumberIteratorFactory = (currentPrime, primes) => {
+    const infiniteRange = Iterator(currentPrime, i => i + 1, _ => false);
+
+    const isDivisibleByAnyPrime = candidate => (acc, cur) => acc || candidate % cur === 0;
+
+    const next = () => {
+      currentPrime = [...pipe(infiniteRange)(
+        dropWhile(candidate =>
+            reduce$(isDivisibleByAnyPrime(candidate), false)(primes)
+        ),
+        take(1),
+      )][0];
+
+      primes = cons(currentPrime)(primes);
+
+      return { done: false, value: currentPrime }
+      };
+
+    const copy = () => PrimeNumberIteratorFactory(currentPrime, primes.copy());
+
+    return {
+      [Symbol.iterator]: () => ({ next }),
+      copy
+    }
+  };
+
+  return PrimeNumberIteratorFactory(2, ArrayIterator([]));
 };

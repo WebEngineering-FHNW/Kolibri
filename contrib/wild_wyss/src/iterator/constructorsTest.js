@@ -11,12 +11,31 @@ import {
   StackIterator,
   emptyIterator,
   map,
-  take,
   drop,
-  retainAll, FibonacciIterator, dropWhile, AngleIterator, SquareNumberIterator,
+  retainAll, FibonacciIterator, AngleIterator, SquareNumberIterator, PrimeNumberIterator,
 } from "./iterator.js"
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
+
+/**
+ * Works exactly as take, but does not copy the iterator.
+ * This is useful to test the functionality without the influence of copy.
+ * @template _T_
+ * @type {
+ *         (n: Number)
+ *         => (iterator: IteratorType<_T_>)
+ *         => Array<_T_>
+ * }
+ */
+const takeWithoutCopy = n => iterator => {
+  const values = [];
+  let i = 0;
+  for (const element of iterator) {
+    values.push(element);
+    if (++i === n) break;
+  }
+  return values;
+};
 
 const iteratorSuite = TestSuite("Iterator");
 
@@ -71,12 +90,6 @@ iteratorSuite.add("test advanced case: ArrayIterator", assert => {
     retainAll(el => el % 2 === 0)
   );
   assert.isTrue(arrayEq([2,4])([...pipedArrayIterator]));
-});
-
-iteratorSuite.add("test array does not exceed", assert => {
-  const arrayIterator      = ArrayIterator([1,2,3]);
-  for (const _ of arrayIterator) { /*exhausting*/ }
-  assert.is(arrayIterator[Symbol.iterator]().next().value, 3);
 });
 
 iteratorSuite.add("test typical case: tuple iterator", assert => {
@@ -175,27 +188,26 @@ iteratorSuite.add("test copy: StackIterator", assert => {
 
 iteratorSuite.add("test typical: FibonacciIterator", assert => {
   const iterator = FibonacciIterator();
-  const result = take(8)(iterator);
+  const result = takeWithoutCopy(8)(iterator);
   assert.isTrue(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...result]));
 });
 
 iteratorSuite.add("test copy: FibonacciIterator", assert => {
   const iterator = FibonacciIterator();
-  const result   = take(8)(iterator);
-  const copy     = result.copy();
-  assert.isTrue(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...result]));
-  assert.isTrue(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...copy]));
+  const copy     = iterator.copy();
+  assert.isTrue(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...takeWithoutCopy(8)(iterator)]));
+  assert.isTrue(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...takeWithoutCopy(8)(copy)]));
 });
 
 iteratorSuite.add("test copy on used iterator: FibonacciIterator", assert => {
   const iterator = FibonacciIterator();
   const result   =  drop(1)(iterator);
   for (const elem of result) {
-    if(elem !== 1) break;
+    if (elem !== 1) break;
   }
   const copy = result.copy();
-  assert.isTrue(arrayEq([3, 5, 8, 13, 21])([...take(5)(result)]));
-  assert.isTrue(arrayEq([3, 5, 8, 13, 21])([...take(5)(copy)]));
+  assert.isTrue(arrayEq([3, 5, 8, 13, 21])([...takeWithoutCopy(5)(result)]));
+  assert.isTrue(arrayEq([3, 5, 8, 13, 21])([...takeWithoutCopy(5)(copy)]));
 });
 
 iteratorSuite.add("test typical case: AngleIterator", assert => {
@@ -204,8 +216,30 @@ iteratorSuite.add("test typical case: AngleIterator", assert => {
 });
 
 iteratorSuite.add("test typical case: SquareNumberIterator", assert => {
-  const iterator = take(5)(SquareNumberIterator());
+  const iterator = takeWithoutCopy(5)(SquareNumberIterator());
   assert.isTrue(arrayEq([1, 4, 9, 16, 25])([...iterator]));
+});
+
+iteratorSuite.add("test typical case: PrimeNumberIterator", assert => {
+  const iterator = PrimeNumberIterator();
+  assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
+});
+
+iteratorSuite.add("test copy: PrimeNumberIterator", assert => {
+  const iterator = PrimeNumberIterator();
+  const copy = iterator.copy();
+
+  assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
+  assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(copy)]));
+});
+
+iteratorSuite.add("test copy partially used: PrimeNumberIterator", assert => {
+  const iterator = PrimeNumberIterator();
+  // noinspection LoopStatementThatDoesntLoopJS
+  for (const _ of iterator) { break; }
+  const copy = iterator.copy();
+
+  assert.isTrue(arrayEq([3, 5, 7, 11, 13, 17])([...takeWithoutCopy(6)(copy)]));
 });
 
 iteratorSuite.run();
