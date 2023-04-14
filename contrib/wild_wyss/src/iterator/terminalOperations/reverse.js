@@ -1,4 +1,4 @@
-import { ArrayIterator } from "../constructors/arrayIterator.js";
+import { ArrayIterator } from "../iterator.js";
 
 export { reverse$ }
 

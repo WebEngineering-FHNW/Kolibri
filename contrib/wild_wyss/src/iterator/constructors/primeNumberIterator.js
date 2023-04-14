@@ -1,8 +1,4 @@
-import { Iterator, pipe } from "./constructors.js";
-import { dropWhile, take, cons }  from "../operators/operators.js";
-// noinspection ES6PreferShortImport
-import { reduce$ }                from "../terminalOperations/terminalOperations.js";
-import { ArrayIterator }          from "./constructors.js";
+import { ArrayIterator, cons, dropWhile, Iterator, pipe, reduce$, take, } from "../iterator.js";
 
 export { PrimeNumberIterator }
 

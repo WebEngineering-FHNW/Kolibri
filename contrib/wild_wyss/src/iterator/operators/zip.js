@@ -1,5 +1,5 @@
 import { Pair }    from "../../../../../docs/src/kolibri/stdlib.js";
-import { zipWith } from "./zipWith.js";
+import { zipWith } from "../iterator.js";
 
 export { zip }
 

@@ -8,7 +8,7 @@ export { uncons }
  * @function
  * @template _T_
  * @param   { IteratorType<_T_> } iterator
- * @returns { (s: pairSelector) => (_T_ |IteratorType<_T_>) }
+ * @returns { (s: PairSelectorType) => (_T_ |IteratorType<_T_>) }
  * @pure iterator will be copied defensively
  * @example
  * const it     = Constructors(0, inc, stop);

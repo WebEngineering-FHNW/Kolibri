@@ -1,5 +1,4 @@
-// noinspection ES6PreferShortImport
-import { Iterator } from "./constructors.js";
+import { Iterator } from "../iterator.js";
 
 export { emptyIterator }
 

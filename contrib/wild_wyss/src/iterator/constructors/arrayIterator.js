@@ -1,6 +1,4 @@
-import { map } from "../operators/operators.js";
-// noinspection ES6PreferShortImport
-import { Iterator } from "./constructors.js";
+import { map, Iterator } from "../iterator.js";
 
 export { ArrayIterator }
 /**

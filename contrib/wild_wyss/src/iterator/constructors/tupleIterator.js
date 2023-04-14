@@ -1,6 +1,4 @@
-// noinspection ES6PreferShortImport
-import { Iterator } from "./constructors.js";
-import { map }      from "../operators/operators.js";
+import { Iterator, map } from "../iterator.js";
 
 export { TupleIterator }
 

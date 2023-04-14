@@ -1,5 +1,4 @@
-import { reduce$ } from "../terminalOperations/terminalOperations.js";
-import { ConcatIterator, emptyIterator } from "../constructors/constructors.js";
+import { reduce$, ConcatIterator, emptyIterator  } from "../iterator.js";
 
 export { mconcat }
 
