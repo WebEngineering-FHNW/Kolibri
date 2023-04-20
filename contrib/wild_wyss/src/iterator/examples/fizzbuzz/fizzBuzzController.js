@@ -36,8 +36,8 @@ const FizzBuzzController = () => {
 
   const createIteratorForRule = rule =>
     _.pipe(
-      _.map(a => a === rule.getNr() ? rule.getText() : ""),
-      _.take(rule.getNr()),
+      _.map(a => a === rule.getNr() ? rule.getText() : ""), // add rule's text to number
+      _.take(rule.getNr()), // abort on this rules number
       _.cycle
     )(infiniteNumbers);
 
@@ -48,10 +48,13 @@ const FizzBuzzController = () => {
     const rules     = _.ArrayIterator(currentRules);
 
     const fizzBuzz  = _.pipe(
-      _.reduce$((acc, cur) => _.cons(cur)(acc), _.ArrayIterator([])), // cons all rules into an iterator of iterators
-      _.reverse$,
-      _.reduce$((acc, cur) => _.zipWith((a, b) => a + b)(acc)(cur), baseLine), // combine to single iterator
+      _.reduce$((acc, cur) => // reduce to single iterator by combining all iterator values
+        _.zipWith((a, b) => a + b)(acc)(cur), // combine all strings
+        baseLine), // start value (empty strings)
+
       _.zipWith((numbers, pattern) => pattern === "" ? String(numbers) : pattern)(infiniteNumbers), // add numbers where no text is present
+
+      // limit output
       _.take(model.getUpperBoundary()),
       _.drop(model.getLowerBoundary() -1),
     )(rules);
