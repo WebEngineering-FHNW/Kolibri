@@ -118,7 +118,7 @@ pmSuite.add("create-easy", assert => {
 /* Caveat:
 It is possible that two Attributes synchronize their values (plus label, valid state, etc.) via qualifier,
 but they have different converters and validators. In this case, only the converter/validator of the
-attribute that received the last setConvertedValue() call is in effect - and the dependent attribute will
+attribute that received the pos setConvertedValue() call is in effect - and the dependent attribute will
 experience value changes that might not be in line with its own converter/validation rules.
 */
 

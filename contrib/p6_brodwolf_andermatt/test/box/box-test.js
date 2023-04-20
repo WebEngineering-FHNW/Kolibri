@@ -302,7 +302,7 @@ boxSuite.add("readPersonFromApi maybeBox example", assert => {
     // returns either a parsed object or Nothing
     const parseJson = object =>  object !== null ? eitherTryCatch(() => JSON.parse(object)) : Nothing;
 
-    const parseJsonWithError = _ =>  eitherTryCatch(() => JSON.parse('{"first": "Jane", last: "Doe"}'))
+    const parseJsonWithError = _ =>  eitherTryCatch(() => JSON.parse('{"first": "Jane", pos: "Doe"}'))
 
 
     const getPerson1 = lastName =>

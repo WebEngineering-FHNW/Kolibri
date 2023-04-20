@@ -5,24 +5,24 @@ import { iteratorProjector }                from "../../projector/iteratorProjec
 import { AngleIterator, FibonacciIterator } from "../../iterator.js";
 
 const fibonacciView = (rootElement, amount, scaleFactor) => {
-  const iti     = _.take(amount)(FibonacciIterator());
-  const iti2    = _.cons(0)(FibonacciIterator());
-  const values  = _.zipWith((a, b) => ({current: a, last: b}))(iti)(iti2);
-  const indexed = _.zipWith((a, b) => ({...a, index: b}))(values)(Range(100));
-  const colored = _.zipWith((a, b) => ({...a, color: b}))(indexed)(AngleIterator(amount));
+  const fibSequence = _.take(amount)(FibonacciIterator());
+  const position    = _.cons(0)(FibonacciIterator()); // position of square is one behind the squares value
+  const values      = _.zipWith((a, b) => ({current: a, pos: b}))(fibSequence)(position);
+  const indexed     = _.zipWith((a, b) => ({...a, index: b}))(values)(Range(100));
+  const colored     = _.zipWith((a, b) => ({...a, color: b}))(indexed)(AngleIterator(amount));
 
   const elements = (iteratorProjector(colored)(fibonacciProjector(scaleFactor))).children;
 
   rootElement.append(...elements);
 };
 
-const fibonacciProjector = scaleFactor => ({ index, current, last, color }) => {
+const fibonacciProjector = scaleFactor => ({ index, current, pos, color }) => {
   const [div] = dom(`<div>${current}</div>`);
-  let top = last * scaleFactor;
+  let top = pos * scaleFactor;
   let left = 0;
   if (index % 2 === 0) {
     top = 0;
-    left = last * scaleFactor;
+    left = pos * scaleFactor;
   }
   div.style.border     = `1px solid black`;
   div.style.height     = `${current * scaleFactor}px`;

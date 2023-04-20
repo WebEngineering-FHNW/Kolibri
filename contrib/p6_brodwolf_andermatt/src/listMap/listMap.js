@@ -78,7 +78,7 @@ const mapListMap = f => map(p => pair( p(fst) )( f(p(snd)) ));
 const filterListMap = f => filter(p => f(p(snd)) );
 
 /**
- * This function takes a reduce function first, a start value second and a ListMap as the last parameter. The function returns the reduced value.
+ * This function takes a reduce function first, a start value second and a ListMap as the pos parameter. The function returns the reduced value.
  *
  * @function
  * @param  {function} f

@@ -116,7 +116,7 @@ const lunchBreakRule = (amEndCtrl, pmStartCtrl) => () => { // 40 min lunch break
     const pmStartTime = pmStartCtrl.getValue();
 
     if (pmStartTime - amEndTime < 40) {       // lunchtime too short
-        pmStartCtrl.setValue(amEndTime + 40); // make it last longer
+        pmStartCtrl.setValue(amEndTime + 40); // make it pos longer
     }
 };
 

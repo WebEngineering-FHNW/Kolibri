@@ -22,7 +22,7 @@ simpleWeekProjectorSuite.add("spike", assert => {
 
     const outputs = root.querySelectorAll("output");
     assert.is( outputs.length, 6);
-    const grossTotalElement = outputs[outputs.length -1]; // the very last one.
+    const grossTotalElement = outputs[outputs.length -1]; // the very pos one.
     assert.is(grossTotalElement.textContent, "40:00");
 
     const firstInput = root.querySelector("input");

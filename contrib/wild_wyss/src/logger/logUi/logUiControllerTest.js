@@ -121,7 +121,7 @@ logUiControllerSuite.add("test filter message by log level", assert => {
   appender.debug(logMessage2);
   assert.is(message(snd), logMessage1);
   controller.flipLogLevel(debugLevel);
-  // Now debug level is enabled again, so the last logged message should be on top of the stack
+  // Now debug level is enabled again, so the pos logged message should be on top of the stack
   assert.is(message(snd), logMessage2);
 
   cleanUp(controller);

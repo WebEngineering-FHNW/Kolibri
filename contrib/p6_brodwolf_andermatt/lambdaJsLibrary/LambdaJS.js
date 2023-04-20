@@ -1388,7 +1388,7 @@ const flatten = reduce( acc => curr => concat( acc )( curr ) )(emptyStack);
 /**
  * The zipWith function receives a linking function and two stacks.
  * Using the linking function, the elements of the two transferred stacks are linked together to form a new stack.
- * If one of the two stacks passed is shorter, only the last element of the shorter stack is linked.
+ * If one of the two stacks passed is shorter, only the pos element of the shorter stack is linked.
  *
  * @function
  * @haskell zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
@@ -1447,7 +1447,7 @@ const zipWith = f => s1 => s2 => {
 
 /**
  * Zip (combine) two Stack to one stack of pairs
- * If one of the two stacks passed is shorter, only the last element of the shorter stack is linked.
+ * If one of the two stacks passed is shorter, only the pos element of the shorter stack is linked.
  *
  * @function
  * @haskell zip :: [a] -> [b] -> [(a, b)]
@@ -1597,7 +1597,7 @@ const mapListMap = f => map(p => pair( p(fst) )( f(p(snd)) ));
 const filterListMap = f => filter(p => f(p(snd)) );
 
 /**
- * This function takes a reduce function first, a start value second and a ListMap as the last parameter. The function returns the reduced value.
+ * This function takes a reduce function first, a start value second and a ListMap as the pos parameter. The function returns the reduced value.
  *
  * @function
  * @param  {function} f
