@@ -26,24 +26,21 @@ export { PrimeNumberIterator }
  * console.log(...iterator); // prints: 2, 3, 5, 7, ...
  */
 const PrimeNumberIterator = () => {
-  const PrimeNumberFactory = (currentNumber, prevPrimes) => {
-    prevPrimes = map(it => it.copy())(prevPrimes);
+  const PrimeNumberFactory = (last = undefined) => {
+    let currentNumber = 2;
+    let prevPrimes = ArrayIterator([]);
 
     const infinite = Iterator(currentNumber, i => i + 1, _ => false);
 
     const createPrimeIti = prime =>
       map(x => x === prime)( cycle(Iterator(1, i => i + 1, i => i > prime)));
 
-    const createPrimeIti2 = prime => {
-      const vals = [];
-      for (let i = 1; i < 1000; i++) {
-        vals.push(i % prime === 0);
-      }
-      return ArrayIterator(vals);
-    };
 
     const next = () => {
+      let i = 0;
       while(true) {
+        if (i++ > 10) return {done: true, value: undefined};
+
         currentNumber = nextOf(infinite).value;
         const isPrime = !reduce$((acc, cur) => nextOf(cur).value || acc, false)(prevPrimes);
 
@@ -53,15 +50,20 @@ const PrimeNumberIterator = () => {
         }
       }
 
+
     };
 
+    let cnr = 0;
+    while(last !== undefined && cnr < last){
+      cnr = next().value;
+    }
     return {
       [Symbol.iterator]: () => ({ next }),
       copy: () => {
-        return PrimeNumberFactory(currentNumber, prevPrimes)
+        return PrimeNumberFactory(currentNumber)
       }
     }
   };
 
-  return PrimeNumberFactory(2, ArrayIterator([]));
+  return PrimeNumberFactory();
 };
