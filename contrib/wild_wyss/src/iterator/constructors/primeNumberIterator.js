@@ -1,4 +1,18 @@
-import { ArrayIterator, cons, dropWhile, Iterator, pipe, reduce$, take, } from "../iterator.js";
+import {
+  head,
+  ArrayIterator,
+  map,
+  cons,
+  cycle,
+  dropWhile,
+  Iterator,
+  pipe,
+  reduce$,
+  take,
+  reverse$
+} from "../iterator.js";
+import { Range } from "../../range/range.js";
+import {nextOf} from "../util/util.js";
 
 export { PrimeNumberIterator }
 
@@ -12,32 +26,42 @@ export { PrimeNumberIterator }
  * console.log(...iterator); // prints: 2, 3, 5, 7, ...
  */
 const PrimeNumberIterator = () => {
+  const PrimeNumberFactory = (currentNumber, prevPrimes) => {
+    prevPrimes = map(it => it.copy())(prevPrimes);
 
-  const PrimeNumberIteratorFactory = (currentPrime, primes) => {
-    const infiniteRange = Iterator(currentPrime, i => i + 1, _ => false);
+    const infinite = Iterator(currentNumber, i => i + 1, _ => false);
 
-    const isDivisibleByAnyPrime = candidate => (acc, cur) => acc || candidate % cur === 0;
+    const createPrimeIti = prime =>
+      map(x => x === prime)( cycle(Iterator(1, i => i + 1, i => i > prime)));
+
+    const createPrimeIti2 = prime => {
+      const vals = [];
+      for (let i = 1; i < 1000; i++) {
+        vals.push(i % prime === 0);
+      }
+      return ArrayIterator(vals);
+    };
 
     const next = () => {
-      currentPrime = [...pipe(
-        dropWhile(candidate =>
-            reduce$(isDivisibleByAnyPrime(candidate), false)(primes)
-        ),
-        take(1),
-      )(infiniteRange)][0];
+      while(true) {
+        currentNumber = nextOf(infinite).value;
+        const isPrime = !reduce$((acc, cur) => nextOf(cur).value || acc, false)(prevPrimes);
 
-      primes = cons(currentPrime)(primes);
+        if (isPrime) {
+          prevPrimes = cons(createPrimeIti(currentNumber))(prevPrimes);
+          return { value: currentNumber, done: false}
+        }
+      }
 
-      return { done: false, value: currentPrime }
-      };
-
-    const copy = () => PrimeNumberIteratorFactory(currentPrime, primes.copy());
+    };
 
     return {
       [Symbol.iterator]: () => ({ next }),
-      copy
+      copy: () => {
+        return PrimeNumberFactory(currentNumber, prevPrimes)
+      }
     }
   };
 
-  return PrimeNumberIteratorFactory(2, ArrayIterator([]));
+  return PrimeNumberFactory(2, ArrayIterator([]));
 };

@@ -33,6 +33,14 @@ iteratorSuite.add("test copy: Iterator", assert => {
   assert.isTrue(arrayEq([0, 1, 2, 3, 4, 5])([...iterator]));
 });
 
+iteratorSuite.add("test copy after partial use: Iterator", assert => {
+  const iterator = Iterator(0, current => current + 1, current => current > 5);
+  // noinspection LoopStatementThatDoesntLoopJS
+  for (const _ of iterator) { break; }
+  const copy = iterator.copy();
+  assert.isTrue(arrayEq([1,2,3,4,5])([...copy]));
+});
+
 iteratorSuite.add("test special case: no increment after done", assert => {
   let result = true;
   const iterator = Iterator(true, _ => result = false, _ => true);
@@ -202,14 +210,13 @@ iteratorSuite.add("test typical case: SquareNumberIterator", assert => {
 });
 
 iteratorSuite.add("test typical case: PrimeNumberIterator", assert => {
-  const iterator = PrimeNumberIterator();
-  assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
+ const iterator = PrimeNumberIterator();
+ assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
 });
 
 iteratorSuite.add("test copy: PrimeNumberIterator", assert => {
   const iterator = PrimeNumberIterator();
   const copy = iterator.copy();
-
   assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
   assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(copy)]));
 });
@@ -217,9 +224,11 @@ iteratorSuite.add("test copy: PrimeNumberIterator", assert => {
 iteratorSuite.add("test copy partially used: PrimeNumberIterator", assert => {
   const iterator = PrimeNumberIterator();
   // noinspection LoopStatementThatDoesntLoopJS
-  for (const _ of iterator) { break; }
+  let counter = 0;
+  for (const _ of iterator) {if(counter++ === 0){ break; }}
   const copy = iterator.copy();
-
+  console.log("original: ", ...takeWithoutCopy(5)(iterator));
+  console.log("copy: ", ...takeWithoutCopy(5)(copy));
   assert.isTrue(arrayEq([3, 5, 7, 11, 13, 17])([...takeWithoutCopy(6)(copy)]));
 });
 
