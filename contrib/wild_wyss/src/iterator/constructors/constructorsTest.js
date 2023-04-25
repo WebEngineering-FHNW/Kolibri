@@ -81,6 +81,16 @@ iteratorSuite.add("test advanced case: ArrayIterator", assert => {
   assert.isTrue(arrayEq([2,4])([...pipedArrayIterator]));
 });
 
+iteratorSuite.add("test advanced case: ArrayIterator", assert => {
+  const arrayIterator      = ArrayIterator([1,2,3]);
+  for (const arrayIteratorElement of arrayIterator) {
+    break;
+  }
+  const copy = arrayIterator.copy();
+  assert.isTrue(arrayEq([2,3])([...copy]));
+  assert.isTrue(arrayEq([2,3])([...arrayIterator]));
+});
+
 iteratorSuite.add("test typical case: tuple iterator", assert => {
   const [ Triple ]    = Tuple(3);
   const triple        = Triple(1)(2)(3);
@@ -211,12 +221,16 @@ iteratorSuite.add("test typical case: SquareNumberIterator", assert => {
 
 iteratorSuite.add("test typical case: PrimeNumberIterator", assert => {
  const iterator = PrimeNumberIterator();
- assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
+  //console.log([...takeWithoutCopy(6)(iterator)]);
+  assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
 });
 
 iteratorSuite.add("test copy: PrimeNumberIterator", assert => {
   const iterator = PrimeNumberIterator();
   const copy = iterator.copy();
+
+  //console.log("orig: ", [...takeWithoutCopy(6)(iterator)])
+  //console.log([...takeWithoutCopy(6)(copy)])
   assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
   assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(copy)]));
 });
@@ -224,12 +238,10 @@ iteratorSuite.add("test copy: PrimeNumberIterator", assert => {
 iteratorSuite.add("test copy partially used: PrimeNumberIterator", assert => {
   const iterator = PrimeNumberIterator();
   // noinspection LoopStatementThatDoesntLoopJS
-  let counter = 0;
-  for (const _ of iterator) {if(counter++ === 1){ break; }}
+  for (const _ of iterator) { break; }
   const copy = iterator.copy();
-  console.log("original: ", ...takeWithoutCopy(5)(iterator));
-  console.log("copy: ", ...takeWithoutCopy(5)(copy));
-  //assert.isTrue(arrayEq([3, 5, 7, 11, 13, 17])([...takeWithoutCopy(6)(copy)]));
+  assert.isTrue(arrayEq([3, 5, 7, 11, 13, 17])([...takeWithoutCopy(6)(iterator)]));
+  assert.isTrue(arrayEq([3, 5, 7, 11, 13, 17])([...takeWithoutCopy(6)(copy)]));
 });
 
 iteratorSuite.run();

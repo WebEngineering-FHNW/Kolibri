@@ -26,41 +26,37 @@ export { PrimeNumberIterator }
  * console.log(...iterator); // prints: 2, 3, 5, 7, ...
  */
 const PrimeNumberIterator = () => {
-  const PrimeNumberFactory = (last = undefined) => {
-    let currentNumber = 2;
-    let prevPrimes = ArrayIterator([]);
 
-    const infinite = Iterator(currentNumber, i => i + 1, _ => false);
+  const createPrimeIti = prime => map(x => x === prime)(cycle(Iterator(1, i => i + 1, i => i > prime)));
 
-    const createPrimeIti = prime =>
-      map(x => x === prime)( cycle(Iterator(1, i => i + 1, i => i > prime)));
+  const PrimeNumberFactory = (value = 2, prevPrimes = ArrayIterator([createPrimeIti(value)])) => {
+    prevPrimes = ArrayIterator([...prevPrimes.copy()].map(it => it.copy()));
+      //prevPrimes = map(it => it.copy())(prevPrimes);
+
+    const infinite = Iterator(value + 1, i => i + 1, _ => false);
 
 
     const next = () => {
+      const current = value;
+
       let i = 0;
       while(true) {
         if (i++ > 10) return {done: true, value: undefined};
 
-        currentNumber = nextOf(infinite).value;
+        value = nextOf(infinite).value;
         const isPrime = !reduce$((acc, cur) => nextOf(cur).value || acc, false)(prevPrimes);
 
         if (isPrime) {
-          prevPrimes = cons(createPrimeIti(currentNumber))(prevPrimes);
-          return { value: currentNumber, done: false}
+          prevPrimes = cons(createPrimeIti(value))(prevPrimes);
+          return { value: current, done: false}
         }
       }
-
-
     };
 
-    let cnr = 0;
-    while(last !== undefined && cnr < last){
-      cnr = next().value;
-    }
     return {
       [Symbol.iterator]: () => ({ next }),
       copy: () => {
-        return PrimeNumberFactory(currentNumber)
+        return PrimeNumberFactory(value, prevPrimes)
       }
     }
   };
