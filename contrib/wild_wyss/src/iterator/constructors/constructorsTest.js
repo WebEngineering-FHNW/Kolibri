@@ -13,7 +13,7 @@ import {
   emptyIterator,
   map,
   drop,
-  retainAll, FibonacciIterator, AngleIterator, SquareNumberIterator, PrimeNumberIterator,
+  retainAll, FibonacciIterator, AngleIterator, SquareNumberIterator, PrimeNumberIterator, cycle, take,
 } from "../iterator.js"
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
@@ -220,8 +220,7 @@ iteratorSuite.add("test typical case: SquareNumberIterator", assert => {
 });
 
 iteratorSuite.add("test typical case: PrimeNumberIterator", assert => {
- const iterator = PrimeNumberIterator();
-  //console.log([...takeWithoutCopy(6)(iterator)]);
+  const iterator = PrimeNumberIterator();
   assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
 });
 
@@ -229,8 +228,6 @@ iteratorSuite.add("test copy: PrimeNumberIterator", assert => {
   const iterator = PrimeNumberIterator();
   const copy = iterator.copy();
 
-  //console.log("orig: ", [...takeWithoutCopy(6)(iterator)])
-  //console.log([...takeWithoutCopy(6)(copy)])
   assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
   assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(copy)]));
 });
@@ -242,6 +239,23 @@ iteratorSuite.add("test copy partially used: PrimeNumberIterator", assert => {
   const copy = iterator.copy();
   assert.isTrue(arrayEq([3, 5, 7, 11, 13, 17])([...takeWithoutCopy(6)(iterator)]));
   assert.isTrue(arrayEq([3, 5, 7, 11, 13, 17])([...takeWithoutCopy(6)(copy)]));
+});
+
+// TODO: show to DK
+iteratorSuite.add("map problems", assert => {
+  const createSimpleIti = nr => Iterator(1, i => i + 1, i => i > nr);
+  const iti1 = createSimpleIti(2);
+  const iti2 = createSimpleIti(3);
+
+  const arr = ArrayIterator([iti1,iti2]);
+  const copy = map(i => {
+    console.log("lazy");
+    return i.copy();
+  })(arr);
+
+  let i = 0;
+  for (const a of arr){ console.log("orig", "Iteration: ", i++, ...a); }
+  for (const a of copy){ console.log("copy", "Iteration: ", i++, ...a); }
 });
 
 iteratorSuite.run();

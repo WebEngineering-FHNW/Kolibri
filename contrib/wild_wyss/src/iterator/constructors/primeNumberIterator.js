@@ -1,18 +1,14 @@
 import {
-  head,
   ArrayIterator,
   map,
   cons,
   cycle,
-  dropWhile,
   Iterator,
   pipe,
   reduce$,
-  take,
-  reverse$
 } from "../iterator.js";
-import { Range } from "../../range/range.js";
 import {nextOf} from "../util/util.js";
+import {Range} from "../../range/range.js";
 
 export { PrimeNumberIterator }
 
@@ -23,31 +19,53 @@ export { PrimeNumberIterator }
  * @constructor
  * @example
  * const iterator = PrimeNumberIterator();
- * console.log(...iterator); // prints: 2, 3, 5, 7, ...
+ * console.log(...take(4)(iterator)); // prints: 2, 3, 5, 7
  */
 const PrimeNumberIterator = () => {
+  /**
+   * Creates a repeated sequence pattern for the given prime
+   * @param prime
+   * @returns {IteratorType<Boolean>}
+   * @example
+   * const it = patternForPrime(3);
+   * // false, false, true
+   */
+  const patternForPrime = prime => pipe(
+    map(x => x === prime),
+    cycle
+  )(Iterator(1, i => i + 1, i => i > prime));
 
-  const createPrimeIti = prime => map(x => x === prime)(cycle(Iterator(1, i => i + 1, i => i > prime)));
-
-  const PrimeNumberFactory = (value = 2, prevPrimes = ArrayIterator([createPrimeIti(value)])) => {
+  /**
+   * @param { number? } firstPrime -
+   * @param {IteratorType<IteratorType<Boolean>>? } prevPrimes
+   * @returns {any}
+   * @constructor
+   */
+  const PrimeNumberFactory = (firstPrime = 2, prevPrimes = ArrayIterator([patternForPrime(firstPrime)])) => {
+    let nextValue = firstPrime;
+    // copy all primeIterators immediately
     prevPrimes = ArrayIterator([...prevPrimes.copy()].map(it => it.copy()));
-      //prevPrimes = map(it => it.copy())(prevPrimes);
 
-    const infinite = Iterator(value + 1, i => i + 1, _ => false);
+    // TODO: show to DK
+    // prevPrimes = map(it => {
+    //  console.log("lazy", ...take(4)(it.copy()));
+    //  return it.copy();
+    // })(prevPrimes);
 
+    // pre calculation starts from firstPrime + 1
+    const infinite = Range(nextValue + 1, Number.MAX_VALUE);
 
     const next = () => {
-      const current = value;
+      const current = nextValue;
 
-      let i = 0;
       while(true) {
-        if (i++ > 10) return {done: true, value: undefined};
-
-        value = nextOf(infinite).value;
-        const isPrime = !reduce$((acc, cur) => nextOf(cur).value || acc, false)(prevPrimes);
+        // pre calculate next value
+        nextValue = nextOf(infinite).value;
+        const isPrime = !reduce$((acc, cur) =>
+          nextOf(cur).value || acc, false)(prevPrimes);
 
         if (isPrime) {
-          prevPrimes = cons(createPrimeIti(value))(prevPrimes);
+          prevPrimes = cons(patternForPrime(nextValue))(prevPrimes);
           return { value: current, done: false}
         }
       }
@@ -55,9 +73,7 @@ const PrimeNumberIterator = () => {
 
     return {
       [Symbol.iterator]: () => ({ next }),
-      copy: () => {
-        return PrimeNumberFactory(value, prevPrimes)
-      }
+      copy: () => PrimeNumberFactory(nextValue, prevPrimes)
     }
   };
 
