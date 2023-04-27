@@ -3,10 +3,9 @@ export { reduce$ }
 /**
  * Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
  * @function
- * @template _T_
  * @pure iterator will be copied defensively
- * @type {
- *             (accumulationFn: BiOperation<_T_>, start: _T_)
+ * @type {<_T_, _U_>
+ *             (accumulationFn: BiFunction<_T_, _U_, _T_>, start: _T_)
  *          => (iterator: IteratorType<_T_>)
  *          => _T_
  *       }

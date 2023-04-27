@@ -2,8 +2,7 @@ export { pipe }
 
 /**
  * Transforms the given {@link IteratorType iterator} using the passed {@link IteratorOperation}
- * @template _T_
- * @type  {
+ * @type  {<_T_>
  *            (...transformers: IteratorOperation )
  *            => (iterator: IteratorType<_T_>)
  *            => IteratorType<_T_>
