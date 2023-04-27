@@ -1,5 +1,6 @@
 import { Range }      from "./range.js"
 import { TestSuite }  from "../test/test.js";
+import {arrayEq} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 const rangeSuite = TestSuite("Range");
 
@@ -148,6 +149,24 @@ rangeSuite.add("test of all combinations", assert => {
 
   testRangeNegativeStepSize(0, -5, -1, Range(-5, 0, -1), assert);
   testRangeNegativeStepSize(0, -5, -1, Range(0, -5, -1), assert);
+});
+
+rangeSuite.add("test copy", assert => {
+  const range = Range(5);
+  const copy = range.copy();
+
+  assert.isTrue(arrayEq([0,1,2,3,4,5])([...range]));
+  assert.isTrue(arrayEq([0,1,2,3,4,5])([...copy]));
+});
+
+rangeSuite.add("test partially used copy", assert => {
+  const range = Range(5);
+  // noinspection LoopStatementThatDoesntLoopJS
+  for (const _ of range) { break; } // take 1
+  const copy = range.copy();
+
+  assert.isTrue(arrayEq([1,2,3,4,5])([...range]));
+  assert.isTrue(arrayEq([1,2,3,4,5])([...copy]));
 });
 
 rangeSuite.run();
