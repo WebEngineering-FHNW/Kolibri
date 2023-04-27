@@ -13,3 +13,4 @@ export * from "./cycle.js";
 export * from "./map.js";
 export * from "./repeat.js";
 export * from "./bind.js";
+export * from "./reverse.js";

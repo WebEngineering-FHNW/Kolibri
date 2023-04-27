@@ -9,6 +9,8 @@ import {
 } from "../iterator.js";
 import {nextOf} from "../util/util.js";
 import {Range} from "../../range/range.js";
+import {Just, Nothing} from "../../../../../docs/src/kolibri/stdlib.js";
+import {catMaybes} from "../../stdlib/stdlib.js";
 
 export { PrimeNumberIterator }
 
@@ -25,25 +27,27 @@ const PrimeNumberIterator = () => {
   /**
    * Creates a repeated sequence pattern for the given prime
    * @param prime
-   * @returns {IteratorType<Boolean>}
+   * @returns {IteratorType<MaybeType>}
    * @example
    * const it = patternForPrime(3);
    * // false, false, true
    */
   const patternForPrime = prime => pipe(
-    map(x => x === prime),
+    map(x => x === prime ? Just(prime) : Nothing),
     cycle
   )(Iterator(1, i => i + 1, i => i > prime));
 
   /**
    * @param { number? } firstPrime -
-   * @param {IteratorType<IteratorType<Boolean>>? } prevPrimes
+   * @param {IteratorType<IteratorType<MaybeType<Number, void>>>? } prevPrimes
    * @returns {any}
    * @constructor
    */
   const PrimeNumberFactory = (firstPrime = 2, prevPrimes = ArrayIterator([patternForPrime(firstPrime)])) => {
     let nextValue = firstPrime;
+
     // copy all primeIterators immediately
+    /** @type { IteratorType<IteratorType<MaybeType<Number, void>>> } */
     prevPrimes = ArrayIterator([...prevPrimes.copy()].map(it => it.copy()));
 
     // TODO: show to DK
@@ -61,8 +65,13 @@ const PrimeNumberIterator = () => {
       while(true) {
         // pre calculate next value
         nextValue = nextOf(infinite).value;
-        const isPrime = !reduce$((acc, cur) =>
-          nextOf(cur).value || acc, false)(prevPrimes);
+
+        const maybeDividers = reduce$((acc, cur) => {
+          acc.push( nextOf(cur).value);
+          return acc;
+        }, [])(prevPrimes);
+
+        const isPrime = catMaybes(maybeDividers).length === 0;
 
         if (isPrime) {
           prevPrimes = cons(patternForPrime(nextValue))(prevPrimes);
