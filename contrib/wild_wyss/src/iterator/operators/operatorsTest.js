@@ -23,98 +23,58 @@ import {
   bind,
 } from "../iterator.js";
 
-/**
- *
- * @param  { Number } limit
- * @returns { IteratorType<Number> }
- */
-const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
+import {
+  UPPER_ITERATOR_BOUNDARY,
+  newIterator,
+  testCBNotCalledAfterDone,
+  testCopy,
+  testCopyAfterConsumption,
+  testPurity,
+  testSimple,
+} from "../util/testUtil.js";
 
 const iteratorSuite = TestSuite("IteratorOperators");
-const UPPER_ITERATOR_BOUNDARY = 4;
 
-/**
- * Tests if a given operation applicated on an iterator processes the expected result.
- * Optionally an evaluation function can be passed to compare the created array using the operation and the expected array.
- * @function
- * @template _T_
- * @type {
- *         (op: (number) => IteratorType<_T_>)
- *      => (expected: Array<_T_>)
- *      => (evalFn?: (expected: Array<_T_>) => (actual: Array<_T_> ) => boolean)
- *      => (assert: any)
- *      => void
- * }
- */
-const testSimple = op => expected => (evalFn = arrayEq) => assert => {
-  const it       = newIterator(UPPER_ITERATOR_BOUNDARY);
-  const operated = op(it);
-  assert.isTrue(evalFn([...expected])([...operated]));
+const prepareTestSuite = () => {
+  [
+    ["drop",          drop(2),                           [2, 3, 4],                 ],
+    ["take",          take(2),                           [0, 1],                    ],
+    ["reverse$",      reverse$,                          [4, 3, 2, 1, 0],           ],
+    ["cons",          cons(2),                           [2, 0, 1, 2, 3, 4],        ],
+    ["mconcat",       mconcatInit,                       [0, 1, 2, 0, 1, 2, 0, 1, 2]],
+    ["cycle",         cycleInit,                         [0, 1, 2, 0, 1, 2, 0, 1, 2]],
+    ["repeat",        repeatInit,                        [1, 1, 1, 1, 1, 1, ]       ],
+    ["zip",           zipInit,                           expectedZipResult,         zipEvaluation]
+  ].forEach(el => {
+    const [ name, op, expected, evalFn ] = el;
+    iteratorSuite.add(`test simple: ${name}`,                 testSimple              (op)(expected)(evalFn));
+    iteratorSuite.add(`test copy: ${name}`,                   testCopy                (op)(evalFn));
+    iteratorSuite.add(`test copy after consumption: ${name}`, testCopyAfterConsumption(op)(evalFn));
+    iteratorSuite.add(`test purity: ${name}.`,                testPurity              (op));
+  });
+
+
+  // operations which take callbacks as arguments
+  [
+    ["map",           map,        (el => 2 * el),           [0, 2, 4, 6, 8],                                  ],
+    ["retainAll",     retainAll,  (el => el % 2 === 0),     [0, 2, 4],                                        ],
+    ["rejectAll",     rejectAll,  (el => el % 2 === 0),     [1, 3],                                           ],
+    ["dropWhile",     dropWhile,  (el => el < 2),           [2, 3, 4],                                        ],
+    ["takeWhile",     takeWhile,  (el => el < 2),           [0, 1],                                           ],
+    ["zipWith",       zipWithInit,((i, j) => i + j),        [0, 2, 4, 6, 8]                                   ],
+    ["bind",          bind,       bindFn,                   ["0", "0", "1", "1", "2", "2", "3", "3", "4", "4"]]
+  ].forEach(el => {
+    const [ name, op, callback, expected, evalFn] = el;
+    iteratorSuite.add(`test simple: ${name}`,                           testSimple              (op(callback))(expected)(evalFn));
+    iteratorSuite.add(`test copy: ${name}`,                             testCopy                (op(callback))(evalFn));
+    iteratorSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(op(callback))(evalFn));
+    iteratorSuite.add(`test purity: ${name}.`,                          testPurity              (op(callback)));
+    iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(op)(callback));
+  });
 };
 
-/**
- * Checks if a given operation does not modify the underlying iterator.
- * @type {
- *         (op: (number) => IteratorType<number>)
- *      => (assert: any)
- *      => void
- * }
- */
-const testPurity = op => assert => {
-  const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
-  op(iterator);
-  assert.isTrue(arrayEq([0,1,2,3,4])([...iterator]));
-};
-
-/**
- * Tests if the copy function of a given operation works as intended.
- * Optionally an evaluation function can be passed to compare the created array using the operation and the expected array.
- * @type {
- *         (op: (number) => IteratorType<number>)
- *      => (evalFn?: (expected: Array<any>) => (actual: Array<any> ) => boolean)
- *      => (assert: any)
- *      => void
- * }
- */
-const testCopy = op => (evalFn = arrayEq) => assert => {
-  const expected = op(newIterator(UPPER_ITERATOR_BOUNDARY));
-  const copied   = op(newIterator(UPPER_ITERATOR_BOUNDARY)).copy();
-  assert.isTrue(evalFn([...expected])([...copied]));
-};
-
-const testCopyAfterConsumption = op => (evalFn = arrayEq) => assert => {
-  const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
-  const operated = op(iterator);
-  // noinspection LoopStatementThatDoesntLoopJS
-  for (const elem of operated) {
-    break; // consume one element
-  }
-  const copy = operated.copy();
-  assert.isTrue(evalFn([...operated])([...copy]));
-};
-
-/**
- * Since there is no guarantee that the value of the iterator is existing when done is true,
- * it must be ensured that the callback function is not called after that.
- * @type {
- *         (op: (number) => IteratorOperation<number>)
- *      => (callback: (el: number) => any)
- *      => (assert: any)
- *      => void
- * }
- */
-const testCBNotCalledAfterDone = op => callback => assert => {
-  let called = false;
-  const it = Iterator(0, _ => 0, _ => true);
-  const operated = op(el => {
-    // since this iterator is empty, called should never be set to true
-    called = true;
-    return callback(el);
-  })(it);
-
-  for (const _ of operated) { /* exhausting */ }
-  assert.is(called, false);
-};
+const bindFn =
+  el => take(2)(Iterator(el.toString(), _ => _, _ => false));
 
 // bootstrap operations for tests
 const mconcatInit = _ => mconcat(ArrayIterator([
@@ -152,43 +112,6 @@ const zipEvaluation = expectedArray => actualArray => {
 const expectedZipResult = [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(4)(4)];
 
 // operations which take values as arguments
-[
-  ["drop",          drop(2),                           [2, 3, 4],                 ],
-  ["take",          take(2),                           [0, 1],                    ],
-  ["reverse$",      reverse$,                          [4, 3, 2, 1, 0],           ],
-  ["cons",          cons(2),                           [2, 0, 1, 2, 3, 4],        ],
-  ["mconcat",       mconcatInit,                       [0, 1, 2, 0, 1, 2, 0, 1, 2]],
-  ["cycle",         cycleInit,                         [0, 1, 2, 0, 1, 2, 0, 1, 2]],
-  ["repeat",        repeatInit,                        [1, 1, 1, 1, 1, 1, ]       ],
-  ["zip",           zipInit,                           expectedZipResult,         zipEvaluation]
-].forEach(el => {
-  const [ name, op, expected, evalFn ] = el;
-  iteratorSuite.add(`test simple: ${name}`,                 testSimple              (op)(expected)(evalFn));
-  iteratorSuite.add(`test copy: ${name}`,                   testCopy                (op)(evalFn));
-  iteratorSuite.add(`test copy after consumption: ${name}`, testCopyAfterConsumption(op)(evalFn));
-  iteratorSuite.add(`test purity: ${name}.`,                testPurity              (op));
-});
-
-const bindFn =
-  el => take(2)(Iterator(el.toString(), _ => _, _ => false));
-
-// operations which take callbacks as arguments
-[
-  ["map",           map,        (el => 2 * el),           [0, 2, 4, 6, 8],                                  ],
-  ["retainAll",     retainAll,  (el => el % 2 === 0),     [0, 2, 4],                                        ],
-  ["rejectAll",     rejectAll,  (el => el % 2 === 0),     [1, 3],                                           ],
-  ["dropWhile",     dropWhile,  (el => el < 2),           [2, 3, 4],                                        ],
-  ["takeWhile",     takeWhile,  (el => el < 2),           [0, 1],                                           ],
-  ["zipWith",       zipWithInit,((i, j) => i + j),        [0, 2, 4, 6, 8]                                   ],
-  ["bind",          bind,       bindFn,                   ["0", "0", "1", "1", "2", "2", "3", "3", "4", "4"]]
-].forEach(el => {
-  const [ name, op, callback, expected, evalFn] = el;
-  iteratorSuite.add(`test simple: ${name}`,                           testSimple              (op(callback))(expected)(evalFn));
-  iteratorSuite.add(`test copy: ${name}`,                             testCopy                (op(callback))(evalFn));
-  iteratorSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(op(callback))(evalFn));
-  iteratorSuite.add(`test purity: ${name}.`,                          testPurity              (op(callback)));
-  iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(op)(callback));
-});
 
 iteratorSuite.add("test advanced case: takeWhile inner iterator is shorter", assert => {
   // the inner iterator stops before the outer
@@ -276,4 +199,5 @@ iteratorSuite.add("test : mconcat", assert => {
   assert.isTrue(arrayEq([])([...concatenated]));
 });
 
+prepareTestSuite();
 iteratorSuite.run();
