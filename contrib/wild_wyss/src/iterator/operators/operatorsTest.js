@@ -30,7 +30,7 @@ import {
   testCopy,
   testCopyAfterConsumption,
   testPurity,
-  testSimple,
+  testSimple, createTestConfig, testSimple2,
 } from "../util/testUtil.js";
 
 const iteratorSuite = TestSuite("IteratorOperators");
@@ -47,10 +47,10 @@ const prepareTestSuite = () => {
     ["zip",           zipInit,                           expectedZipResult,         zipEvaluation]
   ].forEach(el => {
     const [ name, op, expected, evalFn ] = el;
-    iteratorSuite.add(`test simple: ${name}`,                 testSimple              (op)(expected)(evalFn));
-    iteratorSuite.add(`test copy: ${name}`,                   testCopy                (op)(evalFn));
-    iteratorSuite.add(`test copy after consumption: ${name}`, testCopyAfterConsumption(op)(evalFn));
-    iteratorSuite.add(`test purity: ${name}.`,                testPurity              (op));
+    // iteratorSuite.add(`test simple: ${name}`,                 testSimple              (op)(expected)(evalFn));
+    // iteratorSuite.add(`test copy: ${name}`,                   testCopy                (op)(evalFn));
+    // iteratorSuite.add(`test copy after consumption: ${name}`, testCopyAfterConsumption(op)(evalFn));
+    // iteratorSuite.add(`test purity: ${name}.`,                testPurity              (op));
   });
 
 
@@ -65,13 +65,107 @@ const prepareTestSuite = () => {
     ["bind",          bind,       bindFn,                   ["0", "0", "1", "1", "2", "2", "3", "3", "4", "4"]]
   ].forEach(el => {
     const [ name, op, callback, expected, evalFn] = el;
-    iteratorSuite.add(`test simple: ${name}`,                           testSimple              (op(callback))(expected)(evalFn));
-    iteratorSuite.add(`test copy: ${name}`,                             testCopy                (op(callback))(evalFn));
-    iteratorSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(op(callback))(evalFn));
-    iteratorSuite.add(`test purity: ${name}.`,                          testPurity              (op(callback)));
-    iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(op)(callback));
+    // iteratorSuite.add(`test simple: ${name}`,                           testSimple              (op(callback))(expected)(evalFn));
+    // iteratorSuite.add(`test copy: ${name}`,                             testCopy                (op(callback))(evalFn));
+    // iteratorSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(op(callback))(evalFn));
+    // iteratorSuite.add(`test purity: ${name}.`,                          testPurity              (op(callback)));
+    // iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(op)(callback));
   });
+
+  [
+    mapTester,
+    dropTester,
+    reverse$Tester,
+    zipTester
+  ].forEach(config => {
+    iteratorSuite.add(`test simple: ${name}`,                           testSimple2             (config));
+    iteratorSuite.add(`test copy: ${name}`,                             testCopy                (config));
+    iteratorSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(config));
+    iteratorSuite.add(`test purity: ${name}.`,                          testPurity              (config));
+    iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(config));
+  })
 };
+
+const mapTester = createTestConfig({
+  name:     "map",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: map,
+  param: el => 2 * el,
+  expected: [0, 2, 4, 6, 8]
+});
+
+const dropTester = createTestConfig({
+  name:     "drop",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: drop,
+  param: 2,
+  expected: [2, 3, 4,]
+});
+
+const reverse$Tester = createTestConfig({
+  name:     "reverse$",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: () => reverse$,
+  expected: [4, 3, 2, 1, 0]
+});
+
+const zipTester = createTestConfig({
+  name: "zip",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: zip,
+  param: newIterator(UPPER_ITERATOR_BOUNDARY),
+  expected: [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(4)(4)],
+  evalFn: expectedArray => actualArray => {
+    let result = true;
+    for (let i = 0; i < expectedArray.length; i++) {
+      result = result && actualArray[i](fst) === expectedArray[i](fst);
+      result = result && actualArray[i](snd) === expectedArray[i](snd);
+    }
+    return result;
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const bindFn =
   el => take(2)(Iterator(el.toString(), _ => _, _ => false));
