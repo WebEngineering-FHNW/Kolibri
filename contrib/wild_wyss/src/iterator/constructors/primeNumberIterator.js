@@ -5,7 +5,7 @@ import {
   cycle,
   Iterator,
   pipe,
-  reduce$,
+  reduce$, repeat, reverse$,
 } from "../iterator.js";
 import {nextOf} from "../util/util.js";
 import {Range} from "../../range/range.js";
@@ -35,7 +35,16 @@ const PrimeNumberIterator = () => {
   const patternForPrime = prime => pipe(
     map(x => x === prime ? Just(prime) : Nothing),
     cycle
-  )(Iterator(1, i => i + 1, i => i > prime));
+  )(Iterator(1, i => i + 1, i => i > prime)); // TODO: use Range
+
+  const patternForPrime2 = prime => {
+    //TODO: cycle(mconcat(repeat(prime-1)(Nothing)(pure(Just(prime))))
+    reverse$(
+      cons(Just(prime)(
+        take(prime -1)(repeat(Nothing)))
+      )
+    );
+  };
 
   /**
    * @param { number? } firstPrime -
@@ -67,7 +76,7 @@ const PrimeNumberIterator = () => {
         nextValue = nextOf(infinite).value;
 
         const maybeDividers = reduce$((acc, cur) => {
-          acc.push( nextOf(cur).value);
+          acc.push(nextOf(cur).value);
           return acc;
         }, [])(prevPrimes);
 

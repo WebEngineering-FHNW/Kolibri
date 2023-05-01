@@ -87,11 +87,11 @@ const prepareTestSuite = () => {
 };
 
 const mapTester = createTestConfig({
-  name:     "map",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  name:      "map",
+  iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
   operation: map,
-  param: el => 2 * el,
-  expected: [0, 2, 4, 6, 8]
+  param:     el => 2 * el,
+  expected:  [0, 2, 4, 6, 8]
 });
 
 const dropTester = createTestConfig({
@@ -99,7 +99,7 @@ const dropTester = createTestConfig({
   iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
   operation: drop,
   param: 2,
-  expected: [2, 3, 4,]
+  expected: [2, 3, 4]
 });
 
 const reverse$Tester = createTestConfig({

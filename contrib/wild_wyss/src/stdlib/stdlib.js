@@ -5,7 +5,7 @@ export { catMaybes }
  * @template _T_
  * @template _U_
  * @haskell [Maybe a] -> [a]
- * @param  { Array<JustXType<_T_, _U_> | NothingXType<_T_, _U_>> } maybes
+ * @param  { Array<MaybeType<_T_, _U_>> } maybes
  * @return { Array<_T_> }
  */
 const catMaybes = maybes => {
