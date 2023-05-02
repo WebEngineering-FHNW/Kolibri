@@ -14,6 +14,7 @@ import {
   PureIterator,
   map,
   drop,
+  replicate,
   retainAll, FibonacciIterator, AngleIterator, SquareNumberIterator, PrimeNumberIterator, cycle, take,
 } from "../iterator.js"
 
@@ -244,8 +245,8 @@ iteratorSuite.add("test copy partially used: PrimeNumberIterator", assert => {
 });
 
 iteratorSuite.add("test typical case: PureIterator", assert => {
-  const iterator = PureIterator(1);
-  assert.isTrue(arrayEq([1])([...iterator]));
+const iterator = PureIterator(1);
+assert.isTrue(arrayEq([1])([...iterator]));
 });
 
 
@@ -258,9 +259,30 @@ iteratorSuite.add("test copy: PureIterator", assert => {
 
 iteratorSuite.add("test copy partial used: PureIterator", assert => {
   const iterator = PureIterator(1);
-  const copy = iterator.copy();
   for (const _ of iterator) { /** exhausting */ }
+  const copy = iterator.copy();
   assert.isTrue(arrayEq([])([...iterator]));
-  assert.isTrue(arrayEq([1])([...copy]));
+  assert.isTrue(arrayEq([])([...copy]));
+});
+
+iteratorSuite.add("test typical case: replicate", assert => {
+  const iterator = replicate(3)(true);
+  assert.isTrue(arrayEq([true, true, true])([...iterator]));
+});
+
+iteratorSuite.add("test copy: replicate", assert => {
+  const iterator = replicate(3)(true);
+  const copy = iterator.copy();
+  assert.isTrue(arrayEq([true, true, true])([...iterator]));
+  assert.isTrue(arrayEq([true, true, true])([...copy]));
+});
+
+iteratorSuite.add("test copy partially used: replicate", assert => {
+  const iterator = replicate(3)(true);
+  // noinspection LoopStatementThatDoesntLoopJS
+  for (const _ of iterator) { break; } // consume one element
+  const copy = iterator.copy();
+  assert.isTrue(arrayEq([true, true])([...iterator]));
+  assert.isTrue(arrayEq([true, true])([...copy]));
 });
 iteratorSuite.run();

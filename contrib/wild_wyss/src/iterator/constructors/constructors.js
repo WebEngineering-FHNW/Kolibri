@@ -9,4 +9,5 @@ export * from "./angleIterator.js";
 export * from "./squareNumberIterator.js";
 export * from "./primeNumberIterator.js";
 export * from "./pureIterator.js";
+export * from "./replicate.js";
 
