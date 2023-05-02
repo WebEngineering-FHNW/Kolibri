@@ -1,7 +1,7 @@
 import { TestSuite }     from "../test/test.js";
 import { arrayEq }       from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Just, Nothing } from "../../../../docs/src/kolibri/stdlib.js";
-import { catMaybes }     from "./stdlib.js";
+import {catMaybes, choiceMaybe} from "./stdlib.js";
 
 const iteratorSuite = TestSuite("stdlib");
 
@@ -13,6 +13,42 @@ iteratorSuite.add("typical case: catMaybes", assert => {
 iteratorSuite.add("empty list test: catMaybes", assert => {
   const maybes = [];
   assert.isTrue(arrayEq([])(catMaybes(maybes)));
+});
+
+iteratorSuite.add("empty list test: catMaybes", assert => {
+  const maybes = [];
+  assert.isTrue(arrayEq([])(catMaybes(maybes)));
+});
+
+iteratorSuite.add("typical case: choiceMaybe", assert => {
+  const just = Just(1);
+  const just2 = Just(2);
+  const nothing = Nothing;
+
+  /*
+    There are 4 possible cases to be considered:
+    Nothing <|> Nothing = Nothing -- 0 results + 0 results = 0 results
+    Just x  <|> Nothing = Just x  -- 1 result  + 0 results = 1 result
+    Nothing <|> Just x  = Just x  -- 0 results + 1 result  = 1 result
+    Just x  <|> Just y  = Just x  -- 1 result  + 1 result  = 1 result:
+   */
+  assert.is(choiceMaybe(nothing)(nothing), nothing);
+  assert.is(choiceMaybe(just)(nothing), just);
+  assert.is(choiceMaybe(nothing)(just), just);
+  assert.is(choiceMaybe(just)(just2), just);
+});
+
+
+iteratorSuite.add("test associativity: choiceMaybe", assert => {
+  const just = Just(1);
+  const just2 = Just(2);
+  const just3 = Just(3);
+
+  // choice must be associative
+  const case1 = choiceMaybe(choiceMaybe(just)(just2))(just3);
+  const case2 = choiceMaybe(just)(choiceMaybe((just2)(just3)));
+
+  assert.is(case1, case2);
 });
 
 iteratorSuite.run();

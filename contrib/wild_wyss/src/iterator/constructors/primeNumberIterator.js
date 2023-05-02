@@ -1,16 +1,16 @@
 import {
   ArrayIterator,
   map,
-  cons,
   cycle,
   Iterator,
   pipe,
-  reduce$, repeat, reverse$,
-} from "../iterator.js";
-import {nextOf} from "../util/util.js";
-import {Range} from "../../range/range.js";
-import {Just, Nothing} from "../../../../../docs/src/kolibri/stdlib.js";
-import {catMaybes} from "../../stdlib/stdlib.js";
+  zipWith
+}                         from "../iterator.js";
+import { nextOf }         from "../util/util.js";
+import { Range }          from "../../range/range.js";
+import { Just, Nothing }  from "../../../../../docs/src/kolibri/stdlib.js";
+import { choiceMaybe }    from "../../stdlib/stdlib.js";
+import { uncurry }        from "../../../../../docs/src/kolibri/lambda/church.js";
 
 export { PrimeNumberIterator }
 
@@ -30,68 +30,36 @@ const PrimeNumberIterator = () => {
    * @returns {IteratorType<MaybeType>}
    * @example
    * const it = patternForPrime(3);
-   * // false, false, true
+   * // => Nothing, Nothing, Just(3), ...
    */
   const patternForPrime = prime => pipe(
     map(x => x === prime ? Just(prime) : Nothing),
     cycle
-  )(Iterator(1, i => i + 1, i => i > prime)); // TODO: use Range
+  )(Iterator(1, i => i + 1, i => i > prime));
 
-  const patternForPrime2 = prime => {
-    //TODO: cycle(mconcat(repeat(prime-1)(Nothing)(pure(Just(prime))))
-    reverse$(
-      cons(Just(prime)(
-        take(prime -1)(repeat(Nothing)))
-      )
-    );
-  };
-
-  /**
-   * @param { number? } firstPrime -
-   * @param {IteratorType<IteratorType<MaybeType<Number, void>>>? } prevPrimes
-   * @returns {any}
-   * @constructor
-   */
-  const PrimeNumberFactory = (firstPrime = 2, prevPrimes = ArrayIterator([patternForPrime(firstPrime)])) => {
-    let nextValue = firstPrime;
-
-    // copy all primeIterators immediately
-    /** @type { IteratorType<IteratorType<MaybeType<Number, void>>> } */
-    prevPrimes = ArrayIterator([...prevPrimes.copy()].map(it => it.copy()));
-
-    // TODO: show to DK
-    // prevPrimes = map(it => {
-    //  console.log("lazy", ...take(4)(it.copy()));
-    //  return it.copy();
-    // })(prevPrimes);
-
-    // pre calculation starts from firstPrime + 1
-    const infinite = Range(nextValue + 1, Number.MAX_VALUE);
+  const PrimeNumberFactory = (lastPrime = 1, prevPrimes = cycle(ArrayIterator([Nothing]))) => {
+    prevPrimes     = prevPrimes.copy(); // defensively copy
+    const infinite = Range(lastPrime + 1, Number.MAX_VALUE);
 
     const next = () => {
-      const current = nextValue;
+      const nextValue  = nextOf(infinite).value;
+      const maybePrime = nextOf(prevPrimes).value;
 
-      while(true) {
-        // pre calculate next value
-        nextValue = nextOf(infinite).value;
-
-        const maybeDividers = reduce$((acc, cur) => {
-          acc.push(nextOf(cur).value);
-          return acc;
-        }, [])(prevPrimes);
-
-        const isPrime = catMaybes(maybeDividers).length === 0;
-
-        if (isPrime) {
-          prevPrimes = cons(patternForPrime(nextValue))(prevPrimes);
-          return { value: current, done: false}
-        }
-      }
+      return maybePrime
+        (_ => {
+          lastPrime       = nextValue;
+          const nextPrime = patternForPrime(nextValue);
+          prevPrimes      = zipWith(uncurry(choiceMaybe))
+                                (prevPrimes)
+                                (nextPrime);
+          return { value: nextValue, done: false};
+        })      // Nothing, no number found that divides the current number, so it is prime
+        (next); // Just, at least one number found, which divides the current number
     };
 
     return {
       [Symbol.iterator]: () => ({ next }),
-      copy: () => PrimeNumberFactory(nextValue, prevPrimes)
+      copy: () => PrimeNumberFactory(lastPrime, prevPrimes)
     }
   };
 
