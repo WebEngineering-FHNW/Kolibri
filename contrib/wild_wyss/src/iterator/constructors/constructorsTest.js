@@ -11,6 +11,7 @@ import {
   ConcatIterator,
   StackIterator,
   emptyIterator,
+  PureIterator,
   map,
   drop,
   retainAll, FibonacciIterator, AngleIterator, SquareNumberIterator, PrimeNumberIterator, cycle, take,
@@ -242,4 +243,24 @@ iteratorSuite.add("test copy partially used: PrimeNumberIterator", assert => {
   assert.isTrue(arrayEq([3, 5, 7, 11, 13, 17])([...takeWithoutCopy(6)(copy)]));
 });
 
+iteratorSuite.add("test typical case: PureIterator", assert => {
+  const iterator = PureIterator(1);
+  assert.isTrue(arrayEq([1])([...iterator]));
+});
+
+
+iteratorSuite.add("test copy: PureIterator", assert => {
+  const iterator = PureIterator(1);
+  const copy = iterator.copy();
+  assert.isTrue(arrayEq([1])([...iterator]));
+  assert.isTrue(arrayEq([1])([...copy]));
+});
+
+iteratorSuite.add("test copy partial used: PureIterator", assert => {
+  const iterator = PureIterator(1);
+  const copy = iterator.copy();
+  for (const _ of iterator) { /** exhausting */ }
+  assert.isTrue(arrayEq([])([...iterator]));
+  assert.isTrue(arrayEq([1])([...copy]));
+});
 iteratorSuite.run();

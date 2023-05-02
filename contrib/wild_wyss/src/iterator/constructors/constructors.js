@@ -8,4 +8,5 @@ export * from "./fibonacciIterator.js";
 export * from "./angleIterator.js";
 export * from "./squareNumberIterator.js";
 export * from "./primeNumberIterator.js";
+export * from "./pureIterator.js";
 
