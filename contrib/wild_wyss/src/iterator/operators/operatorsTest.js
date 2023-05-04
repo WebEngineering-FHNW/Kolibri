@@ -19,7 +19,6 @@ import {
   takeWhile,
   zip,
   zipWith,
-  repeat,
   bind,
 } from "../iterator.js";
 
@@ -30,63 +29,122 @@ import {
   testCopy,
   testCopyAfterConsumption,
   testPurity,
-  testSimple, createTestConfig, testSimple2,
+  createTestConfig,
+  testSimple2,
 } from "../util/testUtil.js";
 
 const iteratorSuite = TestSuite("IteratorOperators");
 
-const prepareTestSuite = () => {
+const prepareTestSuite = () =>
   [
-    ["drop",          drop(2),                           [2, 3, 4],                 ],
-    ["take",          take(2),                           [0, 1],                    ],
-    ["reverse$",      reverse$,                          [4, 3, 2, 1, 0],           ],
-    ["cons",          cons(2),                           [2, 0, 1, 2, 3, 4],        ],
-    ["mconcat",       mconcatInit,                       [0, 1, 2, 0, 1, 2, 0, 1, 2]],
-    ["cycle",         cycleInit,                         [0, 1, 2, 0, 1, 2, 0, 1, 2]],
-    ["repeat",        repeatInit,                        [1, 1, 1, 1, 1, 1, ]       ],
-    ["zip",           zipInit,                           expectedZipResult,         zipEvaluation]
-  ].forEach(el => {
-    const [ name, op, expected, evalFn ] = el;
-    // iteratorSuite.add(`test simple: ${name}`,                 testSimple              (op)(expected)(evalFn));
-    // iteratorSuite.add(`test copy: ${name}`,                   testCopy                (op)(evalFn));
-    // iteratorSuite.add(`test copy after consumption: ${name}`, testCopyAfterConsumption(op)(evalFn));
-    // iteratorSuite.add(`test purity: ${name}.`,                testPurity              (op));
-  });
-
-
-  // operations which take callbacks as arguments
-  [
-    ["map",           map,        (el => 2 * el),           [0, 2, 4, 6, 8],                                  ],
-    ["retainAll",     retainAll,  (el => el % 2 === 0),     [0, 2, 4],                                        ],
-    ["rejectAll",     rejectAll,  (el => el % 2 === 0),     [1, 3],                                           ],
-    ["dropWhile",     dropWhile,  (el => el < 2),           [2, 3, 4],                                        ],
-    ["takeWhile",     takeWhile,  (el => el < 2),           [0, 1],                                           ],
-    ["zipWith",       zipWithInit,((i, j) => i + j),        [0, 2, 4, 6, 8]                                   ],
-    ["bind",          bind,       bindFn,                   ["0", "0", "1", "1", "2", "2", "3", "3", "4", "4"]]
-  ].forEach(el => {
-    const [ name, op, callback, expected, evalFn] = el;
-    // iteratorSuite.add(`test simple: ${name}`,                           testSimple              (op(callback))(expected)(evalFn));
-    // iteratorSuite.add(`test copy: ${name}`,                             testCopy                (op(callback))(evalFn));
-    // iteratorSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(op(callback))(evalFn));
-    // iteratorSuite.add(`test purity: ${name}.`,                          testPurity              (op(callback)));
-    // iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(op)(callback));
-  });
-
-  [
-    mapTester,
-    dropTester,
-    reverse$Tester,
-    zipTester
+    mapConfig,
+    mconcatConfig,
+    reverse$Config,
+    zipConfig,
+    dropConfig,
+    takeConfig,
+    consConfig,
+    cycleConfig,
+    retainAllConfig,
+    rejectAllConfig,
+    dropWhileConfig,
+    takeWhileConfig,
+    zipWithConfig,
+    bindConfig,
   ].forEach(config => {
+    const { name } = config;
     iteratorSuite.add(`test simple: ${name}`,                           testSimple2             (config));
     iteratorSuite.add(`test copy: ${name}`,                             testCopy                (config));
     iteratorSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(config));
     iteratorSuite.add(`test purity: ${name}.`,                          testPurity              (config));
     iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(config));
-  })
-};
+  });
 
-const mapTester = createTestConfig({
+const mconcatConfig = createTestConfig({
+  name: "mconcat",
+  iterator: () => ArrayIterator([
+    newIterator(2),
+    newIterator(2),
+    newIterator(2),
+  ]),
+  operation: () => mconcat,
+  expected: [0, 1, 2, 0, 1, 2, 0, 1, 2]
+});
+
+const bindConfig = createTestConfig({
+  name: "bind",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: bind,
+  param: el => take(2)(Iterator(el.toString(), _ => _, _ => false)),
+  expected: ["0", "0", "1", "1", "2", "2", "3", "3", "4", "4"]
+});
+
+const zipWithConfig = createTestConfig({
+  name: "zipWith",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: zipper => zipWith(zipper)(newIterator(UPPER_ITERATOR_BOUNDARY)),
+  param: (i, j) => i + j,
+  expected: [0, 2, 4, 6, 8]
+});
+
+const takeWhileConfig = createTestConfig({
+  name: "takeWhile",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: takeWhile,
+  param: el => el < 2,
+  expected: [0, 1]
+});
+
+const dropWhileConfig = createTestConfig({
+  name: "dropWhile",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: dropWhile,
+  param: el => el < 2,
+  expected: [2, 3, 4]
+});
+
+const rejectAllConfig = createTestConfig({
+  name: "rejectAll",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: rejectAll,
+  param: el => el % 2 === 0,
+  expected: [1, 3]
+});
+
+const retainAllConfig = createTestConfig({
+  name: "retainAll",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: retainAll,
+  param: el => el % 2 === 0,
+  expected: [0, 2, 4]
+});
+
+const cycleConfig = createTestConfig({
+  name: "cycle",
+  iterator: () => newIterator(2),
+  operation: () => cycle,
+  maxIterations: 9,
+  expected: [0, 1, 2, 0, 1, 2, 0, 1, 2]
+});
+
+
+const consConfig = createTestConfig({
+  name:     "cons",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: cons,
+  param: 2,
+  expected: [2, 0, 1, 2, 3, 4]
+});
+
+const takeConfig = createTestConfig({
+  name:     "take",
+  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: take,
+  param: 2,
+  expected: [0, 1]
+});
+
+const mapConfig = createTestConfig({
   name:      "map",
   iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
   operation: map,
@@ -94,7 +152,7 @@ const mapTester = createTestConfig({
   expected:  [0, 2, 4, 6, 8]
 });
 
-const dropTester = createTestConfig({
+const dropConfig = createTestConfig({
   name:     "drop",
   iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
   operation: drop,
@@ -102,14 +160,14 @@ const dropTester = createTestConfig({
   expected: [2, 3, 4]
 });
 
-const reverse$Tester = createTestConfig({
+const reverse$Config = createTestConfig({
   name:     "reverse$",
   iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
   operation: () => reverse$,
   expected: [4, 3, 2, 1, 0]
 });
 
-const zipTester = createTestConfig({
+const zipConfig = createTestConfig({
   name: "zip",
   iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
   operation: zip,
@@ -125,88 +183,9 @@ const zipTester = createTestConfig({
   }
 });
 
+// Special cases
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const bindFn =
-  el => take(2)(Iterator(el.toString(), _ => _, _ => false));
-
-// bootstrap operations for tests
-const mconcatInit = _ => mconcat(ArrayIterator([
-  newIterator(2),
-  newIterator(2),
-  newIterator(2),
-]));
-
-const cycleInit = _ => {
-  const iterator = newIterator(2);
-  const cycled = cycle(iterator);
-
-  return take(9)(cycled);
-};
-
-const zipWithInit = zipper => {
-  const it1 = newIterator(UPPER_ITERATOR_BOUNDARY);
-  return zipWith(zipper)(it1);
-};
-
-const zipInit =
-  zip(newIterator(UPPER_ITERATOR_BOUNDARY));
-
-const repeatInit = _ => take(6)(repeat(1));
-
-const zipEvaluation = expectedArray => actualArray => {
-  let result = true;
-  for (let i = 0; i < expectedArray.length; i++) {
-    result = result && actualArray[i](fst) === expectedArray[i](fst);
-    result = result && actualArray[i](snd) === expectedArray[i](snd);
-  }
-  return result;
-};
-
-const expectedZipResult = [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(4)(4)];
-
-// operations which take values as arguments
-
+// takeWhile
 iteratorSuite.add("test advanced case: takeWhile inner iterator is shorter", assert => {
   // the inner iterator stops before the outer
   const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
@@ -214,6 +193,7 @@ iteratorSuite.add("test advanced case: takeWhile inner iterator is shorter", ass
   assert.isTrue(arrayEq([0, 1, 2, 3, 4])([...some]));
 });
 
+// dropWhile
 iteratorSuite.add("test advanced case: dropWhile inner iterator is shorter", assert => {
   // the inner iterator stops before the outer
   const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
@@ -221,6 +201,7 @@ iteratorSuite.add("test advanced case: dropWhile inner iterator is shorter", ass
   assert.isTrue(arrayEq([0, 1, 2, 3, 4])([...some]));
 });
 
+// zipWith
 iteratorSuite.add("test advanced case: zipWith one iterator is shorter", assert => {
   let iterationCount = 0;
 
@@ -240,6 +221,7 @@ iteratorSuite.add("test advanced case: zipWith one iterator is shorter", assert 
   assert.is(iterationCount, 6);
 });
 
+// zip
 iteratorSuite.add("test advanced case: zip one iterator is shorter", assert => {
   const it1 = newIterator(UPPER_ITERATOR_BOUNDARY);
   const it2 = newIterator(2);
@@ -250,6 +232,7 @@ iteratorSuite.add("test advanced case: zip one iterator is shorter", assert => {
   assert.is([...zipped2].length, 3);
 });
 
+// mconcat
 iteratorSuite.add("test left/right neutrality: mconcat", assert => {
   const left  = mconcat(ArrayIterator([emptyIterator, newIterator(UPPER_ITERATOR_BOUNDARY)]));
   const right = mconcat(ArrayIterator([newIterator(UPPER_ITERATOR_BOUNDARY), emptyIterator]));
