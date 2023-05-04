@@ -1,5 +1,6 @@
-import { Iterator } from "../iterator.js";
+import {Iterator, take} from "../iterator.js";
 import { arrayEq } from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import {takeWithoutCopy} from "./util.js";
 
 export {
   createTestConfig,
@@ -22,6 +23,7 @@ export {
  * @property { String } name
  * @property { (_: *) => IteratorOperation } operation
  * @property { * } param?
+ * @property { number? } maxIterations - How many iterations should be executed at maximum
  * @property {Array<_U_> } expected
  * @property { * } evalFn
  */
@@ -59,10 +61,11 @@ const testSimple = op => expected => (evalFn = arrayEq) => assert => {
  * @param { IteratorTestConfigType } obj
  * @returns {(function(*): void)|*}
  */
-const testSimple2 = ({iterator, operation, evalFn, expected, param}) => assert => {
+const testSimple2 = ({iterator, operation, evalFn, expected, param, maxIterations}) => assert => {
   const baseIterator = iterator();
   const operated = operation(param)(baseIterator);
-  assert.isTrue(evalFn([...expected])([...operated]));
+  const evaluated = toArray(operated, maxIterations);
+  assert.isTrue(evalFn([...expected])(evaluated));
 };
 
 /**
@@ -74,9 +77,10 @@ const testSimple2 = ({iterator, operation, evalFn, expected, param}) => assert =
  * }
  */
 const testPurity = config => assert => {
-  const { operation, param, iterator } = config;
-  operation(param)(iterator());
-  assert.isTrue(arrayEq([0,1,2,3,4])([...iterator()]));
+  const { operation, param, iterator, maxIterations } = config;
+  const underlyingIt = iterator();
+  toArray(operation(param)(underlyingIt), maxIterations); // just run operation to see if it produces any side effect
+  assert.isTrue(arrayEq([...underlyingIt])([...iterator()]));
 };
 
 /**
@@ -89,10 +93,10 @@ const testPurity = config => assert => {
  * }
  */
 const testCopy = config => assert => {
-  const { operation, evalFn, iterator, param} = config;
+  const { operation, evalFn, iterator, param, maxIterations } = config;
   const expected = operation(param)(iterator());
   const copied   = operation(param)(iterator()).copy();
-  assert.isTrue(evalFn([...expected])([...copied]));
+  assert.isTrue(evalFn(toArray(expected, maxIterations))(toArray(copied, maxIterations)));
 };
 
 /**
@@ -103,15 +107,14 @@ const testCopy = config => assert => {
  * }
  */
 const testCopyAfterConsumption = config => assert => {
-  const { operation, param, evalFn } = config;
-  const iterator = config.iterator();
-  const operated = operation(param)(iterator);
+  const { operation, param, evalFn, iterator, maxIterations } = config;
+  const operated = operation(param)(iterator());
   // noinspection LoopStatementThatDoesntLoopJS
   for (const elem of operated) {
     break; // consume one element
   }
   const copy = operated.copy();
-  assert.isTrue(evalFn([...operated])([...copy]));
+  assert.isTrue(evalFn(toArray(operated, maxIterations))(toArray(copy, maxIterations)));
 };
 
 /**
@@ -152,3 +155,21 @@ const createTestConfig = config => ({
  ...config,
  evalFn : config.evalFn === undefined ? arrayEq : config.evalFn
 });
+
+/**
+ * Collects the given {@link IteratorType} into an {@link Array}.
+ * If takeSoMany is set, so many iterations will be proceeded.
+ *
+ * @template _T_
+ * @param { IteratorType<_T_> } iterator
+ * @param { Number? } takeSoMany
+ * @returns Array<_T_>
+ * @example
+ * console.log(toArray(Range(5), 3));
+ * // => logs [0, 1, 2] to the console
+ * console.log(toArray(Range(5)));
+ * // => logs [0, 1, 2, 3, 4, 5] to the console
+ */
+const toArray = (iterator, takeSoMany) =>
+  takeSoMany ? takeWithoutCopy(takeSoMany)(iterator) : [...iterator];
+
