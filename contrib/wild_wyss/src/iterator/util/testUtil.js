@@ -59,8 +59,10 @@ const testSimple2 = ({iterator, operation, evalFn, expected, param, maxIteration
 const testPurity = config => assert => {
   const { operation, param, iterator, maxIterations, evalFn } = config;
   const underlyingIt = iterator();
-  const first  = toArray(operation(param)(underlyingIt), maxIterations); // just run operation to see if it produces any side effect
-  const second = toArray(operation(param)(underlyingIt), maxIterations); // just run operation to see if it produces any side effect
+  // if the iterator modifies the underlying iterator, the following test would fail, because both use the same
+  // underlying iterator
+  const first  = toArray(operation(param)(underlyingIt), maxIterations);
+  const second = toArray(operation(param)(underlyingIt), maxIterations);
   assert.isTrue(evalFn(first)(second));
 };
 

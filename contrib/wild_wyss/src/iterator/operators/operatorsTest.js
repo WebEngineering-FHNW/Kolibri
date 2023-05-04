@@ -35,7 +35,7 @@ import {
 
 const iteratorSuite = TestSuite("IteratorOperators");
 
-const prepareTestSuite = () => {
+const prepareTestSuite = () =>
   [
     mapConfig,
     mconcatConfig,
@@ -58,8 +58,7 @@ const prepareTestSuite = () => {
     iteratorSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(config));
     iteratorSuite.add(`test purity: ${name}.`,                          testPurity              (config));
     iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(config));
-  })
-};
+  });
 
 const mconcatConfig = createTestConfig({
   name: "mconcat",
