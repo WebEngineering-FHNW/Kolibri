@@ -62,78 +62,74 @@ const prepareTestSuite = () =>
   });
 
 const mapConfig = createTestConfig({
-  name:      "map",
-  iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: map,
-  param:     el => 2 * el,
-  expected:  [0, 2, 4, 6, 8]
+  name:       "map",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  map,
+  param:      el => 2 * el,
+  expected:   [0, 2, 4, 6, 8]
 });
 
 const mconcatConfig = createTestConfig({
-  name: "mconcat",
-  iterator: () => ArrayIterator([
-    newIterator(2),
-    newIterator(2),
-    newIterator(2),
-  ]),
-  operation: () => mconcat,
-  expected: [0, 1, 2, 0, 1, 2, 0, 1, 2]
+  name:       "mconcat",
+  iterator:   () => ArrayIterator([ newIterator(2), newIterator(2), newIterator(2), ]),
+  operation:  () => mconcat,
+  expected:   [0, 1, 2, 0, 1, 2, 0, 1, 2]
 });
 
 const bindConfig = createTestConfig({
-  name: "bind",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: bind,
-  param: el => take(2)(Iterator(el.toString(), _ => _, _ => false)),
-  expected: ["0", "0", "1", "1", "2", "2", "3", "3", "4", "4"]
+  name:       "bind",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  bind,
+  param:      el => take(2)(Iterator(el.toString(), _ => _, _ => false)),
+  expected:   ["0", "0", "1", "1", "2", "2", "3", "3", "4", "4"]
 });
 
 const zipWithConfig = createTestConfig({
-  name: "zipWith",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: zipper => zipWith(zipper)(newIterator(UPPER_ITERATOR_BOUNDARY)),
-  param: (i, j) => i + j,
-  expected: [0, 2, 4, 6, 8]
+  name:       "zipWith",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  zipper => zipWith(zipper)(newIterator(UPPER_ITERATOR_BOUNDARY)),
+  param:      (i, j) => i + j,
+  expected:   [0, 2, 4, 6, 8]
 });
 
 const takeWhileConfig = createTestConfig({
-  name: "takeWhile",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: takeWhile,
-  param: el => el < 2,
-  expected: [0, 1]
+  name:       "takeWhile",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  takeWhile,
+  param:      el => el < 2,
+  expected:   [0, 1]
 });
 
 const dropWhileConfig = createTestConfig({
-  name: "dropWhile",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: dropWhile,
-  param: el => el < 2,
-  expected: [2, 3, 4]
+  name:       "dropWhile",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  dropWhile,
+  param:      el => el < 2,
+  expected:   [2, 3, 4]
 });
 
 const rejectAllConfig = createTestConfig({
-  name: "rejectAll",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: rejectAll,
-  param: el => el % 2 === 0,
-  expected: [1, 3]
+  name:       "rejectAll",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  rejectAll,
+  param:      el => el % 2 === 0,
+  expected:   [1, 3]
 });
 
 const retainAllConfig = createTestConfig({
-  name: "retainAll",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: retainAll,
-  param: el => el % 2 === 0,
-  expected: [0, 2, 4]
+  name:       "retainAll",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  retainAll,
+  param:      el => el % 2 === 0,
+  expected:   [0, 2, 4]
 });
 
 const cycleConfig = createTestConfig({
-  name: "cycle",
-  iterator: () => newIterator(2),
-  operation: () => cycle,
-  expected: [0, 1, 2, 0, 1, 2, 0, 1, 2],
-  evalFn: expected => actual => {
+  name:       "cycle",
+  iterator:   () => newIterator(2),
+  operation:  () => cycle,
+  expected:   [0, 1, 2, 0, 1, 2, 0, 1, 2],
+  evalFn:     expected => actual => {
     const actualArray = takeWithoutCopy(9)(actual);
     const expectedArray = takeWithoutCopy(9)(expected);
     return arrayEq(expectedArray)(actualArray);
@@ -141,43 +137,43 @@ const cycleConfig = createTestConfig({
 });
 
 const consConfig = createTestConfig({
-  name:     "cons",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: cons,
-  param: 2,
-  expected: [2, 0, 1, 2, 3, 4]
+  name:       "cons",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  cons,
+  param:      2,
+  expected:   [2, 0, 1, 2, 3, 4]
 });
 
 const takeConfig = createTestConfig({
-  name:     "take",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: take,
-  param: 2,
-  expected: [0, 1]
+  name:       "take",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  take,
+  param:      2,
+  expected:   [0, 1]
 });
 
 const dropConfig = createTestConfig({
-  name:     "drop",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: drop,
-  param: 2,
-  expected: [2, 3, 4]
+  name:       "drop",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  drop,
+  param:      2,
+  expected:   [2, 3, 4]
 });
 
 const reverse$Config = createTestConfig({
-  name:     "reverse$",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: () => reverse$,
-  expected: [4, 3, 2, 1, 0]
+  name:       "reverse$",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  () => reverse$,
+  expected:   [4, 3, 2, 1, 0]
 });
 
 const zipConfig = createTestConfig({
-  name: "zip",
-  iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: zip,
-  param: newIterator(UPPER_ITERATOR_BOUNDARY),
-  expected: [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(4)(4)],
-  evalFn: expected => actual => {
+  name:       "zip",
+  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation:  zip,
+  param:      newIterator(UPPER_ITERATOR_BOUNDARY),
+  expected:   [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(4)(4)],
+  evalFn:     expected => actual => {
     const expectedArray = [...expected];
     const actualArray = [...actual];
     let result = true;
