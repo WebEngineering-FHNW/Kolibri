@@ -21,7 +21,7 @@ export {
  * @property { () => IteratorType<_T_> } iterator
  * @property { String } name
  * @property { (_: *) => IteratorOperation } operation
- * @property { * } param
+ * @property { * } param?
  * @property {Array<_U_> } expected
  * @property { * } evalFn
  */
@@ -64,6 +64,7 @@ const testSimple2 = ({iterator, operation, evalFn, expected, param}) => assert =
   const operated = operation(param)(baseIterator);
   assert.isTrue(evalFn([...expected])([...operated]));
 };
+
 /**
  * Checks if a given operation does not modify the underlying iterator.
  * @type {
@@ -73,10 +74,9 @@ const testSimple2 = ({iterator, operation, evalFn, expected, param}) => assert =
  * }
  */
 const testPurity = config => assert => {
-  const {operation, param } = config;
-  const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
-  operation(param)(iterator);
-  assert.isTrue(arrayEq([0,1,2,3,4])([...iterator]));
+  const { operation, param, iterator } = config;
+  operation(param)(iterator());
+  assert.isTrue(arrayEq([0,1,2,3,4])([...iterator()]));
 };
 
 /**
