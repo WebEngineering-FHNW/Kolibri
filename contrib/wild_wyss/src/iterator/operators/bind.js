@@ -15,8 +15,8 @@ export { bind }
  *          => IteratorType<_U_>
  * }
  * @example
- * const it = Range(3);
- * const bindFn = (el => take(el)(repeat(el));
+ * const it     = Range(3);
+ * const bindFn = el => take(el)(repeat(el);
  * const result = bind(bindFn)(it);
  * console.log(...result);
  * // => Logs: 1, 2, 2, 3, 3, 3
