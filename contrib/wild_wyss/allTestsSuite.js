@@ -14,6 +14,8 @@ import "./src/iterator/constructors/constructorsTest.js";
 import "./src/iterator/operators/operatorsTest.js";
 import "./src/iterator/terminalOperations/terminalOperationsTest.js";
 import "./src/iterator/iteratorBuilderTest.js";
+import "./src/iterator/constructors/constructorsTestTabled.js";
+
 
 // range
 import "./src/range/rangeTest.js";
