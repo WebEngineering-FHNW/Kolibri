@@ -30,8 +30,9 @@ import {
   testCopyAfterConsumption,
   testPurity,
   createTestConfig,
-  testSimple2,
+  testSimple,
 } from "../util/testUtil.js";
+import {takeWithoutCopy} from "../util/util.js";
 
 const iteratorSuite = TestSuite("IteratorOperators");
 
@@ -53,12 +54,20 @@ const prepareTestSuite = () =>
     bindConfig,
   ].forEach(config => {
     const { name } = config;
-    iteratorSuite.add(`test simple: ${name}`,                           testSimple2             (config));
+    iteratorSuite.add(`test simple: ${name}`,                           testSimple             (config));
     iteratorSuite.add(`test copy: ${name}`,                             testCopy                (config));
     iteratorSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(config));
     iteratorSuite.add(`test purity: ${name}.`,                          testPurity              (config));
     iteratorSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(config));
   });
+
+const mapConfig = createTestConfig({
+  name:      "map",
+  iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: map,
+  param:     el => 2 * el,
+  expected:  [0, 2, 4, 6, 8]
+});
 
 const mconcatConfig = createTestConfig({
   name: "mconcat",
@@ -123,10 +132,13 @@ const cycleConfig = createTestConfig({
   name: "cycle",
   iterator: () => newIterator(2),
   operation: () => cycle,
-  maxIterations: 9,
-  expected: [0, 1, 2, 0, 1, 2, 0, 1, 2]
+  expected: [0, 1, 2, 0, 1, 2, 0, 1, 2],
+  evalFn: expected => actual => {
+    const actualArray = takeWithoutCopy(9)(actual);
+    const expectedArray = takeWithoutCopy(9)(expected);
+    return arrayEq(expectedArray)(actualArray);
+  }
 });
-
 
 const consConfig = createTestConfig({
   name:     "cons",
@@ -142,14 +154,6 @@ const takeConfig = createTestConfig({
   operation: take,
   param: 2,
   expected: [0, 1]
-});
-
-const mapConfig = createTestConfig({
-  name:      "map",
-  iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: map,
-  param:     el => 2 * el,
-  expected:  [0, 2, 4, 6, 8]
 });
 
 const dropConfig = createTestConfig({
@@ -173,7 +177,9 @@ const zipConfig = createTestConfig({
   operation: zip,
   param: newIterator(UPPER_ITERATOR_BOUNDARY),
   expected: [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(4)(4)],
-  evalFn: expectedArray => actualArray => {
+  evalFn: expected => actual => {
+    const expectedArray = [...expected];
+    const actualArray = [...actual];
     let result = true;
     for (let i = 0; i < expectedArray.length; i++) {
       result = result && actualArray[i](fst) === expectedArray[i](fst);

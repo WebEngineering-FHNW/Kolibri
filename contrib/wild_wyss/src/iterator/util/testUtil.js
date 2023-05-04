@@ -6,7 +6,7 @@ export {
   createTestConfig,
   newIterator,
   UPPER_ITERATOR_BOUNDARY,
-  testSimple2,
+  testSimple,
   testCopyAfterConsumption,
   testPurity,
   testCopy,
@@ -22,9 +22,8 @@ export {
  * @property { String } name
  * @property { (_: *) => IteratorOperation } operation
  * @property { *? } param
- * @property { number? } maxIterations - How many iterations should be executed at maximum
- * @property {Array<_U_> } expected
- * @property { * } evalFn
+ * @property { Array<_U_> } expected
+ * @property { (expected: * ) => (actual: * ) => Boolean } evalFn
  */
 
 /**
@@ -41,11 +40,10 @@ const UPPER_ITERATOR_BOUNDARY = 4;
  * @param { IteratorTestConfigType } obj
  * @returns {(function(*): void)|*}
  */
-const testSimple2 = ({iterator, operation, evalFn, expected, param, maxIterations}) => assert => {
+const testSimple = ({iterator, operation, evalFn, expected, param}) => assert => {
   const baseIterator = iterator();
   const operated = operation(param)(baseIterator);
-  const evaluated = toArray(operated, maxIterations);
-  assert.isTrue(evalFn([...expected])(evaluated));
+  assert.isTrue(evalFn(expected)(operated));
 };
 
 /**
@@ -57,12 +55,12 @@ const testSimple2 = ({iterator, operation, evalFn, expected, param, maxIteration
  * }
  */
 const testPurity = config => assert => {
-  const { operation, param, iterator, maxIterations, evalFn } = config;
+  const { operation, param, iterator, evalFn } = config;
   const underlyingIt = iterator();
   // if the iterator modifies the underlying iterator, the following test would fail, because both use the same
   // underlying iterator
-  const first  = toArray(operation(param)(underlyingIt), maxIterations);
-  const second = toArray(operation(param)(underlyingIt), maxIterations);
+  const first  = operation(param)(underlyingIt);
+  const second = operation(param)(underlyingIt);
   assert.isTrue(evalFn(first)(second));
 };
 
@@ -76,10 +74,10 @@ const testPurity = config => assert => {
  * }
  */
 const testCopy = config => assert => {
-  const { operation, evalFn, iterator, param, maxIterations } = config;
+  const { operation, evalFn, iterator, param } = config;
   const expected = operation(param)(iterator());
   const copied   = operation(param)(iterator()).copy();
-  assert.isTrue(evalFn(toArray(expected, maxIterations))(toArray(copied, maxIterations)));
+  assert.isTrue(evalFn(expected)(copied));
 };
 
 /**
@@ -90,14 +88,14 @@ const testCopy = config => assert => {
  * }
  */
 const testCopyAfterConsumption = config => assert => {
-  const { operation, param, evalFn, iterator, maxIterations } = config;
+  const { operation, param, evalFn, iterator } = config;
   const operated = operation(param)(iterator());
   // noinspection LoopStatementThatDoesntLoopJS
   for (const elem of operated) {
     break; // consume one element
   }
   const copy = operated.copy();
-  assert.isTrue(evalFn(toArray(operated, maxIterations))(toArray(copy, maxIterations)));
+  assert.isTrue(evalFn(operated)(copy));
 };
 
 /**
@@ -136,7 +134,7 @@ const testCBNotCalledAfterDone = config => assert => {
  */
 const createTestConfig = config => ({
  ...config,
- evalFn : config.evalFn === undefined ? arrayEq : config.evalFn
+ evalFn : config.evalFn === undefined ? arrayEvaluation : config.evalFn
 });
 
 /**
@@ -155,3 +153,5 @@ const createTestConfig = config => ({
  */
 const toArray = (iterator, takeSoMany) =>
   takeSoMany ? takeWithoutCopy(takeSoMany)(iterator) : [...iterator];
+
+const arrayEvaluation = expected => actual => arrayEq([...expected])([...actual]);

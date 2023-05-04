@@ -10,15 +10,51 @@ import {
   reduce$,
   forEach$,
   uncons,
-  map,
+  map, zipWith,
 } from "../iterator.js";
+import {
+  createTestConfig,
+  testCBNotCalledAfterDone,
+  testPurity,
+  testSimple,
+  UPPER_ITERATOR_BOUNDARY
+} from "../util/testUtil.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
+const prepareTestSuite = () =>
+  [
+    eq$Config,
+  ].forEach(config => {
+    const { name } = config;
+    terminalOperationsSuite.add(`test simple: ${name}`,                           testSimple(config));
+    terminalOperationsSuite.add(`test purity: ${name}.`,                          testPurity(config));
+    terminalOperationsSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(config));
+    // terminalOperationsSuite.add(`test copy: ${name}`,                             testCopy                (config));
+    // terminalOperationsSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(config));
+  });
+
+const eq$Config = createTestConfig({
+  name:      "eq$",
+  iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: eq$,
+  param:     newIterator(UPPER_ITERATOR_BOUNDARY),
+  evalFn: expected => actual => actual === expected,
+  expected:  true
+});
+
+const forEach$Config = createTestConfig({
+  name:      "forEach$",
+  iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: eq$,
+  param:     newIterator(UPPER_ITERATOR_BOUNDARY),
+  evalFn: expected => actual => actual === expected,
+  expected:  true
+});
 /**
  * Checks if a given operation does not modify the underlying iterator.
  */
-const testPurity = op => assert => {
+const testPurityOld = op => assert => {
   const iterator = newIterator(5);
   op(iterator);
   assert.isTrue(arrayEq([0,1,2,3,4, 5])([...iterator]));
@@ -46,10 +82,10 @@ terminalOperationsSuite.add("test advanced case: eq$ should return false after e
 });
 
 terminalOperationsSuite.add("test purity: eq$. first iterator.",
-  testPurity(it => eq$(it)(newIterator(4))));
+  testPurityOld(it => eq$(it)(newIterator(4))));
 
 terminalOperationsSuite.add("test purity: eq$. second iterator.",
-  testPurity(it => eq$(newIterator(4))(it)));
+  testPurityOld(it => eq$(newIterator(4))(it)));
 
 terminalOperationsSuite.add("test advanced case: eq$ should return true after mapping", assert => {
   const texts = ["hello", "world"];
@@ -74,7 +110,7 @@ terminalOperationsSuite.add("test advanced case: head of empty iterator", assert
   assert.is(head(iterator), undefined);
 });
 
-terminalOperationsSuite.add("test purity: head.", testPurity(head) );
+terminalOperationsSuite.add("test purity: head.", testPurityOld(head) );
 
 terminalOperationsSuite.add("test typical case: isEmpty", assert => {
   const iterator = newIterator(4);
@@ -85,7 +121,7 @@ terminalOperationsSuite.add("test typical case: isEmpty", assert => {
   assert.isTrue(result);
 });
 
-terminalOperationsSuite.add("test purity: isEmpty.", testPurity(isEmpty) );
+terminalOperationsSuite.add("test purity: isEmpty.", testPurityOld(isEmpty) );
 
 terminalOperationsSuite.add("test typical case: reduce", assert => {
   const iterator = newIterator(4);
@@ -94,7 +130,7 @@ terminalOperationsSuite.add("test typical case: reduce", assert => {
   assert.is(10, result);
 });
 
-terminalOperationsSuite.add("test purity: reduce$.", testPurity(reduce$((acc, cur) => acc + cur , 0)));
+terminalOperationsSuite.add("test purity: reduce$.", testPurityOld(reduce$((acc, cur) => acc + cur , 0)));
 
 terminalOperationsSuite.add("test typical case: forEach$", assert => {
   const iterator = newIterator(4);
@@ -114,7 +150,7 @@ terminalOperationsSuite.add("test advanced case: forEach", assert => {
   assert.isTrue(arrayEq([0,1,2,3,4])(iterElements));
 });
 
-terminalOperationsSuite.add("test purity: forEach$.", testPurity(forEach$(_ => undefined)));
+terminalOperationsSuite.add("test purity: forEach$.", testPurityOld(forEach$(_ => undefined)));
 
 terminalOperationsSuite.add("test typical case: uncons", assert => {
   const iterator = newIterator(4);
@@ -131,6 +167,7 @@ terminalOperationsSuite.add("test advanced case: uncons with copy", assert => {
   assert.isTrue(arrayEq([1,2,3,4])([...pair(snd)]));
 });
 
-terminalOperationsSuite.add("test purity: uncons.", testPurity(uncons));
+terminalOperationsSuite.add("test purity: uncons.", testPurityOld(uncons));
 
+prepareTestSuite();
 terminalOperationsSuite.run();
