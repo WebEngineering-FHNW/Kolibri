@@ -1,6 +1,6 @@
 import { TestSuite } from "../../test/test.js";
 import { arrayEq }   from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { fst, snd }  from "../../../../../docs/src/kolibri/stdlib.js";
+import { Pair, fst, snd } from "../../../../../docs/src/kolibri/stdlib.js";
 import {
   ArrayIterator,
   Iterator,
@@ -10,7 +10,7 @@ import {
   reduce$,
   forEach$,
   uncons,
-  map, zipWith,
+  map, zipWith, take,
 } from "../iterator.js";
 import {
   createTestConfig,
@@ -19,155 +19,121 @@ import {
   testSimple,
   UPPER_ITERATOR_BOUNDARY
 } from "../util/testUtil.js";
+import {Range} from "../../range/range.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
+const terminalOperationsSuite = TestSuite("TerminalOperations");
 const prepareTestSuite = () =>
   [
     eq$Config,
+    forEach$Config,
+    headConfig,
+    isEmptyConfig,
+    unconsConfig,
+    reduce$Config
   ].forEach(config => {
     const { name } = config;
-    terminalOperationsSuite.add(`test simple: ${name}`,                           testSimple(config));
-    terminalOperationsSuite.add(`test purity: ${name}.`,                          testPurity(config));
-    terminalOperationsSuite.add(`test callback not called after done: ${name}.`,  testCBNotCalledAfterDone(config));
-    // terminalOperationsSuite.add(`test copy: ${name}`,                             testCopy                (config));
-    // terminalOperationsSuite.add(`test copy after consumption: ${name}`,           testCopyAfterConsumption(config));
+    terminalOperationsSuite.add(`test simple: ${name}`,  testSimple(config));
+    terminalOperationsSuite.add(`test purity: ${name}.`, testPurity(config));
   });
 
-const eq$Config = createTestConfig({
-  name:      "eq$",
+const headConfig = createTestConfig({
+  name:      "head",
   iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: eq$,
-  param:     newIterator(UPPER_ITERATOR_BOUNDARY),
-  evalFn: expected => actual => actual === expected,
+  operation: () => head,
+  evalFn:    expected => actual => expected === actual ,
+  expected:  0
+});
+
+const isEmptyConfig = createTestConfig({
+  name:      "isEmpty",
+  iterator:  () => take(0)(newIterator(UPPER_ITERATOR_BOUNDARY)),
+  operation: () => isEmpty,
+  evalFn:    expected => actual => expected === actual,
   expected:  true
 });
 
-const forEach$Config = createTestConfig({
-  name:      "forEach$",
+const unconsConfig = createTestConfig({
+  name:      "uncons",
   iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation: eq$,
-  param:     newIterator(UPPER_ITERATOR_BOUNDARY),
-  evalFn: expected => actual => actual === expected,
-  expected:  true
-});
-/**
- * Checks if a given operation does not modify the underlying iterator.
- */
-const testPurityOld = op => assert => {
-  const iterator = newIterator(5);
-  op(iterator);
-  assert.isTrue(arrayEq([0,1,2,3,4, 5])([...iterator]));
-};
-
-const terminalOperationsSuite = TestSuite("TerminalOperations");
-
-terminalOperationsSuite.add("test typical case: eq$ should return true", assert => {
-  const it1 = newIterator(4);
-  const it2 = newIterator(4);
-  assert.isTrue(eq$(it1)(it2));
+  operation: () => uncons,
+  expected:  Pair(0)(Range(1, UPPER_ITERATOR_BOUNDARY)),
+  evalFn:    expected => actual =>
+    expected(fst) === actual(fst) &&
+    arrayEq([...expected(snd)])([...actual(snd)]),
 });
 
+const reduce$Config = createTestConfig({
+  name:      "reduce$",
+  iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
+  operation: () => reduce$((acc, cur) => acc + cur, 0),
+  expected:  10,
+  evalFn:    expected => actual => expected === actual
+});
+
+const eq$Config = (() => {
+  // eq$ takes two iterators which both shouldn't be modified when eq runs.
+  // To keep this we keep two iterators in our closure scope, to ensure that neither is modified by pure.
+  const firstIterator = newIterator(UPPER_ITERATOR_BOUNDARY);
+  const secondIterator = newIterator(UPPER_ITERATOR_BOUNDARY);
+  return createTestConfig({
+    name:      "eq$",
+    iterator:  () => firstIterator,
+    operation: eq$,
+    param:     secondIterator,
+    evalFn: expected => actual => expected === actual,
+    expected:  true
+  });
+})();
+
+const forEach$Config = (() => {
+  // keep this state in the closure scope
+  const iterElements = [];
+  return createTestConfig({
+    name: "forEach$",
+    iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
+    operation: forEach$,
+    param: cur => iterElements.push(cur),
+    evalFn: expected => _actual => {
+      let result;
+      if (expected !== undefined) {
+        result = arrayEq(expected)(iterElements);
+        iterElements.splice(0, iterElements.length);
+      } else {
+        // test purity just runs two times the current function, since forEach does not return any value,
+        // both expected and actual are set to undefined, so it can be checked if 10 elements are in the array
+        result = arrayEq([...iterElements])([0, 1, 2, 3, 4, 0, 1, 2, 3, 4]);
+        iterElements.splice(0, iterElements.length);
+      }
+      return result;
+    },
+    expected: [0, 1, 2, 3, 4]
+  });
+})();
+
+// special cases
+
+// isEmpty
+terminalOperationsSuite.add("test typical case: isEmpty ist not empty", assert => {
+  const iterator = newIterator(4);
+  const result = isEmpty(iterator);
+  assert.is(result, false);
+});
+
+// head
+terminalOperationsSuite.add("test advanced case: head of empty iterator", assert => {
+  const iterator = newIterator(4);
+  for (const iteratorElement of iterator) { /* exhaust iterator */ }
+  assert.is(head(iterator), undefined);
+});
+
+// eq$
 terminalOperationsSuite.add("test typical case: eq$ should return false", assert => {
   const it1 = newIterator(2);
   const it2 = newIterator(4);
   assert.is(eq$(it1)(it2), false);
 });
-
-terminalOperationsSuite.add("test advanced case: eq$ should return false after exhausting", assert => {
-  const it1 = newIterator(4);
-  const it2 = newIterator(4);
-  for (const _ of it1) { /** Range gets exhausted. */ }
-  assert.is(eq$(it1)(it2), false);
-});
-
-terminalOperationsSuite.add("test purity: eq$. first iterator.",
-  testPurityOld(it => eq$(it)(newIterator(4))));
-
-terminalOperationsSuite.add("test purity: eq$. second iterator.",
-  testPurityOld(it => eq$(newIterator(4))(it)));
-
-terminalOperationsSuite.add("test advanced case: eq$ should return true after mapping", assert => {
-  const texts = ["hello", "world"];
-  const it1 = newIterator(1);
-  const it2 = ArrayIterator(texts);
-  assert.isTrue(eq$(map(idx => texts[idx])(it1))(it2));
-});
-
-terminalOperationsSuite.add("test typical case: head", assert => {
-  const iterator = newIterator(4);
-  let iteratorHead = head(iterator);
-  // consume iterator and check if head always points to the first element
-  for (const iteratorElement of iterator) {
-    assert.is(iteratorHead, iteratorElement);
-    iteratorHead = head(iterator);
-  }
-});
-
-terminalOperationsSuite.add("test advanced case: head of empty iterator", assert => {
-  const iterator = newIterator(4);
-  for (const iteratorElement of iterator) { /*exhaust iterator*/ }
-  assert.is(head(iterator), undefined);
-});
-
-terminalOperationsSuite.add("test purity: head.", testPurityOld(head) );
-
-terminalOperationsSuite.add("test typical case: isEmpty", assert => {
-  const iterator = newIterator(4);
-  let result = isEmpty(iterator);
-  assert.is(result, false);
-  for (const _ of iterator) { /** Range gets exhausted. */ }
-  result = isEmpty(iterator);
-  assert.isTrue(result);
-});
-
-terminalOperationsSuite.add("test purity: isEmpty.", testPurityOld(isEmpty) );
-
-terminalOperationsSuite.add("test typical case: reduce", assert => {
-  const iterator = newIterator(4);
-  const result = reduce$( (acc, cur) => acc + cur , 0)(iterator);
-  assert.isTrue(arrayEq([0,1,2,3,4])([...iterator]));
-  assert.is(10, result);
-});
-
-terminalOperationsSuite.add("test purity: reduce$.", testPurityOld(reduce$((acc, cur) => acc + cur , 0)));
-
-terminalOperationsSuite.add("test typical case: forEach$", assert => {
-  const iterator = newIterator(4);
-  const iterElements = [];
-  forEach$(cur => iterElements.push(cur))(iterator);
-  assert.isTrue(arrayEq([0,1,2,3,4])(iterElements));
-});
-
-terminalOperationsSuite.add("test advanced case: forEach", assert => {
-  const iterator = newIterator(4);
-  const iterElements = [];
-  forEach$(cur => {
-    // consume all elements of the iterator, to test if the iterator has been copied correctly
-    for (const _ of iterator) { }
-    iterElements.push(cur);
-  })(iterator);
-  assert.isTrue(arrayEq([0,1,2,3,4])(iterElements));
-});
-
-terminalOperationsSuite.add("test purity: forEach$.", testPurityOld(forEach$(_ => undefined)));
-
-terminalOperationsSuite.add("test typical case: uncons", assert => {
-  const iterator = newIterator(4);
-  const pair = uncons(iterator);
-  assert.is(pair(fst), 0);
-  assert.isTrue(arrayEq([1,2,3,4])([...pair(snd)]));
-});
-
-terminalOperationsSuite.add("test advanced case: uncons with copy", assert => {
-  const iterator = newIterator(4);
-  const pair = uncons(iterator);
-  assert.is(pair(fst), 0);
-  assert.isTrue(arrayEq([1,2,3,4])([...pair(snd).copy()]));
-  assert.isTrue(arrayEq([1,2,3,4])([...pair(snd)]));
-});
-
-terminalOperationsSuite.add("test purity: uncons.", testPurityOld(uncons));
 
 prepareTestSuite();
 terminalOperationsSuite.run();
