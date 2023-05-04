@@ -8,6 +8,12 @@ export { TupleIterator }
  * @param  { (f:ArrayApplierType<_T_>) => any } tuple
  * @return { IteratorType<_T_> }
  * @constructor
+ * @example
+ * const [ Triple ]    = Tuple(3);
+ * const triple        = Triple(1)(2)(3);
+ * const tupleIterator = TupleIterator(triple);
+ * console.log(...tupleIterator);
+ * // => Logs: 1, 2, 3
  */
 const TupleIterator = tuple => {
   // detect number of elements in tuple using a special selector function
