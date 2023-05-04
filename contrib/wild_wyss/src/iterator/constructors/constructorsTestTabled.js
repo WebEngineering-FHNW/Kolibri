@@ -16,12 +16,12 @@ import {
   StackIterator,
   emptyIterator,
   PureIterator,
-  replicate,
   FibonacciIterator,
   AngleIterator,
   SquareNumberIterator,
   PrimeNumberIterator,
   repeat,
+  replicate,
 } from "../iterator.js"
 
 import {
@@ -50,9 +50,9 @@ const prepareTestSuite = () => {
     primeNumberIteratorConfig,
     repeatConfig,
   ].forEach(config => {
-    iteratorSuite.add(`test simple: ${config.name}`,                           testSimple            (config));
-    iteratorSuite.add(`test copy: ${config.name}`,                             testCopy                (config));
-    iteratorSuite.add(`test copy after consumption: ${config.name}`,           testCopyAfterConsumption(config));
+    iteratorSuite.add(`test simple: ${config.name}`,                 testSimple              (config));
+    iteratorSuite.add(`test copy: ${config.name}`,                   testCopy                (config));
+    iteratorSuite.add(`test copy after consumption: ${config.name}`, testCopyAfterConsumption(config));
   })
 };
 
