@@ -1,47 +1,9 @@
-import { TestSuite }        from "../../test/test.js";
-import { arrayEq }          from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { Tuple }            from "../../../../../docs/src/kolibri/stdlib.js";
-import { emptyStack, push } from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import { takeWithoutCopy }  from "../util/util.js";
-import {
-  pipe,
-  Iterator,
-  ArrayIterator,
-  TupleIterator,
-  ConcatIterator,
-  StackIterator,
-  emptyIterator,
-  PureIterator,
-  map,
-  drop,
-  replicate,
-  retainAll, FibonacciIterator, AngleIterator, SquareNumberIterator, PrimeNumberIterator, cycle, take,
-} from "../iterator.js"
-
-const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
+import {TestSuite} from "../../test/test.js";
+import {arrayEq} from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import {ArrayIterator, ConcatIterator, emptyIterator, Iterator,} from "../iterator.js"
+import {newIterator} from "../util/testUtil.js";
 
 const iteratorSuite = TestSuite("Iterator");
-
-iteratorSuite.add("test typical case: Iterator", assert => {
-  const iterator = Iterator(0, current => current + 1, current => current > 5);
-  assert.isTrue(arrayEq([0, 1, 2, 3, 4, 5])([...iterator]));
-  assert.isTrue(arrayEq([])([...iterator]));
-});
-
-iteratorSuite.add("test copy: Iterator", assert => {
-  const iterator = Iterator(0, current => current + 1, current => current > 5);
-  const copy = iterator.copy();
-  assert.isTrue(arrayEq([0, 1, 2, 3, 4, 5])([...copy]));
-  assert.isTrue(arrayEq([0, 1, 2, 3, 4, 5])([...iterator]));
-});
-
-iteratorSuite.add("test copy after partial use: Iterator", assert => {
-  const iterator = Iterator(0, current => current + 1, current => current > 5);
-  // noinspection LoopStatementThatDoesntLoopJS
-  for (const _ of iterator) { break; }
-  const copy = iterator.copy();
-  assert.isTrue(arrayEq([1,2,3,4,5])([...copy]));
-});
 
 iteratorSuite.add("test special case: no increment after done", assert => {
   let result = true;
@@ -50,81 +12,12 @@ iteratorSuite.add("test special case: no increment after done", assert => {
   assert.isTrue(result);
 });
 
-iteratorSuite.add("test typical case: pipe", assert => {
-  const iterator = newIterator(4);
-  const piped    = pipe(
-    map(i => i + 1),
-    retainAll(el => el % 2 === 0)
-  )(iterator);
-
-  assert.isTrue(arrayEq([2,4])([...piped]));
-});
-
-iteratorSuite.add("test typical case: ArrayIterator", assert => {
-  const arrayIterator = ArrayIterator([1,2,3]);
-  assert.isTrue(arrayEq([1,2,3])([...arrayIterator]));
-});
-
 iteratorSuite.add("test iterate on copy: ArrayIterator", assert => {
   const arr = [1,2,3];
   const arrayIterator = ArrayIterator(arr);
   arr.push(4);
 
   assert.isTrue(arrayEq([1,2,3])([...arrayIterator]));
-
-});
-
-iteratorSuite.add("test advanced case: ArrayIterator", assert => {
-  const arrayIterator      = ArrayIterator([1,2,3]);
-  const pipedArrayIterator = pipe(
-    map(i => i + 1),
-    retainAll(el => el % 2 === 0)
-  )(arrayIterator);
-  assert.isTrue(arrayEq([2,4])([...pipedArrayIterator]));
-});
-
-iteratorSuite.add("test advanced case: ArrayIterator", assert => {
-  const arrayIterator      = ArrayIterator([1,2,3]);
-  for (const arrayIteratorElement of arrayIterator) {
-    break;
-  }
-  const copy = arrayIterator.copy();
-  assert.isTrue(arrayEq([2,3])([...copy]));
-  assert.isTrue(arrayEq([2,3])([...arrayIterator]));
-});
-
-iteratorSuite.add("test typical case: tuple iterator", assert => {
-  const [ Triple ]    = Tuple(3);
-  const triple        = Triple(1)(2)(3);
-  const tupleIterator = TupleIterator(triple);
-  assert.isTrue(arrayEq([1,2,3])([...tupleIterator]));
-});
-
-iteratorSuite.add("test advanced case: tuple iterator", assert => {
-  const [ Triple ]    = Tuple(3);
-  const triple        = Triple(1)(2)(3);
-  const tupleIterator = TupleIterator(triple);
-  const pipedTupleIterator = pipe(
-    map(i => i + 1),
-    retainAll(el => el % 2 === 0)
-  )(tupleIterator);
-  assert.isTrue(arrayEq([2,4])([...pipedTupleIterator]));
-});
-
-iteratorSuite.add("test typical case: ConcatIterator", assert => {
-  const it1 = newIterator(4);
-  const it2 = newIterator(2);
-  const concatIterator = ConcatIterator(it1)(it2);
-  assert.isTrue(arrayEq([0,1,2,3,4,0,1,2])([...concatIterator]));
-});
-
-iteratorSuite.add("test copy: ConcatIterator", assert => {
-  const it1 = newIterator(4);
-  const it2 = newIterator(2);
-  const concatIterator = ConcatIterator(it1)(it2);
-  const copy = concatIterator.copy();
-  for (const _ of concatIterator) { /* Exhausting */ }
-  assert.isTrue(arrayEq([0,1,2,3,4,0,1,2])([...copy]));
 });
 
 iteratorSuite.add("test purity: ConcatIterator", assert => {
@@ -171,118 +64,5 @@ iteratorSuite.add("test empty: ConcatIterator", assert => {
   assert.is(arrayEq([])([...concatenated]),  true);
 });
 
-iteratorSuite.add("test typical case: stack iterator", assert => {
-  const stack = push(push(push(emptyStack)(1))(2))(3);
 
-  const stackIterator = StackIterator(stack);
-  assert.isTrue(arrayEq([3,2,1])([...stackIterator]));
-});
-
-iteratorSuite.add("test copy: StackIterator", assert => {
-  const stack = push(push(push(emptyStack)(1))(2))(3);
-
-  const stackIterator = StackIterator(stack);
-  const copy = stackIterator.copy();
-  for (const _ of stackIterator) { /* Exhausting */ }
-  assert.isTrue(arrayEq([3,2,1])([...copy]));
-});
-
-iteratorSuite.add("test typical: FibonacciIterator", assert => {
-  const iterator = FibonacciIterator();
-  const result = takeWithoutCopy(8)(iterator);
-  assert.isTrue(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...result]));
-});
-
-iteratorSuite.add("test copy: FibonacciIterator", assert => {
-  const iterator = FibonacciIterator();
-  const copy     = iterator.copy();
-  assert.isTrue(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...takeWithoutCopy(8)(iterator)]));
-  assert.isTrue(arrayEq([1, 1, 2, 3, 5, 8, 13, 21])([...takeWithoutCopy(8)(copy)]));
-});
-
-iteratorSuite.add("test copy on used iterator: FibonacciIterator", assert => {
-  const iterator = FibonacciIterator();
-  const result   =  drop(1)(iterator);
-  for (const elem of result) {
-    if (elem !== 1) break;
-  }
-  const copy = result.copy();
-  assert.isTrue(arrayEq([3, 5, 8, 13, 21])([...takeWithoutCopy(5)(result)]));
-  assert.isTrue(arrayEq([3, 5, 8, 13, 21])([...takeWithoutCopy(5)(copy)]));
-});
-
-iteratorSuite.add("test typical case: AngleIterator", assert => {
-  const iterator = AngleIterator(4);
-  assert.isTrue(arrayEq([0, 90, 180, 270])([...iterator]));
-});
-
-iteratorSuite.add("test typical case: SquareNumberIterator", assert => {
-  const iterator = takeWithoutCopy(5)(SquareNumberIterator());
-  assert.isTrue(arrayEq([1, 4, 9, 16, 25])([...iterator]));
-});
-
-iteratorSuite.add("test typical case: PrimeNumberIterator", assert => {
-  const iterator = PrimeNumberIterator();
-  // console.log([...takeWithoutCopy(6)(iterator)]);
-  assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
-});
-
-iteratorSuite.add("test copy: PrimeNumberIterator", assert => {
-  const iterator = PrimeNumberIterator();
-  const copy = iterator.copy();
-
-  assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(iterator)]));
-  assert.isTrue(arrayEq([2, 3, 5, 7, 11, 13])([...takeWithoutCopy(6)(copy)]));
-});
-
-iteratorSuite.add("test copy partially used: PrimeNumberIterator", assert => {
-  const iterator = PrimeNumberIterator();
-  // noinspection LoopStatementThatDoesntLoopJS
-  for (const _ of iterator) { break; }
-  const copy = iterator.copy();
-  assert.isTrue(arrayEq([3, 5, 7, 11, 13, 17])([...takeWithoutCopy(6)(iterator)]));
-  assert.isTrue(arrayEq([3, 5, 7, 11, 13, 17])([...takeWithoutCopy(6)(copy)]));
-});
-
-iteratorSuite.add("test typical case: PureIterator", assert => {
-const iterator = PureIterator(1);
-assert.isTrue(arrayEq([1])([...iterator]));
-});
-
-
-iteratorSuite.add("test copy: PureIterator", assert => {
-  const iterator = PureIterator(1);
-  const copy = iterator.copy();
-  assert.isTrue(arrayEq([1])([...iterator]));
-  assert.isTrue(arrayEq([1])([...copy]));
-});
-
-iteratorSuite.add("test copy partial used: PureIterator", assert => {
-  const iterator = PureIterator(1);
-  for (const _ of iterator) { /** exhausting */ }
-  const copy = iterator.copy();
-  assert.isTrue(arrayEq([])([...iterator]));
-  assert.isTrue(arrayEq([])([...copy]));
-});
-
-iteratorSuite.add("test typical case: replicate", assert => {
-  const iterator = replicate(3)(true);
-  assert.isTrue(arrayEq([true, true, true])([...iterator]));
-});
-
-iteratorSuite.add("test copy: replicate", assert => {
-  const iterator = replicate(3)(true);
-  const copy = iterator.copy();
-  assert.isTrue(arrayEq([true, true, true])([...iterator]));
-  assert.isTrue(arrayEq([true, true, true])([...copy]));
-});
-
-iteratorSuite.add("test copy partially used: replicate", assert => {
-  const iterator = replicate(3)(true);
-  // noinspection LoopStatementThatDoesntLoopJS
-  for (const _ of iterator) { break; } // consume one element
-  const copy = iterator.copy();
-  assert.isTrue(arrayEq([true, true])([...iterator]));
-  assert.isTrue(arrayEq([true, true])([...copy]));
-});
 iteratorSuite.run();

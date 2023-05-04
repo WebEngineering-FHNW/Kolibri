@@ -13,6 +13,8 @@ export {
   testCBNotCalledAfterDone
 }
 
+const id = x => x;
+
 /**
  * This type is used to create testing table entry.
  * @template _T_
@@ -20,10 +22,10 @@ export {
  * @typedef IteratorTestConfigType
  * @property { () => IteratorType<_T_> } iterator
  * @property { String } name
- * @property { (_: *) => IteratorOperation } operation
+ * @property { (_: *) => IteratorOperation? } operation
  * @property { *? } param
  * @property { Array<_U_> } expected
- * @property { (expected: * ) => (actual: * ) => Boolean } evalFn
+ * @property { (expected: * ) => (actual: * ) => Boolean? } evalFn
  */
 
 /**
@@ -133,8 +135,9 @@ const testCBNotCalledAfterDone = config => assert => {
  * @returns IteratorTestConfigType<_U_>
  */
 const createTestConfig = config => ({
- ...config,
- evalFn : config.evalFn === undefined ? arrayEvaluation : config.evalFn
+  ...config,
+  operation: config.operation === undefined ? () => id : config.operation,
+  evalFn : config.evalFn === undefined ? arrayEvaluation : config.evalFn
 });
 
 /**
