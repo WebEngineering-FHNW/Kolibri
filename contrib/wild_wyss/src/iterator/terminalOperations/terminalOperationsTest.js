@@ -2,26 +2,22 @@ import { TestSuite } from "../../test/test.js";
 import { arrayEq }   from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Pair, fst, snd } from "../../../../../docs/src/kolibri/stdlib.js";
 import {
-  ArrayIterator,
-  Iterator,
   eq$,
   head,
   isEmpty,
   reduce$,
   forEach$,
   uncons,
-  map, zipWith, take,
+  take,
 } from "../iterator.js";
 import {
+  newIterator,
   createTestConfig,
-  testCBNotCalledAfterDone,
   testPurity,
   testSimple,
   UPPER_ITERATOR_BOUNDARY
 } from "../util/testUtil.js";
-import {Range} from "../../range/range.js";
-
-const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
+import { Range } from "../../range/range.js";
 
 const terminalOperationsSuite = TestSuite("TerminalOperations");
 const prepareTestSuite = () =>
@@ -82,7 +78,7 @@ const eq$Config = (() => {
     iterator:  () => firstIterator,
     operation: eq$,
     param:     secondIterator,
-    evalFn: expected => actual => expected === actual,
+    evalFn:    expected => actual => expected === actual,
     expected:  true
   });
 })();
@@ -91,11 +87,12 @@ const forEach$Config = (() => {
   // keep this state in the closure scope
   const iterElements = [];
   return createTestConfig({
-    name: "forEach$",
-    iterator: () => newIterator(UPPER_ITERATOR_BOUNDARY),
-    operation: forEach$,
-    param: cur => iterElements.push(cur),
-    evalFn: expected => _actual => {
+    name:       "forEach$",
+    iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+    operation:  forEach$,
+    param:      cur => iterElements.push(cur),
+    expected:   [0, 1, 2, 3, 4],
+    evalFn:     expected => _actual => {
       let result;
       if (expected !== undefined) {
         result = arrayEq(expected)(iterElements);
@@ -108,7 +105,6 @@ const forEach$Config = (() => {
       }
       return result;
     },
-    expected: [0, 1, 2, 3, 4]
   });
 })();
 
@@ -117,7 +113,7 @@ const forEach$Config = (() => {
 // isEmpty
 terminalOperationsSuite.add("test typical case: isEmpty ist not empty", assert => {
   const iterator = newIterator(4);
-  const result = isEmpty(iterator);
+  const result   = isEmpty(iterator);
   assert.is(result, false);
 });
 
