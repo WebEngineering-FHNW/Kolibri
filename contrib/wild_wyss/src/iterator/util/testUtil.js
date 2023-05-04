@@ -1,12 +1,11 @@
-import {Iterator, take} from "../iterator.js";
-import { arrayEq } from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import {takeWithoutCopy} from "./util.js";
+import { Iterator }         from "../iterator.js";
+import { arrayEq }          from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { takeWithoutCopy }  from "./util.js";
 
 export {
   createTestConfig,
   newIterator,
   UPPER_ITERATOR_BOUNDARY,
-  testSimple,
   testSimple2,
   testCopyAfterConsumption,
   testPurity,
@@ -22,7 +21,7 @@ export {
  * @property { () => IteratorType<_T_> } iterator
  * @property { String } name
  * @property { (_: *) => IteratorOperation } operation
- * @property { * } param?
+ * @property { *? } param
  * @property { number? } maxIterations - How many iterations should be executed at maximum
  * @property {Array<_U_> } expected
  * @property { * } evalFn
@@ -35,25 +34,6 @@ export {
  */
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 const UPPER_ITERATOR_BOUNDARY = 4;
-
-/**
- * Tests if a given operation applicated on an iterator processes the expected result.
- * Optionally an evaluation function can be passed to compare the created array using the operation and the expected array.
- * @function
- * @template _T_
- * @type {
- *         (op: (number) => IteratorType<_T_>)
- *      => (expected: Array<_T_>)
- *      => (evalFn?: (expected: Array<_T_>) => (actual: Array<_T_> ) => boolean)
- *      => (assert: any)
- *      => void
- * }
- */
-const testSimple = op => expected => (evalFn = arrayEq) => assert => {
-  const it       = newIterator(UPPER_ITERATOR_BOUNDARY);
-  const operated = op(it);
-  assert.isTrue(evalFn([...expected])([...operated]));
-};
 
 /**
  *
@@ -77,10 +57,11 @@ const testSimple2 = ({iterator, operation, evalFn, expected, param, maxIteration
  * }
  */
 const testPurity = config => assert => {
-  const { operation, param, iterator, maxIterations } = config;
+  const { operation, param, iterator, maxIterations, evalFn } = config;
   const underlyingIt = iterator();
-  toArray(operation(param)(underlyingIt), maxIterations); // just run operation to see if it produces any side effect
-  assert.isTrue(arrayEq([...underlyingIt])([...iterator()]));
+  const first  = toArray(operation(param)(underlyingIt), maxIterations); // just run operation to see if it produces any side effect
+  const second = toArray(operation(param)(underlyingIt), maxIterations); // just run operation to see if it produces any side effect
+  assert.isTrue(evalFn(first)(second));
 };
 
 /**
@@ -172,4 +153,3 @@ const createTestConfig = config => ({
  */
 const toArray = (iterator, takeSoMany) =>
   takeSoMany ? takeWithoutCopy(takeSoMany)(iterator) : [...iterator];
-
