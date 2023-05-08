@@ -26,7 +26,10 @@ const id = x => x;
  * @property { *? } param
  * @property { Array<_U_> } expected
  * @property { (expected: * ) => (actual: * ) => Boolean? } evalFn
+ * @property { Array<TestingFunction>? } excludedTests
  */
+
+
 
 /**
  *
@@ -140,21 +143,5 @@ const createTestConfig = config => ({
   evalFn : config.evalFn === undefined ? arrayEvaluation : config.evalFn
 });
 
-/**
- * Collects the given {@link IteratorType} into an {@link Array}.
- * If takeSoMany is set, so many iterations will be proceeded.
- *
- * @template _T_
- * @param { IteratorType<_T_> } iterator
- * @param { Number? } takeSoMany
- * @returns Array<_T_>
- * @example
- * console.log(toArray(Range(5), 3));
- * // => logs [0, 1, 2] to the console
- * console.log(toArray(Range(5)));
- * // => logs [0, 1, 2, 3, 4, 5] to the console
- */
-const toArray = (iterator, takeSoMany) =>
-  takeSoMany ? takeWithoutCopy(takeSoMany)(iterator) : [...iterator];
 
 const arrayEvaluation = expected => actual => arrayEq([...expected])([...actual]);
