@@ -1,6 +1,6 @@
 import { Attribute, VALUE } from "../../../../../../docs/src/kolibri/presentationModel.js";
 import { Observable }       from "../../../../../../docs/src/kolibri/observable.js";
-import { emptyIterator }    from "../../iterator.js";
+import { nil }    from "../../iterator.js";
 
 export { FizzBuzzModel, Rule }
 
@@ -53,7 +53,7 @@ const Rule = (nr = 1, text = "change me") => {
  */
 const FizzBuzzModel = () => {
   const rules         = Observable([]);
-  const result        = Observable(emptyIterator);
+  const result        = Observable(nil);
   const upperBoundary = Observable(30);
   const lowerBoundary = Observable(1);
 

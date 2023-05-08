@@ -1,6 +1,6 @@
 import {TestSuite} from "../../test/test.js";
 import {arrayEq} from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import {ArrayIterator, ConcatIterator, emptyIterator, Iterator,} from "../iterator.js"
+import {ArrayIterator, ConcatIterator, nil, Iterator,} from "../iterator.js"
 import {newIterator} from "../util/testUtil.js";
 
 const iteratorSuite = TestSuite("Iterator");
@@ -30,8 +30,8 @@ iteratorSuite.add("test purity: ConcatIterator", assert => {
 });
 
 iteratorSuite.add("test left/right neutrality: ConcatIterator", assert => {
-  const left =  ConcatIterator(emptyIterator)(newIterator(4));
-  const right = ConcatIterator(newIterator(4))(emptyIterator);
+  const left =  ConcatIterator(nil)(newIterator(4));
+  const right = ConcatIterator(newIterator(4))(nil);
   const expected = [0,1,2,3,4];
   assert.isTrue(arrayEq(expected)([...right]));
   assert.is(arrayEq(expected)([...left]),  true);
@@ -60,7 +60,7 @@ iteratorSuite.add("test concat with infinity: ConcatIterator", assert => {
 });
 
 iteratorSuite.add("test empty: ConcatIterator", assert => {
-  const concatenated = ConcatIterator(emptyIterator)(emptyIterator);
+  const concatenated = ConcatIterator(nil)(nil);
   assert.is(arrayEq([])([...concatenated]),  true);
 });
 

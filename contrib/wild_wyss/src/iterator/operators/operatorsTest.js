@@ -4,7 +4,7 @@ import { Pair, fst, snd }  from "../../../../../docs/src/kolibri/stdlib.js";
 
 import {
   ArrayIterator,
-  emptyIterator,
+  nil,
   Iterator,
   cons,
   cycle,
@@ -236,8 +236,8 @@ iteratorSuite.add("test advanced case: zip one iterator is shorter", assert => {
 
 // mconcat
 iteratorSuite.add("test left/right neutrality: mconcat", assert => {
-  const left  = mconcat(ArrayIterator([emptyIterator, newIterator(UPPER_ITERATOR_BOUNDARY)]));
-  const right = mconcat(ArrayIterator([newIterator(UPPER_ITERATOR_BOUNDARY), emptyIterator]));
+  const left  = mconcat(ArrayIterator([nil, newIterator(UPPER_ITERATOR_BOUNDARY)]));
+  const right = mconcat(ArrayIterator([newIterator(UPPER_ITERATOR_BOUNDARY), nil]));
   const expected = [0,1,2,3,4];
   assert.isTrue(arrayEq(expected)([...right]));
   assert.isTrue(arrayEq(expected)([...left]));
@@ -269,12 +269,12 @@ iteratorSuite.add("test concat with infinity: mconcat", assert => {
 });
 
 iteratorSuite.add("test empty: mconcat", assert => {
-  const concatenated = mconcat(ArrayIterator([emptyIterator]));
+  const concatenated = mconcat(ArrayIterator([nil]));
   assert.isTrue(arrayEq([])([...concatenated]));
 });
 
 iteratorSuite.add("test : mconcat", assert => {
-  const concatenated = mconcat(ArrayIterator([emptyIterator]));
+  const concatenated = mconcat(ArrayIterator([nil]));
   assert.isTrue(arrayEq([])([...concatenated]));
 });
 

@@ -14,7 +14,7 @@ import {
   TupleIterator,
   ConcatIterator,
   StackIterator,
-  emptyIterator,
+  nil,
   PureIterator,
   FibonacciIterator,
   AngleIterator,
@@ -41,7 +41,7 @@ const prepareTestSuite = () => {
     tupleIteratorConfig,
     concatIteratorConfig,
     stackIteratorConfig,
-    emptyIteratorConfig,
+    nilConfig,
     pureIteratorConfig,
     replicateConfig,
     fibonacciIteratorConfig,
@@ -97,9 +97,9 @@ const stackIteratorConfig = createTestConfig({
   expected: [0,1,2,3,4],
 });
 
-const emptyIteratorConfig = createTestConfig({
-  name:     "EmptyIterator",
-  iterator: () => emptyIterator,
+const nilConfig = createTestConfig({
+  name:     "nil",
+  iterator: () => nil,
   expected: [],
 });
 

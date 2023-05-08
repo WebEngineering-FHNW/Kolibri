@@ -3,7 +3,7 @@ import {
   cons,
   reduce$,
   IteratorBuilder,
-  emptyIterator,
+  nil,
 } from "./iterator.js";
 
 const performanceSuite = TestSuite("PerformanceTest");
@@ -19,7 +19,7 @@ performanceSuite.add("compare IteratorBuilder and cons: IteratorBuilder 1000x fa
   }, "builder");
 
   const consTime = measure(() => {
-    let consed = emptyIterator;
+    let consed = nil;
     for (let i = 0; i < limit; i++) { consed = cons(i)(consed)}
     return reduce$( (acc, cur) => acc + cur, 0)(consed);
   }, "Cons");

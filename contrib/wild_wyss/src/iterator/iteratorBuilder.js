@@ -1,7 +1,7 @@
 import { nextOf } from "./util/util.js";
 
 export { IteratorBuilder }
-import { emptyIterator } from "./iterator.js";
+import { nil } from "./iterator.js";
 
 
 
@@ -17,7 +17,7 @@ const ALREADY_BUILT_ERROR_MESSAGE = "Unsupported operation: Iterator has already
  *
  * **Consider the following:**
  * - Passed {@link IteratorType} will not be copied automatically (to save performance). Copy them manually if needed.
- * - Build must only be called at most once. After the first time, build() returns an {@link emptyIterator}.
+ * - Build must only be called at most once. After the first time, build() returns an {@link nil}.
  * - After build has been called, no elements can be added.
  *
  * @template _T_
@@ -34,7 +34,7 @@ const ALREADY_BUILT_ERROR_MESSAGE = "Unsupported operation: Iterator has already
  * .build();
  * // [...it] === [0,1,2,3,4,5,6,7]
  */
-const IteratorBuilder = (start = emptyIterator) => {
+const IteratorBuilder = (start = nil) => {
   /**
    * @template _T_
    * @type { Array<IteratorType<_T_> | _T_> }
@@ -80,11 +80,11 @@ const IteratorBuilder = (start = emptyIterator) => {
  * @constructor
  */
 const InternalIterator = (elements, currentIdx = 0) => {
-  let currentIterator = emptyIterator;
+  let currentIterator = nil;
 
   const next = () => {
     while (isIterable(elements[currentIdx])) {
-      if (currentIterator === emptyIterator) {
+      if (currentIterator === nil) {
         // process next iterator
         currentIterator = elements[currentIdx].copy();
       }
@@ -92,7 +92,7 @@ const InternalIterator = (elements, currentIdx = 0) => {
       const result = nextOf(currentIterator);
 
       if (result.done) {
-        currentIterator = emptyIterator;
+        currentIterator = nil;
         currentIdx++;
       } else {
         return result;

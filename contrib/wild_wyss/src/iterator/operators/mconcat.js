@@ -1,4 +1,4 @@
-import { reduce$, ConcatIterator, emptyIterator  } from "../iterator.js";
+import { reduce$, ConcatIterator, nil  } from "../iterator.js";
 
 export { mconcat }
 
@@ -23,5 +23,5 @@ const mconcat = iterator =>
    * @template _T_
    * @type { IteratorType<_T_> }
    */
-  reduce$((acc, cur) => ConcatIterator(acc)(cur), emptyIterator)(iterator);
+  reduce$((acc, cur) => ConcatIterator(acc)(cur), nil)(iterator);
 

@@ -1,6 +1,6 @@
 import {
   ArrayIterator,
-  emptyIterator,
+  nil,
   reverse$,
   cons,
   drop,
@@ -19,7 +19,7 @@ export { FocusRing }
  * @constructor
  */
 const FocusRing = nonEmptyIterator => FocusRingInternal(
-  emptyIterator,
+  nil,
   nonEmptyIterator.copy() // paranoid
 );
 
@@ -38,8 +38,8 @@ const FocusRingInternal = (pre, post) => {
     const currentFocus = head(post);
     const modifiedPost = drop(1)(post);
 
-    if (eq$(modifiedPost)(emptyIterator)) {
-      if (eq$(pre)(emptyIterator)) {
+    if (eq$(modifiedPost)(nil)) {
+      if (eq$(pre)(nil)) {
         // do nothing when only one element in list
         return FocusRingInternal(pre, post);
       }
@@ -57,7 +57,7 @@ const FocusRingInternal = (pre, post) => {
     let modifiedPost = post;
 
     if (isEmpty(pre)) {
-      modifiedPost = emptyIterator;
+      modifiedPost = nil;
       modifiedPre  = reverse$(post);
     }
 
