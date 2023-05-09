@@ -1,4 +1,6 @@
-export { Iterator }
+import {bind} from "../operators/bind.js";
+
+export { Iterator, IteratorPrototype }
 
 /**
  *
@@ -38,8 +40,22 @@ const Iterator = (value, incrementFunction, isDoneFunction) => {
    */
   const copy = () => Iterator(value, incrementFunction, isDoneFunction);
 
-  return {
+  const result = {
     [Symbol.iterator]: () => ({ next }),
     copy,
-  }
+  };
+  Object.setPrototypeOf(result, IteratorPrototype);
+  // TODO: move next and copy to prototype?
+
+  return result;
+};
+
+/**
+ * TODO: description
+ * @return { null }
+ * @constructor
+ */
+const IteratorPrototype = () => null;
+IteratorPrototype.and = function (bindFn) {
+  return bind(bindFn)(this);
 };

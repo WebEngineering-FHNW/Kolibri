@@ -55,4 +55,17 @@
  * @returns IteratorBuilderType<_T_>
  */
 
+/**
+ * @template _T_
+ * @typedef { IteratorType<_T_> & MonadType<_T_> } IteratorMonadType
+ *
+ */
 
+/**
+ * @template _T_
+ * @typedef MonadType
+ * @property { <_U_>
+ *                 (bindFn: (_T_) => MonadType<_U_>)
+ *              => MonadType<_U_>
+ *           } and
+ */

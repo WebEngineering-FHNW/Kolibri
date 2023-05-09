@@ -1,7 +1,6 @@
 import { TestSuite }       from "../../test/test.js";
 import { arrayEq }         from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Pair, fst, snd }  from "../../../../../docs/src/kolibri/stdlib.js";
-
 import {
   ArrayIterator,
   nil,
@@ -33,6 +32,7 @@ import {
   testSimple,
 } from "../util/testUtil.js";
 import {takeWithoutCopy} from "../util/util.js";
+import {Range} from "../../range/range.js";
 
 const iteratorSuite = TestSuite("IteratorOperators");
 
@@ -276,6 +276,11 @@ iteratorSuite.add("test empty: mconcat", assert => {
 iteratorSuite.add("test : mconcat", assert => {
   const concatenated = mconcat(ArrayIterator([nil]));
   assert.isTrue(arrayEq([])([...concatenated]));
+});
+
+iteratorSuite.add("test : and", assert => {
+  const result = Range(3).and(el => Range(el));
+  assert.isTrue(arrayEq([0, 0, 1, 0, 1, 2, 0, 1, 2, 3])([...result]));
 });
 
 prepareTestSuite();
