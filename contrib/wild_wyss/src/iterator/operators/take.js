@@ -1,4 +1,4 @@
-import { nextOf } from "../util/util.js";
+import { createIterator, nextOf } from "../util/util.js";
 
 export { take }
 
@@ -22,8 +22,8 @@ const take = count => iterator => {
    * @type { <_T_>
    *     (start: Number)
    *  => (count: Number)
-   *  => (iterator: IteratorType<_T_>)
-   *  => IteratorType<_T_>
+   *  => (iterator: IteratorMonadType<_T_>)
+   *  => IteratorMonadType<_T_>
    * }
    */
   const takeFactory = start => count => iterator => {
@@ -37,10 +37,10 @@ const take = count => iterator => {
       return { value: el.value, done };
     };
 
-    return {
-      [Symbol.iterator]: () => ({ next }),
-      copy: () => takeFactory(start)(count)(inner)
-    };
+    const copy = () => takeFactory(start)(count)(inner);
+    return createIterator(next, copy);
   };
+
   return takeFactory(0)(count)(iterator);
 };
+

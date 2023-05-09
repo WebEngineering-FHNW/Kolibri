@@ -1,4 +1,6 @@
-export { nextOf, takeWithoutCopy }
+import { IteratorPrototype } from "../constructors/iterator.js";
+
+export { nextOf, takeWithoutCopy, createIterator }
 
 /**
  * @function
@@ -29,3 +31,19 @@ const takeWithoutCopy = n => iterator => {
   return values;
 };
 
+/**
+ *
+ * @template _T_
+ * @param { () => IteratorResult<_T_, _T_> } next
+ * @param { () => IteratorType<_T_> } copy
+ * @returns {IteratorMonadType<_T_>}
+ */
+const createIterator = (next, copy) =>{
+  const result = {
+    [Symbol.iterator]: () => ({ next }),
+    copy
+  };
+
+  Object.setPrototypeOf(result, IteratorPrototype);
+  return /** @type IteratorMonadType */ result;
+};

@@ -1,4 +1,5 @@
-import {bind} from "../operators/bind.js";
+import { bind }           from "../operators/bind.js";
+import { createIterator } from "../util/util.js";
 
 export { Iterator, IteratorPrototype }
 
@@ -40,14 +41,7 @@ const Iterator = (value, incrementFunction, isDoneFunction) => {
    */
   const copy = () => Iterator(value, incrementFunction, isDoneFunction);
 
-  const result = {
-    [Symbol.iterator]: () => ({ next }),
-    copy,
-  };
-  Object.setPrototypeOf(result, IteratorPrototype);
-  // TODO: move next and copy to prototype?
-
-  return result;
+  return createIterator(next, copy);
 };
 
 /**
@@ -59,3 +53,4 @@ const IteratorPrototype = () => null;
 IteratorPrototype.and = function (bindFn) {
   return bind(bindFn)(this);
 };
+

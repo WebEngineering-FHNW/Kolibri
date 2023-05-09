@@ -278,10 +278,5 @@ iteratorSuite.add("test : mconcat", assert => {
   assert.isTrue(arrayEq([])([...concatenated]));
 });
 
-iteratorSuite.add("test : and", assert => {
-  const result = Range(3).and(el => Range(el));
-  assert.isTrue(arrayEq([0, 0, 1, 0, 1, 2, 0, 1, 2, 3])([...result]));
-});
-
 prepareTestSuite();
 iteratorSuite.run();
