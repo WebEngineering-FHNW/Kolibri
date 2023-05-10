@@ -20,16 +20,29 @@ const id = x => x;
  * @template _T_
  * @template _U_
  * @typedef IteratorTestConfigType
- * @property { () => IteratorType<_T_> } iterator
- * @property { String } name
- * @property { (_: *) => IteratorOperation? } operation
- * @property { *? } param
- * @property { Array<_U_> } expected
- * @property { (expected: * ) => (actual: * ) => Boolean? } evalFn
- * @property { Array<TestingFunction>? } excludedTests
+ * @property { String }                   name
+ * @property { () => IteratorType<_T_> }  iterator
+ * @property { Array<_U_> | _U_ }         expected
+ * @property { EvalCallback }             evalFn
+ * @property { Array<TestingFunction>? }  excludedTests
+ * @property { OperationCallback }        operation
+ * @property { *? }                       param
  */
 
+/**
+ * @template _T_
+ * @callback OperationCallback
+ * @type { (param: ?*) => (IteratorType<_T_> | _T_) }
+ */
 
+/**
+ * @callback EvalCallback
+ * @type {
+ *             (expected: *)
+ *          => (actual: *)
+ *          => Boolean
+ *      }
+ */
 
 /**
  *
@@ -137,11 +150,10 @@ const testCBNotCalledAfterDone = config => assert => {
  * @param { IteratorTestConfigType<_T_> } config
  * @returns IteratorTestConfigType<_U_>
  */
-
 const createTestConfig = config => ({
   ...config,
-  operation: config.operation === undefined ? () => id : config.operation,
-  evalFn : config.evalFn === undefined ? arrayEvaluation : config.evalFn
+  operation: config.operation === undefined ? () => id        : config.operation,
+  evalFn:    config.evalFn    === undefined ? arrayEvaluation : config.evalFn
 });
 
 
