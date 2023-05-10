@@ -1,4 +1,4 @@
-import { nextOf } from "../util/util.js";
+import {createIterator, nextOf} from "../util/util.js";
 
 export { zipWith }
 
@@ -13,7 +13,7 @@ export { zipWith }
  *             (zipper: BiFunction<_T_, _U_, _V_>)
  *          => (it1: IteratorType<_T_>)
  *          => (it2: IteratorType<_U_>)
- *          => IteratorType<_V_>
+ *          => IteratorMonadType<_V_>
  * }
  * @example
  * const it1 = Range(2);
@@ -48,8 +48,6 @@ const zipWith = zipper => it1 => it2 => {
   };
 
   const copy = () => zipWith(zipper)(inner1)(inner2);
-  return {
-    [Symbol.iterator]: () => ({ next }),
-    copy,
-  };
+
+  return createIterator(next, copy);
 };

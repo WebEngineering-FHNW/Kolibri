@@ -18,7 +18,7 @@ export { Iterator, IteratorPrototype }
  * @param   { _T_ }               value
  * @param   { (_T_) => _T_ }      incrementFunction
  * @param   { (_T_) => Boolean }  isDoneFunction - returns true if the iteration should stop
- * @returns { IteratorType<_T_> }
+ * @returns { IteratorMonadType<_T_> }
  * @constructor
  */
 const Iterator = (value, incrementFunction, isDoneFunction) => {

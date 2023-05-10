@@ -1,6 +1,16 @@
 import {TestSuite} from "../../test/test.js";
 import {arrayEq} from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import {ArrayIterator, ConcatIterator, Iterator, IteratorPrototype, nil,} from "../iterator.js"
+import {
+  ArrayIterator,
+  ConcatIterator,
+  Iterator,
+  IteratorPrototype,
+  nil,
+  PureIterator,
+  repeat,
+  take,
+  zipWith
+} from "../iterator.js"
 import {newIterator} from "../util/testUtil.js";
 import {Range} from "../../range/range.js";
 
@@ -71,7 +81,9 @@ iteratorSuite.add("test : and", assert => {
   assert.isTrue(arrayEq([0, 0, 1, 0, 1, 2, 0, 1, 2, 3])([...result]));
 });
 
+// TODO: Add to testing table
 iteratorSuite.add("test : prototype", assert => {
   assert.is(Object.getPrototypeOf(nil), IteratorPrototype);
 });
+
 iteratorSuite.run();
