@@ -7,6 +7,7 @@ import {
   Iterator,
   cons,
   cycle,
+  concat,
   drop,
   dropWhile,
   map,
@@ -46,6 +47,7 @@ const prepareTestSuite = () =>
     takeConfig,
     consConfig,
     cycleConfig,
+    concatConfig,
     retainAllConfig,
     rejectAllConfig,
     dropWhileConfig,
@@ -158,6 +160,14 @@ const dropConfig = createTestConfig({
   operation:  drop,
   param:      2,
   expected:   [2, 3, 4]
+});
+
+const concatConfig = createTestConfig({
+  name:      "concat",
+  iterator:  () => Range(3,4),
+  operation: concat,
+  param:     newIterator(2),
+  expected:  [0,1,2,3,4],
 });
 
 const reverse$Config = createTestConfig({

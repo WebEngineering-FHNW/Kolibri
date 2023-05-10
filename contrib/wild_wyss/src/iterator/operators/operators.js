@@ -11,6 +11,7 @@ export * from "./retainAll.js";
 export * from "./mconcat.js";
 export * from "./cycle.js";
 export * from "./map.js";
-export * from "../constructors/repeat.js";
 export * from "./bind.js";
 export * from "./reverse.js";
+export * from "./concat.js";
+

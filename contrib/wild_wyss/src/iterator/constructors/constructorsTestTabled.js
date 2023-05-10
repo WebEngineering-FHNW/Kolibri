@@ -12,7 +12,6 @@ import {
   Iterator,
   ArrayIterator,
   TupleIterator,
-  ConcatIterator,
   StackIterator,
   nil,
   PureIterator,
@@ -26,7 +25,6 @@ import {
 
 import {
   createTestConfig,
-  newIterator,
   testCopy,
   testCopyAfterConsumption,
   testSimple,
@@ -39,7 +37,6 @@ const prepareTestSuite = () => {
     iteratorConfig,
     arrayIteratorConfig,
     tupleIteratorConfig,
-    concatIteratorConfig,
     stackIteratorConfig,
     nilConfig,
     pureIteratorConfig,
@@ -78,15 +75,6 @@ const tupleIteratorConfig = createTestConfig({
   expected:  [0,1,2,3,4],
 });
 
-const concatIteratorConfig = createTestConfig({
-  name:      "ConcatIterator",
-  iterator:  () => {
-    const it1 = newIterator(2);
-    const it2 = Range(3,4);
-    return ConcatIterator(it1)(it2);
-  },
-  expected:  [0,1,2,3,4],
-});
 
 const stackIteratorConfig = createTestConfig({
   name:     "StackIterator",

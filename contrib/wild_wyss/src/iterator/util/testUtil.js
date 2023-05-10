@@ -137,6 +137,7 @@ const testCBNotCalledAfterDone = config => assert => {
  * @param { IteratorTestConfigType<_T_> } config
  * @returns IteratorTestConfigType<_U_>
  */
+
 const createTestConfig = config => ({
   ...config,
   operation: config.operation === undefined ? () => id : config.operation,
