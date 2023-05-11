@@ -1,4 +1,4 @@
-import { take, repeat } from "../iterator.js";
+import { take, repeat } from "../../iterator.js";
 
 export { replicate }
 

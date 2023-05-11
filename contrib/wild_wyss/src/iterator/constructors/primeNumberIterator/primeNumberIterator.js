@@ -5,12 +5,12 @@ import {
   Iterator,
   pipe,
   zipWith
-}                         from "../iterator.js";
-import { nextOf }         from "../util/util.js";
-import { Range }          from "../../range/range.js";
-import { Just, Nothing }  from "../../../../../docs/src/kolibri/stdlib.js";
-import { choiceMaybe }    from "../../stdlib/stdlib.js";
-import { uncurry }        from "../../../../../docs/src/kolibri/lambda/church.js";
+}                         from "../../iterator.js";
+import { nextOf }         from "../../util/util.js";
+import { Range }          from "../../../range/range.js";
+import { Just, Nothing }  from "../../../../../../docs/src/kolibri/stdlib.js";
+import { choiceMaybe }    from "../../../stdlib/stdlib.js";
+import { uncurry }        from "../../../../../../docs/src/kolibri/lambda/church.js";
 
 export { PrimeNumberIterator }
 

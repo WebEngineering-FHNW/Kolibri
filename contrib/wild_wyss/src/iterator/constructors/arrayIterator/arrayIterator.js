@@ -1,4 +1,4 @@
-import { map, Iterator } from "../iterator.js";
+import { map, Iterator } from "../../iterator.js";
 
 export { ArrayIterator }
 /**

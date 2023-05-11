@@ -1,6 +1,6 @@
-import { pop, emptyStack, stackEquals } from "../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import { fst, snd }                     from "../../../../../docs/src/kolibri/stdlib.js";
-import { convertToJsBool }              from "../../logger/lamdaCalculus.js";
+import { pop, emptyStack, stackEquals } from "../../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import { fst, snd }                     from "../../../../../../docs/src/kolibri/stdlib.js";
+import { convertToJsBool }              from "../../../logger/lamdaCalculus.js";
 
 export { StackIterator }
 

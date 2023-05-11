@@ -1,5 +1,5 @@
-import { bind }           from "../operators/bind/bind.js";
-import { createIterator } from "../util/util.js";
+import { bind }           from "../../operators/bind/bind.js";
+import { createIterator } from "../../util/util.js";
 
 export { Iterator, IteratorPrototype }
 

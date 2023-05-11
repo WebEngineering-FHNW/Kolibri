@@ -1,5 +1,5 @@
 import { mconcat }       from "../mconcat/mconcat.js";
-import { ArrayIterator } from "../../constructors/arrayIterator.js";
+import { ArrayIterator } from "../../constructors/arrayIterator/arrayIterator.js";
 
 export { concat }
 
