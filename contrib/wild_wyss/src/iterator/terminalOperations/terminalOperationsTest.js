@@ -38,7 +38,7 @@ const headConfig = createTestConfig({
   name:      "head",
   iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
   operation: () => head,
-  evalFn:    expected => actual => expected === actual ,
+  evalFn:    expected => actual => expected === actual,
   expected:  0
 });
 

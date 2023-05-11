@@ -1,4 +1,4 @@
-import { IteratorPrototype } from "../constructors/iterator.js";
+import { IteratorPrototype } from "../constructors/iterator/iterator.js";
 
 export { nextOf, takeWithoutCopy, createIterator }
 
