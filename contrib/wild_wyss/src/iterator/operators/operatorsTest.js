@@ -14,3 +14,4 @@ import "./take/takeTest.js";
 import "./takeWhile/takeWhileTest.js";
 import "./zip/zipTest.js";
 import "./zipWith/zipWithTest.js";
+import "./snoc/snocTest.js";

@@ -9,10 +9,12 @@ export { cons }
  * if you want to add many elements (more than 100).
  * @function
  * @template _T_
+ * @template _U_
  * @pure iterator will be copied defensively
  * @type {
  *            (element: _T_)
- *         => IteratorOperation<_T_>
+           => (iterator: IteratorType<_U_>)
+ *         => IteratorType<_T_>
  *       }
  * @example
  * const it       = Iterator(0, inc, stop);
@@ -33,6 +35,6 @@ const cons = element => iterator => {
 
   return {
     [Symbol.iterator]: () => ({ next }),
-    copy: () => cons(value)(inner)
+    copy: () => cons(value)(inner),
   }
 };
