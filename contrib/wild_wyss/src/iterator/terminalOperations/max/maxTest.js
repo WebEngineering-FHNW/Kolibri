@@ -42,7 +42,19 @@ testSuite.add("test max on string: should return the longest string", assert => 
   assert.is(result, "aa");
 });
 
-testSuite.add("", assert => {
+testSuite.add("test largest element at the end of the iterator", assert => {
+  const iterator = ArrayIterator([4,3,2,5,1,0,9]);
+  const result   = max$(iterator);
+  assert.is(result, 9);
+});
+
+testSuite.add("test largest element at the start of the iterator", assert => {
+  const iterator = ArrayIterator([9,4,3,2,5,1,0]);
+  const result   = max$(iterator);
+  assert.is(result, 9);
+});
+
+testSuite.add("test multiple of equal values", assert => {
   const values = replicate(4)(7);
   const result = max$(values);
   assert.is(result, 7);
