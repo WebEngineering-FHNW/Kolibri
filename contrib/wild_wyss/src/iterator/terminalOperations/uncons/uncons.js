@@ -1,5 +1,5 @@
-import { Pair }    from "../../../../../docs/src/kolibri/stdlib.js";
-import { nextOf }  from "../util/util.js";
+import { Pair }    from "../../../../../../docs/src/kolibri/stdlib.js";
+import { nextOf }  from "../../util/util.js";
 
 export { uncons }
 
