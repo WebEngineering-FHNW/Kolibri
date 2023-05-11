@@ -1,8 +1,8 @@
-import { TestSuite }            from "../../../test/test.js";
-import { createTestConfig }     from "../../util/testUtil.js";
-import { takeWithoutCopy  }     from "../../util/util.js";
-import { arrayEq }              from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { FibonacciIterator }    from "./fibonacciIterator.js";
+import { TestSuite }         from "../../../test/test.js";
+import { createTestConfig }  from "../../util/testUtil.js";
+import { takeWithoutCopy  }  from "../../util/util.js";
+import { arrayEq }           from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { FibonacciIterator } from "./fibonacciIterator.js";
 import {
   addToTestingTable,
   TESTS

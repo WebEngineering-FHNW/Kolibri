@@ -1,10 +1,7 @@
-import { TestSuite }           from "../../../test/test.js";
-import { createTestConfig }    from "../../util/testUtil.js";
-import { PureIterator }        from "./pureIterator.js";
-import {
-  addToTestingTable,
-  TESTS
-} from "../../util/testingTable.js";
+import { TestSuite }              from "../../../test/test.js";
+import { createTestConfig }       from "../../util/testUtil.js";
+import { PureIterator }           from "./pureIterator.js";
+import {addToTestingTable, TESTS} from "../../util/testingTable.js";
 
 const testSuite = TestSuite("Iterator: Constructor PureIterator");
 

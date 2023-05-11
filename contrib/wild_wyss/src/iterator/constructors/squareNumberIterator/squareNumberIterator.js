@@ -1,5 +1,5 @@
-import { map, Iterator } from "../../iterator.js";
-import {nextOf} from "../../util/util.js";
+import { Iterator } from "../../iterator.js";
+import { nextOf }   from "../../util/util.js";
 
 export { SquareNumberIterator }
 /**

@@ -1,12 +1,8 @@
-import { TestSuite }                     from "../../../test/test.js";
-import { createTestConfig, newIterator } from "../../util/testUtil.js";
-import { Tuple }                         from "../../../../../p6_haefliger_misic/branch-projector-pattern/church/rock.js";
-import { TupleIterator }                 from "./tupleIterator.js";
-
-import {
-  addToTestingTable,
-  TESTS
-} from "../../util/testingTable.js";
+import { TestSuite }                from "../../../test/test.js";
+import { createTestConfig }         from "../../util/testUtil.js";
+import { Tuple }                    from "../../../../../p6_haefliger_misic/branch-projector-pattern/church/rock.js";
+import { TupleIterator }            from "./tupleIterator.js";
+import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 
 const testSuite = TestSuite("Iterator: Constructor TupleIterator");
 

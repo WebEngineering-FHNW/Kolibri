@@ -1,4 +1,4 @@
-import { Iterator } from "../iterator/iterator.js";
+import { Iterator }       from "../iterator/iterator.js";
 import { createIterator } from "../../util/util.js";
 
 export { PureIterator }

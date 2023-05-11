@@ -1,11 +1,13 @@
 import { TestSuite }         from "../../../test/test.js";
 import { createTestConfig }  from "../../util/testUtil.js";
 import { ArrayIterator }     from "./arrayIterator.js";
+import { arrayEq }           from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { nil }               from "../nil/nil.js";
+import { eq$ }               from "../../terminalOperations/eq/eq.js";
 import {
   addToTestingTable,
   TESTS
 } from "../../util/testingTable.js";
-import {arrayEq} from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 const testSuite = TestSuite("Iterator: Constructor ArrayIterator");
 
@@ -18,12 +20,19 @@ addToTestingTable(testSuite)(
   })
 );
 
-testSuite.add("test iterate on copy: ArrayIterator", assert => {
+testSuite.add("test iterate on copy", assert => {
   const arr = [1,2,3];
   const arrayIterator = ArrayIterator(arr);
   arr.push(4);
 
   assert.isTrue(arrayEq([1,2,3])([...arrayIterator]));
+});
+
+testSuite.add("test empty array", assert => {
+  const arr = [];
+  const arrayIterator = ArrayIterator(arr);
+
+  assert.isTrue(eq$(arrayIterator)(nil));
 });
 
 testSuite.run();
