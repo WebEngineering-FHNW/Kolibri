@@ -77,13 +77,12 @@ iteratorSuite.add("test empty: ConcatIterator", assert => {
 
 
 iteratorSuite.add("test : and", assert => {
-  const result = Range(3).and(el => Range(el));
+  const result = Range(3).and(Range);
   assert.isTrue(arrayEq([0, 0, 1, 0, 1, 2, 0, 1, 2, 3])([...result]));
 });
 
 // TODO: Add to testing table
-iteratorSuite.add("test : prototype", assert => {
-  assert.is(Object.getPrototypeOf(nil), IteratorPrototype);
-});
+iteratorSuite.add("test : prototype", assert =>
+  assert.is(Object.getPrototypeOf(nil), IteratorPrototype));
 
 iteratorSuite.run();

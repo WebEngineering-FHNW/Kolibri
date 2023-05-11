@@ -11,6 +11,7 @@
  * @template _T_
  * @property { () => { next: () => IteratorResult<_T_, _T_> } } [Symbol.iterator] - returns the iterator for this object.
  * @property { () => IteratorType<_T_> }                        copy - creates a copy of this {@link IteratorType}
+ * @property { <_U_>(bindFn: (_T_) => IteratorType<_U_>) => IteratorType<_U_> } and
  */
 
 /**
@@ -55,17 +56,13 @@
  * @returns IteratorBuilderType<_T_>
  */
 
-/**
- * @template _T_
- * @typedef { IteratorType<_T_> & MonadType<_T_> } IteratorMonadType
- *
- */
 
 /**
- * @template _T_
- * @typedef MonadType
- * @property { <_U_>
+ * Defines a Monad.
+ * @typedef   MonadType
+ * @template  _T_
+ * @property  { <_U_>
  *                 (bindFn: (_T_) => MonadType<_U_>)
  *              => MonadType<_U_>
- *           } and
+ *            } and
  */

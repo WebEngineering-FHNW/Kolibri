@@ -22,8 +22,8 @@ const take = count => iterator => {
    * @type { <_T_>
    *     (start: Number)
    *  => (count: Number)
-   *  => (iterator: IteratorMonadType<_T_>)
-   *  => IteratorMonadType<_T_>
+   *  => (iterator: IteratorType<_T_>)
+   *  => IteratorType<_T_>
    * }
    */
   const takeFactory = start => count => iterator => {

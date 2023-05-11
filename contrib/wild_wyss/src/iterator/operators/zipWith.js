@@ -13,7 +13,7 @@ export { zipWith }
  *             (zipper: BiFunction<_T_, _U_, _V_>)
  *          => (it1: IteratorType<_T_>)
  *          => (it2: IteratorType<_U_>)
- *          => IteratorMonadType<_V_>
+ *          => IteratorType<_V_>
  * }
  * @example
  * const it1 = Range(2);
@@ -31,6 +31,11 @@ const zipWith = zipper => it1 => it2 => {
    * */
   let zippedValue;
 
+  /**
+   *
+   * @template _V_
+   * @returns { IteratorResult<_V_,_V_> }
+   */
   const next = () => {
     const { done: done1, value: value1 } = nextOf(inner1);
     const { done: done2, value: value2 } = nextOf(inner2);
@@ -38,11 +43,9 @@ const zipWith = zipper => it1 => it2 => {
 
     if (!done) zippedValue = zipper(value1, value2);
 
-    return {
+
+    return /** @type IteratorResult */{
       done:  done,
-      /**
-       * @template _V_
-       * @type _V_  */
       value: zippedValue
     };
   };

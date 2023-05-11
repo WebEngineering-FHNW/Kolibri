@@ -10,9 +10,9 @@ export { concat }
  * @pure it1 and it2 will be copied defensively
  * @haskell (++) :: [a] -> [a] -> [a]
  * @type {
- *             (it1: IteratorMonadType<_T_>)
- *          => (it2: IteratorMonadType<_T_>)
- *          => IteratorMonadType<_T_>
+ *             (it1: IteratorType<_T_>)
+ *          => (it2: IteratorType<_T_>)
+ *          => IteratorType<_T_>
  *       }
  * @constructor
  * @example

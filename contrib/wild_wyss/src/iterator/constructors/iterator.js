@@ -18,7 +18,7 @@ export { Iterator, IteratorPrototype }
  * @param   { _T_ }               value
  * @param   { (_T_) => _T_ }      incrementFunction
  * @param   { (_T_) => Boolean }  isDoneFunction - returns true if the iteration should stop
- * @returns { IteratorMonadType<_T_> }
+ * @returns { IteratorType<_T_> }
  * @constructor
  */
 const Iterator = (value, incrementFunction, isDoneFunction) => {
@@ -37,7 +37,7 @@ const Iterator = (value, incrementFunction, isDoneFunction) => {
   /**
    * @template _T_
    * Returns a copy of this Iterator
-   * @returns {IteratorType<_T_>}
+   * @returns { IteratorType<_T_> }
    */
   const copy = () => Iterator(value, incrementFunction, isDoneFunction);
 
@@ -47,9 +47,18 @@ const Iterator = (value, incrementFunction, isDoneFunction) => {
 /**
  * TODO: description
  * @return { null }
+ * @template _T_,_U_
+ * @property { IteratorAnd<_T_,_U_> } and
  * @constructor
  */
 const IteratorPrototype = () => null;
+
+/**
+ * @typedef IteratorAnd
+ * @template _T_, _U_
+ * @param { (_T_) => IteratorType<_U_> } bindFn
+ * @returns { IteratorType<_U_> }
+ */
 IteratorPrototype.and = function (bindFn) {
   return bind(bindFn)(this);
 };
