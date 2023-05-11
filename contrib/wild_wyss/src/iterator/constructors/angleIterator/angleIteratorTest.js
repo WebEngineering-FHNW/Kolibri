@@ -5,6 +5,7 @@ import {
   addToTestingTable,
   TESTS
 } from "../../util/testingTable.js";
+import {IteratorPrototype} from "../iterator/iterator.js";
 
 const testSuite = TestSuite("Iterator: Constructor AngleIterator");
 
@@ -16,5 +17,9 @@ addToTestingTable(testSuite)(
     excludedTests: [TESTS.TEST_PURITY, TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
+// TODO: Remove this test after generalization
+testSuite.add("test : prototype", assert => {
+  assert.is(Object.getPrototypeOf(AngleIterator(3)), IteratorPrototype);
+});
 
 testSuite.run();

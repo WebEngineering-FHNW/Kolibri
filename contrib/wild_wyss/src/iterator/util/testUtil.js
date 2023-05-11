@@ -1,4 +1,4 @@
-import { Iterator }         from "../iterator.js";
+import {AngleIterator, Iterator, IteratorPrototype} from "../iterator.js";
 import { arrayEq }          from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 export {
@@ -9,7 +9,8 @@ export {
   testCopyAfterConsumption,
   testPurity,
   testCopy,
-  testCBNotCalledAfterDone
+  testCBNotCalledAfterDone,
+  testPrototype,
 }
 
 const id = x => x;
@@ -22,9 +23,9 @@ const id = x => x;
  * @property { String }                   name
  * @property { () => IteratorType<_T_> }  iterator
  * @property { Array<_U_> | _U_ }         expected
- * @property { EvalCallback? }             evalFn
+ * @property { EvalCallback? }            evalFn
  * @property { Array<TestingFunction>? }  excludedTests
- * @property { OperationCallback? }        operation
+ * @property { OperationCallback? }       operation
  * @property { *? }                       param
  */
 
@@ -139,6 +140,10 @@ const testCBNotCalledAfterDone = config => assert => {
 
   for (const _ of operated) { /* exhausting */ }
   assert.is(called, false);
+};
+
+const testPrototype = config => assert => {
+  assert.is(Object.getPrototypeOf(config.iterator()), IteratorPrototype);
 };
 
 /**

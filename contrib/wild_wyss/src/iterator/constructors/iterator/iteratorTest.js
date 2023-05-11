@@ -1,13 +1,13 @@
-import { TestSuite }         from "../../../test/test.js";
-import { createTestConfig }  from "../../util/testUtil.js";
-import {Iterator, IteratorPrototype} from "./iterator.js";
+import { TestSuite }                   from "../../../test/test.js";
+import { createTestConfig }            from "../../util/testUtil.js";
+import { Iterator, IteratorPrototype } from "./iterator.js";
+import { Range }                       from "../../../range/range.js";
+import { arrayEq }                     from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { nil }                         from "../nil/nil.js";
 import {
   addToTestingTable,
   TESTS
 } from "../../util/testingTable.js";
-import {Range} from "../../../range/range.js";
-import {arrayEq} from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import {nil} from "../nil/nil.js";
 
 const testSuite = TestSuite("Iterator: Constructor Iterator");
 
