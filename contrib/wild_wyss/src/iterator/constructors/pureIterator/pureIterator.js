@@ -1,4 +1,5 @@
-import {Iterator} from "../iterator/iterator.js";
+import { Iterator } from "../iterator/iterator.js";
+import { createIterator } from "../../util/util.js";
 
 export { PureIterator }
 
@@ -17,12 +18,10 @@ export { PureIterator }
  */
 const PureIterator = value => {
     const PureIteratorFactory = done => {
-        const inner =  Iterator(value, _ => done = true, _ => done);
+        const inner = Iterator(value, _ => done = true, _ => done);
 
-        return {
-            [Symbol.iterator]: inner[Symbol.iterator] ,
-            copy: () => PureIteratorFactory(done)
-        }
+        const copy = () => PureIteratorFactory(done);
+        return createIterator(inner[Symbol.iterator]().next, copy);
     };
     return PureIteratorFactory(false);
 };

@@ -3,7 +3,7 @@ import { createIterator, nextOf } from "../../util/util.js";
 export { mconcat }
 
 /**
- * Flatten an {@link IteratorMonadType} of {@link IteratorMonadType IteratorMonadType's}.
+ * Flatten an {@link IteratorType} of {@link IteratorType Iteratortypes}.
  *
  * _Note:_
  * Iterator passed to {@link mconcat} is processed lazily.
@@ -13,8 +13,8 @@ export { mconcat }
  * @function
  * @template _T_
  * @pure iterator and sub iterators will be copied defensively
- * @param { IteratorMonadType<IteratorMonadType<_T_>> } iterator -
- * @returns IteratorMonadType<_T_>
+ * @param { IteratorType<IteratorType<_T_>> } iterator -
+ * @returns IteratorType<_T_>
  * @example
  * const ranges = map(x => Range(x))(Range(2));
  * const result = mconcat(ranges);
