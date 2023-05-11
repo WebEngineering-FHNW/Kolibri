@@ -1,6 +1,5 @@
 import { Iterator }         from "../iterator.js";
 import { arrayEq }          from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { takeWithoutCopy }  from "./util.js";
 
 export {
   createTestConfig,
