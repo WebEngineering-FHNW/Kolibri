@@ -13,7 +13,7 @@ export { cycle }
  * const it     = Range(2);
  * const cycled = cycle(it);
  * console.log(take(6)(cycled));
- * // prints: 0, 1, 2, 0, 1, 2
+ * // => Logs: 0, 1, 2, 0, 1, 2
  */
 const cycle = iterator => {
 

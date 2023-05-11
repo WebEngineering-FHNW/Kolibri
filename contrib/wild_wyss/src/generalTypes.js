@@ -57,3 +57,13 @@
  * @param   { _A_ } value
  * @returns { boolean }
  */
+
+/**
+ * A callback which takes two argument of type {@link _A_} and returns a boolean.
+ * @template _A_
+ * @template _B_
+ * @callback BiPredicate
+ * @param   { _A_ } value1
+ * @param   { _B_ } value2
+ * @returns { boolean }
+ */
