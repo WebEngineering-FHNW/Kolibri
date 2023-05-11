@@ -40,6 +40,7 @@ const TESTS = {
   TEST_CB_NOT_CALLED_AFTER_DONE: 'TEST_CB_NOT_CALLED_AFTER_DONE',
 };
 
+
 const testingFunctions = [];
 testingFunctions.push({ name: TESTS.TEST_SIMPLE                  , test: testSimple});
 testingFunctions.push({ name: TESTS.TEST_COPY                    , test: testCopy});

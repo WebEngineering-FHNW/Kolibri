@@ -1,5 +1,5 @@
-import {AngleIterator, Iterator, IteratorPrototype} from "../iterator.js";
-import { arrayEq }          from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { Iterator, IteratorPrototype} from "../iterator.js";
+import { arrayEq }                    from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 export {
   createTestConfig,
@@ -142,9 +142,17 @@ const testCBNotCalledAfterDone = config => assert => {
   assert.is(called, false);
 };
 
-const testPrototype = config => assert => {
+/**
+ * Tests, if {@link IteratorPrototype} is set on the {@link IteratorType} under test.
+ *
+ * @type {
+ *         (config: IteratorTestConfigType)
+ *      => (assert: any)
+ *      => void
+ * }
+ */
+const testPrototype = config => assert =>
   assert.is(Object.getPrototypeOf(config.iterator()), IteratorPrototype);
-};
 
 /**
  * EvalFn will be set to {@link arrayEq} if it has not been defined
