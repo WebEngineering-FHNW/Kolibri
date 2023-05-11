@@ -29,3 +29,15 @@ addToTestingTable(testSuite)(
     }
   })
 );
+
+testSuite.add("test advanced case: zip one iterator is shorter", assert => {
+  const it1 = newIterator(UPPER_ITERATOR_BOUNDARY);
+  const it2 = newIterator(2);
+  const zipped1 = zip(it2)(it1); // first iterator is shorter
+  const zipped2 = zip(it1)(it2); // second iterator is shorter
+
+  assert.is([...zipped1].length, 3);
+  assert.is([...zipped2].length, 3);
+});
+
+testSuite.run();

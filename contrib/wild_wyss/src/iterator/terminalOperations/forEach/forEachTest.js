@@ -41,3 +41,5 @@ const forEach$Config = (() => {
 })();
 
 addToTestingTable(testSuite)(forEach$Config);
+
+testSuite.run();

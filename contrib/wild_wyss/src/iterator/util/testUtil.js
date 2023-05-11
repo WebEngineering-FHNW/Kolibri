@@ -151,8 +151,9 @@ const testCBNotCalledAfterDone = config => assert => {
  */
 const createTestConfig = config => ({
   ...config,
-  operation: config.operation === undefined ? () => id        : config.operation,
-  evalFn:    config.evalFn    === undefined ? arrayEvaluation : config.evalFn
+  operation:     config.operation     === undefined ? () => id        : config.operation,
+  evalFn:        config.evalFn        === undefined ? arrayEvaluation : config.evalFn,
+  excludedTests: config.excludedTests === undefined ? []              : config.excludedTests,
 });
 
 

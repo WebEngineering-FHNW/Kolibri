@@ -31,3 +31,11 @@ const eq$Config = (() => {
 })();
 
 addToTestingTable(testSuite)(eq$Config);
+
+testSuite.add("test typical case: eq$ should return false", assert => {
+  const it1 = newIterator(2);
+  const it2 = newIterator(4);
+  assert.is(eq$(it1)(it2), false);
+});
+
+testSuite.run();

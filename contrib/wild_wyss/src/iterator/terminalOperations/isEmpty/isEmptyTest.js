@@ -24,3 +24,11 @@ addToTestingTable(testSuite)(
     ]
   })
 );
+
+testSuite.add("test typical case: isEmpty ist not empty", assert => {
+  const iterator = newIterator(4);
+  const result   = isEmpty(iterator);
+  assert.is(result, false);
+});
+
+testSuite.run();

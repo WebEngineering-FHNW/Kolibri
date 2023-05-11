@@ -1,7 +1,8 @@
-import { TestSuite }        from "../../../test/test.js";
-import { createTestConfig } from "../../util/testUtil.js";
-import { Tuple }            from "../../../../../p6_haefliger_misic/branch-projector-pattern/church/rock.js";
-import { TupleIterator }    from "./tupleIterator.js";
+import { TestSuite }                     from "../../../test/test.js";
+import { createTestConfig, newIterator } from "../../util/testUtil.js";
+import { Tuple }                         from "../../../../../p6_haefliger_misic/branch-projector-pattern/church/rock.js";
+import { TupleIterator }                 from "./tupleIterator.js";
+
 import {
   addToTestingTable,
   TESTS
@@ -21,3 +22,5 @@ addToTestingTable(testSuite)(
     excludedTests: [TESTS.TEST_PURITY, TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
+
+testSuite.run();

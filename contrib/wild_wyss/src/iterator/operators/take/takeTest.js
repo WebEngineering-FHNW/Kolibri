@@ -18,3 +18,5 @@ addToTestingTable(testSuite)(
     expected:   [0, 1]
   })
 );
+
+testSuite.run();

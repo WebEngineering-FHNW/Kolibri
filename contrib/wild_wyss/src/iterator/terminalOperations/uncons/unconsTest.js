@@ -27,3 +27,5 @@ addToTestingTable(testSuite)(
     ]
   })
 );
+
+testSuite.run();

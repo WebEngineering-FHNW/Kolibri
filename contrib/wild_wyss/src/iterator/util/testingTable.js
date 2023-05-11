@@ -51,14 +51,9 @@ testingFunctions.push({ name: TESTS.TEST_CB_NOT_CALLED_AFTER_DONE, test: testCBN
  * }
  */
 const addToTestingTable = testSuite => config => {
-  let { excludedTests } = config;
-  excludedTests = excludedTests ?? [];
+  const { excludedTests } = config;
 
-  console.log(excludedTests)
-  console.dir(config)
   testingFunctions
     .filter (({ name })        => !excludedTests.includes(name))
     .forEach(({ name, test })  => testSuite.add(`${name}: ${config.name}`, test(config)));
-
-  testSuite.run();
 };

@@ -18,3 +18,24 @@ addToTestingTable(testSuite)(
     expected:   [0, 2, 4, 6, 8]
   })
 );
+
+testSuite.add("test advanced case: zipWith one iterator is shorter", assert => {
+  let iterationCount = 0;
+
+  const it1 = newIterator(UPPER_ITERATOR_BOUNDARY);
+  const it2 = newIterator(2);
+  const zipper = (i, j) => {
+    iterationCount++;
+    return i + j;
+  };
+  const zipped1 = zipWith(zipper)(it2)(it1); // first iterator is shorter
+  const zipped2 = zipWith(zipper)(it1)(it2); // second iterator is shorter
+
+  for (const _ of zipped1) { /* Exhausting*/ }
+  assert.is(iterationCount, 3);
+
+  for (const _ of zipped2) { /* Exhausting*/ }
+  assert.is(iterationCount, 6);
+});
+
+testSuite.run();

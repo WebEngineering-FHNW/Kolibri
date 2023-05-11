@@ -23,3 +23,11 @@ addToTestingTable(testSuite)(
     ]
   })
 );
+
+testSuite.add("test advanced case: head of empty iterator", assert => {
+  const iterator = newIterator(4);
+  for (const iteratorElement of iterator) { /* exhaust iterator */ }
+  assert.is(head(iterator), undefined);
+});
+
+testSuite.run();
