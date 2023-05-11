@@ -7,14 +7,14 @@ import {
   UPPER_ITERATOR_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: Operation reverse");
+const testSuite = TestSuite("Iterator: Operation reverse$");
 
 addToTestingTable(testSuite)(
   createTestConfig({
-    name:       "reverse$",
-    iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
-    operation:  () => reverse$,
-    expected:   [4, 3, 2, 1, 0]
+    name:      "reverse$",
+    iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
+    operation: () => reverse$,
+    expected:  [4, 3, 2, 1, 0]
   })
 );
 
