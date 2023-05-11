@@ -1,4 +1,4 @@
-import {map, mconcat } from "../iterator.js";
+import { map, mconcat } from "../../iterator.js";
 
 export { bind }
 

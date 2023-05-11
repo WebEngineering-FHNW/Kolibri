@@ -1,4 +1,4 @@
-import { retainAll } from "../iterator.js";
+import { retainAll } from "../../iterator.js";
 
 export { rejectAll }
 

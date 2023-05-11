@@ -23,7 +23,7 @@ const id = x => x;
  * @property { String }                   name
  * @property { () => IteratorType<_T_> }  iterator
  * @property { Array<_U_> | _U_ }         expected
- * @property { EvalCallback }             evalFn
+ * @property { EvalCallback? }             evalFn
  * @property { Array<TestingFunction>? }  excludedTests
  * @property { OperationCallback }        operation
  * @property { *? }                       param
