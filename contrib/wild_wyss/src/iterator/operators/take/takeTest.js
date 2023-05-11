@@ -10,11 +10,11 @@ import {
 const testSuite = TestSuite("Iterator: Operation take");
 
 addToTestingTable(testSuite)(
-createTestConfig({
-  name:       "take",
-  iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
-  operation:  take,
-  param:      2,
-  expected:   [0, 1]
-})
+  createTestConfig({
+    name:       "take",
+    iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
+    operation:  take,
+    param:      2,
+    expected:   [0, 1]
+  })
 );
