@@ -1,5 +1,5 @@
-import { Iterator, IteratorPrototype} from "../iterator.js";
-import { arrayEq }                    from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { Iterator, IteratorPrototype } from "../iterator.js";
+import { arrayEq }  from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 export {
   createTestConfig,
