@@ -59,10 +59,17 @@
 
 /**
  * Defines a Monad.
- * @typedef   MonadType
  * @template  _T_
- * @property  { <_U_>
- *                 (bindFn: (_T_) => MonadType<_U_>)
- *              => MonadType<_U_>
- *            } and
+ * @typedef { {and:  <_U_> (bindFn: (_T_) => MonadType<_U_>) => MonadType<_U_> } & ApplicativeType<_T_> } MonadType
+ */
+
+/**
+ * @typedef { {pure: (_T_) => ApplicativeType<_T_>} & FunctorType<_T_>} ApplicativeType
+ * @template _T_
+ */
+
+/**
+ * @typedef FunctorType
+ * @template _T_
+ * @property { <_U_> (f: (_T_) => _U_) => FunctorType<_U_> } fmap
  */

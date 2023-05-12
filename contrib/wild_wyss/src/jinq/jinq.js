@@ -41,7 +41,7 @@ const from = jinq;
 const join = monad1 => monad2 => {
   const processed = monad1.and(x =>
     monad2.and(y =>
-      PureIterator(Pair(x)(y))
+      monad.pure(Pair(x)(y))
     )
   );
   return jinq(processed)
@@ -55,7 +55,7 @@ const join = monad1 => monad2 => {
  * }
  */
 const where = monad => predicate => {
-  const processed = monad.and(a => predicate(a) ? PureIterator(a) : nil);
+  const processed = monad.and(a => predicate(a) ? monad.pure(a) : monad.mempty);
   return jinq(processed);
 };
 
@@ -67,6 +67,6 @@ const where = monad => predicate => {
  * }
  */
 const select = monad => mapper => {
-  const processed = map(mapper)(monad);
+  const processed = monad.fmap(mapper);
   return jinq(processed) ;
 };
