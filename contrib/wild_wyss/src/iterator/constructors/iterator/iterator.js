@@ -1,5 +1,7 @@
-import { bind }           from "../../operators/bind/bind.js";
 import { createIterator } from "../../util/util.js";
+import {bind} from "../../operators/bind/bind.js";
+import {map} from "../../operators/map/map.js"
+import {PureIterator} from "../pureIterator/pureIterator.js";
 
 export { Iterator, IteratorPrototype }
 
@@ -63,3 +65,9 @@ IteratorPrototype.and = function (bindFn) {
   return bind(bindFn)(this);
 };
 
+IteratorPrototype.fmap = function (mapper) {
+  return map(mapper)(this);
+};
+
+IteratorPrototype.pure = val => PureIterator(val);
+IteratorPrototype.empty = () => Iterator(undefined, _ => undefined, _ => true);

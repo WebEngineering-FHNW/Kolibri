@@ -38,7 +38,7 @@ const takeWithoutCopy = n => iterator => {
  * @param { () => IteratorType<_T_> } copy
  * @returns { IteratorType<_T_> }
  */
-const createIterator = (next, copy) =>{
+const createIterator = (next, copy) => {
   const result = {
     [Symbol.iterator]: () => ({ next }),
     copy

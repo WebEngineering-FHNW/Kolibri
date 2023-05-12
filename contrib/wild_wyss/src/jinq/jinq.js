@@ -50,7 +50,7 @@ const join = monad1 => monad2 => {
  * }
  */
 const where = monad => predicate => {
-  const processed = monad.and(a => predicate(a) ? monad.pure(a) : monad.empty);
+  const processed = monad.and(a => predicate(a) ? monad.pure(a) : monad.empty());
   return jinq(processed);
 };
 

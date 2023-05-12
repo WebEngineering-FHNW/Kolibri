@@ -9,9 +9,12 @@
  *
  * @typedef IteratorType
  * @template _T_
- * @property { () => { next: () => IteratorResult<_T_, _T_> } } [Symbol.iterator] - returns the iterator for this object.
- * @property { () => IteratorType<_T_> }                        copy - creates a copy of this {@link IteratorType}
- * @property { <_U_>(bindFn: (_T_) => IteratorType<_U_>) => IteratorType<_U_> } and
+ * @property {        ()                => { next: () => IteratorResult<_T_, _T_> } } Symbol.iterator - returns the iterator for this object.
+ * @property {        ()                => IteratorType<_T_> }                        copy            - creates a copy of this {@link IteratorType}
+ * @property { <_U_>  (bindFn: (_T_)    => IteratorType<_U_>) => IteratorType<_U_> }  and             - sequentially compose two actions, passing any value produced by the first as an argument to the second.
+ * @property { <_U_>  (_U_)             => IteratorType<_U_> }                        pure            - lifts a given value into the contextb
+ * @property { <_U_>  (f: (_T_) => _U_) => IteratorType<_U_> }                        fmap            - maps the value in the context
+ * @property {        ()                => IteratorType<_T_> }                        empty           - the empty alternative
  */
 
 /**
@@ -61,8 +64,8 @@
  * Defines a Monad.
  * @template  _T_
  * @typedef  MonadType
- * @property{ <_U_> (bindFn: (_T_) => MonadType<_U_>) => MonadType<_U_>  } and
+ * @property { <_U_> (bindFn: (_T_) => MonadType<_U_>) => MonadType<_U_>  } and
  * @property { (_T_) => MonadType<_T_> } pure
  * @property { <_U_> (f: (_T_) => _U_) => MonadType<_U_> } fmap
- * @property { () => MonadType<_T_> } empty
+ * @property {       ()                => MonadType<_T_> } empty
  */
