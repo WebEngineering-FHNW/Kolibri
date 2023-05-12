@@ -26,4 +26,9 @@ testSuite.add("test empty iterator: snoc an element to empty iterator", assert =
   assert.isTrue(arrayEq([42])([...result]));
 });
 
+testSuite.add("test snoc 2 times", assert => {
+  const result = snoc(42)(snoc(42)(nil));
+  assert.isTrue(arrayEq([42, 42])([...result]));
+});
+
 testSuite.run();
