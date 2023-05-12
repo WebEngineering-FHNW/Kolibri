@@ -1,9 +1,4 @@
 import { Pair }    from "../../../../docs/src/kolibri/stdlib.js";
-import {
-  map,
-  nil,
-  PureIterator
-} from "../iterator/iterator.js";
 
 export { from }
 
@@ -41,7 +36,7 @@ const from = jinq;
 const join = monad1 => monad2 => {
   const processed = monad1.and(x =>
     monad2.and(y =>
-      monad.pure(Pair(x)(y))
+      monad1.pure(Pair(x)(y))
     )
   );
   return jinq(processed)
@@ -55,7 +50,7 @@ const join = monad1 => monad2 => {
  * }
  */
 const where = monad => predicate => {
-  const processed = monad.and(a => predicate(a) ? monad.pure(a) : monad.mempty);
+  const processed = monad.and(a => predicate(a) ? monad.pure(a) : monad.empty);
   return jinq(processed);
 };
 
