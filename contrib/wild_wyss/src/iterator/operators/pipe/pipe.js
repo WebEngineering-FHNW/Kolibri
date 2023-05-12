@@ -3,7 +3,7 @@ export { pipe }
 /**
  * Transforms the given {@link IteratorType iterator} using the passed {@link IteratorOperation}
  * @type  {<_T_>
- *            (...transformers: IteratorOperation )
+ *            (...transformers: IteratorOperation<*,*> )
  *            => (iterator: IteratorType<_T_>)
  *            => IteratorType<_T_>
  *        }

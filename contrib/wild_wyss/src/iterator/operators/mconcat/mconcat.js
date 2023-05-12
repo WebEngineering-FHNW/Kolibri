@@ -48,5 +48,4 @@ const mconcat = iterator => {
     return createIterator(next, copy);
   };
   return mconcatFactory(iterator.copy())
-
 };

@@ -25,7 +25,7 @@ const id = x => x;
  * @property { Array<_U_> | _U_ }         expected
  * @property { EvalCallback? }            evalFn
  * @property { Array<TestingFunction>? }  excludedTests
- * @property { OperationCallback? }       operation
+ * @property { OperationCallback<_T_> }   operation
  * @property { *? }                       param
  */
 

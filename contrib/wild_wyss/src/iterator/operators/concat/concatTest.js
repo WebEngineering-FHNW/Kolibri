@@ -11,6 +11,7 @@ import {
 } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Iterator: Operation concat");
+
 addToTestingTable(testSuite)(
   createTestConfig({
     name:      "concat",

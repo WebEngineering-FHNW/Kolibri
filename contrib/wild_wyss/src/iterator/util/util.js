@@ -36,7 +36,7 @@ const takeWithoutCopy = n => iterator => {
  * @template _T_
  * @param { () => IteratorResult<_T_, _T_> } next
  * @param { () => IteratorType<_T_> } copy
- * @returns {IteratorType<_T_>}
+ * @returns { IteratorType<_T_> }
  */
 const createIterator = (next, copy) =>{
   const result = {

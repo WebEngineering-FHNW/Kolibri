@@ -23,5 +23,3 @@ export { concat }
  * => Logs: 0, 1, 0, 1, 2
  */
 const concat = it1 => it2 => mconcat(ArrayIterator([it1.copy(), it2.copy()]));
-
-// TODO: add test cases to test if it1 and it2 are copied
