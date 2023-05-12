@@ -10,43 +10,16 @@ export { from }
 /**
  * @template _T_
  * @typedef JinqType
- * @property { SelectCallback<_T_> }  select
- * @property { WhereCallback<_T_> }   where
- * @property { JoinCallback<_T_>}     join
- * @property { () => MonadType<_T_> } result
- */
-
-/**
- * @callback JoinCallback
- * @type {<_T_, _U_>
- *       (monad1: IteratorType<_T_>)
- *    => (monad2: IteratorType<_U_>)
- *    => JinqType<_U_>
- * }
- */
-
-/**
- * @callback WhereCallback
- * @type {<_T_>
- *       (monad: IteratorType<_T_>)
- *    => (predicate: Predicate<_T_>)
- *    => JinqType<_T_>
- * }
- */
-
-/**
- * @callback SelectCallback
- * @type {<_T_, _U_>
- *       (monad: IteratorType<_T_>)
- *    => (selector: Functor<_T_, _U_>)
- *    => JinqType<_U_>
- * }
+ * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               select
+ * @property { <_U_> (monad:     MonadType<_U_>)     => JinqType<PairType<_T_,_U_>> } join
+ * @property {       (predicate: Predicate<_T_>)     => JinqType<_T_> }               where
+ * @property {       ()                              => MonadType<_T_> }              result
  */
 
 /**
  * @template _T_
  * @param { MonadType<_T_> } monad
- * @returns { JinqType }
+ * @returns { JinqType<_T_> }
  */
 const jinq = monad => ({
   join:   join  (monad),
@@ -59,7 +32,11 @@ const from = jinq;
 
 /**
  * @template _T_, _U_
- * @type JoinCallback<_T_,_U_>
+ * @type {
+ *          (monad1: MonadType<_T_>)
+ *       => (monad2: MonadType<_U_>)
+ *       => JinqType<PairType<_T_,_U_>>
+ * }
  */
 const join = monad1 => monad2 => {
   const processed = monad1.and(x =>
@@ -71,8 +48,11 @@ const join = monad1 => monad2 => {
 };
 
 /**
- * @template _T_
- * @type WhereCallback<_T_>
+ * @type {<_T_>
+ *       (monad: MonadType<_T_>)
+ *    => (predicate: Predicate<_T_>)
+ *    => JinqType<_T_>
+ * }
  */
 const where = monad => predicate => {
   const processed = monad.and(a => predicate(a) ? PureIterator(a) : nil);
@@ -80,8 +60,11 @@ const where = monad => predicate => {
 };
 
 /**
- * @template _T_, _U_
- * @type SelectCallback<_T_,_U_>
+ * @type {<_T_, _U_>
+ *       (monad: MonadType<_T_>)
+ *    => (selector: Functor<_T_, _U_>)
+ *    => JinqType<_U_>
+ * }
  */
 const select = monad => mapper => {
   const processed = map(mapper)(monad);
