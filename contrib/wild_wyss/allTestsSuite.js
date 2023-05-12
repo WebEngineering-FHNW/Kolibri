@@ -24,6 +24,8 @@ import "./src/focusring/focusRingTest.js";
 // stdlib
 import "./src/stdlib/stdlibTest.js";
 
+// jinq
+import "./src/jinq/jinqTest.js";
 
 total.onChange(value => document.getElementById('grossTotal').textContent = "" + value + " tests done.");
 
