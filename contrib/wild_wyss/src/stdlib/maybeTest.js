@@ -1,6 +1,6 @@
 import { TestSuite } from "../test/test.js";
-import { Nothing, Just } from "./either.js"
-const eitherTestSuite = TestSuite("Either");
+import { Nothing, Just } from "./maybe.js"
+const eitherTestSuite = TestSuite("Maybe");
 
 
 eitherTestSuite.add("test fmap", assert => {
