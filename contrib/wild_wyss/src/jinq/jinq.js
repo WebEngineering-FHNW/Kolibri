@@ -1,11 +1,12 @@
-import { Pair }    from "../../../../docs/src/kolibri/stdlib.js";
+import {Pair} from "../../../../docs/src/kolibri/stdlib.js";
 
-export { from }
+export {from}
 
 /**
  * @template _T_
  * @typedef JinqType
  * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               select
+ * @property { <_U_> ((prev: _T_) => MonadType<_U_>) => JinqType<_U_> }               fromIn
  * @property { <_U_> (monad:     MonadType<_U_>)     => JinqType<PairType<_T_,_U_>> } join
  * @property {       (predicate: Predicate<_T_>)     => JinqType<_T_> }               where
  * @property {       ()                              => MonadType<_T_> }              result
@@ -17,14 +18,19 @@ export { from }
  * @returns { JinqType<_T_> }
  */
 const jinq = monad => ({
-  join:   join  (monad),
-  where:  where (monad),
+  join: join(monad),
+  where: where(monad),
   select: select(monad),
+  fromIn: fromIn(monad),
   result: () => monad
 });
 
 const from = jinq;
 
+const fromIn = monad => f => {
+  const processed = monad.and(f);
+  return jinq(processed);
+};
 /**
  * @template _T_, _U_
  * @type {
@@ -63,5 +69,5 @@ const where = monad => predicate => {
  */
 const select = monad => mapper => {
   const processed = monad.fmap(mapper);
-  return jinq(processed) ;
+  return jinq(processed);
 };

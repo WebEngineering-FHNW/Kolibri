@@ -1,9 +1,9 @@
 import { TestSuite } from "../test/test.js";
 import { Nothing, Just } from "./maybe.js"
-const eitherTestSuite = TestSuite("Maybe");
+const maybeTestSuite = TestSuite("Maybe");
 
 
-eitherTestSuite.add("test fmap", assert => {
+maybeTestSuite.add("test fmap", assert => {
   const just    = Just(5);
   const nothing = Nothing;
 
@@ -19,14 +19,14 @@ eitherTestSuite.add("test fmap", assert => {
   assert.is(nothingResult, undefined);
 });
 
-eitherTestSuite.add("test empty", assert => {
+maybeTestSuite.add("test empty", assert => {
   const just    = Just(5);
   const nothing = Nothing;
   assert.is(just.empty(), Nothing);
   assert.is(nothing.empty(), Nothing);
 });
 
-eitherTestSuite.add("test and", assert => {
+maybeTestSuite.add("test and", assert => {
   const just    = Just(5);
   const nothing = Nothing;
 
@@ -43,7 +43,7 @@ eitherTestSuite.add("test and", assert => {
   assert.is(nothingResult, undefined);
 });
 
-eitherTestSuite.add("test pure", assert => {
+maybeTestSuite.add("test pure", assert => {
   const just    = Just(5);
   const nothing = Nothing;
 
@@ -58,4 +58,6 @@ eitherTestSuite.add("test pure", assert => {
   assert.is(justResult, 10);
   assert.is(nothingResult, 10);
 });
-eitherTestSuite.run();
+
+
+maybeTestSuite.run();
