@@ -102,7 +102,6 @@ jsonWrapperSuite.add("test and", assert => {
     (iterator => {
       const result = [...iterator];
       assert.is(result.length, 3);
-      console.log(result);
       assert.is(result[0].name, "Atonadias");
     });
 });

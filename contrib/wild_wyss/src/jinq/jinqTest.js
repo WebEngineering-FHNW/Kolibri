@@ -44,7 +44,7 @@ jinqSuite.add("select with iterator", assert => {
   assert.isTrue(arrayEq([0, 2, 4, 6])([...result]))
 });
 
-jinqSuite.add("", assert => {
+jinqSuite.add("jinq with maybe", assert => {
   /**
    * @typedef PersonType
    * @property { String } name
@@ -62,7 +62,6 @@ jinqSuite.add("", assert => {
   const ceo   = Person("Paul",  Nothing);
   const cto   = Person("Tom",   Just(ceo));
   const andri = Person("Andri", Just(cto));
-  const tobi  = Person("Tobi",  Just(cto));
 
   /**
    *
@@ -94,70 +93,60 @@ jinqSuite.add("test join with Nothing", assert => {
 
 });
 
-jinqSuite.add("object test", assert => {
-
-
-
-  const sample = JSON.parse( `
-  {
-    "address": {
-      "address": "629 Debbie Drive",
-        "city": "Nashville",
-        "coordinates": {
-        "lat": 36.208114,
-          "lng": -86.58621199999999
-      },
-      "postalCode": "47076",
-        "state": "TN"
-    },
-    "department": "Marketing",
-      "name": "Blanda-O'Keefe",
-      "title": "Help Desk Operator"
-  }
-  `);
-
-  const sample2 = JSON.parse( `
-  {
-    "people": [
+jinqSuite.add("json test", assert => {
+  const battleData = JSON.parse( `
     {
-      "postalCode": "47076",
-      "name": "Atoandias"
+      "battleName": "The battle of Curly",
+      "numberOfDeaths": 420000,
+      "winner": {
+        "teamName": "JSON",
+        "outStandingHeroes": [1]
       },
-      
-    {
-      "postalCode": "47076",
-      "name": "Tanobiri"
-      },
-    {
-      "postalCode": "37076",
-      "name": "Drk"
+      "loser": {
+        "teamName": "XML",
+        "outStandingHeroes": []
       }
-      ]
-  }
+    }
+ `);
+
+  const heroes = JSON.parse( `
+    [
+      {
+        "heroId": 1,
+        "kills": 47076,
+        "name": "Atonadias"
+      },
+      {
+        "heroId": 2,
+        "kills": 5691,
+        "name": "Tanobiri"
+      },
+      {
+        "heroId": 3,
+        "kills": 3707,
+        "name": "Tonadri"
+      }
+    ]
   `);
 
-
-  const wrapper =
-    from(JsonWrapper(sample))
-      .select(x => x.address)
-      .select(x => x.postalCode)
+  const outstandingHeroNames =
+    from(JsonWrapper(battleData))
+      .select(x => x["winner"])
+      .select(x => x["outStandingHeroes"])
+      .join(JsonWrapper(heroes))
+      .where(tuple => tuple(fst) === tuple(snd)["heroId"])
+      .select(tuple => tuple(snd))
+      .select(hero => hero["name"])
       .result()
       .get();
-  wrapper(x => console.log("nothing"))(x => console.log("just: " + x));
 
-  const wrapper2 =
-    from(JsonWrapper(sample))
-      .select(x => x.address)
-      .select(x => x.postalCode)
-      .join(JsonWrapper(sample2))
-      .where(tuple => {
-        console.log(tuple(fst), tuple(snd));
-       return  tuple(fst) === tuple(snd).postalCode
-      })
-      .result()
-      .get();
-  wrapper2(x => console.log("nothing"))(x => console.log("just: " + x))
-
+  outstandingHeroNames
+    (_ => assert.isTrue(false))
+    (x => {
+      const results = [...x];
+      assert.is(results.length, 1);
+      assert.is(results[0], "Atonadias")
+    })
 });
 
 
