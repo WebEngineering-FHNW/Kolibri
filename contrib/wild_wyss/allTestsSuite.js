@@ -27,7 +27,7 @@ import "./src/stdlib/maybeTest.js";
 
 // jinq
 import "./src/jinq/jinqTest.js";
-
+import "./src/json/jsonWrapperTest.js"
 
 total.onChange(value => document.getElementById('grossTotal').textContent = "" + value + " tests done.");
 
