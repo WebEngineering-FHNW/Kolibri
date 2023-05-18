@@ -4,6 +4,7 @@ import {Range} from "../range/range.js";
 import {arrayEq} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import {fst, snd} from "../../../../docs/src/kolibri/lambda/church.js";
 import {Just, Nothing} from "../stdlib/maybe.js"
+import {JsonWrapper} from "../json/JsonWrapper.js";
 
 const jinqSuite = TestSuite("Jinq Suite");
 
@@ -95,58 +96,6 @@ jinqSuite.add("test join with Nothing", assert => {
 
 jinqSuite.add("object test", assert => {
 
-  /**
-   *
-   * @param obj
-   * @return {}
-   * @constructor
-   */
-  const JsonWrapper = obj => {
-
-    /**
-     *
-     * @param {}maybeObj
-     * @return {any}
-     * @constructor
-     */
-    const JsonWrapperFactory = maybeObj => {
-
-      const pure = a => JsonWrapperFactory(Just(a));
-
-      const empty = () => JsonWrapperFactory(Nothing);
-
-      const fmap = f => {
-       const result = maybeObj.and(x => {
-         const result = f(x);
-         return result ? Just(result): Nothing;
-       });
-       return JsonWrapperFactory(result);
-      };
-
-      // x => x.adress
-      // f :: _T_ -> JsonWrapper<_U_>
-      const and = f => {
-
-       const result = maybeObj.and(x => {
-         const result = f(x);
-         return result.get();
-       });
-       return JsonWrapperFactory(result);
-      };
-
-      const get = () => maybeObj;
-
-      return {
-        pure,
-        empty,
-        fmap,
-        and,
-        get,
-      }
-    };
-
-    return JsonWrapperFactory(Just(obj));
-  };
 
 
   const sample = JSON.parse( `
