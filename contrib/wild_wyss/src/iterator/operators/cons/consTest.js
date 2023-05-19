@@ -1,7 +1,6 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
 import { cons }              from "./cons.js"
-import { snoc }              from "../snoc/snoc.js";
 import { nil }               from "../../constructors/nil/nil.js";
 import { arrayEq }           from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import {
@@ -23,7 +22,7 @@ addToTestingTable(testSuite)(
 );
 
 testSuite.add("test empty iterator: cons element to empty iterator", assert => {
-  const result = snoc(42)(nil);
+  const result = cons(42)(nil);
   assert.isTrue(arrayEq([42])([...result]));
 });
 

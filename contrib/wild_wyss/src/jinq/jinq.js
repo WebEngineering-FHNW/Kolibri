@@ -18,11 +18,11 @@ export {from}
  * @returns { JinqType<_T_> }
  */
 const jinq = monad => ({
-  join: join(monad),
-  where: where(monad),
+  join:   join  (monad),
+  where:  where (monad),
   select: select(monad),
   fromIn: fromIn(monad),
-  result: () => monad
+  result: () =>  monad
 });
 
 const from = jinq;
@@ -45,6 +45,7 @@ const join = monad1 => monad2 => {
       monad1.pure(Pair(x)(y))
     )
   );
+
   return jinq(processed)
 };
 

@@ -23,7 +23,7 @@ jinqSuite.add("join with iterator", assert => {
   const result =
     from(it)
       .join(it)
-      .where(x => x(fst) === x(snd))
+      .where(pair => pair(fst) === pair(snd))
       .result();
 
   const values = [];
@@ -90,7 +90,6 @@ jinqSuite.add("test join with Nothing", assert => {
       .join(Nothing)
       .result();
   assert.is(result, Nothing);
-
 });
 
 jinqSuite.add("json test", assert => {
@@ -133,12 +132,12 @@ jinqSuite.add("json test", assert => {
     from(JsonWrapper(battleData))
       .select(x => x["winner"])
       .select(x => x["outStandingHeroes"])
-      .join(JsonWrapper(heroes))
-      .where(tuple => tuple(fst) === tuple(snd)["heroId"])
+      .join  (JsonWrapper(heroes))
+      .where (tuple => tuple(fst) === tuple(snd)["heroId"])
       .select(tuple => tuple(snd))
-      .select(hero => hero["name"])
+      .select(hero  => hero["name"])
       .result()
-      .get();
+      .get   ();
 
   outstandingHeroNames
     (_ => assert.isTrue(false))
