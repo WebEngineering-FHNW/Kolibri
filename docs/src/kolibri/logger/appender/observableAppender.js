@@ -3,7 +3,7 @@
  * The observable Appender is a decorator for other {@link AppenderType}s that notifies a listener about new log messages or
  * other interesting events.
  */
-import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_NOTHING, LOG_TRACE, LOG_WARN} from "../logger.js";
+import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_NOTHING, LOG_TRACE, LOG_WARN} from "../logLevel.js";
 
 export { Appender}
 

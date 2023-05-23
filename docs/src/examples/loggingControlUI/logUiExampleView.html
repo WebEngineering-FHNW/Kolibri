@@ -39,11 +39,13 @@
             transform: scale(1.1);
         }
 
+        /*noinspection CssUnusedSymbol*/
         .sidebar .toggleButton.open {
             left: 0;
             border: none;
         }
 
+        /*noinspection CssUnusedSymbol*/
         .sidebar.hidden {
             right: 0;
         }
@@ -53,7 +55,8 @@
             transition: 0.7s;
         }
 
-        img.buttonCLose {
+        /*noinspection CssUnusedSymbol*/
+        img.buttonClose {
             transition: 0.7s;
             transform: scaleX(-1);
         }
@@ -71,7 +74,7 @@
         <div class="toggleButton" id="btn" onclick="move()">
             <img src="../../../img/logo/logo.svg" alt="kolibri-logo" id="sliderButton" />
         </div>
-        <div id="container"></div>
+        <div id="loggingUiContainer"></div>
     </div>
 
     <script>
@@ -79,7 +82,7 @@
           const sliderButton    = document.getElementById("sliderButton");
           const sidebar         = document.getElementById("sidebar");
           const btn             = document.getElementById("btn");
-          sliderButton          .classList.toggle("buttonCLose");
+          sliderButton          .classList.toggle("buttonClose");
           sidebar               .classList.toggle("hidden");
           btn                   .classList.toggle("open");
         };
