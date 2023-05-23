@@ -30,6 +30,9 @@ import "./src/stdlib/pairTest.js";
 import "./src/jinq/jinqTest.js";
 import "./src/json/jsonMonadTest.js"
 
+//poc
+import "./src/iterator/poc/pocTest.js"
+
 total.onChange(value => document.getElementById('grossTotal').textContent = "" + value + " tests done.");
 
 document.querySelector("footer").textContent = "Built with Kolibri " + versionInfo;
