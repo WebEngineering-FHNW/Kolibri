@@ -47,16 +47,13 @@ const Iterator = (value, incrementFunction, isDoneFunction) => {
 };
 
 /**
- * TODO: description
- * @return { null }
- * @template _T_,_U_
- * @property { IteratorAnd<_T_,_U_> } and
- * @constructor
+ * This function serves as prototype for the {@link IteratorType}.
+ *
  */
 const IteratorPrototype = () => null;
 
+
 /**
- * @typedef IteratorAnd
  * @template _T_, _U_
  * @param { (_T_) => IteratorType<_U_> } bindFn
  * @returns { IteratorType<_U_> }
@@ -65,9 +62,24 @@ IteratorPrototype.and = function (bindFn) {
   return bind(bindFn)(this);
 };
 
+/**
+ * @template _T_, _U_
+ * @param { (_T_) => _U_ } mapper - maps the value in the context
+ * @returns IteratorType<_U_>
+ */
 IteratorPrototype.fmap = function (mapper) {
   return map(mapper)(this);
 };
 
+/**
+ * @template _T_
+ * @param { (_T_) } val - lifts a given value into the context
+ * @returns IteratorType<_T_>
+ */
 IteratorPrototype.pure = val => PureIterator(val);
+
+/**
+ * @template _T_
+ * @returns IteratorType<_T_>
+ */
 IteratorPrototype.empty = () => Iterator(undefined, _ => undefined, _ => true);
