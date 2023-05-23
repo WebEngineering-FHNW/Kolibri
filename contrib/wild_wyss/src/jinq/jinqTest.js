@@ -1,10 +1,10 @@
-import {TestSuite} from "../test/test.js";
-import {from} from "./jinq.js";
-import {Range} from "../range/range.js";
-import {arrayEq} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
-import {fst, snd} from "../../../../docs/src/kolibri/lambda/church.js";
-import {Just, Nothing} from "../stdlib/maybe.js"
-import {JsonWrapper} from "../json/JsonWrapper.js";
+import { TestSuite }     from "../test/test.js";
+import { from }          from "./jinq.js";
+import { Range }         from "../range/range.js";
+import { arrayEq }       from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { fst, snd }      from "../../../../docs/src/kolibri/lambda/church.js";
+import { Just, Nothing } from "../stdlib/maybe.js"
+import { JsonMonad }   from "../json/jsonMonad.js";
 
 const jinqSuite = TestSuite("Jinq Suite");
 
@@ -108,7 +108,7 @@ jinqSuite.add("json test", assert => {
     }
  `);
 
-  const heroes = JSON.parse( `
+  const heroes = JSON.parse(`
     [
       {
         "heroId": 1,
@@ -129,10 +129,10 @@ jinqSuite.add("json test", assert => {
   `);
 
   const outstandingHeroNames =
-    from(JsonWrapper(battleData))
+    from(JsonMonad(battleData))
       .select(x => x["winner"])
       .select(x => x["outStandingHeroes"])
-      .join  (JsonWrapper(heroes))
+      .join  (JsonMonad(heroes))
       .where (tuple => tuple(fst) === tuple(snd)["heroId"])
       .select(tuple => tuple(snd))
       .select(hero  => hero["name"])

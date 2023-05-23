@@ -1,9 +1,9 @@
 import { TestSuite }   from "../test/test.js";
-import { JsonWrapper } from "./JsonWrapper.js";
+import { JsonMonad } from "./jsonMonad.js";
 
-const jsonWrapperSuite = TestSuite("JsonWrapper");
+const jsonMonadSuite = TestSuite("JsonMonad");
 
-jsonWrapperSuite.add("test fmap mapping to list", assert => {
+jsonMonadSuite.add("test fmap mapping to list", assert => {
   const sample2 = JSON.parse( `
   {
     "heroes": [
@@ -22,8 +22,8 @@ jsonWrapperSuite.add("test fmap mapping to list", assert => {
       ]
   }
   `);
-  const wrapper = JsonWrapper(sample2);
-  const result = wrapper.fmap(x => x.heroes).get();
+  const jsonMonad = JsonMonad(sample2);
+  const result = jsonMonad.fmap(x => x.heroes).get();
 
   result
     (_ => assert.isTrue(false))
@@ -34,7 +34,7 @@ jsonWrapperSuite.add("test fmap mapping to list", assert => {
     });
 });
 
-jsonWrapperSuite.add("test fmap mapping to object", assert => {
+jsonMonadSuite.add("test fmap mapping to object", assert => {
   const heroData = JSON.parse( `
   {
     "hero": 
@@ -44,8 +44,8 @@ jsonWrapperSuite.add("test fmap mapping to object", assert => {
     }
   }
   `);
-  const wrapper = JsonWrapper(heroData);
-  const result = wrapper.fmap(x => x.hero).get();
+  const jsonMonad = JsonMonad(heroData);
+  const result = jsonMonad.fmap(x => x.hero).get();
 
   result
   (_ => assert.isTrue(false))
@@ -55,7 +55,7 @@ jsonWrapperSuite.add("test fmap mapping to object", assert => {
   });
 });
 
-jsonWrapperSuite.add("test fmap mapping to inexistent", assert => {
+jsonMonadSuite.add("test fmap mapping to inexistent", assert => {
   const heroData = JSON.parse( `
   {
     "hero": 
@@ -65,8 +65,8 @@ jsonWrapperSuite.add("test fmap mapping to inexistent", assert => {
     }
   }
   `);
-  const wrapper = JsonWrapper(heroData);
-  const result = wrapper.fmap(x => x.fears).get();
+  const jsonMonad = JsonMonad(heroData);
+  const result = jsonMonad.fmap(x => x.fears).get();
 
   result
   (_ => assert.isTrue(true))
@@ -74,7 +74,7 @@ jsonWrapperSuite.add("test fmap mapping to inexistent", assert => {
 });
 
 
-jsonWrapperSuite.add("test and", assert => {
+jsonMonadSuite.add("test and", assert => {
   const heroes = JSON.parse( `
   [
     {
@@ -91,10 +91,10 @@ jsonWrapperSuite.add("test and", assert => {
     }
   ]
   `);
-  const wrapper = JsonWrapper(heroes);
-  const result = wrapper.and(elem => {
+  const jsonMonad = JsonMonad(heroes);
+  const result = jsonMonad.and(elem => {
     const { name } = elem;
-    return JsonWrapper({ name });
+    return JsonMonad({ name });
   }).get();
 
   result
@@ -106,4 +106,4 @@ jsonWrapperSuite.add("test and", assert => {
     });
 });
 
-jsonWrapperSuite.run();
+jsonMonadSuite.run();

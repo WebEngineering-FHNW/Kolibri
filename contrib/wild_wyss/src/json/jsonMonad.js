@@ -9,10 +9,10 @@ import {
   mconcat
 } from "../iterator/iterator.js"
 
-export { JsonWrapper }
+export { JsonMonad }
 
 /**
- * This wrapper can be used to process JSON data in a fluent way.
+ * This {@link JsonMonad} can be used to process JSON data in a fluent way.
  * It wraps a given JSON Array or Object to provide a linq based API called jinq.
  *
  * @see https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/
@@ -22,7 +22,7 @@ export { JsonWrapper }
  * @constructor
  * @example
  * const result =
- * from(JsonWrapper(jsonData))
+ * from(JsonMonad(jsonData))
  *      .select(x => x["id"])
  *      .result()
  *      .get();
@@ -30,10 +30,10 @@ export { JsonWrapper }
  * // => Logs: all id's from the passed json
  *
  */
-const JsonWrapper = jsonData => {
+const JsonMonad = jsonData => {
   const inner = JsonIterator(jsonData);
 
-  const JsonWrapperFactory = maybeObj => {
+  const JsonMonadFactory = maybeObj => {
 
     const fmap = f => {
       const result = maybeObj.and(iterator => {
@@ -50,14 +50,14 @@ const JsonWrapper = jsonData => {
         return isEmpty(newIt) ? Nothing : Just(newIt);
       });
 
-      return JsonWrapperFactory(result);
+      return JsonMonadFactory(result);
     };
 
     const and = f => {
       const result = maybeObj.fmap(iterator => {
         const maybeIterators = iterator.fmap(elem => {
-          const jsonWrapper = f(elem);
-          return jsonWrapper.get();
+          const jsonMonad = f(elem);
+          return jsonMonad.get();
         });
 
         /**@type IteratorType<IteratorType> */
@@ -65,11 +65,11 @@ const JsonWrapper = jsonData => {
         return mconcat(catted)
       });
 
-      return JsonWrapperFactory(result);
+      return JsonMonadFactory(result);
     };
 
-    const pure  = a => JsonWrapperFactory(Just(JsonIterator(a)));
-    const empty = () => JsonWrapperFactory(Nothing);
+    const pure  = a => JsonMonadFactory(Just(JsonIterator(a)));
+    const empty = () => JsonMonadFactory(Nothing);
     const get   = () => maybeObj;
 
     return {
@@ -81,5 +81,5 @@ const JsonWrapper = jsonData => {
     }
   };
 
-  return JsonWrapperFactory(Just(inner));
+  return JsonMonadFactory(Just(inner));
 };
