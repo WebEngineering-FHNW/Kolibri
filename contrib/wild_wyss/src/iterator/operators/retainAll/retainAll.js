@@ -20,13 +20,13 @@ const retainAll = predicate => iterator => {
   const inner = iterator.copy();
 
   const next = () => {
-    const applyFilter  = current => {
-      const { done, value } = current;
+    const applyFilter  = () => {
+      const { done, value } = nextOf(inner);
       const result = done || predicate(value);
-      return result ? { done, value } : applyFilter(nextOf(inner));
+      return result ? { done, value } : applyFilter();
     };
 
-    return applyFilter(nextOf(inner))
+    return applyFilter();
   };
 
   return {
