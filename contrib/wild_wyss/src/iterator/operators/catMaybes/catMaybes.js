@@ -1,4 +1,4 @@
-import {createIterator, nextOf} from "../../util/util.js";
+import { createIterator, nextOf }    from "../../util/util.js";
 import { catMaybes as arrCatMaybes } from "../../../stdlib/stdlib.js";
 
 export { catMaybes }

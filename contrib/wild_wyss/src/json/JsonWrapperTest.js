@@ -1,5 +1,5 @@
-import {TestSuite} from "../test/test.js";
-import {JsonWrapper} from "./JsonWrapper.js";
+import { TestSuite }   from "../test/test.js";
+import { JsonWrapper } from "./JsonWrapper.js";
 
 const jsonWrapperSuite = TestSuite("JsonWrapper");
 

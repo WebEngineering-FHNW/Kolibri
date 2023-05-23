@@ -1,37 +1,46 @@
-import {catMaybes, JsonIterator, mconcat} from "../iterator/iterator.js"
-import {ArrayIterator} from "../iterator/constructors/arrayIterator/arrayIterator.js";
-
-import {Just, Nothing} from "../stdlib/maybe.js";
-import {nil} from "../iterator/constructors/nil/nil.js";
-import {isEmpty} from "../iterator/terminalOperations/isEmpty/isEmpty.js";
-import {PureIterator} from "../iterator/constructors/pureIterator/pureIterator.js";
+import { ArrayIterator } from "../iterator/constructors/arrayIterator/arrayIterator.js";
+import { Just, Nothing } from "../stdlib/maybe.js";
+import { nil }           from "../iterator/constructors/nil/nil.js";
+import { isEmpty }       from "../iterator/terminalOperations/isEmpty/isEmpty.js";
+import { PureIterator }  from "../iterator/constructors/pureIterator/pureIterator.js";
+import {
+  catMaybes,
+  JsonIterator,
+  mconcat
+} from "../iterator/iterator.js"
 
 export { JsonWrapper }
 
 /**
+ * This wrapper can be used to process JSON data in a fluent way.
+ * It wraps a given JSON Array or Object to provide a linq based API called jinq.
  *
- * @param obj
+ * @see https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/
+ * @template _T_
+ * @param { String } jsonData
+ * @returns JinqType<IteratorType<_T_>
  * @constructor
+ * @example
+ * const result =
+ * from(JsonWrapper(jsonData))
+ *      .select(x => x["id"])
+ *      .result()
+ *      .get();
+ * console.log(result);
+ * // => Logs: all id's from the passed json
+ *
  */
-const JsonWrapper = obj => {
-  const inner = JsonIterator(obj);
+const JsonWrapper = jsonData => {
+  const inner = JsonIterator(jsonData);
 
-  /**
-   *
-   * @return {any}
-   * @constructor
-   */
   const JsonWrapperFactory = maybeObj => {
-
-    const pure = a => JsonWrapperFactory(Just(JsonIterator(a)));
-
-    const empty = () => JsonWrapperFactory(Nothing);
 
     const fmap = f => {
       const result = maybeObj.and(iterator => {
         const newIt = iterator.and(elem => {
-          const mapped = f(elem);
+          const mapped = f(elem); // deep dive into json structure
 
+          // next JSON Object could be an array or an object
           if (Array.isArray(mapped)) {
             return ArrayIterator(mapped);
           }
@@ -59,7 +68,9 @@ const JsonWrapper = obj => {
       return JsonWrapperFactory(result);
     };
 
-    const get = () => maybeObj;
+    const pure  = a => JsonWrapperFactory(Just(JsonIterator(a)));
+    const empty = () => JsonWrapperFactory(Nothing);
+    const get   = () => maybeObj;
 
     return {
       pure,
