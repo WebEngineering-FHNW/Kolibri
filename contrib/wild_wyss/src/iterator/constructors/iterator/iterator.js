@@ -1,7 +1,8 @@
 import { createIterator } from "../../util/util.js";
-import {bind} from "../../operators/bind/bind.js";
-import {map} from "../../operators/map/map.js"
-import {PureIterator} from "../pureIterator/pureIterator.js";
+import { bind }           from "../../operators/bind/bind.js";
+import { map }            from "../../operators/map/map.js"
+import { PureIterator }   from "../pureIterator/pureIterator.js";
+import { show }           from "../../terminalOperations/show/show.js";
 
 export { Iterator, IteratorPrototype }
 
@@ -83,3 +84,7 @@ IteratorPrototype.pure = val => PureIterator(val);
  * @returns IteratorType<_T_>
  */
 IteratorPrototype.empty = () => Iterator(undefined, _ => undefined, _ => true);
+
+IteratorPrototype.toString = function () {
+  return show(this);
+};

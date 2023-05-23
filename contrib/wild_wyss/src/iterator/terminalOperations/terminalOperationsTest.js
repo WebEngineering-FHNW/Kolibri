@@ -6,3 +6,4 @@ import "./uncons/unconsTest.js";
 import "./max/maxTest.js";
 import "./min/minTest.js";
 import "./foldr/foldrTest.js";
+import "./show/showTest.js";
