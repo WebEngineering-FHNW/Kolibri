@@ -1,6 +1,6 @@
-import {Pair} from "../../../../docs/src/kolibri/stdlib.js";
+import { Pair } from "../stdlib/pair.js";
 
-export {from}
+export { from }
 
 /**
  * JINQ brings query capabilities to any monadic type.

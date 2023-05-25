@@ -2,7 +2,6 @@ import { TestSuite }     from "../test/test.js";
 import { from }          from "./jinq.js";
 import { Range }         from "../range/range.js";
 import { arrayEq }       from "../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { fst, snd }      from "../../../../docs/src/kolibri/lambda/church.js";
 import { Just, Nothing } from "../stdlib/maybe.js"
 import { JsonMonad }   from "../json/jsonMonad.js";
 
@@ -23,15 +22,15 @@ jinqSuite.add("pairWith with iterator", assert => {
   const result =
     from(it)
       .pairWith(it)
-      .where   (pair => pair(fst) === pair(snd))
+      .where   (([fst, snd]) => fst === snd)
       .result  ();
 
   const values = [];
-  for (const pair of result) {
-    values.push(pair(fst), pair(snd));
+  for (const element of result) {
+    values.push(...element);
   }
 
-  assert.isTrue(arrayEq([0,0,1,1,2,2,3,3])([...values]));
+  assert.isTrue(arrayEq([0,0,1,1,2,2,3,3])(values));
 });
 
 jinqSuite.add("select with iterator", assert => {
@@ -133,9 +132,8 @@ jinqSuite.add("json test", assert => {
       .select   (x => x["winner"])
       .select   (x => x["outStandingHeroes"])
       .pairWith (JsonMonad(heroes))
-      .where    (tuple => tuple(fst) === tuple(snd)["heroId"])
-      .select   (tuple => tuple(snd))
-      .select   (hero  => hero["name"])
+      .where    (([heroId, hero]) => heroId === hero["heroId"])
+      .select   (([_, hero]) => hero["name"])
       .result   ()
       .get      ();
 
