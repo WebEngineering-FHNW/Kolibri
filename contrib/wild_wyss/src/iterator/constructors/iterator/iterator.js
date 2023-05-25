@@ -74,7 +74,7 @@ IteratorPrototype.fmap = function (mapper) {
 
 /**
  * @template _T_
- * @param { (_T_) } val - lifts a given value into the context
+ * @param { _T_ } val - lifts a given value into the context
  * @returns IteratorType<_T_>
  */
 IteratorPrototype.pure = val => PureIterator(val);
@@ -85,6 +85,10 @@ IteratorPrototype.pure = val => PureIterator(val);
  */
 IteratorPrototype.empty = () => Iterator(undefined, _ => undefined, _ => true);
 
+/**
+ *
+ * @returns { string }
+ */
 IteratorPrototype.toString = function () {
   return show(this);
 };

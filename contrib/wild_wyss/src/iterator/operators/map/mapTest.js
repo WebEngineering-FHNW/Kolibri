@@ -13,7 +13,7 @@ addToTestingTable(testSuite)(
   createTestConfig({
     name:       "map",
     iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
-    operation:  map,
+    operation:  mapper => map(mapper),
     param:      el => 2 * el,
     expected:   [0, 2, 4, 6, 8]
   })

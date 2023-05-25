@@ -17,31 +17,39 @@ const id = x => x;
 
 /**
  * This type is used to create testing table entry.
+ *
  * @template _T_
  * @template _U_
- * @typedef IteratorTestConfigType
- * @property { String }                   name
- * @property { () => IteratorType<_T_> }  iterator
- * @property { Array<_U_> | _U_ }         expected
- * @property { EvalCallback? }            evalFn
- * @property { Array<TestingFunction>? }  excludedTests
- * @property { OperationCallback<_T_> }   operation
- * @property { *? }                       param
+ * @typedef  IteratorTestConfigType
+ * @property { String }                   name            - The name of the iterator under test.
+ * @property { () => IteratorType<_T_> }  iterator        - A function which constructs a new iterator to apply the operation to. If the iterator under test does not take an inner iterator, use this function instead of {@link operation}.
+ * @property { Array<_U_> | _U_ }         expected        - The expected result of the {@link operation} applied to the {@link iterator}.
+ * @property { Array<TestingFunction> }   [excludedTests] - An optional array of {@link TestingFunction TestingFunctions} to exclude tests in this table.
+ * @property { OperationCallback<_T_> }   [operation]     - The operation to test. The value passed in {@link param} is passed as an argument (Leave this empty for constructor tests, since they do not take an inner iterator.)
+ * @property { (Function | any) }         [param]         - A parameter passed to this operation. If it is a function, some extra tests will be performed.
+ * @property { EvalCallback<_U_> }        [evalFn]        - An optional function which takes {@link expected} and the actual result in curried style. It defaults to {@link arrayEq}.
  */
 
 /**
+ *
  * @template _T_
- * @callback OperationCallback
- * @type { (param: ?*) => (IteratorType<_T_> | _T_) }
+ * @typedef {
+ *              (param: any)
+ *           => (base: IteratorType<_T_>)
+ *           => (IteratorType<_T_> | _T_)
+ * } OperationCallback
  */
 
 /**
- * @callback EvalCallback
- * @type {
- *             (expected: *)
- *          => (actual: *)
+ * A functions which evaluates the output of the test.
+ * returns true, if the test has been successful, false otherwise.
+ * @template _U_
+ * @callback
+ * @typedef {
+ *             (expected: [_U_] | _U_)
+ *          => (actual:   [_U_] | _U_)
  *          => Boolean
- *      }
+ *      } EvalCallback
  */
 
 /**

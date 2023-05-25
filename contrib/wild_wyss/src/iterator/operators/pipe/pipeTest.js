@@ -18,7 +18,7 @@ addToTestingTable(testSuite)(
     iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
     operation:  ops => pipe(...ops),
     param:      [ map(x => 2*x), rejectAll(x => x > 4) ],
-    expected:   [0, 2, 4]
+    expected:   [0, 2, 4],
   })
 );
 
