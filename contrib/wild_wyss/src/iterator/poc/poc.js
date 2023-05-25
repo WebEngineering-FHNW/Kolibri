@@ -1,8 +1,37 @@
 import {nextOf} from "../util/util.js";
+import {IteratorPrototype} from "../constructors/iterator/iterator.js";
+
 
 export { Iterator, map, retainAll, reduce$ }
 
-const Iterator = (start, incFn, stopFn) => ({
+
+const Iterator = (start, incFn, stopFn) => {
+  const fn = () => {
+    let nextValue = start;
+
+    const next = () => {
+      const current = nextValue;
+      const done    = stopFn(current);
+
+      if (!done) nextValue = incFn(nextValue);
+      return { done, value: current };
+    };
+
+    return { next };
+  };
+
+  return createIterator(fn);
+};
+
+const createIterator = iterator => {
+ const result = {[Symbol.iterator]: iterator};
+ Object.setPrototypeOf(result, IteratorPrototype);
+ return result;
+};
+
+
+
+const Iterator2 = (start, incFn, stopFn) => ({
 
   [Symbol.iterator]: () => {
 

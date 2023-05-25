@@ -2,10 +2,30 @@ import {TestSuite} from "../../test/test.js";
 import {addToTestingTable, TESTS} from "../util/testingTable.js";
 import {createTestConfig,  UPPER_ITERATOR_BOUNDARY} from "../util/testUtil.js";
 import {Iterator, map, retainAll, reduce$ } from "./poc.js";
+import {arrayEq} from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import {pipe} from "../operators/pipe/pipe.js";
+import {rejectAll} from "../operators/rejectAll/rejectAll.js";
 
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 
 const testSuite = TestSuite("poc: Constructor Iterator");
+
+testSuite.add("normal array", assert => {
+  const array = [1,2,3,4];
+  const mapped = map(x => x * 2)(array);
+  assert.isTrue(arrayEq([...mapped])([2,4,6,8]));
+});
+
+testSuite.add("normal array", assert => {
+  const result =  pipe(
+    map(x => x * 2),
+    retainAll(x => x < 6),
+    reduce$((acc, cur) => acc + cur,0),
+  )([1,2,3,4]);
+
+  assert.is(result, 6);
+});
+
 
 addToTestingTable(testSuite)(
   createTestConfig({
