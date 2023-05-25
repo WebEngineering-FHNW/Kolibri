@@ -30,6 +30,11 @@ export { Pair }
  * const values = Pair("Tobi")("Andri");
  * values(fst) === "Tobi";
  * values(snd) === "Andri";
+ *
+ * // a pair is also iterable
+ * const [tobi, andri] = values;
+ * console.log(tobi, andri);
+ * // => logs "Tobi", "Andri" to the console
  */
 const Pair = x => y => {
   /**
