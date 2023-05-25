@@ -6,8 +6,8 @@ export { Pair }
  * @callback PairSelectorType
  * @template _T_, _U_
  * @pure
- * @type { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
- * @property { () => { next: () => IteratorResult<_T_|_U_, undefined> } } Symbol.iterator
+ * @type     { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
+ * @property { () => { next: () => IteratorResult<_T_ | _U_, undefined> } } Symbol.iterator
  */
 
 /**
@@ -38,13 +38,6 @@ const Pair = x => y => {
    */
   const pair = selector => selector(x)(y);
 
-  pair[Symbol.iterator] = iterator(x,y);
+  pair[Symbol.iterator] = () => [x,y][Symbol.iterator]();
   return pair;
-};
-
-const iterator = (x,y) => () => {
-  const elements = [y, x];
-  const next = () => ({ done: elements.length === 0,  value: elements.pop() });
-
-  return { next };
 };

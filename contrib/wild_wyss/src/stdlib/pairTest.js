@@ -5,7 +5,7 @@ import {arrayEq} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 const pairTestSuite = TestSuite("Pair");
 
-pairTestSuite.add("test simple case", assert => {
+pairTestSuite.add("test simple case pair", assert => {
   const pair  = Pair("Tobi")("Andri");
   const tobi  = pair(fst);
   const andri = pair(snd);
