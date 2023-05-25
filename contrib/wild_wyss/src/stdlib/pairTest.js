@@ -1,7 +1,7 @@
-import {TestSuite} from "../test/test.js";
-import {Pair} from "./pair.js";
-import { fst, snd } from "../../../../docs/src/kolibri/stdlib.js"
-import {arrayEq} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { TestSuite } from "../test/test.js";
+import { Pair      } from "./pair.js";
+import { fst, snd  } from "../../../../docs/src/kolibri/stdlib.js"
+import { arrayEq   } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 const pairTestSuite = TestSuite("Pair");
 
