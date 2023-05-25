@@ -34,7 +34,7 @@ testSuite.add("Test pipe with terminal operation", assert => {
   const res = pipe(
     mapper, // [0, 2, 4, 6, 8, 10]
     reducer // 0 + 0 + 2 + 4 + 6 + 8 + 10
-  )(base); // [0, 1, 2, 3, 4, 5]
+  )(base);  // [0, 1, 2, 3, 4, 5]
 
   //Then
   assert.is(res, 30);

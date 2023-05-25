@@ -17,6 +17,8 @@ export { pipe }
  * // => Logs 0,4,8
  */
 const pipe = (...transformers) => iterator => {
+  if (transformers.length === 0) iterator = iterator.copy();
+
   for (const transformer of transformers) {
     iterator = transformer(iterator);
   }
