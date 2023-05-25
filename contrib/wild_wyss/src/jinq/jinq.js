@@ -23,11 +23,11 @@ export {from}
  */
 const jinq = monad => ({
   pairWith: pairWith(monad),
-  where:    where (monad),
-  select:   select(monad),
-  map:      select(monad),
-  inside:   inside(monad),
-  result:   () =>  monad
+  where:    where   (monad),
+  select:   select  (monad),
+  map:      select  (monad),
+  inside:   inside  (monad),
+  result:   () =>    monad
 });
 
 /**
@@ -42,6 +42,7 @@ const inside = monad => f => {
   const processed = monad.and(f);
   return jinq(processed);
 };
+
 /**
  * @template _T_, _U_
  * @type {
@@ -52,9 +53,7 @@ const inside = monad => f => {
  */
 const pairWith = monad1 => monad2 => {
   const processed = monad1.and(x =>
-    monad2.and(y =>
-      monad1.pure(Pair(x)(y))
-    )
+    monad2.fmap(y => Pair(x)(y))
   );
 
   return jinq(processed)
