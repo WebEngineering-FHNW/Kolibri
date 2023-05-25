@@ -96,47 +96,42 @@ const Assert = () => {
             messages.push(message);
         },
         iterableEq: (actual, expected, maxElementsToConsume = 1_000) => {
-            if (actual[Symbol.iterator]   === undefined) console.error("actual is not iterable!");
-            if (expected[Symbol.iterator] === undefined) console.error("actual is not iterable!");
+            if (actual[Symbol.iterator]   === undefined) error("actual is not iterable!");
+            if (expected[Symbol.iterator] === undefined) error("expected is not iterable!");
 
-            const actualIt = actual[Symbol.iterator]();
-            const expectedIt = expected[Symbol.iterator]();
+            const actualIt     = actual[Symbol.iterator]();
+            const expectedIt   = expected[Symbol.iterator]();
 
             let iterationCount = 0;
-            let stop           = false;
-            let reportError    = false;
-            let message        = "Iterator equals failed:\n";
+            let testPassed     = true;
+            let message        = "";
 
-            while (!stop) {
-                iterationCount++;
+            while (true) {
                 const { value: actualValue,   done: actualDone   } = actualIt.next();
                 const { value: expectedValue, done: expectedDone } = expectedIt.next();
 
-                const sameDone          = actualDone     === expectedDone;
-                const oneDone           = actualDone || expectedDone;
-                const sameValues        = actualValue    === expectedValue;
-                const tooManyIterations = iterationCount  >  maxElementsToConsume;
+                const oneIteratorDone      = actualDone || expectedDone;
+                const tooManyIterations = iterationCount > maxElementsToConsume;
 
-                stop = !sameValues || oneDone || tooManyIterations;
-
-                if (!sameDone) {
-                    reportError = true;
-                    if (actualDone)   message += `Actual was done after ${iterationCount} iterations. (Expected is not done yet)\n`;
-                    else message += `Expected was done after ${iterationCount} iterations. (Actual is not done yet\n)`;
-                    error(message);
-                }
-                if (sameDone && !sameValues) {
-                    reportError = true;
-                    message += `Values were not equal in iteration ${iterationCount}! Expected ${expectedValue} but was ${actualValue}\n`;
-                    error(message);
-                }
+                if (oneIteratorDone) break;
                 if (tooManyIterations) {
-                    reportError = true;
-                    message += `It took more iterations than ${maxElementsToConsume}. Aborting.\n`;
-                    error(message);
+                    message = `It took more iterations than ${maxElementsToConsume}. Aborting.\n`;
+                    testPassed = false;
+                    break;
                 }
+
+                if (actualValue !== expectedValue) {
+                    testPassed = false;
+                    message = `Values were not equal in iteration ${iterationCount}! Expected ${expectedValue} but was ${actualValue}\n`;
+
+                    break;
+                }
+
+                iterationCount++;
             }
-            results.push(reportError);
+
+            if (!testPassed) error(message);
+            results.push(testPassed);
             messages.push(message);
         },
         throws: (functionUnderTest, expectedErrorMsg = "") => {

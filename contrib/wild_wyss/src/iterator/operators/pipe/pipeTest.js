@@ -12,7 +12,6 @@ import {reduce$} from "../../terminalOperations/reduce/reduce.js";
 import {arrayEq} from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 const testSuite = TestSuite("Iterator: Operation pipe");
-testSuite.run();
 
 addToTestingTable(testSuite)(
   createTestConfig({

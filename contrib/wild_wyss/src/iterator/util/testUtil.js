@@ -190,6 +190,6 @@ const evaluate = (expected, actual, assert, evalFn ) => {
   if (evalFn) {
     assert.isTrue(evalFn(expected)(actual));
   } else {
-    assert.iterableEq(expected, actual);
+    assert.iterableEq(actual, expected);
   }
 };
