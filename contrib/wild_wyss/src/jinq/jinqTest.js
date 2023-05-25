@@ -18,13 +18,13 @@ jinqSuite.add("simple with iterator", assert => {
   assert.isTrue(arrayEq([0, 2, 4, 6])([...result]))
 });
 
-jinqSuite.add("join with iterator", assert => {
+jinqSuite.add("pairWith with iterator", assert => {
   const it = Range(3);
   const result =
     from(it)
-      .join(it)
-      .where(pair => pair(fst) === pair(snd))
-      .result();
+      .pairWith(it)
+      .where   (pair => pair(fst) === pair(snd))
+      .result  ();
 
   const values = [];
   for (const pair of result) {
@@ -70,8 +70,8 @@ jinqSuite.add("jinq with maybe", assert => {
    */
   const maybeBossNameOfBoss = employee =>
     from(Just(employee))
-      .fromIn(p => p.boss)
-      .fromIn(p => p.boss)
+      .inside(p => p.boss)
+      .inside(p => p.boss)
       .select(p => p.name)
       .result();
 
@@ -83,11 +83,11 @@ jinqSuite.add("jinq with maybe", assert => {
     (n => assert.is(n, "Paul"));
 });
 
-jinqSuite.add("test join with Nothing", assert => {
+jinqSuite.add("test pairWith with Nothing", assert => {
   const just2 = Just(2);
   const result =
     from(just2)
-      .join(Nothing)
+      .pairWith(Nothing)
       .result();
   assert.is(result, Nothing);
 });
@@ -130,14 +130,14 @@ jinqSuite.add("json test", assert => {
 
   const outstandingHeroNames =
     from(JsonMonad(battleData))
-      .select(x => x["winner"])
-      .select(x => x["outStandingHeroes"])
-      .join  (JsonMonad(heroes))
-      .where (tuple => tuple(fst) === tuple(snd)["heroId"])
-      .select(tuple => tuple(snd))
-      .select(hero  => hero["name"])
-      .result()
-      .get   ();
+      .select   (x => x["winner"])
+      .select   (x => x["outStandingHeroes"])
+      .pairWith (JsonMonad(heroes))
+      .where    (tuple => tuple(fst) === tuple(snd)["heroId"])
+      .select   (tuple => tuple(snd))
+      .select   (hero  => hero["name"])
+      .result   ()
+      .get      ();
 
   outstandingHeroNames
     (_ => assert.isTrue(false))
