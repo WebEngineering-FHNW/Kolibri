@@ -7,8 +7,23 @@ import {accentColor, okColor} from "../../../../docs/src/kolibri/style/kolibriSt
 import {id, Tuple} from "../../../../docs/src/kolibri/stdlib.js"
 import {Observable} from "../../../../docs/src/kolibri/observable.js"
 import {dom} from "../../../../docs/src/kolibri/util/dom.js"
+import {LoggerFactory} from "../../../../docs/src/kolibri/logger/loggerFactory.js";
+import {
+    addToAppenderList,
+    getLoggingLevel,
+    removeFromAppenderList,
+    setLoggingLevel,
+    setLoggingContext,
+    setMessageFormatter,
+} from "../../../../docs/src/kolibri/logger/logging.js";
+import {
+  LOG_DEBUG,
+} from "../../../../docs/src/kolibri/logger/logLevel.js";
+import {Appender} from "../../../../docs/src/kolibri/logger/appender/consoleAppender.js";
 
 export { TestSuite, total, asyncTest }
+
+const { debug, error } = LoggerFactory("kolibri.test");
 
 /**
  * The running total of executed test assertions.
@@ -89,6 +104,7 @@ const Assert = () => {
 
             let iterationCount = 0;
             let stop           = false;
+            let reportError    = false;
             let message        = "Iterator equals failed:\n";
 
             while (!stop) {
@@ -97,26 +113,30 @@ const Assert = () => {
                 const { value: expectedValue, done: expectedDone } = expectedIt.next();
 
                 const sameDone          = actualDone     === expectedDone;
+                const oneDone           = actualDone || expectedDone;
                 const sameValues        = actualValue    === expectedValue;
                 const tooManyIterations = iterationCount  >  maxElementsToConsume;
 
-                stop = !sameValues || sameDone || tooManyIterations;
+                stop = !sameValues || oneDone || tooManyIterations;
 
                 if (!sameDone) {
+                    reportError = true;
                     if (actualDone)   message += `Actual was done after ${iterationCount} iterations. (Expected is not done yet)\n`;
                     else message += `Expected was done after ${iterationCount} iterations. (Actual is not done yet\n)`;
-                    console.error(message);
+                    error(message);
                 }
-                if (!actualDone && !expectedDone && !sameValues) {
+                if (sameDone && !sameValues) {
+                    reportError = true;
                     message += `Values were not equal in iteration ${iterationCount}! Expected ${expectedValue} but was ${actualValue}\n`;
-                    console.error(message);
+                    error(message);
                 }
                 if (tooManyIterations) {
+                    reportError = true;
                     message += `It took more iterations than ${maxElementsToConsume}. Aborting.\n`;
-                    console.error(message);
+                    error(message);
                 }
             }
-            results.push(stop);
+            results.push(reportError);
             messages.push(message);
         },
         throws: (functionUnderTest, expectedErrorMsg = "") => {
@@ -223,7 +243,17 @@ const TestSuite = suiteName => {
             if (suiteAssert.results.every( id )) { // whole suite was ok, report whole suite
                 report(suiteName, suiteAssert.results, suiteAssert.messages);
             } else { // some test in suite failed, rerun tests for better error indication
-                tests.forEach( testInfo => test( testInfo(name), testInfo(logic) ) )
+                const prevLoggingLevel = getLoggingLevel();
+                setLoggingLevel(LOG_DEBUG);
+                setLoggingContext("");
+                const appender = Appender();
+                setMessageFormatter(
+                  context => logLevel => logMessage => `[${logLevel}]\t${context} ${suiteName}: ${logMessage}`
+                );
+                addToAppenderList(appender);
+                tests.forEach( testInfo => test( testInfo(name), testInfo(logic) ));
+                setLoggingLevel(prevLoggingLevel);
+                removeFromAppenderList(appender);
             }
         }
     };
