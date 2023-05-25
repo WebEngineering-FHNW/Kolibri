@@ -39,6 +39,7 @@ testSuite.add("test purity: concat - both sub iterators untouched.", assert => {
 testSuite.add("test left/right identity: concat", assert => {
   // Given
   const base = newIterator(4);
+
   // When
   const left =  concat(nil)(base.copy());
   const right = concat(base)(nil);
