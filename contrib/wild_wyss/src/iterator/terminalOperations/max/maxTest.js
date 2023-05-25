@@ -19,7 +19,6 @@ addToTestingTable(testSuite)(
     name:      "max$",
     iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
     operation: () => max$,
-    param:     () => {},
     expected:  4,
     evalFn:    expected => actual => expected === actual,
     excludedTests: [

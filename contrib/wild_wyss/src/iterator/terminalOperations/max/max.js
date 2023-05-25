@@ -1,5 +1,5 @@
-import { nextOf }                           from "../../util/util.js";
 import { ILLEGAL_ARGUMENT_EMPTY_ITERATOR }  from "../../util/errorMessages.js";
+import { safeMax$ }                         from "./safeMax.js";
 
 export { max$ }
 
@@ -8,8 +8,8 @@ export { max$ }
  *
  *  _Note_:
  *  To determine the largest element, a comparator function is used.
- *  This function compares two elements by default with the `< (LT)` operator.
- *  Where on the left side is the current largest element when processing the iterator.
+ *  This function compares two elements by default with the `< (LT)` operator,
+ *  where on the left side is the current largest element when processing the iterator.
  *  If needed, a different comparator can also be passed as a second argument to {@link max$}
  *  and will then be used to determine the largest element.
  *
@@ -26,19 +26,13 @@ export { max$ }
  * // => Logs: 3
  */
 const max$ = (iterator, comparator = (a, b) => a < b) => {
-  const inner                     = iterator.copy();
-  let { value: currentMax, done } = nextOf(inner);
+  let returnVal;
+  const maybeResult = safeMax$(iterator, comparator);
 
-  if (done) {
-    // iterator is empty, no max can be found
-    throw Error(ILLEGAL_ARGUMENT_EMPTY_ITERATOR);
-  }
+  maybeResult
+    (_ => { throw Error(ILLEGAL_ARGUMENT_EMPTY_ITERATOR) })
+    (x => returnVal = x);
 
-  for (const elem of inner) {
-    if (comparator(currentMax, elem)) {
-      currentMax = elem;
-    }
-  }
-
-  return currentMax;
+  return returnVal;
 };
+
