@@ -80,6 +80,45 @@ const Assert = () => {
             results .push(testResult);
             messages.push(message);
         },
+        iterableEq: (actual, expected, maxElementsToConsume = 1_000) => {
+            if (actual[Symbol.iterator]   === undefined) console.error("actual is not iterable!");
+            if (expected[Symbol.iterator] === undefined) console.error("actual is not iterable!");
+
+            const actualIt = actual[Symbol.iterator]();
+            const expectedIt = expected[Symbol.iterator]();
+
+            let iterationCount = 0;
+            let stop           = false;
+            let message        = "Iterator equals failed:\n";
+
+            while (!stop) {
+                iterationCount++;
+                const { value: actualValue,   done: actualDone   } = actualIt.next();
+                const { value: expectedValue, done: expectedDone } = expectedIt.next();
+
+                const sameDone          = actualDone     === expectedDone;
+                const sameValues        = actualValue    === expectedValue;
+                const tooManyIterations = iterationCount  >  maxElementsToConsume;
+
+                stop = !sameValues || sameDone || tooManyIterations;
+
+                if (!sameDone) {
+                    if (actualDone)   message += `Actual was done after ${iterationCount} iterations. (Expected is not done yet)\n`;
+                    else message += `Expected was done after ${iterationCount} iterations. (Actual is not done yet\n)`;
+                    console.error(message);
+                }
+                if (!actualDone && !expectedDone && !sameValues) {
+                    message += `Values were not equal in iteration ${iterationCount}! Expected ${expectedValue} but was ${actualValue}\n`;
+                    console.error(message);
+                }
+                if (tooManyIterations) {
+                    message += `It took more iterations than ${maxElementsToConsume}. Aborting.\n`;
+                    console.error(message);
+                }
+            }
+            results.push(stop);
+            messages.push(message);
+        },
         throws: (functionUnderTest, expectedErrorMsg = "") => {
             let testResult    = false;
             let message       = "";

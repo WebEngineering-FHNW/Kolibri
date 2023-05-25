@@ -60,6 +60,7 @@ const id = x => x;
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 const UPPER_ITERATOR_BOUNDARY = 4;
 
+
 /**
  *
  * @param operation
@@ -69,7 +70,7 @@ const UPPER_ITERATOR_BOUNDARY = 4;
 const testSimple = ({iterator, operation, evalFn, expected, param}) => assert => {
   const baseIterator = iterator();
   const operated = operation(param)(baseIterator);
-  assert.isTrue(evalFn(expected)(operated));
+  evaluate(expected, operated, assert, evalFn);
 };
 
 /**
@@ -87,7 +88,7 @@ const testPurity = config => assert => {
   // underlying iterator
   const first  = operation(param)(underlyingIt);
   const second = operation(param)(underlyingIt);
-  assert.isTrue(evalFn(first)(second));
+  evaluate(first, second, assert, evalFn);
 };
 
 /**
@@ -103,7 +104,7 @@ const testCopy = config => assert => {
   const { operation, evalFn, iterator, param } = config;
   const expected = operation(param)(iterator());
   const copied   = operation(param)(iterator()).copy();
-  assert.isTrue(evalFn(expected)(copied));
+  evaluate(expected, copied, assert, evalFn);
 };
 
 /**
@@ -120,8 +121,8 @@ const testCopyAfterConsumption = config => assert => {
   for (const elem of operated) {
     break; // consume one element
   }
-  const copy = operated.copy();
-  assert.isTrue(evalFn(operated)(copy));
+  const copied = operated.copy();
+  evaluate(operated, copied, assert, evalFn);
 };
 
 /**
@@ -173,9 +174,22 @@ const testPrototype = config => assert =>
 const createTestConfig = config => ({
   ...config,
   operation:     config.operation     === undefined ? () => id        : config.operation,
-  evalFn:        config.evalFn        === undefined ? arrayEvaluation : config.evalFn,
   excludedTests: config.excludedTests === undefined ? []              : config.excludedTests,
 });
 
 
-const arrayEvaluation = expected => actual => arrayEq([...expected])([...actual]);
+/**
+ * Checks if the given iterables are equals.
+ * @template _T_, _U_
+ * @param { Array<_U_> | _T_ }        expected
+ * @param { IteratorType<_T_> | _T_ } actual
+ * @param { AssertType }              assert
+ * @param { EvalCallback<_U_> }       [evalFn] - An evaluation function if the iterables shouldn't be compared using standard iteratable test.
+ */
+const evaluate = (expected, actual, assert, evalFn ) => {
+  if (evalFn) {
+    assert.isTrue(evalFn(expected)(actual));
+  } else {
+    assert.iterableEq(expected, actual);
+  }
+};
