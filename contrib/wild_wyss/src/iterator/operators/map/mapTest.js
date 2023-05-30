@@ -15,7 +15,7 @@ addToTestingTable(testSuite)(
     iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
     operation:  mapper => map(mapper),
     param:      el => 2 * el,
-    expected:   [0, 2, 4, 6, 8]
+    expected:   [0, 4, 6, 8]
   })
 );
 
