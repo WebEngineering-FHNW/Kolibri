@@ -6,6 +6,6 @@ const show = (iterator, maxValues = 50) =>
   "[" +
   pipe(
     take(maxValues),
-    reduce$((acc, cur) => acc === "" ? cur : `${acc},${cur}`, ""),
+    reduce$((acc, cur) => acc === "" ? cur : `${acc},${String(cur)}`, ""),
   )(iterator)
   + "]";
