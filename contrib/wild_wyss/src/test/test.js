@@ -23,7 +23,7 @@ import {Appender} from "../../../../docs/src/kolibri/logger/appender/consoleAppe
 
 export { TestSuite, total, asyncTest }
 
-const { debug, error } = LoggerFactory("kolibri.test");
+const { error } = LoggerFactory("kolibri.test");
 
 /**
  * The running total of executed test assertions.
@@ -51,15 +51,24 @@ const addToTotal = num => total.setValue( num + total.getValue());
  */
 
 /**
- * @typedef  { Object }  AssertType
- * @property { Array<String> }         messages - stores all assertions messages, one for each entry in "results"
- * @property { Array<Boolean> }        results  - stores all assertion results
- * @property { (Boolean)  => void }    isTrue   - assert that expression is true, side effects "results" and "messages"
- * @property { equalityCheckFunction } is       - assert that two expressions are equal,
- *                                                side effects "results" and "messages", and
- *                                                logs an error to the console incl. stack trace in case of failure
- * @property { AssertThrows }          throws   - assert that the given function throws an exception,
- *                                                logs an error to the console incl. stack trace in case of failure
+ * @callback IterableEq
+ * @param { Iterable<*> } actual            - the actual iterable
+ * @param { Iterable<*> } expected          - an iterable with the expected elements
+ * @param { number } [maxElementsToConsume] - if set, the thrown errors message will be compared to this string
+ * @returns void
+ */
+
+/**
+ * @typedef  { Object }                AssertType
+ * @property { Array<String> }         messages     - stores all assertions messages, one for each entry in "results"
+ * @property { Array<Boolean> }        results      - stores all assertion results
+ * @property { (Boolean)  => void }    isTrue       - assert that expression is true, side effects "results" and "messages"
+ * @property { equalityCheckFunction } is           - assert that two expressions are equal,
+ *                                                    side effects "results" and "messages", and
+ *                                                    logs an error to the console incl. stack trace in case of failure
+ * @property { AssertThrows }          throws       - assert that the given function throws an exception,
+ *                                                    logs an error to the console incl. stack trace in case of failure
+ * @property { IterableEq }            iterableEq   - assert that two objects conform to the [JS iteration protocols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols) are equal.
  */
 
 /**
@@ -79,7 +88,7 @@ const Assert = () => {
         isTrue: testResult => {
             let message = "";
             if (!testResult) {
-                console.error("test failed");
+                error("test failed");
                 message = "not true";
             }
             results .push(testResult);
@@ -90,7 +99,7 @@ const Assert = () => {
             let message = "";
             if (!testResult) {
                 message = `Got '${actual}', expected '${expected}'`;
-                console.error(message);
+                error(message);
             }
             results .push(testResult);
             messages.push(message);
@@ -111,7 +120,7 @@ const Assert = () => {
                 const { value: expectedValue, done: expectedDone } = expectedIt.next();
 
                 const oneIteratorDone      = actualDone || expectedDone;
-                const tooManyIterations = iterationCount > maxElementsToConsume;
+                const tooManyIterations    = iterationCount > maxElementsToConsume;
 
                 if (oneIteratorDone) break;
                 if (tooManyIterations) {
@@ -146,7 +155,7 @@ const Assert = () => {
                 if (hasErrorMsg) {
                     message += ` Expected: '${expectedErrorMsg}'`;
                 }
-                console.error(message);
+                error(message);
             } catch (e) {
                 testResult = true;
 

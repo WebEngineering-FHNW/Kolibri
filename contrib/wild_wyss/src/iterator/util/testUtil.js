@@ -180,11 +180,11 @@ const createTestConfig = config => ({
 
 /**
  * Checks if the given iterables are equals.
- * @template _T_, _U_
- * @param { Array<_U_> | _T_ }        expected
- * @param { IteratorType<_T_> | _T_ } actual
+ * @template _T_
+ * @param { Array<_T_> | _T_}        expected
+ * @param { Iterable<_T_> | _T_ }    actual
  * @param { AssertType }              assert
- * @param { EvalCallback<_U_> }       [evalFn] - An evaluation function if the iterables shouldn't be compared using standard iteratable test.
+ * @param { EvalCallback<_T_> }       [evalFn] - An evaluation function if the iterables shouldn't be compared using standard iteratable test.
  */
 const evaluate = (expected, actual, assert, evalFn ) => {
   if (evalFn) {
