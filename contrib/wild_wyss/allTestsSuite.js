@@ -19,7 +19,7 @@ import "./src/iterator/terminalOperations/terminalOperationsTest.js";
 import "./src/range/rangeTest.js";
 
 // focusring
-// import "./src/focusring/focusRingTest.js";
+import "./src/focusring/focusRingTest.js";
 
 // stdlib
 import "./src/stdlib/stdlibTest.js";

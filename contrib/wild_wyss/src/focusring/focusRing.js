@@ -14,20 +14,20 @@ export { FocusRing }
 /**
  * Constructs a new immutable focus ring.
  * @template _T_
- * @param   { !IteratorType<_T_> } nonEmptyIterator - A finite iterator which has at least one element.
+ * @param   { !Iterable<_T_> } nonEmptyIterator - A finite iterator which has at least one element.
  * @returns { FocusRingType<_T_> }
  * @constructor
  */
 const FocusRing = nonEmptyIterator => FocusRingInternal(
   nil,
-  nonEmptyIterator.copy() // paranoid
+  nonEmptyIterator
 );
 
 /**
  * Constructs a new immutable focus ring using the given iterators.
  * @template _T_
- * @param   { !IteratorType<_T_> } pre  - a finite iterator
- * @param   { !IteratorType<_T_> } post - a finite iterator which has at least one element, it's head is the focus.
+ * @param   { !Iterable<_T_> } pre  - a finite iterator
+ * @param   { !Iterable<_T_> } post - a finite iterator which has at least one element, it's head is the focus.
  * @returns { FocusRingType<_T_> }
  * @constructor
  */
