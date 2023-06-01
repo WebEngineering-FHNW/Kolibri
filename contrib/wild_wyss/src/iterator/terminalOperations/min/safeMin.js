@@ -4,7 +4,7 @@ import { safeMax$ }                        from "../max/safeMax.js";
 export { safeMin$ }
 
 /**
- *  Returns the smallest element of an {@link IteratorType}.
+ *  Returns the smallest element of an {@link Iterable}.
  *
  *  _Note_:
  *  To determine the smallest element, a comparator function is used.
@@ -15,7 +15,7 @@ export { safeMin$ }
  *
  * @function
  * @template _T_
- * @param { IteratorType<_T_> }     iterator     - a finite iterator
+ * @param { Iterable<_T_> }     iterator     - a finite iterator
  * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the first argument is smaller than the second
  * @returns MaybeType<_T_>
  * @throws { Error } {@link ILLEGAL_ARGUMENT_EMPTY_ITERATOR} if the given iterator is empty

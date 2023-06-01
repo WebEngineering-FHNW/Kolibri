@@ -1,24 +1,27 @@
-import { Pair }    from "../../../../../../docs/src/kolibri/stdlib.js";
-import { nextOf }  from "../../util/util.js";
+import { createMonadicIterable, iteratorOf } from "../../util/util.js";
+import { Pair } from "../../../stdlib/pair.js";
 
 export { uncons }
 
 /**
- * Removes the first element of this iterator.
+ * Removes the first element of this iterable.
  * @function
  * @template _T_
- * @param   { IteratorType<_T_> } iterator
- * @returns { (s: PairSelectorType) => (_T_ |IteratorType<_T_>) }
- * @pure iterator will be copied defensively
+ * @param   { Iterable<_T_> } iterable
+ * @returns { (s: PairSelectorType) => (_T_ |Iterable<_T_>) }
+ * @pure iterable will not be changed
  * @example
- * const it     = Range(5);
- * const result = uncons(it);
- * const head   = result(fst); // 0
- * const tail   = result(snd); // 1, 2, 3, 4, 5
+ * const numbers       = [0, 1, 2, 3, 4];
+ * const [head, tail]  = uncons(numbers);
+ *
+ * console.log("head:", head, "tail:", ...tail);
+ * // => Logs head: 0 tail: 1 2 3 4
  */
-const uncons = iterator => {
-  const inner = iterator.copy();
-  const { value } = nextOf(inner);
+const uncons = iterable => {
+  const inner = iteratorOf(iterable);
+  const { value } = inner.next();
 
-  return Pair(value)(inner);
+  const iterator = () => ({next: () => inner.next()});
+
+  return Pair(value)(createMonadicIterable(iterator));
 };

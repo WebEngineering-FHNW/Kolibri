@@ -9,7 +9,7 @@ export { isEmpty }
  * @template _T_
  * @pure iterator will be copied defensively
  * @type {
- *            (iterator: IteratorType<_T_>)
+ *            (iterator: Iterable<_T_>)
  *         => Boolean
  *       }
  * @example

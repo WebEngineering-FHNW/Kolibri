@@ -18,9 +18,9 @@ export { foldl$, reduce$ }
  * console.log(res);
  * // => logs 15 to the console
  */
-const reduce$ = (accumulationFn, start) => iterator => {
+const reduce$ = (accumulationFn, start) => iterable => {
   let accumulator = start;
-  for (const current of iterator) {
+  for (const current of iterable) {
     accumulator = accumulationFn(accumulator, current);
   }
 

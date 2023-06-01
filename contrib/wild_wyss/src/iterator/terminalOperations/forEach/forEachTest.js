@@ -21,25 +21,31 @@ const forEach$Config = (() => {
     expected:   [0, 1, 2, 3, 4],
     evalFn:     expected => _actual => {
       let result;
-      if (expected !== undefined) {
         result = arrayEq(expected)(iterElements);
         iterElements.splice(0, iterElements.length);
-      } else {
-        // test purity just runs two times the current function, since forEach does not return any value,
-        // both expected and actual are set to undefined, so it can be checked if 10 elements are in the array
-        result = arrayEq([...iterElements])([0, 1, 2, 3, 4, 0, 1, 2, 3, 4]);
-        iterElements.splice(0, iterElements.length);
-      }
       return result;
     },
     excludedTests: [
-      TESTS.TEST_COPY,
-      TESTS.TEST_COPY_AFTER_CONSUMPTION,
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE
+      TESTS.TEST_PURITY,
+      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
+      TESTS.TEST_ITERATE_MULTIPLE_TIMES
     ]
   });
 })();
 
 addToTestingTable(testSuite)(forEach$Config);
+
+testSuite.add("test purity forEach$", assert => {
+  // Given
+  const elements = [0, 1, 2, 3, 4];
+  const expected = [];
+
+  // When
+  forEach$(x => expected.push(x))(elements);
+
+  // Then
+  assert.iterableEq(elements, expected);
+});
+
 
 testSuite.run();

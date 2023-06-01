@@ -4,7 +4,7 @@ import { safeMax$ }                         from "./safeMax.js";
 export { max$ }
 
 /**
- *  Returns the largest element of a **non-empty** {@link IteratorType}.
+ *  Returns the largest element of a **non-empty** {@link Iterable}.
  *
  *  _Note_:
  *  To determine the largest element, a comparator function is used.
@@ -15,15 +15,16 @@ export { max$ }
  *
  * @function
  * @template _T_
- * @param { IteratorType<_T_> }     iterator     - a non-empty finite iterator
+ * @param { Iterable<_T_> }         iterator     - a non-empty finite iterator
  * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the second argument is larger than the first
  * @returns _T_
  * @throws { Error } {@link ILLEGAL_ARGUMENT_EMPTY_ITERATOR} if the given iterator is empty
  * @example
- * const it = Range(3);
- * const maximum = max$(it);
+ * const numbers = [1, 3, 0, 5];
+ * const maximum = max$(numbers);
+ *
  * console.log(maximum);
- * // => Logs: 3
+ * // => Logs 5
  */
 const max$ = (iterator, comparator = (a, b) => a < b) => {
   let returnVal;

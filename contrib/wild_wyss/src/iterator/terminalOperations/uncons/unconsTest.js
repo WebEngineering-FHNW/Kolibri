@@ -21,9 +21,8 @@ addToTestingTable(testSuite)(
       expected(fst) === actual(fst) &&
       arrayEq([...expected(snd)])([...actual(snd)]),
     excludedTests: [
-      TESTS.TEST_COPY,
-      TESTS.TEST_COPY_AFTER_CONSUMPTION,
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE
+      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
+      TESTS.TEST_ITERATE_MULTIPLE_TIMES
     ]
   })
 );

@@ -1,4 +1,4 @@
-import { nextOf } from "../../util/util.js";
+import {iteratorOf, nextOf} from "../../util/util.js";
 
 export { head }
 
@@ -6,18 +6,19 @@ export { head }
  * Return the next value without consuming it.
  * @function
  * @template _T_
- * @pure iterator will be copied defensively
+ * @haskell [a] -> a
+ * @pure iterable will not be changed
  * @type {
- *              (iterator: IteratorType<_T_>)
+ *              (iterable: Iterable<_T_>)
  *          =>  _T_
  *       }
  * @example
  * const it     = Iterator(0, inc, stop);
  * const result = head(it);
  */
-const head = iterator => {
-  const inner = iterator.copy();
-  const { done, value } = nextOf(inner);
+const head = iterable => {
+  const inner = iteratorOf(iterable);
+  const { done, value } = inner.next();
 
   return done ? undefined : value;
 };

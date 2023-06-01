@@ -4,7 +4,7 @@ import { max$ }                            from "../max/max.js";
 export { min$ }
 
 /**
- *  Returns the smallest element of a **non-empty** {@link IteratorType}.
+ *  Returns the smallest element of a **non-empty** {@link Iterable}.
  *
  *  _Note_:
  *  To determine the  smallest element, a comparator function is used.
@@ -15,14 +15,15 @@ export { min$ }
  *
  * @function
  * @template _T_
- * @param { IteratorType<_T_> }     iterator     - a non-empty finite iterator
+ * @param { Iterable<_T_> }     iterator     - a non-empty finite iterator
  * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the first argument is smaller than the second
  * @returns _T_
  * @throws { Error } {@link ILLEGAL_ARGUMENT_EMPTY_ITERATOR} if the given iterator is empty
  * @example
- * const it = Range(3);
- * const minimum = min$(it);
+ * const numbers = [1, 3, 0, 5];
+ * const minimum = min$(numbers);
+ *
  * console.log(minimum);
- * // => Logs: 0
+ * // => Logs 0
  */
 const min$ = (iterator, comparator = (a, b) => b < a) => max$(iterator, comparator);

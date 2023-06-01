@@ -7,7 +7,7 @@ export { forEach$ }
  * @pure iterator will be copied defensively
  * @type {
  *            (callback: Consumer<_T_>)
- *         => (it: IteratorType<_T_>)
+ *         => (it: Iterable<_T_>)
  *         => void
  *       }
  * @example
@@ -17,8 +17,8 @@ export { forEach$ }
  * console.log(iterElements);
  * // => Logs 0, 1, 2, 3, 4
  */
-const forEach$ = callback => iterator => {
-  for (const current of iterator.copy()) {
+const forEach$ = callback => iterable => {
+  for (const current of iterable) {
     callback(current);
   }
 };

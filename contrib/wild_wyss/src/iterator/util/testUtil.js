@@ -37,7 +37,7 @@ const id = x => x;
  * @typedef {
  *              (param: any)
  *           => (base: Iterable<_T_>)
- *           => (IteratorMonadType<_T_> | _T_)
+ *           => (IteratorMonadType<_T_> | _T_ | *)
  * } OperationCallback
  */
 

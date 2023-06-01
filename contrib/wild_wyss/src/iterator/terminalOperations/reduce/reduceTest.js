@@ -18,8 +18,6 @@ addToTestingTable(testSuite)(
     expected:  10,
     evalFn:    expected => actual => expected === actual,
     excludedTests: [
-      TESTS.TEST_COPY,
-      TESTS.TEST_COPY_AFTER_CONSUMPTION,
       TESTS.TEST_CB_NOT_CALLED_AFTER_DONE
     ]
   })

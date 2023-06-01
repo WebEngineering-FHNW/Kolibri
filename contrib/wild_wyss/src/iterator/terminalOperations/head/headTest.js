@@ -6,6 +6,7 @@ import {
   newIterator,
   UPPER_ITERATOR_BOUNDARY
 } from "../../util/testUtil.js";
+import { nil } from "../../constructors/nil/nil.js";
 
 const testSuite = TestSuite("Iterator: terminal Operations head");
 
@@ -17,17 +18,11 @@ addToTestingTable(testSuite)(
     evalFn:    expected => actual => expected === actual,
     expected:  0,
     excludedTests: [
-      TESTS.TEST_COPY,
-      TESTS.TEST_COPY_AFTER_CONSUMPTION,
       TESTS.TEST_CB_NOT_CALLED_AFTER_DONE
     ]
   })
 );
 
-testSuite.add("test advanced case: head of empty iterator", assert => {
-  const iterator = newIterator(4);
-  for (const iteratorElement of iterator) { /* exhaust iterator */ }
-  assert.is(head(iterator), undefined);
-});
+testSuite.add("test advanced case: head of empty iterator", assert => assert.is(head(nil), undefined));
 
 testSuite.run();
