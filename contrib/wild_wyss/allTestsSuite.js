@@ -16,7 +16,7 @@ import "./src/iterator/terminalOperations/terminalOperationsTest.js";
 // import "./src/iterator/iteratorBuilderTest.js";
 
 // range
-// import "./src/range/rangeTest.js";
+import "./src/range/rangeTest.js";
 
 // focusring
 // import "./src/focusring/focusRingTest.js";

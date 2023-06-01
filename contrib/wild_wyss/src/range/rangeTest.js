@@ -1,6 +1,6 @@
 import { Range }      from "./range.js"
 import { TestSuite }  from "../test/test.js";
-import {arrayEq} from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { createMonadicIterable, iteratorOf } from "../iterator/util/util.js";
 
 const rangeSuite = TestSuite("Range");
 
@@ -30,23 +30,24 @@ rangeSuite.add("test typical case deconstruction", assert => {
 });
 
 const testRange = (from, to, step, range, assert) => {
-
+  const rangeIterator = iteratorOf(range);
   for (let expected = from; expected <= to; expected += step) {
 
-    const { done, value } = range[Symbol.iterator]().next();
+    const { done, value } = rangeIterator.next();
     assert.is(value, expected);
     assert.isTrue(!done)
   }
-  assert.isTrue(range[Symbol.iterator]().next().done)
+  assert.isTrue(rangeIterator.next().done)
 };
 
 const testRangeNegativeStepSize = (from, to, step, range, assert) => {
+  const rangeIterator = iteratorOf(range);
   for (let expected = from; expected >= to; expected += step) {
-    const { done, value } = range[Symbol.iterator]().next();
+    const { done, value } = rangeIterator.next();
     assert.is(value, expected);
     assert.isTrue(!done)
   }
-  assert.isTrue(range[Symbol.iterator]().next().done)
+  assert.isTrue(rangeIterator.next().done)
 };
 
 rangeSuite.add("test simple Range(2,3)", assert =>
@@ -69,27 +70,6 @@ rangeSuite.add("test break Range(7)", assert => {
   assert.is(result[0], 0);
 });
 
-rangeSuite.add("test double break", assert => {
-  const range = Range(7);
-  const result = [];
-
-  // noinspection LoopStatementThatDoesntLoopJS
-  for (const value of range) {
-    result.push(value);
-    break;
-  }
-
-
-  // noinspection LoopStatementThatDoesntLoopJS
-  for (const value of range) {
-    result.push(value);
-    break;
-  }
-
-  assert.is(result.length, 2);
-  assert.is(result[0], 0);
-  assert.is(result[1], 1);
-});
 
 rangeSuite.add("test use range twice", assert => {
   const range = Range(0);
@@ -98,7 +78,7 @@ rangeSuite.add("test use range twice", assert => {
   assert.is(zero, 0);
 
   const [repeat] = range;
-  assert.is(repeat, undefined)
+  assert.is(repeat, 0);
 });
 
 rangeSuite.add("test continue and break", assert => {
@@ -111,11 +91,13 @@ rangeSuite.add("test continue and break", assert => {
 
 rangeSuite.add("test running out of range", assert => {
   const range = Range(2);
+  const rangeIterator = iteratorOf(range);
 
-  for (const _ of range) { /** Range gets exhausted. */ }
+  rangeIterator.next();
+  const rangeIterable = createMonadicIterable(() => rangeIterator);
+  for (const _ of rangeIterable) { /* Range gets exhausted. */ }
 
-  assert.is(range[Symbol.iterator]().next().done, true);
-  assert.is(range[Symbol.iterator]().next().done, true);
+  assert.is(rangeIterator.next().done, true);
 });
 
 rangeSuite.add("test negative Range(4, 6,- 2)", assert =>
@@ -149,24 +131,6 @@ rangeSuite.add("test of all combinations", assert => {
 
   testRangeNegativeStepSize(0, -5, -1, Range(-5, 0, -1), assert);
   testRangeNegativeStepSize(0, -5, -1, Range(0, -5, -1), assert);
-});
-
-rangeSuite.add("test copy", assert => {
-  const range = Range(5);
-  const copy = range.copy();
-
-  assert.isTrue(arrayEq([0,1,2,3,4,5])([...range]));
-  assert.isTrue(arrayEq([0,1,2,3,4,5])([...copy]));
-});
-
-rangeSuite.add("test partially used copy", assert => {
-  const range = Range(5);
-  // noinspection LoopStatementThatDoesntLoopJS
-  for (const _ of range) { break; } // take 1
-  const copy = range.copy();
-
-  assert.isTrue(arrayEq([1,2,3,4,5])([...range]));
-  assert.isTrue(arrayEq([1,2,3,4,5])([...copy]));
 });
 
 rangeSuite.run();

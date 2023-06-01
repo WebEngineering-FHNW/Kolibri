@@ -55,7 +55,6 @@ const createIterator = (next, copy) => {
 
 };
 
-
 /**
  *
  * @template _T_
