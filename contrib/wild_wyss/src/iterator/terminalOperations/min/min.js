@@ -16,7 +16,7 @@ export { min$ }
  * @function
  * @template _T_
  * @param { IteratorType<_T_> }     iterator     - a non-empty finite iterator
- * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the second argument is smaller than the first
+ * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the first argument is smaller than the second
  * @returns _T_
  * @throws { Error } {@link ILLEGAL_ARGUMENT_EMPTY_ITERATOR} if the given iterator is empty
  * @example

@@ -7,6 +7,7 @@ import {
   UPPER_ITERATOR_BOUNDARY
 } from "../../util/testUtil.js";
 import {Range} from "../../../range/range.js";
+import {ArrayIterator} from "../../constructors/arrayIterator/arrayIterator.js";
 
 const testSuite = TestSuite("Iterator: terminal Operations show");
 
@@ -55,6 +56,12 @@ testSuite.add("test exceed default output length (50)", assert => {
    */
   const outputLength = 2 + 49 + 10 + 2 * 40;
   assert.is(result.length, outputLength);
+});
+
+testSuite.add("test show of an iterator of iterators", assert => {
+  const it     = ArrayIterator([Range(1), Range(2), Range(3)]);
+  const result = show(it);
+  assert.is(result, "[[0,1],[0,1,2],[0,1,2,3]]");
 });
 
 testSuite.run();
