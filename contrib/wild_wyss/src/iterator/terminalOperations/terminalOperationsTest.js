@@ -1,5 +1,6 @@
 import "./forEach/forEachTest.js";
 import "./head/headTest.js";
+import "./eq/eqTest.js"
 import "./isEmpty/isEmptyTest.js";
 import "./reduce/reduceTest.js";
 import "./uncons/unconsTest.js";
