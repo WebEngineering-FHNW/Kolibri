@@ -1,4 +1,5 @@
-import { nextOf } from "../../util/util.js";
+import { dropWhile } from "../dropWhile/dropWhile.js";
+import {createMonadicIterable, iteratorOf} from "../../util/util.js";
 
 export { drop }
 
@@ -12,39 +13,22 @@ export { drop }
  *            (count: number)
  *         => IteratorOperation<_T_>
  *       }
+ *
  * @example
- * const it      = Iterator(0, inc, stop);
- * const dropped = drop(2)(it);
+ * const numbers = [0,1,2,3];
+ * const dropped = drop(2)(numbers);
+ *
+ * console.log(...dropped);
+ * // => Logs 2, 3
  */
-const drop = count => iterator => {
+const drop = count => iterable => {
+  const dropIterator = () => {
+    let start               = 0;
+    const dropWhileIterable = dropWhile(_ => start++ < count)(iterable);
+    const inner             = iteratorOf(dropWhileIterable);
 
-  /**
-   * @type { <_T_>
-   *     (start: Number)
-   *  => (count: Number)
-   *  => (iterator: IteratorType<_T_>)
-   *  => IteratorType<_T_>
-   * }
-   */
-  const dropFactory = start => count => iterator => {
-    const inner = iterator.copy();
-
-    const next = () => {
-      let { done, value } = nextOf(inner);
-
-      while (!done && start++ < count) {
-        const n = nextOf(inner);
-        done = n.done;
-        value = n.value;
-      }
-
-      return { done, value }
-    };
-
-    return {
-      [Symbol.iterator]: () => ({ next }),
-      copy: () => dropFactory(start)(count)(inner),
-    }
+    return { next : inner.next }
   };
-  return dropFactory(0)(count)(iterator);
+
+  return createMonadicIterable(dropIterator);
 };

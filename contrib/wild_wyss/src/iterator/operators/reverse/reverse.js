@@ -1,22 +1,31 @@
-import { ArrayIterator } from "../../iterator.js";
+import { createMonadicIterable, iteratorOf } from "../../util/util.js";
 
 export { reverse$ }
 
 /**
- * Processes the iterator backwards.
+ * Processes the iterable backwards.
  * @template _T_
  * @function
- * @pure iterator will be copied defensively
+ * @pure iterable will not be changed
  * @type {
- *             (iterator: IteratorType<_T_>)
- *          => IteratorType<_T_>
+ *             (iterable: Iterable<_T_>)
+ *          => IteratorMonadType<_T_>
  *       }
  * @example
- * const it       = Iterator(0, inc, stop);
+ * const numbers  = [0, 1, 2];
  * const reversed = reverse$(it);
+ *
+ * console.log(...reversed);
+ * // => Logs 2, 1, 0
  */
-const reverse$ = iterator => {
-  const values = [...iterator.copy()].reverse();
+const reverse$ = iterable => {
 
-  return ArrayIterator(values);
+  // wrap the code in a function, to keep lazyness
+  const reverse$Iterator = () => {
+    const values         = [...iterable].reverse();
+    const valuesIterator = iteratorOf(values);
+    return { next: () => valuesIterator.next() };
+  };
+
+  return createMonadicIterable(reverse$Iterator);
 };

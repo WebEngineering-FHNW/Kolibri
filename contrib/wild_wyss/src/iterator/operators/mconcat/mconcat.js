@@ -1,51 +1,51 @@
-import { createIterator, nextOf } from "../../util/util.js";
+import { createMonadicIterable, iteratorOf } from "../../util/util.js";
 
 export { mconcat }
 
 /**
- * Flatten an {@link IteratorType} of {@link IteratorType Iteratortypes}.
- *
- * _Note:_
- * Iterator passed to {@link mconcat} is processed lazily.
- * Therefore, its sub iterators are not copied until these are processed.
- * Otherwise, the passed iterator must be processed eagerly and couldn't contain infinite iterators.
+ * Flatten an {@link Iterable} of {@link Iterable Iterables}.
  *
  * @function
  * @template _T_
- * @pure iterator and sub iterators will be copied defensively
- * @param { IteratorType<IteratorType<_T_>> } iterator -
- * @returns IteratorType<_T_>
+ * @pure iterable and sub iterators will not be changed
+ * @haskell [a] -> a
+ * @param { Iterable<Iterable<_T_>> } iterable -
+ * @returns IteratorMonadType<_T_>
  * @example
  * const ranges = map(x => Range(x))(Range(2));
  * const result = mconcat(ranges);
  * console.log(...result);
- * // prints: 0, 0, 1, 0, 1, 2
+ * // => Logs 0, 0, 1, 0, 1, 2
  */
-const mconcat = iterator => {
+const mconcat = iterable => {
 
-  const mconcatFactory = (outer, current = undefined) => {
+  const mconcatIterator = () => {
+    /**
+     * @template _T_
+     * @type { Iterator<_T_> }
+     */
+    let current = undefined;
+    const outer = iteratorOf(iterable);
 
     const next = () => {
       while (true) {
         if (current === undefined) {
-          // if there is no current, get the next sub iterator of the outer iterator
-          const nextOfOuter = nextOf(outer);
+          // if there is no current, get the next sub iterable of the outer iterable
+          const nextOfOuter = outer.next();
           if (nextOfOuter.done) return nextOfOuter;
-          current = nextOfOuter.value.copy();
+          current = iteratorOf(nextOfOuter.value);
         }
-        // grab next iterator value from sub iterator until it is done
-        const nextOfCurrent = nextOf(current);
+
+        // grab next value from sub iterable until it is done
+        const nextOfCurrent = current.next();
         if (!nextOfCurrent.done) return nextOfCurrent;
+
         current = undefined;
       }
     };
 
-    const copy = () => {
-      const safeCopyCurrent = current === undefined ? current : current.copy();
-      return mconcatFactory(outer.copy(), safeCopyCurrent);
-    };
-
-    return createIterator(next, copy);
+    return { next }
   };
-  return mconcatFactory(iterator.copy())
+
+  return createMonadicIterable(mconcatIterator);
 };

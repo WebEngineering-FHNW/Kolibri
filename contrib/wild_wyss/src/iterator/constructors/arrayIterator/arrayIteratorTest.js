@@ -3,7 +3,6 @@ import { createTestConfig }  from "../../util/testUtil.js";
 import { ArrayIterator }     from "./arrayIterator.js";
 import { arrayEq }           from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { nil }               from "../nil/nil.js";
-import { eq$ }               from "../../terminalOperations/eq/eq.js";
 import {
   addToTestingTable,
   TESTS
@@ -21,18 +20,26 @@ addToTestingTable(testSuite)(
 );
 
 testSuite.add("test iterate on copy", assert => {
+  // Given
   const arr = [1,2,3];
   const arrayIterator = ArrayIterator(arr);
+
+  // When
   arr.push(4);
 
+  // Then
   assert.isTrue(arrayEq([1,2,3])([...arrayIterator]));
 });
 
 testSuite.add("test empty array", assert => {
+  // Given
   const arr = [];
+
+  // When
   const arrayIterator = ArrayIterator(arr);
 
-  assert.isTrue(eq$(arrayIterator)(nil));
+  // Then
+  assert.iterableEq(arrayIterator, nil);
 });
 
 testSuite.run();

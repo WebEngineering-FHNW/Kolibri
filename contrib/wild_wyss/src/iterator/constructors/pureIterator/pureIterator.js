@@ -1,14 +1,14 @@
-import { Iterator }       from "../iterator/iterator.js";
-import { createIterator } from "../../util/util.js";
+import { createMonadicIterable } from "../../util/util.js";
 
 export { PureIterator }
 
 /**
- * Creates an {@link IteratorType} which contains just the given value.
+ * Creates an {@link IteratorMonadType} which contains just the given value.
  *
  * @template _T_
  * @param { _T_ } value
- * @returns { IteratorType<_T_> }
+ * @pure
+ * @returns { IteratorMonadType<_T_> }
  * @haskell pure :: a -> [a]
  * @constructor
  * @example
@@ -17,11 +17,18 @@ export { PureIterator }
  * // => Logs: 1
  */
 const PureIterator = value => {
-    const PureIteratorFactory = done => {
-        const inner = Iterator(value, _ => done = true, _ => done);
 
-        const copy = () => PureIteratorFactory(done);
-        return createIterator(inner[Symbol.iterator]().next, copy);
+  const pureIterator = () => {
+    let done = false;
+
+    const next = () => {
+      const prevDone = done;
+      done = true;
+      return { done: prevDone, value }
     };
-    return PureIteratorFactory(false);
+
+    return { next }
+  };
+
+  return createMonadicIterable(pureIterator)
 };

@@ -4,10 +4,10 @@ import { Range }  from "../../../range/range.js";
 export { AngleIterator }
 
 /**
- * Creates an {@link IteratorType} which generates evenly spaced angles between 0 and 360.
+ * Creates an {@link IteratorMonadType} which generates evenly spaced angles between 0 and 360.
  *
  * @param { Number } count - the number of angles to create.
- * @returns { IteratorType<Number> }
+ * @returns { IteratorMonadType<Number> }
  * @constructor
  * @example
  * const iterator = AngleIterator(4);

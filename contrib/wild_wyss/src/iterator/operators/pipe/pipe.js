@@ -1,11 +1,13 @@
+import {iteratorOf} from "../../util/util.js";
+
 export { pipe }
 
 /**
- * Transforms the given {@link IteratorType iterator} using the passed {@link IteratorOperation}
+ * Transforms the given {@link Iterable iterable} using the passed {@link IteratorOperation}
  * @type  {<_T_>
  *            (...transformers: IteratorOperation<*,*> )
- *            => (iterator: IteratorType<_T_>)
- *            => IteratorType<_T_>
+ *            => (iterator: Iterable<_T_>)
+ *            => (IteratorMonadType<_T_> | *)
  *        }
  * @example
  * const piped = pipe(
@@ -16,12 +18,10 @@ export { pipe }
  * console.log(...piped);
  * // => Logs 0,4,8
  */
-const pipe = (...transformers) => iterator => {
-  if (transformers.length === 0) iterator = iterator.copy();
-
+const pipe = (...transformers) => iterable => {
   for (const transformer of transformers) {
-    iterator = transformer(iterator);
+    iterable = transformer(iterable);
   }
 
-  return iterator;
+  return /**@type {IteratorMonadType} */ iterable;
 };

@@ -1,8 +1,10 @@
+import {createIterator, createMonadicIterable, toMonadicIterable} from "../../util/util.js";
+
 export { FibonacciIterator }
 
 /**
  * Generates the Fibonacci sequence.
- * @returns { IteratorType<Number> }
+ * @returns { IteratorMonadType<Number> }
  * @constructor
  * @example
  * const iterator = FibonacciIterator();
@@ -11,7 +13,9 @@ export { FibonacciIterator }
  */
 const FibonacciIterator = () => {
 
-  const FibonacciIteratorFactory = (last = 0, secondLast = 0) => {
+  const Iterator = () => {
+    let last = 0;
+    let secondLast = 0;
 
     const next = () => {
       let current = last + secondLast;
@@ -21,13 +25,8 @@ const FibonacciIterator = () => {
       return { done: false, value: current };
     };
 
-    const copy = () => FibonacciIteratorFactory(last, secondLast);
-
-    return {
-      [Symbol.iterator]: () => ({ next }),
-      copy,
-    };
+    return { next };
   };
 
-  return FibonacciIteratorFactory();
+  return createMonadicIterable(Iterator);
 };

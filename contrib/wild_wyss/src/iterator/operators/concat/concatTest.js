@@ -41,7 +41,7 @@ testSuite.add("test left/right identity: concat", assert => {
   const base = newIterator(4);
 
   // When
-  const left =  concat(nil)(base.copy());
+  const left =  concat(nil)(base);
   const right = concat(base)(nil);
 
   // Then

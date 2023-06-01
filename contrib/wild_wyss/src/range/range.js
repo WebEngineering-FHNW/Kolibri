@@ -18,7 +18,7 @@ export { Range }
  * @param { !Number } firstBoundary  - the first boundary of the range
  * @param { Number }  secondBoundary - optionally the second boundary of the range
  * @param { Number }  step - the size of a step, processed during each iteration
- * @returns IteratorType<Number>
+ * @returns IteratorMonadType<Number>
  * @example
  *  const [zero, one, two, three] = Range(3);
  *  const [five, three, one]      = Range(1, 5, -2);

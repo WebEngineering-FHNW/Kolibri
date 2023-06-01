@@ -21,8 +21,12 @@ addToTestingTable(testSuite)(
   })
 );
 
+// TODO: remove as soon as empty is in the testing table
 testSuite.add("test empty iterator: cons element to empty iterator", assert => {
+  // When
   const result = cons(42)(nil);
+
+  // Then
   assert.isTrue(arrayEq([42])([...result]));
 });
 

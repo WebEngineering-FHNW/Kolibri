@@ -7,6 +7,7 @@ import {
   createTestConfig,
   newIterator,
 } from "../../util/testUtil.js";
+import {take} from "../take/take.js";
 
 const testSuite = TestSuite("Iterator: Operation cycle");
 

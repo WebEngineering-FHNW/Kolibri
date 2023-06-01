@@ -1,4 +1,4 @@
-import { nextOf } from "../../util/util.js";
+import { createMonadicIterable, iteratorOf } from "../../util/util.js";
 
 export { takeWhile }
 
@@ -16,20 +16,22 @@ export { takeWhile }
  * // keep all elements until one element is bigger or equal to 2.
  * const dropped = takeWhile(el => el < 2)(it);
  */
-const takeWhile = predicate => iterator => {
-  const inner = iterator.copy();
+const takeWhile = predicate => iterable => {
 
-  const next = () => {
-    const el = nextOf(inner);
-    // the iterator finishes, when the predicate does not return true anymore,
-    // or the previous iterator has no more elements left
-    const done = el.done || !predicate(el.value);
+  const takeWhileIterator = () => {
+    const inner = iteratorOf(iterable);
 
-    return  { value: el.value, done };
+    const next = () => {
+      const el = inner.next();
+      // the iterator finishes, when the predicate does not return true anymore,
+      // or the previous iterator has no more elements left
+      const done = el.done || !predicate(el.value);
+
+      return  { value: el.value, done };
+    };
+
+    return { next };
   };
 
-  return {
-    [Symbol.iterator]: () => ({ next }),
-    copy: () => takeWhile(predicate)(inner)
-  };
+  return createMonadicIterable(takeWhileIterator)
 };

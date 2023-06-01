@@ -21,10 +21,15 @@ addToTestingTable(testSuite)(
 );
 
 testSuite.add("test advanced case: takeWhile inner iterator is shorter", assert => {
-  // the inner iterator stops before the outer
+  // Given
   const iterator = newIterator(UPPER_ITERATOR_BOUNDARY);
+
+  // When
+  // take all elements
   const some = takeWhile(_ => true)(iterator);
-  assert.isTrue(arrayEq([0, 1, 2, 3, 4])([...some]));
+
+  // Then
+  assert.iterableEq([0, 1, 2, 3, 4], some);
 });
 
 testSuite.run();

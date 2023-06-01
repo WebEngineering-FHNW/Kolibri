@@ -13,10 +13,10 @@
  * @template _T_
  * @typedef {
  *            {
- *              and: <_U_>(bindFn: (_T_) => IteratorMonadType<_U_>) => IteratorMonadType<_U_>,
- *              pure: <_U_>  (_U_)             => IteratorMonadType<_U_>,
- *              fmap: <_U_>  (f: (_T_) => _U_) => IteratorMonadType<_U_>,
- *              empty: ()                      => IteratorMonadType<_T_>
+ *              and:  <_U_>(bindFn: (_T_) => IteratorMonadType<_U_>) => IteratorMonadType<_U_>,
+ *              pure: <_U_>(_U_)             => IteratorMonadType<_U_>,
+ *              fmap: <_U_>(f: (_T_) => _U_) => IteratorMonadType<_U_>,
+ *              empty: ()                    => IteratorMonadType<_T_>
  *            } & Iterable<_T_>
  * } IteratorMonadType
  */
@@ -32,11 +32,10 @@
 /**
  * Defines a single operation to decorate an existing {@link IteratorMonadType}.
  *
- * _Note_: Functions of this type must always copy the given iterator.
  * @callback IteratorOperation
  * @template _T_
  * @template _U_
- * @param { IteratorMonadType<_T_> } iterator
+ * @param   { Iterable<_T_>} iterator
  * @returns { IteratorMonadType<_U_>}
  */
 

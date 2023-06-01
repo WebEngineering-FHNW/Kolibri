@@ -1,15 +1,21 @@
 import { IteratorPrototype } from "../constructors/iterator/iterator.js";
 
-export { nextOf, takeWithoutCopy, createIterator }
+export { iteratorOf, nextOf, takeWithoutCopy, createIterator, toMonadicIterable, createMonadicIterable}
 
 /**
  * @function
  * @template _T_
  * Convenience function to call the next function of an object which is iterable.
- * @param   { IteratorType<_T_> } it
+ * @param   { IteratorMonadType<_T_> } it
  * @returns { IteratorResult<_T_, _T_> }
  */
 const nextOf = it => it[Symbol.iterator]().next();
+/**
+ * @template _T_
+ * @param { Iterable<_T_> } it
+ * @returns Iterator<_T_>
+ */
+const iteratorOf = it => it[Symbol.iterator]();
 
 /**
  * Works exactly as take, but does not copy the iterator.
@@ -17,7 +23,7 @@ const nextOf = it => it[Symbol.iterator]().next();
  * @template _T_
  * @type {
  *         (n: Number)
- *         => (iterator: IteratorType<_T_>)
+ *         => (iterator: IteratorMonadType<_T_>)
  *         => Array<_T_>
  * }
  */
@@ -35,8 +41,8 @@ const takeWithoutCopy = n => iterator => {
  *
  * @template _T_
  * @param { () => IteratorResult<_T_, _T_> } next
- * @param { () => IteratorType<_T_> } copy
- * @returns { IteratorType<_T_> }
+ * @param { () => IteratorMonadType<_T_> } copy
+ * @returns { IteratorMonadType<_T_> }
  */
 const createIterator = (next, copy) => {
   const result = {
@@ -45,6 +51,29 @@ const createIterator = (next, copy) => {
   };
 
   Object.setPrototypeOf(result, IteratorPrototype);
-  return /** @type IteratorType */result;
+  return /** @type IteratorMonadType */result;
 
+};
+
+
+/**
+ *
+ * @template _T_
+ * @param { Iterable<_T_> } iterable
+ * @returns { IteratorMonadType<_T_> }
+ */
+const toMonadicIterable = iterable => {
+  Object.setPrototypeOf(iterable, IteratorPrototype);
+  return /**@type IteratorMonadType*/ iterable;
+};
+
+/**
+ *
+ * @template _T_
+ * @param { () => { next: () => IteratorResult<_T_, _T_>} } iterator
+ * @returns { IteratorMonadType<_T_> }
+ */
+const createMonadicIterable = iterator => {
+  const result = {[Symbol.iterator]: iterator};
+  return toMonadicIterable(result);
 };

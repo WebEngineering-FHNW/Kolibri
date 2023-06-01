@@ -1,7 +1,7 @@
 import {
   testCBNotCalledAfterDone,
   testCopy,
-  testCopyAfterConsumption,
+  testCopyAfterConsumption, testIterateMultipleTimes,
   testPrototype,
   testPurity,
   testSimple
@@ -34,20 +34,18 @@ export { addToTestingTable, TESTS }
 const TESTS = {
   TEST_SIMPLE:                   'TEST_SIMPLE',
   TEST_PURITY:                   'TEST_PURITY',
-  TEST_COPY:                     'TEST_COPY',
   TEST_PROTOTYPE:                'TEST_PROTOTYPE',
-  TEST_COPY_AFTER_CONSUMPTION:   'TEST_COPY_AFTER_CONSUMPTION',
   TEST_CB_NOT_CALLED_AFTER_DONE: 'TEST_CB_NOT_CALLED_AFTER_DONE',
+  TEST_ITERATE_MULTIPLE_TIMES:   'TEST_ITERATE_MULTIPLE_TIMES',
 };
 
 
 const testingFunctions = [];
 testingFunctions.push({ name: TESTS.TEST_SIMPLE                  , test: testSimple});
-testingFunctions.push({ name: TESTS.TEST_COPY                    , test: testCopy});
 testingFunctions.push({ name: TESTS.TEST_PURITY                  , test: testPurity});
-testingFunctions.push({ name: TESTS.TEST_COPY_AFTER_CONSUMPTION  , test: testCopyAfterConsumption});
+testingFunctions.push({ name: TESTS.TEST_ITERATE_MULTIPLE_TIMES  , test: testIterateMultipleTimes});
 testingFunctions.push({ name: TESTS.TEST_CB_NOT_CALLED_AFTER_DONE, test: testCBNotCalledAfterDone});
-// testingFunctions.push({ name: TESTS.TEST_PROTOTYPE               , test: testPrototype}); // TODO: include this test
+testingFunctions.push({ name: TESTS.TEST_PROTOTYPE               , test: testPrototype});
 
 /**
  * @type {

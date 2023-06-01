@@ -1,12 +1,28 @@
 export { JsonIterator }
-import {ArrayIterator} from "../arrayIterator/arrayIterator.js";
-import {createIterator, nextOf} from "../../util/util.js";
+import { createMonadicIterable, iteratorOf } from "../../util/util.js";
 
-const JsonIterator = json => {
-  const inner = ArrayIterator(Array.isArray(json) ? json : [json]);
+/**
+ *
+ * Returns every element of the given JavaScript object.
+ * If the passed object is an array, every element of the object is returned.
+ * Thw whole object otherwise.
+ * @template _T_
+ * @param { _T_ | Array<_T_>} json -
+ * @returns {IteratorMonadType<_T_>}
+ * @constructor
+ */
+// TODO: Can this be done using varargs?!
+const JsonIterator = (...json) => {
+  // convert this object to an array.
+  const jsonArray = json;
 
-  const next = () => nextOf(inner);
-  const copy = () => JsonIterator(json);
+  const jsonIterator = () => {
+    const inner = iteratorOf(jsonArray);
 
-  return createIterator(next, copy);
+    const next = () => inner.next();
+    return { next };
+  };
+
+
+  return createMonadicIterable(jsonIterator);
 };

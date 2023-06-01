@@ -22,13 +22,18 @@ addToTestingTable(testSuite)(
 );
 
 testSuite.add("test empty iterator: snoc an element to empty iterator", assert => {
+  // When
   const result = snoc(42)(nil);
-  assert.isTrue(arrayEq([42])([...result]));
+  // Then
+  assert.iterableEq(result, [42]);
 });
 
 testSuite.add("test snoc 2 times", assert => {
+  // When
   const result = snoc(42)(snoc(42)(nil));
-  assert.isTrue(arrayEq([42, 42])([...result]));
+
+  // Then
+  assert.iterableEq([42, 42], result);
 });
 
 testSuite.run();

@@ -1,5 +1,4 @@
 import { mconcat }       from "../mconcat/mconcat.js";
-import { ArrayIterator } from "../../constructors/arrayIterator/arrayIterator.js";
 
 export { concat }
 
@@ -8,11 +7,10 @@ export { concat }
  *
  * @template _T_
  * @pure it1 and it2 will be copied defensively
- * @haskell (++) :: [a] -> [a] -> [a]
+ * @haskell [a] -> [a] -> [a]
  * @type {
- *             (it1: IteratorType<_T_>)
- *          => (it2: IteratorType<_T_>)
- *          => IteratorType<_T_>
+ *             (it1: Iterable<_T_>)
+ *          => IteratorOperation<_T_>
  *       }
  * @constructor
  * @example
@@ -20,6 +18,6 @@ export { concat }
  * const it2 = Range(2);
  * const concatenated = concat(it1)(it2);
  * console.log(...concatenated);
- * => Logs: 0, 1, 0, 1, 2
+ * => Logs 0, 1, 0, 1, 2
  */
-const concat = it1 => it2 => mconcat(ArrayIterator([it1.copy(), it2.copy()]));
+const concat = it1 => it2 => mconcat([it1, it2]);

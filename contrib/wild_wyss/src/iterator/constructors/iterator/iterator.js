@@ -1,4 +1,4 @@
-import { createIterator } from "../../util/util.js";
+import {createIterator, createMonadicIterable} from "../../util/util.js";
 import { bind }           from "../../operators/bind/bind.js";
 import { map }            from "../../operators/map/map.js"
 import { PureIterator }   from "../pureIterator/pureIterator.js";
@@ -18,37 +18,42 @@ export { Iterator, IteratorPrototype }
  * - Functions ending with a "$" must not be applied to infinite iterators.
  *
  * @template _T_
- * @param   { _T_ }               value
+ * @param   { _T_ }               start
  * @param   { (_T_) => _T_ }      incrementFunction
  * @param   { (_T_) => Boolean }  isDoneFunction - returns true if the iteration should stop
- * @returns { IteratorType<_T_> }
+ * @returns { IteratorMonadType<_T_> }
  * @constructor
  */
-const Iterator = (value, incrementFunction, isDoneFunction) => {
-  /**
-   * @template _T_
-   * Returns the next iteration of this iterable object.
-   * @returns { IteratorResult<_T_, _T_> }
-   */
-  const next = () => {
-    const current = value;
-    const done = isDoneFunction(current);
-    if (!done) value = incrementFunction(value);
-    return { done, value: current };
+const Iterator = (start, incrementFunction, isDoneFunction) => {
+
+  const iteratorIterator = () => {
+    let value = start;
+    /**
+     * @template _T_
+     * Returns the next iteration of this iterable object.
+     * @returns { IteratorResult<_T_, _T_> }
+     */
+    const next = () => {
+      const current = value;
+      const done = isDoneFunction(current);
+      if (!done) value = incrementFunction(value);
+      return { done, value: current };
+    };
+
+    return { next };
   };
 
   /**
    * @template _T_
    * Returns a copy of this Iterator
-   * @returns { IteratorType<_T_> }
+   * @returns { IteratorMonadType<_T_> }
    */
-  const copy = () => Iterator(value, incrementFunction, isDoneFunction);
 
-  return createIterator(next, copy);
+  return createMonadicIterable(iteratorIterator);
 };
 
 /**
- * This function serves as prototype for the {@link IteratorType}.
+ * This function serves as prototype for the {@link IteratorMonadType}.
  *
  */
 const IteratorPrototype = () => null;
@@ -56,8 +61,8 @@ const IteratorPrototype = () => null;
 
 /**
  * @template _T_, _U_
- * @param { (_T_) => IteratorType<_U_> } bindFn
- * @returns { IteratorType<_U_> }
+ * @param { (_T_) => IteratorMonadType<_U_> } bindFn
+ * @returns { IteratorMonadType<_U_> }
  */
 IteratorPrototype.and = function (bindFn) {
   return bind(bindFn)(this);
@@ -66,7 +71,7 @@ IteratorPrototype.and = function (bindFn) {
 /**
  * @template _T_, _U_
  * @param { (_T_) => _U_ } mapper - maps the value in the context
- * @returns IteratorType<_U_>
+ * @returns IteratorMonadType<_U_>
  */
 IteratorPrototype.fmap = function (mapper) {
   return map(mapper)(this);
@@ -75,13 +80,13 @@ IteratorPrototype.fmap = function (mapper) {
 /**
  * @template _T_
  * @param { _T_ } val - lifts a given value into the context
- * @returns IteratorType<_T_>
+ * @returns IteratorMonadType<_T_>
  */
 IteratorPrototype.pure = val => PureIterator(val);
 
 /**
  * @template _T_
- * @returns IteratorType<_T_>
+ * @returns IteratorMonadType<_T_>
  */
 IteratorPrototype.empty = () => Iterator(undefined, _ => undefined, _ => true);
 

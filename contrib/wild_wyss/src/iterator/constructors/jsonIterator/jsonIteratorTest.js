@@ -10,7 +10,6 @@ const testSuite = TestSuite("Iterator: Constructor JsonIterator");
 
 const sampleJson = JSON.parse( `{ "id": 42 }`);
 
-// TODO: add test for copy after consumption
 addToTestingTable(testSuite)(
   createTestConfig({
     name:     "JsonIterator test with object",
@@ -21,22 +20,20 @@ addToTestingTable(testSuite)(
       const expectedVal = [...expected];
       return expectedVal[0].id === actualVal[0].id
     },
-    excludedTests: [TESTS.TEST_PURITY, TESTS.TEST_CB_NOT_CALLED_AFTER_DONE, TESTS.TEST_COPY_AFTER_CONSUMPTION]
+    excludedTests: [TESTS.TEST_PURITY, TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
 
-const sampleJsonArray = JSON.parse( `[1,2,3]`);
+const sampleJsonArray = JSON.parse(`[1,2,3]`);
 
-// TODO: add test for copy after consumption
 addToTestingTable(testSuite)(
   createTestConfig({
-    name:     "JsonIterator test with object",
-    iterator: () => JsonIterator(sampleJsonArray),
+    name:     "JsonIterator test with array",
+    iterator: () => JsonIterator(...sampleJsonArray),
     expected: [1,2,3],
-    excludedTests: [TESTS.TEST_PURITY, TESTS.TEST_CB_NOT_CALLED_AFTER_DONE, TESTS.TEST_COPY_AFTER_CONSUMPTION]
+    excludedTests: [TESTS.TEST_PURITY, TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
-
 
 // TODO: add special case test with complex object in array
 testSuite.run();

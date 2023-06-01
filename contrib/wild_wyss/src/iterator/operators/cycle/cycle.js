@@ -1,43 +1,34 @@
-import { nextOf } from "../../util/util.js";
+import {createMonadicIterable, iteratorOf } from "../../util/util.js";
 
 export { cycle }
 
 /**
- * {@link cycle Cycle} ties a finite {@link IteratorType} into a circular one, or equivalently, the infinite repetition of the original {@link IteratorType}.
+ * {@link cycle Cycle} ties a finite {@link Iterable} into a circular one, or equivalently, the infinite repetition of the original {@link Iterable}.
  * @function
  * @template _T_
- * @pure iterator will be copied defensively
- * @param { IteratorType<_T_> } iterator
- * @returns IteratorType<_T_>
+ * @pure iterable will not be changed
+ * @param { Iterable<_T_> } iterable
+ * @returns IteratorMonadType<_T_>
  * @example
- * const it     = Range(2);
- * const cycled = cycle(it);
- * console.log(take(6)(cycled));
+ * const cycled = cycle([0,1,2]);
+ * console.log(...take(6)(cycled));
  * // => Logs: 0, 1, 2, 0, 1, 2
  */
-const cycle = iterator => {
+const cycle = iterable => {
 
-  // cycleFactory is used to create a proper copy and makes sure the following points:
-  // - continue from the current value of the underlying iterator (and not from the first value of the origin iterator)
-  // - that the iterator works on the full range of the original iterator when the next cycle begins
-  const cycleFactory = original => current => {
-
-    const origin  = original.copy();
-    let inner     = current.copy();
+  const cycleIterator = () => {
+    let inner = iteratorOf(iterable);
 
     const next = () => {
-      const result = nextOf(inner);
+      const result = inner.next();
       if (!result.done) return result;
 
-      inner = origin.copy();
-      return nextOf(inner);
+      inner = iteratorOf(iterable);
+      return next();
     };
 
-    return {
-      [Symbol.iterator]: () => ({ next }),
-      copy: () => cycleFactory(origin)(inner),
-    }
+   return { next };
   };
 
-  return cycleFactory(iterator)(iterator);
+  return createMonadicIterable(cycleIterator);
 };

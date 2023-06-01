@@ -1,4 +1,4 @@
-import { nextOf } from "../../util/util.js";
+import { createMonadicIterable, iteratorOf } from "../../util/util.js";
 
 export { retainAll }
 
@@ -16,21 +16,20 @@ export { retainAll }
  * // just keep even numbers
  * const filtered = retainAll(el => el % 2 === 0)(it);
  */
-const retainAll = predicate => iterator => {
-  const inner = iterator.copy();
+const retainAll = predicate => iterable => {
 
-  const next = () => {
-    const applyFilter  = () => {
-      const { done, value } = nextOf(inner);
-      const result = done || predicate(value);
-      return result ? { done, value } : applyFilter();
+  const retainAllIterator = () => {
+    const inner = iteratorOf(iterable);
+
+    const next = () => {
+      while(true) {
+        const { done, value } = inner.next();
+        const result = done || predicate(value);
+        if (result) return { /**@type boolean */done, value } ;
+      }
     };
-
-    return applyFilter();
+    return { next };
   };
 
-  return {
-    [Symbol.iterator]: () => ({ next }),
-    copy: () => retainAll(predicate)(inner)
-  };
+  return createMonadicIterable(retainAllIterator);
 };

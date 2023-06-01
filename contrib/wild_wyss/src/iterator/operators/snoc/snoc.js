@@ -1,41 +1,44 @@
-import {createIterator, nextOf} from "../../util/util.js";
+import { createMonadicIterable, iteratorOf } from "../../util/util.js";
 
 export { snoc }
 
 /**
  * Adds the given element to the end of the iterator.
  * _Note_:
- * Since snoc creates a copy of the {@link IteratorType}, it's better to use {@link IteratorBuilderType},
+ * Since snoc creates a copy of the {@link Iterable}, it's better to use {@link IteratorBuilderType},
  * if you want to add many elements (more than 100).
  * @function
  * @template _T_
  * @pure iterator will be copied defensively
  * @type {
  *            (element: _T_)
- *         => (iterator: IteratorType<_T_>)
- *         => IteratorType<_T_>
+ *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it       = Range(3)
- * const iterator = snoc(element)(7);
- * console.log(...iterator);
- * // => Logs: 0, 1, 2, 3, 7
+ * const numbers = [0, 1, 2, 3];
+ * const snocced = snoc(element)(7);
+ *
+ * console.log(...snocced);
+ * // => Logs 0, 1, 2, 3, 7
  *
  */
-const snoc = element => iterator => {
-  const inner = iterator.copy();
+const snoc = element => iterable => {
+  const snocIterator = () => {
+    let last = element;
+    const inner = iteratorOf(iterable);
 
-  const next = () => {
-    const current = nextOf(inner);
-    if (current.done && element !== undefined) {
-      const value = element;
-      element = undefined;
-      return { done: false, value: value }
-    }
-    return current;
+    const next = () => {
+      const current = inner.next();
+      if (current.done && last !== undefined) {
+        const value = element;
+        last = undefined;
+        return { done: false, value: value }
+      }
+      return current;
+    };
+
+    return { next };
   };
 
-  const copy = () => snoc(element)(inner);
-
-  return createIterator(next, copy);
+  return createMonadicIterable(snocIterator);
 };

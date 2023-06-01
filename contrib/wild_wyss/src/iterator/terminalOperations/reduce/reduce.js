@@ -10,7 +10,7 @@ export { foldl$, reduce$ }
  * @haskell foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
  * @type {<_T_, _U_>
  *             (accumulationFn: BiFunction<_T_, _U_, _T_>, start: _T_)
- *          => (iterator: IteratorType<_T_>)
+ *          => (iterator: Iterable<_T_>)
  *          => _T_
  *       }
  * @example
@@ -19,9 +19,8 @@ export { foldl$, reduce$ }
  * // => logs 15 to the console
  */
 const reduce$ = (accumulationFn, start) => iterator => {
-  const inner = iterator.copy();
   let accumulator = start;
-  for (const current of inner) {
+  for (const current of iterator) {
     accumulator = accumulationFn(accumulator, current);
   }
 

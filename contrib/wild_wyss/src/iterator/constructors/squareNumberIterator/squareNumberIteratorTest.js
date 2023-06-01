@@ -13,7 +13,7 @@ const testSuite = TestSuite("Iterator: Constructor SquareNumberIterator");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:     "SquareNumberIterator",
-    iterator: () => SquareNumberIterator(),
+    iterator: SquareNumberIterator,
     expected: [1, 4, 9, 16, 25],
     evalFn:   expected => actual => {
       const expectedArray = takeWithoutCopy(5)(expected);
