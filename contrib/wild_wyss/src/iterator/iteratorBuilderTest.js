@@ -47,27 +47,22 @@ iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert =>
   assert.isTrue(arrayEq([undefined, null])([...it]));
 });
 
-iteratorBuilderSuite.add("test copy: IteratorBuilder", assert => {
+iteratorBuilderSuite.add("test purity: IteratorBuilder", assert => {
   const it = IteratorBuilder()
     .append(1,2,3)
     .build();
-  const copy = it.copy();
-  assert.isTrue(arrayEq([1,2,3])([...copy]));
+  for (const el of it) { /* consume iterable */}
+
   assert.isTrue(arrayEq([1,2,3])([...it]));
 });
 
-iteratorBuilderSuite.add("test copy index: IteratorBuilder", assert => {
+iteratorBuilderSuite.add("test purity with sub-iterables: IteratorBuilder", assert => {
   const it = IteratorBuilder()
-    .append(1,2,3)
-    .build();
-  for (const element of it) { // take 2
-    if (element === 2) {
-      break;
-    }
-  }
-  const copy = it.copy();
-  assert.isTrue(arrayEq([3])([...copy]));
-  assert.isTrue(arrayEq([3])([...it]));
+      .append([1,2,3])
+      .build();
+  for (const el of it) { /* consume iterable */}
+
+  assert.isTrue(arrayEq([1,2,3])([...it]));
 });
 
 iteratorBuilderSuite.add("test infinity: IteratorBuilder", assert => {

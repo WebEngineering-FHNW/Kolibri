@@ -13,7 +13,7 @@ import "./src/logger/logUi/logUiControllerTest.js";
 import "./src/iterator/constructors/constructorTest.js";
 import "./src/iterator/operators/operatorsTest.js";
 import "./src/iterator/terminalOperations/terminalOperationsTest.js";
-// import "./src/iterator/iteratorBuilderTest.js";
+import "./src/iterator/iteratorBuilderTest.js";
 
 // range
 import "./src/range/rangeTest.js";
