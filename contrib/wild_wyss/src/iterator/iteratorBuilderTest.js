@@ -1,4 +1,3 @@
-import { arrayEq }                    from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Range }                      from "../range/range.js";
 import { TestSuite }                  from "../test/test.js";
 import { IteratorBuilder, Iterator }  from "./iterator.js";
@@ -11,12 +10,12 @@ iteratorBuilderSuite.add("test basic: IteratorBuilder", assert => {
     .append(1)
     .append(2, 3)
     .build();
-  assert.isTrue(arrayEq([1,2,3])([...it]));
+  assert.iterableEq(it, [1,2,3]);
 });
 
 iteratorBuilderSuite.add("test no start iterator: IteratorBuilder", assert => {
   const iterator = IteratorBuilder().build();
-  assert.isTrue(arrayEq([])([...iterator]));
+  assert.iterableEq(iterator, []);
 });
 
 iteratorBuilderSuite.add("test add values and iterator: IteratorBuilder", assert => {
@@ -26,7 +25,7 @@ iteratorBuilderSuite.add("test add values and iterator: IteratorBuilder", assert
     .append(range)
     .append(4)
     .build();
-  assert.isTrue(arrayEq([0,1,2,3,4])([...it]));
+  assert.iterableEq(it, [0,1,2,3,4]);
 });
 
 iteratorBuilderSuite.add("test varargs: IteratorBuilder", assert => {
@@ -36,7 +35,7 @@ iteratorBuilderSuite.add("test varargs: IteratorBuilder", assert => {
     .append(iterator,6,7,8)
     .append(9,10,11)
     .build();
-  assert.isTrue(arrayEq([0,1,2,3,4,5,6,7,8,9,10,11])([...it]));
+  assert.iterableEq(it, [0,1,2,3,4,5,6,7,8,9,10,11]);
 });
 
 iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert => {
@@ -44,7 +43,7 @@ iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert =>
     .append(undefined)
     .append(null)
     .build();
-  assert.isTrue(arrayEq([undefined, null])([...it]));
+  assert.iterableEq(it, [undefined, null]);
 });
 
 iteratorBuilderSuite.add("test purity: IteratorBuilder", assert => {
@@ -53,7 +52,7 @@ iteratorBuilderSuite.add("test purity: IteratorBuilder", assert => {
     .build();
   for (const el of it) { /* consume iterable */}
 
-  assert.isTrue(arrayEq([1,2,3])([...it]));
+  assert.iterableEq(it, [1,2,3]);
 });
 
 iteratorBuilderSuite.add("test purity with sub-iterables: IteratorBuilder", assert => {
@@ -62,7 +61,7 @@ iteratorBuilderSuite.add("test purity with sub-iterables: IteratorBuilder", asse
       .build();
   for (const el of it) { /* consume iterable */}
 
-  assert.isTrue(arrayEq([1,2,3])([...it]));
+  assert.iterableEq(it, [1,2,3]);
 });
 
 iteratorBuilderSuite.add("test infinity: IteratorBuilder", assert => {
@@ -90,7 +89,7 @@ iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert =>
   const it = IteratorBuilder(Range(3, 5))
     .prepend(0,1,2)
     .build();
-  assert.isTrue(arrayEq([0,1,2,3,4,5])([...it]));
+  assert.iterableEq(it, [0,1,2,3,4,5]);
 });
 
 iteratorBuilderSuite.add("test build two times: IteratorBuilder", assert => {
@@ -98,7 +97,7 @@ iteratorBuilderSuite.add("test build two times: IteratorBuilder", assert => {
   const it1 = builder.build();
 
   assert.throws(() => builder.build(), "Unsupported operation: Iterator has already been built!");
-  assert.isTrue(arrayEq([0,1,2,3])([...it1]));
+  assert.iterableEq(it1, [0,1,2,3]);
 });
 
 
@@ -108,7 +107,7 @@ iteratorBuilderSuite.add("test append after build: IteratorBuilder", assert => {
 
   assert.throws(() => builder.append(4,5,6), "Unsupported operation: Iterator has already been built!");
   // nothing should happen to the previous built iterator
-  assert.isTrue(arrayEq([0,1,2,3])([...it1]));
+  assert.iterableEq(it1, [0,1,2,3]);
 });
 
 iteratorBuilderSuite.add("test prepend after build: IteratorBuilder", assert => {
@@ -118,7 +117,7 @@ iteratorBuilderSuite.add("test prepend after build: IteratorBuilder", assert => 
   assert.throws(() => builder.prepend(4,5,6), "Unsupported operation: Iterator has already been built!");
 
   // nothing should happen to the previous built iterator
-  assert.isTrue(arrayEq([0,1,2,3])([...it1]));
+  assert.iterableEq(it1, [0,1,2,3]);
 });
 
 iteratorBuilderSuite.run();
