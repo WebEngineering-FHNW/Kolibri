@@ -1,6 +1,6 @@
-import { addToTestingTable } from "../../util/testingTable.js";
-import { TestSuite }         from "../../../test/test.js";
-import { rejectAll }         from "./rejectAll.js";
+import { addToTestingTable }   from "../../util/testingTable.js";
+import { TestSuite }           from "../../../test/test.js";
+import { rejectAll, nil, eq$ } from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -15,7 +15,11 @@ addToTestingTable(testSuite)(
     iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
     operation:  rejectAll,
     param:      el => el % 2 === 0,
-    expected:   [1, 3]
+    expected:   [1, 3],
+    invariants: [
+      it => eq$(rejectAll(_ => false)(it)) /* === */ (it),
+      it => eq$(rejectAll(_ => true)(it))  /* === */ (nil),
+    ]
   })
 );
 

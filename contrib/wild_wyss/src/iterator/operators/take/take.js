@@ -12,9 +12,11 @@ export {take}
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it      = Iterator(0, inc, stop);
- * // only keep the next 4 elements, ignore the others
- * const taken = take(4)(it);
+ * const numbers = [0,1,2,3];
+ * const take = take(2)(numbers);
+ *
+ * console.log(...taken);
+ * // => Logs 0, 1
  */
 const take = count => iterable => {
 

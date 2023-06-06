@@ -1,12 +1,11 @@
-import { addToTestingTable } from "../../util/testingTable.js";
-import { TestSuite }         from "../../../test/test.js";
-import { takeWhile }         from "./takeWhile.js";
+import { addToTestingTable }   from "../../util/testingTable.js";
+import { TestSuite }           from "../../../test/test.js";
+import { takeWhile, eq$, nil } from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
   UPPER_ITERATOR_BOUNDARY,
 } from "../../util/testUtil.js";
-import {arrayEq} from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 const testSuite = TestSuite("Iterator: Operation takeWhile");
 
@@ -16,7 +15,11 @@ addToTestingTable(testSuite)(
     iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
     operation:  takeWhile,
     param:      el => el < 2,
-    expected:   [0, 1]
+    expected:   [0, 1],
+    invariants: [
+      it => eq$(takeWhile(_ => true)(it))  /* === */ (it),
+      it => eq$(takeWhile(_ => false)(it)) /* === */ (nil),
+    ]
   })
 );
 

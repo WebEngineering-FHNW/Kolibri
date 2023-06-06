@@ -31,7 +31,7 @@ import "./src/stdlib/pairTest.js";
 // import "./src/json/jsonMonadTest.js"
 
 //poc
-import "./src/iterator/poc/pocTest.js"
+// import "./src/iterator/poc/pocTest.js"
 
 total.onChange(value => document.getElementById('grossTotal').textContent = "" + value + " tests done.");
 

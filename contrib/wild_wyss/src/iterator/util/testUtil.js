@@ -1,17 +1,17 @@
-import { Iterator, IteratorPrototype } from "../iterator.js";
+import {Iterator, IteratorPrototype, nil, PureIterator} from "../iterator.js";
 import { arrayEq }  from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { Just, Nothing }     from "../../stdlib/maybe.js";
 
 export {
   createTestConfig,
   newIterator,
   UPPER_ITERATOR_BOUNDARY,
   testSimple,
-  testCopyAfterConsumption,
   testPurity,
   testIterateMultipleTimes,
-  testCopy,
   testCBNotCalledAfterDone,
   testPrototype,
+  testInvariants,
 }
 
 const id = x => x;
@@ -22,17 +22,17 @@ const id = x => x;
  * @template _T_
  * @template _U_
  * @typedef  IteratorTestConfigType
- * @property { String }                   name            - The name of the iterator under test.
- * @property { () => Iterable<_T_> }      iterator   - A function which constructs a new iterator to apply the operation to. If the iterator under test does not take an inner iterator, use this function instead of {@link operation}.
- * @property { Array<_U_> | _U_ }         expected        - The expected result of the {@link operation} applied to the {@link iterator}.
- * @property { Array<TestingFunction> }   [excludedTests] - An optional array of {@link TestingFunction TestingFunctions} to exclude tests in this table.
- * @property { OperationCallback<_T_> }   [operation]     - The operation to test. The value passed in {@link param} is passed as an argument (Leave this empty for constructor tests, since they do not take an inner iterator.)
- * @property { (Function | any) }         [param]         - A parameter passed to this operation. If it is a function, some extra tests will be performed.
- * @property { EvalCallback<_U_> }        [evalFn]        - An optional function which takes {@link expected} and the actual result in curried style. It defaults to {@link arrayEq}.
+ * @property { String }                      name            - The name of the iterator under test.
+ * @property { () => Iterable<_T_> }         iterator        - A function which constructs a new iterator to apply the operation to. If the iterator under test does not take an inner iterator, use this function instead of {@link operation}.
+ * @property { Array<_U_> | _U_ }            expected        - The expected result of the {@link operation} applied to the {@link iterator}.
+ * @property { Array<TestingFunction> }      [excludedTests] - An optional array of {@link TestingFunction TestingFunctions} to exclude tests in this table.
+ * @property { OperationCallback<_T_> }      [operation]     - The operation to test. The value passed in {@link param} is passed as an argument (Leave this empty for constructor tests, since they do not take an inner iterator.)
+ * @property { (Function | any) }            [param]         - A parameter passed to this operation. If it is a function, some extra tests will be performed.
+ * @property { Array<InvariantCallback<T>> } [invariants]    - An optional array of {@link InvariantCallback}. The invariant must hold tests against different lists.
+ * @property { EvalCallback<_U_> }           [evalFn]        - An optional function which takes {@link expected} and the actual result in curried style. It defaults to {@link arrayEq}.
  */
 
 /**
- *
  * @template _T_
  * @typedef {
  *              (param: any)
@@ -54,16 +54,21 @@ const id = x => x;
  */
 
 /**
- *
+ * @template _T_
+ * @typedef {
+ *              (it: Iterator<_T_>)
+ *           => Boolean
+ * } InvariantCallback
+ */
+
+/**
  * @param  { Number } limit
  * @returns { IteratorMonadType<Number> }
  */
 const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
 const UPPER_ITERATOR_BOUNDARY = 4;
 
-
 /**
- *
  * @param operation
  * @param { IteratorTestConfigType } obj
  * @returns {(function(*): void)|*}
@@ -75,7 +80,6 @@ const testSimple = ({iterator, operation, evalFn, expected, param}) => assert =>
 };
 
 /**
- *
  * @param operation
  * @param { IteratorTestConfigType } obj
  * @returns {(function(*): void)|*}
@@ -102,40 +106,6 @@ const testPurity = config => assert => {
   const first  = operation(param)(underlyingIt);
   const second = operation(param)(underlyingIt);
   evaluate(first, second, assert, evalFn);
-};
-
-/**
- * Tests if the copy function of a given operation works as intended.
- * Optionally an evaluation function can be passed to compare the created array using the operation and the expected array.
- * @type {
- *         (config: IteratorTestConfigType)
- *      => (assert: any)
- *      => void
- * }
- */
-const testCopy = config => assert => {
-  const { operation, evalFn, iterator, param } = config;
-  const expected = operation(param)(iterator());
-  const copied   = operation(param)(iterator()).copy();
-  evaluate(expected, copied, assert, evalFn);
-};
-
-/**
- * @type {
- *         (config: IteratorTestConfigType)
- *      => (assert: any)
- *      => void
- * }
- */
-const testCopyAfterConsumption = config => assert => {
-  const { operation, param, evalFn, iterator } = config;
-  const operated = operation(param)(iterator());
-  // noinspection LoopStatementThatDoesntLoopJS
-  for (const elem of operated) {
-    break; // consume one element
-  }
-  const copied = operated.copy();
-  evaluate(operated, copied, assert, evalFn);
 };
 
 /**
@@ -176,6 +146,47 @@ const testCBNotCalledAfterDone = config => assert => {
 const testPrototype = config => assert =>
   assert.is(Object.getPrototypeOf(config.iterator()), IteratorPrototype);
 
+
+/**
+ * Tests, whether the given invariants hold when passed different lists.
+ * @type {
+ *         (invariants: IteratorTestConfigType)
+ *        => (assert: any)
+ *        => void
+ * }
+ */
+const testInvariants = config => assert => {
+  const invariants = config.invariants;
+  for (const inv of invariants) {
+    invariantPenetration(inv)(assert);
+  }
+};
+
+/**
+ * Applies a series of lists to a given invariant.
+ * @template _T_
+ * @type {
+ *           (invariant: InvariantCallback<_T_>)
+ *        => (assert: any)
+ *        => void
+ * }
+ */
+const invariantPenetration = invariant => assert => {
+  const testingLists = [
+    nil,
+    newIterator(1),
+    newIterator(5),
+    PureIterator("testString"),
+    ['a', 'b', 'c', 1, 2, 3, Nothing, Just("testString")],
+    [PureIterator(1), newIterator(4), '#', "abc", 1]
+  ];
+
+  for (const list of testingLists) {
+    const result = invariant(list);
+    assert.isTrue(result);
+  }
+};
+
 /**
  * EvalFn will be set to {@link arrayEq} if it has not been defined
  * @template _T_
@@ -189,7 +200,6 @@ const createTestConfig = config => ({
   operation:     config.operation     === undefined ? () => id        : config.operation,
   excludedTests: config.excludedTests === undefined ? []              : config.excludedTests,
 });
-
 
 /**
  * Checks if the given iterables are equals.

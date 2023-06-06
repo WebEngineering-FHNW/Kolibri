@@ -13,7 +13,11 @@ addToTestingTable(testSuite)(
     name:     "AngleIterator",
     iterator: () => AngleIterator(4),
     expected: [0, 90, 180, 270],
-    excludedTests: [TESTS.TEST_PURITY, TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
+    excludedTests: [
+      TESTS.TEST_PURITY,
+      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
+      TESTS.TEST_INVARIANTS,
+    ]
   })
 );
 

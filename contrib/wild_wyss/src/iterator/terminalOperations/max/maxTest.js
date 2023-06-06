@@ -4,7 +4,6 @@ import { addToTestingTable, TESTS }        from "../../util/testingTable.js";
 import { TestSuite }                       from "../../../test/test.js";
 import { max$ }                            from "./max.js"
 import { PureIterator }                    from "../../constructors/pureIterator/pureIterator.js";
-import { ArrayIterator }                   from "../../constructors/arrayIterator/arrayIterator.js";
 import { replicate }                       from "../../constructors/replicate/replicate.js";
 import {
   createTestConfig,
@@ -22,7 +21,8 @@ addToTestingTable(testSuite)(
     expected:  4,
     evalFn:    expected => actual => expected === actual,
     excludedTests: [
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE
+      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
+      TESTS.TEST_INVARIANTS
     ]
   })
 );

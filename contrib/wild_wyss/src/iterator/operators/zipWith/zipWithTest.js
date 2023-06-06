@@ -1,6 +1,6 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
-import { zipWith }           from "./zipWith.js";
+import { zipWith, eq$, nil } from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -15,7 +15,11 @@ addToTestingTable(testSuite)(
     iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
     operation:  zipper => zipWith(zipper)(newIterator(UPPER_ITERATOR_BOUNDARY)),
     param:      (i, j) => i + j,
-    expected:   [0, 2, 4, 6, 8]
+    expected:   [0, 2, 4, 6, 8],
+    invariants: [
+      it => eq$(zipWith(x => x)(nil)(it)) /* === */ (nil),
+      it => eq$(zipWith(x => x)(it)(nil)) /* === */ (nil),
+    ]
   })
 );
 

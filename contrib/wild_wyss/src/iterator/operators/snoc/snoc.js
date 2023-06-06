@@ -4,9 +4,6 @@ export { snoc }
 
 /**
  * Adds the given element to the end of the iterator.
- * _Note_:
- * Since snoc creates a copy of the {@link Iterable}, it's better to use {@link IteratorBuilderType},
- * if you want to add many elements (more than 100).
  * @function
  * @template _T_
  * @pure iterator will be copied defensively
@@ -16,7 +13,7 @@ export { snoc }
  *       }
  * @example
  * const numbers = [0, 1, 2, 3];
- * const snocced = snoc(element)(7);
+ * const snocced = snoc(7)(numbers);
  *
  * console.log(...snocced);
  * // => Logs 0, 1, 2, 3, 7

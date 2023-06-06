@@ -1,4 +1,4 @@
-import { addToTestingTable } from "../../util/testingTable.js";
+import {addToTestingTable, TESTS} from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
 import { catMaybes }         from "./catMaybes.js"
 import { nil }               from "../../constructors/nil/nil.js";
@@ -15,7 +15,8 @@ addToTestingTable(testSuite)(
     name:       "catMaybes",
     iterator:   () => ArrayIterator([Just(5), Just(3), Nothing]),
     operation:  () => catMaybes,
-    expected:   [5, 3]
+    expected:   [5, 3],
+    excludedTests: [TESTS.TEST_INVARIANTS],
   })
 );
 

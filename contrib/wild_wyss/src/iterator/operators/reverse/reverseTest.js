@@ -1,6 +1,6 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
-import { reverse$ }          from "./reverse.js";
+import { reverse$, eq$ }     from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -14,7 +14,10 @@ addToTestingTable(testSuite)(
     name:      "reverse$",
     iterator:  () => newIterator(UPPER_ITERATOR_BOUNDARY),
     operation: () => reverse$,
-    expected:  [4, 3, 2, 1, 0]
+    expected:  [4, 3, 2, 1, 0],
+    invariants: [
+      it => eq$(reverse$(reverse$(it))) /* === */ (it),
+    ]
   })
 );
 

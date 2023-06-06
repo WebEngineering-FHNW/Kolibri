@@ -1,10 +1,8 @@
-import { addToTestingTable } from "../../util/testingTable.js";
-import { TestSuite }         from "../../../test/test.js";
-import { Range }             from "../../../range/range.js";
-import { concat }            from "./concat.js"
-import { arrayEq }           from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { Iterator }          from "../../constructors/iterator/iterator.js";
-import { nil }               from "../../constructors/nil/nil.js";
+import {addToTestingTable }           from "../../util/testingTable.js";
+import { TestSuite }                  from "../../../test/test.js";
+import { Range }                      from "../../../range/range.js";
+import { arrayEq }                    from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { concat, Iterator, eq$, nil } from "../../../iterator/iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -19,6 +17,11 @@ addToTestingTable(testSuite)(
     operation: concat,
     param:     newIterator(2),
     expected:  [0,1,2,3,4],
+    invariants: [
+      it => eq$(concat(nil)(it)) /* === */ (it),
+      it => eq$(concat(it)(nil)) /* === */ (it),
+      it => [...concat([1])(it)].length > [...it].length,
+    ],
   })
 );
 
@@ -34,20 +37,6 @@ testSuite.add("test purity: concat - both sub iterators untouched.", assert => {
   // Then
   assert.isTrue(arrayEq([0,1,2,3,4])([...it1]));
   assert.isTrue(arrayEq([0,1,2])    ([...it2]));
-});
-
-testSuite.add("test left/right identity: concat", assert => {
-  // Given
-  const base = newIterator(4);
-
-  // When
-  const left =  concat(nil)(base);
-  const right = concat(base)(nil);
-
-  // Then
-  const expected = [0,1,2,3,4];
-  assert.isTrue(arrayEq(expected)([...right]));
-  assert.is(arrayEq(expected)([...left]),  true);
 });
 
 testSuite.add("test left/right associativity: concat", assert => {
