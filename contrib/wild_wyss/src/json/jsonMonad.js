@@ -35,16 +35,16 @@ const JsonMonad = jsonData => {
 
   const JsonMonadFactory = maybeObj => {
 
+    const ensureIterable = value => {
+      const it = Array.isArray(value) ? value: [value];
+      return toMonadicIterable(it)
+    };
+
     const fmap = f => {
       const result = maybeObj.and(iterator => {
         const newIt = iterator.and(elem => {
           const mapped = f(elem); // deep dive into json structure
-
-          // next JSON Object could be an array or an object
-          if (Array.isArray(mapped)) {
-            return ArrayIterator(mapped);
-          }
-          return mapped ? PureIterator(mapped): nil;
+          return mapped ? ensureIterable(mapped) : nil;
         });
 
         return isEmpty(newIt) ? Nothing : Just(newIt);
@@ -68,7 +68,7 @@ const JsonMonad = jsonData => {
       return JsonMonadFactory(result);
     };
 
-    const pure  = a => JsonMonadFactory(Just(JsonIterator(a)));
+    const pure  = a  => JsonMonadFactory(Just(JsonIterator(a)));
     const empty = () => JsonMonadFactory(Nothing);
     const get   = () => maybeObj;
 
