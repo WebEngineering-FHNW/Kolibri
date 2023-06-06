@@ -1,14 +1,12 @@
-import { ArrayIterator } from "../iterator/constructors/arrayIterator/arrayIterator.js";
 import { Just, Nothing } from "../stdlib/maybe.js";
 import { nil }           from "../iterator/constructors/nil/nil.js";
 import { isEmpty }       from "../iterator/terminalOperations/isEmpty/isEmpty.js";
 import { PureIterator }  from "../iterator/constructors/pureIterator/pureIterator.js";
 import {
   catMaybes,
-  JsonIterator,
+  toMonadicIterable,
   mconcat
 } from "../iterator/iterator.js"
-import {toMonadicIterable} from "../iterator/util/util.js";
 
 export { JsonMonad }
 
@@ -35,7 +33,7 @@ const JsonMonad = jsObject => {
     jsObject = [jsObject];
   }
   // TODO: Change to "toMonadicIterable"
-  const inner = JsonIterator(...jsObject);
+  const inner = toMonadicIterable(...jsObject);
 
   /**
    *
@@ -48,7 +46,7 @@ const JsonMonad = jsObject => {
 
     const ensureIterable = value => {
       const it = Array.isArray(value) ? value: [value];
-      return JsonIterator(...it)
+      return toMonadicIterable(...it)
     };
 
     const fmap = f => {

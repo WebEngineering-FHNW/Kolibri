@@ -4,34 +4,33 @@ import {
   addToTestingTable,
   TESTS
 } from "../../util/testingTable.js";
-import {JsonIterator} from "./jsonIterator.js";
+import { toMonadicIterable } from "./toMonadicIterable.js";
 
-const testSuite = TestSuite("Iterator: Constructor JsonIterator");
+const testSuite = TestSuite("Iterator: Constructor toMonadicIterable");
 
-const sampleJson = JSON.parse( `{ "id": 42 }`);
+const sampleObj = { id: 42 };
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:     "JsonIterator test with object",
-    iterator: () => JsonIterator(sampleJson),
-    expected: [{id: 42}],
+    iterator: () => toMonadicIterable(sampleObj),
+    expected: [sampleObj],
     evalFn: expected => actual => {
       const actualVal = [...actual];
       const expectedVal = [...expected];
       return expectedVal[0].id === actualVal[0].id
     },
-    excludedTests: [TESTS.TEST_PURITY, TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
+    excludedTests: [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
 
-const sampleJsonArray = JSON.parse(`[1,2,3]`);
-
+const sampleArray = [1,2,3];
 addToTestingTable(testSuite)(
   createTestConfig({
-    name:     "JsonIterator test with array",
-    iterator: () => JsonIterator(...sampleJsonArray),
-    expected: [1,2,3],
-    excludedTests: [TESTS.TEST_PURITY, TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
+    name:           "JsonIterator test with array",
+    iterator:       () => toMonadicIterable(sampleArray),
+    expected:       sampleArray,
+    excludedTests:  [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
 
