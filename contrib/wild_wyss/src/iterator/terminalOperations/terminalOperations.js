@@ -5,3 +5,7 @@ export * from "./head/head.js";
 export * from "./forEach/forEach.js";
 export * from "./isEmpty/isEmpty.js";
 export * from "./show/show.js";
+export * from "./min/min.js";
+export * from "./min/safeMin.js";
+export * from "./max/max.js";
+export * from "./max/safeMax.js";

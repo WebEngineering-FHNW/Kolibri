@@ -46,19 +46,17 @@ const JsonMonad = jsObject => {
    */
   const JsonMonadFactory = maybeObj => {
 
+    const ensureIterable = value => {
+      const it = Array.isArray(value) ? value: [value];
+      return JsonIterator(...it)
+    };
+
     const fmap = f => {
       // the result can be turned to nothing as well, therefore and on maybe must be used
       const result = maybeObj.and(iterator => {
         const newIt = iterator.and(elem => {
           const mapped = f(elem); // deep dive into json structure
-
-          // next JSON Object could be an array or an object
-          if (Array.isArray(mapped)) {
-            return ArrayIterator(mapped);
-          }
-
-          // react when mapping to undefined/null
-          return mapped ? PureIterator(mapped): nil;
+          return mapped ? ensureIterable(mapped) : nil;
         });
 
         return isEmpty(newIt) ? Nothing : Just(newIt);
