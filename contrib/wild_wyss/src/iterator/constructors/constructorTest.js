@@ -10,4 +10,4 @@ import "./squareNumberIterator/squareNumberIteratorTest.js";
 import "./stackIterator/stackIteratorTest.js";
 import "./tupleIterator/tupleIteratorTest.js";
 import "./fibonacciIterator/fibonacciIteratorTest.js";
-import "./jsonIterator/jsonIteratorTest.js";
+import "./toMonadicIterable/toMonadicIterableTest.js";

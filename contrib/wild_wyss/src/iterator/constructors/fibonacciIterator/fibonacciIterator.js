@@ -1,4 +1,4 @@
-import {createIterator, createMonadicIterable, toMonadicIterable} from "../../util/util.js";
+import { createMonadicIterable } from "../../util/util.js";
 
 export { FibonacciIterator }
 

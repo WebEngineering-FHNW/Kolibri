@@ -1,13 +1,6 @@
 import { IteratorPrototype } from "../constructors/iterator/iterator.js";
 
-export {
-  iteratorOf,
-  nextOf,
-  takeWithoutCopy,
-  createIterator,
-  toMonadicIterable,
-  createMonadicIterable,
-}
+export { iteratorOf, nextOf, takeWithoutCopy, createIterator, createMonadicIterable}
 
 /**
  * @function
