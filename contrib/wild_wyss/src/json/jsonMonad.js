@@ -8,34 +8,46 @@ import {
   JsonIterator,
   mconcat
 } from "../iterator/iterator.js"
+import {toMonadicIterable} from "../iterator/util/util.js";
 
 export { JsonMonad }
 
 /**
- * This {@link JsonMonad} can be used to process JSON data in a fluent way.
- * It wraps a given JSON Array or Object to provide a linq based API called jinq.
- *
+ * This {@link JsonMonad} can be used to process JSON data or JS objects in a fluent way.
+ * It is mainly used with {@link JinqType}.
  * @see https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/
  * @template _T_
- * @param { String } jsonData
- * @returns JinqType<IteratorType<_T_>
+ * @param { Object | Array<_T_> } jsObject
+ * @returns MonadType<_T_>
  * @constructor
  * @example
  * const result =
- * from(JsonMonad(jsonData))
+ *    from(JsonMonad(jsObject))
  *      .select(x => x["id"])
  *      .result()
  *      .get();
  * console.log(result);
- * // => Logs: all id's from the passed json
+ * // => Logs all ids of the passed json
  *
  */
-const JsonMonad = jsonData => {
-  const inner = JsonIterator(jsonData);
+const JsonMonad = jsObject => {
+  if (!jsObject[Symbol.iterator]) {
+    jsObject = [jsObject];
+  }
+  // TODO: Change to "toMonadicIterable"
+  const inner = JsonIterator(...jsObject);
 
+  /**
+   *
+   * @template _T_
+   * @param { MaybeType<IteratorMonadType<_T_>> & MaybeMonadType<_T_> } maybeObj
+   * @returns { MonadType<_T_> }
+   * @constructor
+   */
   const JsonMonadFactory = maybeObj => {
 
     const fmap = f => {
+      // the result can be turned to nothing as well, therefore and on maybe must be used
       const result = maybeObj.and(iterator => {
         const newIt = iterator.and(elem => {
           const mapped = f(elem); // deep dive into json structure
@@ -44,23 +56,28 @@ const JsonMonad = jsonData => {
           if (Array.isArray(mapped)) {
             return ArrayIterator(mapped);
           }
+
+          // react when mapping to undefined/null
           return mapped ? PureIterator(mapped): nil;
         });
 
         return isEmpty(newIt) ? Nothing : Just(newIt);
       });
 
+      // wrap result in json monad again
       return JsonMonadFactory(result);
     };
 
     const and = f => {
+      // Map each element of this iterator, that might be in this maybe
       const result = maybeObj.fmap(iterator => {
         const maybeIterators = iterator.fmap(elem => {
+          // f :: _T_ -> JsonMonad<IteratorMonadType<MaybeXType<_T_>>>
           const jsonMonad = f(elem);
-          return jsonMonad.get();
+          return jsonMonad.get(); // unwrap the JsonMonad to access the iterator in it.
         });
 
-        /**@type IteratorType<IteratorType> */
+        /**@type IteratorMonadType<IteratorMonadType> */
         const catted = /**@type any */catMaybes(maybeIterators);
         return mconcat(catted)
       });
@@ -68,7 +85,7 @@ const JsonMonad = jsonData => {
       return JsonMonadFactory(result);
     };
 
-    const pure  = a => JsonMonadFactory(Just(JsonIterator(a)));
+    const pure  = a  => JsonMonad(PureIterator(a));
     const empty = () => JsonMonadFactory(Nothing);
     const get   = () => maybeObj;
 

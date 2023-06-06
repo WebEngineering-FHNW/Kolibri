@@ -5,19 +5,18 @@ import { createMonadicIterable, iteratorOf } from "../../util/util.js";
  *
  * Returns every element of the given JavaScript object.
  * If the passed object is an array, every element of the object is returned.
- * Thw whole object otherwise.
+ * The whole object otherwise.
  * @template _T_
  * @param { _T_ | Array<_T_>} json -
- * @returns {IteratorMonadType<_T_>}
+ * @returns { IteratorMonadType<_T_> }
  * @constructor
  */
 // TODO: Can this be done using varargs?!
 const JsonIterator = (...json) => {
   // convert this object to an array.
-  const jsonArray = json;
 
   const jsonIterator = () => {
-    const inner = iteratorOf(jsonArray);
+    const inner = iteratorOf(json);
 
     const next = () => inner.next();
     return { next };

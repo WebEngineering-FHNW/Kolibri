@@ -96,34 +96,16 @@ jinqSuite.add("json test", assert => {
     {
       "battleName": "The battle of Curly",
       "numberOfDeaths": 420000,
-      "winner": {
-        "teamName": "JSON",
-        "outStandingHeroes": [1]
-      },
-      "loser": {
-        "teamName": "XML",
-        "outStandingHeroes": []
-      }
+      "winner": { "teamName": "JSON", "outStandingHeroes": [1] },
+      "loser": { "teamName": "XML", "outStandingHeroes": [] }
     }
  `);
 
   const heroes = JSON.parse(`
     [
-      {
-        "heroId": 1,
-        "kills": 47076,
-        "name": "Atonadias"
-      },
-      {
-        "heroId": 2,
-        "kills": 5691,
-        "name": "Tanobiri"
-      },
-      {
-        "heroId": 3,
-        "kills": 3707,
-        "name": "Tonadri"
-      }
+      { "heroId": 1, "kills": 47076, "name": "Atonadias" },
+      { "heroId": 2, "kills": 5691,  "name": "Tanobiri" },
+      { "heroId": 3, "kills": 3707,  "name": "Tonadri" }
     ]
   `);
 
