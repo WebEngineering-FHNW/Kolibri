@@ -1,12 +1,12 @@
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { TestSuite }                from "../../../test/test.js";
 import { head }                     from "./head.js";
+import { nil }                      from "../../constructors/nil/nil.js";
 import {
   createTestConfig,
   newIterator,
   UPPER_ITERATOR_BOUNDARY
 } from "../../util/testUtil.js";
-import { nil } from "../../constructors/nil/nil.js";
 
 const testSuite = TestSuite("Iterator: terminal Operations head");
 
@@ -17,9 +17,7 @@ addToTestingTable(testSuite)(
     operation: () => head,
     evalFn:    expected => actual => expected === actual,
     expected:  0,
-    excludedTests: [
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE, TESTS.TEST_INVARIANTS
-    ]
+    excludedTests: [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
 

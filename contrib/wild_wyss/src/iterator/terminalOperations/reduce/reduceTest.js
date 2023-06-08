@@ -17,10 +17,7 @@ addToTestingTable(testSuite)(
     operation: () => reduce$((acc, cur) => acc + cur, 0),
     expected:  10,
     evalFn:    expected => actual => expected === actual,
-    excludedTests: [
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
-      TESTS.TEST_INVARIANTS
-    ]
+    excludedTests: [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
 

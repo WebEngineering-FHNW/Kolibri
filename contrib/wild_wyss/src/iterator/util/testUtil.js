@@ -69,22 +69,28 @@ const newIterator = limit => Iterator(0, current => current + 1, current => curr
 const UPPER_ITERATOR_BOUNDARY = 4;
 
 /**
- * @param operation
- * @param { IteratorTestConfigType } obj
- * @returns {(function(*): void)|*}
+ * @type {
+ *             (config: IteratorTestConfigType)
+ *          => (assert: AssertType)
+ *          => void
+ *       }
  */
-const testSimple = ({iterator, operation, evalFn, expected, param}) => assert => {
+const testSimple = config => assert => {
+  const { iterator, operation, evalFn, expected, param } = config;
   const baseIterator = iterator();
   const operated = operation(param)(baseIterator);
   evaluate(expected, operated, assert, evalFn);
 };
 
 /**
- * @param operation
- * @param { IteratorTestConfigType } obj
- * @returns {(function(*): void)|*}
+ * @type {
+ *             (config: IteratorTestConfigType)
+ *          => (assert: AssertType)
+ *          => void
+ *       }
  */
-const testIterateMultipleTimes = ({iterator, operation, evalFn, param}) => assert => {
+const testIterateMultipleTimes = config => assert => {
+  const { iterator, operation, evalFn, param } = config;
   const baseIterator = iterator();
   const operated = operation(param)(baseIterator);
   evaluate(operated, operated, assert, evalFn);
@@ -92,11 +98,12 @@ const testIterateMultipleTimes = ({iterator, operation, evalFn, param}) => asser
 
 /**
  * Checks if a given operation does not modify the underlying iterator.
+ *
  * @type {
-  *        (config: IteratorTestConfigType)
- *      => (assert: any)
- *      => void
- * }
+ *             (config: IteratorTestConfigType)
+ *          => (assert: AssertType)
+ *          => void
+ *       }
  */
 const testPurity = config => assert => {
   const { operation, param, iterator, evalFn } = config;
@@ -111,11 +118,12 @@ const testPurity = config => assert => {
 /**
  * Since there is no guarantee that the value of the iterator is existing when done is true,
  * it must be ensured that the callback function is not called after that.
+ *
  * @type {
- *         (config: IteratorTestConfigType)
- *      => (assert: any)
- *      => void
- * }
+ *             (config: IteratorTestConfigType)
+ *          => (assert: AssertType)
+ *          => void
+ *       }
  */
 const testCBNotCalledAfterDone = config => assert => {
   const { operation, param } = config;
@@ -139,7 +147,7 @@ const testCBNotCalledAfterDone = config => assert => {
  *
  * @type {
  *         (config: IteratorTestConfigType)
- *      => (assert: any)
+ *      => (assert: AssertType)
  *      => void
  * }
  */
@@ -150,8 +158,8 @@ const testPrototype = config => assert =>
 /**
  * Tests, whether the given invariants hold when passed different lists.
  * @type {
- *         (invariants: IteratorTestConfigType)
- *        => (assert: any)
+ *           (invariants: IteratorTestConfigType)
+ *        => (assert: AssertType)
  *        => void
  * }
  */
@@ -164,10 +172,11 @@ const testInvariants = config => assert => {
 
 /**
  * Applies a series of lists to a given invariant.
+ *
  * @template _T_
  * @type {
- *           (invariant: InvariantCallback<_T_>)
- *        => (assert: any)
+ *           (invariants: IteratorTestConfigType)
+ *        => (assert: AssertType)
  *        => void
  * }
  */
@@ -197,6 +206,7 @@ const invariantPenetration = invariant => assert => {
  */
 const createTestConfig = config => ({
   ...config,
+  invariants:    config.invariants    === undefined ? []              : config.invariants,
   operation:     config.operation     === undefined ? () => id        : config.operation,
   excludedTests: config.excludedTests === undefined ? []              : config.excludedTests,
 });

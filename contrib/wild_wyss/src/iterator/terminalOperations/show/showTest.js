@@ -18,10 +18,7 @@ addToTestingTable(testSuite)(
     operation: () => show,
     evalFn:    expected => actual => expected === actual,
     expected:  "[0,1,2,3,4]",
-    excludedTests: [
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
-      TESTS.TEST_INVARIANTS
-    ]
+    excludedTests: [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
 

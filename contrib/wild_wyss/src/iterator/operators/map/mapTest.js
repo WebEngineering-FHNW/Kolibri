@@ -17,7 +17,7 @@ addToTestingTable(testSuite)(
     param:      el => 2 * el,
     expected:   [0, 2, 4, 6, 8],
     invariants: [
-      it => eq$(map(x => x)(it ))                 /* === */ (it),
+      it => map(x => x)(it) ["==="] (it),
       it => eq$(map(x => x[0])(map(x => [x])(it)))/* === */ (it),
     ]
   })

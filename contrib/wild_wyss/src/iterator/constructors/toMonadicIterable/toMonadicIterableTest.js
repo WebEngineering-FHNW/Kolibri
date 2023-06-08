@@ -20,10 +20,7 @@ addToTestingTable(testSuite)(
       const expectedVal = [...expected];
       return expectedVal[0].id === actualVal[0].id
     },
-    excludedTests:  [
-      TESTS.TEST_INVARIANTS,
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE
-    ]
+    excludedTests: [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
 
@@ -33,10 +30,7 @@ addToTestingTable(testSuite)(
     name:           "JsonIterator test with array",
     iterator:       () => toMonadicIterable(sampleArray),
     expected:       sampleArray,
-    excludedTests:  [
-      TESTS.TEST_INVARIANTS,
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE
-    ]
+    excludedTests:  [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
 

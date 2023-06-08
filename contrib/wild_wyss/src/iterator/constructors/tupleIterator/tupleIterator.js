@@ -1,5 +1,5 @@
-import { Iterator, map } from "../../iterator.js";
-import {createMonadicIterable, iteratorOf} from "../../util/util.js";
+import { Iterator, map }                     from "../../iterator.js";
+import { createMonadicIterable, iteratorOf } from "../../util/util.js";
 
 export { TupleIterator }
 

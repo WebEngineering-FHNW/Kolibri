@@ -1,5 +1,10 @@
+import {
+  isIterable,
+  createMonadicIterable,
+  iteratorOf
+} from "../../util/util.js";
+
 export { toMonadicIterable }
-import { isIterable, createMonadicIterable, iteratorOf } from "../../util/util.js";
 
 /**
  * Creates an {@link IteratorMonadType} from any {@link Iterable} or {@link Iterable} of {@link Iterable Iterables}.

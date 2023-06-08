@@ -30,7 +30,6 @@ const forEach$Config = (() => {
       TESTS.TEST_PURITY,
       TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
       TESTS.TEST_ITERATE_MULTIPLE_TIMES,
-      TESTS.TEST_INVARIANTS
     ]
   });
 })();

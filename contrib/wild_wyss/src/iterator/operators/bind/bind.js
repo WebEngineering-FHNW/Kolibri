@@ -3,15 +3,15 @@ import { map, mconcat } from "../../iterator.js";
 export { bind }
 
 /**
- * Applies the given function to each element of the {@link IteratorType} and flats it afterward.
+ * Applies the given function to each element of the {@link IteratorMonadType} and flats it afterward.
  *
- * @Note This operation adds a monadic API to the {@link IteratorType}.
+ * @Note This operation adds a monadic API to the {@link IteratorMonadType}.
  * @haskell (>>=) :: m a -> (a -> m b) -> m b
  * @template _T_
  * @type {
- *          <_U_>(bindFn: (_T_) => IteratorType<_U_>)
- *          => (it: IteratorType<_T_>)
- *          => IteratorType<_U_>
+ *          <_U_>(bindFn: (_T_) => IteratorMonadType<_U_>)
+ *          => (it: IteratorMonadType<_T_>)
+ *          => IteratorMonadType<_U_>
  * }
  * @example
  * const it     = Range(3);

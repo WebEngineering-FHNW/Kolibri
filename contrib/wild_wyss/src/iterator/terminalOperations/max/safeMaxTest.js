@@ -1,11 +1,13 @@
-import { nil }                      from "../../constructors/nil/nil.js";
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { TestSuite }                from "../../../test/test.js";
-import { safeMax$ }                 from "./safeMax.js"
-import { PureIterator }             from "../../constructors/pureIterator/pureIterator.js";
-import { ArrayIterator }            from "../../constructors/arrayIterator/arrayIterator.js";
-import { replicate }                from "../../constructors/replicate/replicate.js";
 import { Just }                     from "../../../stdlib/maybe.js";
+import {
+  PureIterator,
+  ArrayIterator,
+  replicate,
+  safeMax$,
+  nil
+} from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -30,10 +32,7 @@ addToTestingTable(testSuite)(
         (x => result = x === unwrappedVal);
       return result;
     },
-    excludedTests: [
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
-      TESTS.TEST_INVARIANTS
-    ]
+    excludedTests: [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
 

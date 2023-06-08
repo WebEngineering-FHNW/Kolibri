@@ -23,10 +23,7 @@ const eq$Config = (() => {
     param:     secondIterator,
     evalFn:    expected => actual => expected === actual,
     expected:  true,
-    excludedTests: [
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
-      TESTS.TEST_INVARIANTS
-    ]
+    excludedTests: [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   });
 })();
 

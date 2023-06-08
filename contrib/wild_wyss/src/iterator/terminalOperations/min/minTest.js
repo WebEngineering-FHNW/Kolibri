@@ -1,9 +1,7 @@
-import { ILLEGAL_ARGUMENT_EMPTY_ITERATOR } from "../../util/errorMessages.js";
-import { nil }                             from "../../constructors/nil/nil.js";
-import { addToTestingTable, TESTS }        from "../../util/testingTable.js";
-import { TestSuite }                       from "../../../test/test.js";
-import { min$ }                            from "./min.js"
-import { replicate, PureIterator }         from "../../iterator.js";
+import { ILLEGAL_ARGUMENT_EMPTY_ITERATOR }    from "../../util/errorMessages.js";
+import { addToTestingTable, TESTS }           from "../../util/testingTable.js";
+import { TestSuite }                          from "../../../test/test.js";
+import { replicate, PureIterator, nil, min$ } from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -20,10 +18,7 @@ addToTestingTable(testSuite)(
     param:     () => {},
     expected:  0,
     evalFn:    expected => actual => expected === actual,
-    excludedTests: [
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
-      TESTS.TEST_INVARIANTS
-    ]
+    excludedTests: [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
   })
 );
 

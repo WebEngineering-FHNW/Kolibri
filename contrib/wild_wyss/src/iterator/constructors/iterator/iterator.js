@@ -1,8 +1,9 @@
-import {createIterator, createMonadicIterable} from "../../util/util.js";
+import {createIterator, createMonadicIterable, isIterable} from "../../util/util.js";
 import { bind }           from "../../operators/bind/bind.js";
 import { map }            from "../../operators/map/map.js"
 import { PureIterator }   from "../pureIterator/pureIterator.js";
 import { show }           from "../../terminalOperations/show/show.js";
+import {eq$} from "../../terminalOperations/eq/eq.js";
 
 export { Iterator, IteratorPrototype }
 
@@ -96,4 +97,22 @@ IteratorPrototype.empty = () => Iterator(undefined, _ => undefined, _ => true);
  */
 IteratorPrototype.toString = function () {
   return show(this);
+};
+
+/**
+ * Tests this {@link IteratorMonadType} for equality against the given {@link Iterable}.
+ *
+ * @param { Iterable } that
+ * @return { Boolean }
+ * @example
+ * const it1 = Range(3);
+ * const it2 = [0,1,2,3];
+ *
+ * console.log(it1 ["==="] it2);
+ * // => Logs 'true'
+ *
+ */
+IteratorPrototype["==="] = function(that) {
+  if (!isIterable(that)) return false;
+  return eq$(this) /* === */ (that);
 };
