@@ -116,16 +116,11 @@ jinqSuite.add("json test", assert => {
       .pairWith (JsonMonad(heroes))
       .where    (([heroId, hero]) => heroId === hero["heroId"])
       .select   (([_, hero]) => hero["name"])
-      .result   ()
-      .get      ();
+      .result   ();
 
-  outstandingHeroNames
-    (_ => assert.isTrue(false))
-    (x => {
-      const results = [...x];
+      const results = [...outstandingHeroNames];
       assert.is(results.length, 1);
       assert.is(results[0], "Atonadias")
-    })
 });
 
 

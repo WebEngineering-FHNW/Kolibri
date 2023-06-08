@@ -6,7 +6,7 @@ import {
   catMaybes,
   mconcat
 } from "../iterator/iterator.js"
-import { createMonadicIterable, iteratorOf } from "../iterator/util/util.js";
+import {createIterator, createMonadicIterable, iteratorOf} from "../iterator/util/util.js";
 
 export { JsonMonad }
 
@@ -82,14 +82,23 @@ const JsonMonad = jsObject => {
 
     const pure  = a  => JsonMonad(PureIterator(a));
     const empty = () => JsonMonadFactory(Nothing);
-    const get   = () => maybeObj;
+
+    const iterator = () => {
+      let inner;
+     maybeObj
+      (() => inner = nil)
+      (it => inner = it);
+
+      return iteratorOf(inner);
+    };
 
     return {
       pure,
       empty,
       fmap,
       and,
-      get,
+      [Symbol.iterator]: iterator,
+      get: () => maybeObj
     }
   };
 

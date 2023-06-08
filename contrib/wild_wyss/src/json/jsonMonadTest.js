@@ -14,15 +14,11 @@ jsonMonadSuite.add("test fmap mapping to list", assert => {
   }
   `);
   const jsonMonad = JsonMonad(sample2);
-  const result = jsonMonad.fmap(x => x["heroes"]).get();
+  const result = [...jsonMonad.fmap(x => x["heroes"])];
 
-  result
-    (_ => assert.isTrue(false))
-    (iterator => {
-      const result = [...iterator];
+
       assert.is(result.length, 3);
       assert.is(result[0]["kills"], 47076);
-    });
 });
 
 jsonMonadSuite.add("test fmap mapping to object", assert => {
@@ -30,14 +26,9 @@ jsonMonadSuite.add("test fmap mapping to object", assert => {
   { "hero": { "kills": 47076, "name": "Atonadias" } }
   `);
   const jsonMonad = JsonMonad(heroData);
-  const result = jsonMonad.fmap(x => x["hero"]).get();
+  const result = [...jsonMonad.fmap(x => x["hero"])];
 
-  result
-  (_ => assert.isTrue(false))
-  (iterator => {
-    const result = [...iterator];
-    assert.is(result[0]["kills"], 47076);
-  });
+  assert.is(result[0]["kills"], 47076);
 });
 
 jsonMonadSuite.add("test fmap mapping to inexistent", assert => {
@@ -45,11 +36,9 @@ jsonMonadSuite.add("test fmap mapping to inexistent", assert => {
   { "hero": { "kills": 47076, "name": "Atonadias" } }
   `);
   const jsonMonad = JsonMonad(heroData);
-  const result = jsonMonad.fmap(x => x["fears"]).get();
+  const result = [...jsonMonad.fmap(x => x["fears"])];
 
-  result
-  (_ => assert.isTrue(true))
-  (_ => assert.isTrue(false))
+  assert.is(result.length, 0);
 });
 
 
@@ -60,18 +49,13 @@ jsonMonadSuite.add("test and", assert => {
     { "kills": 3707,  "name": "Tonadri" }]
   `);
   const jsonMonad = JsonMonad(heroes);
-  const result = jsonMonad.and(elem => {
+  const result = [...jsonMonad.and(elem => {
     const { name } = elem;
     return JsonMonad({ name });
-  }).get();
+  })];
 
-  result
-    (_ => assert.isTrue(false))
-    (iterator => {
-      const result = [...iterator];
-      assert.is(result.length, 3);
-      assert.is(result[0].name, "Atonadias");
-    });
+  assert.is(result.length, 3);
+  assert.is(result[0].name, "Atonadias");
 });
 
 jsonMonadSuite.run();
