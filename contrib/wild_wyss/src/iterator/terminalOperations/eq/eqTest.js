@@ -1,6 +1,7 @@
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { TestSuite }                from "../../../test/test.js";
 import { eq$ }                      from "./eq.js";
+import { nil }                      from "../../constructors/nil/nil.js";
 import {
   createTestConfig,
   newIterator,
@@ -31,10 +32,8 @@ const eq$Config = (() => {
 
 addToTestingTable(testSuite)(eq$Config);
 
-testSuite.add("test typical case: eq$ should return false", assert => {
-  const it1 = newIterator(2);
-  const it2 = newIterator(4);
-  assert.is(eq$(it1)(it2), false);
+testSuite.add("test empty iterator", assert => {
+  assert.is(eq$(nil)(nil), true);
 });
 
 testSuite.run();

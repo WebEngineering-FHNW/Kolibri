@@ -28,4 +28,15 @@ addToTestingTable(testSuite)(
   })
 );
 
+// TODO: test empty iterator
+testSuite.add("test purity forEach$", assert => {
+  // Given
+
+  // When
+
+  // Then
+  //assert.iterableEq(elements, expected);
+});
+
+
 testSuite.run();

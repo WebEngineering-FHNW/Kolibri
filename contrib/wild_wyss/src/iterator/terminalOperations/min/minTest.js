@@ -3,9 +3,7 @@ import { nil }                             from "../../constructors/nil/nil.js";
 import { addToTestingTable, TESTS }        from "../../util/testingTable.js";
 import { TestSuite }                       from "../../../test/test.js";
 import { min$ }                            from "./min.js"
-import { PureIterator }                    from "../../constructors/pureIterator/pureIterator.js";
-import { ArrayIterator }                   from "../../constructors/arrayIterator/arrayIterator.js";
-import { replicate }                       from "../../constructors/replicate/replicate.js";
+import { replicate, PureIterator }         from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,

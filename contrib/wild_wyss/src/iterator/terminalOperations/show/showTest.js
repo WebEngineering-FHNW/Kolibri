@@ -1,13 +1,13 @@
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { TestSuite }                from "../../../test/test.js";
 import { show }                     from "./show.js";
+import { Range }                    from "../../../range/range.js";
+import { ArrayIterator, nil }       from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
   UPPER_ITERATOR_BOUNDARY
 } from "../../util/testUtil.js";
-import {Range} from "../../../range/range.js";
-import {ArrayIterator} from "../../constructors/arrayIterator/arrayIterator.js";
 
 const testSuite = TestSuite("Iterator: terminal Operations show");
 
@@ -86,6 +86,14 @@ testSuite.add("test show of an iterator of iterators", assert => {
 
   // Then
   assert.is(result, "[[0,1],[0,1,2],[0,1,2,3]]");
+});
+
+testSuite.add("test show of an empty iterator", assert => {
+  // When
+  const result = show(nil);
+
+  // Then
+  assert.is(result, "[]");
 });
 
 testSuite.run();
