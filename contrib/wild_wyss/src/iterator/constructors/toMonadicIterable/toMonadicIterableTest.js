@@ -34,5 +34,13 @@ addToTestingTable(testSuite)(
   })
 );
 
-// TODO: add special case test with complex object in array
+const sampleArray2 = [[1,2,3],[4,5],6];
+addToTestingTable(testSuite)(
+  createTestConfig({
+    name:           "JsonIterator test with array",
+    iterator:       () => toMonadicIterable(sampleArray2),
+    expected:       [1,2,3,4,5,6],
+    excludedTests:  [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
+  })
+);
 testSuite.run();

@@ -1,6 +1,13 @@
 import { IteratorPrototype } from "../constructors/iterator/iterator.js";
 
-export { iteratorOf, nextOf, takeWithoutCopy, createIterator, createMonadicIterable}
+export { isIterable, iteratorOf, nextOf, takeWithoutCopy, createIterator, createMonadicIterable}
+
+/**
+ * checks if a given value is iterable
+ * @param { any } value
+ * @return { boolean }
+ */
+const isIterable = value => value && value[Symbol.iterator] !== undefined;
 
 /**
  * @function

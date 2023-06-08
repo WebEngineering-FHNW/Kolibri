@@ -4,9 +4,9 @@ import { isEmpty }       from "../iterator/terminalOperations/isEmpty/isEmpty.js
 import { PureIterator }  from "../iterator/constructors/pureIterator/pureIterator.js";
 import {
   catMaybes,
-  toMonadicIterable,
   mconcat
 } from "../iterator/iterator.js"
+import { createMonadicIterable, iteratorOf } from "../iterator/util/util.js";
 
 export { JsonMonad }
 
@@ -32,8 +32,7 @@ const JsonMonad = jsObject => {
   if (!jsObject[Symbol.iterator]) {
     jsObject = [jsObject];
   }
-  // TODO: Change to "toMonadicIterable"
-  const inner = toMonadicIterable(...jsObject);
+  const inner = innerIterable(...jsObject);
 
   /**
    *
@@ -46,7 +45,7 @@ const JsonMonad = jsObject => {
 
     const ensureIterable = value => {
       const it = Array.isArray(value) ? value: [value];
-      return toMonadicIterable(...it)
+      return innerIterable(...it)
     };
 
     const fmap = f => {
@@ -95,4 +94,23 @@ const JsonMonad = jsObject => {
   };
 
   return JsonMonadFactory(Just(inner));
+};
+
+
+/**
+ * Helper function to create an {@link IteratorMonadType} from varargs.
+ *
+ * {@link toMonadicIterable } can't be used here, because sub iterables shouldn't be consumed
+ * @template _T_
+ * @param  { ..._T_ } elements - the elements to iterate on
+ * @returns {IteratorMonadType<*>}
+ */
+const innerIterable = (...elements) => {
+  const iterator = () => {
+    const inner = iteratorOf(elements);
+
+    const next = () => inner.next();
+    return { next };
+  };
+  return createMonadicIterable(iterator);
 };

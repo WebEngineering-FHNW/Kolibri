@@ -18,7 +18,7 @@ import "./src/iterator/iteratorBuilderTest.js";
 // range
 import "./src/range/rangeTest.js";
 
-// focusring
+// focus ring
 import "./src/focusring/focusRingTest.js";
 
 // stdlib
@@ -27,8 +27,8 @@ import "./src/stdlib/maybeTest.js";
 import "./src/stdlib/pairTest.js";
 
 // jinq
-import "./src/jinq/jinqTest.js";
 import "./src/json/jsonMonadTest.js"
+import "./src/jinq/jinqTest.js";
 
 //poc
 import "./src/iterator/poc/pocTest.js"

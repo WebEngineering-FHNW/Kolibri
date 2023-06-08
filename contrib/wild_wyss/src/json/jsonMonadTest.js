@@ -1,5 +1,6 @@
-import { TestSuite }   from "../test/test.js";
+import { TestSuite } from "../test/test.js";
 import { JsonMonad } from "./jsonMonad.js";
+import { Pair }      from "../stdlib/pair.js";
 
 const jsonMonadSuite = TestSuite("JsonMonad");
 

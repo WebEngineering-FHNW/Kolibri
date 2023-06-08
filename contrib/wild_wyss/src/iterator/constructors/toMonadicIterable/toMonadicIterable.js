@@ -1,29 +1,17 @@
 export { toMonadicIterable }
-import { createMonadicIterable, iteratorOf } from "../../util/util.js";
+import { isIterable, createMonadicIterable, iteratorOf } from "../../util/util.js";
 
 /**
+ * Creates an {@link IteratorMonadType} from any {@link Iterable} or {@link Iterable} of {@link Iterable Iterables}.
  *
- * Returns every element of the given JavaScript object.
- * If the passed object is an array, every element of the object is returned.
- * The whole object otherwise.
  * @template _T_
- * @param { ..._T_ | Array<_T_> } elements -
+ * @param { _T_ | Iterable<_T_> | Iterable<Iterable<_T_>>} elements -
  * @returns { IteratorMonadType<_T_> }
  * @constructor
  */
-const toMonadicIterable = (...elements) => {
-
-
-  // previous implementation
-  // const jsonIterator = () => {
-  //   const inner = iteratorOf(elements);
-  //
-  //   const next = () => inner.next();
-  //   return { next };
-  // };
-  // return createMonadicIterable(jsonIterator);
-
-  const internalIterator = () => {
+const toMonadicIterable = elements => {
+  elements = isIterable(elements) ? elements : [elements];
+  const iterator = () => {
     let currentIdx = 0;
     let currentIterator = undefined;
 
@@ -46,22 +34,14 @@ const toMonadicIterable = (...elements) => {
 
       // if all elements of the iterator have been processed
       if (currentIdx === elements.length) {
-        return {done: true, value: undefined};
+        return { done: true, value: undefined };
       }
 
-      return {done: false, value: elements[currentIdx++]};
+      return { done: false, value: elements[currentIdx++] };
     };
 
-    return {next};
+    return { next };
   };
 
-  return createMonadicIterable(internalIterator);
+  return createMonadicIterable(iterator);
 };
-
-
-/**
- * checks if a given value is iterable
- * @param { any } value
- * @return { boolean }
- */
-const isIterable = value => value && value[Symbol.iterator] !== undefined;

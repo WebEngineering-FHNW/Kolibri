@@ -1,7 +1,7 @@
 import {createMonadicIterable, iteratorOf, nextOf} from "./util/util.js";
 
 export { IteratorBuilder }
-import { nil } from "./iterator.js";
+import {nil, toMonadicIterable} from "./iterator.js";
 
 
 
@@ -58,7 +58,7 @@ const IteratorBuilder = (start = nil) => {
   const build = () => {
     checkIfBuilt();
     built = true;
-    return InternalIterator(elements);
+    return toMonadicIterable(elements);
   };
 
   const builder = { append, prepend, build };
@@ -71,54 +71,3 @@ const IteratorBuilder = (start = nil) => {
 
   return builder;
 };
-
-/**
- * Creates an {@link IteratorMonadType } from the given elements
- * @template _T_
- * @param   { ( _T_ | Iterable<_T_>)[] }  elements   - these elements will be iterated
- * @returns { IteratorMonadType<_T_> }
- * @constructor
- */
-const InternalIterator = elements => {
-
-  const internalIterator = () => {
-    let currentIdx = 0;
-    let currentIterator = undefined;
-
-    const next = () => {
-      while (isIterable(elements[currentIdx])) {
-        if (currentIterator === undefined) {
-          // process next iterator
-          currentIterator = iteratorOf(elements[currentIdx]);
-        }
-
-        const result = currentIterator.next();
-
-        if (result.done) {
-          currentIterator = undefined;
-          currentIdx++;
-        } else {
-          return result;
-        }
-      }
-
-      // if all elements of the iterator have been processed
-      if (currentIdx === elements.length) {
-        return { done: true, value: undefined };
-      }
-
-      return { done: false, value: elements[currentIdx++] };
-    };
-
-    return { next };
-  };
-
-  return createMonadicIterable(internalIterator);
-};
-
-/**
- * checks if a given value is iterable
- * @param { any } value
- * @return { boolean }
- */
-const isIterable = value => value && value[Symbol.iterator] !== undefined;
