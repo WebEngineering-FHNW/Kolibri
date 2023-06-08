@@ -2,6 +2,7 @@ import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { TestSuite }                from "../../../test/test.js";
 import { forEach$ }                 from "./forEach.js";
 import { arrayEq }                  from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { nil }                      from "../../constructors/nil/nil.js";
 import {
   createTestConfig,
   newIterator,
@@ -28,7 +29,8 @@ const forEach$Config = (() => {
     excludedTests: [
       TESTS.TEST_PURITY,
       TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
-      TESTS.TEST_ITERATE_MULTIPLE_TIMES
+      TESTS.TEST_ITERATE_MULTIPLE_TIMES,
+      TESTS.TEST_INVARIANTS
     ]
   });
 })();
@@ -47,5 +49,15 @@ testSuite.add("test purity forEach$", assert => {
   assert.iterableEq(elements, expected);
 });
 
+testSuite.add("test empty iterator", assert => {
+  // Given
+  const expected = [];
+
+  // When
+  forEach$(x => expected.push(x))(nil);
+
+  // Then
+  assert.iterableEq(expected, nil);
+});
 
 testSuite.run();

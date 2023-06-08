@@ -1,8 +1,6 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
-import { snoc }              from "./snoc.js";
-import { nil }               from "../../constructors/nil/nil.js";
-import { arrayEq }           from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { snoc, nil }         from "../../../iterator/iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -17,7 +15,10 @@ addToTestingTable(testSuite)(
     iterator:   () => newIterator(UPPER_ITERATOR_BOUNDARY),
     operation:  snoc,
     param:      42,
-    expected:   [0, 1, 2, 3, 4, 42]
+    expected:   [0, 1, 2, 3, 4, 42],
+    invariants: [
+      it => [...snoc(1)(it)].length > [...it].length,
+    ]
   })
 );
 

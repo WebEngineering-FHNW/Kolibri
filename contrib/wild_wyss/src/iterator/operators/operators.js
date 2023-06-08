@@ -15,4 +15,4 @@ export * from "./map/map.js"
 export * from "./bind/bind.js"
 export * from "./reverse/reverse.js"
 export * from "./concat/concat.js"
-
+export * from "./snoc/snoc.js"

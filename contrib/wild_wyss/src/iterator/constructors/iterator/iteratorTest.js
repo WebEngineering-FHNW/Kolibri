@@ -1,9 +1,6 @@
-import { TestSuite }                   from "../../../test/test.js";
-import { createTestConfig }            from "../../util/testUtil.js";
-import { Iterator, IteratorPrototype } from "./iterator.js";
-import { Range }                       from "../../../range/range.js";
-import { arrayEq }                     from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { nil }                         from "../nil/nil.js";
+import { TestSuite }        from "../../../test/test.js";
+import { createTestConfig } from "../../util/testUtil.js";
+import { Iterator }         from "./iterator.js";
 import {
   addToTestingTable,
   TESTS
@@ -16,7 +13,11 @@ addToTestingTable(testSuite)(
     name:      "Iterator",
     iterator:  () => Iterator(0, current => current + 1, current => 4 < current),
     expected:  [0,1,2,3,4],
-    excludedTests: [TESTS.TEST_PURITY, TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
+    excludedTests: [
+      TESTS.TEST_PURITY,
+      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
+      TESTS.TEST_INVARIANTS,
+    ]
   })
 );
 

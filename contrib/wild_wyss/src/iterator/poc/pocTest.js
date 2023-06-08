@@ -34,9 +34,8 @@ addToTestingTable(testSuite)(
     expected:  [0,1,2,3,4],
     excludedTests: [
       TESTS.TEST_PURITY,
-      TESTS.TEST_COPY,
       TESTS.TEST_PROTOTYPE,
-      TESTS.TEST_COPY_AFTER_CONSUMPTION,
+      TESTS.TEST_INVARIANTS
     ]
   })
 );
@@ -58,9 +57,8 @@ addToTestingTable(testSuite)(
     expected:   [0, 2, 4, 6, 8],
     excludedTests: [
       TESTS.TEST_PURITY,
-      TESTS.TEST_COPY,
       TESTS.TEST_PROTOTYPE,
-      TESTS.TEST_COPY_AFTER_CONSUMPTION,
+      TESTS.TEST_INVARIANTS
     ]
   })
 );
@@ -74,9 +72,7 @@ addToTestingTable(testSuite)(
     expected:   [0, 2, 4],
     excludedTests: [
       TESTS.TEST_PURITY,
-      TESTS.TEST_COPY,
       TESTS.TEST_PROTOTYPE,
-      TESTS.TEST_COPY_AFTER_CONSUMPTION,
     ]
   })
 );
@@ -89,8 +85,6 @@ addToTestingTable(testSuite)(
     expected:  10,
     evalFn:    expected => actual => expected === actual,
     excludedTests: [
-      TESTS.TEST_COPY,
-      TESTS.TEST_COPY_AFTER_CONSUMPTION,
       TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
       TESTS.TEST_PROTOTYPE
     ]

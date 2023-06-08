@@ -22,9 +22,21 @@ addToTestingTable(testSuite)(
       arrayEq([...expected(snd)])([...actual(snd)]),
     excludedTests: [
       TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
-      TESTS.TEST_ITERATE_MULTIPLE_TIMES
+      TESTS.TEST_ITERATE_MULTIPLE_TIMES,
+      TESTS.TEST_INVARIANTS
     ]
   })
 );
+
+// TODO: test empty iterator
+testSuite.add("test purity forEach$", assert => {
+  // Given
+
+  // When
+
+  // Then
+  //assert.iterableEq(elements, expected);
+});
+
 
 testSuite.run();

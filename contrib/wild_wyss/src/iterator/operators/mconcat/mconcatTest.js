@@ -1,13 +1,17 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
-import { ArrayIterator }     from "../../constructors/arrayIterator/arrayIterator.js";
-import { nil }               from "../../constructors/nil/nil.js";
-import { arrayEq }           from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { Iterator }          from "../../constructors/iterator/iterator.js";
-import { mconcat }           from "./mconcat.js";
+import {
+  Iterator,
+  ArrayIterator,
+  eq$,
+  PureIterator,
+  mconcat,
+  nil
+} from "../../../iterator/iterator.js";
+
 import {
   createTestConfig,
-  newIterator, UPPER_ITERATOR_BOUNDARY,
+  newIterator,
 } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Iterator: Operation mconcat");
@@ -15,24 +19,16 @@ const testSuite = TestSuite("Iterator: Operation mconcat");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "mconcat",
-    iterator:   () => ArrayIterator([ newIterator(2), newIterator(2), newIterator(2), ]),
+    iterator:   () => ArrayIterator([ newIterator(2), newIterator(2), newIterator(2) ]),
     operation:  () => mconcat,
-    expected:   [0, 1, 2, 0, 1, 2, 0, 1, 2]
+    expected:   [0, 1, 2, 0, 1, 2, 0, 1, 2],
+    invariants: [
+      it => eq$(mconcat([nil, it])) /* === */ (it),
+      it => eq$(mconcat([it, nil])) /* === */ (it),
+      it => [...mconcat([PureIterator(1),it])].length > [...it].length,
+    ],
   })
 );
-
-testSuite.add("test left/right neutrality: mconcat", assert => {
-  // Given
-  const iterable = [0,1,2,3,4];
-
-  // When
-  const left  = mconcat([nil, iterable]);
-  const right = mconcat([iterable, nil]);
-
-  // Then
-  assert.iterableEq(left, iterable);
-  assert.iterableEq(right, iterable);
-});
 
 testSuite.add("test left/right associativity: mconcat", assert => {
   // Given
@@ -67,15 +63,5 @@ testSuite.add("test concat with infinity: mconcat", assert => {
   // Then
   assert.is(called, false);
 });
-
-// TODO: remove as soon, as test with nil is in testing table
-testSuite.add("test empty: mconcat", assert => {
-  // Given
-  const concatenated = mconcat([nil]);
-
-  // Then
-  assert.iterableEq([], concatenated);
-});
-
 
 testSuite.run();

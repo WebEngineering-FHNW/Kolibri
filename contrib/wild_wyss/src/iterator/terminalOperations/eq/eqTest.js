@@ -1,6 +1,7 @@
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { TestSuite }                from "../../../test/test.js";
 import { eq$ }                      from "./eq.js";
+import { nil }                      from "../../constructors/nil/nil.js";
 import {
   createTestConfig,
   newIterator,
@@ -23,19 +24,16 @@ const eq$Config = (() => {
     evalFn:    expected => actual => expected === actual,
     expected:  true,
     excludedTests: [
-      TESTS.TEST_COPY,
-      TESTS.TEST_COPY_AFTER_CONSUMPTION,
-      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE
+      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
+      TESTS.TEST_INVARIANTS
     ]
   });
 })();
 
 addToTestingTable(testSuite)(eq$Config);
 
-testSuite.add("test typical case: eq$ should return false", assert => {
-  const it1 = newIterator(2);
-  const it2 = newIterator(4);
-  assert.is(eq$(it1)(it2), false);
+testSuite.add("test empty iterator", assert => {
+  assert.is(eq$(nil)(nil), true);
 });
 
 testSuite.run();

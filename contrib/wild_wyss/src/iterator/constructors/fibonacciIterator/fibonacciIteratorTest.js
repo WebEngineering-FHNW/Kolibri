@@ -20,7 +20,11 @@ addToTestingTable(testSuite)(
       const actualArray   = take(5)(actual);
       return arrayEq([...expectedArray])([...actualArray]);
     },
-    excludedTests: [TESTS.TEST_PURITY, TESTS.TEST_CB_NOT_CALLED_AFTER_DONE ]
+    excludedTests: [
+      TESTS.TEST_PURITY,
+      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
+      TESTS.TEST_INVARIANTS,
+    ]
   })
 );
 
