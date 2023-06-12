@@ -108,11 +108,11 @@ IteratorPrototype.toString = function () {
  * const it1 = Range(3);
  * const it2 = [0,1,2,3];
  *
- * console.log(it1 ["==="] it2);
+ * console.log(it1 ["=="] it2);
  * // => Logs 'true'
  *
  */
-IteratorPrototype["==="] = function(that) {
+IteratorPrototype["=="] = function(that) {
   if (!isIterable(that)) return false;
-  return eq$(this) /* === */ (that);
+  return eq$(this) /* == */ (that);
 };
