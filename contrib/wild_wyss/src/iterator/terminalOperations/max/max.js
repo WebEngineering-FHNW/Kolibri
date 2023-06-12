@@ -24,7 +24,7 @@ export { max$ }
  * const maximum = max$(numbers);
  *
  * console.log(maximum);
- * // => Logs 5
+ * // => Logs '5'
  */
 const max$ = (iterator, comparator = (a, b) => a < b) => {
   let returnVal;
