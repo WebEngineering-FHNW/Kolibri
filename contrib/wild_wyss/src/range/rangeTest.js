@@ -101,8 +101,10 @@ rangeSuite.add("test break Range(7)", assert => {
 
 
 rangeSuite.add("test use range twice", assert => {
+  // Given
   const range = Range(0);
 
+  // Then
   const [zero] = range;
   assert.is(zero, 0);
 
@@ -111,21 +113,27 @@ rangeSuite.add("test use range twice", assert => {
 });
 
 rangeSuite.add("test continue and break", assert => {
+  // When
   for (const value of Range(Number.MAX_VALUE)) {
     if(4 > value) continue; // dropWhile value < 4
     if(4 < value) break;    // take(1)
+
+    // Then
     assert.is(value, 4);
   }
 });
 
 rangeSuite.add("test running out of range", assert => {
+  // Given
   const range = Range(2);
   const rangeIterator = iteratorOf(range);
 
+  // When
   rangeIterator.next();
   const rangeIterable = createMonadicSequence(() => rangeIterator);
   for (const _ of rangeIterable) { /* Range gets exhausted. */ }
 
+  // Then
   assert.is(rangeIterator.next().done, true);
 });
 

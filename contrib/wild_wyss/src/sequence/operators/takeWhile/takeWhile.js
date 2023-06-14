@@ -20,7 +20,7 @@ export { takeWhile }
  * const dropped = takeWhile(el => el <= 2)(numbers);
  *
  * console.log(...result);
- * // => Logs '0 , 1, 2'
+ * // => Logs '0, 1, 2'
  */
 const takeWhile = predicate => iterable => {
 

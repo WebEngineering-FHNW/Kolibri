@@ -20,6 +20,6 @@ export { concat }
  * const concatenated = concat(numbers)(range);
  *
  * console.log(...concatenated);
- * => Logs '0, 1, 0, 1, 2'
+ * // => Logs '0, 1, 0, 1, 2'
  */
 const concat = it1 => it2 => mconcat([it1, it2]);

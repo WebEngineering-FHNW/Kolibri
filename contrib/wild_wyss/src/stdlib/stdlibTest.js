@@ -1,30 +1,41 @@
-import { TestSuite }     from "../test/test.js";
-import { arrayEq }       from "../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { Just, Nothing } from "../../../../docs/src/kolibri/stdlib.js";
-import {catMaybes, choiceMaybe} from "./stdlib.js";
+import { TestSuite }              from "../test/test.js";
+import { arrayEq }                from "../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { Just, Nothing }          from "../../../../docs/src/kolibri/stdlib.js";
+import { catMaybes, choiceMaybe } from "./stdlib.js";
 
 const iteratorSuite = TestSuite("stdlib");
 
 iteratorSuite.add("typical case: catMaybes", assert => {
+  // When
   const maybes = [Nothing, Just(4), Nothing, Just(0), Nothing];
+
+  // Then
   assert.isTrue(arrayEq([4, 0])(catMaybes(maybes)));
 });
 
 iteratorSuite.add("empty list test: catMaybes", assert => {
+  // When
   const maybes = [];
+
+  // Then
   assert.isTrue(arrayEq([])(catMaybes(maybes)));
 });
 
 iteratorSuite.add("empty list test: catMaybes", assert => {
+  // When
   const maybes = [];
+
+  // Then
   assert.isTrue(arrayEq([])(catMaybes(maybes)));
 });
 
 iteratorSuite.add("typical case: choiceMaybe", assert => {
+  // Given
   const just = Just(1);
   const just2 = Just(2);
   const nothing = Nothing;
 
+  // Then
   /*
     There are 4 possible cases to be considered:
     Nothing <|> Nothing = Nothing -- 0 results + 0 results = 0 results
@@ -40,14 +51,17 @@ iteratorSuite.add("typical case: choiceMaybe", assert => {
 
 
 iteratorSuite.add("test associativity: choiceMaybe", assert => {
+  // Given
   const just = Just(1);
   const just2 = Just(2);
   const just3 = Just(3);
 
+  // When
   // choice must be associative
   const case1 = choiceMaybe(choiceMaybe(just)(just2))(just3);
   const case2 = choiceMaybe(just)(choiceMaybe((just2)(just3)));
 
+  // Then
   assert.is(case1, case2);
 });
 

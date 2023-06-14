@@ -22,7 +22,7 @@ export { pipe }
  *              )(Range(5));
  *
  * console.log(...piped);
- * // => Logs '0,4,8'
+ * // => Logs '0, 4, 8'
  */
 const pipe = (...transformers) => iterable => {
 

@@ -19,6 +19,7 @@ export { JsonMonad }
  * @template _T_
  * @param { Object | Array<_T_> } jsObject
  * @returns MonadType<_T_>
+ *
  * @example
  * const result =
  *    from(JsonMonad(jsObject))
@@ -66,16 +67,16 @@ const JsonMonad = jsObject => {
     };
 
     const and = f => {
-      // Map each element of this iterator, that might be in this maybe
-      const result = maybeObj.fmap(iterator => {
-        const maybeIterators = iterator.fmap(elem => {
+      // Map each element of this iterable, that might be in this maybe
+      const result = maybeObj.fmap(iterable => {
+        const maybeIterable = iterable.fmap(elem => {
           // f :: _T_ -> JsonMonad<SequenceType<MaybeXType<_T_>>>
           const jsonMonad = f(elem);
-          return jsonMonad.get(); // unwrap the JsonMonad to access the iterator in it.
+          return jsonMonad.get(); // unwrap the JsonMonad to access the iterable in it.
         });
 
         /**@type SequenceType<SequenceType> */
-        const catted = /**@type any */catMaybes(maybeIterators);
+        const catted = /**@type any */catMaybes(maybeIterable);
         return mconcat(catted)
       });
 

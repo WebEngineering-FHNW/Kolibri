@@ -4,8 +4,8 @@ export { Pair }
  * A callback function that selects between two arguments that are given in curried style.
  * Only needed internally for the sake of proper JsDoc.
  * @callback PairSelectorType
- * @template _T_, _U_
  * @pure
+ * @template _T_, _U_
  * @type     { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
  * @property { () => { next: () => IteratorResult<_T_ | _U_, undefined> } } Symbol.iterator
  */
@@ -17,15 +17,18 @@ export { Pair }
  *   => (y: _U_)
  *   => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
  */
+
 /**
  * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
  * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
  * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
+ *
+ * @constructor
+ * @pure
  * @haskell a -> b -> (a -> b -> a|b) -> a|b
- * @pure    if the selector function is pure, which it usually is
  * @template _T_, _U_
  * @type    { PairType<_T_, _U_> }
- * @constructor
+ *
  * @example
  * const values = Pair("Tobi")("Andri");
  * values(fst) === "Tobi";
@@ -34,7 +37,7 @@ export { Pair }
  * // a pair is also iterable
  * const [tobi, andri] = values;
  * console.log(tobi, andri);
- * // => logs "Tobi", "Andri" to the console
+ * // => Logs '"Tobi", "Andri"'
  */
 const Pair = x => y => {
   /**

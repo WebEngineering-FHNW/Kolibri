@@ -14,16 +14,21 @@ export { Range }
  * - Zero step size leads to infinite loops.
  * - Only values that behave correctly with respect to addition and
  *   size comparison may be passed as arguments.
+ *
  * @constructor
  * @pure
  * @param { !Number } firstBoundary  - the first boundary of the range
  * @param { Number }  secondBoundary - optionally the second boundary of the range
  * @param { Number }  step - the size of a step, processed during each iteration
  * @returns SequenceType<Number>
+ *
  * @example
- *  const [zero, one, two, three] = Range(3);
- *  const [five, three, one]      = Range(1, 5, -2);
- *  const [three, four, five]     = Range(5, 3);
+ *  const range               = Range(3);
+ *  const [five, three, one]  = Range(1, 5, -2);
+ *  const [three, four, five] = Range(5, 3);
+ *
+ *  console.log(...range);
+ *  // => Logs '0, 1, 2, 3'
  */
 const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
   const stepIsNegative = 0 > step;

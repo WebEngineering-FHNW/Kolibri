@@ -5,7 +5,6 @@ import {
   iteratorOf
 } from "./util/util.js";
 
-
 export { SequenceBuilder }
 
 const ALREADY_BUILT_ERROR_MESSAGE = "Unsupported operation: Sequence has already been built!";
@@ -22,11 +21,13 @@ const ALREADY_BUILT_ERROR_MESSAGE = "Unsupported operation: Sequence has already
  * - Build must only be called at most once. After the first time, `build()` returns an {@link nil}.
  * - After build has been called, no elements can be added.
  *
+ * @constructor
+ * @pure
  * @template _T_
  * @param  { Iterable<_T_> } start
  * @returns { SequenceBuilderType<_T_> }
- * @throws { string } if any method on this {@link SequenceBuilderType} is called when the iterator is in built phase.
- * @constructor
+ * @throws { string } if any method on this {@link SequenceBuilderType} is called when the {@link Iterable} is in built phase.
+ *
  * @example
  * const range = Range(3);
  * const it = SequenceBuilder()
@@ -36,7 +37,7 @@ const ALREADY_BUILT_ERROR_MESSAGE = "Unsupported operation: Sequence has already
  * .build();
  *
  * console.log(...it);
- * // => Logs 0,1,2,3,4,5,6,7
+ * // => Logs '0, 1, 2, 3, 4, 5, 6, 7'
  */
 const SequenceBuilder = (start = nil) => {
   /**
@@ -79,12 +80,18 @@ const SequenceBuilder = (start = nil) => {
  * Creates an {@link SequenceType} from any {@link Iterable} or {@link Iterable} of {@link Iterable Iterables}.
  *
  * @template _T_
- * @param { _T_ | Iterable<_T_> | Iterable<Iterable<_T_>>} elements -
+ * @param { _T_ | Iterable<_T_> | Iterable<Iterable<_T_>>} elements
  * @returns { SequenceType<_T_> }
  * @constructor
  */
 const toMonadicIterable = elements => {
   elements = isIterable(elements) ? elements : [elements];
+
+  /**
+   *
+   * @template _T_
+   * @returns { Iterator<_T_> }
+   */
   const iterator = () => {
     let currentIdx = 0;
     let currentIterator = undefined;

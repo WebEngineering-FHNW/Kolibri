@@ -75,7 +75,6 @@ const ruleNrProjector = rule => {
   return numberInput;
 };
 
-
 /**
  * @param   { RuleType } rule
  * @returns { HTMLElement }

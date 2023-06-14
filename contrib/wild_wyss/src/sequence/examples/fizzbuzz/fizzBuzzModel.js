@@ -15,11 +15,10 @@ export { FizzBuzzModel, Rule }
  */
 
 /**
- *
+ * @constructor
  * @param nr
  * @param text
  * @returns { RuleType }
- * @constructor
  */
 const Rule = (nr = 1, text = "change me") => {
   const nrAttr    = Attribute(nr);

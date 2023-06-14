@@ -27,8 +27,8 @@ addToTestingTable(testSuite)(
 
 testSuite.add("test purity: concat - both sub iterables untouched.", assert => {
   // Given
-  const it1 = newSequence(4);
-  const it2 = newSequence(2);
+  const it1            = newSequence(4);
+  const it2            = newSequence(2);
   const concatIterator = concat(it1)(it2);
 
   // When

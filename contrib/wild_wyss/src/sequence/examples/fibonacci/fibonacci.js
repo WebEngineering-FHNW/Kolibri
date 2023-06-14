@@ -34,11 +34,11 @@ const fibonacciProjector = scaleFactor => ({ index, current, pos, color }) => {
   return div;
 };
 
-const rootElement   = document.getElementById("root");
-const amountInput   = document.getElementById("amount");
-const scaleInput    = document.getElementById("scale");
-let amount          = 5;
-let scaleFactor     = 10;
+const rootElement = document.getElementById("root");
+const amountInput = document.getElementById("amount");
+const scaleInput  = document.getElementById("scale");
+let amount        = 5;
+let scaleFactor   = 10;
 
 amountInput.value = amount;
 amountInput.onchange = () => {

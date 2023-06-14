@@ -30,6 +30,8 @@ const id = x => x;
  * @property { (Function | any) }            [param]         - A parameter passed to this operation. If it is a function, some extra tests will be performed.
  * @property { Array<InvariantCallback<T>> } [invariants]    - An optional array of {@link InvariantCallback}. The invariant must hold tests against different lists.
  * @property { EvalCallback<_U_> }           [evalFn]        - An optional function which takes {@link expected} and the actual result in curried style. It defaults to {@link arrayEq}.
+ * @example
+ * TODO
  */
 
 /**
@@ -38,7 +40,7 @@ const id = x => x;
  *              (param: any)
  *           => (base: Iterable<_T_>)
  *           => (SequenceType<_T_> | _T_ | *)
- * } OperationCallback
+ *         } OperationCallback
  */
 
 /**
@@ -47,10 +49,10 @@ const id = x => x;
  * @template _U_
  * @callback
  * @typedef {
- *             (expected: [_U_] | _U_)
- *          => (actual:   [_U_] | _U_)
- *          => Boolean
- *      } EvalCallback
+ *               (expected: [_U_] | _U_)
+ *            => (actual:   [_U_] | _U_)
+ *            => Boolean
+ *         } EvalCallback
  */
 
 /**
@@ -58,11 +60,11 @@ const id = x => x;
  * @typedef {
  *              (it: Sequence<Sequence>)
  *           => Boolean
- * } InvariantCallback
+ *          } InvariantCallback
  */
 
 /**
- * @param  { Number } limit
+ * @param { Number } limit
  * @returns { SequenceType<Number> }
  */
 const newSequence = limit => Sequence(0, current => current > limit, current => current + 1);
@@ -116,7 +118,7 @@ const testPurity = config => assert => {
 };
 
 /**
- * Since there is no guarantee that the value of the iterator is existing when done is true,
+ * Since there is no guarantee that the value of the iterable is existing when done is true,
  * it must be ensured that the callback function is not called after that.
  *
  * @type {
@@ -146,10 +148,10 @@ const testCBNotCalledAfterDone = config => assert => {
  * Tests, if {@link SequencePrototype} is set on the {@link SequenceType} under test.
  *
  * @type {
- *         (config: SequenceTestConfigType)
- *      => (assert: AssertType)
- *      => void
- * }
+ *            (config: SequenceTestConfigType)
+ *         => (assert: AssertType)
+ *         => void
+ *       }
  */
 const testPrototype = config => assert =>
   assert.is(Object.getPrototypeOf(config.iterable()), SequencePrototype);
@@ -161,7 +163,7 @@ const testPrototype = config => assert =>
  *           (invariants: SequenceTestConfigType)
  *        => (assert: AssertType)
  *        => void
- * }
+ *      }
  */
 const testInvariants = config => assert => {
   const invariants = config.invariants;
@@ -174,10 +176,10 @@ const testInvariants = config => assert => {
  * Applies a series of lists to a given invariant.
  * @template _T_
  * @type {
- *           (invariants: InvariantCallback)
- *        => (assert: AssertType)
- *        => void
- * }
+ *            (invariants: InvariantCallback)
+ *         => (assert: AssertType)
+ *         => void
+ *       }
  */
 const invariantPenetration = invariant => assert => {
   const testingLists = [
@@ -198,8 +200,9 @@ const invariantPenetration = invariant => assert => {
 
 /**
  * EvalFn will be set to {@link arrayEq} if it has not been defined
- * @template _T_, _U_
+ *
  * @function
+ * @template _T_, _U_
  * @param { SequenceTestConfigType<_T_> } config
  * @returns SequenceTestConfigType<_U_>
  */
@@ -212,6 +215,7 @@ const createTestConfig = config => ({
 
 /**
  * Checks if the given iterables are equals.
+ *
  * @template _T_
  * @param { Array<_T_> | _T_}     expected
  * @param { Iterable<_T_> | _T_ } actual
