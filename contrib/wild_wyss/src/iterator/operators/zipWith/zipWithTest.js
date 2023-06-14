@@ -1,6 +1,6 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
-import { zipWith, eq$, nil } from "../../iterator.js";
+import { zipWith, nil } from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -17,8 +17,8 @@ addToTestingTable(testSuite)(
     param:      (i, j) => i + j,
     expected:   [0, 2, 4, 6, 8],
     invariants: [
-      it => eq$(zipWith(x => x)(nil)(it)) /* === */ (nil),
-      it => eq$(zipWith(x => x)(it)(nil)) /* === */ (nil),
+      it => zipWith(x => x)(nil)(it) ["=="] (nil),
+      it => zipWith(x => x)(it)(nil) ["=="] (nil),
     ]
   })
 );

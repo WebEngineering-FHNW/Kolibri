@@ -1,6 +1,6 @@
-import {addToTestingTable }  from "../../util/testingTable.js";
+import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
-import { cons, uncons, eq$ } from "../../../iterator/iterator.js"
+import { cons, uncons }      from "../../../iterator/iterator.js"
 import { snd  }              from "../../../../../../docs/src/kolibri/stdlib.js"
 import {
   createTestConfig ,
@@ -18,7 +18,7 @@ addToTestingTable(testSuite)(
     param:      2,
     expected:   [2, 0, 1, 2, 3, 4],
     invariants: [
-      it => eq$(uncons(cons(1)(it))(snd)) /* === */ (it),
+      it => uncons(cons(1)(it))(snd)  ["=="] (it),
       it => [...cons(1)(it)].length > [...it].length,
     ],
   })

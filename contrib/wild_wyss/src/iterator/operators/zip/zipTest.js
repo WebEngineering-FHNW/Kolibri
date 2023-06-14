@@ -1,7 +1,7 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
 import { Pair, fst, snd }    from "../../../../../../docs/src/kolibri/stdlib.js";
-import { zip, eq$, nil }     from "../../iterator.js"
+import { zip, nil }          from "../../iterator.js"
 import {
   createTestConfig,
   newIterator,
@@ -28,8 +28,8 @@ addToTestingTable(testSuite)(
       return result;
     },
     invariants: [
-      it => eq$(zip(it)(nil)) /* === */ (nil),
-      it => eq$(zip(nil)(it)) /* === */ (nil)
+      it => zip(it)(nil) ["=="] (nil),
+      it => zip(nil)(it) ["=="] (nil)
     ]
   })
 );

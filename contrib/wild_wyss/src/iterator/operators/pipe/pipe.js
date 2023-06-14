@@ -1,4 +1,5 @@
-import {iteratorOf} from "../../util/util.js";
+import { IteratorPrototype } from "../../constructors/iterator/iterator.js";
+import {createMonadicIterable, toMonadicIterable} from "../../util/util.js";
 
 export { pipe }
 
@@ -19,6 +20,12 @@ export { pipe }
  * // => Logs 0,4,8
  */
 const pipe = (...transformers) => iterable => {
+
+  // assure that the iterable is monadic
+  if (Object.getPrototypeOf(iterable) !== IteratorPrototype) {
+   iterable = toMonadicIterable(iterable);
+  }
+
   for (const transformer of transformers) {
     iterable = transformer(iterable);
   }

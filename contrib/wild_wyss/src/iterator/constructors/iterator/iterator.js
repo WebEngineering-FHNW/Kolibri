@@ -1,9 +1,9 @@
-import {createIterator, createMonadicIterable, isIterable} from "../../util/util.js";
-import { bind }           from "../../operators/bind/bind.js";
-import { map }            from "../../operators/map/map.js"
-import { PureIterator }   from "../pureIterator/pureIterator.js";
-import { show }           from "../../terminalOperations/show/show.js";
-import {eq$} from "../../terminalOperations/eq/eq.js";
+import { createMonadicIterable, isIterable } from "../../util/util.js";
+import { bind }                              from "../../operators/bind/bind.js";
+import { map }                               from "../../operators/map/map.js"
+import { PureIterator }                      from "../pureIterator/pureIterator.js";
+import { show }                              from "../../terminalOperations/show/show.js";
+import { eq$ }                               from "../../terminalOperations/eq/eq.js";
 
 export { Iterator, IteratorPrototype }
 

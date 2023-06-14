@@ -2,7 +2,7 @@ import {addToTestingTable }           from "../../util/testingTable.js";
 import { TestSuite }                  from "../../../test/test.js";
 import { Range }                      from "../../../range/range.js";
 import { arrayEq }                    from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { concat, Iterator, eq$, nil } from "../../../iterator/iterator.js";
+import { concat, Iterator, nil }      from "../../../iterator/iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -18,8 +18,8 @@ addToTestingTable(testSuite)(
     param:     newIterator(2),
     expected:  [0,1,2,3,4],
     invariants: [
-      it => eq$(concat(nil)(it)) /* === */ (it),
-      it => eq$(concat(it)(nil)) /* === */ (it),
+      it => concat(nil)(it) ["=="] (it),
+      it => concat(it)(nil) ["=="] (it),
       it => [...concat([1])(it)].length > [...it].length,
     ],
   })

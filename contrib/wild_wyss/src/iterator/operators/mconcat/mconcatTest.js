@@ -3,7 +3,6 @@ import { TestSuite }         from "../../../test/test.js";
 import {
   Iterator,
   ArrayIterator,
-  eq$,
   PureIterator,
   mconcat,
   nil
@@ -23,8 +22,8 @@ addToTestingTable(testSuite)(
     operation:  () => mconcat,
     expected:   [0, 1, 2, 0, 1, 2, 0, 1, 2],
     invariants: [
-      it => eq$(mconcat([nil, it])) /* === */ (it),
-      it => eq$(mconcat([it, nil])) /* === */ (it),
+      it =>mconcat([nil, it]) ["=="] (it),
+      it =>mconcat([it, nil]) ["=="] (it),
       it => [...mconcat([PureIterator(1),it])].length > [...it].length,
     ],
   })

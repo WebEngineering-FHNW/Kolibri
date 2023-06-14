@@ -1,7 +1,7 @@
-import { addToTestingTable }   from "../../util/testingTable.js";
-import { TestSuite }           from "../../../test/test.js";
-import { dropWhile, eq$, nil } from "../../iterator.js";
-import { arrayEq }             from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { addToTestingTable } from "../../util/testingTable.js";
+import { TestSuite }         from "../../../test/test.js";
+import { dropWhile, nil }    from "../../iterator.js";
+import { arrayEq }           from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import {
   createTestConfig,
   newIterator,
@@ -18,8 +18,8 @@ addToTestingTable(testSuite)(
     param:      el => el < 2,
     expected:   [2, 3, 4],
     invariants: [
-      it => eq$(dropWhile(_ => true)(it))  /* === */ (nil),
-      it => eq$(dropWhile(_ => false)(it)) /* === */ (it),
+      it => dropWhile(_ => true )(it) ["=="] (nil),
+      it => dropWhile(_ => false)(it) ["=="] (it),
     ]
   })
 );

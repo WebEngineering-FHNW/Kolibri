@@ -6,7 +6,7 @@ import {
   map,
   rejectAll,
   reduce$,
-  eq$
+  eq$,
 } from "../../../iterator/iterator.js";
 
 import {
@@ -14,6 +14,7 @@ import {
   newIterator,
   UPPER_ITERATOR_BOUNDARY
 } from "../../util/testUtil.js";
+import {toMonadicIterable} from "../../util/util.js";
 
 const testSuite = TestSuite("Iterator: Operation pipe");
 
@@ -25,7 +26,7 @@ addToTestingTable(testSuite)(
     param:      [ map(x => 2*x), rejectAll(x => x > 4) ],
     expected:   [0, 2, 4],
     invariants: [
-      it => eq$(pipe()(it)) /* === */ (it),
+      it => pipe()(it) ["=="] (it),
     ]
   })
 );

@@ -1,6 +1,6 @@
-import { addToTestingTable }   from "../../util/testingTable.js";
-import { TestSuite }           from "../../../test/test.js";
-import { retainAll, eq$, nil } from "../../iterator.js";
+import { addToTestingTable } from "../../util/testingTable.js";
+import { TestSuite }         from "../../../test/test.js";
+import { retainAll, nil }    from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -17,8 +17,8 @@ addToTestingTable(testSuite)(
     param:      el => el % 2 === 0,
     expected:   [0, 2, 4],
     invariants: [
-      it => eq$(retainAll(_ => true)(it))  /* === */ (it),
-      it => eq$(retainAll(_ => false)(it)) /* === */ (nil),
+      it => retainAll(_ => true )(it) ["=="] (it),
+      it => retainAll(_ => false)(it) ["=="] (nil),
     ]
   })
 );

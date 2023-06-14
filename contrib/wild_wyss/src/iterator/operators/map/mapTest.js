@@ -1,6 +1,6 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
-import { map, eq$ }          from "../../../iterator/iterator.js";
+import { map }               from "./map.js";
 import {
   createTestConfig,
   newIterator,
@@ -18,7 +18,7 @@ addToTestingTable(testSuite)(
     expected:   [0, 2, 4, 6, 8],
     invariants: [
       it => map(x => x)(it) ["=="] (it),
-      it => eq$(map(x => x[0])(map(x => [x])(it)))/* === */ (it),
+      it => map(x => x[0])(map(x => [x])(it)) ["=="] (it),
     ]
   })
 );

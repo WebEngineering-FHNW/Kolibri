@@ -1,6 +1,6 @@
-import { addToTestingTable }   from "../../util/testingTable.js";
-import { TestSuite }           from "../../../test/test.js";
-import { takeWhile, eq$, nil } from "../../iterator.js";
+import { addToTestingTable } from "../../util/testingTable.js";
+import { TestSuite }         from "../../../test/test.js";
+import { takeWhile, nil }    from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -17,8 +17,8 @@ addToTestingTable(testSuite)(
     param:      el => el < 2,
     expected:   [0, 1],
     invariants: [
-      it => eq$(takeWhile(_ => true)(it))  /* === */ (it),
-      it => eq$(takeWhile(_ => false)(it)) /* === */ (nil),
+      it => takeWhile(_ => true)(it)  ["=="] (it),
+      it => takeWhile(_ => false)(it) ["=="] (nil),
     ]
   })
 );
