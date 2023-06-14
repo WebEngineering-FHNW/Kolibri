@@ -1,11 +1,13 @@
 import { Range }                      from "../range/range.js";
 import { TestSuite }                  from "../test/test.js";
-import { IteratorBuilder, Iterator }  from "./iterator.js";
+import {IteratorBuilder, Iterator, PureIterator} from "./iterator.js";
+import {addToTestingTable, TESTS} from "./util/testingTable.js";
+import {createTestConfig} from "./util/testUtil.js";
 
 
-const iteratorBuilderSuite = TestSuite("IteratorBuilder");
+const testSuite = TestSuite("IteratorBuilder");
 
-iteratorBuilderSuite.add("test basic: IteratorBuilder", assert => {
+testSuite.add("test basic: IteratorBuilder", assert => {
   const it = IteratorBuilder()
     .append(1)
     .append(2, 3)
@@ -13,12 +15,12 @@ iteratorBuilderSuite.add("test basic: IteratorBuilder", assert => {
   assert.iterableEq(it, [1,2,3]);
 });
 
-iteratorBuilderSuite.add("test no start iterator: IteratorBuilder", assert => {
+testSuite.add("test no start iterator: IteratorBuilder", assert => {
   const iterator = IteratorBuilder().build();
   assert.iterableEq(iterator, []);
 });
 
-iteratorBuilderSuite.add("test add values and iterator: IteratorBuilder", assert => {
+testSuite.add("test add values and iterator: IteratorBuilder", assert => {
   const range = Range(1, 3);
   const it = IteratorBuilder()
     .append(0)
@@ -28,7 +30,7 @@ iteratorBuilderSuite.add("test add values and iterator: IteratorBuilder", assert
   assert.iterableEq(it, [0,1,2,3,4]);
 });
 
-iteratorBuilderSuite.add("test varargs: IteratorBuilder", assert => {
+testSuite.add("test varargs: IteratorBuilder", assert => {
   const iterator = Range(3, 5);
   const it = IteratorBuilder()
     .append(0,1,2)
@@ -38,7 +40,7 @@ iteratorBuilderSuite.add("test varargs: IteratorBuilder", assert => {
   assert.iterableEq(it, [0,1,2,3,4,5,6,7,8,9,10,11]);
 });
 
-iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert => {
+testSuite.add("test add undefined & null: IteratorBuilder", assert => {
   const it = IteratorBuilder()
     .append(undefined)
     .append(null)
@@ -46,7 +48,7 @@ iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert =>
   assert.iterableEq(it, [undefined, null]);
 });
 
-iteratorBuilderSuite.add("test purity: IteratorBuilder", assert => {
+testSuite.add("test purity: IteratorBuilder", assert => {
   const it = IteratorBuilder()
     .append(1,2,3)
     .build();
@@ -55,7 +57,7 @@ iteratorBuilderSuite.add("test purity: IteratorBuilder", assert => {
   assert.iterableEq(it, [1,2,3]);
 });
 
-iteratorBuilderSuite.add("test purity with sub-iterables: IteratorBuilder", assert => {
+testSuite.add("test purity with sub-iterables: IteratorBuilder", assert => {
   const it = IteratorBuilder()
       .append([1,2,3])
       .build();
@@ -64,7 +66,7 @@ iteratorBuilderSuite.add("test purity with sub-iterables: IteratorBuilder", asse
   assert.iterableEq(it, [1,2,3]);
 });
 
-iteratorBuilderSuite.add("test infinity: IteratorBuilder", assert => {
+testSuite.add("test infinity: IteratorBuilder", assert => {
   let called  = false;
   let counter = 0;
 
@@ -85,14 +87,14 @@ iteratorBuilderSuite.add("test infinity: IteratorBuilder", assert => {
   assert.is(called, false);
 });
 
-iteratorBuilderSuite.add("test add undefined & null: IteratorBuilder", assert => {
+testSuite.add("test add undefined & null: IteratorBuilder", assert => {
   const it = IteratorBuilder(Range(3, 5))
     .prepend(0,1,2)
     .build();
   assert.iterableEq(it, [0,1,2,3,4,5]);
 });
 
-iteratorBuilderSuite.add("test build two times: IteratorBuilder", assert => {
+testSuite.add("test build two times: IteratorBuilder", assert => {
   const builder = IteratorBuilder(Range(3));
   const it1 = builder.build();
 
@@ -101,7 +103,7 @@ iteratorBuilderSuite.add("test build two times: IteratorBuilder", assert => {
 });
 
 
-iteratorBuilderSuite.add("test append after build: IteratorBuilder", assert => {
+testSuite.add("test append after build: IteratorBuilder", assert => {
   const builder = IteratorBuilder(Range(3));
   const it1 = builder.build();
 
@@ -110,7 +112,7 @@ iteratorBuilderSuite.add("test append after build: IteratorBuilder", assert => {
   assert.iterableEq(it1, [0,1,2,3]);
 });
 
-iteratorBuilderSuite.add("test prepend after build: IteratorBuilder", assert => {
+testSuite.add("test prepend after build: IteratorBuilder", assert => {
   const builder = IteratorBuilder(Range(3));
   const it1 = builder.build();
 
@@ -120,4 +122,5 @@ iteratorBuilderSuite.add("test prepend after build: IteratorBuilder", assert => 
   assert.iterableEq(it1, [0,1,2,3]);
 });
 
-iteratorBuilderSuite.run();
+testSuite.run();
+
