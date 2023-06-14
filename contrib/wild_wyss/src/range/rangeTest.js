@@ -1,52 +1,77 @@
-import { Range }      from "./range.js"
-import { TestSuite }  from "../test/test.js";
+import { Range }                             from "./range.js"
+import { TestSuite }                         from "../test/test.js";
 import { createMonadicSequence, iteratorOf } from "../sequence/util/util.js";
 
 const rangeSuite = TestSuite("Range");
 
 rangeSuite.add("test typical case for of", assert => {
+  // Given
   const result = [];
+
+  // When
   for(const value of Range(1)){
     result.push(value);
   }
+
+  // Then
   assert.is(result.length, 2);
 });
 
 rangeSuite.add("test typical case spread", assert => {
+  // When
   const result = [...Range(2)];
+
+  // Then
   assert.is(result.length, 3);
 });
 
 rangeSuite.add("test typical case deconstruction", assert => {
+  // When
   const [zero, one, two] = Range(2);
+
+  // Then
   assert.is(zero, 0);
   assert.is(one,  1);
   assert.is(two,  2);
 });
 
 rangeSuite.add("test typical case deconstruction", assert => {
+  // When
   const result = Array.from(/** @type ArrayLike */ Range(3));
+
+  // Then
   assert.is(result.length, 4);
 });
 
 const testRange = (from, to, step, range, assert) => {
+  // Given
   const rangeIterator = iteratorOf(range);
-  for (let expected = from; expected <= to; expected += step) {
 
+  // When
+  for (let expected = from; expected <= to; expected += step) {
     const { done, value } = rangeIterator.next();
+    // Then
     assert.is(value, expected);
     assert.isTrue(!done)
   }
+
+  // Then
   assert.isTrue(rangeIterator.next().done)
 };
 
 const testRangeNegativeStepSize = (from, to, step, range, assert) => {
+  // Given
   const rangeIterator = iteratorOf(range);
+
+  // When
   for (let expected = from; expected >= to; expected += step) {
     const { done, value } = rangeIterator.next();
+    // Then
     assert.is(value, expected);
     assert.isTrue(!done)
   }
+
+  // Then
   assert.isTrue(rangeIterator.next().done)
 };
 
@@ -58,14 +83,18 @@ rangeSuite.add("test simple Range(3,2,1)", assert => {
 });
 
 rangeSuite.add("test break Range(7)", assert => {
+  // Given
   const range = Range(7);
   const result = [];
 
+  // When
   // noinspection LoopStatementThatDoesntLoopJS
   for (const value of range) {
     result.push(value);
     break;
   }
+
+  // Then
   assert.is(result.length, 1);
   assert.is(result[0], 0);
 });

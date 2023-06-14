@@ -1,15 +1,12 @@
-import { Just, Nothing } from "../stdlib/maybe.js";
-import { nil }           from "../sequence/constructors/nil/nil.js";
-import { isEmpty }       from "../sequence/terminalOperations/isEmpty/isEmpty.js";
-import { PureSequence }  from "../sequence/constructors/pureSequence/pureSequence.js";
+import { Just, Nothing }                     from "../stdlib/maybe.js";
+import { createMonadicSequence, iteratorOf } from "../sequence/util/util.js";
 import {
-  createMonadicSequence,
-  iteratorOf
-} from "../sequence/util/util.js";
-import {
+  PureSequence,
+  nil,
+  isEmpty,
   catMaybes,
-  mconcat
-} from "../sequence/sequence.js"
+  mconcat,
+} from "../sequence/sequence.js";
 
 export { JsonMonad }
 
@@ -17,17 +14,19 @@ export { JsonMonad }
  * This {@link JsonMonad} can be used to process JSON data or JS objects in a fluent way.
  * It is mainly used with {@link JinqType}.
  * @see https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/
+ *
+ * @constructor
  * @template _T_
  * @param { Object | Array<_T_> } jsObject
  * @returns MonadType<_T_>
- * @constructor
  * @example
  * const result =
  *    from(JsonMonad(jsObject))
  *      .select(x => x["id"])
  *      .result()
  *      .get();
- * console.log(result);
+ *
+ * console.log(...result);
  * // => Logs all ids of the passed json
  *
  */
@@ -110,12 +109,12 @@ const JsonMonad = jsObject => {
 
 
 /**
- * Helper function to create an {@link SequenceType} from varargs.
- *
+ * Helper function to create a {@link SequenceType} from varargs.
  * {@link toMonadicIterable } can't be used here, because sub iterables shouldn't be consumed
+ *
  * @template _T_
  * @param  { ..._T_ } elements - the elements to iterate on
- * @returns {SequenceType<*>}
+ * @returns { SequenceType<*> }
  */
 const innerIterable = (...elements) => {
   const iterator = () => {

@@ -1,5 +1,5 @@
-import * as _ from "../../sequence.js";
-import {FizzBuzzModel, Rule} from "./fizzBuzzModel.js";
+import { FizzBuzzModel, Rule } from "./fizzBuzzModel.js";
+import * as _                  from "../../sequence.js";
 
 export { FizzBuzzController }
 
@@ -12,7 +12,7 @@ export { FizzBuzzController }
  * @property { (value: Number) => void }                                    setUpperBoundary
  * @property { (nr: Number = 0, text: String = "") => void }                addRule
  * @property { (nr: Number) => void }                                       delRule
- * @property { (cb: ValueChangeCallback<IteratorType<RuleType>>) => void }  onResultChange
+ * @property { (cb: ValueChangeCallback<SequenceType<RuleType>>) => void }  onResultChange
  * @property { (cb: ValueChangeCallback<Array<RuleType>>) => void }         onRulesChange
  * @property { (cb: ValueChangeCallback<Number>) => void }                  onLowerBoundaryChange
  * @property { (cb: ValueChangeCallback<Number>) => void }                  onUpperBoundaryChange

@@ -1,6 +1,6 @@
 import { Attribute, VALUE } from "../../../../../../docs/src/kolibri/presentationModel.js";
 import { Observable }       from "../../../../../../docs/src/kolibri/observable.js";
-import { nil }    from "../../sequence.js";
+import { nil }              from "../../sequence.js";
 
 export { FizzBuzzModel, Rule }
 
@@ -45,8 +45,8 @@ const Rule = (nr = 1, text = "change me") => {
  * @property { (value: Number) => void }                                    setUpperBoundary
  * @property { (nr: Number, text: String) => void }                         addRule
  * @property { (nr: Number) => void }                                       delRule
- * @property { (cb: ValueChangeCallback<IteratorType<RuleType>>) => void }  onResultChange
- * @property { (result: IteratorType<RuleType>) => void }                   setResult
+ * @property { (cb: ValueChangeCallback<SequenceType<RuleType>>) => void }  onResultChange
+ * @property { (result: SequenceType<RuleType>) => void }                   setResult
  * @property { (cb: ValueChangeCallback<Array<RuleType>>) => void }         onRulesChange
  * @property { (cb: ValueChangeCallback<Number>) => void }                  onLowerBoundaryChange
  * @property { (cb: ValueChangeCallback<Number>) => void }                  onUpperBoundaryChange
@@ -75,4 +75,3 @@ const FizzBuzzModel = () => {
     onLowerBoundaryChange: lowerBoundary.onChange,
   }
 };
-

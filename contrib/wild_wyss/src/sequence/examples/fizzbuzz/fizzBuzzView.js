@@ -9,9 +9,9 @@ export { FizzBuzzView }
  * @param { HTMLElement } rootElement
  */
 const FizzBuzzView = (controller, rootElement) => {
-  const [addButton]                  = dom(`<button style="margin-top: 5px">Add Rule</button>`);
-  const [rulesHeader, rulesRoot]     = dom(`<h3>Rules</h3><div></div>`);
-  const [resultHeader, resultRoot]   = dom(`<h3>Result</h3><div></div>`);
+  const [addButton]                = dom(`<button style="margin-top: 5px">Add Rule</button>`);
+  const [rulesHeader, rulesRoot]   = dom(`<h3>Rules</h3><div></div>`);
+  const [resultHeader, resultRoot] = dom(`<h3>Result</h3><div></div>`);
 
   const boundaryElements = boundaryProjector(controller);
   const renderResult = result => resultRoot.replaceChildren(resultProjector(controller, result));
@@ -54,7 +54,7 @@ const boundaryProjector = controller => {
 /**
  *
  * @param   { FizzBuzzControllerType } controller
- * @param   { IteratorType<RuleType> } result
+ * @param   { SequenceType<RuleType> } result
  * @returns { HTMLElement }
  */
 const resultProjector = (controller, result) => {

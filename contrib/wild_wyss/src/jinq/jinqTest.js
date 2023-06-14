@@ -3,22 +3,29 @@ import { from }          from "./jinq.js";
 import { Range }         from "../range/range.js";
 import { arrayEq }       from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Just, Nothing } from "../stdlib/maybe.js"
-import { JsonMonad }   from "../json/jsonMonad.js";
+import { JsonMonad }     from "../json/jsonMonad.js";
 
 const jinqSuite = TestSuite("Jinq Suite");
 
 jinqSuite.add("simple with iterator", assert => {
- const it = Range(7);
- const result =
-   from(it)
-   .where(x => x % 2 === 0)
-   .result();
+  // Given
+  const it = Range(7);
 
+  // When
+  const result =
+    from(it)
+      .where(x => x % 2 === 0)
+      .result();
+
+  // Then
   assert.isTrue(arrayEq([0, 2, 4, 6])([...result]))
 });
 
 jinqSuite.add("pairWith with iterator", assert => {
+  // Given
   const it = Range(3);
+
+  // When
   const result =
     from(it)
       .pairWith(it)
@@ -30,20 +37,26 @@ jinqSuite.add("pairWith with iterator", assert => {
     values.push(...element);
   }
 
+  // Then
   assert.isTrue(arrayEq([0,0,1,1,2,2,3,3])(values));
 });
 
 jinqSuite.add("select with iterator", assert => {
+  // Given
   const it = Range(3);
+
+  // When
   const result =
     from(it)
       .select(x => 2 * x)
       .result();
 
+  // Then
   assert.isTrue(arrayEq([0, 2, 4, 6])([...result]))
 });
 
 jinqSuite.add("jinq with maybe", assert => {
+  // Given
   /**
    * @typedef PersonType
    * @property { String } name
@@ -62,6 +75,7 @@ jinqSuite.add("jinq with maybe", assert => {
   const cto   = Person("Tom",   Just(ceo));
   const andri = Person("Andri", Just(cto));
 
+  // When
   /**
    *
    * @param   { PersonType } employee
@@ -75,7 +89,9 @@ jinqSuite.add("jinq with maybe", assert => {
       .result();
 
   const maybeName = maybeBossNameOfBoss(andri);
-  const noName = maybeBossNameOfBoss(ceo);
+  const noName    = maybeBossNameOfBoss(ceo);
+
+  // Then
   assert.is(noName, Nothing);
   maybeName
     (_ => assert.isTrue(false))
@@ -83,15 +99,21 @@ jinqSuite.add("jinq with maybe", assert => {
 });
 
 jinqSuite.add("test pairWith with Nothing", assert => {
+  // Given
   const just2 = Just(2);
+
+  // When
   const result =
     from(just2)
       .pairWith(Nothing)
       .result();
+
+  // Then
   assert.is(result, Nothing);
 });
 
 jinqSuite.add("json test", assert => {
+  // Given
   const battleData = JSON.parse( `
     {
       "battleName": "The battle of Curly",
@@ -109,6 +131,7 @@ jinqSuite.add("json test", assert => {
     ]
   `);
 
+  // When
   const outstandingHeroNames =
     from(JsonMonad(battleData))
       .select   (x => x["winner"])
@@ -118,10 +141,10 @@ jinqSuite.add("json test", assert => {
       .select   (([_, hero]) => hero["name"])
       .result   ();
 
-      const results = [...outstandingHeroNames];
-      assert.is(results.length, 1);
-      assert.is(results[0], "Atonadias")
+  // Then
+  const results = [...outstandingHeroNames];
+  assert.is(results.length, 1);
+  assert.is(results[0], "Atonadias")
 });
-
 
 jinqSuite.run();
