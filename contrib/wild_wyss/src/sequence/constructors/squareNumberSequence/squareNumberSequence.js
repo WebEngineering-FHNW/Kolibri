@@ -12,7 +12,7 @@ export { SquareNumberSequence }
  * const squares = SquareNumberSequence();
  * const result  = take(5)(squares);
  *
- * console.log(...iterator);
+ * console.log(...result);
  * // => Logs '1, 4, 9, 16, 25'
  */
 const SquareNumberSequence = () => {

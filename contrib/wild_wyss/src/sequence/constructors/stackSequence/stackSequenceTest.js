@@ -1,20 +1,14 @@
-import { TestSuite }        from "../../../test/test.js";
-import { createTestConfig } from "../../util/testUtil.js";
-import { StackSequence }    from "./stackSequence.js";
-import {
-  convertArrayToStack,
-  reverseStack
-} from "../../../../../p6_brodwolf_andermatt/src/stack/stack.js";
-import {
-  addToTestingTable,
-  TESTS
-} from "../../util/testingTable.js";
+import { TestSuite }                         from "../../../test/test.js";
+import { createTestConfig }                  from "../../util/testUtil.js";
+import { StackSequence }                     from "./stackSequence.js";
+import { convertArrayToStack, reverseStack } from "../../../../../p6_brodwolf_andermatt/src/stack/stack.js";
+import { addToTestingTable, TESTS }          from "../../util/testingTable.js";
 
 const testSuite = TestSuite("Sequence: Constructor StackSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({
-    name:     "StackIterator",
+    name:     "StackSequence",
     iterable: () => {
       const stack = reverseStack(convertArrayToStack([0,1,2,3,4]));
       return StackSequence(stack);

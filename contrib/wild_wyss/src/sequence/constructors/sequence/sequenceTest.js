@@ -24,10 +24,10 @@ addToTestingTable(testSuite)(
 testSuite.add("test special case: no increment after done", assert => {
   // Given
   let result = true;
-  const iterator = Sequence(true, _ => true, _ => result = false);
+  const sequence = Sequence(true, _ => true, _ => result = false);
 
   // When
-  for (const iteratorElement of iterator) { /* exhausting iterator */ }
+  for (const element of sequence) { /* exhausting sequence */ }
 
   // Then
   assert.isTrue(result);

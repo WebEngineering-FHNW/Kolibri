@@ -17,7 +17,7 @@ export { StackSequence }
  * const stack         = push(push(push(emptyStack)(1))(2))(3);
  * const stackSequence = StackSequence(stack);
  *
- * console.log(...stackIterator);
+ * console.log(...stackSequence);
  * // => Logs: '3, 2, 1'
  */
 const StackSequence = stack => {
