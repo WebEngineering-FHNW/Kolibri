@@ -25,7 +25,7 @@ addToTestingTable(testSuite)(
   })
 );
 
-testSuite.add("test purity: concat - both sub iterators untouched.", assert => {
+testSuite.add("test purity: concat - both sub iterables untouched.", assert => {
   // Given
   const it1 = newSequence(4);
   const it2 = newSequence(2);
@@ -56,8 +56,8 @@ testSuite.add("test concat with infinity: concat", assert => {
   let counter = 0;
 
   const endless                = Sequence(0, _ => false, i => i + 1);
-  const iteratorWithSideEffect = Sequence(false, _ => false, _ => called = true);
-  const concatenated           = concat(endless)(iteratorWithSideEffect);
+  const iterableWithSideEffect = Sequence(false, _ => false, _ => called = true);
+  const concatenated           = concat(endless)(iterableWithSideEffect);
 
   // When
   for (const _ of concatenated) {

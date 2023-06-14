@@ -35,8 +35,8 @@ testSuite.add("test advanced case: zipWith one iterable is shorter", assert => {
   };
 
   // When
-  const zipped1 = zipWith(zipper)(it2)(it1); // first iterator is shorter
-  const zipped2 = zipWith(zipper)(it1)(it2); // second iterator is shorter
+  const zipped1 = zipWith(zipper)(it2)(it1); // first iterable is shorter
+  const zipped2 = zipWith(zipper)(it1)(it2); // second iterable is shorter
 
   // Then
   for (const _ of zipped1) { /* Exhausting*/ }

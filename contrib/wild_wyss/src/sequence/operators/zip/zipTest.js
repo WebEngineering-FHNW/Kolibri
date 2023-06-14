@@ -40,8 +40,8 @@ testSuite.add("test advanced case: zip one iterable is shorter", assert => {
   const it2 = newSequence(2);
 
   // When
-  const zipped1 = zip(it2)(it1); // first iterator is shorter
-  const zipped2 = zip(it1)(it2); // second iterator is shorter
+  const zipped1 = zip(it2)(it1); // first iterable is shorter
+  const zipped2 = zip(it1)(it2); // second iterable is shorter
 
   // Then
   assert.is([...zipped1].length, 3);

@@ -3,7 +3,7 @@ import { mconcat }       from "../mconcat/mconcat.js";
 export { concat }
 
 /**
- * Adds the second iterator to the first iterators end.
+ * Adds the second iterable to the first iterables end.
  *
  * @function
  * @pure

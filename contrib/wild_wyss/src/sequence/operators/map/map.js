@@ -3,7 +3,7 @@ import { createMonadicSequence, iteratorOf } from "../../util/util.js";
 export { map }
 
 /**
- * Transforms each element using the given function.
+ * Transforms each element using the given {@link Functor function}.
  *
  * @function
  * @pure
@@ -22,10 +22,10 @@ export { map }
  * console.log(...numbers);
  * // => Logs '0, 2, 4'
  */
-const map = mapper => iterator => {
+const map = mapper => iterable => {
 
   const mapIterator = () => {
-    const inner = iteratorOf(iterator);
+    const inner = iteratorOf(iterable);
     let mappedValue;
 
     const next = () => {
