@@ -1,6 +1,6 @@
 import { Range }      from "./range.js"
 import { TestSuite }  from "../test/test.js";
-import { createMonadicIterable, iteratorOf } from "../iterator/util/util.js";
+import { createMonadicSequence, iteratorOf } from "../sequence/util/util.js";
 
 const rangeSuite = TestSuite("Range");
 
@@ -94,7 +94,7 @@ rangeSuite.add("test running out of range", assert => {
   const rangeIterator = iteratorOf(range);
 
   rangeIterator.next();
-  const rangeIterable = createMonadicIterable(() => rangeIterator);
+  const rangeIterable = createMonadicSequence(() => rangeIterator);
   for (const _ of rangeIterable) { /* Range gets exhausted. */ }
 
   assert.is(rangeIterator.next().done, true);

@@ -6,7 +6,7 @@ import {
   eq$,
   head,
   isEmpty,
-} from "../iterator/iterator.js"
+} from "../sequence/sequence.js"
 
 export { FocusRing }
 

@@ -1,15 +1,15 @@
 import { Just, Nothing } from "../stdlib/maybe.js";
-import { nil }           from "../iterator/constructors/nil/nil.js";
-import { isEmpty }       from "../iterator/terminalOperations/isEmpty/isEmpty.js";
-import { PureSequence }  from "../iterator/constructors/pureSequence/pureSequence.js";
+import { nil }           from "../sequence/constructors/nil/nil.js";
+import { isEmpty }       from "../sequence/terminalOperations/isEmpty/isEmpty.js";
+import { PureSequence }  from "../sequence/constructors/pureSequence/pureSequence.js";
 import {
-  createMonadicIterable,
+  createMonadicSequence,
   iteratorOf
-} from "../iterator/util/util.js";
+} from "../sequence/util/util.js";
 import {
   catMaybes,
   mconcat
-} from "../iterator/iterator.js"
+} from "../sequence/sequence.js"
 
 export { JsonMonad }
 
@@ -40,7 +40,7 @@ const JsonMonad = jsObject => {
   /**
    *
    * @template _T_
-   * @param { MaybeType<IteratorMonadType<_T_>> & MaybeMonadType<_T_> } maybeObj
+   * @param { MaybeType<SequenceType<_T_>> & MaybeMonadType<_T_> } maybeObj
    * @returns { MonadType<_T_> }
    * @constructor
    */
@@ -70,12 +70,12 @@ const JsonMonad = jsObject => {
       // Map each element of this iterator, that might be in this maybe
       const result = maybeObj.fmap(iterator => {
         const maybeIterators = iterator.fmap(elem => {
-          // f :: _T_ -> JsonMonad<IteratorMonadType<MaybeXType<_T_>>>
+          // f :: _T_ -> JsonMonad<SequenceType<MaybeXType<_T_>>>
           const jsonMonad = f(elem);
           return jsonMonad.get(); // unwrap the JsonMonad to access the iterator in it.
         });
 
-        /**@type IteratorMonadType<IteratorMonadType> */
+        /**@type SequenceType<SequenceType> */
         const catted = /**@type any */catMaybes(maybeIterators);
         return mconcat(catted)
       });
@@ -110,12 +110,12 @@ const JsonMonad = jsObject => {
 
 
 /**
- * Helper function to create an {@link IteratorMonadType} from varargs.
+ * Helper function to create an {@link SequenceType} from varargs.
  *
  * {@link toMonadicIterable } can't be used here, because sub iterables shouldn't be consumed
  * @template _T_
  * @param  { ..._T_ } elements - the elements to iterate on
- * @returns {IteratorMonadType<*>}
+ * @returns {SequenceType<*>}
  */
 const innerIterable = (...elements) => {
   const iterator = () => {
@@ -124,5 +124,5 @@ const innerIterable = (...elements) => {
     const next = () => inner.next();
     return { next };
   };
-  return createMonadicIterable(iterator);
+  return createMonadicSequence(iterator);
 };

@@ -1,5 +1,5 @@
 import { FocusRing }                from "../focusRing.js";
-import { pipe, map }                from "../../iterator/iterator.js";
+import { pipe, map }                from "../../sequence/sequence.js";
 import { Observable }               from "../../../../../docs/src/kolibri/observable.js"
 import { Range }                    from "../../range/range.js";
 
