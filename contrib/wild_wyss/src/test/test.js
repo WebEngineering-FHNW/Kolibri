@@ -105,6 +105,23 @@ const Assert = () => {
             messages.push(message);
         },
         iterableEq: (actual, expected, maxElementsToConsume = 1_000) => {
+            /**
+             // Following tests should fail
+             assert.iterableEq([1,2], [1,2,3]);            // actual is shorter
+             assert.iterableEq([1,2,3], [1,2]);            // expected is shorter
+             assert.iterableEq([2,2,3,4],[1,2,3,4]);       // first element different
+             assert.iterableEq([1,2,3,4],[1,2,4,4]);       // any element different
+             assert.iterableEq([1,2,3,4],[1,2,3,5]);       // last element different
+             assert.iterableEq(Range(100), Range(50), 100);// actual has more elements than default
+             assert.iterableEq(Range(50), Range(100), 100);// expected has more elements than default
+             assert.iterableEq(Range(100), Range(80), 80); // after 80, comparing will be aborted
+             assert.iterableEq(Range(80), Range(100), 80); // after 80, comparing will be aborted
+
+             // Following tests should pass
+             assert.iterableEq([], []);                    // empty iterables
+             assert.iterableEq([1], [1]);                  // single valued iterables
+             assert.iterableEq([1,2,3,4], [1,2,3,4]);      // any iterable
+             */
             if (actual[Symbol.iterator]   === undefined) error("actual is not iterable!");
             if (expected[Symbol.iterator] === undefined) error("expected is not iterable!");
 
