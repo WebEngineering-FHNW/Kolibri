@@ -2,7 +2,6 @@ import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
 import {
   Iterator,
-  ArrayIterator,
   PureIterator,
   mconcat,
   nil
@@ -12,18 +11,19 @@ import {
   createTestConfig,
   newIterator,
 } from "../../util/testUtil.js";
+import {toMonadicIterable} from "../../util/util.js";
 
 const testSuite = TestSuite("Iterator: Operation mconcat");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "mconcat",
-    iterator:   () => ArrayIterator([ newIterator(2), newIterator(2), newIterator(2) ]),
+    iterator:   () => toMonadicIterable([ newIterator(2), newIterator(2), newIterator(2) ]),
     operation:  () => mconcat,
     expected:   [0, 1, 2, 0, 1, 2, 0, 1, 2],
     invariants: [
-      it =>mconcat([nil, it]) ["=="] (it),
-      it =>mconcat([it, nil]) ["=="] (it),
+      it => mconcat([nil, it]) ["=="] (it),
+      it => mconcat([it, nil]) ["=="] (it),
       it => [...mconcat([PureIterator(1),it])].length > [...it].length,
     ],
   })

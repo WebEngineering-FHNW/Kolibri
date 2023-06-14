@@ -1,5 +1,5 @@
-import * as _                  from "../../iterator.js";
-import { FizzBuzzModel, Rule } from "./fizzBuzzModel.js";
+import * as _ from "../../iterator.js";
+import {FizzBuzzModel, Rule} from "./fizzBuzzModel.js";
 
 export { FizzBuzzController }
 
@@ -45,8 +45,6 @@ const FizzBuzzController = () => {
     const currentRules = model.rulesSnapshot().map(createIteratorForRule);
 
     const baseLine  = _.Iterator("", _ => "", _ => false);
-    const rules     = _.ArrayIterator(currentRules);
-
     const fizzBuzz  = _.pipe(
       _.reduce$((acc, cur) => // reduce to single iterator by combining all iterator values
         _.zipWith((a, b) => a + b)(acc)(cur), // combine all strings
@@ -57,7 +55,7 @@ const FizzBuzzController = () => {
       // limit output
       _.take(model.getUpperBoundary()),
       _.drop(model.getLowerBoundary() -1),
-    )(rules);
+    )(currentRules);
 
     model.setResult(fizzBuzz);
   };

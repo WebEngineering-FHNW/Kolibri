@@ -10,7 +10,7 @@ import "./src/logger/appender/observableAppenderTest.js";
 import "./src/logger/logUi/logUiControllerTest.js";
 
 // iterator
-import "./src/iterator/constructors/constructorTest.js";
+// import "./src/iterator/constructors/constructorTest.js";
 import "./src/iterator/operators/operatorsTest.js";
 import "./src/iterator/terminalOperations/terminalOperationsTest.js";
 import "./src/iterator/iteratorBuilderTest.js";

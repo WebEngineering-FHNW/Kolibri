@@ -1,5 +1,4 @@
 import "./angleIterator/angleIteratorTest.js";
-import "./arrayIterator/arrayIteratorTest.js";
 import "./iterator/iteratorTest.js";
 import "./nil/nilTest.js";
 import "./primeNumberIterator/primeNumberIteratorTest.js";

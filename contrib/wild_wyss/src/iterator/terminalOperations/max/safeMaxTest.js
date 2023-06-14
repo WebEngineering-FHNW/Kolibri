@@ -3,7 +3,6 @@ import { TestSuite }                from "../../../test/test.js";
 import { Just }                     from "../../../stdlib/maybe.js";
 import {
   PureIterator,
-  ArrayIterator,
   replicate,
   safeMax$,
   nil
@@ -61,7 +60,7 @@ testSuite.add("test empty iterator: should return Nothing", assert => {
 
 testSuite.add("test comparator on strings: should return the longest string", assert => {
   // Given
-  const strings = ArrayIterator(["a", "b", "aa", "bb"]);
+  const strings = ["a", "b", "aa", "bb"];
 
   // When
   const maybeMax = safeMax$(strings, (a, b) => a.length < b.length);
@@ -74,7 +73,7 @@ testSuite.add("test comparator on strings: should return the longest string", as
 
 testSuite.add("test largest element at the end of the iterator", assert => {
   // Given
-  const iterator = ArrayIterator([4,3,2,5,1,0,9]);
+  const iterator = [4,3,2,5,1,0,9];
 
   // When
   const maybeMax   = safeMax$(iterator);
@@ -87,7 +86,7 @@ testSuite.add("test largest element at the end of the iterator", assert => {
 
 testSuite.add("test largest element at the start of the iterator", assert => {
   // Given
-  const iterator = ArrayIterator([9,4,3,2,5,1,0]);
+  const iterator = [9,4,3,2,5,1,0];
 
   // When
   const maybeMax   = safeMax$(iterator);

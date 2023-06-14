@@ -3,7 +3,6 @@ import { TestSuite }                from "../../../test/test.js";
 import { Just }                     from "../../../stdlib/maybe.js";
 import {
   PureIterator,
-  ArrayIterator,
   replicate,
   nil,
   safeMin$
@@ -61,7 +60,7 @@ testSuite.add("test empty iterator: should return Nothing", assert => {
 
 testSuite.add("test comparator on strings: should return the longest string", assert => {
   // Given
-  const strings = ArrayIterator(["a", "b", "aa", "bb"]);
+  const strings = ["a", "b", "aa", "bb"];
 
   // When
   const maybeMin = safeMin$(strings, (a, b) => a.length > b.length);
@@ -74,7 +73,7 @@ testSuite.add("test comparator on strings: should return the longest string", as
 
 testSuite.add("test smallest element at the end of the iterator", assert => {
   // Given
-  const iterator = ArrayIterator([4,3,2,5,1,9,0]);
+  const iterator = [4,3,2,5,1,9,0];
 
   // When
   const maybeMin   = safeMin$(iterator);
@@ -87,7 +86,7 @@ testSuite.add("test smallest element at the end of the iterator", assert => {
 
 testSuite.add("test smallest element at the start of the iterator", assert => {
   // Given
-  const iterator = ArrayIterator([0,9,4,3,2,5,1]);
+  const iterator = [0,9,4,3,2,5,1];
 
   // When
   const maybeMin   = safeMin$(iterator);

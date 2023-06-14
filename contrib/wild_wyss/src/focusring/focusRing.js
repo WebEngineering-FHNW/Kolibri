@@ -1,5 +1,4 @@
 import {
-  ArrayIterator,
   nil,
   reverse$,
   cons,
@@ -44,7 +43,7 @@ const FocusRingInternal = (pre, post) => {
         return FocusRingInternal(pre, post);
       }
       return FocusRingInternal(
-        ArrayIterator([currentFocus]),
+        [currentFocus],
         reverse$(pre)
       );
     }

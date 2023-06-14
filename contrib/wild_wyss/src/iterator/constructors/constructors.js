@@ -1,5 +1,4 @@
 export * from "./iterator/iterator.js";
-export * from "./arrayIterator/arrayIterator.js";
 export * from "./tupleIterator/tupleIterator.js";
 export * from "../operators/concat/concat.js";
 export * from "./stackIterator/stackIterator.js";

@@ -1,5 +1,5 @@
 import { FocusRing }                from "../focusRing.js";
-import { ArrayIterator, pipe, map } from "../../iterator/iterator.js";
+import { pipe, map }                from "../../iterator/iterator.js";
 import { Observable }               from "../../../../../docs/src/kolibri/observable.js"
 import { Range }                    from "../../range/range.js";
 
@@ -34,7 +34,7 @@ const SlotMachineModel = slotChars => {
   /** @type {Array<IObservable<FocusRingType>>} */
   const wheels = [
     ...pipe(
-      map(_ => FocusRing(ArrayIterator(shuffle(slotChars)))),
+      map(_ => FocusRing(shuffle(slotChars))),
       map(Observable)
     )(Range(WHEEL_COUNT-1))
   ];

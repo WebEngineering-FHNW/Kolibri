@@ -2,7 +2,7 @@ import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { TestSuite }                from "../../../test/test.js";
 import { show }                     from "./show.js";
 import { Range }                    from "../../../range/range.js";
-import { ArrayIterator, nil }       from "../../iterator.js";
+import { nil }                      from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
@@ -76,7 +76,7 @@ testSuite.add("test exceed default output length (50)", assert => {
 
 testSuite.add("test show of an iterator of iterators", assert => {
   // Given
-  const it     = ArrayIterator([Range(1), Range(2), Range(3)]);
+  const it     = [Range(1), Range(2), Range(3)];
 
   // When
   const result = show(it);
