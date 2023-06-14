@@ -1,16 +1,13 @@
-import {addToTestingTable } from "../../util/testingTable.js";
-import { bind }             from "./bind.js";
-import { take }             from "../take/take.js";
-import { Sequence }         from "../../constructors/sequence/Sequence.js";
-import { TestSuite }        from "../../../test/test.js";
-import { PureSequence }     from "../../constructors/pureSequence/pureSequence.js";
+import { addToTestingTable }                  from "../../util/testingTable.js";
+import { TestSuite }                          from "../../../test/test.js";
+import { bind, take, Sequence, PureSequence } from "../../sequence.js";
 import {
     createTestConfig,
     newSequence,
     UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation bind");
+const testSuite = TestSuite("Sequence: operation bind");
 
 addToTestingTable(testSuite)(
   createTestConfig({

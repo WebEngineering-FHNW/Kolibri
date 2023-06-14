@@ -3,24 +3,26 @@ import { createMonadicSequence, iteratorOf } from "../../util/util.js";
 export { zipWith }
 
 /**
- * {@link zipWith ZipWith} generalises {@link zip} by zipping with the function given as the first argument, instead of a {@link pair} constructor.
+ * {@link zipWith ZipWith} generalises {@link zip} by zipping with the function given as the first argument,
+ * instead of a {@link pair} constructor.
+ *
  * @function
- * @pure both iterables will no be changed
- * @template _T_
- * @template _U_
- * @template _V_
+ * @pure
+ * @template _T_, _U_, _V_
  * @type {
- *             (zipper: BiFunction<_T_, _U_, _V_>)
- *          => (it1: Iterable<_T_>)
- *          => (it2: Iterable<_U_>)
- *          => SequenceType<_V_>
- * }
+ *            (zipper: BiFunction<_T_, _U_, _V_>)
+ *         => (it1: Iterable<_T_>)
+ *         => (it2: Iterable<_U_>)
+ *         => SequenceType<_V_>
+ *       }
+ *
  * @example
- * const range1    = Range(2);
- * const range2    = Range(2, 4);
- * const zipped = zipWith((i,j) => [i,j])(range1)(range2);
+ * const numbers = [0, 1, 2];
+ * const range   = Range(2, 4);
+ * const zipped  = zipWith((i,j) => [i,j])(numbers)(range);
  * console.log(...zipped);
- * // => Logs [0,2], [1,3], [2,4]
+ *
+ * // => Logs '[0,2], [1,3], [2,4]'
  */
 const zipWith = zipper => it1 => it2 => {
   /**

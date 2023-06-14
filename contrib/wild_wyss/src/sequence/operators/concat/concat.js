@@ -5,19 +5,21 @@ export { concat }
 /**
  * Adds the second iterator to the first iterators end.
  *
- * @template _T_
- * @pure it1 and it2 will be copied defensively
+ * @function
+ * @pure
  * @haskell [a] -> [a] -> [a]
+ * @template _T_
  * @type {
- *             (it1: Iterable<_T_>)
- *          => SequenceOperation<_T_>
+ *            (it1: Iterable<_T_>)
+ *         => SequenceOperation<_T_>
  *       }
- * @constructor
+ *
  * @example
- * const it1 = Range(1);
- * const it2 = Range(2);
- * const concatenated = concat(it1)(it2);
+ * const numbers = [0, 1, 2];
+ * const range   = Range(2);
+ * const concatenated = concat(numbers)(range);
+ *
  * console.log(...concatenated);
- * => Logs 0, 1, 0, 1, 2
+ * => Logs '0, 1, 0, 1, 2'
  */
 const concat = it1 => it2 => mconcat([it1, it2]);

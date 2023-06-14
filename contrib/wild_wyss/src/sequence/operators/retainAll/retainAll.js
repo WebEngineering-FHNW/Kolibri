@@ -3,18 +3,25 @@ import { createMonadicSequence, iteratorOf } from "../../util/util.js";
 export { retainAll }
 
 /**
- * Only keeps elements which fulfill the predicate.
+ * Only keeps elements which fulfill the given {@link Predicate}.
+ *
  * @function
+ * @pure
  * @template _T_
- * @pure iterator will be copied defensively
  * @type {
- *             (predicate: Predicate<_T_>)
- *          => SequenceOperation<_T_>
+ *            (predicate: Predicate<_T_>)
+ *         => SequenceOperation<_T_>
  *       }
+ *
  * @example
- * const it     = Sequence(0, inc, stop);
+ * const numbers = [0, 1, 2, 3, 4, 5];
+ *
  * // just keep even numbers
  * const filtered = retainAll(el => el % 2 === 0)(it);
+ *
+ * console.log(...filtered);
+ * // => Logs '0, 2, 4'
+ *
  */
 const retainAll = predicate => iterable => {
 

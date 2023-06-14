@@ -1,22 +1,24 @@
 import { createMonadicSequence, iteratorOf } from "../../util/util.js";
 
-export {take}
+export { take }
 
 /**
- * Stop after so many elements
+ * Stop after so many elements.
+ *
  * @function
+ * @pure
  * @template _T_
- * @pure iterator will be copied defensively
  * @type {
- *            (count: Number)
- *         => SequenceOperation<_T_>
+ *           (count: Number)
+ *        => SequenceOperation<_T_>
  *       }
+ *
  * @example
  * const numbers = [0,1,2,3];
- * const take = take(2)(numbers);
+ * const taken   = take(2)(numbers);
  *
  * console.log(...taken);
- * // => Logs 0, 1
+ * // => Logs '0, 1'
  */
 const take = count => iterable => {
 
@@ -37,4 +39,3 @@ const take = count => iterable => {
 
   return createMonadicSequence(takeIterator);
 };
-

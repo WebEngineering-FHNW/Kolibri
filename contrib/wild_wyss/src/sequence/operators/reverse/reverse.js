@@ -4,19 +4,22 @@ export { reverse$ }
 
 /**
  * Processes the iterable backwards.
- * @template _T_
+ *
  * @function
- * @pure iterable will not be changed
+ * @pure
+ * @haskell [a] -> [a]
+ * @template _T_
  * @type {
  *             (iterable: Iterable<_T_>)
  *          => SequenceType<_T_>
  *       }
+ *
  * @example
  * const numbers  = [0, 1, 2];
- * const reversed = reverse$(it);
+ * const reversed = reverse$(numbers);
  *
  * console.log(...reversed);
- * // => Logs 2, 1, 0
+ * // => Logs '2, 1, 0'
  */
 const reverse$ = iterable => {
 

@@ -1,23 +1,26 @@
 import { createMonadicSequence, iteratorOf } from "../../util/util.js";
-import { catMaybes as arrCatMaybes } from "../../../stdlib/stdlib.js";
+import { catMaybes as arrCatMaybes }         from "../../../stdlib/stdlib.js";
 
 export { catMaybes }
 
 /**
- * The catMaybes function takes an {@link Iterable} of {@link MaybeType Maybes} and returns an {@link Iterable} of all the {@link JustXType Justs} values.
+ * The catMaybes function takes an {@link Iterable} of {@link MaybeType Maybes}
+ * and returns an {@link Iterable} of all the {@link JustXType Just's} values.
+ *
  * @function
+ * @pure
  * @template _T_
- * @pure iterable will not be changed
  * @type {
               (iterable: Iterable<MaybeType<_T_>>)
  *         => SequenceType<_T_>
  *       }
+ *
  * @example
  * const maybes = [Just(5), Just(3), Nothing];
  * const result = catMaybes(maybes);
  *
  * console.log(...result);
- * // => Logs 5, 3
+ * // => Logs '5, 3'
  */
 const catMaybes = iterable => {
 
@@ -38,7 +41,6 @@ const catMaybes = iterable => {
 
     return { next };
   };
-
 
   return createMonadicSequence(catMaybesIterator);
 };

@@ -1,5 +1,5 @@
-import { dropWhile } from "../dropWhile/dropWhile.js";
-import {createMonadicSequence, iteratorOf} from "../../util/util.js";
+import { dropWhile }                         from "../dropWhile/dropWhile.js";
+import { createMonadicSequence, iteratorOf } from "../../util/util.js";
 
 export { drop }
 
@@ -7,19 +7,20 @@ export { drop }
  * Jumps over so many elements.
  *
  * @function
- * @template _T_
  * @pure
+ * @haskell Int -> [a] -> [a]
+ * @template _T_
  * @type {
  *            (count: number)
  *         => SequenceOperation<_T_>
  *       }
  *
  * @example
- * const numbers = [0,1,2,3];
+ * const numbers = [0, 1, 2, 3];
  * const dropped = drop(2)(numbers);
  *
  * console.log(...dropped);
- * // => Logs 2, 3
+ * // => Logs '2, 3'
  */
 const drop = count => iterable => {
   const dropIterator = () => {

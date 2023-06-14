@@ -4,20 +4,23 @@ export { map }
 
 /**
  * Transforms each element using the given function.
+ *
  * @function
+ * @pure
+ * @haskell (a -> b) -> [a] -> [b]
  * @template _T_
  * @template _U_
- * @pure iterator will be copied defensively
  * @type {
  *            (mapper: Functor<_U_, _T_>)
  *         => SequenceOperation<_T_>
  *       }
+ *
  * @example
  * const numbers = [0, 1, 2];
  * const mapped  = map(el => el * 2)(numbers);
  *
  * console.log(...numbers);
- * // => Logs 0, 2, 4
+ * // => Logs '0, 2, 4'
  */
 const map = mapper => iterator => {
 

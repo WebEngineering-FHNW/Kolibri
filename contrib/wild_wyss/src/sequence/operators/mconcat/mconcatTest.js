@@ -1,5 +1,7 @@
-import { addToTestingTable } from "../../util/testingTable.js";
-import { TestSuite }         from "../../../test/test.js";
+import { addToTestingTable }             from "../../util/testingTable.js";
+import { TestSuite }                     from "../../../test/test.js";
+import { createTestConfig, newSequence } from "../../util/testUtil.js";
+import { toMonadicIterable}              from "../../util/util.js";
 import {
   Sequence,
   PureSequence,
@@ -7,13 +9,7 @@ import {
   nil
 } from "../../sequence.js";
 
-import {
-  createTestConfig,
-  newSequence,
-} from "../../util/testUtil.js";
-import {toMonadicIterable} from "../../util/util.js";
-
-const testSuite = TestSuite("Sequence: Operation mconcat");
+const testSuite = TestSuite("Sequence: operation mconcat");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -51,8 +47,8 @@ testSuite.add("test concat with infinity: mconcat", assert => {
   let counter = 0;
 
   const endless                = Sequence(0, _ => false, i => i + 1);
-  const iteratorWithSideEffect = Sequence(false, _ => false, _ => called = true);
-  const concatenated           = mconcat([endless, iteratorWithSideEffect]);
+  const iterableWithSideEffect = Sequence(false, _ => false, _ => called = true);
+  const concatenated           = mconcat([endless, iterableWithSideEffect]);
 
   // When
   for (const _ of concatenated) {

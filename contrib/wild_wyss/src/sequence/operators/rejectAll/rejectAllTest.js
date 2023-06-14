@@ -7,7 +7,7 @@ import {
   UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation rejectAll");
+const testSuite = TestSuite("Sequence: operation rejectAll");
 
 addToTestingTable(testSuite)(
   createTestConfig({

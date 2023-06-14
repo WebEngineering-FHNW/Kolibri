@@ -7,7 +7,7 @@ import {
   newSequence,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation cycle");
+const testSuite = TestSuite("Sequence: operation cycle");
 
 addToTestingTable(testSuite)(
   createTestConfig({

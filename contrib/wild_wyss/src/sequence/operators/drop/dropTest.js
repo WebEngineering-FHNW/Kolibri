@@ -7,7 +7,7 @@ import {
   UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation drop");
+const testSuite = TestSuite("Sequence: operation drop");
 
 addToTestingTable(testSuite)(
   createTestConfig({

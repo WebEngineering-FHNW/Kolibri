@@ -7,7 +7,7 @@ import {
   UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation takeWhile");
+const testSuite = TestSuite("Sequence: operation takeWhile");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -23,13 +23,13 @@ addToTestingTable(testSuite)(
   })
 );
 
-testSuite.add("test advanced case: takeWhile inner iterator is shorter", assert => {
+testSuite.add("test advanced case: takeWhile inner iterable is shorter", assert => {
   // Given
-  const iterator = newSequence(UPPER_SEQUENCE_BOUNDARY);
+  const sequence = newSequence(UPPER_SEQUENCE_BOUNDARY);
 
   // When
   // take all elements
-  const some = takeWhile(_ => true)(iterator);
+  const some    = takeWhile(_ => true)(sequence);
 
   // Then
   assert.iterableEq([0, 1, 2, 3, 4], some);

@@ -8,7 +8,7 @@ import {
   UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation dropWhile");
+const testSuite = TestSuite("Sequence: operation dropWhile");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -24,10 +24,15 @@ addToTestingTable(testSuite)(
   })
 );
 
-testSuite.add("test advanced case: dropWhile inner iterator is shorter", assert => {
+testSuite.add("test advanced case: dropWhile inner iterable is shorter", assert => {
+  // Given
   // the inner iterator stops before the outer
-  const iterator = newSequence(UPPER_SEQUENCE_BOUNDARY);
-  const some = dropWhile(_ => false)(iterator);
+  const sequence = newSequence(UPPER_SEQUENCE_BOUNDARY);
+
+  // When
+  const some     = dropWhile(_ => false)(sequence);
+
+  // Then
   assert.isTrue(arrayEq([0, 1, 2, 3, 4])([...some]));
 });
 

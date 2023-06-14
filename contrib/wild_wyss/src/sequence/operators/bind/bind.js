@@ -4,21 +4,25 @@ export { bind }
 
 /**
  * Applies the given function to each element of the {@link SequenceType} and flats it afterward.
- *
  * @Note This operation adds a monadic API to the {@link SequenceType}.
+ *
+ * @function
+ * @pure
  * @haskell (>>=) :: m a -> (a -> m b) -> m b
  * @template _T_
  * @type {
  *          <_U_>(bindFn: (_T_) => SequenceType<_U_>)
  *          => (it: SequenceType<_T_>)
  *          => SequenceType<_U_>
- * }
+ *       }
+ *
  * @example
- * const it     = Range(3);
- * const bindFn = el => take(el)(repeat(el));
- * const result = bind(bindFn)(it);
+ * const numbers = [0, 1, 2, 3];
+ * const bindFn  = el => take(el)(repeat(el));
+ * const result  = bind(bindFn)(numbers);
+ *
  * console.log(...result);
- * // => Logs: 1, 2, 2, 3, 3, 3
+ * // => Logs '1, 2, 2, 3, 3, 3'
  */
 const bind = bindFn => it =>
   mconcat(

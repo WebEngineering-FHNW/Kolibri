@@ -8,7 +8,7 @@ import {
   UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation cons");
+const testSuite = TestSuite("Sequence: operation cons");
 
 addToTestingTable(testSuite)(
   createTestConfig({

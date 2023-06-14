@@ -6,16 +6,18 @@ export { mconcat }
  * Flatten an {@link Iterable} of {@link Iterable Iterables}.
  *
  * @function
- * @template _T_
- * @pure iterable and sub iterators will not be changed
+ * @pure
  * @haskell [a] -> a
+ * @template _T_
  * @param { Iterable<Iterable<_T_>> } iterable -
  * @returns SequenceType<_T_>
+ *
  * @example
  * const ranges = map(x => Range(x))(Range(2));
  * const result = mconcat(ranges);
+ *
  * console.log(...result);
- * // => Logs 0, 0, 1, 0, 1, 2
+ * // => Logs '0, 0, 1, 0, 1, 2'
  */
 const mconcat = iterable => {
 

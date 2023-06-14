@@ -1,22 +1,14 @@
-import { TestSuite         } from "../../../test/test.js";
-import { addToTestingTable } from "../../util/testingTable.js";
-import { arrayEq }           from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import {
-  pipe,
-  map,
-  rejectAll,
-  reduce$,
-  eq$,
-} from "../../sequence.js";
-
+import { TestSuite         }             from "../../../test/test.js";
+import { addToTestingTable }             from "../../util/testingTable.js";
+import { arrayEq }                       from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { pipe, map, rejectAll, reduce$ } from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
   UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
-import {toMonadicIterable} from "../../util/util.js";
 
-const testSuite = TestSuite("Sequence: Operation pipe");
+const testSuite = TestSuite("Sequence: operation pipe");
 
 addToTestingTable(testSuite)(
   createTestConfig({

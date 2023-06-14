@@ -1,14 +1,12 @@
-import { addToTestingTable, TESTS } from "../../util/testingTable.js";
-import { TestSuite }                from "../../../test/test.js";
-import { catMaybes }                from "./catMaybes.js"
-import { nil }                      from "../../constructors/nil/nil.js";
-import { arrayEq }                  from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { Just, Nothing }            from "../../../stdlib/maybe.js";
-import { createTestConfig }         from "../../util/testUtil.js";
-import { PureSequence }             from "../../constructors/pureSequence/pureSequence.js";
-import {toMonadicIterable} from "../../util/util.js";
+import { addToTestingTable, TESTS }     from "../../util/testingTable.js";
+import { TestSuite }                    from "../../../test/test.js";
+import { arrayEq }                      from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { Just, Nothing }                from "../../../stdlib/maybe.js";
+import { createTestConfig }             from "../../util/testUtil.js";
+import { toMonadicIterable }            from "../../util/util.js";
+import { catMaybes, nil, PureSequence } from "../../sequence.js"
 
-const testSuite = TestSuite("Sequence: Operation catMaybes");
+const testSuite = TestSuite("Sequence: operation catMaybes");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -23,6 +21,7 @@ addToTestingTable(testSuite)(
 testSuite.add("test catMaybes with Nothing", assert => {
   // When
   const result = catMaybes(PureSequence(Nothing));
+
   // Then
   assert.isTrue(arrayEq([])([...result]));
 });
@@ -30,6 +29,7 @@ testSuite.add("test catMaybes with Nothing", assert => {
 testSuite.add("test catMaybes with nil", assert => {
   // When
   const result = catMaybes(nil);
+
   // Then
   assert.isTrue(arrayEq([])([...result]));
 });
@@ -37,6 +37,7 @@ testSuite.add("test catMaybes with nil", assert => {
 testSuite.add("test catMaybes with no Nothings", assert => {
   // Given
   const inner = [Just(5), Just(3)];
+
   // When
   const result = catMaybes(inner);
 

@@ -1,13 +1,13 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
-import { zipWith, nil } from "../../sequence.js";
+import { zipWith, nil }      from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
   UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation zipWith");
+const testSuite = TestSuite("Sequence: operation zipWith");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -23,7 +23,8 @@ addToTestingTable(testSuite)(
   })
 );
 
-testSuite.add("test advanced case: zipWith one iterator is shorter", assert => {
+testSuite.add("test advanced case: zipWith one iterable is shorter", assert => {
+  // Given
   let iterationCount = 0;
 
   const it1 = newSequence(UPPER_SEQUENCE_BOUNDARY);
@@ -32,9 +33,12 @@ testSuite.add("test advanced case: zipWith one iterator is shorter", assert => {
     iterationCount++;
     return i + j;
   };
+
+  // When
   const zipped1 = zipWith(zipper)(it2)(it1); // first iterator is shorter
   const zipped2 = zipWith(zipper)(it1)(it2); // second iterator is shorter
 
+  // Then
   for (const _ of zipped1) { /* Exhausting*/ }
   assert.is(iterationCount, 3);
 

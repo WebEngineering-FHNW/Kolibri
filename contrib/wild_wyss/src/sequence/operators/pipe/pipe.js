@@ -5,19 +5,24 @@ export { pipe }
 
 /**
  * Transforms the given {@link Iterable iterable} using the passed {@link SequenceOperation SequenceOperations}.
- * @type  {<_T_>
+ *
+ * @function
+ * @pure
+ * @type  { <_T_>
  *            (...transformers: SequenceOperation<*,*> )
  *            => (iterable: Iterable<_T_>)
  *            => (SequenceType<_T_> | *)
  *        }
+ *
  * @example
  * const piped = pipe(
  *                retainAll(n => n % 2 === 0),
  *                map(n => 2*n),
  *                drop(2)
  *              )(Range(5));
+ *
  * console.log(...piped);
- * // => Logs 0,4,8
+ * // => Logs '0,4,8'
  */
 const pipe = (...transformers) => iterable => {
 

@@ -7,7 +7,7 @@ import {
   UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation reverse$");
+const testSuite = TestSuite("Sequence: operation reverse$");
 
 addToTestingTable(testSuite)(
   createTestConfig({

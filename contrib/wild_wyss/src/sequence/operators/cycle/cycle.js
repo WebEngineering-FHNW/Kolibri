@@ -3,16 +3,22 @@ import {createMonadicSequence, iteratorOf } from "../../util/util.js";
 export { cycle }
 
 /**
- * {@link cycle Cycle} ties a finite {@link Iterable} into a circular one, or equivalently, the infinite repetition of the original {@link Iterable}.
+ * {@link cycle Cycle} ties a finite {@link Iterable} into a circular one, or equivalently,
+ * the infinite repetition of the original {@link Iterable}.
+ *
  * @function
+ * @pure
  * @template _T_
- * @pure iterable will not be changed
  * @param { Iterable<_T_> } iterable
  * @returns SequenceType<_T_>
+ *
  * @example
- * const cycled = cycle([0,1,2]);
- * console.log(...take(6)(cycled));
- * // => Logs: 0, 1, 2, 0, 1, 2
+ * const numbers = [0, 1, 2];
+ * const cycled = cycle(numbers);
+ * const result = take(6)(cycled);
+ *
+ * console.log(...result);
+ * // => Logs '0, 1, 2, 0, 1, 2'
  */
 const cycle = iterable => {
 

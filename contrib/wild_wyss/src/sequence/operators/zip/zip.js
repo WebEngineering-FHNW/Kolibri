@@ -1,14 +1,14 @@
-import { Pair }    from "../../../../../../docs/src/kolibri/stdlib.js";
+import { Pair }    from "../../../stdlib/pair.js";
 import { zipWith } from "../../sequence.js";
 
 export { zip }
 
 /**
- * Zip takes two {@link Iterable iterables} and returns an {@link Iterable iterable} of corresponding {@link PairType paris}
+ * Zip takes two {@link Iterable iterables} and returns an {@link Iterable iterable} of corresponding {@link PairType paris}.
+ *
  * @function
- * @pure both iterators will be copied defensively
- * @template _T_
- * @template _U_
+ * @pure
+ * @template _T_, _U_
  * @type {
  *             (it1: Iterable<_T_>)
  *          => (it2: Iterable<_U_>)
@@ -16,11 +16,11 @@ export { zip }
  * }
  *
  * @example
- * const it1 = [0, 1, 2],
- * const it2 = [3, 4, 5],
- * const zipped = zip(it1)(it2);
+ * const numbers = [0, 1, 2],
+ * const range   = Range(3, 5);
+ * const zipped  = zip(numbers)(range);
  *
- * console.log([...zipped].map(snd));
- * // => Logs 2, 3, 4
+ * forEach$(x => console.log(...x))(zipped);
+ * // => Logs '0 3, 1 4, 2 5'
  */
 const zip = it1 => it2 => zipWith((i,j) => Pair(i)(j))(it1)(it2);

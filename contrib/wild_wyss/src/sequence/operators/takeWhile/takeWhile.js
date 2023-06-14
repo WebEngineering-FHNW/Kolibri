@@ -3,18 +3,24 @@ import { createMonadicSequence, iteratorOf } from "../../util/util.js";
 export { takeWhile }
 
 /**
- * Proceeds with the iteration until the predicate becomes true
+ * Proceeds with the iteration until the {@link Predicate} becomes true.
+ *
  * @function
+ * @pure
  * @template _T_
- * @pure iterator will be copied defensively
  * @type {
  *            (predicate: (_T_) => Boolean)
  *         => SequenceOperation<_T_>
  *       }
+ *
  * @example
- * const it      = Sequence(0, inc, stop);
+ * const number  = [0, 1, 2, 3, 4 ,5];
+ *
  * // keep all elements until one element is bigger or equal to 2.
- * const dropped = takeWhile(el => el < 2)(it);
+ * const dropped = takeWhile(el => el <= 2)(numbers);
+ *
+ * console.log(...result);
+ * // => Logs '0 , 1, 2'
  */
 const takeWhile = predicate => iterable => {
 

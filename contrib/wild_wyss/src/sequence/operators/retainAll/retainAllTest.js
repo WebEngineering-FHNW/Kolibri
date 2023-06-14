@@ -7,7 +7,7 @@ import {
   UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation retainAll");
+const testSuite = TestSuite("Sequence: operation retainAll");
 
 addToTestingTable(testSuite)(
   createTestConfig({

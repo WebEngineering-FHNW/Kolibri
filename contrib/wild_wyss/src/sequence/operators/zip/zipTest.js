@@ -8,7 +8,7 @@ import {
   UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation zip");
+const testSuite = TestSuite("Sequence: operation zip");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -34,12 +34,16 @@ addToTestingTable(testSuite)(
   })
 );
 
-testSuite.add("test advanced case: zip one iterator is shorter", assert => {
+testSuite.add("test advanced case: zip one iterable is shorter", assert => {
+  // Given
   const it1 = newSequence(UPPER_SEQUENCE_BOUNDARY);
   const it2 = newSequence(2);
+
+  // When
   const zipped1 = zip(it2)(it1); // first iterator is shorter
   const zipped2 = zip(it1)(it2); // second iterator is shorter
 
+  // Then
   assert.is([...zipped1].length, 3);
   assert.is([...zipped2].length, 3);
 });
