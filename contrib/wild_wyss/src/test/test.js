@@ -120,9 +120,17 @@ const Assert = () => {
                 const { value: expectedValue, done: expectedDone } = expectedIt.next();
 
                 const oneIteratorDone      = actualDone || expectedDone;
+                const bothIteratorDone     = actualDone && expectedDone;
                 const tooManyIterations    = iterationCount > maxElementsToConsume;
 
-                if (oneIteratorDone) break;
+                if (bothIteratorDone) break;
+                if (oneIteratorDone) {
+                    testPassed = false;
+                    const actualMsg = actualDone ? "had no more elements" : "still had elements";
+                    message = `Actual and expected do not have the same length! After comparing ${iterationCount} 
+                               elements, actual ${actualMsg}, which was not expected!`;
+                    break;
+                }
                 if (tooManyIterations) {
                     message = `It took more iterations than ${maxElementsToConsume}. Aborting.\n`;
                     testPassed = false;
