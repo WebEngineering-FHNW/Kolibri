@@ -172,22 +172,22 @@ const testInvariants = config => assert => {
 
 /**
  * Applies a series of lists to a given invariant.
- *
  * @template _T_
  * @type {
- *           (invariants: IteratorTestConfigType)
+ *           (invariants: InvariantCallback)
  *        => (assert: AssertType)
  *        => void
  * }
  */
 const invariantPenetration = invariant => assert => {
   const testingLists = [
-    nil,
-    newIterator(1),
-    newIterator(5),
-    PureIterator("testString"),
-    ['a', 'b', 'c', 1, 2, 3, Nothing, Just("testString")],
-    [PureIterator(1), newIterator(4), '#', "abc", 1]
+    nil,                                                   // edge case
+    newIterator(1),                                        // edge case, done calculated
+    newIterator(3),                                        // typical number
+                                                           // no big iterator, needs extra test
+    PureIterator("testString"),                            // edge case, done set explicitly
+    ['a', 'b', 'c', 1, 2, 3, Nothing, Just("testString")], // mixing types
+    [PureIterator(1), newIterator(4), '#', "abc", 1]       // iterator of iterators
   ];
 
   for (const list of testingLists) {

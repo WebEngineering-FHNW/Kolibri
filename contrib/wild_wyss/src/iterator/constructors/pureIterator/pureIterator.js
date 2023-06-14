@@ -13,8 +13,9 @@ export { PureIterator }
  * @constructor
  * @example
  * const it = PureIterator(1);
+ *
  * console.log(...it);
- * // => Logs: 1
+ * // => Logs '1'
  */
 const PureIterator = value => {
 
