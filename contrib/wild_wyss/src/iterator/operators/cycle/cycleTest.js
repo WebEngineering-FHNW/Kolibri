@@ -1,8 +1,7 @@
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { TestSuite }                from "../../../test/test.js";
-import { takeWithoutCopy }          from "../../util/util.js";
 import { arrayEq }                  from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { nil, cycle }               from "../../iterator.js"
+import { nil, cycle, take }         from "../../iterator.js"
 import {
   createTestConfig,
   newIterator,
@@ -18,9 +17,9 @@ addToTestingTable(testSuite)(
     expected:   [0, 1, 2, 0, 1, 2, 0, 1, 2],
     onNil:      nil,
     evalFn:     expected => actual => {
-      const actualArray = takeWithoutCopy(9)(actual);
-      const expectedArray = takeWithoutCopy(9)(expected);
-      return arrayEq(expectedArray)(actualArray);
+      const actualArray = take(9)(actual);
+      const expectedArray = take(9)(expected);
+      return arrayEq([...expectedArray])([...actualArray]);
     },
     excludedTests: [TESTS.TEST_INVARIANTS]
   })

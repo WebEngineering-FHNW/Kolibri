@@ -3,10 +3,13 @@ import { nil }           from "../iterator/constructors/nil/nil.js";
 import { isEmpty }       from "../iterator/terminalOperations/isEmpty/isEmpty.js";
 import { PureIterator }  from "../iterator/constructors/pureIterator/pureIterator.js";
 import {
+  createMonadicIterable,
+  iteratorOf
+} from "../iterator/util/util.js";
+import {
   catMaybes,
   mconcat
 } from "../iterator/iterator.js"
-import {createIterator, createMonadicIterable, iteratorOf} from "../iterator/util/util.js";
 
 export { JsonMonad }
 

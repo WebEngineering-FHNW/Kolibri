@@ -1,8 +1,7 @@
-import { TestSuite }           from "../../../test/test.js";
-import { createTestConfig }    from "../../util/testUtil.js";
-import { repeat }              from "./repeat.js";
-import { takeWithoutCopy }     from "../../util/util.js";
-import { arrayEq }             from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { TestSuite }        from "../../../test/test.js";
+import { createTestConfig } from "../../util/testUtil.js";
+import { repeat, take }     from "../../iterator.js";
+import { arrayEq }          from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import {
   addToTestingTable,
   TESTS
@@ -16,9 +15,9 @@ addToTestingTable(testSuite)(
     iterator: () => repeat(42),
     expected: [42, 42, 42, 42, 42],
     evalFn:   expected => actual => {
-      const expectedArray = takeWithoutCopy(5)(expected);
-      const actualArray   = takeWithoutCopy(5)(actual);
-      return arrayEq(expectedArray)(actualArray);
+      const expectedArray = take(5)(expected);
+      const actualArray   = take(5)(actual);
+      return arrayEq([...expectedArray])([...actualArray]);
     },
     excludedTests: [
       TESTS.TEST_PURITY,

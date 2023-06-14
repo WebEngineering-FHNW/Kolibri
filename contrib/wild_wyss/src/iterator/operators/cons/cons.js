@@ -1,4 +1,4 @@
-import {createMonadicIterable, iteratorOf, nextOf} from "../../util/util.js";
+import { createMonadicIterable, iteratorOf } from "../../util/util.js";
 
 export { cons }
 

@@ -1,16 +1,18 @@
+import { Range }          from "../../../range/range.js";
+import { Just, Nothing }  from "../../../../../../docs/src/kolibri/stdlib.js";
+import { choiceMaybe }    from "../../../stdlib/stdlib.js";
+import { uncurry }        from "../../../../../../docs/src/kolibri/lambda/church.js";
 import {
-  ArrayIterator,
+  createMonadicIterable,
+  iteratorOf,
+} from "../../util/util.js";
+import {
   map,
   cycle,
   Iterator,
   pipe,
   zipWith
-}                         from "../../iterator.js";
-import {createMonadicIterable, iteratorOf, nextOf} from "../../util/util.js";
-import { Range }          from "../../../range/range.js";
-import { Just, Nothing }  from "../../../../../../docs/src/kolibri/stdlib.js";
-import { choiceMaybe }    from "../../../stdlib/stdlib.js";
-import { uncurry }        from "../../../../../../docs/src/kolibri/lambda/church.js";
+} from "../../iterator.js";
 
 export { PrimeNumberIterator }
 

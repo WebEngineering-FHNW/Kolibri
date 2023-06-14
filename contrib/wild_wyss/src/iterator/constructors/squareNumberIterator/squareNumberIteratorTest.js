@@ -1,8 +1,7 @@
-import { TestSuite }            from "../../../test/test.js";
-import { createTestConfig }     from "../../util/testUtil.js";
-import { takeWithoutCopy  }     from "../../util/util.js";
-import { SquareNumberIterator } from "./squareNumberIterator.js";
-import { arrayEq }              from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { TestSuite }                  from "../../../test/test.js";
+import { createTestConfig }           from "../../util/testUtil.js";
+import { arrayEq }                    from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { take, SquareNumberIterator } from "../../iterator.js";
 import {
   addToTestingTable,
   TESTS
@@ -16,9 +15,9 @@ addToTestingTable(testSuite)(
     iterator: SquareNumberIterator,
     expected: [1, 4, 9, 16, 25],
     evalFn:   expected => actual => {
-      const expectedArray = takeWithoutCopy(5)(expected);
-      const actualArray   = takeWithoutCopy(5)(actual);
-      return arrayEq(expectedArray)(actualArray);
+      const expectedArray = take(5)(expected);
+      const actualArray   = take(5)(actual);
+      return arrayEq([...expectedArray])([...actualArray]);
     },
     excludedTests: [
       TESTS.TEST_PURITY,

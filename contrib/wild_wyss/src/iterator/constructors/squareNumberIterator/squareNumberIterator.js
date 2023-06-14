@@ -1,4 +1,4 @@
-import { Iterator } from "../../iterator.js";
+import { Iterator }                          from "../../iterator.js";
 import { createMonadicIterable, iteratorOf } from "../../util/util.js";
 
 export { SquareNumberIterator }

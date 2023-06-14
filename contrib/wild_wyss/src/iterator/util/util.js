@@ -1,75 +1,28 @@
 import { IteratorPrototype } from "../constructors/iterator/iterator.js";
 import { map }               from "../iterator.js"
+import { id }                from "../../../../../docs/src/kolibri/stdlib.js"
 
 export {
   isIterable,
   iteratorOf,
-  nextOf,
-  takeWithoutCopy,
-  createIterator,
   createMonadicIterable,
   toMonadicIterable,
 }
 
 /**
- * checks if a given value is iterable
+ * Checks if a given value is {@link Iterable}.
  * @param { any } value
  * @return { boolean }
  */
 const isIterable = value => value && value[Symbol.iterator] !== undefined;
 
 /**
- * @function
- * @template _T_
- * Convenience function to call the next function of an object which is iterable.
- * @param   { IteratorMonadType<_T_> } it
- * @returns { IteratorResult<_T_, _T_> }
- */
-const nextOf = it => it[Symbol.iterator]().next();
-/**
+ * Returns the {@link Iterator} of an {@link Iterable}.
  * @template _T_
  * @param { Iterable<_T_> } it
  * @returns Iterator<_T_>
  */
 const iteratorOf = it => it[Symbol.iterator]();
-
-/**
- * Works exactly as take, but does not copy the iterator.
- * This is useful to test the functionality without the influence of copy.
- * @template _T_
- * @type {
- *         (n: Number)
- *         => (iterator: IteratorMonadType<_T_>)
- *         => Array<_T_>
- * }
- */
-const takeWithoutCopy = n => iterator => {
-  const values = [];
-  let i = 0;
-  for (const element of iterator) {
-    values.push(element);
-    if (++i === n) break;
-  }
-  return values;
-};
-
-/**
- *
- * @template _T_
- * @param { () => IteratorResult<_T_, _T_> } next
- * @param { () => IteratorMonadType<_T_> } copy
- * @returns { IteratorMonadType<_T_> }
- */
-const createIterator = (next, copy) => {
-  const result = {
-    [Symbol.iterator]: () => ({ next }),
-    copy
-  };
-
-  Object.setPrototypeOf(result, IteratorPrototype);
-  return /** @type IteratorMonadType */result;
-
-};
 
 /**
  *
@@ -83,9 +36,9 @@ const setPrototype = iterable => {
 };
 
 /**
- *
+ * Builds an {@link IteratorMonadType} from a given {@link Iterator}.
  * @template _T_
- * @param { () => { next: () => IteratorResult<_T_, _T_>} } iterator
+ * @param { () => Iterator<_T_> } iterator
  * @returns { IteratorMonadType<_T_> }
  */
 const createMonadicIterable = iterator => {
@@ -93,6 +46,10 @@ const createMonadicIterable = iterator => {
   return setPrototype(result);
 };
 
-
-
-const toMonadicIterable = iterable => map(x => x)(iterable);
+/**
+ * Casts an arbitrary {@link Iterable} into the {@link IteratorMonadType}.
+ * @template _T_
+ * @param { Iterable<_T_> } iterable
+ * @return { IteratorMonadType<_T_> }
+ */
+const toMonadicIterable = iterable => map(id)(iterable);

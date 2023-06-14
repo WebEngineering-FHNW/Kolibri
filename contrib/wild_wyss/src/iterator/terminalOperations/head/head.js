@@ -1,4 +1,4 @@
-import {iteratorOf, nextOf} from "../../util/util.js";
+import { iteratorOf } from "../../util/util.js";
 
 export { head }
 

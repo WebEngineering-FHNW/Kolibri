@@ -1,6 +1,6 @@
-import { max$ }           from "./max.js";
-import {createMonadicIterable, iteratorOf, nextOf} from "../../util/util.js";
-import { Just, Nothing }  from "../../../stdlib/maybe.js";
+import { max$ }          from "./max.js";
+import { iteratorOf }    from "../../util/util.js";
+import { Just, Nothing } from "../../../stdlib/maybe.js";
 
 export { safeMax$ }
 
