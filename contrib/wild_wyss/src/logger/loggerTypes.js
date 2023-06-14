@@ -70,7 +70,7 @@
 /**
  * The currently active logging level for this application.
  * @callback PrioritySupplier
- * @return { LogLevelType }
+ * @returns { LogLevelType }
  */
 
 /**

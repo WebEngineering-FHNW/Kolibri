@@ -41,7 +41,7 @@ const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
  * Sorts the two parameter a and b by its magnitude.
  * @param  { Number } a
  * @param  { Number } b
- * @return { [Number, Number] }
+ * @returns { [Number, Number] }
  */
 const sort = (a, b) => {
   if (a < b) return [a,b];
@@ -53,7 +53,7 @@ const sort = (a, b) => {
  * @param   { Boolean } stepIsNegative - signals, which range boundary condition is active
  * @param   { Number }  next
  * @param   { Number }  end
- * @return  { boolean }
+ * @returns  { boolean }
  */
 const hasReachedEnd = (stepIsNegative, next, end) =>
     stepIsNegative ? next < end : next > end;
@@ -64,7 +64,7 @@ const hasReachedEnd = (stepIsNegative, next, end) =>
  * @param   { Number }  left
  * @param   { Number }  right
  * @param   { Boolean } stepIsNegative
- * @return  { [Number, Number] }
+ * @returns  { [Number, Number] }
  */
 const normalize = (left, right, stepIsNegative) => {
   const [min, max] = sort(left, right);

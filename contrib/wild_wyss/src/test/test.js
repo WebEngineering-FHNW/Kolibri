@@ -40,7 +40,7 @@ const addToTotal = num => total.setValue( num + total.getValue());
  * @function
  * @param { _T_ } actual
  * @param { _T_ } expected
- * @return void
+ * @returns void
  * */
 
 /**

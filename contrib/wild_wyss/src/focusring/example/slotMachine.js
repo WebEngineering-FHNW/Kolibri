@@ -13,7 +13,7 @@ const WHEEL_COUNT    = 3;
  * The model manages the data held in the observables.
  *
  * @param  { Array<String> } slotChars
- * @return { SlotMachineModelType }
+ * @returns { SlotMachineModelType }
  * @constructor
  */
 const SlotMachineModel = slotChars => {
@@ -50,7 +50,7 @@ const SlotMachineModel = slotChars => {
 /**
  * Processes the actions from the user interface and manages the model.
  *
- * @return { SlotMachineControllerType }
+ * @returns { SlotMachineControllerType }
  * @constructor
  */
 const SlotMachineController = () => {

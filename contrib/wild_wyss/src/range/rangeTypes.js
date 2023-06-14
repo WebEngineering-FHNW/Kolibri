@@ -22,5 +22,5 @@
 /**
  * @callback RangeFilter
  * @param  { Predicate<Number> } predicate
- * @return { RangeType }
+ * @returns { RangeType }
  */

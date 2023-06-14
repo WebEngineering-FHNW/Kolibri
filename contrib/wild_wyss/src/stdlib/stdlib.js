@@ -7,7 +7,7 @@ export { catMaybes, choiceMaybe }
  * @template _U_
  * @haskell [Maybe a] -> [a]
  * @param  { Array<MaybeType<_T_, _U_>> } maybes
- * @return { Array<_T_> }
+ * @returns { Array<_T_> }
  */
 const catMaybes = maybes => {
   const result = [];

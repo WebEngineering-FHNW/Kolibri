@@ -97,7 +97,7 @@ const logLevelActivated = loggerLevel => leq(loggingLevel(fst))(loggerLevel(fst)
  * Returns {@link True} if the {@link loggingContext} is a prefix of the given {@link String} parameter.
  * @function
  * @param   { String } context
- * @return  { churchBoolean }
+ * @returns  { churchBoolean }
  * @private
  */
 const contextActivated = context => toChurchBoolean(context.startsWith(loggingContext));

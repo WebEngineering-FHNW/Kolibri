@@ -80,7 +80,7 @@ const getValue = () => logObservable;
 
 /**
  *
- * @return { IObservable<stack> }
+ * @returns { IObservable<stack> }
  */
 const reset = () => {
   const lastValue = logObservable.getValue();
