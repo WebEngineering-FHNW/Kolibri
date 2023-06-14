@@ -50,8 +50,8 @@ testSuite.add("test concat with infinity: mconcat", assert => {
   let called  = false;
   let counter = 0;
 
-  const endless                = Iterator(0, i => i + 1, _ => false);
-  const iteratorWithSideEffect = Iterator(false, _ => called = true, _ => false);
+  const endless                = Iterator(0, _ => false, i => i + 1);
+  const iteratorWithSideEffect = Iterator(false, _ => false, _ => called = true);
   const concatenated           = mconcat([endless, iteratorWithSideEffect]);
 
   // When

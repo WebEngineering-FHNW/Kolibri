@@ -71,7 +71,7 @@ testSuite.add("test infinity: IteratorBuilder", assert => {
   let counter = 0;
 
   const endless    = Iterator(false, _ => false, _ => false);
-  const sideEffect = Iterator(false, _ => called = true, _ => false);
+  const sideEffect = Iterator(false, _ => false, _ => called = true);
   const it = IteratorBuilder()
     .append(endless)
     .append(sideEffect)

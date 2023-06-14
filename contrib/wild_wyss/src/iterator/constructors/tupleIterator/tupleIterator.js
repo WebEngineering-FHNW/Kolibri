@@ -19,7 +19,7 @@ export { TupleIterator }
 const TupleIterator = tuple => {
   // detect number of elements in tuple using a special selector function
   const lengthSelector = arr => arr.length;
-  const indexIterator  = Iterator(0, i => i + 1, i => i === tuple(lengthSelector));
+  const indexIterator  = Iterator(0, i => i === tuple(lengthSelector), i => i + 1);
 
   const tupleIterator = () => {
     // map over indices and grab corresponding element from tuple

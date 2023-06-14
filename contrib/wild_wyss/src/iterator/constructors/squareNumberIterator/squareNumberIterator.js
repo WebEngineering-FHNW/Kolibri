@@ -15,7 +15,7 @@ export { SquareNumberIterator }
 const SquareNumberIterator = () => {
 
   const squareNumberIterator = () => {
-    const odds  = iteratorOf(Iterator(1, i => i + 2, _ => false));
+    const odds  = iteratorOf(Iterator(1, _ => false, i => i + 2));
     let prev    = 0;
 
     const next = () => {

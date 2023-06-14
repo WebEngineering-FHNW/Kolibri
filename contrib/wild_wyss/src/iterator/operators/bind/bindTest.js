@@ -17,7 +17,7 @@ addToTestingTable(testSuite)(
       name:          "bind",
       iterator:      () => newIterator(UPPER_ITERATOR_BOUNDARY),
       operation:     bind,
-      param:         el => take(2)(Iterator(el.toString(), _ => _, _ => false)),
+      param:         el => take(2)(Iterator(el.toString(), _ => false, _ => _)),
       expected:      ["0", "0", "1", "1", "2", "2", "3", "3", "4", "4"],
       invariants: [
         it => bind(x => PureIterator(x))(it) ["=="] (it)

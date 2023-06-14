@@ -39,7 +39,7 @@ const PrimeNumberIterator = () => {
   const patternForPrime = prime => pipe(
     map(x => x === prime ? Just(prime) : Nothing),
     cycle
-  )(Iterator(1, i => i + 1, i => i > prime));
+  )(Iterator(1, i => i > prime, i => i + 1));
 
   const primeNumberIterator  = () => {
     let prevPrimesIterator   = iteratorOf(cycle([Nothing]));

@@ -56,7 +56,7 @@ const id = x => x;
 /**
  * @template _T_
  * @typedef {
- *              (it: Iterator<_T_>)
+ *              (it: Iterator<Iterator>)
  *           => Boolean
  * } InvariantCallback
  */
@@ -65,7 +65,7 @@ const id = x => x;
  * @param  { Number } limit
  * @returns { IteratorMonadType<Number> }
  */
-const newIterator = limit => Iterator(0, current => current + 1, current => current > limit);
+const newIterator = limit => Iterator(0, current => current > limit, current => current + 1);
 const UPPER_ITERATOR_BOUNDARY = 4;
 
 /**
@@ -130,7 +130,7 @@ const testCBNotCalledAfterDone = config => assert => {
   if (typeof param !== "function") return;
 
   let called = false;
-  const it   = Iterator(0, _ => 0, _ => true);
+  const it   = Iterator(0, _ => true, _ => 0);
 
   const operated = operation(el => {
     // since this iterator is empty, called should never be set to true

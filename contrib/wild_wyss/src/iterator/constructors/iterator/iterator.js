@@ -10,22 +10,22 @@ export { Iterator, IteratorPrototype }
 /**
  *
  * The incrementFunction should change the value (make progress) in a way
- * that the isDoneFunction function can recognize the end of the iterator.
+ * that the untilFunction function can recognize the end of the iterator.
  *
  * Contract:
- * - incrementFunction & isDoneFunction should not refer to any mutable
+ * - incrementFunction & untilFunction should not refer to any mutable
  *   state variable (because of side effect) in the closure.
  *   Otherwise, copying and iterator may not work as expected.
  * - Functions ending with a "$" must not be applied to infinite iterators.
  *
  * @template _T_
  * @param   { _T_ }               start
+ * @param   { (_T_) => Boolean }  untilFunction - returns true if the iteration should stop
  * @param   { (_T_) => _T_ }      incrementFunction
- * @param   { (_T_) => Boolean }  isDoneFunction - returns true if the iteration should stop
  * @returns { IteratorMonadType<_T_> }
  * @constructor
  */
-const Iterator = (start, incrementFunction, isDoneFunction) => {
+const Iterator = (start, untilFunction, incrementFunction) => {
 
   const iteratorIterator = () => {
     let value = start;
@@ -36,7 +36,7 @@ const Iterator = (start, incrementFunction, isDoneFunction) => {
      */
     const next = () => {
       const current = value;
-      const done = isDoneFunction(current);
+      const done = untilFunction(current);
       if (!done) value = incrementFunction(value);
       return { done, value: current };
     };
@@ -89,7 +89,7 @@ IteratorPrototype.pure = val => PureIterator(val);
  * @template _T_
  * @returns IteratorMonadType<_T_>
  */
-IteratorPrototype.empty = () => Iterator(undefined, _ => undefined, _ => true);
+IteratorPrototype.empty = () => Iterator(undefined, _ => true, _ => undefined);
 
 /**
  *

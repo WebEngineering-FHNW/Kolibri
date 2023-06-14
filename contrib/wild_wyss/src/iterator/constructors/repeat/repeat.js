@@ -15,4 +15,4 @@ export { repeat }
  * console.log(...take(3)(it));
  * // => Logs 1, 1, 1
  */
-const repeat = arg => Iterator(arg, _ => arg, _ => false);
+const repeat = arg => Iterator(arg, _ => false, _ => arg);

@@ -8,5 +8,5 @@ export { nil }
  * @type { IteratorMonadType<_T_> }
  */
 const nil =
-  Iterator(undefined, _ => undefined, _ => true);
+  Iterator(undefined, _ => true, _ => undefined);
 
