@@ -8,7 +8,7 @@ import {
 
 export { IteratorBuilder }
 
-const ALREADY_BUILT_ERROR_MESSAGE = "Unsupported operation: Iterator has already been built!";
+const ALREADY_BUILT_ERROR_MESSAGE = "Unsupported operation: Sequence has already been built!";
 
 /**
  * A mutable builder for an {@link IteratorMonadType}.

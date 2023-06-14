@@ -16,7 +16,7 @@ import {
 } from "../../util/testUtil.js";
 import {toMonadicIterable} from "../../util/util.js";
 
-const testSuite = TestSuite("Iterator: Operation pipe");
+const testSuite = TestSuite("Sequence: Operation pipe");
 
 addToTestingTable(testSuite)(
   createTestConfig({

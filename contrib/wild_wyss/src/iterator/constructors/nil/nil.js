@@ -1,4 +1,4 @@
-import { Iterator } from "../../iterator.js";
+import { Sequence } from "../../iterator.js";
 
 export { nil }
 
@@ -8,5 +8,5 @@ export { nil }
  * @type { IteratorMonadType<_T_> }
  */
 const nil =
-  Iterator(undefined, _ => true, _ => undefined);
+  Sequence(undefined, _ => true, _ => undefined);
 

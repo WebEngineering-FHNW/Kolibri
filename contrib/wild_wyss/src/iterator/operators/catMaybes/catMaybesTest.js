@@ -5,10 +5,10 @@ import { nil }                      from "../../constructors/nil/nil.js";
 import { arrayEq }                  from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Just, Nothing }            from "../../../stdlib/maybe.js";
 import { createTestConfig }         from "../../util/testUtil.js";
-import { PureIterator }             from "../../constructors/pureIterator/pureIterator.js";
+import { PureSequence }             from "../../constructors/pureSequence/pureSequence.js";
 import {toMonadicIterable} from "../../util/util.js";
 
-const testSuite = TestSuite("Iterator: Operation catMaybes");
+const testSuite = TestSuite("Sequence: Operation catMaybes");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -22,7 +22,7 @@ addToTestingTable(testSuite)(
 
 testSuite.add("test catMaybes with Nothing", assert => {
   // When
-  const result = catMaybes(PureIterator(Nothing));
+  const result = catMaybes(PureSequence(Nothing));
   // Then
   assert.isTrue(arrayEq([])([...result]));
 });

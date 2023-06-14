@@ -6,7 +6,7 @@ import {
   TESTS
 } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Iterator: Constructor replicate");
+const testSuite = TestSuite("Sequence: Constructor replicate");
 
 addToTestingTable(testSuite)(
   createTestConfig({

@@ -7,7 +7,7 @@ import {
   UPPER_ITERATOR_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: Operation retainAll");
+const testSuite = TestSuite("Sequence: Operation retainAll");
 
 addToTestingTable(testSuite)(
   createTestConfig({

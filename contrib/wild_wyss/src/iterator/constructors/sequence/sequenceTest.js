@@ -1,18 +1,18 @@
 import { TestSuite }        from "../../../test/test.js";
 import { createTestConfig } from "../../util/testUtil.js";
-import { Iterator }         from "./iterator.js";
+import { Sequence }         from "./Sequence.js";
 import { Range }            from "../../../range/range.js";
 import {
   addToTestingTable,
   TESTS
 } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Iterator: Constructor Iterator");
+const testSuite = TestSuite("Sequence: Constructor Sequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:      "Iterator",
-    iterator:  () => Iterator(0, current => 4 < current, current => current + 1),
+    iterator:  () => Sequence(0, current => 4 < current, current => current + 1),
     expected:  [0,1,2,3,4],
     excludedTests: [
       TESTS.TEST_PURITY,
@@ -23,7 +23,7 @@ addToTestingTable(testSuite)(
 
 testSuite.add("test special case: no increment after done", assert => {
   let result = true;
-  const iterator = Iterator(true, _ => true, _ => result = false);
+  const iterator = Sequence(true, _ => true, _ => result = false);
   for (const iteratorElement of iterator) { /* exhausting iterator */ }
   assert.isTrue(result);
 });

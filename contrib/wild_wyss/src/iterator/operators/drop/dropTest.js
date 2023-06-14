@@ -7,7 +7,7 @@ import {
   UPPER_ITERATOR_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: Operation drop");
+const testSuite = TestSuite("Sequence: Operation drop");
 
 addToTestingTable(testSuite)(
   createTestConfig({

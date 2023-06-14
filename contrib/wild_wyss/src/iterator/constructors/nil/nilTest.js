@@ -6,7 +6,7 @@ import {
   TESTS
 } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Iterator: Constructor nil");
+const testSuite = TestSuite("Sequence: Constructor nil");
 
 addToTestingTable(testSuite)(
   createTestConfig({

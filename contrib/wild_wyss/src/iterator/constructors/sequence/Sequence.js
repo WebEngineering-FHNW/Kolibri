@@ -1,11 +1,11 @@
 import { createMonadicIterable, isIterable } from "../../util/util.js";
 import { bind }                              from "../../operators/bind/bind.js";
 import { map }                               from "../../operators/map/map.js"
-import { PureIterator }                      from "../pureIterator/pureIterator.js";
+import { PureSequence }                      from "../pureSequence/pureSequence.js";
 import { show }                              from "../../terminalOperations/show/show.js";
 import { eq$ }                               from "../../terminalOperations/eq/eq.js";
 
-export { Iterator, IteratorPrototype }
+export { Sequence, IteratorPrototype }
 
 /**
  *
@@ -25,7 +25,7 @@ export { Iterator, IteratorPrototype }
  * @returns { IteratorMonadType<_T_> }
  * @constructor
  */
-const Iterator = (start, untilFunction, incrementFunction) => {
+const Sequence = (start, untilFunction, incrementFunction) => {
 
   const iteratorIterator = () => {
     let value = start;
@@ -46,7 +46,7 @@ const Iterator = (start, untilFunction, incrementFunction) => {
 
   /**
    * @template _T_
-   * Returns a copy of this Iterator
+   * Returns a copy of this Sequence
    * @returns { IteratorMonadType<_T_> }
    */
 
@@ -83,13 +83,13 @@ IteratorPrototype.fmap = function (mapper) {
  * @param { _T_ } val - lifts a given value into the context
  * @returns IteratorMonadType<_T_>
  */
-IteratorPrototype.pure = val => PureIterator(val);
+IteratorPrototype.pure = val => PureSequence(val);
 
 /**
  * @template _T_
  * @returns IteratorMonadType<_T_>
  */
-IteratorPrototype.empty = () => Iterator(undefined, _ => true, _ => undefined);
+IteratorPrototype.empty = () => Sequence(undefined, _ => true, _ => undefined);
 
 /**
  *

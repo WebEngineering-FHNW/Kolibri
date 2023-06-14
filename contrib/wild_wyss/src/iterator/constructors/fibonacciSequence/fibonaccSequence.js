@@ -1,17 +1,17 @@
 import { createMonadicIterable } from "../../util/util.js";
 
-export { FibonacciIterator }
+export { FibonaccSequence }
 
 /**
  * Generates the Fibonacci sequence.
  * @returns { IteratorMonadType<Number> }
  * @constructor
  * @example
- * const iterator = FibonacciIterator();
+ * const iterator = FibonaccSequence();
  * const result = take(8)(iterator);
  * console.log(...result); // prints 1, 1, 2, 3, 5, 8, 13, 21 to the console
  */
-const FibonacciIterator = () => {
+const FibonaccSequence = () => {
 
   const Iterator = () => {
     let last = 0;

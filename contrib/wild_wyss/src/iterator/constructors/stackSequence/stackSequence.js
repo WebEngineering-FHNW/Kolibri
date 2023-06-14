@@ -3,7 +3,7 @@ import { fst, snd }                     from "../../../../../../docs/src/kolibri
 import { convertToJsBool }              from "../../../logger/lamdaCalculus.js";
 import {createMonadicIterable} from "../../util/util.js";
 
-export { StackIterator }
+export { StackSequence }
 
 /**
  * Creates an {@link IteratorMonadType} on top of the given {@link stack}
@@ -13,10 +13,10 @@ export { StackIterator }
  * @constructor
  * @example
  * const stack = push(push(push(emptyStack)(1))(2))(3);
- * const stackIterator = StackIterator(stack);
+ * const stackIterator = StackSequence(stack);
  * console.log(...stackIterator); // 3, 2, 1
  */
-const StackIterator = stack => {
+const StackSequence = stack => {
 
   const stackIterator = () => {
     let internalStack = stack;

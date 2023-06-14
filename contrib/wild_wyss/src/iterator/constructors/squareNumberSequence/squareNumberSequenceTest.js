@@ -1,18 +1,18 @@
 import { TestSuite }                  from "../../../test/test.js";
 import { createTestConfig }           from "../../util/testUtil.js";
 import { arrayEq }                    from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { take, SquareNumberIterator } from "../../iterator.js";
+import { take, SquareNumberSequence } from "../../iterator.js";
 import {
   addToTestingTable,
   TESTS
 } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Iterator: Constructor SquareNumberIterator");
+const testSuite = TestSuite("Sequence: Constructor SquareNumberSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:     "SquareNumberIterator",
-    iterator: SquareNumberIterator,
+    iterator: SquareNumberSequence,
     expected: [1, 4, 9, 16, 25],
     evalFn:   expected => actual => {
       const expectedArray = take(5)(expected);

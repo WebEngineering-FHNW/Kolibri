@@ -8,7 +8,7 @@
  * Additionally, such objects are monadic and provide therefore all functions that make up a monad.
  *
  * _Note_: The Kolibri defines many functions of type {@link IteratorOperation} which can be used to
- * transform the elements of this Iterator.
+ * transform the elements of this Sequence.
  *
  * @template _T_
  * @typedef {

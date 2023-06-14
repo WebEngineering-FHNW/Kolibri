@@ -8,7 +8,7 @@ import {
   UPPER_ITERATOR_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: terminal Operations eq$");
+const testSuite = TestSuite("Sequence: terminal Operations eq$");
 
 const eq$Config = (() => {
   // eq$ takes two iterators which both shouldn't be modified when eq runs.

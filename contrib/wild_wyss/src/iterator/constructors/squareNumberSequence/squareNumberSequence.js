@@ -1,21 +1,21 @@
-import { Iterator }                          from "../../iterator.js";
+import { Sequence }                          from "../../iterator.js";
 import { createMonadicIterable, iteratorOf } from "../../util/util.js";
 
-export { SquareNumberIterator }
+export { SquareNumberSequence }
 /**
  * Creates an {@link Iterable} which generates the sequence of square numbers.
  *
  * @return {Iterable<Number>}
  * @constructor
  * @example
- * const squares = take(5)(SquareNumberIterator());
+ * const squares = take(5)(SquareNumberSequence());
  * console.log(...iterator);
  * // => Logs 1, 4, 9, 16, 25
  */
-const SquareNumberIterator = () => {
+const SquareNumberSequence = () => {
 
   const squareNumberIterator = () => {
-    const odds  = iteratorOf(Iterator(1, _ => false, i => i + 2));
+    const odds  = iteratorOf(Sequence(1, _ => false, i => i + 2));
     let prev    = 0;
 
     const next = () => {

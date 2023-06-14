@@ -14,7 +14,7 @@ export { iteratorProjector }
 
 /**
  * Projects an {@link IteratorType} using the given projector for a single value of the iterator.
- * It can be used to add the content of an Iterator to the DOM.
+ * It can be used to add the content of an Sequence to the DOM.
  *
  * @function
  * @template _T_

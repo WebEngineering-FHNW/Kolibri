@@ -12,7 +12,7 @@ export { takeWhile }
  *         => IteratorOperation<_T_>
  *       }
  * @example
- * const it      = Iterator(0, inc, stop);
+ * const it      = Sequence(0, inc, stop);
  * // keep all elements until one element is bigger or equal to 2.
  * const dropped = takeWhile(el => el < 2)(it);
  */

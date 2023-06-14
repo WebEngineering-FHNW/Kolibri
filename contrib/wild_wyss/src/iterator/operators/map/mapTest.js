@@ -7,7 +7,7 @@ import {
   UPPER_ITERATOR_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: Operation map");
+const testSuite = TestSuite("Sequence: Operation map");
 
 addToTestingTable(testSuite)(
   createTestConfig({

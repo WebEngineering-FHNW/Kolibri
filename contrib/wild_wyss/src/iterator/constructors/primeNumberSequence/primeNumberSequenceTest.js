@@ -1,6 +1,6 @@
 import { TestSuite }           from "../../../test/test.js";
 import { createTestConfig }    from "../../util/testUtil.js";
-import { PrimeNumberIterator } from "./primeNumberIterator.js";
+import { PrimeNumberSequence } from "./primeNumberSequence.js";
 import { arrayEq }             from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { take }                from "../../operators/take/take.js";
 import {
@@ -8,12 +8,12 @@ import {
   TESTS
 } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Iterator: Constructor PrimeNumberIterator");
+const testSuite = TestSuite("Sequence: Constructor PrimeNumberSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:     "PrimeNumberIterator",
-    iterator: () => PrimeNumberIterator(),
+    iterator: () => PrimeNumberSequence(),
     expected: [2, 3, 5, 7, 11],
     evalFn:   expected => actual => {
       const expectedArray = take(5)(expected);

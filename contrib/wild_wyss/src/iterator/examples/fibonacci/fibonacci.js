@@ -2,14 +2,14 @@ import * as _                               from "../../iterator.js";
 import { Range }                            from "../../../range/range.js";
 import { dom }                              from "../../../../../../docs/src/kolibri/util/dom.js";
 import { iteratorProjector }                from "../../projector/iteratorProjector.js";
-import { AngleIterator, FibonacciIterator } from "../../iterator.js";
+import { AngleSequence, FibonaccSequence } from "../../iterator.js";
 
 const fibonacciView = (rootElement, amount, scaleFactor) => {
-  const fibSequence = _.take(amount)(FibonacciIterator());
-  const position    = _.cons(0)(FibonacciIterator()); // position of square is one behind the squares value
+  const fibSequence = _.take(amount)(FibonaccSequence());
+  const position    = _.cons(0)(FibonaccSequence()); // position of square is one behind the squares value
   const values      = _.zipWith((a, b) => ({current: a, pos: b}))(fibSequence)(position);
   const indexed     = _.zipWith((a, b) => ({...a, index: b}))(values)(Range(100));
-  const colored     = _.zipWith((a, b) => ({...a, color: b}))(indexed)(AngleIterator(amount));
+  const colored     = _.zipWith((a, b) => ({...a, color: b}))(indexed)(AngleSequence(amount));
 
   const elements = (iteratorProjector(colored)(fibonacciProjector(scaleFactor))).children;
 

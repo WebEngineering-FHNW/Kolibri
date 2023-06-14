@@ -9,7 +9,7 @@ import {
   UPPER_ITERATOR_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: terminal Operations forEach$");
+const testSuite = TestSuite("Sequence: terminal Operations forEach$");
 
 const forEach$Config = (() => {
   // keep this state in the closure scope

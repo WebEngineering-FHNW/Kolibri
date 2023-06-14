@@ -12,7 +12,7 @@ export { retainAll }
  *          => IteratorOperation<_T_>
  *       }
  * @example
- * const it     = Iterator(0, inc, stop);
+ * const it     = Sequence(0, inc, stop);
  * // just keep even numbers
  * const filtered = retainAll(el => el % 2 === 0)(it);
  */

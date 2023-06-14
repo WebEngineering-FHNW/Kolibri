@@ -1,10 +1,10 @@
 import { TestSuite }                from "../../../test/test.js";
 import { createTestConfig }         from "../../util/testUtil.js";
 import { Tuple }                    from "../../../../../p6_haefliger_misic/branch-projector-pattern/church/rock.js";
-import { TupleIterator }            from "./tupleIterator.js";
+import { TupleSequence }            from "./tupleSequence.js";
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Iterator: Constructor TupleIterator");
+const testSuite = TestSuite("Sequence: Constructor TupleSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -12,7 +12,7 @@ addToTestingTable(testSuite)(
     iterator:  () => {
       const [ Triple ]    = Tuple(5);
       const triple        = Triple(0)(1)(2)(3)(4);
-      return TupleIterator(triple)
+      return TupleSequence(triple)
     },
     expected:  [0,1,2,3,4],
     excludedTests: [

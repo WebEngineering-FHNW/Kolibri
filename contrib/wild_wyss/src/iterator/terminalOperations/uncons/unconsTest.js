@@ -10,7 +10,7 @@ import {
   UPPER_ITERATOR_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: terminal Operations uncons");
+const testSuite = TestSuite("Sequence: terminal Operations uncons");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:      "uncons",

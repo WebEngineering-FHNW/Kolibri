@@ -1,4 +1,4 @@
-import { Iterator } from "../iterator/iterator.js";
+import { Sequence } from "../iterator/iterator.js";
 
 export { Range }
 
@@ -28,7 +28,7 @@ const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
   const stepIsNegative = 0 > step;
   const [left, right]  = normalize(firstBoundary, secondBoundary, stepIsNegative);
 
-  return Iterator(left, value => hasReachedEnd(stepIsNegative, value, right), value => value + step);
+  return Sequence(left, value => hasReachedEnd(stepIsNegative, value, right), value => value + step);
 };
 
 /**

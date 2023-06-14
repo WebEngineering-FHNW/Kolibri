@@ -1,6 +1,6 @@
 import { TestSuite }        from "../../../test/test.js";
 import { createTestConfig } from "../../util/testUtil.js";
-import { StackIterator }    from "./stackIterator.js";
+import { StackSequence }    from "./stackSequence.js";
 import {
   convertArrayToStack,
   reverseStack
@@ -10,14 +10,14 @@ import {
   TESTS
 } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Iterator: Constructor StackIterator");
+const testSuite = TestSuite("Sequence: Constructor StackSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:     "StackIterator",
     iterator: () => {
       const stack = reverseStack(convertArrayToStack([0,1,2,3,4]));
-      return StackIterator(stack);
+      return StackSequence(stack);
     },
     expected: [0,1,2,3,4],
     excludedTests: [

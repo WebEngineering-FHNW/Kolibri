@@ -1,8 +1,8 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
 import {
-  Iterator,
-  PureIterator,
+  Sequence,
+  PureSequence,
   mconcat,
   nil
 } from "../../../iterator/iterator.js";
@@ -13,7 +13,7 @@ import {
 } from "../../util/testUtil.js";
 import {toMonadicIterable} from "../../util/util.js";
 
-const testSuite = TestSuite("Iterator: Operation mconcat");
+const testSuite = TestSuite("Sequence: Operation mconcat");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -24,7 +24,7 @@ addToTestingTable(testSuite)(
     invariants: [
       it => mconcat([nil, it]) ["=="] (it),
       it => mconcat([it, nil]) ["=="] (it),
-      it => [...mconcat([PureIterator(1),it])].length > [...it].length,
+      it => [...mconcat([PureSequence(1),it])].length > [...it].length,
     ],
   })
 );
@@ -50,8 +50,8 @@ testSuite.add("test concat with infinity: mconcat", assert => {
   let called  = false;
   let counter = 0;
 
-  const endless                = Iterator(0, _ => false, i => i + 1);
-  const iteratorWithSideEffect = Iterator(false, _ => false, _ => called = true);
+  const endless                = Sequence(0, _ => false, i => i + 1);
+  const iteratorWithSideEffect = Sequence(false, _ => false, _ => called = true);
   const concatenated           = mconcat([endless, iteratorWithSideEffect]);
 
   // When

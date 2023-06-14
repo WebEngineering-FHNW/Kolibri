@@ -1,7 +1,7 @@
-import { Iterator, map }                     from "../../iterator.js";
+import { Sequence, map }                     from "../../iterator.js";
 import { createMonadicIterable, iteratorOf } from "../../util/util.js";
 
-export { TupleIterator }
+export { TupleSequence }
 
 /**
  * Constructs a new iterator based on the given tuple. Each iteration returns an element of the tuple.
@@ -12,14 +12,14 @@ export { TupleIterator }
  * @example
  * const [ Triple ]    = Tuple(3);
  * const triple        = Triple(1)(2)(3);
- * const tupleIterator = TupleIterator(triple);
+ * const tupleIterator = TupleSequence(triple);
  * console.log(...tupleIterator);
  * // => Logs 1, 2, 3
  */
-const TupleIterator = tuple => {
+const TupleSequence = tuple => {
   // detect number of elements in tuple using a special selector function
   const lengthSelector = arr => arr.length;
-  const indexIterator  = Iterator(0, i => i === tuple(lengthSelector), i => i + 1);
+  const indexIterator  = Sequence(0, i => i === tuple(lengthSelector), i => i + 1);
 
   const tupleIterator = () => {
     // map over indices and grab corresponding element from tuple

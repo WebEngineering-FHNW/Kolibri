@@ -1,6 +1,6 @@
 import { createMonadicIterable } from "../../util/util.js";
 
-export { PureIterator }
+export { PureSequence }
 
 /**
  * Creates an {@link IteratorMonadType} which contains just the given value.
@@ -12,12 +12,12 @@ export { PureIterator }
  * @haskell pure :: a -> [a]
  * @constructor
  * @example
- * const it = PureIterator(1);
+ * const it = PureSequence(1);
  *
  * console.log(...it);
  * // => Logs '1'
  */
-const PureIterator = value => {
+const PureSequence = value => {
 
   const pureIterator = () => {
     let done = false;

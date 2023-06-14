@@ -7,7 +7,7 @@ import {
   UPPER_ITERATOR_BOUNDARY,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: Operation snoc");
+const testSuite = TestSuite("Sequence: Operation snoc");
 
 addToTestingTable(testSuite)(
   createTestConfig({

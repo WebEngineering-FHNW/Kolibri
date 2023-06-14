@@ -1,4 +1,4 @@
-import { IteratorPrototype } from "../constructors/iterator/iterator.js";
+import { IteratorPrototype } from "../constructors/sequence/Sequence.js";
 import { map }               from "../iterator.js"
 import { id }                from "../../../../../docs/src/kolibri/stdlib.js"
 

@@ -7,7 +7,7 @@ import {
   newIterator,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: Operation cycle");
+const testSuite = TestSuite("Sequence: Operation cycle");
 
 addToTestingTable(testSuite)(
   createTestConfig({

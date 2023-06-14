@@ -1,14 +1,14 @@
 import { TestSuite }                from "../../../test/test.js";
 import { createTestConfig }         from "../../util/testUtil.js";
-import { PureIterator }             from "./pureIterator.js";
+import { PureSequence }             from "./pureSequence.js";
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Iterator: Constructor PureIterator");
+const testSuite = TestSuite("Sequence: Constructor PureSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:     "PureIterator",
-    iterator: () => PureIterator(42),
+    iterator: () => PureSequence(42),
     expected: [42],
     excludedTests: [
       TESTS.TEST_PURITY,

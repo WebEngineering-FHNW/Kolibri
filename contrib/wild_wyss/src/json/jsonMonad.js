@@ -1,7 +1,7 @@
 import { Just, Nothing } from "../stdlib/maybe.js";
 import { nil }           from "../iterator/constructors/nil/nil.js";
 import { isEmpty }       from "../iterator/terminalOperations/isEmpty/isEmpty.js";
-import { PureIterator }  from "../iterator/constructors/pureIterator/pureIterator.js";
+import { PureSequence }  from "../iterator/constructors/pureSequence/pureSequence.js";
 import {
   createMonadicIterable,
   iteratorOf
@@ -83,7 +83,7 @@ const JsonMonad = jsObject => {
       return JsonMonadFactory(result);
     };
 
-    const pure  = a  => JsonMonad(PureIterator(a));
+    const pure  = a  => JsonMonad(PureSequence(a));
     const empty = () => JsonMonadFactory(Nothing);
 
     const iterator = () => {

@@ -1,4 +1,4 @@
-import { Iterator } from "../../iterator.js";
+import { Sequence } from "../../iterator.js";
 
 export { repeat }
 
@@ -15,4 +15,4 @@ export { repeat }
  * console.log(...take(3)(it));
  * // => Logs 1, 1, 1
  */
-const repeat = arg => Iterator(arg, _ => false, _ => arg);
+const repeat = arg => Sequence(arg, _ => false, _ => arg);

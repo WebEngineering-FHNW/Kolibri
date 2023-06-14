@@ -2,13 +2,13 @@ import {addToTestingTable }           from "../../util/testingTable.js";
 import { TestSuite }                  from "../../../test/test.js";
 import { Range }                      from "../../../range/range.js";
 import { arrayEq }                    from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { concat, Iterator, nil }      from "../../../iterator/iterator.js";
+import { concat, Sequence, nil }      from "../../../iterator/iterator.js";
 import {
   createTestConfig,
   newIterator,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: Operation concat");
+const testSuite = TestSuite("Sequence: Operation concat");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -55,8 +55,8 @@ testSuite.add("test concat with infinity: concat", assert => {
   let called  = false;
   let counter = 0;
 
-  const endless                = Iterator(0, _ => false, i => i + 1);
-  const iteratorWithSideEffect = Iterator(false, _ => false, _ => called = true);
+  const endless                = Sequence(0, _ => false, i => i + 1);
+  const iteratorWithSideEffect = Sequence(false, _ => false, _ => called = true);
   const concatenated           = concat(endless)(iteratorWithSideEffect);
 
   // When

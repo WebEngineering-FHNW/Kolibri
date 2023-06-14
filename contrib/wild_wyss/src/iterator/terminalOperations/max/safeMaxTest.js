@@ -2,7 +2,7 @@ import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { TestSuite }                from "../../../test/test.js";
 import { Just }                     from "../../../stdlib/maybe.js";
 import {
-  PureIterator,
+  PureSequence,
   replicate,
   safeMax$,
   nil
@@ -13,7 +13,7 @@ import {
   UPPER_ITERATOR_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: terminal Operations safeMax$");
+const testSuite = TestSuite("Sequence: terminal Operations safeMax$");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -37,7 +37,7 @@ addToTestingTable(testSuite)(
 
 testSuite.add("test single element: should return the only element ", assert => {
   // Given
-  const single = PureIterator(1);
+  const single = PureSequence(1);
 
   // When
   const maybeMax = safeMax$(single);

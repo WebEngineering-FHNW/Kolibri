@@ -9,12 +9,12 @@ import {
 import {
   map,
   cycle,
-  Iterator,
+  Sequence,
   pipe,
   zipWith
 } from "../../iterator.js";
 
-export { PrimeNumberIterator }
+export { PrimeNumberSequence }
 
 /**
  * Creates an {@link IteratorMonadType} which generates the sequence of prime numbers.
@@ -23,11 +23,11 @@ export { PrimeNumberIterator }
  * @pure
  * @constructor
  * @example
- * const primes = PrimeNumberIterator();
+ * const primes = PrimeNumberSequence();
  * console.log(...take(4)(primes));
  * // => Logs 2, 3, 5, 7
  */
-const PrimeNumberIterator = () => {
+const PrimeNumberSequence = () => {
   /**
    * Creates a repeated sequence pattern for the given prime
    * @param prime
@@ -39,7 +39,7 @@ const PrimeNumberIterator = () => {
   const patternForPrime = prime => pipe(
     map(x => x === prime ? Just(prime) : Nothing),
     cycle
-  )(Iterator(1, i => i > prime, i => i + 1));
+  )(Sequence(1, i => i > prime, i => i + 1));
 
   const primeNumberIterator  = () => {
     let prevPrimesIterator   = iteratorOf(cycle([Nothing]));

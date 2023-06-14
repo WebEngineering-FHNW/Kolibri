@@ -1,4 +1,4 @@
-import { IteratorPrototype } from "../../constructors/iterator/iterator.js";
+import { IteratorPrototype } from "../../constructors/sequence/Sequence.js";
 import {createMonadicIterable, toMonadicIterable} from "../../util/util.js";
 
 export { pipe }

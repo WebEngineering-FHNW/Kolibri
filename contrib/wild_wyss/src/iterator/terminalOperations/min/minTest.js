@@ -1,14 +1,14 @@
 import { ILLEGAL_ARGUMENT_EMPTY_ITERATOR }    from "../../util/errorMessages.js";
 import { addToTestingTable, TESTS }           from "../../util/testingTable.js";
 import { TestSuite }                          from "../../../test/test.js";
-import { replicate, PureIterator, nil, min$ } from "../../iterator.js";
+import { replicate, PureSequence, nil, min$ } from "../../iterator.js";
 import {
   createTestConfig,
   newIterator,
   UPPER_ITERATOR_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Iterator: terminal Operations min$");
+const testSuite = TestSuite("Sequence: terminal Operations min$");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -23,7 +23,7 @@ addToTestingTable(testSuite)(
 );
 
 testSuite.add("test single element should return the element ", assert =>
- assert.is(min$(PureIterator(1)), 1));
+ assert.is(min$(PureSequence(1)), 1));
 
 testSuite.add("test empty iterator: should throw an error", assert =>
   assert.throws(() => min$(nil), ILLEGAL_ARGUMENT_EMPTY_ITERATOR));

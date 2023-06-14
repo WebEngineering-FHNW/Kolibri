@@ -1,4 +1,4 @@
-import {Iterator, IteratorPrototype, nil, PureIterator} from "../iterator.js";
+import {Sequence, IteratorPrototype, nil, PureSequence} from "../iterator.js";
 import { arrayEq }  from "../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Just, Nothing }     from "../../stdlib/maybe.js";
 
@@ -56,7 +56,7 @@ const id = x => x;
 /**
  * @template _T_
  * @typedef {
- *              (it: Iterator<Iterator>)
+ *              (it: Sequence<Sequence>)
  *           => Boolean
  * } InvariantCallback
  */
@@ -65,7 +65,7 @@ const id = x => x;
  * @param  { Number } limit
  * @returns { IteratorMonadType<Number> }
  */
-const newIterator = limit => Iterator(0, current => current > limit, current => current + 1);
+const newIterator = limit => Sequence(0, current => current > limit, current => current + 1);
 const UPPER_ITERATOR_BOUNDARY = 4;
 
 /**
@@ -130,7 +130,7 @@ const testCBNotCalledAfterDone = config => assert => {
   if (typeof param !== "function") return;
 
   let called = false;
-  const it   = Iterator(0, _ => true, _ => 0);
+  const it   = Sequence(0, _ => true, _ => 0);
 
   const operated = operation(el => {
     // since this iterator is empty, called should never be set to true
@@ -185,9 +185,9 @@ const invariantPenetration = invariant => assert => {
     newIterator(1),                                        // edge case, done calculated
     newIterator(3),                                        // typical number
                                                            // no big iterator, needs extra test
-    PureIterator("testString"),                            // edge case, done set explicitly
+    PureSequence("testString"),                            // edge case, done set explicitly
     ['a', 'b', 'c', 1, 2, 3, Nothing, Just("testString")], // mixing types
-    [PureIterator(1), newIterator(4), '#', "abc", 1]       // iterator of iterators
+    [PureSequence(1), newIterator(4), '#', "abc", 1]       // iterator of iterators
   ];
 
   for (const list of testingLists) {
