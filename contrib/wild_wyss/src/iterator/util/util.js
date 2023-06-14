@@ -1,6 +1,15 @@
 import { IteratorPrototype } from "../constructors/iterator/iterator.js";
+import { map }               from "../iterator.js"
 
-export { isIterable, iteratorOf, nextOf, takeWithoutCopy, createIterator, createMonadicIterable}
+export {
+  isIterable,
+  iteratorOf,
+  nextOf,
+  takeWithoutCopy,
+  createIterator,
+  createMonadicIterable,
+  toMonadicIterable,
+}
 
 /**
  * checks if a given value is iterable
@@ -68,7 +77,7 @@ const createIterator = (next, copy) => {
  * @param { Iterable<_T_> } iterable
  * @returns { IteratorMonadType<_T_> }
  */
-const toMonadicIterable = iterable => {
+const setPrototype = iterable => {
   Object.setPrototypeOf(iterable, IteratorPrototype);
   return /**@type IteratorMonadType*/ iterable;
 };
@@ -81,5 +90,9 @@ const toMonadicIterable = iterable => {
  */
 const createMonadicIterable = iterator => {
   const result = {[Symbol.iterator]: iterator};
-  return toMonadicIterable(result);
+  return setPrototype(result);
 };
+
+
+
+const toMonadicIterable = iterable => map(x => x)(iterable);
