@@ -4,7 +4,7 @@ import { Tuple }                    from "../../../../../p6_haefliger_misic/bran
 import { TupleSequence }            from "./tupleSequence.js";
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Sequence: Constructor TupleSequence");
+const testSuite = TestSuite("Sequence: constructor TupleSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({

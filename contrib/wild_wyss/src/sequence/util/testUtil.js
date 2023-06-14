@@ -5,7 +5,7 @@ import { Just, Nothing }     from "../../stdlib/maybe.js";
 export {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY,
+  UPPER_SEQUENCE_BOUNDARY,
   testSimple,
   testPurity,
   testIterateMultipleTimes,
@@ -66,7 +66,7 @@ const id = x => x;
  * @returns { SequenceType<Number> }
  */
 const newSequence = limit => Sequence(0, current => current > limit, current => current + 1);
-const UPPER_ITERATOR_BOUNDARY = 4;
+const UPPER_SEQUENCE_BOUNDARY = 4;
 
 /**
  * @type {

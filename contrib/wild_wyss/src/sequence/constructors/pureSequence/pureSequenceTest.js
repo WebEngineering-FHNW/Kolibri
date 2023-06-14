@@ -3,7 +3,7 @@ import { createTestConfig }         from "../../util/testUtil.js";
 import { PureSequence }             from "./pureSequence.js";
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Sequence: Constructor PureSequence");
+const testSuite = TestSuite("Sequence: constructor PureSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({

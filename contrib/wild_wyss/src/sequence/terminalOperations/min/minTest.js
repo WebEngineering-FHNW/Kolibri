@@ -1,19 +1,19 @@
-import { ILLEGAL_ARGUMENT_EMPTY_ITERATOR }    from "../../util/errorMessages.js";
+import { ILLEGAL_ARGUMENT_EMPTY_ITERABLE }    from "../../util/errorMessages.js";
 import { addToTestingTable, TESTS }           from "../../util/testingTable.js";
 import { TestSuite }                          from "../../../test/test.js";
 import { replicate, PureSequence, nil, min$ } from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY
+  UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: terminal Operations min$");
+const testSuite = TestSuite("Sequence: terminal operation min$");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:      "min$",
-    iterable:  () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:  () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation: () => min$,
     param:     () => {},
     expected:  0,
@@ -23,10 +23,12 @@ addToTestingTable(testSuite)(
 );
 
 testSuite.add("test single element should return the element ", assert =>
- assert.is(min$(PureSequence(1)), 1));
+  // Then
+  assert.is(min$(PureSequence(1)), 1));
 
-testSuite.add("test empty iterator: should throw an error", assert =>
-  assert.throws(() => min$(nil), ILLEGAL_ARGUMENT_EMPTY_ITERATOR));
+testSuite.add("test empty sequence: should throw an error", assert =>
+  // Then
+  assert.throws(() => min$(nil), ILLEGAL_ARGUMENT_EMPTY_ITERABLE));
 
 testSuite.add("test min on strings: should return the shortest string", assert => {
   // Given
@@ -39,23 +41,23 @@ testSuite.add("test min on strings: should return the shortest string", assert =
   assert.is(result, "a");
 });
 
-testSuite.add("test smallest element at the end of the iterator", assert => {
+testSuite.add("test smallest element at the end of the iterable", assert => {
   // Given
-  const iterator = [4,3,2,5,1,9,0];
+  const sequence = [4,3,2,5,1,9,0];
 
   // When
-  const result   = min$(iterator);
+  const result   = min$(sequence);
 
   // Then
   assert.is(result, 0);
 });
 
-testSuite.add("test smallest element at the start of the iterator", assert => {
+testSuite.add("test smallest element at the start of the iterable", assert => {
   // Given
-  const iterator = [0,9,4,3,2,5,1];
+  const sequence = [0,9,4,3,2,5,1];
 
   // When
-  const result   = min$(iterator);
+  const result   = min$(sequence);
 
   // Then
   assert.is(result, 0);

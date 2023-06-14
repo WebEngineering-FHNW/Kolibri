@@ -12,7 +12,8 @@ export { replicate }
  *           (n: Number)
  *        => (value: _T_)
  *        => Iterable<_T_>
- * }
+ *       }
+ *
  * @example
  * const trues = replicate(3)(true);
  *

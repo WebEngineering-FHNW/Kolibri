@@ -6,7 +6,7 @@ import {
   TESTS
 } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Sequence: Constructor AngleSequence");
+const testSuite = TestSuite("Sequence: constructor AngleSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({

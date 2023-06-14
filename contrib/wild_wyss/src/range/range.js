@@ -15,6 +15,7 @@ export { Range }
  * - Only values that behave correctly with respect to addition and
  *   size comparison may be passed as arguments.
  * @constructor
+ * @pure
  * @param { !Number } firstBoundary  - the first boundary of the range
  * @param { Number }  secondBoundary - optionally the second boundary of the range
  * @param { Number }  step - the size of a step, processed during each iteration

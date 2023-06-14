@@ -4,7 +4,7 @@ import { StackSequence }                     from "./stackSequence.js";
 import { convertArrayToStack, reverseStack } from "../../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import { addToTestingTable, TESTS }          from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Sequence: Constructor StackSequence");
+const testSuite = TestSuite("Sequence: constructor StackSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({

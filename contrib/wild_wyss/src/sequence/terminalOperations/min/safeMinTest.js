@@ -1,24 +1,19 @@
-import { addToTestingTable, TESTS } from "../../util/testingTable.js";
-import { TestSuite }                from "../../../test/test.js";
-import { Just }                     from "../../../stdlib/maybe.js";
-import {
-  PureSequence,
-  replicate,
-  nil,
-  safeMin$
-} from "../../sequence.js";
+import { addToTestingTable, TESTS }               from "../../util/testingTable.js";
+import { TestSuite }                              from "../../../test/test.js";
+import { Just }                                   from "../../../stdlib/maybe.js";
+import { PureSequence, replicate, nil, safeMin$ } from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY
+  UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: terminal Operations safeMin$");
+const testSuite = TestSuite("Sequence: terminal operation safeMin$");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:      "safeMin$",
-    iterable:  () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:  () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation: () => safeMin$,
     expected:  Just(0),
     evalFn:    expected => actual => {
@@ -27,8 +22,8 @@ addToTestingTable(testSuite)(
 
       let result = false;
       actual
-      (_ => false)
-      (x => result = x === unwrappedVal);
+        (_ => false)
+        (x => result = x === unwrappedVal);
       return result;
     },
     excludedTests: [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
@@ -37,7 +32,7 @@ addToTestingTable(testSuite)(
 
 testSuite.add("test single element: should return the only element ", assert => {
   // Given
-  const single = PureSequence(1);
+  const single   = PureSequence(1);
 
   // When
   const maybeMin = safeMin$(single);
@@ -48,7 +43,7 @@ testSuite.add("test single element: should return the only element ", assert => 
   (x => assert.is(x, 1));
 });
 
-testSuite.add("test empty iterator: should return Nothing", assert => {
+testSuite.add("test empty sequence: should return Nothing", assert => {
   // When
   const maybeMin = safeMin$(nil);
 
@@ -60,7 +55,7 @@ testSuite.add("test empty iterator: should return Nothing", assert => {
 
 testSuite.add("test comparator on strings: should return the longest string", assert => {
   // Given
-  const strings = ["a", "b", "aa", "bb"];
+  const strings  = ["a", "b", "aa", "bb"];
 
   // When
   const maybeMin = safeMin$(strings, (a, b) => a.length > b.length);
@@ -71,12 +66,12 @@ testSuite.add("test comparator on strings: should return the longest string", as
   (x => assert.is(x, "a"));
 });
 
-testSuite.add("test smallest element at the end of the iterator", assert => {
+testSuite.add("test smallest element at the end of the iterable", assert => {
   // Given
-  const iterator = [4,3,2,5,1,9,0];
+  const sequence = [4,3,2,5,1,9,0];
 
   // When
-  const maybeMin   = safeMin$(iterator);
+  const maybeMin = safeMin$(sequence);
 
   // Then
   maybeMin
@@ -84,12 +79,12 @@ testSuite.add("test smallest element at the end of the iterator", assert => {
   (x => assert.is(x, 0));
 });
 
-testSuite.add("test smallest element at the start of the iterator", assert => {
+testSuite.add("test smallest element at the start of the sequence", assert => {
   // Given
-  const iterator = [0,9,4,3,2,5,1];
+  const sequence = [0,9,4,3,2,5,1];
 
   // When
-  const maybeMin   = safeMin$(iterator);
+  const maybeMin = safeMin$(sequence);
 
   // Then
   maybeMin
@@ -99,7 +94,7 @@ testSuite.add("test smallest element at the start of the iterator", assert => {
 
 testSuite.add("test multiple of equal values", assert => {
   // Given
-  const values = replicate(4)(7);
+  const values  = replicate(4)(7);
 
   // When
   const maybeMin = safeMin$(values);

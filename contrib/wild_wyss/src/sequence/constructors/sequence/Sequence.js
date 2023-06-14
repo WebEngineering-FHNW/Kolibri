@@ -17,11 +17,21 @@ export { Sequence, SequencePrototype }
  * - Functions ending with a "$" must not be applied to infinite {@link Iterable Iterables}.
  *
  * @constructor
+ * @pure if `untilFunction` & `incrementFunction` are pure
  * @template _T_
  * @param   { _T_ }               start
  * @param   { (_T_) => Boolean }  untilFunction - returns true if the iteration should stop
  * @param   { (_T_) => _T_ }      incrementFunction
  * @returns { SequenceType<_T_> }
+ *
+ * @example
+ * const start      = 0;
+ * const untilF     = x => x > 3;
+ * const incrementF = x => x + 1;
+ * const sequence = Sequence(start, untilF, incrementF);
+ *
+ * console.log(...sequence);
+ * // Logs '0, 1, 2, 3'
  */
 const Sequence = (start, untilFunction, incrementFunction) => {
 

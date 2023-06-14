@@ -4,7 +4,7 @@ import { drop, nil }         from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY,
+  UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: Operation drop");
@@ -12,7 +12,7 @@ const testSuite = TestSuite("Sequence: Operation drop");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "drop",
-    iterable:   () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation:  drop,
     param:      2,
     expected:   [2, 3, 4],

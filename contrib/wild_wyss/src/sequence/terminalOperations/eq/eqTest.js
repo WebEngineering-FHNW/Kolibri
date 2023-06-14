@@ -5,22 +5,22 @@ import { nil }                      from "../../constructors/nil/nil.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY
+  UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: terminal Operations eq$");
+const testSuite = TestSuite("Sequence: terminal operation eq$");
 
 const eq$Config = (() => {
-  // eq$ takes two iterators which both shouldn't be modified when eq runs.
-  // To keep this we keep two iterators in our closure scope, to ensure that neither is modified by pure.
-  const firstIterator  = newSequence(UPPER_ITERATOR_BOUNDARY);
-  const secondIterator = newSequence(UPPER_ITERATOR_BOUNDARY);
+  // eq$ takes two iterables which both shouldn't be modified when eq runs.
+  // To keep this we keep two iterables in our closure scope, to ensure that neither is modified by pure.
+  const firstIterable  = newSequence(UPPER_SEQUENCE_BOUNDARY);
+  const secondIterable = newSequence(UPPER_SEQUENCE_BOUNDARY);
 
   return createTestConfig({
     name:      "eq$",
-    iterable:  () => firstIterator,
+    iterable:  () => firstIterable,
     operation: eq$,
-    param:     secondIterator,
+    param:     secondIterable,
     evalFn:    expected => actual => expected === actual,
     expected:  true,
     excludedTests: [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
@@ -29,7 +29,8 @@ const eq$Config = (() => {
 
 addToTestingTable(testSuite)(eq$Config);
 
-testSuite.add("test empty iterator", assert => {
+testSuite.add("test empty sequences", assert => {
+  // Then
   assert.is(eq$(nil)(nil), true);
 });
 

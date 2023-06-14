@@ -6,17 +6,17 @@ import { nil }                      from "../../constructors/nil/nil.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY
+  UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: terminal Operations forEach$");
+const testSuite = TestSuite("Sequence: terminal operation forEach$");
 
 const forEach$Config = (() => {
   // keep this state in the closure scope
   const iterElements = [];
   return createTestConfig({
     name:       "forEach$",
-    iterable:   () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation:  forEach$,
     param:      cur => iterElements.push(cur),
     expected:   [0, 1, 2, 3, 4],
@@ -48,7 +48,7 @@ testSuite.add("test purity forEach$", assert => {
   assert.iterableEq(elements, expected);
 });
 
-testSuite.add("test empty iterator", assert => {
+testSuite.add("test empty iterable", assert => {
   // Given
   const expected = [];
 

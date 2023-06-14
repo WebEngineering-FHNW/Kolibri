@@ -24,13 +24,14 @@ export { PrimeNumberSequence }
  * const primes       = take(4)(primeNumbers);
  *
  * console.log(...primes);
- * // => Logs 2, 3, 5, 7
+ * // => Logs '2, 3, 5, 7'
  */
 const PrimeNumberSequence = () => {
   /**
    * Creates a repeated sequence pattern for the given prime
    * @param prime
    * @returns { SequenceType<MaybeType> }
+   *
    * @example
    * const seq = patternForPrime(3);
    * const pattern = take(4)(seq);

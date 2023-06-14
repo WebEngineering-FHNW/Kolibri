@@ -4,7 +4,7 @@ import { take, nil }         from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY,
+  UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: Operation take");
@@ -12,7 +12,7 @@ const testSuite = TestSuite("Sequence: Operation take");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "take",
-    iterable:   () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation:  take,
     param:      2,
     expected:   [0, 1],

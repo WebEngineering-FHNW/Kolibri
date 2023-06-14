@@ -8,6 +8,7 @@ export { FibonacciSequence }
  * @constructor
  * @pure
  * @returns { SequenceType<Number> }
+ *
  * @example
  * const fibonacciNumbers = FibonacciSequence();
  * const result           = take(8)(fibonacciNumbers);

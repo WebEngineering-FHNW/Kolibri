@@ -12,7 +12,7 @@ import {
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY
+  UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 import {toMonadicIterable} from "../../util/util.js";
 
@@ -21,7 +21,7 @@ const testSuite = TestSuite("Sequence: Operation pipe");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "pipe",
-    iterable:   () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation:  ops => pipe(...ops),
     param:      [ map(x => 2*x), rejectAll(x => x > 4) ],
     expected:   [0, 2, 4],

@@ -4,7 +4,7 @@ import { zipWith, nil } from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY,
+  UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: Operation zipWith");
@@ -12,8 +12,8 @@ const testSuite = TestSuite("Sequence: Operation zipWith");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "zipWith",
-    iterable:   () => newSequence(UPPER_ITERATOR_BOUNDARY),
-    operation:  zipper => zipWith(zipper)(newSequence(UPPER_ITERATOR_BOUNDARY)),
+    iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
+    operation:  zipper => zipWith(zipper)(newSequence(UPPER_SEQUENCE_BOUNDARY)),
     param:      (i, j) => i + j,
     expected:   [0, 2, 4, 6, 8],
     invariants: [
@@ -26,7 +26,7 @@ addToTestingTable(testSuite)(
 testSuite.add("test advanced case: zipWith one iterator is shorter", assert => {
   let iterationCount = 0;
 
-  const it1 = newSequence(UPPER_ITERATOR_BOUNDARY);
+  const it1 = newSequence(UPPER_SEQUENCE_BOUNDARY);
   const it2 = newSequence(2);
   const zipper = (i, j) => {
     iterationCount++;

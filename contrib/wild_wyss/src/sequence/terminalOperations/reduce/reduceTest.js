@@ -5,15 +5,15 @@ import { nil }                      from "../../constructors/nil/nil.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY
+  UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: terminal Operations reduce$");
+const testSuite = TestSuite("Sequence: terminal operation reduce$");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:      "reduce$",
-    iterable:  () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:  () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation: () => reduce$((acc, cur) => acc + cur, 0),
     expected:  10,
     evalFn:    expected => actual => expected === actual,
@@ -21,8 +21,11 @@ addToTestingTable(testSuite)(
   })
 );
 
-testSuite.add("test empty iterator: should return start value", assert => {
+testSuite.add("test empty sequence: should return start value", assert => {
+  // When
   const result = reduce$((cur, acc) => acc + cur, 0)(nil);
+
+  // Then
   assert.is(result , 0);
 });
 

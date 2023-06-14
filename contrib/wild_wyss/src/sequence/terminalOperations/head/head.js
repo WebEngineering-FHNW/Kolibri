@@ -4,17 +4,22 @@ export { head }
 
 /**
  * Return the next value without consuming it.
+ *
  * @function
- * @template _T_
+ * @pure
  * @haskell [a] -> a
- * @pure iterable will not be changed
+ * @template _T_
  * @type {
  *              (iterable: Iterable<_T_>)
  *          =>  _T_
  *       }
+ *
  * @example
- * const it     = Sequence(0, inc, stop);
- * const result = head(it);
+ * const numbers = [1, 2, 3, 4];
+ * const result  = head(numbers);
+ *
+ * console.log(result);
+ * // => Logs '1'
  */
 const head = iterable => {
   const inner = iteratorOf(iterable);

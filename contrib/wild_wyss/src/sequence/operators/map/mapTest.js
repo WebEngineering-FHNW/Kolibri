@@ -4,7 +4,7 @@ import { map }               from "./map.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY,
+  UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: Operation map");
@@ -12,7 +12,7 @@ const testSuite = TestSuite("Sequence: Operation map");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "map",
-    iterable:   () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation:  mapper => map(mapper),
     param:      el => 2 * el,
     expected:   [0, 2, 4, 6, 8],

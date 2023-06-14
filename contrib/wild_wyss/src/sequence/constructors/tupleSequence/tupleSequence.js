@@ -11,6 +11,7 @@ export { TupleSequence }
  * @template _T_
  * @param  { (f:ArrayApplierType<_T_>) => any } tuple
  * @returns { SequenceType<_T_> }
+ *
  * @example
  * const [Triple]      = Tuple(3);
  * const triple        = Triple(1)(2)(3);

@@ -5,15 +5,15 @@ import { nil }                      from "../../constructors/nil/nil.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY
+  UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: terminal Operations head");
+const testSuite = TestSuite("Sequence: terminal operation head");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:      "head",
-    iterable:  () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:  () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation: () => head,
     evalFn:    expected => actual => expected === actual,
     expected:  0,
@@ -21,6 +21,6 @@ addToTestingTable(testSuite)(
   })
 );
 
-testSuite.add("test advanced case: head of empty iterator", assert => assert.is(head(nil), undefined));
+testSuite.add("test advanced case: head of empty sequence", assert => assert.is(head(nil), undefined));
 
 testSuite.run();

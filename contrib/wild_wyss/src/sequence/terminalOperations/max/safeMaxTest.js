@@ -1,24 +1,19 @@
-import { addToTestingTable, TESTS } from "../../util/testingTable.js";
-import { TestSuite }                from "../../../test/test.js";
-import { Just }                     from "../../../stdlib/maybe.js";
-import {
-  PureSequence,
-  replicate,
-  safeMax$,
-  nil
-} from "../../sequence.js";
+import { addToTestingTable, TESTS }             from "../../util/testingTable.js";
+import { TestSuite }                            from "../../../test/test.js";
+import { Just }                                 from "../../../stdlib/maybe.js";
+import {PureSequence, replicate, safeMax$, nil} from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY
+  UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: terminal Operations safeMax$");
+const testSuite = TestSuite("Sequence: terminal operation safeMax$");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:      "safeMax$",
-    iterable:  () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:  () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation: () => safeMax$,
     expected:  Just(4),
     evalFn:    expected => actual => {
@@ -37,7 +32,7 @@ addToTestingTable(testSuite)(
 
 testSuite.add("test single element: should return the only element ", assert => {
   // Given
-  const single = PureSequence(1);
+  const single   = PureSequence(1);
 
   // When
   const maybeMax = safeMax$(single);
@@ -48,7 +43,7 @@ testSuite.add("test single element: should return the only element ", assert => 
     (x => assert.is(x, 1));
 });
 
-testSuite.add("test empty iterator: should return Nothing", assert => {
+testSuite.add("test empty sequence: should return Nothing", assert => {
   // When
   const maybeMax = safeMax$(nil);
 
@@ -60,7 +55,7 @@ testSuite.add("test empty iterator: should return Nothing", assert => {
 
 testSuite.add("test comparator on strings: should return the longest string", assert => {
   // Given
-  const strings = ["a", "b", "aa", "bb"];
+  const strings  = ["a", "b", "aa", "bb"];
 
   // When
   const maybeMax = safeMax$(strings, (a, b) => a.length < b.length);
@@ -71,12 +66,12 @@ testSuite.add("test comparator on strings: should return the longest string", as
     (x => assert.is(x, "aa"));
 });
 
-testSuite.add("test largest element at the end of the iterator", assert => {
+testSuite.add("test largest element at the end of the iterable", assert => {
   // Given
-  const iterator = [4,3,2,5,1,0,9];
+  const sequence = [4,3,2,5,1,0,9];
 
   // When
-  const maybeMax   = safeMax$(iterator);
+  const maybeMax = safeMax$(sequence);
 
   // Then
   maybeMax
@@ -84,12 +79,12 @@ testSuite.add("test largest element at the end of the iterator", assert => {
     (x => assert.is(x, 9));
 });
 
-testSuite.add("test largest element at the start of the iterator", assert => {
+testSuite.add("test largest element at the start of the iterable", assert => {
   // Given
-  const iterator = [9,4,3,2,5,1,0];
+  const sequence = [9,4,3,2,5,1,0];
 
   // When
-  const maybeMax   = safeMax$(iterator);
+  const maybeMax = safeMax$(sequence);
 
   // Then
   maybeMax
@@ -99,7 +94,7 @@ testSuite.add("test largest element at the start of the iterator", assert => {
 
 testSuite.add("test multiple of equal values", assert => {
   // Given
-  const values = replicate(4)(7);
+  const values   = replicate(4)(7);
 
   // When
   const maybeMax = safeMax$(values);

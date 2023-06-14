@@ -8,7 +8,7 @@ import {
   TESTS
 } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Sequence: Constructor PrimeNumberSequence");
+const testSuite = TestSuite("Sequence: constructor PrimeNumberSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({

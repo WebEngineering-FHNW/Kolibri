@@ -3,7 +3,7 @@ import { createTestConfig }         from "../../util/testUtil.js";
 import { nil }                      from "./nil.js";
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Sequence: Constructor nil");
+const testSuite = TestSuite("Sequence: constructor nil");
 
 addToTestingTable(testSuite)(
   createTestConfig({

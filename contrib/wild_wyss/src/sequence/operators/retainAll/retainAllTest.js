@@ -4,7 +4,7 @@ import { retainAll, nil }    from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY,
+  UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: Operation retainAll");
@@ -12,7 +12,7 @@ const testSuite = TestSuite("Sequence: Operation retainAll");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "retainAll",
-    iterable:   () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation:  retainAll,
     param:      el => el % 2 === 0,
     expected:   [0, 2, 4],

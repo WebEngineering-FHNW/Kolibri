@@ -4,7 +4,7 @@ import { arrayEq }                from "../../../../../../docs/src/kolibri/util/
 import { FibonacciSequence, take } from "../../sequence.js";
 import {addToTestingTable, TESTS} from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Sequence: Constructor FibonacciSequence");
+const testSuite = TestSuite("Sequence: constructor FibonacciSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({

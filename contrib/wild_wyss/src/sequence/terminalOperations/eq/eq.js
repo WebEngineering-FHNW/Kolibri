@@ -5,19 +5,25 @@ export { eq$ }
 /**
  * Checks the equality of two non-infinite {@link Iterable iterables}.
  *
- * _Note_: Two iterators are considered as equal if they contain or create the exactly same values in the same order.
+ * _Note_: Two iterables are considered as equal if they contain or create the exactly same values in the same order.
+ * @see Use ["=="] defined on the {@link SequencePrototype} to perform a comparison in a more readable form.
+ *
  * @function
- * @pure it1 and it2 will not be changed
+ * @pure
+ * @haskell (==) :: Eq a => a -> a -> Bool
  * @template _T_
  * @type {
  *             (it1: Iterable<_T_>)
  *          => (it2: Iterable<_T_>)
  *          => Boolean
  *       }
+ *
  * @example
- * const it1    = Sequence(0, inc, stop);
- * const it2    = Sequence(0, inc, stop);
- * const result = eq$(it1)(it2);
+ * const numbers = [0, 1, 2, 3];
+ * const range   = Range(3);
+ * const result  = eq$(numbers)(range);
+ *
+ * console.log(result);
+ * // => Logs 'true'
  */
-const eq$ = it1 => it2 =>
-  arrayEq([...it1])([...it2]);
+const eq$ = it1 => it2 => arrayEq([...it1])([...it2]);

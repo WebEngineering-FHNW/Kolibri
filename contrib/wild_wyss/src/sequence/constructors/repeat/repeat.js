@@ -12,6 +12,7 @@ export { repeat }
  * @template _T_
  * @param { _T_ } arg
  * @return { SequenceType<_T_> }
+ *
  * @example
  * const ones   = repeat(1);
  * const result = take(3)(ones);

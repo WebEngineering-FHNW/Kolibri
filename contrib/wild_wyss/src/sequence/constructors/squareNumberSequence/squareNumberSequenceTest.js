@@ -7,7 +7,7 @@ import {
   TESTS
 } from "../../util/testingTable.js";
 
-const testSuite = TestSuite("Sequence: Constructor SquareNumberSequence");
+const testSuite = TestSuite("Sequence: constructor SquareNumberSequence");
 
 addToTestingTable(testSuite)(
   createTestConfig({

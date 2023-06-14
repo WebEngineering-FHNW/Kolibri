@@ -4,7 +4,7 @@ import { takeWhile, nil }    from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY,
+  UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: Operation takeWhile");
@@ -12,7 +12,7 @@ const testSuite = TestSuite("Sequence: Operation takeWhile");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "takeWhile",
-    iterable:   () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation:  takeWhile,
     param:      el => el < 2,
     expected:   [0, 1],
@@ -25,7 +25,7 @@ addToTestingTable(testSuite)(
 
 testSuite.add("test advanced case: takeWhile inner iterator is shorter", assert => {
   // Given
-  const iterator = newSequence(UPPER_ITERATOR_BOUNDARY);
+  const iterator = newSequence(UPPER_SEQUENCE_BOUNDARY);
 
   // When
   // take all elements

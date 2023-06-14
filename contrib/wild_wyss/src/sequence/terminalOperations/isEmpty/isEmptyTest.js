@@ -5,15 +5,15 @@ import { isEmpty }                  from "./isEmpty.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY
+  UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: terminal Operations isEmpty");
+const testSuite = TestSuite("Sequence: terminal operation isEmpty");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:      "isEmpty",
-    iterable:  () => take(0)(newSequence(UPPER_ITERATOR_BOUNDARY)),
+    iterable:  () => take(0)(newSequence(UPPER_SEQUENCE_BOUNDARY)),
     operation: () => isEmpty,
     evalFn:    expected => actual => expected === actual,
     expected:  true,
@@ -21,12 +21,12 @@ addToTestingTable(testSuite)(
   })
 );
 
-testSuite.add("test typical case: isEmpty ist not empty", assert => {
+testSuite.add("test typical case: isEmpty should return false", assert => {
   // Given
-  const iterator = newSequence(4);
+  const sequence = [1,2,3];
 
   // When
-  const result   = isEmpty(iterator);
+  const result   = isEmpty(sequence);
 
   // Then
   assert.is(result, false);

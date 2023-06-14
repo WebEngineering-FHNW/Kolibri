@@ -5,7 +5,7 @@ import { snd  }              from "../../../../../../docs/src/kolibri/stdlib.js"
 import {
   createTestConfig ,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY,
+  UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: Operation cons");
@@ -13,7 +13,7 @@ const testSuite = TestSuite("Sequence: Operation cons");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "cons",
-    iterable:   () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation:  cons,
     param:      2,
     expected:   [2, 0, 1, 2, 3, 4],

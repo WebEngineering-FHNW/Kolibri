@@ -1,19 +1,22 @@
-import { head } from "../head/head.js";
+import { iteratorOf } from "../../util/util.js";
 
 export { isEmpty }
 
-// TODO: this implementation does not seem to be correct. an iterator could contain elements after an undefined head. Maybe it would be better to check for the done property
 /**
- * Returns true, if the iterators head is undefined.
+ * Returns true, if the iterables head is undefined.
  * @function
+ * @pure
  * @template _T_
- * @pure iterator will be copied defensively
  * @type {
- *            (iterator: Iterable<_T_>)
+ *            (iterable: Iterable<_T_>)
  *         => Boolean
  *       }
+ *
  * @example
- * const it     = Sequence(0, inc, stop);
- * const result = isEmpty(it);
+ * const empty     = []
+ * const result = isEmpty(empty);
+ *
+ * console.log(result);
+ * // Logs 'true'
  */
-const isEmpty = iterator => head(iterator) === undefined;
+const isEmpty = iterable => iteratorOf(iterable).next().done;

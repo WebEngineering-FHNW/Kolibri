@@ -7,16 +7,16 @@ import { arrayEq }                  from "../../../../../../docs/src/kolibri/uti
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY
+  UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: terminal Operations uncons");
+const testSuite = TestSuite("Sequence: terminal operations uncons");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:      "uncons",
-    iterable:  () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:  () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation: () => uncons,
-    expected:  Pair(0)(Range(1, UPPER_ITERATOR_BOUNDARY)),
+    expected:  Pair(0)(Range(1, UPPER_SEQUENCE_BOUNDARY)),
     evalFn:    expected => actual =>
       expected(fst) === actual(fst) &&
       arrayEq([...expected(snd)])([...actual(snd)]),
@@ -26,16 +26,5 @@ addToTestingTable(testSuite)(
     ]
   })
 );
-
-// TODO: test empty iterator
-testSuite.add("test purity forEach$", assert => {
-  // Given
-
-  // When
-
-  // Then
-  //assert.iterableEq(elements, expected);
-});
-
 
 testSuite.run();

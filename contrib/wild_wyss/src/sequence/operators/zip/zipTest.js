@@ -5,7 +5,7 @@ import { zip, nil }          from "../../sequence.js"
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY,
+  UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: Operation zip");
@@ -13,9 +13,9 @@ const testSuite = TestSuite("Sequence: Operation zip");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "zip",
-    iterable:   () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation:  zip,
-    param:      newSequence(UPPER_ITERATOR_BOUNDARY),
+    param:      newSequence(UPPER_SEQUENCE_BOUNDARY),
     expected:   [Pair(0)(0), Pair(1)(1), Pair(2)(2), Pair(3)(3), Pair(4)(4)],
     evalFn:     expected => actual => {
       const expectedArray = [...expected];
@@ -35,7 +35,7 @@ addToTestingTable(testSuite)(
 );
 
 testSuite.add("test advanced case: zip one iterator is shorter", assert => {
-  const it1 = newSequence(UPPER_ITERATOR_BOUNDARY);
+  const it1 = newSequence(UPPER_SEQUENCE_BOUNDARY);
   const it2 = newSequence(2);
   const zipped1 = zip(it2)(it1); // first iterator is shorter
   const zipped2 = zip(it1)(it2); // second iterator is shorter

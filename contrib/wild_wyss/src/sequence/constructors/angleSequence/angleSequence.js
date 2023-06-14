@@ -10,6 +10,7 @@ export { AngleSequence }
  * @pure
  * @param { Number } count - the number of angles to create.
  * @returns { SequenceType<Number> }
+ *
  * @example
  * const angles = AngleSequence(4);
  * console.log(...angles);

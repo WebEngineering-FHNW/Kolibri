@@ -4,7 +4,7 @@ import { rejectAll, nil }    from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY,
+  UPPER_SEQUENCE_BOUNDARY,
 } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: Operation rejectAll");
@@ -12,7 +12,7 @@ const testSuite = TestSuite("Sequence: Operation rejectAll");
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "rejectAll",
-    iterable:   () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation:  rejectAll,
     param:      el => el % 2 === 0,
     expected:   [1, 3],

@@ -8,6 +8,7 @@ export { SquareNumberSequence }
  * @constructor
  * @pure
  * @return {SequenceType<Number>}
+ *
  * @example
  * const squares = SquareNumberSequence();
  * const result  = take(5)(squares);

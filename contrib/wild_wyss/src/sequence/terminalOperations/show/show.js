@@ -5,11 +5,19 @@ export { show }
 /**
  * Transforms the passed {@link Iterable} to a {@link String}.
  *
+ * @function
+ * @pure
  * @template _T_
- * @pure the passed iterable will not be changed.
  * @param { Iterable<_T_> } iterable
  * @param { number }        [maxValues=50] - the amount of elements that should be printed at most
  * @returns { String }
+ *
+ * @example
+ * const numbers = [0, 1, 2, 3, 4, 5];
+ * const text    = show(numbers, 3);
+ *
+ * console.log(text);
+ * // Logs '[0,1,2]'
  */
 const show = (iterable, maxValues = 50) =>
   "[" +

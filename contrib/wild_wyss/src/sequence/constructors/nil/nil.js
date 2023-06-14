@@ -10,6 +10,7 @@ export { nil }
  * @haskell []
  * @template _T_
  * @type { SequenceType<_T_> }
+ *
  * @example
  * const emptySequence = nil;
  *

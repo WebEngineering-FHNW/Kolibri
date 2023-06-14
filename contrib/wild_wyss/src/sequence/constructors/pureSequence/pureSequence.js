@@ -11,6 +11,7 @@ export { PureSequence }
  * @template _T_
  * @param { _T_ } value
  * @returns { SequenceType<_T_> }
+ *
  * @example
  * const it = PureSequence(1);
  *

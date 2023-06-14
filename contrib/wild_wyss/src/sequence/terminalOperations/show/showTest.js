@@ -6,15 +6,15 @@ import { nil }                      from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
-  UPPER_ITERATOR_BOUNDARY
+  UPPER_SEQUENCE_BOUNDARY
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: terminal Operations show");
+const testSuite = TestSuite("Sequence: terminal operation show");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:      "show",
-    iterable:  () => newSequence(UPPER_ITERATOR_BOUNDARY),
+    iterable:  () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation: () => show,
     evalFn:    expected => actual => expected === actual,
     expected:  "[0,1,2,3,4]",
@@ -35,10 +35,10 @@ testSuite.add("test boundary value", assert => {
 
 testSuite.add("test given output length", assert => {
   // Given
-  const it     = Range(100);
+  const range  = Range(100);
 
   // When
-  const result = show(it, 2);
+  const result = show(range, 2);
 
   // Then
   assert.is(result, "[0,1]");
@@ -46,22 +46,22 @@ testSuite.add("test given output length", assert => {
 
 testSuite.add("test equality of show and toString", assert => {
   // Given
-  const it     = Range(10);
+  const range  = Range(10);
 
   // When
-  const result = show(it);
+  const result = show(range);
 
   // Then
-  assert.is(result, it.toString());
+  assert.is(result, range.toString());
 });
 
 
 testSuite.add("test exceed default output length (50)", assert => {
   // Given
-  const it     = Range(100);
+  const range  = Range(100);
 
   // When
-  const result = show(it);
+  const result = show(range);
   /**
    * 2  [braces]
    * 49 [commas]
@@ -74,18 +74,18 @@ testSuite.add("test exceed default output length (50)", assert => {
   assert.is(result.length, outputLength);
 });
 
-testSuite.add("test show of an iterator of iterators", assert => {
+testSuite.add("test show of an iterable of iterables", assert => {
   // Given
-  const it     = [Range(1), Range(2), Range(3)];
+  const ranges = [Range(1), Range(2), Range(3)];
 
   // When
-  const result = show(it);
+  const result = show(ranges);
 
   // Then
   assert.is(result, "[[0,1],[0,1,2],[0,1,2,3]]");
 });
 
-testSuite.add("test show of an empty iterator", assert => {
+testSuite.add("test show of an empty iterable", assert => {
   // When
   const result = show(nil);
 

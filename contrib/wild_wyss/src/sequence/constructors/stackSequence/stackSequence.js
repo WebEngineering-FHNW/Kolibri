@@ -13,6 +13,7 @@ export { StackSequence }
  * @template _T_
  * @param { stack } stack
  * @returns SequenceType<_T_>
+ *
  * @example
  * const stack         = push(push(push(emptyStack)(1))(2))(3);
  * const stackSequence = StackSequence(stack);

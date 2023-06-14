@@ -2,21 +2,23 @@ export { foldl$, reduce$ }
 
 /**
  * Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
+ * @see {@link foldl$} is an alias reduce$
  *
- * _Note:_
- * foldl$ is an alias reduce$
  * @function
- * @pure iterator will be copied defensively
+ * @pure
  * @haskell foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
- * @type {<_T_, _U_>
+ * @type { <_T_, _U_>
  *             (accumulationFn: BiFunction<_T_, _U_, _T_>, start: _T_)
- *          => (iterator: Iterable<_T_>)
+ *          => (iterable: Iterable<_T_>)
  *          => _T_
  *       }
+ *
  * @example
- * const res = foldl$((acc, cur) => acc + cur, 0)(Range(5));
+ * const number = [0, 1, 2, 3, 4, 5];
+ * const res = foldl$((acc, cur) => acc + cur, 0)(numbers);
+ *
  * console.log(res);
- * // => logs 15 to the console
+ * // => logs '15'
  */
 const reduce$ = (accumulationFn, start) => iterable => {
   let accumulator = start;
@@ -26,6 +28,5 @@ const reduce$ = (accumulationFn, start) => iterable => {
 
   return accumulator;
 };
-
 
 const foldl$ = reduce$;
