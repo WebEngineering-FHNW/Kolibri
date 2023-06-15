@@ -23,7 +23,7 @@ addToTestingTable(testSuite)(
 
 testSuite.add("test special case: no increment after done", assert => {
   // Given
-  let result = true;
+  let result     = true;
   const sequence = Sequence(true, _ => false, _ => result = false);
 
   // When

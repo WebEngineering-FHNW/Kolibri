@@ -1,27 +1,22 @@
-import { createMonadicSequence, isIterable } from "../../util/util.js";
-import { bind }                              from "../../operators/bind/bind.js";
-import { map }                               from "../../operators/map/map.js"
-import { PureSequence }                      from "../pureSequence/pureSequence.js";
-import { show }                              from "../../terminalOperations/show/show.js";
-import { eq$ }                               from "../../terminalOperations/eq/eq.js";
+import { createMonadicSequence, isIterable }  from "../../util/util.js";
+import { bind, map, PureSequence, show, eq$ } from "../../sequence.js"
 
 export { Sequence, SequencePrototype }
 
 /**
- * The `incrementFunction` should change the value (make progress) in a way
- * that the `untilFunction` function can recognize the end of the sequence.
+ * The `incrementFunction` should change the value (make progress) in a way that the `untilFunction` function can
+ * recognize the end of the sequence.
  *
  * Contract:
- * - `incrementFunction` & `untilFunction` should not refer to any mutable
- *   state variable (because of side effect) in the closure.
- * - Functions ending with a "$" must not be applied to infinite {@link Iterable Iterables}.
+ * - `incrementFunction` & `untilFunction` should not refer to any mutable state variable (because of side effect) in
+ *   the closure.
  *
  * @constructor
  * @pure if `untilFunction` & `incrementFunction` are pure
  * @template _T_
- * @param   { _T_ }               start
- * @param   { (_T_) => Boolean }  untilFunction - returns true if the iteration should stop
- * @param   { (_T_) => _T_ }      incrementFunction
+ * @param   { _T_ }               start             - the first value to be returned by this sequence
+ * @param   { (_T_) => Boolean }  untilFunction     - returns false if the iteration should stop
+ * @param   { (_T_) => _T_ }      incrementFunction - calculates the next value based on the previous
  * @returns { SequenceType<_T_> }
  *
  * @example
@@ -31,7 +26,7 @@ export { Sequence, SequencePrototype }
  * const sequence   = Sequence(start, untilF, incrementF);
  *
  * console.log(...sequence);
- * // Logs '0, 1, 2'
+ * // => Logs '0, 1, 2'
  */
 
 const Sequence = (start, untilFunction, incrementFunction) => {
