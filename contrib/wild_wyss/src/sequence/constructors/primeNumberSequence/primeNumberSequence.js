@@ -42,7 +42,7 @@ const PrimeNumberSequence = () => {
   const patternForPrime = prime => pipe(
     map(x => x === prime ? Just(prime) : Nothing),
     cycle
-  )(Sequence(1, i => i > prime, i => i + 1));
+  )(Sequence(1, i => i <= prime, i => i + 1));
 
   const primeNumberIterator = () => {
     let prevPrimesIterator  = iteratorOf(cycle([Nothing]));

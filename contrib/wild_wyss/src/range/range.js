@@ -56,7 +56,7 @@ const sort = (a, b) => {
  * @returns  { boolean }
  */
 const hasReachedEnd = (stepIsNegative, next, end) =>
-    stepIsNegative ? next < end : next > end;
+    stepIsNegative ? next >= end : next <= end;
 
 /**
  * Make sure, that the left and right values

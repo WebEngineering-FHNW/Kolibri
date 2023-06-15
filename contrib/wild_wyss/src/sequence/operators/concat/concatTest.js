@@ -8,7 +8,7 @@ import {
   newSequence,
 } from "../../util/testUtil.js";
 
-const testSuite = TestSuite("Sequence: Operation concat");
+const testSuite = TestSuite("Sequence: operation concat");
 
 addToTestingTable(testSuite)(
   createTestConfig({
@@ -55,8 +55,8 @@ testSuite.add("test concat with infinity: concat", assert => {
   let called  = false;
   let counter = 0;
 
-  const endless                = Sequence(0, _ => false, i => i + 1);
-  const iterableWithSideEffect = Sequence(false, _ => false, _ => called = true);
+  const endless                = Sequence(0, _ => true, i => i + 1);
+  const iterableWithSideEffect = Sequence(false, _ => true, _ => called = true);
   const concatenated           = concat(endless)(iterableWithSideEffect);
 
   // When

@@ -1,11 +1,11 @@
 import "./angleSequence/angleSequenceTest.js";
-import "./sequence/sequenceTest.js";
+import "./fibonacciSequence/fibonacciSequenceTest.js";
 import "./nil/nilTest.js";
 import "./primeNumberSequence/primeNumberSequenceTest.js";
 import "./pureSequence/pureSequenceTest.js";
 import "./repeat/repeatTest.js";
 import "./replicate/replicateTest.js";
+import "./sequence/sequenceTest.js";
 import "./squareNumberSequence/squareNumberSequenceTest.js";
 import "./stackSequence/stackSequenceTest.js";
 import "./tupleSequence/tupleSequenceTest.js";
-import "./fibonacciSequence/fibonacciSequenceTest.js";

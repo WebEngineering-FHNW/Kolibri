@@ -19,7 +19,7 @@ export { SquareNumberSequence }
 const SquareNumberSequence = () => {
 
   const squareNumberIterator = () => {
-    const odds  = iteratorOf(Sequence(1, _ => false, i => i + 2));
+    const odds  = iteratorOf(Sequence(1, _ => true, i => i + 2));
     let prev    = 0;
 
     const next = () => {

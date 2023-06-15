@@ -26,13 +26,14 @@ export { Sequence, SequencePrototype }
  *
  * @example
  * const start      = 0;
- * const untilF     = x => x > 3;
+ * const untilF     = x => x < 3;
  * const incrementF = x => x + 1;
- * const sequence = Sequence(start, untilF, incrementF);
+ * const sequence   = Sequence(start, untilF, incrementF);
  *
  * console.log(...sequence);
- * // Logs '0, 1, 2, 3'
+ * // Logs '0, 1, 2'
  */
+
 const Sequence = (start, untilFunction, incrementFunction) => {
 
   const iterator = () => {
@@ -44,7 +45,7 @@ const Sequence = (start, untilFunction, incrementFunction) => {
      */
     const next = () => {
       const current = value;
-      const done = untilFunction(current);
+      const done = !untilFunction(current);
       if (!done) value = incrementFunction(value);
       return { done, value: current };
     };
@@ -91,7 +92,7 @@ SequencePrototype.pure = val => PureSequence(val);
  * @template _T_
  * @returns SequenceType<_T_>
  */
-SequencePrototype.empty = () => Sequence(undefined, _ => true, _ => undefined);
+SequencePrototype.empty = () => Sequence(undefined, _ => false, _ => undefined);
 
 /**
  *

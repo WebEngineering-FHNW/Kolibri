@@ -1,6 +1,5 @@
 export * from "./sequence/Sequence.js";
 export * from "./tupleSequence/tupleSequence.js";
-export * from "../operators/concat/concat.js";
 export * from "./stackSequence/stackSequence.js";
 export * from "./nil/nil.js";
 export * from "./fibonacciSequence/fibonacciSequence.js";

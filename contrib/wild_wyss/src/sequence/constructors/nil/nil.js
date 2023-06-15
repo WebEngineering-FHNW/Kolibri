@@ -18,4 +18,4 @@ export { nil }
  * // => Logs '' nothing to the console
  */
 const nil =
-  Sequence(undefined, _ => true, _ => undefined);
+  Sequence(undefined, _ => false, _ => undefined);

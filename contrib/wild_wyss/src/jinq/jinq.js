@@ -46,10 +46,10 @@ const inside = monad => f => {
 /**
  * @template _T_, _U_
  * @type {
- *          (monad1: MonadType<_T_>)
- *       => (monad2: MonadType<_U_>)
- *       => JinqType<PairType<_T_,_U_>>
- * }
+ *           (monad1: MonadType<_T_>)
+ *        => (monad2: MonadType<_U_>)
+ *        => JinqType<PairType<_T_,_U_>>
+ *      }
  */
 const pairWith = monad1 => monad2 => {
   const processed = monad1.and(x =>
@@ -60,11 +60,11 @@ const pairWith = monad1 => monad2 => {
 };
 
 /**
- * @type {<_T_>
- *       (monad: MonadType<_T_>)
- *    => (predicate: Predicate<_T_>)
- *    => JinqType<_T_>
- * }
+ * @type { <_T_>
+ *            (monad: MonadType<_T_>)
+ *         => (predicate: Predicate<_T_>)
+ *         => JinqType<_T_>
+ *       }
  */
 const where = monad => predicate => {
   const processed = monad.and(a => predicate(a) ? monad.pure(a) : monad.empty());
@@ -72,11 +72,11 @@ const where = monad => predicate => {
 };
 
 /**
- * @type {<_T_, _U_>
- *       (monad: MonadType<_T_>)
- *    => (selector: Functor<_T_, _U_>)
- *    => JinqType<_U_>
- * }
+ * @type { <_T_, _U_>
+ *           (monad: MonadType<_T_>)
+ *        => (selector: Functor<_T_, _U_>)
+ *        => JinqType<_U_>
+ *       }
  */
 const select = monad => mapper => {
   const processed = monad.fmap(mapper);

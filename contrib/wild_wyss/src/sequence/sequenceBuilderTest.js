@@ -91,8 +91,8 @@ testSuite.add("test infinity: SequenceBuilder", assert => {
   let counter = 0;
 
   // When
-  const endless    = Sequence(false, _ => false, _ => false);
-  const sideEffect = Sequence(false, _ => false, _ => called = true);
+  const endless    = Sequence(false, _ => true, _ => false);
+  const sideEffect = Sequence(false, _ => true, _ => called = true);
   const it = SequenceBuilder()
     .append(endless)
     .append(sideEffect)

@@ -14,7 +14,7 @@ addToTestingTable(testSuite)(
       name:          "bind",
       iterable:      () => newSequence(UPPER_SEQUENCE_BOUNDARY),
       operation:     bind,
-      param:         el => take(2)(Sequence(el.toString(), _ => false, _ => _)),
+      param:         el => take(2)(Sequence(el.toString(), _ => true, _ => _)),
       expected:      ["0", "0", "1", "1", "2", "2", "3", "3", "4", "4"],
       invariants: [
         it => bind(x => PureSequence(x))(it) ["=="] (it)

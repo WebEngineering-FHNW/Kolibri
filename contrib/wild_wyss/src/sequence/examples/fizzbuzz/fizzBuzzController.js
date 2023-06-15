@@ -32,7 +32,7 @@ const FizzBuzzController = () => {
     model.addRule(rule);
   };
 
-  const infiniteNumbers = _.Sequence(1, _ => false, i => i + 1);
+  const infiniteNumbers = _.Sequence(1, _ => true, i => i + 1);
 
   const createIterableForRule = rule =>
     _.pipe(
@@ -44,7 +44,7 @@ const FizzBuzzController = () => {
   const buildFizzBuzz = () => {
     const currentRules = model.rulesSnapshot().map(createIterableForRule);
 
-    const baseLine  = _.Sequence("", _ => false, _ => "");
+    const baseLine  = _.Sequence("", _ => true, _ => "");
     const fizzBuzz  = _.pipe(
       _.reduce$((acc, cur) => // reduce to single iterable by combining all iterable values
         _.zipWith((a, b) => a + b)(acc)(cur), // combine all strings

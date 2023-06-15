@@ -20,4 +20,4 @@ export { repeat }
  * console.log(...result);
  * // => Logs '1, 1, 1'
  */
-const repeat = arg => Sequence(arg, _ => false, _ => arg);
+const repeat = arg => Sequence(arg, _ => true, _ => arg);

@@ -1,4 +1,4 @@
-import { total } from "./src/test/test.js";
+import { total }       from "./src/test/test.js";
 import { versionInfo } from "../../docs/src/kolibri/version.js";
 
 // logger
@@ -29,7 +29,6 @@ import "./src/stdlib/pairTest.js";
 // jinq
 import "./src/json/jsonMonadTest.js"
 import "./src/jinq/jinqTest.js";
-import {nil} from "./src/sequence/constructors/nil/nil.js";
 
 total.onChange(value => document.getElementById('grossTotal').textContent = "" + value + " tests done.");
 

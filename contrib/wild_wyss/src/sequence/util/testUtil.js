@@ -67,7 +67,7 @@ const id = x => x;
  * @param { Number } limit
  * @returns { SequenceType<Number> }
  */
-const newSequence = limit => Sequence(0, current => current > limit, current => current + 1);
+const newSequence = limit => Sequence(0, current => current <= limit, current => current + 1);
 const UPPER_SEQUENCE_BOUNDARY = 4;
 
 /**
@@ -132,7 +132,7 @@ const testCBNotCalledAfterDone = config => assert => {
   if (typeof param !== "function") return;
 
   let called = false;
-  const it   = Sequence(0, _ => true, _ => 0);
+  const it   = Sequence(0, _ => false, _ => 0);
 
   const operated = operation(el => {
     // since this iterable is empty, called should never be set to true
