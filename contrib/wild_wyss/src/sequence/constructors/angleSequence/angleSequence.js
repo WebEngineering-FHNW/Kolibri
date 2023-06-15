@@ -8,11 +8,12 @@ export { AngleSequence }
  *
  * @constructor
  * @pure
- * @param { Number } count - the number of angles to create.
+ * @param { Number } count - the amount of angles to create.
  * @returns { SequenceType<Number> }
  *
  * @example
  * const angles = AngleSequence(4);
+ *
  * console.log(...angles);
  * // Logs => '0, 90, 180, 270'
  */
