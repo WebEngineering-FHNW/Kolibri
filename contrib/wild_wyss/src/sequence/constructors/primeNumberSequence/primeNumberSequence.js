@@ -14,11 +14,12 @@ import {
 export { PrimeNumberSequence }
 
 /**
- * Creates a {@link SequenceType} which generates the sequence of prime numbers.
+ * Generates the sequence of prime numbers.
  *
  * @constructor
  * @pure
  * @returns { SequenceType<Number> }
+ *
  * @example
  * const primeNumbers = PrimeNumberSequence();
  * const primes       = take(4)(primeNumbers);

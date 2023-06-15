@@ -6,7 +6,7 @@ import { createMonadicSequence }        from "../../util/util.js";
 export { StackSequence }
 
 /**
- * Creates an {@link SequenceType} on top of the given {@link stack}.
+ * Creates a {@link SequenceType} on top of the given {@link stack}.
  *
  * @constructor
  * @pure

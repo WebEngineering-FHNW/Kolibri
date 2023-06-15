@@ -8,10 +8,10 @@ export { repeat }
  *
  * @constructor
  * @pure
- * @haskell a -> [a]
+ * @haskell repeat :: a -> [a]
  * @template _T_
- * @param { _T_ } arg
- * @return { SequenceType<_T_> }
+ * @param   { _T_ } arg
+ * @returns { SequenceType<_T_> }
  *
  * @example
  * const ones   = repeat(1);

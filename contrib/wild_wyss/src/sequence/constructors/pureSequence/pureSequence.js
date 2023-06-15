@@ -9,7 +9,7 @@ export { PureSequence }
  * @pure
  * @haskell pure :: a -> [a]
  * @template _T_
- * @param { _T_ } value
+ * @param   { _T_ } value
  * @returns { SequenceType<_T_> }
  *
  * @example

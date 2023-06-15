@@ -14,7 +14,7 @@ export { FibonacciSequence }
  * const result           = take(8)(fibonacciNumbers);
  *
  * console.log(...result);
- * // Logs => '1, 1, 2, 3, 5, 8, 13, 21'
+ * // => Logs '1, 1, 2, 3, 5, 8, 13, 21'
  */
 const FibonacciSequence = () => {
 

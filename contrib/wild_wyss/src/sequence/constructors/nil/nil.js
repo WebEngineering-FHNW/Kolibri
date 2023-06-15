@@ -3,7 +3,7 @@ import { Sequence } from "../../sequence.js";
 export { nil }
 
 /**
- * This const represents a sequence with no values in it.
+ * This constant represents a sequence with no values in it.
  *
  * @constructor
  * @pure
@@ -15,7 +15,7 @@ export { nil }
  * const emptySequence = nil;
  *
  * console.log(...emptySequence);
- * // => Logs '' nothing to the console
+ * // => Logs '' (nothing)
  */
 const nil =
   Sequence(undefined, _ => false, _ => undefined);

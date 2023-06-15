@@ -2,12 +2,13 @@ import { Sequence }                          from "../../sequence.js";
 import { createMonadicSequence, iteratorOf } from "../../util/util.js";
 
 export { SquareNumberSequence }
+
 /**
- * Creates a {@link SequenceType} which generates the sequence of square numbers.
+ * Generates the sequence of square numbers.
  *
  * @constructor
  * @pure
- * @return {SequenceType<Number>}
+ * @returns { SequenceType<Number> }
  *
  * @example
  * const squares = SquareNumberSequence();

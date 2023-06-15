@@ -3,7 +3,7 @@ import { take, repeat } from "../../sequence.js";
 export { replicate }
 
 /**
- * `replicate n x` creates a {@link SequenceType} of length `n` with `x` the value of every element.
+ * `replicate(n)(x)` creates a {@link SequenceType} of length `n` with `x` the value of every element.
  *
  * @constructor
  * @pure
