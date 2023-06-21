@@ -13,10 +13,12 @@
  * @template _T_
  * @typedef {
  *            {
- *              and:  <_U_>(bindFn: (_T_) => SequenceType<_U_>) => SequenceType<_U_>,
- *              pure: <_U_>(_U_)             => SequenceType<_U_>,
- *              fmap: <_U_>(f: (_T_) => _U_) => SequenceType<_U_>,
- *              empty: ()                    => SequenceType<_T_>
+ *              and:  <_U_>(bindFn: (_T_)           => SequenceType<_U_>) => SequenceType<_U_>,
+ *              pure: <_U_>(_U_)                    => SequenceType<_U_>,
+ *              fmap: <_U_>(f: (_T_) => _U_)        => SequenceType<_U_>,
+ *              empty:     ()                       => SequenceType<_T_>,
+ *              toString:  ()                       => String,
+ *              "==":      (that:SequenceType<_T_>) => Boolean
  *            } & Iterable<_T_>
  * } SequenceType
  */
