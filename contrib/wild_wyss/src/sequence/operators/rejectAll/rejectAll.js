@@ -17,7 +17,7 @@ export { rejectAll }
  * const numbers = [0, 1, 2, 3, 4, 5];
  *
  * // reject even numbers
- * const filtered = retainAll(el => el % 2 === 0)(numbers);
+ * const filtered = rejectAll(el => el % 2 === 0)(numbers);
  *
  * console.log(...filtered);
  * // => Logs '1, 3, 5'

@@ -5,7 +5,7 @@ export { catMaybes }
 
 /**
  * The catMaybes function takes an {@link Iterable} of {@link MaybeType Maybes}
- * and returns an {@link Iterable} of all the {@link JustXType Just's} values.
+ * and returns an {@link SequenceType} of all the {@link JustXType Just's} values.
  *
  * @function
  * @pure

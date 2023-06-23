@@ -13,9 +13,9 @@ export { PureSequence }
  * @returns { SequenceType<_T_> }
  *
  * @example
- * const it = PureSequence(1);
+ * const seq = PureSequence(1);
  *
- * console.log(...it);
+ * console.log(...seq);
  * // => Logs '1'
  */
 const PureSequence = value => {

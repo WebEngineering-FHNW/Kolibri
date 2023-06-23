@@ -9,7 +9,7 @@ export { show }
  * @pure
  * @template _T_
  * @param { Iterable<_T_> } iterable
- * @param { number }        [maxValues=50] - the amount of elements that should be printed at most
+ * @param { Number }        [maxValues=50] - the amount of elements that should be printed at most
  * @returns { String }
  *
  * @example
