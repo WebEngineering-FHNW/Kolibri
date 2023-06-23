@@ -85,6 +85,8 @@ const testSimple = config => assert => {
 };
 
 /**
+ * Checks, if the result of an {@link Iterable} is the same twice.
+ *
  * @type {
  *             (config: SequenceTestConfigType)
  *          => (assert: AssertType)
