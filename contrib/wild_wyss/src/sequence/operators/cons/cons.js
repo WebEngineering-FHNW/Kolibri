@@ -8,7 +8,7 @@ export { cons }
  * @function
  * @pure
  * @haskell (:) :: a -> [a] -> [a]
- * @template _T_, _U_
+ * @template _T_
  * @type {
  *           (element: _T_)
           => SequenceOperation<_T_>

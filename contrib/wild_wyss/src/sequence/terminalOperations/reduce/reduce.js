@@ -2,7 +2,7 @@ export { foldl$, reduce$ }
 
 /**
  * Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
- * @see {@link foldl$} is an alias reduce$
+ * @see {@link foldl$} is an alias for reduce$
  *
  * @function
  * @pure

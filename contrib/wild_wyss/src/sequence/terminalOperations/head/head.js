@@ -3,7 +3,7 @@ import { iteratorOf } from "../../util/util.js";
 export { head }
 
 /**
- * Return the next value without consuming it.
+ * Return the next value without consuming it. `undefined` when there is no value.
  *
  * @function
  * @pure

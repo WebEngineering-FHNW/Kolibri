@@ -5,13 +5,14 @@ export { uncons }
 
 /**
  * Removes the first element of this iterable.
+ * The head and the tail of the iterable are returned then
  *
  * @function
  * @pure
  * @haskell [a] -> (a, [a])
  * @template _T_
  * @param   { Iterable<_T_> } iterable
- * @returns { (s: PairSelectorType) => (_T_ |Iterable<_T_>) }
+ * @returns { (s: PairSelectorType) => (_T_ |Iterable<_T_>) } - the head and the tail as a pair
  *
  * @example
  * const numbers       = [0, 1, 2, 3, 4];

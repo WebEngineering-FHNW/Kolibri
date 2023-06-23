@@ -3,7 +3,7 @@ import { map, mconcat } from "../../sequence.js";
 export { bind }
 
 /**
- * Applies the given function to each element of the {@link SequenceType} and flats it afterward.
+ * Applies the given function to each element of the {@link Iterable} and flats it afterward.
  * @Note This operation adds a monadic API to the {@link SequenceType}.
  *
  * @function
@@ -11,8 +11,8 @@ export { bind }
  * @haskell (>>=) :: m a -> (a -> m b) -> m b
  * @template _T_
  * @type {
- *          <_U_>(bindFn: (_T_) => SequenceType<_U_>)
- *          => (it: SequenceType<_T_>)
+ *          <_U_>(bindFn: (_T_) => Iterable<_U_>)
+ *          => (it: Iterable<_T_>)
  *          => SequenceType<_U_>
  *       }
  *
