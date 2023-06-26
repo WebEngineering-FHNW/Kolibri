@@ -9,3 +9,4 @@ export * from "./primeNumberSequence/primeNumberSequence.js";
 export * from "./pureSequence/pureSequence.js";
 export * from "./replicate/replicate.js";
 export * from "./repeat/repeat.js";
+export * from "./range/range.js";

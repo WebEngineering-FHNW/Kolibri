@@ -1,8 +1,11 @@
-import * as _                               from "../../sequence.js";
-import { Range }                            from "../../../range/range.js";
-import { dom }                              from "../../../../../../docs/src/kolibri/util/dom.js";
-import { sequenceProjector }                from "../../projector/sequenceProjector.js";
-import { AngleSequence, FibonacciSequence } from "../../sequence.js";
+import * as _                from "../../sequence.js";
+import { dom }               from "../../../../../../docs/src/kolibri/util/dom.js";
+import { sequenceProjector } from "../../projector/sequenceProjector.js";
+import {
+  AngleSequence,
+  FibonacciSequence,
+  Range,
+} from "../../sequence.js";
 
 const fibonacciView = (rootElement, amount, scaleFactor) => {
   const fibSequence = _.take(amount)(FibonacciSequence());

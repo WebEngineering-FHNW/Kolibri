@@ -9,3 +9,4 @@ import "./sequence/sequenceTest.js";
 import "./squareNumberSequence/squareNumberSequenceTest.js";
 import "./stackSequence/stackSequenceTest.js";
 import "./tupleSequence/tupleSequenceTest.js";
+import "./range/rangeTest.js";

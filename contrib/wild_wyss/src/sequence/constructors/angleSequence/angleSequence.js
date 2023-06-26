@@ -1,5 +1,4 @@
-import { take }  from "../../sequence.js";
-import { Range } from "../../../range/range.js";
+import { take, Range }  from "../../sequence.js";
 
 export { AngleSequence }
 

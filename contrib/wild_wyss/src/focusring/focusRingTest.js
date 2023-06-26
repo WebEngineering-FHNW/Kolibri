@@ -1,6 +1,6 @@
 import { TestSuite } from "../test/test.js";
 import { FocusRing } from "./focusRing.js";
-import { Range }     from "../range/range.js";
+import { Range }     from "../sequence/sequence.js";
 
 const focusRingSuite = TestSuite("FocusRing");
 

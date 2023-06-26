@@ -15,9 +15,6 @@ import "./src/sequence/operators/operatorsTest.js";
 import "./src/sequence/terminalOperations/terminalOperationsTest.js";
 import "./src/sequence/sequenceBuilderTest.js";
 
-// range
-import "./src/range/rangeTest.js";
-
 // focus ring
 import "./src/focusring/focusRingTest.js";
 
