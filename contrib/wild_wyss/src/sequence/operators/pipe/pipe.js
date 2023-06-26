@@ -11,7 +11,7 @@ export { pipe }
  * @type  { <_T_>
  *            (...transformers: SequenceOperation<*,*> )
  *            => (iterable: Iterable<_T_>)
- *            => (SequenceType<_T_> | *)
+ *            => (SequenceType<*> | *)
  *        }
  *
  * @example

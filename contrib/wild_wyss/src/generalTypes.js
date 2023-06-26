@@ -67,3 +67,13 @@
  * @param   { _B_ } value2
  * @returns { boolean }
  */
+
+/**
+ * Defines a Monad.
+ * @template  _T_
+ * @typedef  MonadType
+ * @property { <_U_> (bindFn: (_T_) => MonadType<_U_>) => MonadType<_U_> } and
+ * @property { <_U_> (f:      (_T_) => _U_)            => MonadType<_U_> } fmap
+ * @property {       (_T_)                             => MonadType<_T_> } pure
+ * @property {       ()                                => MonadType<_T_> } empty
+ */

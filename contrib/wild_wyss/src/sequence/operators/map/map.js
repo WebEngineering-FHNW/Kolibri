@@ -12,7 +12,7 @@ export { map }
  * @template _U_
  * @type {
  *            (mapper: Functor<_U_, _T_>)
- *         => SequenceOperation<_T_>
+ *         => SequenceOperation<_U_, _T_>
  *       }
  *
  * @example

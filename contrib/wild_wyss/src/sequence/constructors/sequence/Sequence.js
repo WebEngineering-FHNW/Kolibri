@@ -1,5 +1,5 @@
-import { createMonadicSequence, isIterable }  from "../../util/util.js";
-import { bind, map, PureSequence, show, eq$ } from "../../sequence.js"
+import { createMonadicSequence, isIterable }        from "../../util/util.js";
+import { bind, map, PureSequence, show, eq$, pipe } from "../../sequence.js"
 
 export { Sequence, SequencePrototype }
 
@@ -95,6 +95,14 @@ SequencePrototype.empty = () => Sequence(undefined, _ => false, _ => undefined);
  */
 SequencePrototype.toString = function () {
   return show(this);
+};
+
+/**
+ * @param {...SequenceOperation<*,*> } transformers
+ * @return { SequenceType<*> | * }
+ */
+SequencePrototype.pipe = function(...transformers) {
+  return pipe(...transformers)(this);
 };
 
 /**

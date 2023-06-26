@@ -13,15 +13,17 @@
  * @template _T_
  * @typedef {
  *            {
- *              and:  <_U_>(bindFn: (_T_)           => SequenceType<_U_>) => SequenceType<_U_>,
- *              pure: <_U_>(_U_)                    => SequenceType<_U_>,
- *              fmap: <_U_>(f: (_T_) => _U_)        => SequenceType<_U_>,
- *              empty:     ()                       => SequenceType<_T_>,
- *              toString:  ()                       => String,
- *              "==":      (that:SequenceType<_T_>) => Boolean
+ *              and:  <_U_>(bindFn: (_T_) => SequenceType<_U_>)   => SequenceType<_U_>,
+ *              fmap: <_U_>(f: (_T_)      => _U_)                 => SequenceType<_U_>,
+ *              pure: <_U_>(_U_)                                  => SequenceType<_U_>,
+ *              empty:     ()                                     => SequenceType<_T_>,
+ *              pipe:      function(...transformers: SequenceOperation<*,*>): SequenceType<*> | *,
+ *              toString:  ()                                     => String,
+ *              "==":      (that: SequenceType<_T_>)              => Boolean
  *            } & Iterable<_T_>
  * } SequenceType
  */
+
 /**
  * @template _T_
  * @typedef SequenceBuilderType
@@ -61,15 +63,4 @@
  * @callback InsertIntoBuilder
  * @param   { ...(_T_ | Iterable<_T_>) } args
  * @returns SequenceBuilderType<_T_>
- */
-
-
-/**
- * Defines a Monad.
- * @template  _T_
- * @typedef  MonadType
- * @property { <_U_> (bindFn: (_T_) => MonadType<_U_>) => MonadType<_U_> } and
- * @property { <_U_> (f:      (_T_) => _U_)            => MonadType<_U_> } fmap
- * @property {       (_T_)                             => MonadType<_T_> } pure
- * @property {       ()                                => MonadType<_T_> } empty
  */
