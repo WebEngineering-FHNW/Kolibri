@@ -1,8 +1,7 @@
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { TestSuite }                from "../../../test/test.js";
 import { show }                     from "./show.js";
-import { Range }                    from "../../../range/range.js";
-import { nil }                      from "../../sequence.js";
+import { nil, Range }               from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,

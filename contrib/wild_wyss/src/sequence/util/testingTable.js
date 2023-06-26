@@ -41,14 +41,14 @@ const TESTS = {
   TEST_ITERATE_MULTIPLE_TIMES:   'TEST_ITERATE_MULTIPLE_TIMES',
 };
 
-
-const testingFunctions = [];
-testingFunctions.push({ name: TESTS.TEST_SIMPLE                  , test: testSimple});
-testingFunctions.push({ name: TESTS.TEST_PURITY                  , test: testPurity});
-testingFunctions.push({ name: TESTS.TEST_CB_NOT_CALLED_AFTER_DONE, test: testCBNotCalledAfterDone});
-testingFunctions.push({ name: TESTS.TEST_PROTOTYPE               , test: testPrototype});
-testingFunctions.push({ name: TESTS.TEST_INVARIANTS              , test: testInvariants});
-testingFunctions.push({ name: TESTS.TEST_ITERATE_MULTIPLE_TIMES  , test: testIterateMultipleTimes});
+const testingTable = [
+  { name: TESTS.TEST_SIMPLE,                   test: testSimple},
+  { name: TESTS.TEST_PURITY,                   test: testPurity},
+  { name: TESTS.TEST_CB_NOT_CALLED_AFTER_DONE, test: testCBNotCalledAfterDone},
+  { name: TESTS.TEST_PROTOTYPE,                test: testPrototype},
+  { name: TESTS.TEST_INVARIANTS,               test: testInvariants},
+  { name: TESTS.TEST_ITERATE_MULTIPLE_TIMES,   test: testIterateMultipleTimes},
+];
 
 /**
  * @type {
@@ -60,7 +60,7 @@ testingFunctions.push({ name: TESTS.TEST_ITERATE_MULTIPLE_TIMES  , test: testIte
 const addToTestingTable = testSuite => config => {
   const { excludedTests } = config;
 
-  testingFunctions
+  testingTable
     .filter (({ name })        => !excludedTests.includes(name))
     .forEach(({ name, test })  => testSuite.add(`${name}: ${config.name}`, test(config)));
 };

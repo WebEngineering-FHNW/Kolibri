@@ -1,4 +1,4 @@
-import { Sequence } from "../sequence/sequence.js";
+import { Sequence } from "../sequence/Sequence.js";
 
 export { Range }
 

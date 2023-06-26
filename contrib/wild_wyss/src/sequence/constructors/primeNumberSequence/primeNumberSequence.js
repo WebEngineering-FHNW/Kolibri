@@ -1,4 +1,3 @@
-import { Range }                             from "../../../range/range.js";
 import { Just, Nothing }                     from "../../../../../../docs/src/kolibri/stdlib.js";
 import { choiceMaybe }                       from "../../../stdlib/stdlib.js";
 import { uncurry }                           from "../../../../../../docs/src/kolibri/lambda/church.js";
@@ -8,7 +7,8 @@ import {
   cycle,
   Sequence,
   pipe,
-  zipWith
+  zipWith,
+  Range,
 } from "../../sequence.js";
 
 export { PrimeNumberSequence }

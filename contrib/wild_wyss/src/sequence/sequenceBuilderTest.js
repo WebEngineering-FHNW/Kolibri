@@ -1,6 +1,5 @@
-import { Range }                     from "../range/range.js";
-import { TestSuite }                 from "../test/test.js";
-import { SequenceBuilder, Sequence } from "./sequence.js";
+import { TestSuite }                        from "../test/test.js";
+import { SequenceBuilder, Sequence, Range } from "./sequence.js";
 
 const testSuite = TestSuite("SequenceBuilder");
 

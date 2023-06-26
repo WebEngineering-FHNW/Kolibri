@@ -1,10 +1,24 @@
 import { Range }                             from "./range.js"
-import { TestSuite }                         from "../test/test.js";
-import { createMonadicSequence, iteratorOf } from "../sequence/util/util.js";
+import { TestSuite }                         from "../../../test/test.js";
+import { createMonadicSequence, iteratorOf } from "../../util/util.js";
+import { addToTestingTable, TESTS }          from "../../util/testingTable.js";
+import { createTestConfig }                  from "../../util/testUtil.js";
 
-const rangeSuite = TestSuite("Range");
+const testSuite = TestSuite("Sequence constructor: Range");
 
-rangeSuite.add("test typical case for of", assert => {
+addToTestingTable(testSuite)(
+  createTestConfig({
+    name:     "Range",
+    iterable: () => Range(3),
+    expected: [0,1,2,3],
+    excludedTests: [
+      TESTS.TEST_PURITY,
+      TESTS.TEST_CB_NOT_CALLED_AFTER_DONE,
+    ]
+  })
+);
+
+testSuite.add("test typical case for of", assert => {
   // Given
   const result = [];
 
@@ -17,7 +31,7 @@ rangeSuite.add("test typical case for of", assert => {
   assert.is(result.length, 2);
 });
 
-rangeSuite.add("test typical case spread", assert => {
+testSuite.add("test typical case spread", assert => {
   // When
   const result = [...Range(2)];
 
@@ -25,7 +39,7 @@ rangeSuite.add("test typical case spread", assert => {
   assert.is(result.length, 3);
 });
 
-rangeSuite.add("test typical case deconstruction", assert => {
+testSuite.add("test typical case deconstruction", assert => {
   // When
   const [zero, one, two] = Range(2);
 
@@ -35,7 +49,7 @@ rangeSuite.add("test typical case deconstruction", assert => {
   assert.is(two,  2);
 });
 
-rangeSuite.add("test typical case deconstruction", assert => {
+testSuite.add("test typical case deconstruction", assert => {
   // When
   const result = Array.from(/** @type ArrayLike */ Range(3));
 
@@ -75,14 +89,14 @@ const testRangeNegativeStepSize = (from, to, step, range, assert) => {
   assert.isTrue(rangeIterator.next().done)
 };
 
-rangeSuite.add("test simple Range(2,3)", assert =>
+testSuite.add("test simple Range(2,3)", assert =>
   testRange(2, 3, 1, Range(2, 3), assert));
 
-rangeSuite.add("test simple Range(3,2,1)", assert => {
+testSuite.add("test simple Range(3,2,1)", assert => {
   testRange(2, 3, 1, Range(3,2,1), assert)
 });
 
-rangeSuite.add("test break Range(7)", assert => {
+testSuite.add("test break Range(7)", assert => {
   // Given
   const range = Range(7);
   const result = [];
@@ -100,7 +114,7 @@ rangeSuite.add("test break Range(7)", assert => {
 });
 
 
-rangeSuite.add("test use range twice", assert => {
+testSuite.add("test use range twice", assert => {
   // Given
   const range = Range(0);
 
@@ -112,7 +126,7 @@ rangeSuite.add("test use range twice", assert => {
   assert.is(repeat, 0);
 });
 
-rangeSuite.add("test continue and break", assert => {
+testSuite.add("test continue and break", assert => {
   // When
   for (const value of Range(Number.MAX_VALUE)) {
     if(4 > value) continue; // dropWhile value < 4
@@ -123,7 +137,7 @@ rangeSuite.add("test continue and break", assert => {
   }
 });
 
-rangeSuite.add("test running out of range", assert => {
+testSuite.add("test running out of range", assert => {
   // Given
   const range = Range(2);
   const rangeIterator = iteratorOf(range);
@@ -137,20 +151,20 @@ rangeSuite.add("test running out of range", assert => {
   assert.is(rangeIterator.next().done, true);
 });
 
-rangeSuite.add("test negative Range(4, 6,- 2)", assert =>
+testSuite.add("test negative Range(4, 6,- 2)", assert =>
   testRangeNegativeStepSize(6, 4, -2, Range(4, 6, -2), assert));
 
-rangeSuite.add("test negative Range(6, 4, -2)", assert =>
+testSuite.add("test negative Range(6, 4, -2)", assert =>
   testRangeNegativeStepSize(6, 2, -2, Range(6, 2, -2), assert));
 
-rangeSuite.add("test negative Range(0, -2, -1)", assert =>
+testSuite.add("test negative Range(0, -2, -1)", assert =>
   testRangeNegativeStepSize(0, -2, -1, Range(0, -2, -1), assert));
 
-rangeSuite.add("test negative Range(-12, -2, -2)", assert =>
+testSuite.add("test negative Range(-12, -2, -2)", assert =>
   testRangeNegativeStepSize(-2, -12, -2, Range(-12, -2, -2), assert));
 
 // all combinations
-rangeSuite.add("test of all combinations", assert => {
+testSuite.add("test of all combinations", assert => {
   testRange(0, 5, 1, Range(0, 5, 1), assert);
   testRange(0, 5, 1, Range(5, 0, 1), assert);
 
@@ -170,4 +184,4 @@ rangeSuite.add("test of all combinations", assert => {
   testRangeNegativeStepSize(0, -5, -1, Range(0, -5, -1), assert);
 });
 
-rangeSuite.run();
+testSuite.run();

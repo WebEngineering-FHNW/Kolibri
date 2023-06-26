@@ -1,12 +1,8 @@
-import {addToTestingTable }           from "../../util/testingTable.js";
-import { TestSuite }                  from "../../../test/test.js";
-import { Range }                      from "../../../range/range.js";
-import { arrayEq }                    from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { concat, Sequence, nil }      from "../../sequence.js";
-import {
-  createTestConfig,
-  newSequence,
-} from "../../util/testUtil.js";
+import { addToTestingTable }             from "../../util/testingTable.js";
+import { TestSuite }                     from "../../../test/test.js";
+import { arrayEq }                       from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { concat, Sequence, nil, Range }  from "../../sequence.js";
+import { createTestConfig, newSequence } from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: operation concat");
 
