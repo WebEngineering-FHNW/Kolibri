@@ -1,7 +1,6 @@
 import { TestSuite }        from "../../../test/test.js";
 import { createTestConfig } from "../../util/testUtil.js";
 import { Sequence }         from "./Sequence.js";
-import { Range }            from "../../../range/range.js";
 import { show }             from "../../terminalOperations/show/show.js";
 import { map }              from "../../operators/map/map.js"
 
@@ -39,7 +38,7 @@ testSuite.add("test special case: no increment after done", assert => {
 // test monadic API
 testSuite.add("test prototype: and", assert => {
   // When
-  const result = range(0,3).and(el => Range(el));
+  const result = range(0,3).and(el => range(0, el));
 
   // Then
   assert.iterableEq(result, [0, 0, 1, 0, 1, 2, 0, 1, 2, 3]);
