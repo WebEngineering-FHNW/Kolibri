@@ -41,14 +41,14 @@ const TESTS = {
   TEST_ITERATE_MULTIPLE_TIMES:   'TEST_ITERATE_MULTIPLE_TIMES',
 };
 
-
-const testingTable = [];
-testingTable.push({ name: TESTS.TEST_SIMPLE                  , test: testSimple});
-testingTable.push({ name: TESTS.TEST_PURITY                  , test: testPurity});
-testingTable.push({ name: TESTS.TEST_CB_NOT_CALLED_AFTER_DONE, test: testCBNotCalledAfterDone});
-testingTable.push({ name: TESTS.TEST_PROTOTYPE               , test: testPrototype});
-testingTable.push({ name: TESTS.TEST_INVARIANTS              , test: testInvariants});
-testingTable.push({ name: TESTS.TEST_ITERATE_MULTIPLE_TIMES  , test: testIterateMultipleTimes});
+const testingTable = [
+  { name: TESTS.TEST_SIMPLE,                   test: testSimple},
+  { name: TESTS.TEST_PURITY,                   test: testPurity},
+  { name: TESTS.TEST_CB_NOT_CALLED_AFTER_DONE, test: testCBNotCalledAfterDone},
+  { name: TESTS.TEST_PROTOTYPE,                test: testPrototype},
+  { name: TESTS.TEST_INVARIANTS,               test: testInvariants},
+  { name: TESTS.TEST_ITERATE_MULTIPLE_TIMES,   test: testIterateMultipleTimes},
+];
 
 /**
  * @type {
