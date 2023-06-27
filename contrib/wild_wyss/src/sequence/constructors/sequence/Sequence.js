@@ -29,7 +29,6 @@ export { Sequence, SequencePrototype }
  * // => Logs '0, 1, 2'
  */
 
-// whileFunction
 const Sequence = (start, whileFunction, incrementFunction) => {
 
   const iterator = () => {
