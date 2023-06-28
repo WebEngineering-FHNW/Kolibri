@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Grid mit Buttons</title>
+  <style>
+      #grid-container {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-template-rows: repeat(3, 1fr);
+          gap: 10px;
+          width: 300px;
+          height: 300px;
+      }
+
+      .grid-item {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #e0e0e0;
+      }
+
+      .fill-button {
+          width: 100%;
+          height: 100%;
+          padding: 10px;
+          font-size: 16px;
+      }
+
+  </style>
+</head>
+<body>
+<div id="grid-container"></div>
+</body>
+<script type="module">
+  import { Range, zip, map} from "../../sequence.js";
+  import {dom} from "../../../debounceInput/dom.js";
+  import {Computer, Human, nextBoardBy} from "./tictactoe.js";
+
+  const onPlayTrain = (index, board) => { // on spiel zug
+    board = {whosTurn: Computer, fields: [...board.fields]};
+    board.fields[index] = -1;
+    createBoard(board);
+    setTimeout(() => {
+      const nextBoard = nextBoardBy("Andri")(5)(board.fields);
+      createBoard(nextBoard);
+    }, 500);
+  };
+
+  const createButton = wholeBoard => ([value, index]) => {
+    const gridItem = document.createElement("DIV");
+    gridItem.className = "grid-item";
+    const disabled = value !== 0 || wholeBoard.whosTurn === Computer;
+    const btn = dom(`
+        <button class="fill-button" ${disabled ? "disabled" : ""}>${value}</button>
+     `);
+    btn[0].onclick = () => onPlayTrain(index, wholeBoard);
+    gridItem.append(...btn);
+    return gridItem;
+  };
+
+ /**
+  * @param { Board } board
+  */
+ const createBoard = board => {
+   const gridContainer = document.getElementById("grid-container");
+   gridContainer.innerHTML = '';
+   const { fields } = board;
+   const indexedFields = zip(fields)(Range(8));
+   const buttons = map(createButton(board))(indexedFields);
+   gridContainer.append(...buttons);
+ };
+
+  /** * * @type {Board} */
+ const INITIAL_BOARD = {whosTurn: Human, fields: map(_ => 0)(Range(8))};
+ createBoard(INITIAL_BOARD);
+</script>
+</html>

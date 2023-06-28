@@ -1,6 +1,6 @@
 import { Left, Right } from "../../../../docs/src/kolibri/lambda/church.js";
 
-export { Nothing, Just }
+export { Nothing, Just, MaybePrototype }
 
 /**
  * @typedef MaybeMonadType
