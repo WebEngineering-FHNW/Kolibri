@@ -1,4 +1,4 @@
-import { iteratorOf } from "../../util/util.js";
+import { iteratorOf } from "../../util/sequenceUtil/iteratorOf.js";
 
 export { isEmpty }
 

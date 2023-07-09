@@ -1,4 +1,5 @@
-import { map, mconcat } from "../../sequence.js";
+import { map }     from "../map/map.js";
+import { mconcat } from "../mconcat/mconcat.js";
 
 export { bind }
 

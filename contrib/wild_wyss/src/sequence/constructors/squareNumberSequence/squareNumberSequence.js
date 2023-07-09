@@ -1,5 +1,6 @@
-import { Sequence }                          from "../../sequence.js";
-import { createMonadicSequence, iteratorOf } from "../../util/util.js";
+import { Sequence }              from "../sequence/Sequence.js";
+import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
+import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
 
 export { SquareNumberSequence }
 

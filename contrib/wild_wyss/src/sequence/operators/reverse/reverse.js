@@ -1,4 +1,5 @@
-import { createMonadicSequence, iteratorOf } from "../../util/util.js";
+import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
+import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
 
 export { reverse$ }
 

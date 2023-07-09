@@ -1,12 +1,12 @@
 import { Pair }    from "../../../stdlib/pair.js";
-import { zipWith } from "../../sequence.js";
+import { zipWith } from "../zipWith/zipWith.js";
 
 export { zip }
 
 /**
  * Zip takes two {@link Iterable iterables} and returns an {@link Iterable iterable} of corresponding {@link PairType paris}.
  *
- * @function
+* @function
  * @pure
  * @template _T_, _U_
  * @type {

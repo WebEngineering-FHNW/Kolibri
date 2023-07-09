@@ -1,4 +1,5 @@
-import { take, repeat } from "../../sequence.js";
+import { take }   from "../../operators/take/take.js";
+import { repeat } from "../repeat/repeat.js";
 
 export { replicate }
 

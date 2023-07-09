@@ -1,9 +1,7 @@
-import { nil } from "./sequence.js";
-import {
-  createMonadicSequence,
-  isIterable,
-  iteratorOf
-} from "./util/util.js";
+import { nil }                    from "./constructors/nil/nil.js";
+import { createMonadicSequence }  from "./util/sequenceUtil/createMonadicSequence.js";
+import { isIterable }             from "./util/sequenceUtil/isIterable.js";
+import { iteratorOf }             from "./util/sequenceUtil/iteratorOf.js";
 
 export { SequenceBuilder }
 

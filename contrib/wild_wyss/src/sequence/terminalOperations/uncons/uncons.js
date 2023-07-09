@@ -1,5 +1,6 @@
-import { createMonadicSequence, iteratorOf } from "../../util/util.js";
-import { Pair }                              from "../../../stdlib/pair.js";
+import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
+import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
+import { Pair }                  from "../../../stdlib/pair.js";
 
 export { uncons }
 

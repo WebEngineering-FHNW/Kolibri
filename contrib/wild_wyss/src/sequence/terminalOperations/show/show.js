@@ -1,4 +1,6 @@
-import { pipe, reduce$, take } from "../../sequence.js";
+import { pipe }    from "../../operators/pipe/pipe.js";
+import { take }    from "../../operators/take/take.js";
+import { reduce$ } from "../reduce/reduce.js";
 
 export { show }
 

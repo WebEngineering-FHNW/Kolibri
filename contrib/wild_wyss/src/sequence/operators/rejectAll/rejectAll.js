@@ -1,4 +1,4 @@
-import { retainAll } from "../../sequence.js";
+import { retainAll } from "../retainAll/retainAll.js";
 
 export { rejectAll }
 

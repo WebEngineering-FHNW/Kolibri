@@ -1,5 +1,4 @@
-import { max$ }          from "./max.js";
-import { iteratorOf }    from "../../util/util.js";
+import { iteratorOf }    from "../../util/sequenceUtil/iteratorOf.js";
 import { Just, Nothing } from "../../../stdlib/maybe.js";
 
 export { safeMax$ }

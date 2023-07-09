@@ -1,5 +1,6 @@
-import { dropWhile }                         from "../dropWhile/dropWhile.js";
-import { createMonadicSequence, iteratorOf } from "../../util/util.js";
+import { dropWhile }             from "../dropWhile/dropWhile.js";
+import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
+import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
 
 export { drop }
 

@@ -1,5 +1,5 @@
-import { SequencePrototype } from "../../constructors/sequence/Sequence.js";
-import { toMonadicIterable } from "../../util/util.js";
+import { toMonadicIterable } from "../../util/sequenceUtil/toMonadicIterable.js";
+import { SequencePrototype } from "../../util/sequenceUtil/sequencePrototype.js";
 
 export { pipe }
 

@@ -1,7 +1,7 @@
 import { pop, emptyStack, stackEquals } from "../../../../../p6_brodwolf_andermatt/src/stack/stack.js";
 import { fst, snd }                     from "../../../../../../docs/src/kolibri/stdlib.js";
 import { convertToJsBool }              from "../../../logger/lamdaCalculus.js";
-import { createMonadicSequence }        from "../../util/util.js";
+import { createMonadicSequence }        from "../../util/sequenceUtil/createMonadicSequence.js";
 
 export { StackSequence }
 

@@ -1,5 +1,7 @@
-import { Sequence, map }                     from "../../sequence.js";
-import { createMonadicSequence, iteratorOf } from "../../util/util.js";
+import { map }                   from "../../operators/map/map.js";
+import { Sequence }              from "../sequence/Sequence.js";
+import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
+import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
 
 export { TupleSequence }
 

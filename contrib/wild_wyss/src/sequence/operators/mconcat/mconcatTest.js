@@ -1,7 +1,7 @@
 import { addToTestingTable }             from "../../util/testingTable.js";
 import { TestSuite }                     from "../../../test/test.js";
 import { createTestConfig, newSequence } from "../../util/testUtil.js";
-import { toMonadicIterable}              from "../../util/util.js";
+import { toMonadicIterable }             from "../../util/sequenceUtil/toMonadicIterable.js";
 import {
   Sequence,
   PureSequence,

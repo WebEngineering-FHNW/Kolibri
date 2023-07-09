@@ -1,8 +1,9 @@
-import { Range }                             from "./range.js"
-import { TestSuite }                         from "../../../test/test.js";
-import { createMonadicSequence, iteratorOf } from "../../util/util.js";
-import { addToTestingTable, TESTS }          from "../../util/testingTable.js";
-import { createTestConfig }                  from "../../util/testUtil.js";
+import { Range }                      from "./range.js"
+import { TestSuite }                  from "../../../test/test.js";
+import { iteratorOf }                 from "../../util/sequenceUtil/iteratorOf.js";
+import { createMonadicSequence }      from "../../util/sequenceUtil/createMonadicSequence.js";
+import { addToTestingTable, TESTS }   from "../../util/testingTable.js";
+import { createTestConfig }           from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence constructor: Range");
 

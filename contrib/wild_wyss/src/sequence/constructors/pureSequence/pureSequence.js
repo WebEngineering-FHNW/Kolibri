@@ -1,4 +1,4 @@
-import { createMonadicSequence } from "../../util/util.js";
+import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
 
 export { PureSequence }
 
