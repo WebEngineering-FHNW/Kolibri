@@ -1,9 +1,9 @@
-import {Range, map, show, zip, forEach$, foldl$, pipe, nil, max$, min$, isEmpty} from "../../../sequence/sequence.js";
-import {from} from "../../../jinq/jinq.js";
-import {Pair} from "../../../stdlib/pair.js";
-import {snd} from "../../../../../../docs/src/kolibri/stdlib.js";
+import { Range, map, show, zip, forEach$, foldl$, pipe, nil, max$, min$, isEmpty } from "../../../sequence/sequence.js";
+import { from } from "../../../jinq/jinq.js";
+import { Pair } from "../../../stdlib/pair.js";
+import { snd } from "../../../../../../docs/src/kolibri/stdlib.js";
 
-export { nextBoardBy, nowValue, opponent, stone, Computer, Human, NoPlayer, moves, hasWon, treeMap }
+export { nextBoard, nowValue, opponent, stone, Computer, Human, NoPlayer, moves, hasWon, treeMap }
 
 /**
  * @template _T_
@@ -120,7 +120,7 @@ const hasWon = board => player => {
   ];
 
   const checkTriple = triple => {
-    const actualStone = stone(player);
+    const actualStone   = stone(player);
     const indexedFields = indexFields(board.fields);
 
     const playerOnFields =
@@ -166,7 +166,7 @@ const gameTree = board => buildTree(moves)(board);
  */
 const staticEval = board => {
   if (hasWon(board)(Computer)) return 1.0;
-  if (hasWon(board)(Human))    return -1.0;
+  if (hasWon(board)(Human)) return -1.0;
   return 0.0;
 };
 
@@ -221,6 +221,12 @@ const evaluateBy = f => lookahead => board => {
   return minimize(mappedTree);
 };
 
+const evaluate = lookahead => board => {
+  const prunedTree = prune(lookahead)(gameTree(board));
+  const mappedTree = treeMap(staticEval)(prunedTree);
+  return minimize(mappedTree);
+};
+
 /**
  * @template _T_
  * @type {
@@ -230,10 +236,11 @@ const evaluateBy = f => lookahead => board => {
  * }
  */
 const nowValue = lookahead => board =>
-  Pair(evaluateBy(staticEval)(lookahead)(board))(board);
+  // Pair(evaluateBy(staticEval)(lookahead)(board))(board);
+  Pair(evaluate(lookahead)(board))(board);
 
 
-const nextBoardBy = probe => lookahead => inFields => {
+const nextBoard = lookahead => inFields => {
   const possibleMoves  = moves ({whosTurn: Computer, fields: inFields});
   const evaluatedMoves = /** @type {SequenceType<PairSelectorType<Number, Board>>} */ map (nowValue(lookahead)) (possibleMoves);
 

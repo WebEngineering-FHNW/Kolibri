@@ -4,7 +4,7 @@ import {
   hasWon,
   Human,
   moves,
-  nextBoardBy,
+  nextBoard,
   NoPlayer,
   nowValue,
   opponent,
@@ -13,7 +13,7 @@ import {
 } from "./tictactoe.js";
 import {Range, map, show, zip, forEach$} from "../../../sequence/sequence.js";
 import {arrayEq} from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import {iteratorOf} from "../../util/util.js";
+import {iteratorOf} from "../../util/sequenceUtil/iteratorOf.js";
 import {Pair} from "../../../stdlib/pair.js";
 
 
@@ -67,6 +67,21 @@ testSuite.add("moves", assert => {
   assert.iterableEq(moves(sampleBoardWonHuman), []);
 });
 
+testSuite.add("hasWon2", assert => {
+  const fields = [
+    [
+        -1,1,1,
+        -1,-1,0,
+         1,0,0
+    ]
+  ];
+
+  const boards = map(fields => ({fields, whosTurn: Computer }))(fields);
+
+  for (const board of boards) {
+    assert.isTrue(hasWon(board)(Computer));
+  }
+});
 testSuite.add("hasWon", assert => {
   const fields = [
     [
@@ -143,7 +158,7 @@ testSuite.add("test nextBoard", assert => {
     -1, -1, 1,
     1, -1, 0
   ];
-  const {whosTurn, fields} = nextBoardBy("")(4)(f);
+  const {whosTurn, fields} = nextBoard(4)(f);
   console.log(whosTurn, ...fields);
 });
 

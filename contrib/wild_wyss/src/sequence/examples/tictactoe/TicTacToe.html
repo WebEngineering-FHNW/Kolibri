@@ -32,17 +32,17 @@
 <div id="grid-container"></div>
 </body>
 <script type="module">
-  import { Range, zip, map} from "../../sequence.js";
-  import {dom} from "../../../debounceInput/dom.js";
-  import {Computer, Human, nextBoardBy} from "./tictactoe.js";
+  import { Range, zip, map } from "../../sequence.js";
+  import { dom } from "../../../debounceInput/dom.js";
+  import {Computer, Human, nextBoard} from "./tictactoe.js";
 
   const onPlayTrain = (index, board) => { // on spiel zug
     board = {whosTurn: Computer, fields: [...board.fields]};
     board.fields[index] = -1;
     createBoard(board);
     setTimeout(() => {
-      const nextBoard = nextBoardBy("Andri")(5)(board.fields);
-      createBoard(nextBoard);
+      const newBoard = nextBoard(3)(board.fields);
+      createBoard(newBoard);
     }, 500);
   };
 
