@@ -56,7 +56,7 @@ SequencePrototype.empty = () => {
   const nil = emptySequence();
   Object.setPrototypeOf(nil, SequencePrototype);
 
-  return nil;
+  return /** @type SequenceType */ nil;
 };
 
 /**

@@ -1,7 +1,7 @@
 export { isIterable }
 
 /**
- * Checks if a given value is {@link Iterable}.
+ * Checks if a given value is an {@link Iterable}.
  * @param { any } value
  * @return { boolean }
  */

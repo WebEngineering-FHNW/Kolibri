@@ -2,6 +2,15 @@ import {SequencePrototype} from "../../util/sequenceUtil/sequencePrototype.js";
 
 export { nil }
 
+const emptySequence = () => {
+  const iterator = () => {
+    const next = () => ({ done: true, value: undefined });
+    return {next}
+  };
+
+  return {[Symbol.iterator]: iterator};
+};
+
 /**
  * This constant represents a sequence with no values in it.
  *
@@ -17,14 +26,5 @@ export { nil }
  * console.log(...emptySequence);
  * // => Logs '' (nothing)
  */
-const emptySequence = () => {
-  const iterator = () => {
-    const next = () => ({ done: true, value: undefined });
-    return {next}
-  };
-
-  return {[Symbol.iterator]: iterator};
-};
-
-const nil = emptySequence();
+const nil = /**@type SequenceType */ emptySequence();
 Object.setPrototypeOf(nil, SequencePrototype);
