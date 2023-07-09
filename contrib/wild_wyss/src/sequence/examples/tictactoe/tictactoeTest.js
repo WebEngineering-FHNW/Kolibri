@@ -1,6 +1,6 @@
 import {TestSuite} from "../../../test/test.js";
 import {
-  Computer,
+  Computer, evaluate,
   hasWon,
   Human,
   moves,
@@ -67,21 +67,6 @@ testSuite.add("moves", assert => {
   assert.iterableEq(moves(sampleBoardWonHuman), []);
 });
 
-testSuite.add("hasWon2", assert => {
-  const fields = [
-    [
-        -1,1,1,
-        -1,-1,0,
-         1,0,0
-    ]
-  ];
-
-  const boards = map(fields => ({fields, whosTurn: Computer }))(fields);
-
-  for (const board of boards) {
-    assert.isTrue(hasWon(board)(Computer));
-  }
-});
 testSuite.add("hasWon", assert => {
   const fields = [
     [
@@ -162,4 +147,23 @@ testSuite.add("test nextBoard", assert => {
   console.log(whosTurn, ...fields);
 });
 
+testSuite.add("test evaluate", assert => {
+  // Computer has no chance here - it must lay its stone in the lower right corner nad in the middle line on the left side
+  const field = [
+      -1,1,0,
+      0,-1,0,
+      0,0,0
+  ];
+  // Computer has no chance here - it must lay its stone in the middle and in the lower left corner
+  const field2 = [
+    -1,1,0,
+    -1,0,0,
+     0,0,0
+  ];
+  const board  = {
+    whosTurn: Human,
+    fields: field2
+  };
+  console.log("Who wins? Human: -1, Comp: 1, not clear yet: 0: ", evaluate(3)(board));
+});
 testSuite.run();

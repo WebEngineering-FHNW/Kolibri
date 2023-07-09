@@ -3,7 +3,7 @@ import { from } from "../../../jinq/jinq.js";
 import { Pair } from "../../../stdlib/pair.js";
 import { snd } from "../../../../../../docs/src/kolibri/stdlib.js";
 
-export { nextBoard, nowValue, opponent, stone, Computer, Human, NoPlayer, moves, hasWon, treeMap }
+export { nextBoard, nowValue, opponent, stone, Computer, Human, NoPlayer, moves, hasWon, treeMap, evaluate }
 
 /**
  * @template _T_
@@ -207,20 +207,13 @@ const prune = n => tree => {
 };
 
 /**
- * @template _T_
+ *
  * @type {
- *            (f: (Board) => _T_)
- *         => (lookahead: Number)
+ *            (lookahead: Number)
  *         => (board: Board)
- *         => _T_
+ *         => Number
  * }
  */
-const evaluateBy = f => lookahead => board => {
-  const prunedTree = prune(lookahead)(gameTree(board));
-  const mappedTree = treeMap(f)(prunedTree);
-  return minimize(mappedTree);
-};
-
 const evaluate = lookahead => board => {
   const prunedTree = prune(lookahead)(gameTree(board));
   const mappedTree = treeMap(staticEval)(prunedTree);
@@ -236,17 +229,19 @@ const evaluate = lookahead => board => {
  * }
  */
 const nowValue = lookahead => board =>
-  // Pair(evaluateBy(staticEval)(lookahead)(board))(board);
   Pair(evaluate(lookahead)(board))(board);
 
 
 const nextBoard = lookahead => inFields => {
+  // get all possible
   const possibleMoves  = moves ({whosTurn: Computer, fields: inFields});
+  // evaluate each move by looking ahead how good it is
   const evaluatedMoves = /** @type {SequenceType<PairSelectorType<Number, Board>>} */ map (nowValue(lookahead)) (possibleMoves);
 
   console.log(...evaluatedMoves.fmap(([p, board]) => p + " " + show(board.fields)));
+
   /**
-   *
+   * Gets the highest ranked board of the passed board
    * @param {SequenceType<PairSelectorType<Number, Board>>} boards
    * @return Board
    */
