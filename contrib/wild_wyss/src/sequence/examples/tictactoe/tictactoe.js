@@ -233,21 +233,33 @@ const nowValue = lookahead => board =>
 
 
 const nextBoard = lookahead => inFields => {
+  const onlyLoses = boards =>
+    boards.pipe(
+      map(([v, _]) => v),
+      foldl$((acc, cur) => acc && cur === -1, true)
+    );
+
+  const bestOf = boards => {
+    if (isEmpty(boards)) return { whosTurn: NoPlayer, fields: [] };
+    const max = /** @type {PairSelectorType} */ max$(boards, ([a, _b1],[b, _b2]) => a < b );
+    // noinspection JSValidateTypes
+    return max(snd);
+  };
+
   // get all possible
   const possibleMoves  = moves ({whosTurn: Computer, fields: inFields});
   // evaluate each move by looking ahead how good it is
-  const evaluatedMoves = /** @type {SequenceType<PairSelectorType<Number, Board>>} */ map (nowValue(lookahead)) (possibleMoves);
+  let evaluatedMoves = /** @type {SequenceType<PairSelectorType<Number, Board>>} */ map (nowValue(lookahead)) (possibleMoves);
 
-  console.log(...evaluatedMoves.fmap(([p, board]) => p + " " + show(board.fields)));
+  if (onlyLoses(evaluatedMoves)) {
+    console.log('only loses');
+    evaluatedMoves = map (nowValue(1)) (possibleMoves)
+  }
 
   /**
    * Gets the highest ranked board of the passed board
    * @param {SequenceType<PairSelectorType<Number, Board>>} boards
    * @return Board
    */
-  const bestOf = boards => {
-    if (isEmpty(boards)) return {whosTurn: NoPlayer, fields: []};
-    return max$(boards, ([a, _b1],[b, _b2]) => a < b )(snd);
-  };
   return bestOf(evaluatedMoves);
 };

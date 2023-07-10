@@ -150,20 +150,16 @@ testSuite.add("test nextBoard", assert => {
 testSuite.add("test evaluate", assert => {
   // Computer has no chance here - it must lay its stone in the lower right corner nad in the middle line on the left side
   const field = [
-      -1,1,0,
-      0,-1,0,
+      -1,1,1,
+      0,0,0, // human will set to the middle
       0,0,0
   ];
-  // Computer has no chance here - it must lay its stone in the middle and in the lower left corner
-  const field2 = [
-    -1,1,0,
-    -1,0,0,
-     0,0,0
-  ];
-  const board  = {
+
+  const board = {
     whosTurn: Human,
-    fields: field2
+    fields: field
   };
-  console.log("Who wins? Human: -1, Comp: 1, not clear yet: 0: ", evaluate(3)(board));
+  assert.is(evaluate(1)(board), 0);
+  assert.is(evaluate(5)(board), -1);
 });
 testSuite.run();
