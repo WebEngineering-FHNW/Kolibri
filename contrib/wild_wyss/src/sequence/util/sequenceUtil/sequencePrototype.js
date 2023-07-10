@@ -68,7 +68,7 @@ SequencePrototype.toString = function () {
 };
 
 /**
- * @param {...SequenceOperation<*,*> } transformers
+ * @param {...SequenceOperation, PipeTransformer<*,*> } transformers
  * @return { SequenceType<*> | * }
  */
 SequencePrototype.pipe = function(...transformers) {

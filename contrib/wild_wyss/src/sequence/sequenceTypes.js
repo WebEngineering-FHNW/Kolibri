@@ -44,6 +44,11 @@
  */
 
 /**
+ * @callback PipeTransformer
+ * @template _T_, _U_
+ * @type { SequenceOperation<_T_, _U_> | ((SequenceType) => *)}
+ */
+/**
  * Pipe applies the given {@link SequenceOperation} to the {@link Iterable} it is called on.
  * @callback Pipe
  * @param { ...SequenceOperation<any,any>} operations
