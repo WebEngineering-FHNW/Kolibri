@@ -252,8 +252,7 @@ const nextBoard = lookahead => inFields => {
   let evaluatedMoves = /** @type {SequenceType<PairSelectorType<Number, Board>>} */ map (nowValue(lookahead)) (possibleMoves);
 
   if (onlyLoses(evaluatedMoves)) {
-    console.log('only loses');
-    evaluatedMoves = map (nowValue(1)) (possibleMoves)
+    evaluatedMoves = map (nowValue(1)) (possibleMoves);
   }
 
   /**
