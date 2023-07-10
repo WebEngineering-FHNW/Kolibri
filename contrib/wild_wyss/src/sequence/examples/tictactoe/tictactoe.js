@@ -223,7 +223,7 @@ const evaluate = lookahead => board => {
 /**
  * @template _T_
  * @type {
- *            (lookahead: Number)
+ *            (LOOK_AHEAD: Number)
  *         => (board: Board)
  *         => PairSelectorType<_T_, Board>
  * }
@@ -233,24 +233,14 @@ const nowValue = lookahead => board =>
 
 
 const nextBoard = lookahead => inFields => {
-  const onlyLoses = boards =>
-    boards.pipe(
-      map(([v, _]) => v),
-      foldl$((acc, cur) => acc && cur === -1, true)
-    );
-
-  const bestOf = boards => {
-    if (isEmpty(boards)) return { whosTurn: NoPlayer, fields: [] };
-    const max = /** @type {PairSelectorType} */ max$(boards, ([a, _b1],[b, _b2]) => a < b );
-    // noinspection JSValidateTypes
-    return max(snd);
-  };
-
+  const currentBoard = {whosTurn: Computer, fields: inFields};
   // get all possible
-  const possibleMoves  = moves ({whosTurn: Computer, fields: inFields});
+  const possibleMoves  = moves (currentBoard);
+  if(isEmpty(possibleMoves)) return currentBoard;
   // evaluate each move by looking ahead how good it is
   let evaluatedMoves = /** @type {SequenceType<PairSelectorType<Number, Board>>} */ map (nowValue(lookahead)) (possibleMoves);
 
+  // if the computer is sure to lose, only look one place ahead to prevent the "nearest" loss
   if (onlyLoses(evaluatedMoves)) {
     evaluatedMoves = map (nowValue(1)) (possibleMoves);
   }
@@ -262,3 +252,29 @@ const nextBoard = lookahead => inFields => {
    */
   return bestOf(evaluatedMoves);
 };
+
+// noinspection JSCheckFunctionSignatures
+/**
+ * Returns true if every move of the computer ends in its defeat
+ *
+ * @param { SequenceType<PairSelectorType<Number, Board>> } boards
+ * @returns boolean
+ */
+const onlyLoses = boards =>
+  boards.pipe(
+    map(([v, _]) => v),
+    foldl$((acc, cur) => acc && cur === -1, true)
+  );
+
+/**
+ * gets the best possible turn for the computer from possible boards
+ * @param { SequenceType<PairSelectorType<Number, Board>> } boards
+ * @return Board
+ */
+const bestOf = boards => {
+  if (isEmpty(boards)) return { whosTurn: NoPlayer, fields: [] };
+  const max = /** @type {PairSelectorType} */ max$(boards, ([a, _b1],[b, _b2]) => a < b );
+  // noinspection JSValidateTypes
+  return max(snd);
+};
+
