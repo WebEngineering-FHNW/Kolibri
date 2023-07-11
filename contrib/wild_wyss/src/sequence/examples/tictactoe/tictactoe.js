@@ -1,4 +1,4 @@
-import { Range, map, show, zip, forEach$, foldl$, pipe, nil, max$, min$, isEmpty } from "../../../sequence/sequence.js";
+import { Range, map, zip, foldl$, pipe, nil, max$, min$, isEmpty } from "../../../sequence/sequence.js";
 import { from } from "../../../jinq/jinq.js";
 import { Pair } from "../../../stdlib/pair.js";
 import { snd } from "../../../../../../docs/src/kolibri/stdlib.js";
