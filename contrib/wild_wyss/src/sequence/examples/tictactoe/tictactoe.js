@@ -17,7 +17,6 @@ export { nextBoard, nowValue, opponent, stone, Computer, Human, NoPlayer, moves,
 
 const treeMap = f => ([a, sub]) => Pair(f(a))(map(treeMap(f))(sub));
 
-
 /**
  * @typedef { "Computer" | "Human" | "NoPlayer" } Player
  */
@@ -74,6 +73,7 @@ const stone = player => {
  * @return {SequenceType<PairType<Stone, Number>>}
  */
 const indexFields = fields => zip(fields)(Range(1,9));
+
 /**
  *
  * @param { Board } board
@@ -82,8 +82,8 @@ const indexFields = fields => zip(fields)(Range(1,9));
 const moves = board => {
   if (hasWon(board)(Computer)) return /**@type {SequenceType<Board>} */nil;
   if (hasWon(board)(Human))    return /**@type {SequenceType<Board>} */nil;
-  const otherPlayer = opponent(board.whosTurn);
 
+  const otherPlayer   = opponent(board.whosTurn);
   const indexedFields = indexFields(board.fields);
 
   const blankIndices =
@@ -92,12 +92,10 @@ const moves = board => {
       .select( ([_, i]) => i)
       .result();
 
-
   const fieldsWithPlayerPlacedAt = pos =>
     from(indexedFields)
       .select(([content, i]) => i === pos ? stone(board.whosTurn) : content)
       .result();
-
 
   const boardFieldsAfterMove = map(fieldsWithPlayerPlacedAt)(blankIndices);
 
@@ -158,7 +156,6 @@ const buildTree = unfold => a => {
  */
 const gameTree = board => buildTree(moves)(board);
 
-
 /**
  *
  * @param { Board } board
@@ -166,7 +163,7 @@ const gameTree = board => buildTree(moves)(board);
  */
 const staticEval = board => {
   if (hasWon(board)(Computer)) return 1.0;
-  if (hasWon(board)(Human)) return -1.0;
+  if (hasWon(board)(Human))    return -1.0;
   return 0.0;
 };
 
@@ -207,7 +204,7 @@ const prune = n => tree => {
 };
 
 /**
- *
+ * Evaluates a given Board by building a tree
  * @type {
  *            (lookahead: Number)
  *         => (board: Board)
@@ -231,12 +228,11 @@ const evaluate = lookahead => board => {
 const nowValue = lookahead => board =>
   Pair(evaluate(lookahead)(board))(board);
 
-
 const nextBoard = lookahead => inFields => {
   const currentBoard = {whosTurn: Computer, fields: inFields};
   // get all possible
   const possibleMoves  = moves (currentBoard);
-  if(isEmpty(possibleMoves)) return currentBoard;
+  if (isEmpty(possibleMoves)) return currentBoard;
   // evaluate each move by looking ahead how good it is
   let evaluatedMoves = /** @type {SequenceType<PairSelectorType<Number, Board>>} */ map (nowValue(lookahead)) (possibleMoves);
 
@@ -277,4 +273,3 @@ const bestOf = boards => {
   // noinspection JSValidateTypes
   return max(snd);
 };
-
