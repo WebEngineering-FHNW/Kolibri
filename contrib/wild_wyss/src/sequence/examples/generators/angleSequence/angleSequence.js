@@ -1,5 +1,5 @@
-import { take }  from "../../operators/take/take.js";
-import { Range } from "../range/range.js";
+import { take }  from "../../../operators/take/take.js";
+import { Range } from "../../../constructors/range/range.js"
 
 export { AngleSequence }
 

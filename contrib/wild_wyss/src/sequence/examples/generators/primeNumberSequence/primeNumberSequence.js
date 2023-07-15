@@ -1,15 +1,16 @@
-import { Just, Nothing }         from "../../../../../../docs/src/kolibri/stdlib.js";
-import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
-import { choiceMaybe }           from "../../../stdlib/stdlib.js";
-import { uncurry }               from "../../../../../../docs/src/kolibri/lambda/church.js";
-import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
-
-import { Sequence }              from "../sequence/Sequence.js";
-import { Range }                 from "../range/range.js";
-import { zipWith }               from "../../operators/zipWith/zipWith.js";
-import { pipe }                  from "../../operators/pipe/pipe.js";
-import { map }                   from "../../operators/map/map.js";
-import { cycle }                 from "../../operators/cycle/cycle.js";
+import { Just, Nothing }         from "../../../../../../../docs/src/kolibri/stdlib.js";
+import { createMonadicSequence } from "../../../util/sequenceUtil/createMonadicSequence.js";
+import { choiceMaybe }           from "../../../../stdlib/stdlib.js";
+import { uncurry }               from "../../../../../../../docs/src/kolibri/lambda/church.js";
+import { iteratorOf }            from "../../../util/sequenceUtil/iteratorOf.js";
+import {
+  Sequence,
+  Range,
+  cycle,
+  map,
+  pipe,
+  zipWith,
+} from "../../../sequence.js"
 
 export { PrimeNumberSequence }
 

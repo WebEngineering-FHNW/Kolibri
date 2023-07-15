@@ -1,11 +1,9 @@
-import { TestSuite }                  from "../../../test/test.js";
-import { createTestConfig }           from "../../util/testUtil.js";
-import { arrayEq }                    from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import { take, SquareNumberSequence } from "../../sequence.js";
-import {
-  addToTestingTable,
-  TESTS
-} from "../../util/testingTable.js";
+import { TestSuite }                from "../../../../test/test.js";
+import { createTestConfig }         from "../../../util/testUtil.js";
+import { arrayEq }                  from "../../../../../../../docs/src/kolibri/util/arrayFunctions.js";
+import { take }                     from "../../../sequence.js";
+import { SquareNumberSequence }     from "./squareNumberSequence.js";
+import { addToTestingTable, TESTS } from "../../../util/testingTable.js";
 
 const testSuite = TestSuite("Sequence: constructor SquareNumberSequence");
 

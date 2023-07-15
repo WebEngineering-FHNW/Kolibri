@@ -16,6 +16,9 @@ import "./src/sequence/terminalOperations/terminalOperationsTest.js";
 import "./src/sequence/sequenceBuilderTest.js";
 import "./src/sequence/util/sequenceUtil/sequencePrototypeTest.js"
 
+// generator
+import "./src/sequence/examples/generators/generatorTest.js"
+
 // focus ring
 import "./src/focusring/focusRingTest.js";
 
@@ -27,7 +30,13 @@ import "./src/stdlib/pairTest.js";
 // jinq
 import "./src/json/jsonMonadTest.js"
 import "./src/jinq/jinqTest.js";
+import {FibonacciSequence} from "./src/sequence/examples/generators/fibonacciSequence/fibonacciSequence.js";
+import {take} from "./src/sequence/operators/take/take.js";
 
 total.onChange(value => document.getElementById('grossTotal').textContent = "" + value + " tests done.");
 
 document.querySelector("footer").textContent = "Built with Kolibri " + versionInfo;
+
+
+const fs = take(3)(FibonacciSequence);
+console.log(...fs)

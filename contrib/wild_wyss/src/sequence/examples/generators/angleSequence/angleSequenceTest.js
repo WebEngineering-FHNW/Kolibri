@@ -1,10 +1,10 @@
 import { AngleSequence }    from "./angleSequence.js";
-import { TestSuite }        from "../../../test/test.js";
-import { createTestConfig } from "../../util/testUtil.js";
+import { TestSuite }        from "../../../../test/test.js";
+import { createTestConfig } from "../../../util/testUtil.js";
 import {
   addToTestingTable,
   TESTS
-} from "../../util/testingTable.js";
+} from "../../../util/testingTable.js";
 
 const testSuite = TestSuite("Sequence: constructor AngleSequence");
 
