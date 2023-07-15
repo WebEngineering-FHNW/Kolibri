@@ -1,5 +1,5 @@
 import { Sequence, map } from "../../../sequence.js";
-import { Pair } from "../../../../stdlib/pair.js";
+import { Pair }          from "../../../../stdlib/pair.js";
 
 export { FibonacciSequence }
 
@@ -11,8 +11,7 @@ export { FibonacciSequence }
  * @returns { SequenceType<Number> }
  *
  * @example
- * const fibonacciNumbers = FibonacciSequence();
- * const result           = take(8)(fibonacciNumbers);
+ * const result = take(8)(FibonacciSequence);
  *
  * console.log(...result);
  * // => Logs '1, 1, 2, 3, 5, 8, 13, 21'
