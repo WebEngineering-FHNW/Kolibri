@@ -38,19 +38,19 @@
   </style>
 </head>
 <body>
-<h1>Tictactoe</h1>
-<p>Play Tictactoe against a computer!</p>
+<h1>Tic Tac Toe</h1>
+<p>Play tic-tac-toe against a computer!</p>
 <div id="grid-container"></div>
 <p class="game-info" id="game-info"></p>
 <button id="reset-btn">RESET GAME</button>
 </body>
 <script type="module">
-  import { Range, zip, map } from "../../sequence.js";
-  import { dom } from "../../../debounceInput/dom.js";
+  import { Range, zip, map }                    from "../../sequence.js";
+  import { dom }                                from "../../../debounceInput/dom.js";
   import { Computer, hasWon, Human, nextBoard } from "./tictactoe.js";
-  import {retainAll} from "../../operators/retainAll/retainAll.js";
-  import {isEmpty} from "../../terminalOperations/isEmpty/isEmpty.js";
-  import {pipe} from "../../operators/pipe/pipe.js";
+  import { retainAll }                          from "../../operators/retainAll/retainAll.js";
+  import { isEmpty }                            from "../../terminalOperations/isEmpty/isEmpty.js";
+  import { pipe }                               from "../../operators/pipe/pipe.js";
 
   const gameInfo = document.getElementById("game-info");
   const resetBtn = document.getElementById("reset-btn");
@@ -68,12 +68,14 @@
   const computersTurn = board => {
     setTimeout(() => {
       const newBoard = nextBoard(LOOK_AHEAD)(board.fields);
-      createBoard(newBoard);
       if (hasWon(newBoard)(Computer)) {
         gameInfo.innerText = "Sorry, you lost!";
         gameInfo.classList.add("lost");
+        newBoard.whosTurn = Computer; // lock fields
+        createBoard(newBoard);
         return;
       }
+      createBoard(newBoard);
       gameInfo.innerText = "Your turn!";
     }, 500);
   };
@@ -81,14 +83,16 @@
   const humanPlayed = (index, board) => {
     board = { whosTurn: Computer, fields: [...board.fields] };
     board.fields[index] = -1;
-    createBoard(board);
 
     if (hasWon(board)(Human)) {
       gameInfo.innerText = "Congrats, you won!";
       gameInfo.classList.add("won");
+      board.whosTurn = Computer; // lock fields
+      createBoard(board);
       return;
     }
 
+    createBoard(board);
     const noMoreFields = pipe(
       retainAll(f => f === 0),
       isEmpty

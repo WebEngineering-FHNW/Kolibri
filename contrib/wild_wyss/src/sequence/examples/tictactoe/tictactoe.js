@@ -162,8 +162,8 @@ const gameTree = board => buildTree(moves)(board);
  * @returns Number
  */
 const staticEval = board => {
-  if (hasWon(board)(Computer)) return 1.0;
-  if (hasWon(board)(Human))    return -1.0;
+  if (hasWon(board)(Computer)) return 5.0;
+  if (hasWon(board)(Human))    return -5.0;
   return 0.0;
 };
 
@@ -229,7 +229,8 @@ const nowValue = lookahead => board =>
   Pair(evaluate(lookahead)(board))(board);
 
 const nextBoard = lookahead => inFields => {
-  const currentBoard = {whosTurn: Computer, fields: inFields};
+  const currentBoard = { whosTurn: Computer, fields: inFields };
+
   // get all possible
   const possibleMoves  = moves (currentBoard);
   if (isEmpty(possibleMoves)) return currentBoard;
