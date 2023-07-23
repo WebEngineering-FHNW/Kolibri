@@ -34,7 +34,7 @@ const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
   const stepIsNegative = 0 > step;
   const [left, right]  = normalize(firstBoundary, secondBoundary, stepIsNegative);
 
-  return Sequence(left, value => hasReachedEnd(stepIsNegative, value, right), value => value + step);
+  return Sequence(left, value => !hasReachedEnd(stepIsNegative, value, right), value => value + step);
 };
 
 /**
@@ -56,7 +56,7 @@ const sort = (a, b) => {
  * @returns  { boolean }
  */
 const hasReachedEnd = (stepIsNegative, next, end) =>
-    stepIsNegative ? next >= end : next <= end;
+    stepIsNegative ? next < end : next > end;
 
 /**
  * Make sure, that the left and right values
