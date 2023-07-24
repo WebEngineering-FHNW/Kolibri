@@ -9,6 +9,7 @@ export { zipWith }
  *
  * @function
  * @pure
+ * @haskell (a -> b -> c) -> [a] -> [b] -> [c]
  * @template _T_, _U_, _V_
  * @type {
  *            (zipper: BiFunction<_T_, _U_, _V_>)

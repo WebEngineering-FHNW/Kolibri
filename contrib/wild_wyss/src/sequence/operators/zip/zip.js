@@ -8,6 +8,7 @@ export { zip }
  *
 * @function
  * @pure
+ * @haskell [a] -> [b] -> [(a, b)]
  * @template _T_, _U_
  * @type {
  *             (it1: Iterable<_T_>)

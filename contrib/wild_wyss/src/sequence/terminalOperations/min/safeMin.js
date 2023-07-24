@@ -15,6 +15,7 @@ export { safeMin$ }
  *
  * @function
  * @pure
+ * @haskell Ord a => [a] -> Maybe a
  * @template _T_
  * @param { Iterable<_T_> } iterable             - a finite iterable
  * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the first argument is smaller than the second

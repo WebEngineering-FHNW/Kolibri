@@ -17,6 +17,7 @@ export { Range }
  *
  * @constructor
  * @pure
+ * @haskell (a, a) -> [a]
  * @param { !Number } firstBoundary  - the first boundary of the range
  * @param { Number }  secondBoundary - optionally the second boundary of the range
  * @param { Number }  step - the size of a step, processed during each iteration

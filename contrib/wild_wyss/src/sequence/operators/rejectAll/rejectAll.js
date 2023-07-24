@@ -7,6 +7,7 @@ export { rejectAll }
  *
  * @function
  * @pure
+ * @haskell (a -> Bool) -> [a] -> [a]
  * @template _T_
  * @type {
  *            (predicate: Predicate<_T_>)

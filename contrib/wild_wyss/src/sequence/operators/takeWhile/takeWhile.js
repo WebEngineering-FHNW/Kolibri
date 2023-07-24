@@ -7,7 +7,7 @@ export { takeWhile }
  * Proceeds with the iteration until the {@link Predicate} becomes true.
  *
  * @function
- * @pure
+ * @pure (a -> Bool) -> [a] -> [a]
  * @template _T_
  * @type {
  *            (predicate: (_T_) => Boolean)

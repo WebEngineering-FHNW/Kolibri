@@ -9,6 +9,7 @@ export { show }
  *
  * @function
  * @pure
+ * @haskell Show a => a -> String
  * @template _T_
  * @param { Iterable<_T_> } iterable
  * @param { Number }        [maxValues=50] - the amount of elements that should be printed at most

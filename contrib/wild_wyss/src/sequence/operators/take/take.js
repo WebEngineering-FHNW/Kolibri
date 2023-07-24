@@ -8,6 +8,7 @@ export { take }
  *
  * @function
  * @pure
+ * @haskell Int -> [a] -> [a]
  * @template _T_
  * @type {
  *           (count: Number)

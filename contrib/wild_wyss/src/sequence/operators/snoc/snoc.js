@@ -8,6 +8,7 @@ export { snoc }
  *
  * @function
  * @pure
+ * @haskell a -> [a] -> [a]
  * @template _T_
  * @type {
  *           (element: _T_)

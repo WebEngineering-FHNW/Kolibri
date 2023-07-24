@@ -10,6 +10,7 @@ export { catMaybes }
  *
  * @function
  * @pure
+ * @haskell [Maybe a] -> a
  * @template _T_
  * @type {
               (iterable: Iterable<MaybeType<_T_>>)

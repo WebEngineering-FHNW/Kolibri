@@ -5,6 +5,7 @@ export { forEach$ }
  *
  * @function
  * @pure
+ * @haskell (a -> b) -> [a] -> Unit
  * @template _T_
  * @type {
  *            (callback: Consumer<_T_>)

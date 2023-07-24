@@ -9,6 +9,7 @@ export { cycle }
  *
  * @function
  * @pure
+ * @haskell [a] -> [a]
  * @template _T_
  * @param { Iterable<_T_> } iterable
  * @returns SequenceType<_T_>
