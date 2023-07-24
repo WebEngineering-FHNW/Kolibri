@@ -31,8 +31,27 @@ const id = x => x;
  * @property { (Function | any) }            [param]         - A parameter passed to this operation. If it is a function, some extra tests will be performed.
  * @property { Array<InvariantCallback<T>> } [invariants]    - An optional array of {@link InvariantCallback}. The invariant must hold tests against different lists.
  * @property { EvalCallback<_U_> }           [evalFn]        - An optional function which takes {@link expected} and the actual result in curried style. It defaults to {@link arrayEq}.
+ *
  * @example
- * TODO
+ * const config = {
+ *     name:       "function name",
+ *     iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
+ *     operation:  param => fn(param),
+ *     param:      el => 2 * el,
+ *     expected:   [0, 2, 4, 6, 8],
+ *     invariants: [
+ *       it => map(x => x)(it) ["=="] (it),
+ *       it => map(x => x[0])(map(x => [x])(it)) ["=="] (it),
+ *     ],
+ *     evalFn: expected => actual => {
+ *                 // do some calculations
+ *                 return arrayEq([...expectedArray])([...actualArray]);
+ *     },
+ *     excludedTests: [
+ *       TESTS.TEST_PURITY,
+ *       TESTS.TEST_CB_NOT_CALLED_AFTER_DONE
+ *     ]
+ * }
  */
 
 /**
