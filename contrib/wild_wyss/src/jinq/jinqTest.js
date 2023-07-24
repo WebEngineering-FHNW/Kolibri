@@ -1,7 +1,6 @@
 import { TestSuite }     from "../test/test.js";
 import { from }          from "./jinq.js";
 import { Range }         from "../sequence/sequence.js";
-import { arrayEq }       from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Just, Nothing } from "../stdlib/maybe.js"
 import { JsonMonad }     from "../json/jsonMonad.js";
 
@@ -18,7 +17,7 @@ jinqSuite.add("simple with iterable", assert => {
       .result();
 
   // Then
-  assert.isTrue(arrayEq([0, 2, 4, 6])([...result]))
+  assert.iterableEq([0, 2, 4, 6], [...result]);
 });
 
 jinqSuite.add("pairWith with iterable", assert => {
@@ -38,7 +37,7 @@ jinqSuite.add("pairWith with iterable", assert => {
   }
 
   // Then
-  assert.isTrue(arrayEq([0,0,1,1,2,2,3,3])(values));
+  assert.iterableEq([0,0,1,1,2,2,3,3], values);
 });
 
 jinqSuite.add("select with iterable", assert => {
@@ -52,7 +51,7 @@ jinqSuite.add("select with iterable", assert => {
       .result();
 
   // Then
-  assert.isTrue(arrayEq([0, 2, 4, 6])([...result]))
+  assert.iterableEq([0, 2, 4, 6], [...result]);
 });
 
 jinqSuite.add("jinq with maybe", assert => {

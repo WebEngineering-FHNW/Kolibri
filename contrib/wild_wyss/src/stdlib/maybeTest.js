@@ -15,7 +15,7 @@ maybeTestSuite.add("test fmap", assert => {
   let nothingResult = 0;
 
   // When
-  mappedJust(_ => justResult = undefined )(x => justResult = x);
+  mappedJust   (_ => justResult    = undefined )(x => justResult    = x);
   mappedNothing(_ => nothingResult = undefined )(x => nothingResult = x);
 
   // Then
@@ -29,7 +29,7 @@ maybeTestSuite.add("test empty", assert => {
   const nothing = Nothing;
 
   // Then
-  assert.is(just.empty(), Nothing);
+  assert.is(just.empty(),    Nothing);
   assert.is(nothing.empty(), Nothing);
 });
 
@@ -45,7 +45,7 @@ maybeTestSuite.add("test and", assert => {
   // When
   let justResult    = 0;
   let nothingResult = 0;
-  mappedJust(_ => justResult = undefined)(x => justResult = x);
+  mappedJust   (_ => justResult    = undefined)(x => justResult    = x);
   mappedNothing(_ => nothingResult = undefined)(x => nothingResult = x);
 
   // Then
@@ -58,17 +58,17 @@ maybeTestSuite.add("test pure", assert => {
   const just    = Just(5);
   const nothing = Nothing;
 
-  const mappedJust    = just.pure(10);
+  const mappedJust    = just   .pure(10);
   const mappedNothing = nothing.pure(10);
 
   // When
   let justResult    = 0;
   let nothingResult = 0;
-  mappedJust(_ => justResult = undefined)(x => justResult = x);
+  mappedJust   (_ => justResult    = undefined)(x => justResult    = x);
   mappedNothing(_ => nothingResult = undefined)(x => nothingResult = x);
 
   // Then
-  assert.is(justResult, 10);
+  assert.is(justResult,    10);
   assert.is(nothingResult, 10);
 });
 

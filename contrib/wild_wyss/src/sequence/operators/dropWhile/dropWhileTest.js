@@ -1,7 +1,6 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../test/test.js";
 import { dropWhile, nil }    from "../../sequence.js";
-import { arrayEq }           from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import {
   createTestConfig,
   newSequence,
@@ -33,7 +32,7 @@ testSuite.add("test advanced case: dropWhile inner iterable is shorter", assert 
   const some     = dropWhile(_ => false)(sequence);
 
   // Then
-  assert.isTrue(arrayEq([0, 1, 2, 3, 4])([...some]));
+  assert.iterableEq([0, 1, 2, 3, 4], [...some]);
 });
 
 testSuite.run();

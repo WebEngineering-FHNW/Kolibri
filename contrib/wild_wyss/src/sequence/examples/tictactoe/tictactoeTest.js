@@ -1,4 +1,7 @@
-import {TestSuite} from "../../../test/test.js";
+import { TestSuite }        from "../../../test/test.js";
+import { Range, map, zip }  from "../../../sequence/sequence.js";
+import { iteratorOf }       from "../../util/sequenceUtil/iteratorOf.js";
+import { Pair }             from "../../../stdlib/pair.js";
 import {
   Computer, evaluate,
   hasWon,
@@ -6,29 +9,22 @@ import {
   moves,
   nextBoard,
   NoPlayer,
-  nowValue,
   opponent,
   stone,
   treeMap
 } from "./tictactoe.js";
-import {Range, map, show, zip, forEach$} from "../../../sequence/sequence.js";
-import {arrayEq} from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
-import {iteratorOf} from "../../util/sequenceUtil/iteratorOf.js";
-import {Pair} from "../../../stdlib/pair.js";
-
 
 const testSuite = TestSuite("Tic Tac Toe Game Tests");
 
-
 testSuite.add("opponent", assert => {
   assert.is(opponent(Computer), Human);
-  assert.is(opponent(Human), Computer);
+  assert.is(opponent(Human),    Computer);
   assert.is(opponent(NoPlayer), NoPlayer);
 });
 
 testSuite.add("stone", assert => {
   assert.is(stone(Computer), 1);
-  assert.is(stone(Human), -1);
+  assert.is(stone(Human),   -1);
   assert.is(stone(NoPlayer), 0);
 });
 
@@ -123,9 +119,7 @@ testSuite.add("test treemap", assert => {
       Pair(2)([
         Pair(1)([])
       ]),
-      Pair(3)([
-
-      ])
+      Pair(3)([])
   ]);
 
   const [h1, seq1]   = treeMap(x => 2*x)(tree);
@@ -150,16 +144,17 @@ testSuite.add("test nextBoard", assert => {
 testSuite.add("test evaluate", assert => {
   // Computer has no chance here - it must lay its stone in the lower right corner nad in the middle line on the left side
   const field = [
-      -1,1,1,
-      0,0,0, // human will set to the middle
-      0,0,0
+      -1, 1, 1,
+       0, 0, 0, // human will set to the middle
+       0, 0, 0
   ];
 
   const board = {
     whosTurn: Human,
     fields: field
   };
-  assert.is(evaluate(1)(board), 0);
+  assert.is(evaluate(1)(board),  0);
   assert.is(evaluate(5)(board), -1);
 });
+
 testSuite.run();

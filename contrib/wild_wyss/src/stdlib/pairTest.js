@@ -1,7 +1,6 @@
 import { TestSuite } from "../test/test.js";
 import { Pair      } from "./pair.js";
 import { fst, snd  } from "../../../../docs/src/kolibri/stdlib.js"
-import { arrayEq   } from "../../../../docs/src/kolibri/util/arrayFunctions.js";
 
 const pairTestSuite = TestSuite("Pair");
 
@@ -48,7 +47,7 @@ pairTestSuite.add("test destructuring with spread-operator", assert => {
   const pair = Pair("Tobi")("Andri");
 
   // Then
-  assert.isTrue(arrayEq([...pair])(["Tobi","Andri"]));
+  assert.iterableEq([...pair], ["Tobi","Andri"]);
 });
 
 pairTestSuite.run();

@@ -1,6 +1,5 @@
 import { addToTestingTable, TESTS }     from "../../util/testingTable.js";
 import { TestSuite }                    from "../../../test/test.js";
-import { arrayEq }                      from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { Just, Nothing }                from "../../../stdlib/maybe.js";
 import { createTestConfig }             from "../../util/testUtil.js";
 import { toMonadicIterable }            from "../../util/sequenceUtil/toMonadicIterable.js";
@@ -23,7 +22,7 @@ testSuite.add("test catMaybes with Nothing", assert => {
   const result = catMaybes(PureSequence(Nothing));
 
   // Then
-  assert.isTrue(arrayEq([])([...result]));
+  assert.iterableEq([],[...result]);
 });
 
 testSuite.add("test catMaybes with nil", assert => {
@@ -31,7 +30,7 @@ testSuite.add("test catMaybes with nil", assert => {
   const result = catMaybes(nil);
 
   // Then
-  assert.isTrue(arrayEq([])([...result]));
+  assert.iterableEq([],[...result]);
 });
 
 testSuite.add("test catMaybes with no Nothings", assert => {
@@ -42,7 +41,7 @@ testSuite.add("test catMaybes with no Nothings", assert => {
   const result = catMaybes(inner);
 
   // Then
-  assert.isTrue(arrayEq([5, 3])([...result]));
+  assert.iterableEq([5, 3],[...result]);
 });
 
 testSuite.run();

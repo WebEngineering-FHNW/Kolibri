@@ -1,6 +1,5 @@
 import { addToTestingTable }             from "../../util/testingTable.js";
 import { TestSuite }                     from "../../../test/test.js";
-import { arrayEq }                       from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { concat, Sequence, nil, Range }  from "../../sequence.js";
 import { createTestConfig, newSequence } from "../../util/testUtil.js";
 
@@ -31,8 +30,8 @@ testSuite.add("test purity: concat - both sub iterables untouched.", assert => {
   for (const _ of concatIterator) { /* Exhausting */ }
 
   // Then
-  assert.isTrue(arrayEq([0,1,2,3,4])([...it1]));
-  assert.isTrue(arrayEq([0,1,2])    ([...it2]));
+  assert.iterableEq([0,1,2,3,4], [...it1]);
+  assert.iterableEq([0,1,2],     [...it2]);
 });
 
 testSuite.add("test left/right associativity: concat", assert => {
@@ -42,8 +41,8 @@ testSuite.add("test left/right associativity: concat", assert => {
 
   // Then
   const expected = [0,1,2,0,1,0,1,2,3];
-  assert.isTrue(arrayEq(expected)([...right]));
-  assert.is(arrayEq(expected)([...left]),  true);
+  assert.iterableEq(expected, [...right]);
+  assert.iterableEq(expected, [...left]);
 });
 
 testSuite.add("test concat with infinity: concat", assert => {
@@ -69,7 +68,7 @@ testSuite.add("test empty: concat", assert => {
   const concatenated = concat(nil)(nil);
 
   // Then
-  assert.is(arrayEq([])([...concatenated]),  true);
+  assert.iterableEq([], [...concatenated]);
 });
 
 testSuite.run();

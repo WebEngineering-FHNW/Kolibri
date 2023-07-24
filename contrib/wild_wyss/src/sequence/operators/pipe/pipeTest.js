@@ -1,6 +1,5 @@
 import { TestSuite         }             from "../../../test/test.js";
 import { addToTestingTable }             from "../../util/testingTable.js";
-import { arrayEq }                       from "../../../../../../docs/src/kolibri/util/arrayFunctions.js";
 import { pipe, map, rejectAll, reduce$ } from "../../sequence.js";
 import {
   createTestConfig,
@@ -48,7 +47,7 @@ testSuite.add("Test with no operations", assert => {
   const res = pipe()(base);
 
   //Then
-  assert.isTrue(arrayEq([...base])([...res]))
+  assert.iterableEq([...base], [...res]);
 });
 
 testSuite.run();
