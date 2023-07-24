@@ -93,9 +93,8 @@ const testRangeNegativeStepSize = (from, to, step, range, assert) => {
 testSuite.add("test simple Range(2,3)", assert =>
   testRange(2, 3, 1, Range(2, 3), assert));
 
-testSuite.add("test simple Range(3,2,1)", assert => {
-  testRange(2, 3, 1, Range(3,2,1), assert)
-});
+testSuite.add("test simple Range(3,2,1)", assert =>
+  testRange(2, 3, 1, Range(3, 2, 1), assert));
 
 testSuite.add("test break Range(7)", assert => {
   // Given

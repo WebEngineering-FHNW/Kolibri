@@ -44,12 +44,12 @@ let counter = 0;
  * @type { (eventType:EventTypeString) => InputProjector<T> }
  * @template T
  */
-const projectInput = (eventType) => (formClassName, inputController, timeout = 0) => {
+const projectInput = eventType => (formClassName, inputController, timeout = 0) => {
     if( ! inputController) {
         console.error("no inputController in input projector."); // be defensive
         return;
     }
-    const id = formClassName + "-id-" + (counter++);
+    const id = formClassName + "-id-" + counter++;
     // create view
     const elements = dom(`
         <label for="${id}"></label>

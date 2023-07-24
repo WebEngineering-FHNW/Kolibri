@@ -65,7 +65,7 @@
    *
    * @param { Board } board
    */
-  const computersTurn = board => {
+  const computersTurn = board =>
     setTimeout(() => {
       const newBoard = nextBoard(LOOK_AHEAD)(board.fields);
       if (hasWon(newBoard)(Computer)) {
@@ -78,7 +78,6 @@
       createBoard(newBoard);
       gameInfo.innerText = "Your turn!";
     }, 500);
-  };
 
   const humanPlayed = (index, board) => {
     board = { whosTurn: Computer, fields: [...board.fields] };

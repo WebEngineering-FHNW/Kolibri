@@ -24,7 +24,7 @@ export { reverse$ }
  */
 const reverse$ = iterable => {
 
-  // wrap the code in a function, to keep lazyness
+  // wrap the code in a function, to keep laziness
   const reverse$Iterator = () => {
     const values         = [...iterable].reverse();
     const valuesIterator = iteratorOf(values);

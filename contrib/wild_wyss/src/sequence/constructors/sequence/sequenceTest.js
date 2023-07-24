@@ -1,8 +1,6 @@
 import { TestSuite }        from "../../../test/test.js";
 import { createTestConfig } from "../../util/testUtil.js";
 import { Sequence }         from "./Sequence.js";
-import { show }             from "../../terminalOperations/show/show.js";
-import { map }              from "../../operators/map/map.js"
 
 import {
   addToTestingTable,

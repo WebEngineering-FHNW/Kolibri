@@ -51,7 +51,7 @@ const ResultView = (rootElement, controller) => {
 };
 
 /**
- * Draws the wheels to the UI. Each slot of the wheel is represented by a value of the focusring.
+ * Draws the wheels to the UI. Each slot of the wheel is represented by a value of the {@link FocusRingType focusring}.
  *
  * @param { HTMLElement }                rootElement
  * @param { IObservable<FocusRingType> } wheelObservable
