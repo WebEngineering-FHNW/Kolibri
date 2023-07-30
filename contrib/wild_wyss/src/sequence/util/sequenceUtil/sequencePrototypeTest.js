@@ -57,6 +57,17 @@ testSuite.add("test prototype: toString", assert => {
   assert.is(result, show(seq));
 });
 
+testSuite.add("test prototype: toString with max", assert => {
+  // Given
+  const seq       = range(0, 3);
+  const maxValues = 2;
+
+  // When
+  const result = seq.toString(maxValues);
+
+  // Then
+  assert.is(result, show(seq, maxValues));
+});
 testSuite.add("test prototype: [==]", assert => {
   // Given
   const seq    = range(0, 3);

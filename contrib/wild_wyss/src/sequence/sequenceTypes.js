@@ -18,7 +18,7 @@
  *              pure: <_U_>(_U_)                                  => SequenceType<_U_>,
  *              empty:     ()                                     => SequenceType<_T_>,
  *              pipe:      function(...transformers: SequenceOperation<*,*>): SequenceType<*> | *,
- *              toString:  ()                                     => String,
+ *              toString:  (maxValues?: Number)                   => String,
  *              "==":      (that: SequenceType<_T_>)              => Boolean
  *            } & Iterable<_T_>
  * } SequenceType
