@@ -29,11 +29,11 @@ const take = count => iterable => {
     let start = 0;
 
     const next = () => {
-      const el = inner.next();
       // the iterator finishes, when the predicate does not return true anymore,
       // or the previous iterator has no more elements left
-      const done = el.done || start++ >= count;
-      return { value: el.value, done };
+      const takeDone = start++ >= count;
+      if (takeDone) return { done: true, value: undefined };
+      return inner.next();
     };
 
     return { next };
