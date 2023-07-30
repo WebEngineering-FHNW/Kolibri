@@ -18,7 +18,7 @@ export { foldl$, reduce$ }
  * const res = foldl$((acc, cur) => acc + cur, 0)(numbers);
  *
  * console.log(res);
- * // => logs '15'
+ * // => Logs '15'
  */
 const reduce$ = (accumulationFn, start) => iterable => {
   let accumulator = start;

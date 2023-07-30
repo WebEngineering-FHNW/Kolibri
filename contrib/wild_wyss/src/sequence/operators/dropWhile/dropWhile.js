@@ -20,7 +20,7 @@ export { dropWhile }
  * const dropped = dropWhile(el => el < 2)(numbers);
  *
  * console.log(...dropped);
- * // Logs '2, 3, 4, 5'
+ * // => Logs '2, 3, 4, 5'
  */
 const dropWhile = predicate => iterable => {
 

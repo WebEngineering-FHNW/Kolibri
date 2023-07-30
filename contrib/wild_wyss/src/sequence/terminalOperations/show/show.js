@@ -5,7 +5,7 @@ import { reduce$ } from "../reduce/reduce.js";
 export { show }
 
 /**
- * Transforms the passed {@link Iterable} to a {@link String}.
+ * Transforms the passed {@link Iterable} into a {@link String}.
  *
  * @function
  * @pure
@@ -20,7 +20,7 @@ export { show }
  * const text    = show(numbers, 3);
  *
  * console.log(text);
- * // Logs '[0,1,2]'
+ * // => Logs '[0,1,2]'
  */
 const show = (iterable, maxValues = 50) =>
   "[" +

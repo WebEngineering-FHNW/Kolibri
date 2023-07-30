@@ -4,7 +4,7 @@ export { Range }
 
 /**
  * Creates a range of numbers between two inclusive boundaries,
- * that implements the iterator protocol.
+ * that implements the JS iteration protocol.
  * First and second boundaries can be specified in arbitrary order,
  * step size is always the third parameter.
  * Consider the examples at the end of the documentation.

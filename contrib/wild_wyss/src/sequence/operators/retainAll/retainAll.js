@@ -4,7 +4,7 @@ import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequ
 export { retainAll }
 
 /**
- * Only keeps elements which fulfill the given {@link Predicate}.
+ * Only keeps elements which fulfil the given {@link Predicate}.
  *
  * @function
  * @pure

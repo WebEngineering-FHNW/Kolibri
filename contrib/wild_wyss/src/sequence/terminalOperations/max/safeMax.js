@@ -10,7 +10,7 @@ export { safeMax$ }
  *  To determine the largest element, a comparator function is used.
  *  This function compares two elements by default with the `< (LT)` operator,
  *  where on the left side is the current largest element when processing the iterable.
- *  If needed, a different comparator can also be passed as a second argument to {@link max$}
+ *  If needed, a different comparator can also be passed as a second argument to {@link safeMax$}
  *  and will then be used to determine the largest element.
  *
  * @function

@@ -22,7 +22,7 @@ export { rejectAll }
  *
  * console.log(...filtered);
  * // => Logs '1, 3, 5'
- */
+*/
 const rejectAll = predicate => iterable =>
   // flip the predicate and call retainAll
   retainAll(el => !predicate(el))(iterable);
