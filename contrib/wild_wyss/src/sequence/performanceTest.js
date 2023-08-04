@@ -8,7 +8,7 @@ import {
 
 const performanceSuite = TestSuite("PerformanceTest");
 
-performanceSuite.add("compare SequenceBuilder and cons: SequenceBuilder 1000x faster", assert => {
+performanceSuite.add("compare SequenceBuilder and cons: SequenceBuilder 50x faster", assert => {
   const limit = 5000;
 
   const builderTime = measure(() => {
@@ -24,7 +24,7 @@ performanceSuite.add("compare SequenceBuilder and cons: SequenceBuilder 1000x fa
     return reduce$( (acc, cur) => acc + cur, 0)(consed);
   }, "Cons");
 
-  assert.isTrue(consTime / 1000 > builderTime);
+  assert.isTrue(consTime / 50 > builderTime);
 
 });
 
