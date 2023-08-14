@@ -22,6 +22,8 @@ export { from }
  * handle monadic iterables like {@link SequenceType} and every monadic type such as
  * {@link MaybeType} or {@link JsonMonad}.
  *
+ * Note: Despite the similarity to SQL, it is important to note that the functionalities are not exactly the same.
+ *
  * @see https://learn.microsoft.com/en-us/dotnet/csharp/linq/
  * @template _T_
  * @param { MonadType<_T_> } monad
