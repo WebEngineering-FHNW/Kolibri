@@ -2,14 +2,14 @@ import * as _                from "../../sequence.js";
 import { dom }               from "../../../../../../docs/src/kolibri/util/dom.js";
 import { sequenceProjector } from "../../projector/sequenceProjector.js";
 import {
-  AngleSequence,
-  FibonacciSequence,
   Range,
 } from "../../sequence.js";
+import {AngleSequence} from "../generators/angleSequence/angleSequence.js";
+import {FibonacciSequence} from "../generators/fibonacciSequence/fibonacciSequence.js";
 
 const fibonacciView = (rootElement, amount, scaleFactor) => {
-  const fibSequence = _.take(amount)(FibonacciSequence());
-  const position    = _.cons(0)(FibonacciSequence()); // position of square is one behind the squares value
+  const fibSequence = _.take(amount)(FibonacciSequence);
+  const position    = _.cons(0)(FibonacciSequence); // position of square is one behind the squares value
   const values      = _.zipWith((a, b) => ({current: a, pos: b}))(fibSequence)(position);
   const indexed     = _.zipWith((a, b) => ({...a, index: b}))(values)(Range(100));
   const colored     = _.zipWith((a, b) => ({...a, color: b}))(indexed)(AngleSequence(amount));
