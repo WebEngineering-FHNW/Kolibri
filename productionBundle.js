@@ -3,6 +3,7 @@
  * can be used in an asynchronous fashion.
  */
 
+
 /**
  * @callback createValueCallback
  * @template _T_
@@ -91,6 +92,7 @@ const Scheduler = () => {
  * @module util/arrayFunctions
  * Utility module for array-dependent functions.
  */
+
 
 /**
  * A function that compares two arrays for equality by checking that they are of the same length and
@@ -198,6 +200,7 @@ const sum = array => (callback = Number) => {
  * These functions live in their own module such that users of the library can keep their code clean
  * from prototype modifications if they prefer to do so.
  */
+
 
 /**
  * See {@link arrayEq}.
@@ -468,6 +471,7 @@ const totalMinutesToTimeString = totalMinutes => {
  * Recommended reading: https://en.wikipedia.org/wiki/Church_encoding .
  * Recommended watching: https://www.youtube.com/watch?v=6BnVo7EHO_8&t=1032s .
  */
+
 
 /**
  * Identity function, aka "I" in the SKI calculus or "Ibis" (or "Idiot") in the Smullyan bird metaphors.
@@ -904,6 +908,7 @@ const uncurry = f => (x,y) => f(x)(y);/**
  */
 
 
+
 // to do
 // Eq typeclass, symmetry, reflexivity
 // booleanEq, pairEq, tupleEq, eitherEq, choiceEq, maybeEq, arrayEq
@@ -1166,6 +1171,7 @@ const Attribute = (value, qualifier) => {
     return { getObs, hasObs, setValidator, setConverter, setConvertedValue, getQualifier, setQualifier }
 };// noinspection JSUnusedGlobalSymbols
 
+
 /**
  * Create DOM objects from an HTML string.
  * @param  { String } innerString - The string representation of the inner HTML that will be returned as an HTML collection.
@@ -1328,6 +1334,7 @@ const SimpleFormController = inputAttributesArray => {
     // set up any business rules (we do not have any, yet)
     return inputControllers ;
 };// noinspection JSUnusedLocalSymbols
+
 
 /**
  * Css string value for the given color. We keep values as HSL to allow easier manipulation.
@@ -1502,6 +1509,7 @@ const dangerBg          = pink100;/**
  * to the application while all business logic and their test cases remain untouched.
  */
 
+
 /**
  * @private
  * Internal mutable singleton state to produce unique id values for the label-input pairs.
@@ -1621,6 +1629,7 @@ const InputProjector = {
  * to the application while all business logic and their test cases remain untouched.
  */
 
+
 /**
  * String that must be unique in CSS classes and DOM id prefixes throughout the application.
  * @private
@@ -1678,6 +1687,7 @@ const FORM_CSS = `
  * Provides an {@link AppenderType} that stores all log messages in an array.
  * Since many log messages might be generated, we need a strategy to evict old log messages.
  */
+
 
 const MAX_ARRAY_ELEMENTS    = Number.MAX_SAFE_INTEGER - 1;
 const MIN_ARRAY_LENGTH      = 2;
@@ -2862,6 +2872,7 @@ const clientId    = stamp() + stamp();/**
  * Graham Hutton: https://www.youtube.com/watch?v=9T8A89jgeTI
  */
 
+
 /**
  * Identity, Ibis, I.
  * See {@link id}.
@@ -2942,6 +2953,7 @@ const V = Pair;/**
  * @module lambda/churchNumbers
  * Peano numbers in the church encoding and their operations.
  */
+
 
 /**
  * Peano numbers in the church encoding.
