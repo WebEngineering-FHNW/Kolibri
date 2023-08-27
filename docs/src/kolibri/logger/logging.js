@@ -138,7 +138,7 @@ const appenders = [];
 
 /**
  * This is a singleton state.
- * The currently active {@link AppenderType AppenderType's}.
+ * The currently active {@link AppenderType}.
  * @type { IObservableList<AppenderType> }
  * @private
  */

@@ -149,7 +149,7 @@ const Choice = n => { // number of constructors
  * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
  * @haskell a -> b -> (a -> b -> a|b) -> a|b
  * @pure    if the selector function is pure, which it usually is
- * @type    PairType<_T_, _U_>
+ * @type    PairType
  * @constructor
  * @example
  * const dierk = Pair("Dierk")("König");

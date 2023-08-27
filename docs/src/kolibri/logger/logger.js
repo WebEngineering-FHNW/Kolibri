@@ -22,7 +22,7 @@ export {
  * (set with {@link setLoggingContext}) is a prefix of the logger context.
  *
  * The result of the callback function {@link FormatLogMessage}
- * will be logged using the given {@link AppendCallback AppendCallback's}.
+ * will be logged using the given {@link AppendCallback}.
  *
  * What's the difference between "logger" and "logging" and "log"?
  *
@@ -36,7 +36,7 @@ export {
  * The word "log" is used when the abstraction can be used for both, the logger and the logging
  *
  * @function
- * @pure if the {@link AppendCallback AppendCallback's} in the appender list and the parameter msgFormatter of type {@link FormatLogMessage} are pure.
+ * @pure if the {@link AppendCallback} in the appender list and the parameter msgFormatter of type {@link FormatLogMessage} are pure.
  * @type    {
  *               (loggerLevel:      LogLevelChoice)
  *            => (loggerContext:    LogContextType)

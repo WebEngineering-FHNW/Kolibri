@@ -32,7 +32,7 @@ const K = c;
 
 /**
  * Cardinal, C, flip, \fxy.fyx .
- * Also the boolean "not" operator.
+ * It also is the boolean "not" operator.
  * See also {@link flip}.
  */
 const C = flip;
