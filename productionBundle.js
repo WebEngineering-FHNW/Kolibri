@@ -605,7 +605,7 @@ const Choice = n => { // number of constructors
  * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
  * @haskell a -> b -> (a -> b -> a|b) -> a|b
  * @pure    if the selector function is pure, which it usually is
- * @type    PairType<_T_, _U_>
+ * @type    PairType
  * @constructor
  * @example
  * const dierk = Pair("Dierk")("König");
@@ -1789,7 +1789,7 @@ const getValue$1 = () => appenderArray;
  */
 const appenderCallback$2 = limit => onOverflow => msg =>
   LazyIf(full(limit))
-    // if the array is full, call the overflow function and add the new value afterwards.
+    // if the array is full, call the overflow function and add the new value afterward.
     (() => append(msg)(limit)(onOverflow))
     // in any other case just append the new message.
     (() => append(msg)(limit)(    id    ));
@@ -2304,7 +2304,7 @@ const appenders = [];
 
 /**
  * This is a singleton state.
- * The currently active {@link AppenderType AppenderType's}.
+ * The currently active {@link AppenderType}.
  * @type { IObservableList<AppenderType> }
  * @private
  */
@@ -2348,7 +2348,7 @@ const onAppenderRemoved = appenderListObs.onDel;/**
  * (set with {@link setLoggingContext}) is a prefix of the logger context.
  *
  * The result of the callback function {@link FormatLogMessage}
- * will be logged using the given {@link AppendCallback AppendCallback's}.
+ * will be logged using the given {@link AppendCallback}.
  *
  * What's the difference between "logger" and "logging" and "log"?
  *
@@ -2362,7 +2362,7 @@ const onAppenderRemoved = appenderListObs.onDel;/**
  * The word "log" is used when the abstraction can be used for both, the logger and the logging
  *
  * @function
- * @pure if the {@link AppendCallback AppendCallback's} in the appender list and the parameter msgFormatter of type {@link FormatLogMessage} are pure.
+ * @pure if the {@link AppendCallback} in the appender list and the parameter msgFormatter of type {@link FormatLogMessage} are pure.
  * @type    {
  *               (loggerLevel:      LogLevelChoice)
  *            => (loggerContext:    LogContextType)
@@ -2769,9 +2769,9 @@ const asyncTest = (name, asyncCallback) => {
 
 /**
  * @typedef { Object } TestSuiteType
- * @property { (testName:String, callback:TestCallback) => void} test - running a test function for this suite
- * @property { (testName:String, callback:TestCallback) => void} add  - adding a test function for later execution
- * @property { function(): void } run:                                - running and reporting the suite
+ * @property { (testName:String, callback:TestCallback) => void } test - running a test function for this suite
+ * @property { (testName:String, callback:TestCallback) => void } add  - adding a test function for later execution
+ * @property {                                       () => void } run - running and reporting the suite
  */
 /**
  * Tests are organised in test suites that contain test functions. These functions are added before the suite
@@ -2895,7 +2895,7 @@ const K = c;
 
 /**
  * Cardinal, C, flip, \fxy.fyx .
- * Also the boolean "not" operator.
+ * It also is the boolean "not" operator.
  * See also {@link flip}.
  */
 const C = flip;
