@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Tic Tac Toe</title>
+  <style>
+      #grid-container {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-template-rows: repeat(3, 1fr);
+          background-color: black;
+          grid-gap: 5px;
+          width: 300px;
+          height: 300px;
+      }
+
+      .fill-button {
+          width: 100%;
+          height: 100%;
+          padding: 10px;
+          font-size: 32px;
+          background-color: white;
+          border: none;
+          color: black;
+      }
+      .game-info {
+          font-size: 24px;
+      }
+      .won {
+          color: green;
+      }
+      .lost {
+          color: red;
+      }
+      * {
+          font-family: monospace;
+          font-size: 16px;
+      }
+  </style>
+</head>
+<body>
+<h1>Tic Tac Toe</h1>
+<p>Play tic-tac-toe against a computer!</p>
+<div id="grid-container"></div>
+<p class="game-info" id="game-info"></p>
+<button id="reset-btn">RESET GAME</button>
+</body>
+<script type="module">
+  import { Range, zip, map }                    from "../../sequence.js";
+  import { dom }                                from "../../../debounceInput/dom.js";
+  import { Computer, hasWon, Human, nextBoard } from "./tictactoe.js";
+  import { retainAll }                          from "../../operators/retainAll/retainAll.js";
+  import { isEmpty }                            from "../../terminalOperations/isEmpty/isEmpty.js";
+  import { pipe }                               from "../../operators/pipe/pipe.js";
+
+  const gameInfo = document.getElementById("game-info");
+  const resetBtn = document.getElementById("reset-btn");
+  const LOOK_AHEAD = 3;
+  const SYMBOL = {
+    "-1": "X",
+    "1": "O",
+    "0": ""
+  };
+
+  /**
+   *
+   * @param { Board } board
+   */
+  const computersTurn = board =>
+    setTimeout(() => {
+      const newBoard = nextBoard(LOOK_AHEAD)(board.fields);
+      if (hasWon(newBoard)(Computer)) {
+        gameInfo.innerText = "Sorry, you lost!";
+        gameInfo.classList.add("lost");
+        newBoard.whosTurn = Computer; // lock fields
+        createBoard(newBoard);
+        return;
+      }
+      createBoard(newBoard);
+      gameInfo.innerText = "Your turn!";
+    }, 500);
+
+  const humanPlayed = (index, board) => {
+    board = { whosTurn: Computer, fields: [...board.fields] };
+    board.fields[index] = -1;
+
+    if (hasWon(board)(Human)) {
+      gameInfo.innerText = "Congrats, you won!";
+      gameInfo.classList.add("won");
+      board.whosTurn = Computer; // lock fields
+      createBoard(board);
+      return;
+    }
+
+    createBoard(board);
+    const noMoreFields = pipe(
+      retainAll(f => f === 0),
+      isEmpty
+    )(board.fields);
+    if (noMoreFields) {
+      gameInfo.innerText = "Draw!";
+      return;
+    }
+    gameInfo.innerText = "Computer is choosing...";
+    computersTurn(board);
+  };
+
+
+ /**
+  * @param { Board } board
+  */
+ const createBoard = board => {
+   const gridContainer = document.getElementById("grid-container");
+   gridContainer.innerHTML = '';
+   const { fields } = board;
+   const indexedFields = zip(fields)(Range(8));
+   const buttons = map(createButton(board))(indexedFields);
+   gridContainer.append(...buttons);
+ };
+
+  const createButton = wholeBoard => ([value, index]) => {
+    const gridItem = document.createElement("DIV");
+    gridItem.className = "grid-item";
+    const disabled = value !== 0 || wholeBoard.whosTurn === Computer;
+    const btn = dom(`
+        <button class="fill-button" ${disabled ? "disabled" : ""}>${SYMBOL[String(value)]}</button>
+     `);
+    btn[0].onclick = () => humanPlayed(index, wholeBoard);
+    gridItem.append(...btn);
+    return gridItem;
+  };
+
+  const resetGame = () => {
+   gameInfo.classList.remove("won", "lost");
+   /** @type {Board} */
+   const INITIAL_BOARD = { whosTurn: Human, fields: map(_ => 0)(Range(8)) };
+   createBoard(INITIAL_BOARD);
+   gameInfo.innerText = "You start!";
+ };
+
+ resetBtn.onclick = resetGame;
+ resetGame();
+</script>
+</html>
