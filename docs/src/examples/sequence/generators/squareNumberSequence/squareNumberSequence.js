@@ -1,6 +1,6 @@
-import { Sequence }              from "../../../sequence.js"
-import { iteratorOf }            from "../../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence } from "../../../util/sequenceUtil/createMonadicSequence.js";
+import { Sequence }              from "../../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js"
+import { iteratorOf }            from "../../../../../../contrib/p6_wild_wyss/src/sequence/util/sequenceUtil/iteratorOf.js";
+import { createMonadicSequence } from "../../../../../../contrib/p6_wild_wyss/src/sequence/util/sequenceUtil/createMonadicSequence.js";
 
 export { SquareNumberSequence }
 

@@ -1,6 +1,6 @@
-import { Sequence, map } from "../../../sequence.js";
-import { Pair }          from "../../../../stdlib/pair.js";
-import { snd }           from "../../../../../../../docs/src/kolibri/stdlib.js";
+import { Sequence, map } from "../../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
+import { Pair }          from "../../../../../../contrib/p6_wild_wyss/src/stdlib/pair.js";
+import { snd }           from "../../../../kolibri/stdlib.js";
 
 export { FibonacciSequence }
 

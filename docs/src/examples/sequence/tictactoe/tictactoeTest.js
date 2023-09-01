@@ -1,7 +1,7 @@
-import { TestSuite }        from "../../../test/test.js";
-import { Range, map, zip }  from "../../../sequence/sequence.js";
-import { iteratorOf }       from "../../util/sequenceUtil/iteratorOf.js";
-import { Pair }             from "../../../stdlib/pair.js";
+import { TestSuite }       from "../../../kolibri/util/test.js";
+import { Range, map, zip } from "../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
+import { iteratorOf }      from "../../../../../contrib/p6_wild_wyss/src/sequence/util/sequenceUtil/iteratorOf.js";
+import { Pair }            from "../../../../../contrib/p6_wild_wyss/src/stdlib/pair.js";
 import {
   Computer, evaluate,
   hasWon,
@@ -11,9 +11,9 @@ import {
   opponent,
   stone,
   treeMap
-} from "./tictactoe.js";
+}                          from "./tictactoe.js";
 
-const testSuite = TestSuite("Tic Tac Toe Game Tests");
+const testSuite = TestSuite("examples/sequence/tictactoe");
 
 testSuite.add("opponent", assert => {
   assert.is(opponent(Computer), Human);

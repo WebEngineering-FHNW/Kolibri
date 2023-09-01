@@ -1,11 +1,11 @@
-import * as _                from "../../sequence.js";
-import { dom }               from "../../../../../../docs/src/kolibri/util/dom.js";
-import { sequenceProjector } from "../../projector/sequenceProjector.js";
+import * as _                from "../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
+import { dom }               from "../../../kolibri/util/dom.js";
+import { sequenceProjector } from "../../../../../contrib/p6_wild_wyss/src/sequence/projector/sequenceProjector.js";
 import {
   Range,
-} from "../../sequence.js";
-import {AngleSequence} from "../generators/angleSequence/angleSequence.js";
-import {FibonacciSequence} from "../generators/fibonacciSequence/fibonacciSequence.js";
+}                            from "../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
+import {AngleSequence}       from "../generators/angleSequence/angleSequence.js";
+import {FibonacciSequence}   from "../generators/fibonacciSequence/fibonacciSequence.js";
 
 const fibonacciView = (rootElement, amount, scaleFactor) => {
   const fibSequence = _.take(amount)(FibonacciSequence);

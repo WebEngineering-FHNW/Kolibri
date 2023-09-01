@@ -1,8 +1,8 @@
-import { Just, Nothing }         from "../../../../../../../docs/src/kolibri/stdlib.js";
-import { createMonadicSequence } from "../../../util/sequenceUtil/createMonadicSequence.js";
-import { choiceMaybe }           from "../../../../stdlib/stdlib.js";
-import { uncurry }               from "../../../../../../../docs/src/kolibri/lambda/church.js";
-import { iteratorOf }            from "../../../util/sequenceUtil/iteratorOf.js";
+import { Just, Nothing }         from "../../../../kolibri/stdlib.js";
+import { createMonadicSequence } from "../../../../../../contrib/p6_wild_wyss/src/sequence/util/sequenceUtil/createMonadicSequence.js";
+import { choiceMaybe }           from "../../../../../../contrib/p6_wild_wyss/src/stdlib/stdlib.js";
+import { uncurry }               from "../../../../kolibri/lambda/church.js";
+import { iteratorOf }            from "../../../../../../contrib/p6_wild_wyss/src/sequence/util/sequenceUtil/iteratorOf.js";
 import {
   Sequence,
   Range,
@@ -10,7 +10,7 @@ import {
   map,
   pipe,
   zipWith,
-} from "../../../sequence.js"
+}                                from "../../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js"
 
 export { PrimeNumberSequence }
 

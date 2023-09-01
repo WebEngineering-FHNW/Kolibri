@@ -1,6 +1,6 @@
-import { Attribute, VALUE } from "../../../../../../docs/src/kolibri/presentationModel.js";
-import { Observable }       from "../../../../../../docs/src/kolibri/observable.js";
-import { nil }              from "../../sequence.js";
+import { Attribute, VALUE } from "../../../kolibri/presentationModel.js";
+import { Observable }       from "../../../kolibri/observable.js";
+import { nil }              from "../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
 
 export { FizzBuzzModel, Rule }
 

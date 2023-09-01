@@ -7,7 +7,7 @@ import { TestSuite }                             from "../../kolibri/util/test.j
 import { fireEvent, INPUT}                       from "../../kolibri/util/dom.js";
 import {projectDetailView, projectMasterView}    from "./masterDetailProjector.js";
 
-const personSuite = TestSuite("example/person/person");
+const personSuite = TestSuite("examples/person/person");
 
 personSuite.add("master add remove", assert => {
     // setup
