@@ -24,5 +24,6 @@ import "./projector/simpleForm/simpleFormProjectorTest.js"
 
 // while development, you might want to disable the following tests since they clutter the console
 // make sure to re-enable before pushing
-import "./logger/appender/consoleAppenderTest.js";
-import "./logger/appender/countAppenderTest.js";
+// import "./logger/appender/consoleAppenderTest.js";
+// import "./logger/appender/countAppenderTest.js";
+// todo re-enable before merging

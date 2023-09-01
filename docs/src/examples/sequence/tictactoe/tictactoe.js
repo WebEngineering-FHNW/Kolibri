@@ -1,7 +1,7 @@
-import { Range, map, zip, foldl$, pipe, nil, max$, min$, isEmpty } from "../../../sequence/sequence.js";
-import { from } from "../../../jinq/jinq.js";
-import { Pair } from "../../../stdlib/pair.js";
-import { snd } from "../../../../../../docs/src/kolibri/stdlib.js";
+import { Range, map, zip, foldl$, pipe, nil, max$, min$, isEmpty } from "../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
+import { from }                                                    from "../../../../../contrib/p6_wild_wyss/src/jinq/jinq.js";
+import { Pair }                                                    from "../../../../../contrib/p6_wild_wyss/src/stdlib/pair.js";
+import { snd }                                                     from "../../../kolibri/stdlib.js";
 
 export { nextBoard, nowValue, opponent, stone, Computer, Human, NoPlayer, moves, hasWon, treeMap, evaluate }
 

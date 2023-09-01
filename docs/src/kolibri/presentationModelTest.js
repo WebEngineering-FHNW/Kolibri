@@ -6,7 +6,7 @@ import {
     QualifiedAttribute,
     valueOf,
     presentationModelFromAttributeNames, LABEL
-} from "./presentationModel.js";
+}                    from "./presentationModel.js";
 
 const pmSuite = TestSuite("presentationModel");
 
