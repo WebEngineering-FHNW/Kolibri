@@ -9,7 +9,7 @@ import {
 const performanceSuite = TestSuite("PerformanceTest");
 
 performanceSuite.add("compare SequenceBuilder and cons: SequenceBuilder 50x faster", assert => {
-  const limit = 5000;
+  const limit = 4000; // reduce limit value here when running into stack overflaw
 
   const builderTime = measure(() => {
     const builder = SequenceBuilder();
