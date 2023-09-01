@@ -11,8 +11,6 @@ import "./presentationModelTest.js";
 import "./logger/loggerTest.js";
 import "./logger/loggingTest.js";
 import "./logger/appender/arrayAppenderTest.js";
-import "./logger/appender/consoleAppenderTest.js";
-import "./logger/appender/countAppenderTest.js";
 import "./logger/appender/observableAppenderTest.js";
 import "./logger/loggingUi/loggingUiControllerTest.js";
 import "./rest/restClientTest.js";
@@ -23,3 +21,8 @@ import "./projector/simpleForm/simpleInputControllerTest.js"
 import "./projector/simpleForm/simpleFormControllerTest.js"
 import "./projector/simpleForm/simpleInputProjectorTest.js"
 import "./projector/simpleForm/simpleFormProjectorTest.js"
+
+// while development, you might want to disable the following tests since they clutter the console
+// make sure to re-enable before pushing
+import "./logger/appender/consoleAppenderTest.js";
+import "./logger/appender/countAppenderTest.js";
