@@ -1,0 +1,32 @@
+.container {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0.5rem;
+}
+
+.twoColumnItem {
+    grid-column-end: span 2;
+}
+
+.twoColumnItem > Button {
+    margin: 3rem 0.5rem 0.5rem 1rem;
+}
+
+.tooltip {
+    cursor: help;
+    position: relative;
+}
+
+.tooltip .tooltip-content {
+    display: none;
+    position: absolute;
+    left: 0;
+    background: var(--kolibri-color-output);
+    color: #eee;
+    padding: 12px;
+    min-width: 140px;
+    border-radius: 4px;
+}
+.tooltip:hover .tooltip-content {
+    display: block;
+}

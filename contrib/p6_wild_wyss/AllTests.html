@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> All Tests </title>
+    <link rel="shortcut icon" type="image/png" href="../../docs/img/logo/logo-60x54.png"/>
+    <link rel="stylesheet"                     href="../../docs/css/kolibri-base.css">
+    <style>
+        body {
+            width: 48em;
+            margin: auto;
+        }
+        #out {
+            max-height: calc(100vh - 20em);
+            overflow: scroll;
+            display: grid;
+            grid-template-columns: repeat(4, max-content);
+            grid-column-gap: 2em;
+            grid-row-gap: .5em;
+            padding: 2em;
+            box-shadow: var(--kolibri-box-shadow);
+        }
+        #out div:nth-child(odd) {
+            color: var(--kolibri-color-output);
+        }
+        #out div:nth-child(4n-3) {
+            justify-self: end;
+        }
+        #grossTotal {
+            color: var(--kolibri-color-output);
+        }
+        footer {
+            position: fixed;
+            bottom:     0;
+            left:       0;
+            right:      0;
+            text-align: center;
+            color:      white;
+            background: var(--kolibri-color-neutral);
+            padding:    0.5em;
+        }
+    </style>
+</head>
+<body>
+<h1>Test Report</h1>
+<div id="out"></div>
+
+<p>848 tests expected.</p>
+<p id="grossTotal">Check console for possible errors.</p>
+
+<footer></footer>
+<script src="allTestsSuite.js" type="module"></script>
+
+
+</body>
+</html>
