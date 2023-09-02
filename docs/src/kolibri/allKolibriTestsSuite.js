@@ -22,5 +22,9 @@ import "./projector/simpleForm/simpleInputControllerTest.js"
 import "./projector/simpleForm/simpleFormControllerTest.js"
 import "./projector/simpleForm/simpleInputProjectorTest.js"
 import "./projector/simpleForm/simpleFormProjectorTest.js"
+import "./sequence/util/sequenceUtil/sequencePrototypeTest.js"
+import "./sequence/constructors/constructorTest.js"
+import "./sequence/operators/operatorsTest.js"
+import "./sequence/terminalOperations/terminalOperationsTest.js"
 
 // note: logger tests that need to write to the console are moved to the manual test suite.
