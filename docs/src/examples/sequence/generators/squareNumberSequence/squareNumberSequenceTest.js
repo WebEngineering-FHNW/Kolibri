@@ -1,9 +1,9 @@
 import { TestSuite }                from "../../../../kolibri/util/test.js";
-import { createTestConfig }         from "../../../../../../contrib/p6_wild_wyss/src/sequence/util/testUtil.js";
+import { createTestConfig }         from "../../../../kolibri/sequence/util/testUtil.js";
 import { arrayEq }                  from "../../../../kolibri/util/arrayFunctions.js";
-import { take }                     from "../../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
+import { take }                     from "../../../../kolibri/sequence/sequence.js";
 import { SquareNumberSequence }     from "./squareNumberSequence.js";
-import { addToTestingTable, TESTS } from "../../../../../../contrib/p6_wild_wyss/src/sequence/util/testingTable.js";
+import { addToTestingTable, TESTS } from "../../../../kolibri/sequence/util/testingTable.js";
 
 const testSuite = TestSuite("examples/sequence/generators/squareNumberSequence");
 

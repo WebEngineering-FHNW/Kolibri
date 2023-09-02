@@ -1,12 +1,12 @@
 import { TestSuite }           from "../../../../kolibri/util/test.js";
-import { createTestConfig }    from "../../../../../../contrib/p6_wild_wyss/src/sequence/util/testUtil.js";
+import { createTestConfig }    from "../../../../kolibri/sequence/util/testUtil.js";
 import { arrayEq }             from "../../../../kolibri/util/arrayFunctions.js";
-import { take }                from "../../../../../../contrib/p6_wild_wyss/src/sequence/operators/take/take.js";
+import { take }                from "../../../../kolibri/sequence/operators/take/take.js";
 import { PrimeNumberSequence } from "./primeNumberSequence.js";
 import {
   addToTestingTable,
   TESTS
-}                              from "../../../../../../contrib/p6_wild_wyss/src/sequence/util/testingTable.js";
+}                              from "../../../../kolibri/sequence/util/testingTable.js";
 
 const testSuite = TestSuite("examples/sequence/generators/primeNumberSequence");
 

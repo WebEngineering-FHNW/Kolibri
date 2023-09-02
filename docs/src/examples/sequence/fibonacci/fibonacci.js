@@ -1,9 +1,9 @@
-import * as _                from "../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
+import * as _                from "../../../kolibri/sequence/sequence.js";
 import { dom }               from "../../../kolibri/util/dom.js";
-import { sequenceProjector } from "../../../../../contrib/p6_wild_wyss/src/sequence/projector/sequenceProjector.js";
+import { sequenceProjector } from "../../../kolibri/sequence/projector/sequenceProjector.js";
 import {
   Range,
-}                            from "../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
+}                            from "../../../kolibri/sequence/sequence.js";
 import {AngleSequence}       from "../generators/angleSequence/angleSequence.js";
 import {FibonacciSequence}   from "../generators/fibonacciSequence/fibonacciSequence.js";
 

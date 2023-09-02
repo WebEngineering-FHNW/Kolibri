@@ -45,12 +45,12 @@
 <button id="reset-btn">RESET GAME</button>
 </body>
 <script type="module">
-  import { Range, zip, map }                    from "../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
+  import { Range, zip, map }                    from "../../../kolibri/sequence/sequence.js";
   import { dom }                                from "../../../../../contrib/p6_wild_wyss/src/debounceInput/dom.js";
   import { Computer, hasWon, Human, nextBoard } from "./tictactoe.js";
-  import { retainAll }                          from "../../../../../contrib/p6_wild_wyss/src/sequence/operators/retainAll/retainAll.js";
-  import { isEmpty }                            from "../../../../../contrib/p6_wild_wyss/src/sequence/terminalOperations/isEmpty/isEmpty.js";
-  import { pipe }                               from "../../../../../contrib/p6_wild_wyss/src/sequence/operators/pipe/pipe.js";
+  import { retainAll }                          from "../../../kolibri/sequence/operators/retainAll/retainAll.js";
+  import { isEmpty }                            from "../../../kolibri/sequence/terminalOperations/isEmpty/isEmpty.js";
+  import { pipe }                               from "../../../kolibri/sequence/operators/pipe/pipe.js";
 
   const gameInfo = document.getElementById("game-info");
   const resetBtn = document.getElementById("reset-btn");
