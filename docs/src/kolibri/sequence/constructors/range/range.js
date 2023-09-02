@@ -1,8 +1,6 @@
 import { Sequence } from "../sequence/Sequence.js";
 
-export { Range }
-
-// todo dk: think about renaming the Range ctor as it conflicts with https://developer.mozilla.org/en-US/docs/Web/API/Range
+export { Range, Walk }
 
 /**
  * Creates a range of numbers between two inclusive boundaries,
@@ -39,6 +37,13 @@ const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
 
   return Sequence(left, value => !hasReachedEnd(stepIsNegative, value, right), value => value + step);
 };
+
+/** Walk is an alias for {@link Range} that allows for easier discovery since the name "Range" is also
+ * used within the dom API [https://developer.mozilla.org/en-US/docs/Web/API/Range], which
+ * undermines the auto-import when typing "Range" for the first time in a file.
+ * Just typing "Walk" and using the auto-import will lead to here.
+ */
+const Walk = Range;
 
 /**
  * Sorts the two parameter a and b by its magnitude.

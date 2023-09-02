@@ -1,4 +1,4 @@
-import { Range }                    from "./range.js"
+import { Range, Walk}               from "./range.js";
 import { TestSuite }                from "../../../util/test.js";
 import { iteratorOf }               from "../../util/sequenceUtil/iteratorOf.js";
 import { createMonadicSequence }    from "../../util/sequenceUtil/createMonadicSequence.js";
@@ -25,6 +25,19 @@ testSuite.add("test typical case for of", assert => {
 
   // When
   for(const value of Range(1)){
+    result.push(value);
+  }
+
+  // Then
+  assert.is(result.length, 2);
+});
+
+testSuite.add("test Walk alias", assert => {
+  // Given
+  const result = [];
+
+  // When
+  for(const value of Walk(1)){
     result.push(value);
   }
 
