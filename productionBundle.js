@@ -392,6 +392,55 @@ const ObservableList = list => {
 /**
  * @typedef { <_T_>  (_T_) => _T_ } UnaryOperatorType<_T_>
  * A unary operator on _T_.
+ */
+/**
+ * A callback which takes one argument of type {@link _A_} and transforms it to {@link _B_}.
+ * @template _A_
+ * @template _B_
+ * @callback Functor
+ * @param   { _A_ } value
+ * @returns { _B_ }
+ */
+
+/**
+ * A callback which takes two arguments of type {@link _A_} and transforms it to {@link _A_}.
+ * @template _A_
+ * @callback BiOperation
+ * @param   { _A_ } value1
+ * @param   { _A_ } value2
+ * @returns { _A_ }
+ */
+
+/**
+ * A callback which takes two arguments of type {@link _T_} and {@link _U_} and transforms it to {@link _R_}.
+ * @template _T_
+ * @template _U_
+ * @template _R_
+ * @callback BiFunction
+ * @param   { _T_ } value1
+ * @param   { _U_ } value2
+ * @returns { _R_ }
+ */
+
+/**
+ * A callback which takes an argument of type {@link _A_} and
+ * a second argument of type {@link _A_} and returns a boolean.
+ * @template _A_
+ * @template _B_
+ * @callback BiPredicate
+ * @param   { _A_ } value1
+ * @param   { _B_ } value2
+ * @returns { boolean }
+ */
+
+/**
+ * Defines a Monad.
+ * @template  _T_
+ * @typedef  MonadType
+ * @property { <_U_> (bindFn: (_T_) => MonadType<_U_>) => MonadType<_U_> } and
+ * @property { <_U_> (f:      (_T_) => _U_)            => MonadType<_U_> } fmap
+ * @property {       (_T_)                             => MonadType<_T_> } pure
+ * @property {       ()                                => MonadType<_T_> } empty
  *//**
  * @module projector/projectorUtils
  * Helper functions for use in projectors.
@@ -895,12 +944,27 @@ const maybe = m => f => g => m(f)(g);
  */
 const curry = f => x => y => f(x,y);
 
-// uncurry :: ( a -> b -> c) -> ((a,b) -> c)
 /**
  * Take af function of two arguments in curried style and return a function of two arguments.
+ * @haskell uncurry :: ( a -> b -> c) -> ((a,b) -> c)
  * @type { <_T_,_U_,_V_> (f:FunctionAtoBType<_T_,FunctionAtoBType<_U_,_V_>>) => FunctionAtoBType<_T_,_U_,_V_> }
  */
-const uncurry = f => (x,y) => f(x)(y);/**
+const uncurry = f => (x,y) => f(x)(y);
+
+
+/**
+ * Convert JS boolean to Church boolean
+ * @param  { Boolean } value
+ * @return { ChurchBooleanType & Function }
+ */
+const toChurchBoolean = value => /** @type { ChurchBooleanType& Function } */ value ? T : F;
+
+/**
+ * Convert Church boolean to JS boolean
+ * @param  { ChurchBooleanType & Function } churchBoolean
+ * @return { Boolean }
+ */
+const toJsBool = churchBoolean =>  churchBoolean(true)(false);/**
  * @module stdlib
  * Kolibri standard library with functions and data structures that are most commonly used.
  * The stdlib has no dependencies.
@@ -2161,7 +2225,7 @@ const fatal = appenderCallback(console.error);/**
 /**
  * Logs a given message.
  * @callback Log
- * @param { LogMeType }
+ * @param   { LogMeType } message
  * @returns { ChurchBooleanType } - {@link T} if the logging was successful
  *
  */
@@ -2651,13 +2715,13 @@ const LOGGING_UI_CSS = `
   .logging-ui-config input {
       width: 100%;
   }
-`;/**
- * @module util/test
- * The test "framework", exports the Suite function plus a total of how many assertions have been tested
- */
+`;// noinspection FunctionTooLongJS
+
+
+const log = LoggerFactory("kolibri.test");
 
 /**
- * The running total of executed test assertions.
+ * The running total of executed test assertions
  * @impure the reference does not change, but the contained value. Listeners will produce side effects like DOM changes.
  * @type { IObservable<Number> }
  */
@@ -2671,17 +2735,35 @@ const addToTotal = num => total.setValue( num + total.getValue());
  * @function
  * @param { _T_ } actual
  * @param { _T_ } expected
- * @return void
+ * @returns void
  * */
 
 /**
- * @typedef  { Object }  AssertType
- * @property { Array<String> }         messages - stores all assertions messages, one for each entry in "results"
- * @property { Array<Boolean> }        results  - stores all assertion results
- * @property { (Boolean)  => void }    isTrue   - assert that expression is true, side effects "results" and "messages"
- * @property { equalityCheckFunction } is       - assert that two expressions are equal,
- *                                                side effects "results" and "messages", and
- *                                                logs an error to the console incl. stack trace in case of failure.
+ * @callback AssertThrows
+ * @param { () => void } functionUnderTest - this function should throw an error
+ * @param { String = ""} expectedErrorMsg  - if set, the thrown errors message will be compared to this string
+ * @returns void
+ */
+
+/**
+ * @callback IterableEq
+ * @param { Iterable<*> } actual            - the actual iterable
+ * @param { Iterable<*> } expected          - an iterable with the expected elements
+ * @param { number } [maxElementsToConsume] - if set, the thrown errors message will be compared to this string
+ * @returns void
+ */
+
+/**
+ * @typedef  { Object }                AssertType
+ * @property { Array<String> }         messages     - stores all assertions messages, one for each entry in "results"
+ * @property { Array<Boolean> }        results      - stores all assertion results
+ * @property { (Boolean)  => void }    isTrue       - assert that expression is true, side effects "results" and "messages"
+ * @property { equalityCheckFunction } is           - assert that two expressions are equal,
+ *                                                    side effects "results" and "messages", and
+ *                                                    logs an error to the console incl. stack trace in case of failure
+ * @property { AssertThrows }          throws       - assert that the given function throws an exception,
+ *                                                    logs an error to the console incl. stack trace in case of failure
+ * @property { IterableEq }            iterableEq   - assert that two objects conform to the [JS iteration protocols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols) are equal.
  */
 
 /**
@@ -2693,7 +2775,7 @@ const addToTotal = num => total.setValue( num + total.getValue());
  * @impure assembles test results.
  */
 const Assert = () => {
-    /** @type Array<Boolean> */ const results  = []; // [Bool], true if test passed, false otherwise
+    /** @type Array<Boolean> */ const results  = []; // true if test passed, false otherwise
     /** @type Array<String> */  const messages = [];
     return {
         results,
@@ -2701,20 +2783,90 @@ const Assert = () => {
         isTrue: testResult => {
             let message = "";
             if (!testResult) {
-                console.error("test failed");
+                log['error']("test failed");
                 message = "not true";
             }
-            results.push(testResult);
+            results .push(testResult);
             messages.push(message);
         },
         is: (actual, expected) => {
             const testResult = actual === expected;
             let message = "";
             if (!testResult) {
-                message = "Got '"+ actual +"', expected '" + expected +"'";
-                console.error(message);
+                message = `Got '${actual}', expected '${expected}'`;
+                log.error(message);
             }
-            results.push(testResult);
+            results .push(testResult);
+            messages.push(message);
+        },
+        iterableEq: (actual, expected, maxElementsToConsume = 1_000) => {
+
+            if (actual[Symbol.iterator]   === undefined) log.error("actual is not iterable!");
+            if (expected[Symbol.iterator] === undefined) log.error("expected is not iterable!");
+
+            const actualIt     = actual[Symbol.iterator]();
+            const expectedIt   = expected[Symbol.iterator]();
+
+            let iterationCount = 0;
+            let testPassed     = true;
+            let message        = "";
+
+            while (true) {
+                const { value: actualValue,   done: actualDone   } = actualIt.next();
+                const { value: expectedValue, done: expectedDone } = expectedIt.next();
+
+                const oneIteratorDone      = actualDone || expectedDone;
+                const bothIteratorDone     = actualDone && expectedDone;
+                const tooManyIterations    = iterationCount > maxElementsToConsume;
+
+                if (bothIteratorDone) break;
+                if (oneIteratorDone) {
+                    testPassed = false;
+                    const actualMsg = actualDone ? "had no more elements" : "still had elements";
+                    message = `Actual and expected do not have the same length! After comparing ${iterationCount} 
+                               elements, actual ${actualMsg}, which was not expected!`;
+                    break;
+                }
+                if (tooManyIterations) {
+                    message = `It took more iterations than ${maxElementsToConsume}. Aborting.\n`;
+                    testPassed = false;
+                    break;
+                }
+
+                if (actualValue !== expectedValue) {
+                    testPassed = false;
+                    message = `Values were not equal in iteration ${iterationCount}! Expected ${expectedValue} but was ${actualValue}\n`;
+                    break;
+                }
+
+                iterationCount++;
+            }
+
+            if (!testPassed) log.error(message);
+            results.push(testPassed);
+            messages.push(message);
+        },
+        throws: (functionUnderTest, expectedErrorMsg = "") => {
+            let testResult    = false;
+            let message       = "";
+            const hasErrorMsg = expectedErrorMsg !== "";
+
+            try {
+                functionUnderTest();
+
+                message = "Did not throw an error!";
+                if (hasErrorMsg) {
+                    message += ` Expected: '${expectedErrorMsg}'`;
+                }
+                log.error(message);
+            } catch (e) {
+                testResult = true;
+
+                if (hasErrorMsg) {
+                    testResult = expectedErrorMsg === e.message;
+                }
+            }
+            results .push(testResult);
             messages.push(message);
         }
     }
@@ -2768,10 +2920,11 @@ const asyncTest = (name, asyncCallback) => {
 };
 
 /**
- * @typedef  { Object } TestSuiteType
- * @property { (testName:String, callback:TestCallback) => void } test - running a test function for this suite
- * @property { (testName:String, callback:TestCallback) => void } add  - adding a test function for later execution
- * @property {                                       () => void } run  - running and reporting the suite
+ * @typedef { Object } TestSuiteType
+ * @property { (testName:String, callback:TestCallback) => void} test - running a test function for this suite
+ * @property { (testName:String, callback:TestCallback) => void} add  - adding a test function for later execution
+ * @property { () => void} run                                        - runs the given test suite
+ * @property { function(): void } run:                                - running and reporting the suite
  */
 /**
  * Tests are organised in test suites that contain test functions. These functions are added before the suite
@@ -2798,7 +2951,17 @@ const TestSuite = suiteName => {
             if (suiteAssert.results.every( id )) { // whole suite was ok, report whole suite
                 report(suiteName, suiteAssert.results, suiteAssert.messages);
             } else { // some test in suite failed, rerun tests for better error indication
-                tests.forEach( testInfo => test( testInfo(name), testInfo(logic) ) );
+                const prevLoggingLevel = getLoggingLevel();
+                setLoggingLevel(LOG_DEBUG);
+                setLoggingContext("");
+                const appender = Appender();
+                setMessageFormatter(
+                  context => logLevel => logMessage => `[${logLevel}]\t${context} ${suiteName}: ${logMessage}`
+                );
+                addToAppenderList(appender);
+                tests.forEach( testInfo => test( testInfo(name), testInfo(logic) ));
+                setLoggingLevel(prevLoggingLevel);
+                removeFromAppenderList(appender);
             }
         }
     };
