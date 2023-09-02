@@ -45,6 +45,9 @@ const FizzBuzzController = () => {
     const currentRules = model.rulesSnapshot().map(createSequenceForRule);
 
     const baseLine  = _.Sequence("", _ => true, _ => "");
+
+    // for some reason, _U_ does not unify with String in pattern === ""
+    // noinspection JSIncompatibleTypesComparison
     const fizzBuzz  = _.pipe(
       _.reduce$((acc, cur) => // reduce to single iterable by combining all iterable values
         _.zipWith((a, b) => a + b)(acc)(cur), // combine all strings

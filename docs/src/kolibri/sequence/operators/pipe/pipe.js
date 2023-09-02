@@ -4,7 +4,7 @@ import { SequencePrototype } from "../../util/sequenceUtil/sequencePrototype.js"
 export { pipe }
 
 /**
- * Transforms the given {@link Iterable iterable} using the passed {@link SequenceOperation SequenceOperations}.
+ * Transforms the given {@link Iterable} using the passed {@link SequenceOperation}.
  *
  * @function
  * @pure

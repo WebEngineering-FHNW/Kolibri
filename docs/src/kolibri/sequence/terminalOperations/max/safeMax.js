@@ -26,7 +26,7 @@ export { safeMax$ }
  * const maybeMax = safeMax$(numbers);
  *
  * maybeMax
- *  (_ => console.log("iterable was empty, no max!")
+ *  (_ => console.log('iterable was empty, no max!')
  *  (x => console.log(x));
  * // => Logs '5'
  */

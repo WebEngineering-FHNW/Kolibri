@@ -4,7 +4,7 @@ import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequ
 export { cycle }
 
 /**
- * {@link cycle Cycle} ties a finite {@link Iterable} into a circular one, or equivalently,
+ * {@link cycle} ties a finite {@link Iterable} into a circular one, or equivalently,
  * the infinite repetition of the original {@link Iterable}.
  *
  * @function

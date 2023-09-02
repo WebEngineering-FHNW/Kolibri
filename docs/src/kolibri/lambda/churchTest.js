@@ -29,7 +29,9 @@ import {
     snd,
     T, Tuple,
     uncurry,
-    xor
+    xor,
+    toChurchBoolean,
+    toJsBool
 } from "./church.js";
 
 import { M, Th, Z }  from "./ski.js";
@@ -388,6 +390,11 @@ churchSuite.add("choice", assert => {
     payment = Transfer(['Account 1', 'Account 2']);
     assert.is(pay(payment)(50), 'pay 50 by wire from Account 1 to Account 2');
 
+});
+
+churchSuite.add("boolean type conversion", assert => {
+    assert.is(toJsBool(toChurchBoolean(true)),  true);
+    assert.is(toJsBool(toChurchBoolean(false)), false);
 });
 
 

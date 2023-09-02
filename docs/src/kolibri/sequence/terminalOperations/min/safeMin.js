@@ -26,7 +26,7 @@ export { safeMin$ }
  * const maybeMin = safeMin$(numbers);
  *
  * maybeMin
- *  (_ => console.log("iterable was empty, no min!")
+ *  (_ => console.log('iterable was empty, no min!')
  *  (x => console.log(x));
  * // => Logs '0'
  */

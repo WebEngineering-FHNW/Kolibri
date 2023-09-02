@@ -16,11 +16,11 @@
 
 /**
  * @callback Apply
- * @param { Consumer<Number> } consume
+ * @param { ConsumerType<Number> } consume
  */
 
 /**
  * @callback RangeFilter
- * @param  { Predicate<Number> } predicate
+ * @param  { ConsumingPredicateType<Number> } predicate
  * @returns { RangeType }
  */

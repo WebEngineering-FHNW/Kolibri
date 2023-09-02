@@ -4,7 +4,7 @@ import { zipWith } from "../zipWith/zipWith.js";
 export { zip }
 
 /**
- * Zip takes two {@link Iterable iterables} and returns an {@link Iterable iterable} of corresponding {@link PairType paris}.
+ * Zip takes two {@link Iterable iterables} and returns an {@link Iterable} of corresponding {@link PairType paris}.
  *
 * @function
  * @pure

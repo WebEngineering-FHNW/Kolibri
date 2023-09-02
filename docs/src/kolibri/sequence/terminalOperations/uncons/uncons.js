@@ -1,3 +1,5 @@
+// noinspection GrazieInspection
+
 import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
 import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
 import { Pair }                  from "../../../stdlib/pair.js";

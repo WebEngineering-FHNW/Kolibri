@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 import { TestSuite } from "../util/test.js";
 import { JsonMonad } from "./jsonMonad.js";
 

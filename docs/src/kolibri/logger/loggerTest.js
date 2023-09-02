@@ -21,6 +21,7 @@ import {
   getLoggingLevel,
   getLoggingContext,
 } from "./logging.js";
+import {LoggerFactory} from "./loggerFactory.js";
 
 const logMessage  = "log message from loggerTest.js";
 
@@ -243,6 +244,17 @@ loggerSuite.add("test change appender after creating the logger", assert =>
 
       countAppender.reset();
       removeFromAppenderList(countAppender);
+    }));
+
+
+loggerSuite.add("test common usage", assert =>
+    withDebugTestArrayAppender(appender => {
+      setLoggingLevel(LOG_NOTHING);             // we do not actually log but only show how to write the code
+
+      const log = LoggerFactory("no.such.context");
+      log.error("an error");
+
+      assert.is(appender.getValue().length, 0);
     }));
 
 loggerSuite.run();
