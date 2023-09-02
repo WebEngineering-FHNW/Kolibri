@@ -22,3 +22,52 @@
  * @typedef { <_T_>  (_T_) => _T_ } UnaryOperatorType<_T_>
  * A unary operator on _T_.
  */
+/**
+ * A callback which takes one argument of type {@link _A_} and transforms it to {@link _B_}.
+ * @template _A_
+ * @template _B_
+ * @callback Functor
+ * @param   { _A_ } value
+ * @returns { _B_ }
+ */
+
+/**
+ * A callback which takes two arguments of type {@link _A_} and transforms it to {@link _A_}.
+ * @template _A_
+ * @callback BiOperation
+ * @param   { _A_ } value1
+ * @param   { _A_ } value2
+ * @returns { _A_ }
+ */
+
+/**
+ * A callback which takes two arguments of type {@link _T_} and {@link _U_} and transforms it to {@link _R_}.
+ * @template _T_
+ * @template _U_
+ * @template _R_
+ * @callback BiFunction
+ * @param   { _T_ } value1
+ * @param   { _U_ } value2
+ * @returns { _R_ }
+ */
+
+/**
+ * A callback which takes an argument of type {@link _A_} and
+ * a second argument of type {@link _A_} and returns a boolean.
+ * @template _A_
+ * @template _B_
+ * @callback BiPredicate
+ * @param   { _A_ } value1
+ * @param   { _B_ } value2
+ * @returns { boolean }
+ */
+
+/**
+ * Defines a Monad.
+ * @template  _T_
+ * @typedef  MonadType
+ * @property { <_U_> (bindFn: (_T_) => MonadType<_U_>) => MonadType<_U_> } and
+ * @property { <_U_> (f:      (_T_) => _U_)            => MonadType<_U_> } fmap
+ * @property {       (_T_)                             => MonadType<_T_> } pure
+ * @property {       ()                                => MonadType<_T_> } empty
+ */
