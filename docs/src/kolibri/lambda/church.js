@@ -14,7 +14,8 @@ export {
     Tuple, Choice,
     either, Left, Right,
     Nothing, Just, maybe,
-    curry, uncurry
+    curry, uncurry,
+    toChurchBoolean, toJsBool
 }
 
 /**
@@ -446,4 +447,7 @@ const curry = f => x => y => f(x,y);
  */
 const uncurry = f => (x,y) => f(x)(y);
 
+// todo jsdoc, tests
+const toChurchBoolean = value => value ? T : F;
+const toJsBool        = b => b(true)(false);
 

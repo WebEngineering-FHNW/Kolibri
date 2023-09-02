@@ -1,5 +1,5 @@
-import { take }  from "../../../../../../contrib/p6_wild_wyss/src/sequence/operators/take/take.js";
-import { Range } from "../../../../../../contrib/p6_wild_wyss/src/sequence/constructors/range/range.js"
+import { take }  from "../../../../kolibri/sequence/operators/take/take.js";
+import { Range } from "../../../../kolibri/sequence/constructors/range/range.js"
 
 export { AngleSequence }
 

@@ -1,11 +1,11 @@
 import { AngleSequence }    from "./angleSequence.js";
 import { TestSuite }        from "../../../../kolibri/util/test.js";
 
-import { createTestConfig } from "../../../../../../contrib/p6_wild_wyss/src/sequence/util/testUtil.js";
+import { createTestConfig } from "../../../../kolibri/sequence/util/testUtil.js";
 import {
   addToTestingTable,
   TESTS
-}                           from "../../../../../../contrib/p6_wild_wyss/src/sequence/util/testingTable.js";
+}                           from "../../../../kolibri/sequence/util/testingTable.js";
 
 const testSuite = TestSuite("examples/sequence/generators/angleSequence");
 

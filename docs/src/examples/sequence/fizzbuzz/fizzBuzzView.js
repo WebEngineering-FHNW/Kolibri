@@ -1,5 +1,5 @@
 import { dom }               from "../../../kolibri/util/dom.js";
-import { sequenceProjector } from "../../../../../contrib/p6_wild_wyss/src/sequence/projector/sequenceProjector.js";
+import { sequenceProjector } from "../../../kolibri/sequence/projector/sequenceProjector.js";
 
 export { FizzBuzzView }
 

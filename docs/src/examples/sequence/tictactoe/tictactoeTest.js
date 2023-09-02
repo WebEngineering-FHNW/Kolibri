@@ -1,7 +1,7 @@
 import { TestSuite }       from "../../../kolibri/util/test.js";
-import { Range, map, zip } from "../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
-import { iteratorOf }      from "../../../../../contrib/p6_wild_wyss/src/sequence/util/sequenceUtil/iteratorOf.js";
-import { Pair }            from "../../../../../contrib/p6_wild_wyss/src/stdlib/pair.js";
+import { Range, map, zip } from "../../../kolibri/sequence/sequence.js";
+import { iteratorOf }      from "../../../kolibri/sequence/util/sequenceUtil/iteratorOf.js";
+import { Pair }            from "../../../kolibri/stdlib/pair.js";
 import {
   Computer, evaluate,
   hasWon,

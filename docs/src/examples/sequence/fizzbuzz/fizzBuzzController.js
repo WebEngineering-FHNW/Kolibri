@@ -1,5 +1,5 @@
 import { FizzBuzzModel, Rule } from "./fizzBuzzModel.js";
-import * as _                  from "../../../../../contrib/p6_wild_wyss/src/sequence/sequence.js";
+import * as _                  from "../../../kolibri/sequence/sequence.js";
 
 export { FizzBuzzController }
 
