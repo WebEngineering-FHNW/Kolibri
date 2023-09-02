@@ -4,14 +4,14 @@ import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequ
 export { retainAll }
 
 /**
- * Only keeps elements which fulfil the given {@link Predicate}.
+ * Only keeps elements which fulfil the given predicate.
  *
  * @function
  * @pure
  * @haskell (a -> Bool) -> [a] -> [a]
  * @template _T_
  * @type {
- *            (predicate: Predicate<_T_>)
+ *            (predicate: ConsumingPredicateType<_T_>)
  *         => SequenceOperation<_T_>
  *       }
  *

@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 import { TestSuite }     from "../util/test.js";
 import { from }          from "./jinq.js";
 import { Range }         from "../sequence/sequence.js";

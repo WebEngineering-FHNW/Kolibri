@@ -34,7 +34,7 @@ output {
     color: var(--kolibri-color-output);
 }
 
-/*noinspection CssUnusedSymbol*/
+/*noinspection ALL*/
 .darkTheme {
     filter: invert(85%) hue-rotate(180deg);
 }

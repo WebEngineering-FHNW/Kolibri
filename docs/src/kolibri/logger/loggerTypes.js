@@ -61,7 +61,7 @@
 /**
  * Logs a given message.
  * @callback Log
- * @param { LogMeType }
+ * @param   { LogMeType } message
  * @returns { ChurchBooleanType } - {@link T} if the logging was successful
  *
  */

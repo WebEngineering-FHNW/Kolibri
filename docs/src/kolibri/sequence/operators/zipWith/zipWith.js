@@ -4,8 +4,8 @@ import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequ
 export { zipWith }
 
 /**
- * {@link zipWith ZipWith} generalises {@link zip} by zipping with the function given as the first argument,
- * instead of a {@link pair} constructor.
+ * {@link zipWith} generalises {@link zip} by zipping with the function given as the first argument,
+ * instead of a Pair constructor.
  *
  * @function
  * @pure

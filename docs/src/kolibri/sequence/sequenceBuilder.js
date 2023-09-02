@@ -112,6 +112,8 @@ const toMonadicIterable = elements => {
       }
 
       // if all elements of the iterator have been processed
+      // todo dk: how do we know that elements has a length property and elements[currentIdx] works?
+      // noinspection JSUnresolvedReference
       if (currentIdx === elements.length) {
         return { done: true, value: undefined };
       }

@@ -2,6 +2,8 @@ import { Sequence } from "../sequence/Sequence.js";
 
 export { Range }
 
+// todo dk: think about renaming the Range ctor as it conflicts with https://developer.mozilla.org/en-US/docs/Web/API/Range
+
 /**
  * Creates a range of numbers between two inclusive boundaries,
  * that implements the JS iteration protocol.

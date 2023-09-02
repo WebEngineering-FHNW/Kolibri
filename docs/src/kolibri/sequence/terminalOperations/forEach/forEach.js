@@ -8,7 +8,7 @@ export { forEach$ }
  * @haskell (a -> b) -> [a] -> Unit
  * @template _T_
  * @type {
- *            (callback: Consumer<_T_>)
+ *            (callback: ConsumerType<_T_>)
  *         => (it: Iterable<_T_>)
  *         => void
  *       }

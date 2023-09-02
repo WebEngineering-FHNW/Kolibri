@@ -1,3 +1,5 @@
+// noinspection GrazieInspection
+
 import { bind }         from "../../operators/bind/bind.js";
 import { map }          from "../../operators/map/map.js";
 import { pipe }         from "../../operators/pipe/pipe.js";

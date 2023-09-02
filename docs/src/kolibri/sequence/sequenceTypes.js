@@ -2,7 +2,7 @@
 
 /**
  * This type combines the {@link Iterable} with {@link MonadType}.
- * Objects of this type can therefore be used in [for..of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of) loops,
+ * Objects of this type can therefore be used in [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of) loops,
  * and further syntactical sugar.
  *
  * Additionally, such objects are monadic and provide therefore all functions that make up a monad.

@@ -63,6 +63,8 @@ testSuite.add("test prototype: toString with max", assert => {
   const maxValues = 2;
 
   // When
+  // todo dk: we override toString with a different signature. We should reconsider this.
+  // noinspection JSCheckFunctionSignatures
   const result = seq.toString(maxValues);
 
   // Then

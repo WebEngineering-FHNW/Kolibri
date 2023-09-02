@@ -24,7 +24,7 @@ export { foldr$ }
  * const result  = foldr$((cur, acc) => cur + acc, 0)(numbers);
  *
  * console.log(result);
- * // => Logs '15'
+ * // => Logs "15"
  */
 const foldr$ = (accumulationFn, start) => iterable => {
   const inner = reverse$(iterable);

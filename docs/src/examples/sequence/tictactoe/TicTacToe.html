@@ -25,9 +25,13 @@
       .game-info {
           font-size: 24px;
       }
+
+      /*noinspection ALL*/
       .won {
           color: green;
       }
+
+      /*noinspection ALL*/
       .lost {
           color: red;
       }
@@ -46,11 +50,11 @@
 </body>
 <script type="module">
   import { Range, zip, map }                    from "../../../kolibri/sequence/sequence.js";
-  import { dom }                                from "../../../../../contrib/p6_wild_wyss/src/debounceInput/dom.js";
   import { Computer, hasWon, Human, nextBoard } from "./tictactoe.js";
   import { retainAll }                          from "../../../kolibri/sequence/operators/retainAll/retainAll.js";
   import { isEmpty }                            from "../../../kolibri/sequence/terminalOperations/isEmpty/isEmpty.js";
   import { pipe }                               from "../../../kolibri/sequence/operators/pipe/pipe.js";
+  import { dom }                                from "../../../kolibri/util/dom.js";
 
   const gameInfo = document.getElementById("game-info");
   const resetBtn = document.getElementById("reset-btn");

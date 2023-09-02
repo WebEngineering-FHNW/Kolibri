@@ -28,7 +28,7 @@ const SlotMachineModel = slotChars => {
    * @returns { Array<_T_> } the shuffled array
    */
   const shuffle = array =>
-      // Math.random() returns a number between [0,1]. If the result, of the compareFn >= 0, a is first.
+      // Math.random() returns a number between [0,1]. If the result of the compareFn is >= 0 then "a" is first.
       [...array].sort((_a, _b) => 0.5 - Math.random());
 
   /** @type {Array<IObservable<FocusRingType>>} */

@@ -1,3 +1,5 @@
+// noinspection GrazieInspection
+
 import { Pair } from "../stdlib/pair.js";
 
 export { from }
@@ -12,7 +14,7 @@ export { from }
  * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               select   - alias for map
  * @property { <_U_> ((prev: _T_) => MonadType<_U_>) => JinqType<_U_> }               inside   - maps the current value to a new {@link MonadType}
  * @property { <_U_> (monad:     MonadType<_U_>)     => JinqType<PairType<_T_,_U_>> } pairWith - combines the underlying data structure with the given data structure as {@link PairType}
- * @property {       (predicate: Predicate<_T_>)     => JinqType<_T_> }               where    - only keeps the items that fulfill the predicate
+ * @property {       (predicate: ConsumingPredicateType<_T_>) => JinqType<_T_> }      where    - only keeps the items that fulfill the predicate
  * @property {       ()                              => MonadType<_T_> }              result   - returns the result of this query
  */
 
@@ -54,7 +56,7 @@ const jinq = monad => ({
  * Serves as starting point to enter JINQ and specifies a data source.
  * Consider {@link jinq} linked below for further information.
  *
- * @see {@link jinq}
+ * @see {jinq}
  * @template _T_
  * @param { MonadType<_T_> } monad
  * @returns { JinqType<_T_> }
@@ -112,7 +114,7 @@ const inside = monad => f => {
 };
 
 /**
- * Combines elementwise two {@link MonadType MonadType's}.
+ * Combines elementwise two {@link MonadType}s.
  * It returns a {@link PairType} which holds a combination of two values.
  *
  * @template _T_, _U_
@@ -146,7 +148,7 @@ const pairWith = monad1 => monad2 => {
  *
  * @type { <_T_>
  *            (monad: MonadType<_T_>)
- *         => (predicate: Predicate<_T_>)
+ *         => (predicate: ConsumingPredicateType<_T_>)
  *         => JinqType<_T_>
  *       }
  *

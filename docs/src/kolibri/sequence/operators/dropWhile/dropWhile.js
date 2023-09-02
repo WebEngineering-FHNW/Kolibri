@@ -11,7 +11,7 @@ export { dropWhile }
  * @haskell (a -> Bool) -> [a] -> [a]
  * @template _T_
  * @type {
- *            (predicate: Predicate<_T_>)
+ *            (predicate: ConsumingPredicateType<_T_>)
  *         => SequenceOperation<_T_>
  *       }
  *

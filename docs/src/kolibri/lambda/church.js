@@ -440,14 +440,25 @@ const maybe = m => f => g => m(f)(g);
  */
 const curry = f => x => y => f(x,y);
 
-// uncurry :: ( a -> b -> c) -> ((a,b) -> c)
 /**
  * Take af function of two arguments in curried style and return a function of two arguments.
+ * @haskell uncurry :: ( a -> b -> c) -> ((a,b) -> c)
  * @type { <_T_,_U_,_V_> (f:FunctionAtoBType<_T_,FunctionAtoBType<_U_,_V_>>) => FunctionAtoBType<_T_,_U_,_V_> }
  */
 const uncurry = f => (x,y) => f(x)(y);
 
-// todo jsdoc, tests
-const toChurchBoolean = value => value ? T : F;
-const toJsBool        = b => b(true)(false);
+
+/**
+ * Convert JS boolean to Church boolean
+ * @param  { Boolean } value
+ * @return { ChurchBooleanType & Function }
+ */
+const toChurchBoolean = value => /** @type { ChurchBooleanType& Function } */ value ? T : F;
+
+/**
+ * Convert Church boolean to JS boolean
+ * @param  { ChurchBooleanType & Function } churchBoolean
+ * @return { Boolean }
+ */
+const toJsBool = churchBoolean =>  churchBoolean(true)(false);
 

@@ -1,3 +1,5 @@
+// noinspection GrazieInspection
+
 import { Sequence, nil, PureSequence } from "../sequence.js";
 import { SequencePrototype }           from "./sequenceUtil/sequencePrototype.js";
 import { arrayEq }                     from "../../util/arrayFunctions.js";

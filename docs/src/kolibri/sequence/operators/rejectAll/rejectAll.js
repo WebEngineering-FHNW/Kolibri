@@ -3,14 +3,14 @@ import { retainAll } from "../retainAll/retainAll.js";
 export { rejectAll }
 
 /**
- * Only keeps elements which does not fulfill the given {@link Predicate}.
+ * Only keeps elements which does not fulfil the given predicate.
  *
  * @function
  * @pure
  * @haskell (a -> Bool) -> [a] -> [a]
  * @template _T_
  * @type {
- *            (predicate: Predicate<_T_>)
+ *            (predicate: ConsumingPredicateType<_T_>)
  *         => SequenceOperation<_T_>
  *       }
  *

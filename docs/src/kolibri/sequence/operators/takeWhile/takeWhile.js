@@ -4,13 +4,13 @@ import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequ
 export { takeWhile }
 
 /**
- * Proceeds with the iteration until the {@link Predicate} becomes true.
+ * Proceeds with the iteration until the predicate becomes true.
  *
  * @function
  * @pure (a -> Bool) -> [a] -> [a]
  * @template _T_
  * @type {
- *            (predicate: (_T_) => Boolean)
+ *            (predicate: ConsumingPredicateType<_T_>)
  *         => SequenceOperation<_T_>
  *       }
  *
