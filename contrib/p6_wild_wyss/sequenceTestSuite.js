@@ -1,13 +1,6 @@
 import { total }       from "./src/test/test.js";
 import { versionInfo } from "../../docs/src/kolibri/version.js";
 
-// logger
-import "./src/logger/loggerTest.js";
-import "./src/logger/appender/arrayAppenderTest.js";
-import "./src/logger/appender/countAppenderTest.js";
-import "./src/logger/appender/consoleAppenderTest.js";
-import "./src/logger/appender/observableAppenderTest.js";
-import "./src/logger/logUi/logUiControllerTest.js";
 
 // sequence
 import "./src/sequence/constructors/constructorTest.js";
@@ -15,9 +8,6 @@ import "./src/sequence/operators/operatorsTest.js";
 import "./src/sequence/terminalOperations/terminalOperationsTest.js";
 import "./src/sequence/sequenceBuilderTest.js";
 import "./src/sequence/util/sequenceUtil/sequencePrototypeTest.js"
-
-// generator
-import "./src/sequence/examples/generators/generatorTest.js"
 
 // focus ring
 import "./src/focusring/focusRingTest.js";
