@@ -8,22 +8,21 @@ import {id, Tuple}            from "../stdlib.js"
 import {Observable}           from "../observable.js"
 import {dom}                  from "./dom.js"
 import {LoggerFactory}        from "../logger/loggerFactory.js";
-// import {
-//     addToAppenderList,
-//     getLoggingLevel,
-//     removeFromAppenderList,
-//     setLoggingLevel,
-//     setLoggingContext,
-//     setMessageFormatter
-// }                             from "../logger/logging.js";
+import {
+    addToAppenderList,
+    getLoggingLevel,
+    removeFromAppenderList,
+    setLoggingLevel,
+    setLoggingContext,
+    setMessageFormatter
+}                             from "../logger/logging.js";
 import {LOG_DEBUG}            from "../logger/logLevel.js";
 import {Appender}                                                                        from "../logger/appender/consoleAppender.js";
-import {addToAppenderList, getLoggingLevel, removeFromAppenderList, setMessageFormatter} from "../logger/logging.js";
 
 export { TestSuite, total, asyncTest }
 
-// const log = LoggerFactory("kolibri.test");
-const log = ({ error: msg => console.error(msg)});
+const log = LoggerFactory("kolibri.test");  // todo find out what's wrong here and re-enable
+// const log = ({ error: msg => console.error(msg)});
 
 /**
  * The running total of executed test assertions
