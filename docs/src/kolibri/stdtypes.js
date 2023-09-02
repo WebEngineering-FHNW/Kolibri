@@ -41,14 +41,9 @@
  */
 
 /**
- * A callback which takes two arguments of type {@link _T_} and {@link _U_} and transforms it to {@link _R_}.
- * @template _T_
- * @template _U_
- * @template _R_
+ * A callback which takes two arguments of type _T_ and _U_}and transforms it to _R_.
  * @callback BiFunction
- * @param   { _T_ } value1
- * @param   { _U_ } value2
- * @returns { _R_ }
+ * @type {  <_T_, _U_, _R_> (value1:_T_, value2:_U_) => _R_ }
  */
 
 /**
