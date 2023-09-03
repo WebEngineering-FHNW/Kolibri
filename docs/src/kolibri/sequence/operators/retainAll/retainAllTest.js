@@ -17,7 +17,7 @@ addToTestingTable(testSuite)(
     param:      el => el % 2 === 0,
     expected:   [0, 2, 4],
     invariants: [
-      it => retainAll(_ => true )(it) ["=="] (it),
+      it => retainAll(_ => true )(it) ["=="] (it), // todo dk: think about infinite sequences
       it => retainAll(_ => false)(it) ["=="] (nil),
     ]
   })

@@ -89,7 +89,7 @@ const id = x => x;
  * @param { Number } limit
  * @returns { SequenceType<Number> }
  */
-const newSequence = limit => Sequence(0, current => current <= limit, current => current + 1);
+const newSequence = limit => Sequence(0, current => current <= limit, current => current + 1); // todo dk: Range(limit) ?
 const UPPER_SEQUENCE_BOUNDARY = 4;
 
 /**

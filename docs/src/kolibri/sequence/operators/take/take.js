@@ -29,7 +29,7 @@ const take = count => iterable => {
     let start = 0;
 
     const next = () => {
-      // the iterator finishes, when the predicate does not return true anymore,
+      // the iterator finishes, when the predicate does not return true anymore, // todo dk: copy/paste error?
       // or the previous iterator has no more elements left
       const takeDone = start++ >= count;
       if (takeDone) return { done: true, value: undefined };
