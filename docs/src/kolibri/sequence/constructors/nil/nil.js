@@ -1,4 +1,4 @@
-import { SequencePrototype } from "../../util/sequenceUtil/sequencePrototype.js";
+import { seq } from "../seq/seqSequence.js";
 
 export { nil }
 
@@ -17,5 +17,4 @@ export { nil }
  * console.log(...emptySequence);
  * // => Logs '' (nothing)
  */
-const nil = SequencePrototype.empty(); // empty contains the implementation of nil.
-Object.setPrototypeOf(nil, SequencePrototype);
+const nil = seq();

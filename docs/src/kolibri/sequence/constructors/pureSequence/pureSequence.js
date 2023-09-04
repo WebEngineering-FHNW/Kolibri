@@ -1,4 +1,4 @@
-import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
+import { seq } from "../seq/seqSequence.js";
 
 export { PureSequence }
 
@@ -18,19 +18,4 @@ export { PureSequence }
  * console.log(...seq);
  * // => Logs '1'
  */
-const PureSequence = value => {
-
-  const pureIterator = () => {
-    let done = false;
-
-    const next = () => {
-      const prevDone = done;
-      done = true;
-      return { done: prevDone, value }
-    };
-
-    return { next }
-  };
-
-  return createMonadicSequence(pureIterator)
-};
+const PureSequence = value => seq(value);
