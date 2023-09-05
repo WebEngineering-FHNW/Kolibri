@@ -74,7 +74,7 @@ testSuite.add("operator tests", assert => {
   assert.iterableEq(Seq(1).append(Seq(2,3)),                     Seq(1, 2, 3));
   assert.iterableEq(Seq(1,2) ['++'](Seq(3)),                     Seq(1, 2, 3));
   assert.iterableEq(Seq(Just(1), Nothing, Just(2)).catMaybes() , Seq(1, 2));
-
+  assert.iterableEq(Seq(1,2).cycle().take(4),                    Seq(1, 2, 1, 2));
 
 });
 
