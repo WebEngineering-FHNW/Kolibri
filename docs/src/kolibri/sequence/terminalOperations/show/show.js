@@ -6,13 +6,12 @@ export { show }
 
 /**
  * Transforms the passed {@link Iterable} into a {@link String}.
- *
+ * Elements are passes through the String() constructor, separated by a commas and enclosed in square brackets.
+ * @typedef ShowOperationType
  * @function
  * @pure
- * @haskell Show a => a -> String
- * @template _T_
- * @param { Iterable<_T_> } iterable
- * @param { Number }        [maxValues=50] - the amount of elements that should be printed at most
+ * @haskell Show a => [a] -> String
+ * @param { Number }   [maxValues=50] - the maximum amount of elements that should be printed
  * @returns { String }
  *
  * @example
@@ -21,6 +20,13 @@ export { show }
  *
  * console.log(text);
  * // => Logs '[0,1,2]'
+ */
+
+/**
+ * see {@link ShowOperationType}
+ * @param { Iterable } iterable
+ * @param { Number }   [maxValues=50] - the maximum amount of elements that should be printed
+ * @return { String }
  */
 const show = (iterable, maxValues = 50) =>
   "[" +

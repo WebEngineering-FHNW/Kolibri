@@ -1,97 +1,79 @@
-import { TestSuite } from "../../../util/test.js";
-import { show }      from "../../terminalOperations/show/show.js";
-import { map }       from "../../operators/map/map.js";
-import { Sequence }  from "../../constructors/sequence/Sequence.js";
-
-/**
- * used to perform various tests
- * @param { Number } from
- * @param { Number } to
- * @return { SequenceType<Number> }
- */
-const range = (from, to) => Sequence(from, i => i <= to, i => i + 1);
+import {TestSuite}                   from "../../../util/test.js";
+import {map, nil, Range, Seq, }      from "../../sequence.js";
+import {Just, Nothing}               from "../../../stdlib.js";
 
 const testSuite = TestSuite("Sequence Prototype Suite");
 
 testSuite.add("test prototype: and", assert => {
-  // When
-  const result = range(0,3).and(el => range(0, el));
+  const result = Range(0, 3).and(el => Range(0, el));
 
-  // Then
   assert.iterableEq(result, [0, 0, 1, 0, 1, 2, 0, 1, 2, 3]);
 });
 
 testSuite.add("test prototype: fmap", assert => {
-  // When
-  const result = range(0,3).fmap(x => 2*x);
+  const result = Range(0, 3).fmap(x => 2 * x);
 
-  // Then
   assert.iterableEq(result, [0, 2, 4, 6]);
 });
 
 testSuite.add("test prototype: pure", assert => {
-  // When
-  const result = range(0, 3).pure(3);
-
-  // Then
-  assert.iterableEq(result, [3]);
+  const singleton = Seq().pure(3);
+  assert.iterableEq(singleton, [3]);
 });
 
 testSuite.add("test prototype: empty", assert => {
-  // When
-  const result = range(0, 3).empty();
+  const result = nil.empty();
 
-  // Then
   assert.iterableEq(result, []);
 });
 
-// test other functions
-testSuite.add("test prototype: toString", assert => {
-  // Given
-  const seq    = range(0, 3);
 
-  // When
-  const result = seq.toString();
+testSuite.add("test prototype: toString, show", assert => {
+  const range = Range(0, 3);
 
-  // Then
-  assert.is(result, show(seq));
-});
+  assert.is(range.toString(), range.show());
 
-testSuite.add("test prototype: toString with max", assert => {
-  // Given
-  const seq       = range(0, 3);
-  const maxValues = 2;
-
-  // When
-  // todo dk: we override toString with a different signature. We should reconsider this.
   // noinspection JSCheckFunctionSignatures
-  const result = seq.toString(maxValues);
-
-  // Then
-  assert.is(result, show(seq, maxValues));
+  assert.is(range.toString(2), range.show(2));
 });
-testSuite.add("test prototype: [==]", assert => {
-  // Given
-  const seq    = range(0, 3);
 
-  // When
-  const result = seq ["=="] (seq);
-
-  // Then
-  assert.isTrue(result);
+testSuite.add("test prototype: [==], eq$", assert => {
+  assert.isTrue(Range(0, 3).eq$    (Range(0, 3)));
+  assert.isTrue(Range(0, 3) ["=="] (Range(0, 3)));
 });
 
 testSuite.add("test prototype: pipe", assert => {
   // Given
-  const seq      = range(0, 3);
   const double   = x => 2 * x;
-  const expected = map(double)(seq);
-
   // When
-  const actual = seq.pipe( map(double) );
-
+  const actual = Seq(1, 2).pipe(
+      map(double),
+      map(double)
+  );
   // Then
-  assert.iterableEq(actual, expected);
+  assert.iterableEq(actual, Seq(4, 8));
+});
+
+testSuite.add("test prototype: cons", assert => {
+
+  assert.iterableEq(Seq(1,2,3).cons(0), Seq(0,1,2,3));
+
+  // see whether type inspection can handle this
+  assert.iterableEq(
+      Seq(3)
+        .cons(2)
+        .cons(1)
+        .and(el => Seq(el, -el))
+        .cons(0),
+      Seq(0, 1, -1, 2, -2, 3, -3)
+  );
+});
+
+testSuite.add("operator tests", assert => {
+
+  assert.iterableEq(Seq(Just(1), Nothing, Just(2)).catMaybes() , Seq(1, 2));
+
+
 });
 
 testSuite.run();

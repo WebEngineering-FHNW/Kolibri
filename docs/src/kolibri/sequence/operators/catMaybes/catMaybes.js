@@ -8,6 +8,7 @@ export { catMaybes }
  * The catMaybes function takes an {@link Iterable} of {@link MaybeType Maybes}
  * and returns an {@link SequenceType} of all the {@link JustXType Just's} values.
  *
+ * @typedef CatMaybesOperationType
  * @function
  * @pure
  * @haskell [Maybe a] -> a
@@ -23,6 +24,12 @@ export { catMaybes }
  *
  * console.log(...result);
  * // => Logs '5, 3'
+ */
+
+/**
+ * see {@link CatMaybesOperationType}
+ * @template _T_
+ * @type { CatMaybesOperationType<_T_> }
  */
 const catMaybes = iterable => {
 

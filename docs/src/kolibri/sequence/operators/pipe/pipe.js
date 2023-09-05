@@ -4,16 +4,15 @@ import { SequencePrototype } from "../../util/sequenceUtil/sequencePrototype.js"
 export { pipe }
 
 /**
- * Transforms the given {@link Iterable} using the passed {@link SequenceOperation}.
- *
- * @function
- * @pure
- * @type  { <_T_>
+ * Transforms the given {@link Iterable} by applying each transformer's {@link SequenceOperation}
+ * from begin to end while passing through the intermediate results.
+ * @typedef PipeOperationType
+ * @template _T_
+ * @type  {
  *            (...transformers: SequenceOperation<*,*> )
  *            => (iterable: Iterable<_T_>)
  *            => (SequenceType<*> | *)
  *        }
- *
  * @example
  * const numbers = [0, 1, 2, 3, 4, 5];
  * const piped = pipe(
@@ -24,6 +23,11 @@ export { pipe }
  *
  * console.log(...piped);
  * // => Logs '0, 4, 8'
+ */
+
+/**
+ * @template _T_
+ * @type  { PipeOperationType<_T_> }
  */
 const pipe = (...transformers) => iterable => {
 

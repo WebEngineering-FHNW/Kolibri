@@ -1,26 +1,85 @@
 // typedefs
 
 /**
- * This type combines the {@link Iterable} with {@link MonadType}.
+ * Defines how each Sequence is a {@link MonadType}.
+ * @template  _T_
+ * @typedef  SequenceMonadType
+ * @property { <_U_> (bindFn: (_T_) => SequenceType<_U_>) => SequenceType<_U_> } and
+ *              - monadic _bind_,
+ *              - example: `Seq(1, 2).and(x => Seq(x, -x)) ['=='] Seq(1, -1, 2, -2)`
+ * @property { <_U_> (f:      (_T_) => _U_)               => SequenceType<_U_> } fmap
+ *              - functorial _map_,
+ *              - example: `Seq(1, 2).fmap(x => x * 2) ['=='] Seq(2, 4)`
+ * @property {       (_T_)                                => SequenceType<_T_> } pure
+ *              - applicative _pure_,
+ *              - example: `Seq().pure(1) ['=='] Seq(1)`
+ * @property {       ()                                   => SequenceType<_T_> } empty
+ *              - monoidal _empty_
+ *              - example: `Seq().empty() ['=='] Seq()`
+ *
+ */
+
+/**
+ * Collection of all {@link SequenceOperation}s that are defined on a {@link SequenceType}.
+ * @template  _T_
+ * @typedef  SequenceOperationTypes
+ * @property { CatMaybesOperationType<_T_> } catMaybes
+ *              - Type: {@link CatMaybesOperationType}
+ *              - Sequence of Maybe values to a Sequence of values
+ *              - Example: `Seq(Just(1), Nothing, Just(2)).catMaybes() ['=='] (Seq(1, 2))`
+ * @property { ConsOperationType<_T_> } cons
+ *              - Type: {@link ConsOperationType}
+ *              - Prefix with a single value
+ *              - Example: `Seq(1, 2).cons(0) ['=='] (Seq(0, 1, 2))`
+ * @property { PipeOperationType<_T_> } pipe
+ *              - Type: {@link PipeOperationType}
+ *              - Run a series of {@link SequenceOperation}s on a {@link SequenceType}
+ *              - example: `Seq(1, 2).pipe(map(x => x * 2), drop(1)) ['=='] Seq(4)`
+ */
+
+
+/**
+ * Collection of all terminal operations that are defined on a {@link SequenceType}.
+ * @template  _T_
+ * @typedef  SequenceTerminalOperationTypes
+ * @property { EqualOperationType<_T_> } "=="
+ *              - Type: {@link EqualOperationType}
+ *              - Check for element-wise equality
+ *              - Warning: This only works on finite sequences
+ *              - Example: `Seq(1, 2) ['=='] (Seq(1, 2))`
+ * @property { EqualOperationType<_T_> } eq$
+ *              - Type: {@link EqualOperationType}
+ *              - Check for element-wise equality
+ *              - Warning: This only works on finite sequences as indicated by the name ending with `$`
+ *              - Example: `Seq(1, 2).eq$(Seq(1, 2))`
+ * @property { ShowOperationType } show
+ *              - Type: {@link ShowOperationType}
+ *              - A string representation of the {@link SequenceType} with optionally a maximum amount of elements
+ *              - Example: `Seq(1, 2).show() === "[1,2]"`
+ * @property { ShowOperationType } toString
+ *              - Type: {@link ShowOperationType}, alias for {@link show}
+ *              - Note that providing a maximum amount of elements works but is not advised since it will
+ *                cause type warnings because it breaks the contract of the inherited `Object.toString()`.
+ *                Use {@link show} instead.
+ *              - Example: `Seq(1, 2).toString() === "[1,2]"`
+ */
+
+
+
+/**
+ * This type combines the {@link Iterable} with {@link SequenceMonadType}.
  * Objects of this type can therefore be used in [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of) loops,
  * and further syntactical sugar.
- *
- * Additionally, such objects are monadic and provide therefore all functions that make up a monad.
  *
  * _Note_: The Kolibri defines many functions of type {@link SequenceOperation} which can be used to
  * transform the elements of this Sequence.
  *
  * @template _T_
  * @typedef {
- *            {
- *              and:  <_U_>(bindFn: (_T_) => SequenceType<_U_>)   => SequenceType<_U_>,
- *              fmap: <_U_>(f: (_T_)      => _U_)                 => SequenceType<_U_>,
- *              pure: <_U_>(_U_)                                  => SequenceType<_U_>,
- *              empty:     ()                                     => SequenceType<_T_>,
- *              pipe:      function(...transformers: SequenceOperation<*,*>): SequenceType<*> | *,
- *              toString:  (maxValues?: Number)                   => String,
- *              "==":      (that: SequenceType<_T_>)              => Boolean
- *            } & Iterable<_T_>
+ *              Iterable<_T_>
+ *            & SequenceMonadType<_T_>
+ *            & SequenceOperationTypes<_T_>
+ *            & SequenceTerminalOperationTypes<_T_>
  * } SequenceType
  */
 
