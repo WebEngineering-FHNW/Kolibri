@@ -6,14 +6,13 @@ export { take }
 /**
  * Stop after so many elements.
  *
+ * @template _T_
+ * @typedef TakeOperationType
  * @function
  * @pure
  * @haskell Int -> [a] -> [a]
- * @template _T_
- * @type {
- *           (count: Number)
- *        => SequenceOperation<_T_>
- *       }
+ * @param   { Number } count - number of elements to take
+ * @returns { SequenceOperation<_T_> }
  *
  * @example
  * const numbers = [0,1,2,3];
@@ -21,6 +20,12 @@ export { take }
  *
  * console.log(...taken);
  * // => Logs '0, 1'
+ */
+
+/**
+ * see {@link TakeOperationType}
+ * @template _T_
+ * @type { TakeOperationType<_T_> }
  */
 const take = count => iterable => {
 

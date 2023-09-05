@@ -1,20 +1,22 @@
 // noinspection GrazieInspection
 
-import { PureSequence } from "../../constructors/pureSequence/pureSequence.js";
-import { isIterable }   from "./isIterable.js";
-import {LoggerFactory}  from "../../../logger/loggerFactory.js";
+import { PureSequence }  from "../../constructors/pureSequence/pureSequence.js";
+import { isIterable }    from "./isIterable.js";
+import { LoggerFactory } from "../../../logger/loggerFactory.js";
 import {
   append,
   bind,
   catMaybes,
   cons,
+  cycle,
   map,
-  pipe
-}                       from "../../operators/operators.js";
+  pipe,
+  take
+} from "../../operators/operators.js";
 import {
   eq$,
   show
-}                       from "../../terminalOperations/terminalOperations.js";
+} from "../../terminalOperations/terminalOperations.js";
 
 const log = LoggerFactory("kolibri.sequence");
 
@@ -76,12 +78,20 @@ SequencePrototype["=="] = SequencePrototype.eq$;
 // all the SequenceOperations are added to the prototype
 
 SequencePrototype.append = function (sequence) {
-  return append(sequence)(this);
+  return append(this)(sequence);
 };
 SequencePrototype["++"] = SequencePrototype.append;
 
 SequencePrototype.cons = function (element) {
   return cons(element)(this);
+};
+
+SequencePrototype.cycle = function () {
+  return cycle(this);
+};
+
+SequencePrototype.take = function (n) {
+  return take(n)(this);
 };
 
 SequencePrototype.catMaybes = function () {

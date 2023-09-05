@@ -26,6 +26,6 @@ export { append }
 /**
  * see {@link AppendOperationType}
  * @template _T_
- * @typedef AppendOperationType
+ * @type {AppendOperationType<_T_>}
  */
 const append = it1 => it2 => mconcat([it1, it2]);

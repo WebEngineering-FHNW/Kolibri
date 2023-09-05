@@ -39,10 +39,18 @@
  *              - Type: {@link ConsOperationType}
  *              - Prefix with a single value
  *              - Example: `Seq(1, 2).cons(0) ['=='] (Seq(0, 1, 2))`
+ * @property { CycleOperationType<_T_> } cycle
+ *              - Type: {@link CycleOperationType}
+ *              - infinite repetition of the original {@link SequenceType}
+ *              - Example: `Seq(1, 2).cycle().take(4) ['=='] (Seq(1, 2, 1, 2))`
  * @property { PipeOperationType<_T_> } pipe
  *              - Type: {@link PipeOperationType}
  *              - Run a series of {@link SequenceOperation}s on a {@link SequenceType}
- *              - example: `Seq(1, 2).pipe(map(x => x * 2), drop(1)) ['=='] Seq(4)`
+ *              - example: `Seq(1, 2).pipe(map(x => x * 2), drop(1)) ['=='] (Seq(4))`
+ * @property { TakeOperationType<_T_> } take
+ *              - Type: {@link TakeOperationType}
+ *              - take n elements from a potentially infinite {@link SequenceType}
+ *              - example: `Seq(1, 2, 3).take(2) ['=='] (Seq(1,2))`
  */
 
 
