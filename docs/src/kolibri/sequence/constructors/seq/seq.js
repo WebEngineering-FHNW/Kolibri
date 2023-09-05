@@ -1,6 +1,6 @@
 import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
 
-export { seq }
+export { Seq }
 
 /**
  * Creates a {@link SequenceType} which contains all given arguments as values.
@@ -13,12 +13,12 @@ export { seq }
  * @returns { SequenceType<_T_> }
  *
  * @example
- * const result = seq(1, 2);
+ * const result = Seq(1, 2);
  *
  * console.log(...result);
  * // => Logs '1' '2'
  */
-const seq = (...values) => {
+const Seq = (...values) => {
 
   const seqIterator = () => {
     let index = 0;
