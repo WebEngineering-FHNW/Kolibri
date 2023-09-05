@@ -1,14 +1,14 @@
 import { mconcat } from "../mconcat/mconcat.js";
 
-export { concat }
-
+export { append }
 /**
  * Adds the second iterable to the first iterables end.
  *
+ * @template _T_
+ * @typedef AppendOperationType
  * @function
  * @pure
  * @haskell [a] -> [a] -> [a]
- * @template _T_
  * @type {
  *            (it1: Iterable<_T_>)
  *         => SequenceOperation<_T_>
@@ -17,9 +17,15 @@ export { concat }
  * @example
  * const numbers = [0, 1, 2];
  * const range   = Range(2);
- * const concatenated = concat(numbers)(range);
+ * const concatenated = append(numbers)(range);
  *
  * console.log(...concatenated);
  * // => Logs '0, 1, 0, 1, 2'
  */
-const concat = it1 => it2 => mconcat([it1, it2]);
+
+/**
+ * see {@link AppendOperationType}
+ * @template _T_
+ * @typedef AppendOperationType
+ */
+const append = it1 => it2 => mconcat([it1, it2]);

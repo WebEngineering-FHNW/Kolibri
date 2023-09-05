@@ -1,15 +1,20 @@
 // noinspection GrazieInspection
 
-import { bind }         from "../../operators/bind/bind.js";
-import { map }          from "../../operators/map/map.js";
-import { pipe }         from "../../operators/pipe/pipe.js";
-import { show }         from "../../terminalOperations/show/show.js";
-import { eq$ }          from "../../terminalOperations/eq/eq.js";
 import { PureSequence } from "../../constructors/pureSequence/pureSequence.js";
 import { isIterable }   from "./isIterable.js";
-import { cons }         from "../../operators/cons/cons.js";
 import {LoggerFactory}  from "../../../logger/loggerFactory.js";
-import {catMaybes}      from "../../../stdlib/stdlib.js";
+import {
+  append,
+  bind,
+  catMaybes,
+  cons,
+  map,
+  pipe
+}                       from "../../operators/operators.js";
+import {
+  eq$,
+  show
+}                       from "../../terminalOperations/terminalOperations.js";
 
 const log = LoggerFactory("kolibri.sequence");
 
@@ -69,6 +74,11 @@ SequencePrototype.eq$ = function(that) {
 SequencePrototype["=="] = SequencePrototype.eq$;
 
 // all the SequenceOperations are added to the prototype
+
+SequencePrototype.append = function (sequence) {
+  return append(sequence)(this);
+};
+SequencePrototype["++"] = SequencePrototype.append;
 
 SequencePrototype.cons = function (element) {
   return cons(element)(this);

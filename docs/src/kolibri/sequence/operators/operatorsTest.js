@@ -1,5 +1,5 @@
 import "./bind/bindTest.js";
-import "./concat/concatTest.js";
+import "./append/appendTest.js";
 import "./cons/consTest.js";
 import "./catMaybes/catMaybesTest.js";
 import "./cycle/cycleTest.js";
