@@ -10,6 +10,8 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 - add each operator to SequencePrototype (requires type modification)
 - isSequence
 - test against infinite sequence invariants (operator does not stall, lazy, take(0) === nil)
+- replace Builder with varargs for cons. 
+- add docs for divergent sequences ( repeat(1).dropWhere( x => x === 1 ) )
 
 ## todo
 - update references in production.js

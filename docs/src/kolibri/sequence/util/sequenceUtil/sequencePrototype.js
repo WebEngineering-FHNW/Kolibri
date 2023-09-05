@@ -7,6 +7,11 @@ import { show }         from "../../terminalOperations/show/show.js";
 import { eq$ }          from "../../terminalOperations/eq/eq.js";
 import { PureSequence } from "../../constructors/pureSequence/pureSequence.js";
 import { isIterable }   from "./isIterable.js";
+import { cons }         from "../../operators/cons/cons.js";
+import {LoggerFactory}  from "../../../logger/loggerFactory.js";
+import {catMaybes}      from "../../../stdlib/stdlib.js";
+
+const log = LoggerFactory("kolibri.sequence");
 
 export { SequencePrototype }
 /**
@@ -16,62 +21,16 @@ export { SequencePrototype }
 const SequencePrototype = () => null;
 
 
-/**
- * @template _T_, _U_
- * @param { (_T_) => SequenceType<_U_> } bindFn
- * @returns { SequenceType<_U_> }
- *
- * @example
- * const numbers = Range(3);
- * const bindFn  = el => take(el)(repeat(el));
- * const result  = numbers.and(bindFn);
- *
- * console.log(...result);
- * // => Logs '1, 2, 2, 3, 3, 3'
- */
 SequencePrototype.and = function (bindFn) {
   return bind(bindFn)(this);
 };
 
-/**
- * @template _T_, _U_
- * @param { (_T_) => _U_ } mapper - maps the value in the context
- * @returns SequenceType<_U_>
- *
- * @example
- * const numbers = Range(2);
- * const mapped  = numbers.map(el => el * 2);
- *
- * console.log(...numbers);
- * // => Logs '0, 2, 4'
- */
 SequencePrototype.fmap = function (mapper) {
   return map(mapper)(this);
 };
 
-/**
- * @template _T_
- * @param { _T_ } val - lifts a given value into the context
- * @returns SequenceType<_T_>
- *
- * @example
- * const seq = Range(3).pure(1);
- *
- * console.log(...seq);
- * // => Logs '1'
- */
 SequencePrototype.pure = val => PureSequence(val);
 
-/**
- * @template _T_
- * @returns SequenceType<_T_>
- *
- * @example
- * const emptySequence = Range(3).empty();
- *
- * console.log(...emptySequence);
- * // => Logs '' (nothing)
- */
 SequencePrototype.empty = () => {
   const emptySequence = () => {
     const iterator = () => {
@@ -88,55 +47,33 @@ SequencePrototype.empty = () => {
   return /** @type SequenceType */ nil;
 };
 
-/**
- *
- * @param { Number } [maxValues=50] - the amount of elements that should be printed at most
- * @returns { string }
- *
- * @example
- * const numbers = Range(6);
- * const text    = range.toString(3);
- *
- * console.log(text);
- * // => Logs '[0,1,2]'
- */
-SequencePrototype.toString = function (maxValues = 50) {
+SequencePrototype.show = function (maxValues = 50) {
   return show(this, maxValues);
 };
 
-/**
- * @param {...SequenceOperation, PipeTransformer<*,*> } transformers
- * @return { SequenceType<*> | * }
- *
- * @example
- * const numbers = Range(5);
- * const piped   = numbers.pipe(
- *                  retainAll(n => n % 2 === 0),
- *                  map(n => 2*n),
- *                  drop(2)
- *                );
- *
- * console.log(...piped);
- * // => Logs '0, 4, 8'
- */
+SequencePrototype.toString = function (maxValues = 50) {
+  if (maxValues !== 50) {
+    log.warn("Sequence.toString() with maxValues might lead to type inspection issues. Use show("+ maxValues+") instead.");
+  }
+  return show(this, maxValues);
+};
 SequencePrototype.pipe = function(...transformers) {
   return pipe(...transformers)(this);
 };
 
-/**
- * Tests this {@link SequenceType} for equality against the given {@link Iterable}.
- *
- * @param { Iterable } that
- * @return { Boolean }
- *
- * @example
- * const range = Range(3);
- * const array = [0,1,2,3];
- *
- * console.log(range ["=="] (array));
- * // => Logs 'true'
- */
-SequencePrototype["=="] = function(that) {
+SequencePrototype.eq$ = function(that) {
   if (!isIterable(that)) return false;
   return eq$(this) /* == */ (that);
+};
+
+SequencePrototype["=="] = SequencePrototype.eq$;
+
+// all the SequenceOperations are added to the prototype
+
+SequencePrototype.cons = function (element) {
+  return cons(element)(this);
+};
+
+SequencePrototype.catMaybes = function () {
+  return catMaybes(this);
 };
