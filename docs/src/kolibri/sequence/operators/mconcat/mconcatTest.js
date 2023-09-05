@@ -41,7 +41,7 @@ testSuite.add("test left/right associativity: mconcat", assert => {
   assert.iterableEq(right, expected);
 });
 
-testSuite.add("test concat with infinity: mconcat", assert => {
+testSuite.add("test append with infinity: mconcat", assert => {
   // Given
   let called  = false;
   let counter = 0;

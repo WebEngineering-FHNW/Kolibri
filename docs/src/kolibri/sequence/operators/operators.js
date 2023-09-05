@@ -1,6 +1,6 @@
 export * from "./bind/bind.js"
 export * from "./catMaybes/catMaybes.js"
-export * from "./concat/concat.js"
+export * from "./append/append.js"
 export * from "./cons/cons.js"
 export * from "./cycle/cycle.js"
 export * from "./drop/drop.js"

@@ -23,6 +23,14 @@
  * Collection of all {@link SequenceOperation}s that are defined on a {@link SequenceType}.
  * @template  _T_
  * @typedef  SequenceOperationTypes
+ * @property { AppendOperationType<_T_> } append
+ *              - Type: {@link AppendOperationType}
+ *              - append one sequence to another
+ *              - Example: `Seq(1).append(Seq(2,3)) ['=='] (Seq(1, 2,3))`
+ * @property { AppendOperationType<_T_> } ['++']
+ *              - Type: {@link AppendOperationType}
+ *              - append one sequence to another, alias for {@link append}
+ *              - Example: `Seq(1).append(Seq(2,3)) ['++'] (Seq(1, 2,3))`
  * @property { CatMaybesOperationType<_T_> } catMaybes
  *              - Type: {@link CatMaybesOperationType}
  *              - Sequence of Maybe values to a Sequence of values
