@@ -1,4 +1,4 @@
-import { seq } from "../seq/seqSequence.js";
+import { Seq } from "../seq/seq.js";
 
 export { nil }
 
@@ -17,4 +17,4 @@ export { nil }
  * console.log(...emptySequence);
  * // => Logs '' (nothing)
  */
-const nil = seq();
+const nil = Seq();
