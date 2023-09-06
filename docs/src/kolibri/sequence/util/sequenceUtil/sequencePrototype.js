@@ -10,6 +10,7 @@ import {
   cons,
   cycle,
   drop,
+  dropWhile,
   map,
   pipe,
   take
@@ -93,6 +94,10 @@ SequencePrototype.cycle = function () {
 
 SequencePrototype.drop = function (n) {
   return drop(n)(this);
+};
+
+SequencePrototype.dropWhile = function (predicate) {
+  return dropWhile(predicate)(this);
 };
 
 SequencePrototype.take = function (n) {
