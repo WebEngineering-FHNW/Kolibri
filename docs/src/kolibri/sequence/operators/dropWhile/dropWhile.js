@@ -6,6 +6,8 @@ export { dropWhile }
 /**
  * Discards all elements until the first element does not satisfy the predicate anymore.
  *
+ * @template _T_
+ * @typedef DropWhileOperationType
  * @function
  * @pure
  * @haskell (a -> Bool) -> [a] -> [a]
@@ -21,6 +23,11 @@ export { dropWhile }
  *
  * console.log(...dropped);
  * // => Logs '2, 3, 4, 5'
+ */
+/**
+ * see {@link DropWhileOperationType}
+ * @template _T_
+ * @type { DropWhileOperationType<_T_> }
  */
 const dropWhile = predicate => iterable => {
 

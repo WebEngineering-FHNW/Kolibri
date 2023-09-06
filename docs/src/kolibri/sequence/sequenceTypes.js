@@ -47,6 +47,10 @@
  *              - Type: {@link DropOperationType}
  *              - return a {@link SequenceType} without the first n elements
  *              - Example: `Seq(1, 2, 3).drop(2) ['=='] (Seq(3))`
+ * @property { DropWhileOperationType<_T_> } dropWhile
+ *              - Type: {@link DropWhileOperationType}
+ *              - jump over elements until the predicate is not satisfied anymore
+ *              - Example: `Seq(1, 2, 3).dropWhile(x => x < 3) ['=='] (Seq(3))`
  * @property { PipeOperationType<_T_> } pipe
  *              - Type: {@link PipeOperationType}
  *              - Run a series of {@link SequenceOperation}s on a {@link SequenceType}

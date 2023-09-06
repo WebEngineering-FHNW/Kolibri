@@ -218,8 +218,7 @@ const evaluate = lookahead => board => {
 };
 
 /**
- * @template _T_
- * @type {
+ * @type { <_T_>
  *            (LOOK_AHEAD: Number)
  *         => (board: Board)
  *         => PairSelectorType<_T_, Board>
