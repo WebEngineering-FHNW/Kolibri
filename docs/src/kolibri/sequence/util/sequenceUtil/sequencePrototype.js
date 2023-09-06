@@ -9,6 +9,7 @@ import {
   catMaybes,
   cons,
   cycle,
+  drop,
   map,
   pipe,
   take
@@ -88,6 +89,10 @@ SequencePrototype.cons = function (element) {
 
 SequencePrototype.cycle = function () {
   return cycle(this);
+};
+
+SequencePrototype.drop = function (n) {
+  return drop(n)(this);
 };
 
 SequencePrototype.take = function (n) {

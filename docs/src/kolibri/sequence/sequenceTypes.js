@@ -43,6 +43,10 @@
  *              - Type: {@link CycleOperationType}
  *              - infinite repetition of the original {@link SequenceType}
  *              - Example: `Seq(1, 2).cycle().take(4) ['=='] (Seq(1, 2, 1, 2))`
+ * @property { DropOperationType<_T_> } drop
+ *              - Type: {@link DropOperationType}
+ *              - return a {@link SequenceType} without the first n elements
+ *              - Example: `Seq(1, 2, 3).drop(2) ['=='] (Seq(3))`
  * @property { PipeOperationType<_T_> } pipe
  *              - Type: {@link PipeOperationType}
  *              - Run a series of {@link SequenceOperation}s on a {@link SequenceType}

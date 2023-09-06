@@ -7,10 +7,11 @@ export { drop }
 /**
  * Jumps over so many elements.
  *
+ * @template _T_
+ * @typedef DropOperationType
  * @function
  * @pure
  * @haskell Int -> [a] -> [a]
- * @template _T_
  * @type {
  *            (count: number)
  *         => SequenceOperation<_T_>
@@ -22,6 +23,12 @@ export { drop }
  *
  * console.log(...dropped);
  * // => Logs '2, 3'
+ */
+
+/**
+ * see {@link DropOperationType}
+ * @template _T_
+ * @type { DropOperationType<_T_> }
  */
 const drop = count => iterable => {
   const dropIterator = () => {
