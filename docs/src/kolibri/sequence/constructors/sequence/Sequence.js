@@ -1,4 +1,4 @@
-import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
+import { unfold }  from "../unfold/unfold.js";
 
 export { Sequence }
 
@@ -28,24 +28,12 @@ export { Sequence }
  * // => Logs '0, 1, 2'
  */
 
-const Sequence = (start, whileFunction, incrementFunction) => {
+const Sequence = (start, whileFunction, incrementFunction) =>
 
-  const iterator = () => {
-    let value = start;
-    /**
-     * @template _T_
-     * Returns the next iteration of this iterable object.
-     * @returns { IteratorResult<_T_, _T_> }
-     */
-    const next = () => {
-      const current = value;
-      const done = !whileFunction(current);
-      if (!done) value = incrementFunction(value);
-      return { done, value: current };
-    };
+   unfold(
+       start,
+       current  => whileFunction(current)
+             ? { state: incrementFunction(current), value: current }
+             : undefined
+   );
 
-    return { next };
-  };
-
-  return createMonadicSequence(iterator);
-};
