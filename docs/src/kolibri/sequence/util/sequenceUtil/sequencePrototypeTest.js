@@ -77,7 +77,7 @@ testSuite.add("operator tests", assert => {
   assert.iterableEq(Seq(1,2).cycle().take(4),                    Seq(1, 2, 1, 2));
   assert.iterableEq(Seq(1, 2, 3).drop(2),                        Seq(3));
   assert.iterableEq(Seq(1, 2, 3).dropWhile(x => x < 3),          Seq(3));
-
+  assert.iterableEq(Seq(1, 2).map(x => x * 2),                   Seq(2, 4));
 });
 
 testSuite.run();

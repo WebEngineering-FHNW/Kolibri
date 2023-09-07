@@ -84,6 +84,10 @@ SequencePrototype.append = function (sequence) {
 };
 SequencePrototype["++"] = SequencePrototype.append;
 
+SequencePrototype.catMaybes = function () {
+  return catMaybes(this);
+};
+
 SequencePrototype.cons = function (element) {
   return cons(element)(this);
 };
@@ -104,6 +108,4 @@ SequencePrototype.take = function (n) {
   return take(n)(this);
 };
 
-SequencePrototype.catMaybes = function () {
-  return catMaybes(this);
-};
+SequencePrototype.map = SequencePrototype.fmap;
