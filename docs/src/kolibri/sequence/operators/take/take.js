@@ -11,8 +11,10 @@ export { take }
  * @function
  * @pure
  * @haskell Int -> [a] -> [a]
- * @param   { Number } count - number of elements to take
- * @returns { SequenceOperation<_T_> }
+ * @type {
+ *     (count: Number)
+ *     => SequenceOperation<_T_>
+ * }
  *
  * @example
  * const numbers = [0,1,2,3];
