@@ -7,3 +7,4 @@ export * from "./seq/seq.js";
 export * from "./replicate/replicate.js";
 export * from "./repeat/repeat.js";
 export * from "./range/range.js";
+export * from "./unfold/unfold.js";
