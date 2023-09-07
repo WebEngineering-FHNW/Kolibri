@@ -9,11 +9,12 @@ export { map }
  * @function
  * @pure
  * @haskell (a -> b) -> [a] -> [b]
+ * @typedef MapOperationType
  * @template _T_
  * @template _U_
  * @type {
- *            (mapper: Functor<_U_, _T_>)
- *         => SequenceOperation<_U_, _T_>
+ *            (mapper: Functor<_T_, _U_>)
+ *         => SequenceOperation<_T_, _U_>
  *       }
  *
  * @example
@@ -22,6 +23,13 @@ export { map }
  *
  * console.log(...numbers);
  * // => Logs '0, 2, 4'
+ */
+
+/**
+ * see {@link MapOperationType}
+ * @template _T_
+ * @template _U_
+ * @type {MapOperationType<_T_, _U_>}
  */
 const map = mapper => iterable => {
 
