@@ -4,14 +4,14 @@ export { head }
 
 /**
  * Return the next value without consuming it. `undefined` when there is no value.
- *
+ * @typedef HeadOperationType
+ * @template _T_
  * @function
  * @pure
  * @haskell [a] -> a
- * @template _T_
  * @type {
  *              (iterable: Iterable<_T_>)
- *          =>  _T_
+ *          =>  _T_ | undefined
  *       }
  *
  * @example
@@ -20,6 +20,12 @@ export { head }
  *
  * console.log(result);
  * // => Logs '1'
+ */
+
+/**
+ * see {@link HeadOperationType}
+ * @template _T_
+ * @type { HeadOperationType<_T_> }
  */
 const head = iterable => {
   const inner = iteratorOf(iterable);
