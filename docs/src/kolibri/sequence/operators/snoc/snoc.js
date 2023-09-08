@@ -5,11 +5,11 @@ export { snoc }
 
 /**
  * Adds the given element to the end of the {@link Iterable}.
- *
+ * @typedef SnocOperationType
+ * @template _T_
  * @function
  * @pure
  * @haskell a -> [a] -> [a]
- * @template _T_
  * @type {
  *           (element: _T_)
  *        => SequenceOperation<_T_>
@@ -21,6 +21,12 @@ export { snoc }
  *
  * console.log(...snocced);
  * // => Logs '0, 1, 2, 3, 7'
+ */
+
+/**
+ * see {@link SnocOperationType}
+ * @template _T_
+ * @type { SnocOperationType<_T_> }
  */
 const snoc = element => iterable => {
   const snocIterator = () => {
