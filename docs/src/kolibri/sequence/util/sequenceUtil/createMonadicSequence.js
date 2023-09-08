@@ -1,6 +1,6 @@
 import { SequencePrototype } from "./sequencePrototype.js";
 
-export { createMonadicSequence }
+export { createMonadicSequence, setPrototype };
 
 /**
  *

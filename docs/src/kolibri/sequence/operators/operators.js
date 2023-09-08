@@ -16,3 +16,4 @@ export * from "./take/take.js"
 export * from "./takeWhile/takeWhile.js"
 export * from "./zip/zip.js"
 export * from "./zipWith/zipWith.js"
+export * from "./forEach/forEach.js";
