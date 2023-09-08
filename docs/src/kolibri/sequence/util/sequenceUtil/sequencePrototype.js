@@ -13,7 +13,7 @@ import {
   drop,
   dropWhere,
   dropWhile,
-  forEach,
+  tap,
   map,
   mconcat,
   pipe,
@@ -172,8 +172,8 @@ SequencePrototype.dropWhile = function (predicate) {
   return dropWhile(predicate)(this);
 };
 
-SequencePrototype.forEach = function (callback) {
-  return forEach(callback)(this);
+SequencePrototype.tap = function (callback) {
+  return tap(callback)(this);
 };
 
 SequencePrototype.map = SequencePrototype.fmap;

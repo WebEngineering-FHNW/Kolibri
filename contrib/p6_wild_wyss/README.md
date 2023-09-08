@@ -7,8 +7,7 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 - convenience constructors: seq(), seq(42, 99, 1000), seq(...array)
 - rename rejectAll to dropWhere
 - rename retainAll to takeWhere
-- forEach becomes an operator such that it can be used in a (perhaps infinite) pipe or sequence.
-  it no longer consumes the iterator (needs discussion) 
+- add tap operator to see each processed value, leaving the sequence unchanged
 - foldr: callback args are now switched to (acc, cur) as conventional in JS standard library. 
 - sequence of callback arguments in min$/safeMin$ (
 

@@ -21,7 +21,7 @@ export { zip }
  * const range   = Range(3, 5);
  * const zipped  = zip(numbers)(range);
  *
- * forEach(x => console.log(...x))(zipped);
+ * tap(x => console.log(...x))(zipped);
  * // => Logs '0 3, 1 4, 2 5'
  */
 
