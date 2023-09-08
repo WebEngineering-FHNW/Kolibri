@@ -1,7 +1,5 @@
-import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
-import {append}                  from "../append/append.js";
-import {Seq}                     from "../../constructors/seq/seq.js";
+import { append }                  from "../append/append.js";
+import { Seq }                     from "../../constructors/seq/seq.js";
 
 export { cons }
 
