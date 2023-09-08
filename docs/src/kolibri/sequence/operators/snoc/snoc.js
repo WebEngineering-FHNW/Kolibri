@@ -1,7 +1,5 @@
-import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
-import {mconcat}                 from "../mconcat/mconcat.js";
-import {Seq}                     from "../../constructors/seq/seq.js";
+import { mconcat }                 from "../mconcat/mconcat.js";
+import { Seq }                     from "../../constructors/seq/seq.js";
 
 export { snoc }
 
