@@ -83,6 +83,10 @@
  *            - Type: {@link ZipOperationType}
  *            - Combines two {@link Iterable}s into a single sequence of pairs of elements.
  *            - example: `Seq(1, 2).zip("ab").map(([x, y]) => ""+x+y) ['=='] (Seq("1a", "2b")))`
+ * @property { ZipWithOperationType<_T_> } zipWith
+ *            - Type: {@link ZipWithOperationType}
+ *            - Combines two {@link Iterable}s into a single sequence of results of the callback function.
+ *            - example: `Seq(1, 2).zipWith((x, y) => ""+x+y)("ab") ['=='] (Seq("1a", "2b")))`
  */
 
 

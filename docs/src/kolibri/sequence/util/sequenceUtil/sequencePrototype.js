@@ -18,7 +18,7 @@ import {
   take,
   takeWhere,
   takeWhile,
-  zip
+  zip, zipWith
 } from "../../operators/operators.js";
 import {
   eq$,
@@ -133,5 +133,9 @@ SequencePrototype.mconcat = function () {
 
 SequencePrototype.zip = function (iterable) {
   return zip(this)(iterable);
+};
+
+SequencePrototype.zipWith = function (zipFn) {
+  return zipWith(zipFn)(this);
 };
 
