@@ -55,10 +55,11 @@
  *              - Type: {@link DropWhereOperationType}
  *              - jump over all elements that satisfy the predicate
  *              - Example: `Seq(1, 2, 0).dropWhere(x => x > 1) ['=='] (Seq(1, 0))`
- * @property { ForEachOperationType<_T_> } forEach
- *             - Type: {@link ForEachOperationType}
- *             - Executes the callback for each processed element, great for debugging and separating side effects.
- *             - example: `Seq(1, 2).forEach(x => console.log(x))`
+ * @property { TapOperationType<_T_> } tap
+ *             - Type: {@link TapOperationType}
+ *             - Executes the callback when tapping into each element, great for debugging and separating side effects.
+ *               Leaves the original sequence unchanged.
+ *             - example: `Seq(1, 2).tap(x => console.log(x)) ['=='] (Seq(1, 2))`
  * @property { <_U_> (f: (_T_) => _U_) => SequenceType<_U_> } map
  *              - Type: {@link MapOperationType}, alias for {@link SequenceMonadType.fmap}
  *              - functorial _map_,

@@ -91,7 +91,7 @@ testSuite.add("operator tests", assert => {
   assert.iterableEq(
       Seq(1,2)
           .cycle()
-          .forEach(x => sum += x)
+          .tap(x => sum += x)
           .take(4),
       Seq(1, 2, 1, 2));
   assert.is(sum, 6);
