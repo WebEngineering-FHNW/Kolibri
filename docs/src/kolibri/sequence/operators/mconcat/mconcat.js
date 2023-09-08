@@ -4,14 +4,16 @@ import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequ
 export { mconcat }
 
 /**
- * Flatten an {@link Iterable} of {@link Iterable Iterables}.
- *
+ * Monoidal concatenation: flatten an {@link Iterable} of {@link Iterable Iterables} by appending.
+ * @typedef MconcatOperationType
+ * @template _T_
  * @function
  * @pure
- * @haskell [a] -> a
- * @template _T_
- * @param { Iterable<Iterable<_T_>> } iterable -
- * @returns SequenceType<_T_>
+ * @haskell [[a]] -> [a]
+ * @type {
+ *     (seqs: Iterable<Iterable<_T_>>)
+ *     => SequenceType<_T_>
+ * }
  *
  * @example
  * const ranges = map(x => Range(x))(Range(2));
@@ -19,6 +21,12 @@ export { mconcat }
  *
  * console.log(...result);
  * // => Logs '0, 0, 1, 0, 1, 2'
+ */
+
+/**
+ * see {@link MconcatOperationType}
+ * @template _T_
+ * @type { MconcatOperationType<_T_> }
  */
 const mconcat = iterable => {
 
