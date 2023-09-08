@@ -16,7 +16,7 @@ export { pipe }
  * @example
  * const numbers = [0, 1, 2, 3, 4, 5];
  * const piped = pipe(
- *                retainAll(n => n % 2 === 0),
+ *                takeWhere(n => n % 2 === 0),
  *                map(n => 2*n),
  *                drop(2)
  *              )(numbers);

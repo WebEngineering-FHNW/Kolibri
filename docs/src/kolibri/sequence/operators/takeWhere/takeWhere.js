@@ -1,7 +1,7 @@
 import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
 import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
 
-export { retainAll }
+export { takeWhere }
 
 /**
  * Only keeps elements which fulfil the given predicate.
@@ -19,13 +19,13 @@ export { retainAll }
  * const numbers = [0, 1, 2, 3, 4, 5];
  *
  * // just keep even numbers
- * const filtered = retainAll(el => el % 2 === 0)(it);
+ * const filtered = takeWhere(el => el % 2 === 0)(it);
  *
  * console.log(...filtered);
  * // => Logs '0, 2, 4'
  *
  */
-const retainAll = predicate => iterable => {
+const takeWhere = predicate => iterable => {
 
   const retainAllIterator = () => {
     const inner = iteratorOf(iterable);

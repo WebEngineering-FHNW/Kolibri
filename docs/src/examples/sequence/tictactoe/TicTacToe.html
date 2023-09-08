@@ -51,7 +51,7 @@
 <script type="module">
   import { Range, zip, map }                    from "../../../kolibri/sequence/sequence.js";
   import { Computer, hasWon, Human, nextBoard } from "./tictactoe.js";
-  import { retainAll }                          from "../../../kolibri/sequence/operators/retainAll/retainAll.js";
+  import { takeWhere }                          from "../../../kolibri/sequence/operators/takeWhere/takeWhere.js";
   import { isEmpty }                            from "../../../kolibri/sequence/terminalOperations/isEmpty/isEmpty.js";
   import { pipe }                               from "../../../kolibri/sequence/operators/pipe/pipe.js";
   import { dom }                                from "../../../kolibri/util/dom.js";
@@ -97,8 +97,8 @@
 
     createBoard(board);
     const noMoreFields = pipe(
-      retainAll(f => f === 0),
-      isEmpty
+        takeWhere(f => f === 0),
+        isEmpty
     )(board.fields);
     if (noMoreFields) {
       gameInfo.innerText = "Draw!";

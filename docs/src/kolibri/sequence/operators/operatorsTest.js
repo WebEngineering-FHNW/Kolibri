@@ -9,7 +9,7 @@ import "./map/mapTest.js";
 import "./mconcat/mconcatTest.js";
 import "./pipe/pipeTest.js";
 import "./dropWhere/dropWhereTest.js";
-import "./retainAll/retainAllTest.js";
+import "./takeWhere/takeWhereTest.js";
 import "./reverse/reverseTest.js";
 import "./take/takeTest.js";
 import "./takeWhile/takeWhileTest.js";
