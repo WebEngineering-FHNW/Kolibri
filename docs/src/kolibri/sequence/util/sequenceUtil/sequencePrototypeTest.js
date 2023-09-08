@@ -83,6 +83,8 @@ testSuite.add("operator tests", assert => {
   assert.iterableEq(Seq(1, 3, 2).takeWhere(x => x < 3),          Seq(1, 2));
   assert.iterableEq(Seq(0, 1, 2, 0).takeWhile(x => x < 2),       Seq(0, 1));
 
+  assert.iterableEq(Seq(1, 2).zip("ab").map(([x, y]) => ""+x+y), Seq("1a", "2b"));
+
 });
 
 testSuite.run();

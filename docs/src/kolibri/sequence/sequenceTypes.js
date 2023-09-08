@@ -79,6 +79,10 @@
  *             - Type: {@link TakeWhileOperationType}
  *             - Proceeds until the predicate becomes true.
  *             - example: `Seq(0, 1, 2, 0).takeWhile(x => x < 2) ['=='] (Seq(0, 1))`
+ * @property { ZipOperationType<_T_> } zip
+ *            - Type: {@link ZipOperationType}
+ *            - Combines two {@link Iterable}s into a single sequence of pairs of elements.
+ *            - example: `Seq(1, 2).zip("ab").map(([x, y]) => ""+x+y) ['=='] (Seq("1a", "2b")))`
  */
 
 
