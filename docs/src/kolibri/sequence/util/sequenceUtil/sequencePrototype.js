@@ -31,10 +31,12 @@ import {
   head,
   isEmpty,
   max$,
-  min$, reduce$,
+  min$,
+  reduce$,
   safeMax$,
   safeMin$,
-  show
+  show,
+  uncons
 } from "../../terminalOperations/terminalOperations.js";
 
 const log = LoggerFactory("kolibri.sequence");
@@ -133,6 +135,10 @@ SequencePrototype.safeMin$ = function(comparator = (a, b) => a < b) {
 
 SequencePrototype.reduce$ = function(callback, start) {
     return reduce$(callback, start)(this);
+};
+
+SequencePrototype.uncons = function() {
+    return uncons(this);
 };
 
 // "semigroup-like" sequence operations -------------------------------------

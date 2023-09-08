@@ -1,5 +1,5 @@
 import {TestSuite}                   from "../../../util/test.js";
-import {map, nil, Range, Seq, }      from "../../sequence.js";
+import {map, show, nil, Range, Seq } from "../../sequence.js";
 import {Just, Nothing}               from "../../../stdlib.js";
 
 const testSuite = TestSuite("Sequence Prototype Suite");
@@ -106,6 +106,7 @@ testSuite.add("test prototype: terminal operations", assert => {
     assert.is(nil.isEmpty(),            true);
     assert.is(Seq(1).isEmpty(),         false);
     assert.is(Seq(1,2,3).max$(),         3);
+    assert.is(show(Seq(1,2,3).uncons()), "[1,[2,3]]");
 
     let x = "";
     Seq("x","xx")
@@ -122,6 +123,7 @@ testSuite.add("test prototype: terminal operations", assert => {
           ( _ => y = -1)
           ( n => y =  n);
     assert.is(y, 1);
+
 });
 
 testSuite.run();

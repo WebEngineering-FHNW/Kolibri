@@ -159,6 +159,10 @@
  *             cause type warnings because it breaks the contract of the inherited `Object.toString()`.
  *             Use {@link show} instead.
  *           - Example: `Seq(1, 2).toString() === "[1,2]"`
+ * @property { UnconsSequenceOperationType<_T_> } uncons
+ *          - Type: {@link UnconsSequenceOperationType}
+ *          - Returns the head and the tail of the sequence as a {@link PairType}.
+ *          - Example: `show(Seq(1,2,3).uncons()) === "[1,[2,3]]"`
  */
 /**
  * This type combines the {@link Iterable} with {@link SequenceMonadType}.
