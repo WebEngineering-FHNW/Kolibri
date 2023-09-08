@@ -124,6 +124,9 @@ testSuite.add("test prototype: terminal operations", assert => {
           ( n => y =  n);
     assert.is(y, 1);
 
+    const consumed = [];
+    Seq(1,2,3).forEach$(x => consumed.push(x));
+    assert.iterableEq(consumed, [1,2,3]);
 });
 
 testSuite.run();
