@@ -3,12 +3,29 @@ export { foldl$, reduce$ }
 /**
  * Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
  * @see foldl$ is an alias for reduce$
- *
+ * @typedef ReduceSequenceOperationType
+ * @template _T_
  * @function
  * @pure
  * @haskell foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
- * @type { <_T_, _U_>
- *             (accumulationFn: BiFunction<_T_, _U_, _T_>, start: _T_)
+ *
+ * @type { <_U_>
+ *             (accumulationFn: BiFunction<_U_, _T_, _U_>, start: _U_)
+ *          => _T_
+ *       }
+ */
+
+/**
+ * Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
+ * @see foldl$ is an alias for reduce$
+ *
+ * @template _T_
+ * @function
+ * @pure
+ * @haskell foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
+ *
+ * @type { <_U_>
+ *             (accumulationFn: BiFunction<_U_, _T_, _U_>, start: _U_)
  *          => (iterable: Iterable<_T_>)
  *          => _T_
  *       }

@@ -107,58 +107,59 @@
  * @template  _T_
  * @typedef  SequenceTerminalOperationTypes
  * @property { EqualOperationType<_T_> } "=="
- *              - Type: {@link EqualOperationType}
- *              - Check for element-wise equality
- *              - Warning: This only works on finite sequences
- *              - Example: `Seq(1, 2) ['=='] (Seq(1, 2))`
+ *           - Type: {@link EqualOperationType}
+ *           - Check for element-wise equality
+ *           - **Warning**: This only works on finite sequences
+ *           - Example: `Seq(1, 2) ['=='] (Seq(1, 2))`
  * @property { EqualOperationType<_T_> } eq$
- *              - Type: {@link EqualOperationType}
- *              - Check for element-wise equality
- *              - Warning: This only works on finite sequences as indicated by the name ending with `$`
- *              - Example: `Seq(1, 2).eq$(Seq(1, 2))`
+ *           - Type: {@link EqualOperationType}
+ *           - Check for element-wise equality
+ *           - **Warning**: This only works on finite sequences as indicated by the name ending with `$`
+ *           - Example: `Seq(1, 2).eq$(Seq(1, 2))`
  * @property { FoldrOperationType<_T_> } foldr$
- *             - Type: {@link FoldrOperationType}
- *             - _Must not be called on infinite sequences!_
- *             - Performs a reduction on the elements from right to left, using the provided start value and an accumulation function.
- *             - example: `Seq(1, 2, 3).foldr$((acc, cur) => "" + acc + cur, "") === "321"`
+ *           - Type: {@link FoldrOperationType}
+ *           - **Must not be called on infinite sequences!**
+ *           - Performs a reduction on the elements from right to left, using the provided start value and an accumulation function.
+ *           - example: `Seq(1, 2, 3).foldr$((acc, cur) => "" + acc + cur, "") === "321"`
  * @property { HeadOperationType<_T_> } head
- *             - Type: {@link HeadOperationType}
- *             - Returns the first value or `undefined` if the sequence is empty.
- *             - example: `Seq(1, 2, 3).head() === 1`
+ *           - Type: {@link HeadOperationType}
+ *           - Returns the first value or `undefined` if the sequence is empty.
+ *           - example: `Seq(1, 2, 3).head() === 1`
  * @property { IsEmptyOperationType<_T_> } isEmpty
- *            - Type: {@link IsEmptyOperationType}
- *            - Returns true, if there are no elements in the sequence.
- *            - example: `Seq().isEmpty() === true`
+ *           - Type: {@link IsEmptyOperationType}
+ *           - Returns true, if there are no elements in the sequence.
+ *           - example: `Seq().isEmpty() === true`
  * @property { MaxOperationSequenceType<_T_> } max$
  *           - Type: {@link MaxOperationType}
- *           - Returns the largest element of a **non-empty** {@link Iterable}.
+ *           - Returns the largest element of a **non-empty** sequence.
  *           - example: `Seq(1, 3, 0, 5).max$() === 5`
  * @property { SafeMaxOperationSequenceType<_T_> } safeMax$
  *           - Type: {@link SafeMaxOperationType}
- *           - Returns {@link Just} the largest element of an {@link Iterable} or {@link Nothing} otherwise.
+ *           - Returns {@link Just} the largest element of a sequence or {@link Nothing} otherwise.
  *           - example: `Seq(1, 3, 0, 5).safeMax$() ( _ => console.log(":-(")) ( x => console.log(x)) // logs 5`
  * @property { MinOperationSequenceType<_T_> } min$
  *           - Type: {@link MinOperationType}
- *           - Returns the smallest element of a **non-empty** {@link Iterable}.
+ *           - Returns the smallest element of a **non-empty** sequence.
  *           - example: `Seq(1, 3, 0, 5).min$() === 0`
  * @property { SafeMinOperationSequenceType<_T_> } safeMin$
  *           - Type: {@link SafeMinOperationType}
- *           - Returns {@link Just} the smallest element of an {@link Iterable} or {@link Nothing} otherwise.
+ *           - Returns {@link Just} the smallest element of a sequence or {@link Nothing} otherwise.
  *           - example: `Seq(1, 3, 0, 5).safeMin$() ( _ => console.log(":-(")) ( x => console.log(x)) // logs 0`
+ * @property { ReduceSequenceOperationType<_T_> } reduce$
+ *           - Type: {@link ReduceSequenceOperationType}
+ *           - Combines the elements of a **non-empty** sequence left-to-right using the provided start value and an accumulation function.
+ *           - example: `Seq(1, 2, 3).reduce$((acc, cur) => "" + acc + cur, "") === "123"`
  * @property { ShowOperationType<_T_> } show
- *              - Type: {@link ShowOperationType}
- *              - A string representation of the {@link SequenceType} with optionally a maximum amount of elements
- *              - Example: `Seq(1, 2).show() === "[1,2]"`
+ *           - Type: {@link ShowOperationType}
+ *           - A string representation of the {@link SequenceType} with optionally a maximum amount of elements
+ *           - Example: `Seq(1, 2).show() === "[1,2]"`
  * @property { ShowOperationType<_T_> } toString
- *              - Type: {@link ShowOperationType}, alias for {@link show}
- *              - Note that providing a maximum amount of elements works but is not advised since it will
- *                cause type warnings because it breaks the contract of the inherited `Object.toString()`.
- *                Use {@link show} instead.
- *              - Example: `Seq(1, 2).toString() === "[1,2]"`
+ *           - Type: {@link ShowOperationType}, alias for {@link show}
+ *           - Note that providing a maximum amount of elements works but is not advised since it will
+ *             cause type warnings because it breaks the contract of the inherited `Object.toString()`.
+ *             Use {@link show} instead.
+ *           - Example: `Seq(1, 2).toString() === "[1,2]"`
  */
-
-
-
 /**
  * This type combines the {@link Iterable} with {@link SequenceMonadType}.
  * Objects of this type can therefore be used in [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of) loops,
