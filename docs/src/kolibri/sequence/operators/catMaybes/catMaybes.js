@@ -1,5 +1,5 @@
 import { iteratorOf }                from "../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence}      from "../../util/sequenceUtil/createMonadicSequence.js";
+import { createMonadicSequence}      from "../../util/sequenceUtil/sequencePrototype.js";
 import { catMaybes as arrCatMaybes } from "../../../stdlib/stdlib.js";
 
 export { catMaybes }

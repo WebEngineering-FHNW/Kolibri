@@ -1,5 +1,5 @@
 import { nil }                   from "./constructors/nil/nil.js";
-import { createMonadicSequence } from "./util/sequenceUtil/createMonadicSequence.js";
+import { createMonadicSequence } from "./util/sequenceUtil/sequencePrototype.js";
 import { isIterable }            from "./util/sequenceUtil/isIterable.js";
 import { iteratorOf }            from "./util/sequenceUtil/iteratorOf.js";
 

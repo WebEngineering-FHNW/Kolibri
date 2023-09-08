@@ -1,5 +1,5 @@
 import { Just, Nothing }         from "../../../../kolibri/stdlib.js";
-import { createMonadicSequence } from "../../../../kolibri/sequence/util/sequenceUtil/createMonadicSequence.js";
+import { createMonadicSequence } from "../../../../kolibri/sequence/util/sequenceUtil/sequencePrototype.js";
 import { choiceMaybe }           from "../../../../kolibri/stdlib/stdlib.js";
 import { uncurry }               from "../../../../kolibri/lambda/church.js";
 import { iteratorOf }            from "../../../../kolibri/sequence/util/sequenceUtil/iteratorOf.js";

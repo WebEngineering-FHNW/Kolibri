@@ -1,5 +1,5 @@
 import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
+import { createMonadicSequence } from "../../util/sequenceUtil/sequencePrototype.js";
 
 /**
  * {@link cycle} ties a finite {@link Iterable} into a circular one, or equivalently,
