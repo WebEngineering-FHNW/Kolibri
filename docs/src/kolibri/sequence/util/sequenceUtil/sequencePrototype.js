@@ -12,6 +12,7 @@ import {
   drop,
   dropWhile,
   map,
+  mconcat,
   pipe,
   take
 } from "../../operators/operators.js";
@@ -109,3 +110,8 @@ SequencePrototype.take = function (n) {
 };
 
 SequencePrototype.map = SequencePrototype.fmap;
+
+SequencePrototype.mconcat = function () {
+  return mconcat(this);
+};
+

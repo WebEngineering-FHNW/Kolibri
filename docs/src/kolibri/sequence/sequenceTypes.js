@@ -55,6 +55,10 @@
  *              - Type: {@link MapOperationType}, alias for {@link SequenceMonadType.fmap}
  *              - functorial _map_,
  *              - example: `Seq(1, 2).map(x => x * 2) ['=='] Seq(2, 4)`
+ * @property { MconcatOperationType<_T_> } mconcat
+ *              - Type: {@link MconcatOperationType}
+ *              - monoidal concatenation: flatten an {@link Iterable} of {@link Iterable Iterables} by appending.
+ *              - Example: `Seq( Seq(1), Seq(2,3)).mconcat() ['=='] (Seq(1,2,3))`
  * @property { PipeOperationType<_T_> } pipe
  *              - Type: {@link PipeOperationType}
  *              - Run a series of {@link SequenceOperation}s on a {@link SequenceType}
