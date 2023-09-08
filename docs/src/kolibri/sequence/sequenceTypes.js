@@ -71,6 +71,10 @@
  *              - Type: {@link TakeOperationType}
  *              - take n elements from a potentially infinite {@link SequenceType}
  *              - example: `Seq(1, 2, 3).take(2) ['=='] (Seq(1,2))`
+ * @property { TakeWhereOperationType<_T_> } takeWhere
+ *             - Type: {@link TakeWhereOperationType}
+ *             - Only keeps elements that satisfy the given predicate.
+ *             - example: `Seq(1, 3, 2).takeWhere(x => x < 3) ['=='] (Seq(1, 2))`
  */
 
 

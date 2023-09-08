@@ -15,7 +15,8 @@ import {
   map,
   mconcat,
   pipe,
-  take
+  take,
+  takeWhere
 } from "../../operators/operators.js";
 import {
   eq$,
@@ -112,6 +113,10 @@ SequencePrototype.dropWhile = function (predicate) {
 
 SequencePrototype.take = function (n) {
   return take(n)(this);
+};
+
+SequencePrototype.takeWhere = function (predicate) {
+  return takeWhere(predicate)(this);
 };
 
 SequencePrototype.map = SequencePrototype.fmap;
