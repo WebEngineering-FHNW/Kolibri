@@ -1,7 +1,7 @@
 import { Range, Walk}               from "./range.js";
 import { TestSuite }                from "../../../util/test.js";
 import { iteratorOf }               from "../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence }    from "../../util/sequenceUtil/createMonadicSequence.js";
+import { createMonadicSequence }    from "../../util/sequenceUtil/sequencePrototype.js";
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { createTestConfig }         from "../../util/testUtil.js";
 

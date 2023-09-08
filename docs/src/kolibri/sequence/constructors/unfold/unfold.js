@@ -2,7 +2,7 @@
  * @module kolibri.sequence.constructors.unfold
  * The idea was thankfully provided by Daniel Kröni.
  */
-import {createMonadicSequence} from "../../util/sequenceUtil/createMonadicSequence.js";
+import {createMonadicSequence} from "../../util/sequenceUtil/sequencePrototype.js";
 
 export { unfold }
 /**

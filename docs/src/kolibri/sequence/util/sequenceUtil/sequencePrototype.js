@@ -3,6 +3,7 @@
 import { PureSequence }  from "../../constructors/pureSequence/pureSequence.js";
 import { isIterable }    from "./isIterable.js";
 import { LoggerFactory } from "../../../logger/loggerFactory.js";
+import { nil }           from "../../constructors/nil/nil.js";
 import {
   append,
   bind,
@@ -23,21 +24,45 @@ import {
   takeWhile,
   zip,
   zipWith
-} from "../../operators/operators.js";
+}                        from "../../operators/operators.js";
 import {
   eq$,
   show
-} from "../../terminalOperations/terminalOperations.js";
+}                        from "../../terminalOperations/terminalOperations.js";
 
 const log = LoggerFactory("kolibri.sequence");
 
-export { SequencePrototype }
-/**
- * This function serves as prototype for the {@link SequenceType}.
- *
- */
-const SequencePrototype = () => null;
+export { SequencePrototype, createMonadicSequence }
 
+/**
+ * This function object serves as prototype for the {@link SequenceType}.
+ * Singleton object.
+ */
+function SequencePrototype () {  } // does nothing on purpose
+
+/**
+ *
+ * @template _T_
+ * @param { Iterable<_T_> } iterable
+ * @returns { SequenceType<_T_> }
+ */
+function setPrototype (iterable) {
+  Object.setPrototypeOf(iterable, SequencePrototype);
+  return /**@type SequenceType*/ iterable;
+}
+
+/**
+ * Builds an {@link SequenceType} by decorating a given {@link Iterator}.
+ * @template _T_
+ * @param { () => Iterator<_T_> } iteratorConstructor - a function that returns an {@link Iterator}
+ * @returns { SequenceType<_T_> }
+ */
+function createMonadicSequence (iteratorConstructor) {
+  const iterable = { [Symbol.iterator]: iteratorConstructor }; // make a new iterable object
+  return setPrototype(iterable);
+}
+
+// monadic sequence operations ----------------------------------
 
 SequencePrototype.and = function (bindFn) {
   return bind(bindFn)(this);
@@ -49,21 +74,9 @@ SequencePrototype.fmap = function (mapper) {
 
 SequencePrototype.pure = val => PureSequence(val);
 
-SequencePrototype.empty = () => {
-  const emptySequence = () => {
-    const iterator = () => {
-      const next = () => ({ done: true, value: undefined });
-      return { next };
-    };
+SequencePrototype.empty = () => nil;
 
-    return {[Symbol.iterator]: iterator};
-  };
-
-  const nil = emptySequence();
-  Object.setPrototypeOf(nil, SequencePrototype);
-
-  return /** @type SequenceType */ nil;
-};
+// terminal sequence operations ----------------------------------
 
 SequencePrototype.show = function (maxValues = 50) {
   return show(this, maxValues);
@@ -75,9 +88,6 @@ SequencePrototype.toString = function (maxValues = 50) {
   }
   return show(this, maxValues);
 };
-SequencePrototype.pipe = function(...transformers) {
-  return pipe(...transformers)(this);
-};
 
 SequencePrototype.eq$ = function(that) {
   if (!isIterable(that)) return false;
@@ -86,7 +96,7 @@ SequencePrototype.eq$ = function(that) {
 
 SequencePrototype["=="] = SequencePrototype.eq$;
 
-// all the SequenceOperations are added to the prototype
+// "semigroup-like" sequence operations -------------------------------------
 
 SequencePrototype.append = function (sequence) {
   return append(this)(sequence);
@@ -121,6 +131,16 @@ SequencePrototype.forEach = function (callback) {
   return forEach(callback)(this);
 };
 
+SequencePrototype.map = SequencePrototype.fmap;
+
+SequencePrototype.mconcat = function () {
+  return mconcat(this);
+};
+
+SequencePrototype.pipe = function(...transformers) {
+  return pipe(...transformers)(this);
+};
+
 SequencePrototype.reverse$ = function () {
   return reverse$(this);
 };
@@ -139,12 +159,6 @@ SequencePrototype.takeWhere = function (predicate) {
 
 SequencePrototype.takeWhile = function (predicate) {
   return takeWhile(predicate)(this);
-};
-
-SequencePrototype.map = SequencePrototype.fmap;
-
-SequencePrototype.mconcat = function () {
-  return mconcat(this);
 };
 
 SequencePrototype.zip = function (iterable) {

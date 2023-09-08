@@ -1,6 +1,6 @@
 import { Just, Nothing }         from "../stdlib/maybe.js";
 import { iteratorOf }            from "../sequence/util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence } from "../sequence/util/sequenceUtil/createMonadicSequence.js";
+import { createMonadicSequence } from "../sequence/util/sequenceUtil/sequencePrototype.js";
 import {
   PureSequence,
   nil,
