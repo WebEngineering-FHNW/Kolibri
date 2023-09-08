@@ -71,6 +71,10 @@
  *              - Type: {@link PipeOperationType}
  *              - Run a series of {@link SequenceOperation}s on a {@link SequenceType}
  *              - example: `Seq(1, 2).pipe(map(x => x * 2), drop(1)) ['=='] (Seq(4))`
+ * @property { ReverseOperationType<_T_> } reverse$
+ *             - Type: {@link ReverseOperationType}
+ *             - Processes the iterable backwards, *Works only on finite sequences!*.
+ *             - example: `Seq(1, 2, 3).reverse$() ['=='] (Seq(3, 2, 1))`
  * @property { TakeOperationType<_T_> } take
  *              - Type: {@link TakeOperationType}
  *              - take n elements from a potentially infinite {@link SequenceType}
