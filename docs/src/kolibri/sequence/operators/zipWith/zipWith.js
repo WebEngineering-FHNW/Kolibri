@@ -6,12 +6,12 @@ export { zipWith }
 /**
  * {@link zipWith} generalises {@link zip} by zipping with the function given as the first argument,
  * instead of a Pair constructor.
- *
+ * @typedef ZipWithOperationType
+ * @template _T_
  * @function
  * @pure
  * @haskell (a -> b -> c) -> [a] -> [b] -> [c]
- * @template _T_, _U_, _V_
- * @type {
+ * @type { <_U_, _V_>
  *            (zipper: BiFunction<_T_, _U_, _V_>)
  *         => (it1: Iterable<_T_>)
  *         => (it2: Iterable<_U_>)
@@ -25,6 +25,12 @@ export { zipWith }
  * console.log(...zipped);
  *
  * // => Logs '[0,2], [1,3], [2,4]'
+ */
+
+/**
+ * see {@link ZipWithOperationType}
+ * @template _T_
+ * @type { ZipWithOperationType<_T_> }
  */
 const zipWith = zipper => it1 => it2 => {
   /**
