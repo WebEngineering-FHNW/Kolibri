@@ -1,4 +1,4 @@
-import { retainAll } from "../retainAll/retainAll.js";
+import { takeWhere } from "../takeWhere/takeWhere.js";
 
 export { dropWhere }
 
@@ -30,5 +30,5 @@ export { dropWhere }
  * @type  { DropWhereOperationType<_T_> }
  */
 const dropWhere = predicate => iterable =>
-  // flip the predicate and call retainAll
-  retainAll(el => !predicate(el))(iterable);
+  // flip the predicate and call takeWhere
+  takeWhere(el => !predicate(el))(iterable);
