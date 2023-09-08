@@ -31,7 +31,7 @@ import {
   head,
   isEmpty,
   max$,
-  min$,
+  min$, reduce$,
   safeMax$,
   safeMin$,
   show
@@ -129,6 +129,10 @@ SequencePrototype.min$ = function(comparator = (a, b) => a < b) {
 
 SequencePrototype.safeMin$ = function(comparator = (a, b) => a < b) {
     return safeMin$(this, comparator);
+};
+
+SequencePrototype.reduce$ = function(callback, start) {
+    return reduce$(callback, start)(this);
 };
 
 // "semigroup-like" sequence operations -------------------------------------
