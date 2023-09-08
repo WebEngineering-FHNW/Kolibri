@@ -28,7 +28,10 @@ import {
 import {
   eq$,
   foldr$,
-  head, isEmpty,
+  head,
+  isEmpty,
+  max$,
+  safeMax$,
   show
 } from "../../terminalOperations/terminalOperations.js";
 
@@ -108,6 +111,14 @@ SequencePrototype.head = function() {
 
 SequencePrototype.isEmpty = function() {
     return isEmpty(this);
+};
+
+SequencePrototype.max$ = function(comparator = (a, b) => a < b) {
+    return max$(this, comparator);
+};
+
+SequencePrototype.safeMax$ = function(comparator = (a, b) => a < b) {
+    return safeMax$(this, comparator);
 };
 
 // "semigroup-like" sequence operations -------------------------------------

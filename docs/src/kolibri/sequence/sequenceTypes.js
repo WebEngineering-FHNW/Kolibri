@@ -121,19 +121,27 @@
  *             - _Must not be called on infinite sequences!_
  *             - Performs a reduction on the elements from right to left, using the provided start value and an accumulation function.
  *             - example: `Seq(1, 2, 3).foldr$((acc, cur) => "" + acc + cur, "") === "321"`
- * @property { HeadOperationType } head
+ * @property { HeadOperationType<_T_> } head
  *             - Type: {@link HeadOperationType}
  *             - Returns the first value or `undefined` if the sequence is empty.
  *             - example: `Seq(1, 2, 3).head() === 1`
- * @property { IsEmptyOperationType } isEmpty
+ * @property { IsEmptyOperationType<_T_> } isEmpty
  *            - Type: {@link IsEmptyOperationType}
  *            - Returns true, if there are no elements in the sequence.
  *            - example: `Seq().isEmpty() === true`
- * @property { ShowOperationType } show
+ * @property { MaxOperationSequenceType<_T_> } max$
+ *           - Type: {@link MaxOperationType}
+ *           - Returns the largest element of a **non-empty** {@link Iterable}.
+ *           - example: `Seq(1, 3, 0, 5).max$() === 5`
+ * @property { SafeMaxOperationSequenceType<_T_> } safeMax$
+ *           - Type: {@link SafeMaxOperationType}
+ *           - Returns {@link Just} the largest element of an {@link Iterable} or {@link Nothing} otherwise.
+ *           - example: `Seq(1, 3, 0, 5).safeMax$() ( _ => console.log(":-(")) ( x => console.log(x)) // logs 5`
+ * @property { ShowOperationType<_T_> } show
  *              - Type: {@link ShowOperationType}
  *              - A string representation of the {@link SequenceType} with optionally a maximum amount of elements
  *              - Example: `Seq(1, 2).show() === "[1,2]"`
- * @property { ShowOperationType } toString
+ * @property { ShowOperationType<_T_> } toString
  *              - Type: {@link ShowOperationType}, alias for {@link show}
  *              - Note that providing a maximum amount of elements works but is not advised since it will
  *                cause type warnings because it breaks the contract of the inherited `Object.toString()`.

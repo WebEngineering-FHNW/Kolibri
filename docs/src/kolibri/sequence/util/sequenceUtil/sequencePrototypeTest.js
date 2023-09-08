@@ -104,6 +104,14 @@ testSuite.add("test prototype: terminal operations", assert => {
     assert.is(nil.head(),               undefined);
     assert.is(nil.isEmpty(),            true);
     assert.is(Seq(1).isEmpty(),         false);
+    assert.is(Seq(1,2,3).max$(),         3);
+
+    let x = "";
+    Seq("x","xx")
+        .safeMax$( (a,b) => a.length < b.length)
+          ( _ => x ="error")
+          ( n => x = n);
+    assert.is(x, "xx");
 
 });
 

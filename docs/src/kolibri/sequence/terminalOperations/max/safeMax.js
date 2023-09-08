@@ -4,6 +4,13 @@ import { Just, Nothing } from "../../../stdlib/maybe.js";
 export { safeMax$ }
 
 /**
+ * @typedef SafeMaxOperationSequenceType
+ * @template _T_
+ * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the second argument is larger than the first
+ * @returns MaybeType<_T_>
+ */
+
+/**
  *  Returns the largest element of an {@link Iterable}.
  *
  *  _Note_:
@@ -13,10 +20,11 @@ export { safeMax$ }
  *  If needed, a different comparator can also be passed as a second argument to {@link safeMax$}
  *  and will then be used to determine the largest element.
  *
+ * @typedef SafeMaxOperationType
+ * @template _T_
  * @function
  * @pure
  * @haskell Ord a => [a] -> Maybe a
- * @template _T_
  * @param { Iterable<_T_> }         iterable     - a finite iterable
  * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the second argument is larger than the first
  * @returns MaybeType<_T_>
@@ -29,6 +37,12 @@ export { safeMax$ }
  *  (_ => console.log('iterable was empty, no max!')
  *  (x => console.log(x));
  * // => Logs '5'
+ */
+
+/**
+ * see {@link SafeMaxOperationType}
+ * @template _T_
+ * @type { SafeMaxOperationType<_T_> }
  */
 const safeMax$ = (iterable, comparator = (a, b) => a < b) => {
   const inner = iteratorOf(iterable);
