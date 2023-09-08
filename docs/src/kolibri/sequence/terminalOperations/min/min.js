@@ -3,6 +3,12 @@ import { max$ } from "../max/max.js";
 export { min$ }
 
 /**
+ * @typedef MinOperationSequenceType
+ * @template _T_
+ * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the first argument is smaller than the second
+ * @returns _T_
+ */
+/**
  *  Returns the smallest element of a **non-empty** {@link Iterable}.
  *
  *  _Note_:
@@ -12,10 +18,12 @@ export { min$ }
  *  If needed, a different comparator can also be passed as a second argument to {@link min$}
  *  and will then be used to determine the smallest element.
  *
+ *
+ * @typedef MinOperationType
+ * @template _T_
  * @function
  * @pure
  * @haskell Ord a => [a] -> a
- * @template _T_
  * @param { Iterable<_T_> } iterable             - a non-empty finite iterable
  * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the first argument is smaller than the second
  * @returns _T_
@@ -28,4 +36,10 @@ export { min$ }
  * console.log(minimum);
  * // => Logs '0'
  */
-const min$ = (iterable, comparator = (a, b) => b < a) => max$(iterable, comparator);
+
+/**
+ * see {@link MinOperationType}
+ * @template _T_
+ * @type { MinOperationType<_T_> }
+ */
+const min$ = (iterable, comparator = (a, b) => a < b) => max$(iterable, (a,b) => ! comparator(a,b));

@@ -31,7 +31,9 @@ import {
   head,
   isEmpty,
   max$,
+  min$,
   safeMax$,
+  safeMin$,
   show
 } from "../../terminalOperations/terminalOperations.js";
 
@@ -119,6 +121,14 @@ SequencePrototype.max$ = function(comparator = (a, b) => a < b) {
 
 SequencePrototype.safeMax$ = function(comparator = (a, b) => a < b) {
     return safeMax$(this, comparator);
+};
+
+SequencePrototype.min$ = function(comparator = (a, b) => a < b) {
+    return min$(this, comparator);
+};
+
+SequencePrototype.safeMin$ = function(comparator = (a, b) => a < b) {
+    return safeMin$(this, comparator);
 };
 
 // "semigroup-like" sequence operations -------------------------------------

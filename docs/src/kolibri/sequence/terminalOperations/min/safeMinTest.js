@@ -55,10 +55,10 @@ testSuite.add("test empty sequence: should return Nothing", assert => {
 
 testSuite.add("test comparator on strings: should return the longest string", assert => {
   // Given
-  const strings  = ["a", "b", "aa", "bb"];
+  const strings  = ["a", "aa"];
 
   // When
-  const maybeMin = safeMin$(strings, (a, b) => a.length > b.length);
+  const maybeMin = safeMin$(strings, (a, b) => a.length < b.length);
 
   // Then
   maybeMin

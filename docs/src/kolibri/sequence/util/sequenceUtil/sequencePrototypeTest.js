@@ -113,6 +113,14 @@ testSuite.add("test prototype: terminal operations", assert => {
           ( n => x = n);
     assert.is(x, "xx");
 
+    assert.is(Seq("x","xxx","xx").min$( (a,b) => a.length <  b.length), "x");
+
+    let y = undefined;
+    Seq(3,1,2)
+        .safeMin$()
+          ( _ => y = -1)
+          ( n => y =  n);
+    assert.is(y, 1);
 });
 
 testSuite.run();

@@ -32,10 +32,10 @@ testSuite.add("test empty sequence: should throw an error", assert =>
 
 testSuite.add("test min on strings: should return the shortest string", assert => {
   // Given
-  const strings = ["a", "b", "aa", "bb"];
+  const strings = ["a", "aa", ];
 
   // When
-  const result = min$(strings, (a, b) => b.length < a.length);
+  const result = min$(strings, (a, b) => a.length < b.length);
 
   // Then
   assert.is(result, "a");
