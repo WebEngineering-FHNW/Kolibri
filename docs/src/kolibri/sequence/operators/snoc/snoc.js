@@ -1,5 +1,7 @@
 import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
 import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
+import {mconcat}                 from "../mconcat/mconcat.js";
+import {Seq}                     from "../../constructors/seq/seq.js";
 
 export { snoc }
 
@@ -28,23 +30,5 @@ export { snoc }
  * @template _T_
  * @type { SnocOperationType<_T_> }
  */
-const snoc = element => iterable => {
-  const snocIterator = () => {
-    let last = element;
-    const inner = iteratorOf(iterable);
+const snoc = element => iterable => mconcat( Seq( iterable, Seq(element) ));
 
-    const next = () => {
-      const current = inner.next();
-      if (current.done && last !== undefined) {
-        const value = element;
-        last = undefined;
-        return { done: false, value: value }
-      }
-      return current;
-    };
-
-    return { next };
-  };
-
-  return createMonadicSequence(snocIterator);
-};
