@@ -81,6 +81,7 @@ testSuite.add("operator tests", assert => {
   assert.iterableEq(Seq(1, 2).map(x => x * 2),                   Seq(2, 4));
   assert.iterableEq(Seq( Seq(1), Seq(2,3)).mconcat(),            Seq(1,2,3));
   assert.iterableEq(Seq(1, 3, 2).takeWhere(x => x < 3),          Seq(1, 2));
+  assert.iterableEq(Seq(0, 1, 2, 0).takeWhile(x => x < 2),       Seq(0, 1));
 
 });
 

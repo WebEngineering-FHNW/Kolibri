@@ -75,6 +75,10 @@
  *             - Type: {@link TakeWhereOperationType}
  *             - Only keeps elements that satisfy the given predicate.
  *             - example: `Seq(1, 3, 2).takeWhere(x => x < 3) ['=='] (Seq(1, 2))`
+ * @property { TakeWhileOperationType<_T_> } takeWhile
+ *             - Type: {@link TakeWhileOperationType}
+ *             - Proceeds until the predicate becomes true.
+ *             - example: `Seq(0, 1, 2, 0).takeWhile(x => x < 2) ['=='] (Seq(0, 1))`
  */
 
 
