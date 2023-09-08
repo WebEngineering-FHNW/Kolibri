@@ -51,6 +51,10 @@
  *              - Type: {@link DropWhileOperationType}
  *              - jump over elements until the predicate is not satisfied anymore
  *              - Example: `Seq(1, 2, 3).dropWhile(x => x < 3) ['=='] (Seq(3))`
+ * @property { DropWhereOperationType<_T_> } dropWhere
+ *              - Type: {@link DropWhereOperationType}
+ *              - jump over all elements that satisfy the predicate
+ *              - Example: `Seq(1, 2, 0).dropWhere(x => x > 1) ['=='] (Seq(1, 0))`
  * @property { <_U_> (f: (_T_) => _U_) => SequenceType<_U_> } map
  *              - Type: {@link MapOperationType}, alias for {@link SequenceMonadType.fmap}
  *              - functorial _map_,
