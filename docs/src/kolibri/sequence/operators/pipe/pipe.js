@@ -26,6 +26,7 @@ export { pipe }
  */
 
 /**
+ * see {@link PipeOperationType}
  * @template _T_
  * @type  { PipeOperationType<_T_> }
  */
