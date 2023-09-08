@@ -15,6 +15,7 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 - replace Builder with varargs for cons. 
 - add docs for divergent sequences ( repeat(1).dropWhere( x => x === 1 ) )
 - add alias "flatten" for "mconcat" ? Might suggest deep flattening.
+- for zip, zipWith and pairWith consider using a sequence of two elements instead of a pair.
 
 ## todo
 - update references in production.js

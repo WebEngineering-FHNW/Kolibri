@@ -17,7 +17,8 @@ import {
   pipe,
   take,
   takeWhere,
-  takeWhile
+  takeWhile,
+  zip
 } from "../../operators/operators.js";
 import {
   eq$,
@@ -128,5 +129,9 @@ SequencePrototype.map = SequencePrototype.fmap;
 
 SequencePrototype.mconcat = function () {
   return mconcat(this);
+};
+
+SequencePrototype.zip = function (iterable) {
+  return zip(this)(iterable);
 };
 
