@@ -7,6 +7,7 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 - convenience constructors: seq(), seq(42, 99, 1000), seq(...array)
 - rename rejectAll to dropWhere
 - rename retainAll to takeWhere
+- forEach becomes an operator such that it can be used in a (perhaps infinite) pipe or sequence
 
 ## wishlist
 - add each operator to SequencePrototype (requires type modification)

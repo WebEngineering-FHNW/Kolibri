@@ -1,5 +1,4 @@
 import "./eq/eqTest.js"
-import "./forEach/forEachTest.js";
 import "./foldr/foldrTest.js";
 import "./head/headTest.js";
 import "./isEmpty/isEmptyTest.js";
