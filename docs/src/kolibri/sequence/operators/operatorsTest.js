@@ -8,7 +8,7 @@ import "./dropWhile/dropWhileTest.js";
 import "./map/mapTest.js";
 import "./mconcat/mconcatTest.js";
 import "./pipe/pipeTest.js";
-import "./rejectAll/rejectAllTest.js";
+import "./dropWhere/dropWhereTest.js";
 import "./retainAll/retainAllTest.js";
 import "./reverse/reverseTest.js";
 import "./take/takeTest.js";

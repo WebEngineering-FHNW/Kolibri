@@ -1,6 +1,6 @@
 import { TestSuite         }             from "../../../util/test.js";
 import { addToTestingTable }             from "../../util/testingTable.js";
-import { pipe, map, rejectAll, reduce$ } from "../../sequence.js";
+import { pipe, map, dropWhere, reduce$ } from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
@@ -14,7 +14,7 @@ addToTestingTable(testSuite)(
     name:       "pipe",
     iterable:   () => newSequence(UPPER_SEQUENCE_BOUNDARY),
     operation:  ops => pipe(...ops),
-    param:      [ map(x => 2*x), rejectAll(x => x > 4) ],
+    param:      [map(x => 2*x), dropWhere(x => x > 4) ],
     expected:   [0, 2, 4],
     invariants: [
       it => pipe()(it) ["=="] (it),
