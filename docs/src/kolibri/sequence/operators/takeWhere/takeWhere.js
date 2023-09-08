@@ -4,12 +4,13 @@ import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequ
 export { takeWhere }
 
 /**
- * Only keeps elements which fulfil the given predicate.
+ * Only keeps elements that satisfy the given predicate.
  *
+ * @typedef TakeWhereOperationType
+ * @template _T_
  * @function
  * @pure
  * @haskell (a -> Bool) -> [a] -> [a]
- * @template _T_
  * @type {
  *            (predicate: ConsumingPredicateType<_T_>)
  *         => SequenceOperation<_T_>
@@ -24,6 +25,12 @@ export { takeWhere }
  * console.log(...filtered);
  * // => Logs '0, 2, 4'
  *
+ */
+
+/**
+ * see {@link TakeWhereOperationType}
+ * @template _T_
+ * @type { TakeWhereOperationType<_T_> }
  */
 const takeWhere = predicate => iterable => {
 
