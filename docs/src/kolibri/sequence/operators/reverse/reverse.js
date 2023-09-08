@@ -5,11 +5,11 @@ export { reverse$ }
 
 /**
  * Processes the iterable backwards.
- *
+ * @typedef ReverseOperationType
+ * @template _T_
  * @function
  * @pure
  * @haskell [a] -> [a]
- * @template _T_
  * @type {
  *             (iterable: Iterable<_T_>)
  *          => SequenceType<_T_>
@@ -21,6 +21,12 @@ export { reverse$ }
  *
  * console.log(...reversed);
  * // => Logs '2, 1, 0'
+ */
+
+/**
+ * see {@link ReverseOperationType}
+ * @template _T_
+ * @type { ReverseOperationType<_T_> }
  */
 const reverse$ = iterable => {
 

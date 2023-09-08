@@ -16,6 +16,7 @@ import {
   map,
   mconcat,
   pipe,
+  reverse$,
   take,
   takeWhere,
   takeWhile,
@@ -116,6 +117,10 @@ SequencePrototype.dropWhile = function (predicate) {
 
 SequencePrototype.forEach = function (callback) {
   return forEach(callback)(this);
+};
+
+SequencePrototype.reverse$ = function () {
+  return reverse$(this);
 };
 
 SequencePrototype.take = function (n) {
