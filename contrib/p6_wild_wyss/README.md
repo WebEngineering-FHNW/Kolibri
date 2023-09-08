@@ -8,6 +8,7 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 - rename rejectAll to dropWhere
 - rename retainAll to takeWhere
 - forEach becomes an operator such that it can be used in a (perhaps infinite) pipe or sequence
+- foldr: callback args are now switched to (acc, cur) as conventional in JS standard library. 
 
 ## wishlist
 - add each operator to SequencePrototype (requires type modification)

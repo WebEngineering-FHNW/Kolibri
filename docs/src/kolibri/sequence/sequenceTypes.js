@@ -116,6 +116,11 @@
  *              - Check for element-wise equality
  *              - Warning: This only works on finite sequences as indicated by the name ending with `$`
  *              - Example: `Seq(1, 2).eq$(Seq(1, 2))`
+ * @property { FoldrOperationType<_T_> } foldr$
+ *             - Type: {@link FoldrOperationType}
+ *             - _Must not be called on infinite sequences!_
+ *             - Performs a reduction on the elements from right to left, using the provided start value and an accumulation function.
+ *             - example: `Seq(1, 2, 3).foldr$((acc, cur) => "" + acc + cur, "") === "321"`
  * @property { ShowOperationType } show
  *              - Type: {@link ShowOperationType}
  *              - A string representation of the {@link SequenceType} with optionally a maximum amount of elements
