@@ -137,6 +137,14 @@
  *           - Type: {@link SafeMaxOperationType}
  *           - Returns {@link Just} the largest element of an {@link Iterable} or {@link Nothing} otherwise.
  *           - example: `Seq(1, 3, 0, 5).safeMax$() ( _ => console.log(":-(")) ( x => console.log(x)) // logs 5`
+ * @property { MinOperationSequenceType<_T_> } min$
+ *           - Type: {@link MinOperationType}
+ *           - Returns the smallest element of a **non-empty** {@link Iterable}.
+ *           - example: `Seq(1, 3, 0, 5).min$() === 0`
+ * @property { SafeMinOperationSequenceType<_T_> } safeMin$
+ *           - Type: {@link SafeMinOperationType}
+ *           - Returns {@link Just} the smallest element of an {@link Iterable} or {@link Nothing} otherwise.
+ *           - example: `Seq(1, 3, 0, 5).safeMin$() ( _ => console.log(":-(")) ( x => console.log(x)) // logs 0`
  * @property { ShowOperationType<_T_> } show
  *              - Type: {@link ShowOperationType}
  *              - A string representation of the {@link SequenceType} with optionally a maximum amount of elements
