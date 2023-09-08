@@ -122,6 +122,11 @@
  *           - **Must not be called on infinite sequences!**
  *           - Performs a reduction on the elements from right to left, using the provided start value and an accumulation function.
  *           - example: `Seq(1, 2, 3).foldr$((acc, cur) => "" + acc + cur, "") === "321"`
+ * @property { ForEachSequenceOperationType<_T_> } forEach$
+ *          - Type: {@link ForEachOperationType}
+ *          - Executes the callback for each element and consumes the sequence. Returns undefined.
+ *          - Use only on **finite** sequences.
+ *          - example: `Seq(1, 2).forEach$(x => console.log(x))`
  * @property { HeadOperationType<_T_> } head
  *           - Type: {@link HeadOperationType}
  *           - Returns the first value or `undefined` if the sequence is empty.

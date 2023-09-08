@@ -38,6 +38,7 @@ import {
   show,
   uncons
 } from "../../terminalOperations/terminalOperations.js";
+import {forEach$} from "../../terminalOperations/forEach/forEach.js";
 
 const log = LoggerFactory("kolibri.sequence");
 
@@ -107,6 +108,10 @@ SequencePrototype["=="] = SequencePrototype.eq$;
 
 SequencePrototype.foldr$ = function(callback, start) {
     return foldr$(callback, start)(this);
+};
+
+SequencePrototype.forEach$ = function(callback) {
+    return forEach$(callback)(this);
 };
 
 SequencePrototype.head = function() {
