@@ -17,10 +17,12 @@ import {
   mconcat,
   pipe,
   reverse$,
+  snoc,
   take,
   takeWhere,
   takeWhile,
-  zip, zipWith
+  zip,
+  zipWith
 } from "../../operators/operators.js";
 import {
   eq$,
@@ -121,6 +123,10 @@ SequencePrototype.forEach = function (callback) {
 
 SequencePrototype.reverse$ = function () {
   return reverse$(this);
+};
+
+SequencePrototype.snoc = function (element) {
+  return snoc(element)(this);
 };
 
 SequencePrototype.take = function (n) {

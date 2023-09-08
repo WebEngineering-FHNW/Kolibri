@@ -75,6 +75,10 @@
  *             - Type: {@link ReverseOperationType}
  *             - Processes the iterable backwards, *Works only on finite sequences!*.
  *             - example: `Seq(1, 2, 3).reverse$() ['=='] (Seq(3, 2, 1))`
+ * @property { SnocOperationType<_T_> } snoc
+ *             - Type: {@link SnocOperationType}
+ *             - Append a single element to the end of the {@link SequenceType}
+ *             - example: `Seq(1, 2).snoc(3) ['=='] (Seq(1, 2, 3))`
  * @property { TakeOperationType<_T_> } take
  *              - Type: {@link TakeOperationType}
  *              - take n elements from a potentially infinite {@link SequenceType}
