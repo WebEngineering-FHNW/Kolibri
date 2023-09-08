@@ -1,5 +1,7 @@
 import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
 import { createMonadicSequence } from "../../util/sequenceUtil/createMonadicSequence.js";
+import {append}                  from "../append/append.js";
+import {Seq}                     from "../../constructors/seq/seq.js";
 
 export { cons }
 
@@ -25,22 +27,4 @@ export { cons }
  * @type { ConsOperationType<_T_> }
  *
  */
-const cons = element => iterable => {
-
-  const consIterator = () => {
-    const inner = iteratorOf(iterable);
-    let value   = element;
-
-    const next = () => {
-      if (value !== undefined) {
-        value = undefined;
-        return { done: false, value: element };
-      }
-      return inner.next();
-    };
-
-    return { next };
-  };
-
-  return createMonadicSequence(consIterator);
-};
+const cons = element => append( Seq(element) )  ;
