@@ -1,6 +1,6 @@
-import {TestSuite}                   from "../../../util/test.js";
-import {map, show, nil, Range, Seq } from "../../sequence.js";
-import {Just, Nothing}               from "../../../stdlib.js";
+import {TestSuite}                                                 from "../../../util/test.js";
+import {map, show, nil, Range, Seq, drop, take, Sequence, reduce$} from "../../sequence.js";
+import {Just, Nothing}                                             from "../../../stdlib.js";
 
 const testSuite = TestSuite("Sequence Prototype Suite");
 
@@ -127,6 +127,37 @@ testSuite.add("test prototype: terminal operations", assert => {
     const consumed = [];
     Seq(1,2,3).forEach$(x => consumed.push(x));
     assert.iterableEq(consumed, [1,2,3]);
+});
+
+testSuite.add("test prototype: composition", assert => {
+
+    const slice = (begin, len) => [       // "composed" operator
+        drop(begin),
+        take(len)
+    ];
+    const sort = iterable => Seq(...[...iterable].sort());
+    assert.iterableEq(
+        Range(1000)
+            .pipe(...slice(50,2))           // how to use a composed operator
+            .cycle()
+            .take(4)
+            // .tap(x => console.log(x))    // uncomment for debugging
+            .pipe(sort),                    // custom operator
+        Seq(50, 50, 51, 51));
+
+    const count = reduce$( acc => acc + 1, 0);
+    const collatz = x => Sequence(
+        x,
+        n => n > 2,
+        n => n % 2 === 0
+             ? n / 2
+             : 3 * n + 1);
+
+    const result = Range(2, 100_000)
+        .map(n => [n, count(collatz(n))] )
+        .max$((a, b) => a[1] < b[1]);
+    assert.iterableEq(result, [77031, 349]);
+
 });
 
 testSuite.run();
