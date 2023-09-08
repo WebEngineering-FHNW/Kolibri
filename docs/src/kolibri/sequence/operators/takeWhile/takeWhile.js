@@ -5,10 +5,10 @@ export { takeWhile }
 
 /**
  * Proceeds with the iteration until the predicate becomes true.
- *
+ * @typedef TakeWhileOperationType
+ * @template _T_
  * @function
  * @pure (a -> Bool) -> [a] -> [a]
- * @template _T_
  * @type {
  *            (predicate: ConsumingPredicateType<_T_>)
  *         => SequenceOperation<_T_>
@@ -22,6 +22,12 @@ export { takeWhile }
  *
  * console.log(...result);
  * // => Logs '0, 1, 2'
+ */
+
+/**
+ * see {@link TakeWhileOperationType}
+ * @template _T_
+ * @type { TakeWhileOperationType<_T_> }
  */
 const takeWhile = predicate => iterable => {
 
