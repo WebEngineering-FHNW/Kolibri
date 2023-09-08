@@ -4,11 +4,11 @@ export { dropWhere }
 
 /**
  * Only keeps elements which does not fulfil the given predicate.
- *
+ * @typedef DropWhereOperationType
+ * @template _T_
  * @function
  * @pure
  * @haskell (a -> Bool) -> [a] -> [a]
- * @template _T_
  * @type {
  *            (predicate: ConsumingPredicateType<_T_>)
  *         => SequenceOperation<_T_>
@@ -23,6 +23,12 @@ export { dropWhere }
  * console.log(...filtered);
  * // => Logs '1, 3, 5'
 */
+
+/**
+ * see {@link DropWhereOperationType}
+ * @template _T_
+ * @type  { DropWhereOperationType<_T_> }
+ */
 const dropWhere = predicate => iterable =>
   // flip the predicate and call retainAll
   retainAll(el => !predicate(el))(iterable);

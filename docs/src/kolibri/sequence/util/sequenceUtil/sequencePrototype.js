@@ -10,6 +10,7 @@ import {
   cons,
   cycle,
   drop,
+  dropWhere,
   dropWhile,
   map,
   mconcat,
@@ -99,6 +100,10 @@ SequencePrototype.cycle = function () {
 
 SequencePrototype.drop = function (n) {
   return drop(n)(this);
+};
+
+SequencePrototype.dropWhere = function (predicate) {
+    return dropWhere(predicate)(this);
 };
 
 SequencePrototype.dropWhile = function (predicate) {

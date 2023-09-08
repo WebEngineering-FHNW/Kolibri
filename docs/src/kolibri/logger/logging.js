@@ -150,7 +150,7 @@ const appenderListObs = ObservableList(appenders);
 const getAppenderList = () => appenders;
 
 /**
- * Adds one or multiple {@link AppenderType AppenderType's} to the appender list.
+ * Adds one or multiple {@link AppenderType}s to the appender list.
  * @param { ...AppenderType } newAppender
  */
 const addToAppenderList = (...newAppender) => newAppender.forEach(app => appenderListObs.add(app));
