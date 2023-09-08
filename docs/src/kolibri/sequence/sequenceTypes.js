@@ -124,7 +124,11 @@
  * @property { HeadOperationType } head
  *             - Type: {@link HeadOperationType}
  *             - Returns the first value or `undefined` if the sequence is empty.
- *             - example: `head(Seq(1, 2, 3)) === 1`
+ *             - example: `Seq(1, 2, 3).head() === 1`
+ * @property { IsEmptyOperationType } isEmpty
+ *            - Type: {@link IsEmptyOperationType}
+ *            - Returns true, if there are no elements in the sequence.
+ *            - example: `Seq().isEmpty() === true`
  * @property { ShowOperationType } show
  *              - Type: {@link ShowOperationType}
  *              - A string representation of the {@link SequenceType} with optionally a maximum amount of elements

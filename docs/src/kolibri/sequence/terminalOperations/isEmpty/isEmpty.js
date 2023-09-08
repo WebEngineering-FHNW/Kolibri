@@ -4,10 +4,11 @@ export { isEmpty }
 
 /**
  * Returns true, if the iterables head is undefined.
+ * @typedef IsEmptyOperationType
+ * @template _T_
  * @function
  * @pure
  * @haskell [a] -> Bool
- * @template _T_
  * @type {
  *            (iterable: Iterable<_T_>)
  *         => Boolean
@@ -19,5 +20,11 @@ export { isEmpty }
  *
  * console.log(result);
  * // Logs 'true'
+ */
+
+/**
+ * see {@link IsEmptyOperationType}
+ * @template _T_
+ * @type { IsEmptyOperationType<_T_> }
  */
 const isEmpty = iterable => iteratorOf(iterable).next().done;

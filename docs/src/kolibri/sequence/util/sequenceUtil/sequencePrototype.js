@@ -28,7 +28,7 @@ import {
 import {
   eq$,
   foldr$,
-  head,
+  head, isEmpty,
   show
 } from "../../terminalOperations/terminalOperations.js";
 
@@ -104,6 +104,10 @@ SequencePrototype.foldr$ = function(callback, start) {
 
 SequencePrototype.head = function() {
     return head(this);
+};
+
+SequencePrototype.isEmpty = function() {
+    return isEmpty(this);
 };
 
 // "semigroup-like" sequence operations -------------------------------------
