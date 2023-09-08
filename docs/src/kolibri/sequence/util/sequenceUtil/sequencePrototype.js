@@ -28,6 +28,7 @@ import {
 import {
   eq$,
   foldr$,
+  head,
   show
 } from "../../terminalOperations/terminalOperations.js";
 
@@ -99,6 +100,10 @@ SequencePrototype["=="] = SequencePrototype.eq$;
 
 SequencePrototype.foldr$ = function(callback, start) {
     return foldr$(callback, start)(this);
+};
+
+SequencePrototype.head = function() {
+    return head(this);
 };
 
 // "semigroup-like" sequence operations -------------------------------------

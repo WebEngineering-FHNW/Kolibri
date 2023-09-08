@@ -100,6 +100,9 @@ testSuite.add("operator tests", assert => {
 
 testSuite.add("test prototype: terminal operations", assert => {
     assert.is(Seq(1, 2, 3).foldr$((acc, cur) => "" + acc + cur, ""), "321");
+    assert.is(Seq(1, 2, 3).head(),      1);
+    assert.is(nil.head(),               undefined);
+
 });
 
 testSuite.run();
