@@ -12,6 +12,7 @@ import {
   drop,
   dropWhere,
   dropWhile,
+  forEach,
   map,
   mconcat,
   pipe,
@@ -111,6 +112,10 @@ SequencePrototype.dropWhere = function (predicate) {
 
 SequencePrototype.dropWhile = function (predicate) {
   return dropWhile(predicate)(this);
+};
+
+SequencePrototype.forEach = function (callback) {
+  return forEach(callback)(this);
 };
 
 SequencePrototype.take = function (n) {

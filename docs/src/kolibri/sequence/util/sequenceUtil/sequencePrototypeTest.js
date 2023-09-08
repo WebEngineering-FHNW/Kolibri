@@ -85,6 +85,15 @@ testSuite.add("operator tests", assert => {
   assert.iterableEq(Seq(1, 2).zip("ab").map(([x, y]) => ""+x+y), Seq("1a", "2b"));
   assert.iterableEq(Seq(1, 2).zipWith((x, y) => ""+x+y)("ab"),   Seq("1a", "2b"));
 
+  let sum = 0;
+  assert.iterableEq(
+      Seq(1,2)
+          .cycle()
+          .forEach(x => sum += x)
+          .take(4),
+      Seq(1, 2, 1, 2));
+  assert.is(sum, 6);
+
 });
 
 testSuite.run();
