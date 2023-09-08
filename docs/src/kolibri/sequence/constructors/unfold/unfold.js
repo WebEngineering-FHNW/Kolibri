@@ -31,6 +31,9 @@ export { unfold }
  * @param { FromStateToNextStateAndValue<_S_, _T_> } fromStateToNextStateAndValue - callback function to generate the next state and value
  * @param { _S_ } initialState
  * @return { SequenceType<_T_> }
+ * @example
+ *     const zeroToFour = unfold(0, n => n < 5 ? {state: n + 1, value: n} : undefined);
+ *     zeroToFour ['=='] Range(4);
  */
 const unfold = (initialState, fromStateToNextStateAndValue) => {
 

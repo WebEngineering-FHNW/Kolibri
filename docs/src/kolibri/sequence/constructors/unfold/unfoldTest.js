@@ -12,7 +12,7 @@ testSuite.add("common usage", assert => {
     assert.iterableEq(empty, nil);
 
     const zeroToFour = unfold(0, n => n < 5 ? {state: n + 1, value: n} : undefined);
-    assert.iterableEq(zeroToFour, Range(4).take(5));
+    assert.iterableEq(zeroToFour, Range(4));
 
     const infiniteFibs = unfold(
         {last: 0, current: 1},
