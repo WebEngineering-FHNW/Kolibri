@@ -23,7 +23,7 @@ addToTestingTable(testSuite)(
 
 testSuite.add("test empty sequence: should return start value", assert => {
   // When
-  const result = foldr$((cur, acc) => acc + cur, 0)(nil);
+  const result = foldr$((acc, cur) => acc + cur, 0)(nil);
 
   // Then
   assert.is(result , 0);

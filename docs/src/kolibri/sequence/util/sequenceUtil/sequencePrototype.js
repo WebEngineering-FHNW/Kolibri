@@ -27,8 +27,9 @@ import {
 }                        from "../../operators/operators.js";
 import {
   eq$,
+  foldr$,
   show
-}                        from "../../terminalOperations/terminalOperations.js";
+} from "../../terminalOperations/terminalOperations.js";
 
 const log = LoggerFactory("kolibri.sequence");
 
@@ -95,6 +96,10 @@ SequencePrototype.eq$ = function(that) {
 };
 
 SequencePrototype["=="] = SequencePrototype.eq$;
+
+SequencePrototype.foldr$ = function(callback, start) {
+    return foldr$(callback, start)(this);
+};
 
 // "semigroup-like" sequence operations -------------------------------------
 
