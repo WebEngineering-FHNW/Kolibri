@@ -4,6 +4,13 @@ import { safeMax$ }                        from "./safeMax.js";
 export { max$ }
 
 /**
+ * @typedef MaxOperationSequenceType
+ * @template _T_
+ * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the second argument is larger than the first
+ * @returns _T_
+ */
+
+/**
  *  Returns the largest element of a **non-empty** {@link Iterable}.
  *
  *  _Note_:
@@ -12,11 +19,11 @@ export { max$ }
  *  where on the left side is the current largest element when processing the iterable.
  *  If needed, a different comparator can also be passed as a second argument to {@link max$}
  *  and will then be used to determine the largest element.
- *
+ * @typedef MaxOperationType
+ * @template _T_
  * @function
  * @pure
  * @haskell Ord a => [a] -> a
- * @template _T_
  * @param { Iterable<_T_> }         iterable     - a non-empty finite iterable
  * @param { BiPredicate<_T_, _T_> } [comparator] - an optional comparing function which returns true if the second argument is larger than the first
  * @returns _T_
@@ -28,6 +35,12 @@ export { max$ }
  *
  * console.log(maximum);
  * // => Logs '5'
+ */
+
+/**
+ * see {@link MaxOperationType}
+ * @template _T_
+ * @type { MaxOperationType<_T_> }
  */
 const max$ = (iterable, comparator = (a, b) => a < b) => {
   let returnVal;
