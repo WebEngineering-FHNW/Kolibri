@@ -1,5 +1,5 @@
 import {createMonadicSequence} from "../../sequencePrototype.js";
-import {iteratorOf_}           from "../../util/helpers.js";
+import {iteratorOf}            from "../../util/helpers.js";
 
 export { reverse$ }
 
@@ -33,7 +33,7 @@ const reverse$ = iterable => {
   // wrap the code in a function, to keep laziness
   const reverse$Iterator = () => {
     const values         = [...iterable].reverse();
-    const valuesIterator = iteratorOf_(values);
+    const valuesIterator = iteratorOf(values);
     return { next: () => valuesIterator.next() };
   };
 

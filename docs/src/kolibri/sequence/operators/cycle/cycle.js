@@ -1,5 +1,5 @@
 import {createMonadicSequence} from "../../sequencePrototype.js";
-import {iteratorOf_}           from "../../util/helpers.js";
+import {iteratorOf}            from "../../util/helpers.js";
 
 /**
  * {@link cycle} ties a finite {@link Iterable} into a circular one, or equivalently,
@@ -30,13 +30,13 @@ export { cycle }
 const cycle = iterable => {
 
   const cycleIterator = () => {
-    let inner = iteratorOf_(iterable);
+    let inner = iteratorOf(iterable);
 
     const next = () => {
       const result = inner.next();
       if (!result.done) return result;
 
-      inner = iteratorOf_(iterable);
+      inner = iteratorOf(iterable);
       return next();
     };
 

@@ -1,8 +1,8 @@
 // noinspection GrazieInspection
 
 import {createMonadicSequence} from "../../sequencePrototype.js";
-import {Pair}                  from "../../../stdlib/pair.js";
-import {iteratorOf_} from "../../util/helpers.js";
+import {Pair}       from "../../../stdlib/pair.js";
+import {iteratorOf} from "../../util/helpers.js";
 
 export { uncons }
 
@@ -31,7 +31,7 @@ export { uncons }
  * @returns { UnconsSequenceOperationType<_T_> } }
  */
 const uncons = iterable => {
-  const inner = iteratorOf_(iterable);
+  const inner = iteratorOf(iterable);
   const { value } = inner.next();
 
   const iterator = () => ({ next: () => inner.next() });

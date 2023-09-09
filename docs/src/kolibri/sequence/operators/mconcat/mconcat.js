@@ -1,5 +1,5 @@
 import {createMonadicSequence} from "../../sequencePrototype.js";
-import {iteratorOf_}           from "../../util/helpers.js";
+import {iteratorOf}            from "../../util/helpers.js";
 
 export { mconcat }
 
@@ -36,7 +36,7 @@ const mconcat = iterable => {
      * @type { Iterator<_T_> }
      */
     let current = undefined;
-    const outer = iteratorOf_(iterable);
+    const outer = iteratorOf(iterable);
 
     const next = () => {
       while (true) {
@@ -44,7 +44,7 @@ const mconcat = iterable => {
           // if there is no current, get the next sub iterable of the outer iterable
           const nextOfOuter = outer.next();
           if (nextOfOuter.done) return nextOfOuter;
-          current = iteratorOf_(nextOfOuter.value);
+          current = iteratorOf(nextOfOuter.value);
         }
 
         // grab next value from sub iterable until it is done

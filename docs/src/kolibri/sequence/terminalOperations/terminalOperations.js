@@ -1,6 +1,6 @@
 export * from "./eq/eq.js";
 export * from "./foldr/foldr.js";
-export * from "./forEach/forEachTest.js";
+export * from "./forEach/forEach.js";
 export * from "./head/head.js";
 export * from "./isEmpty/isEmpty.js";
 export * from "./max/max.js";

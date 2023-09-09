@@ -1,6 +1,6 @@
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
 import { TestSuite }                from "../../../util/test.js";
-import { Pair, fst, snd }           from "../../../stdlib.js";
+import {fst, Pair, snd}             from "../../../lambda/church.js";
 import { Range }                    from "../../sequence.js";
 import { uncons }                   from "./uncons.js";
 import { arrayEq }                  from "../../../util/arrayFunctions.js";

@@ -1,5 +1,6 @@
 import "./eq/eqTest.js"
 import "./foldr/foldrTest.js";
+import "./forEach/forEachTest.js";
 import "./head/headTest.js";
 import "./isEmpty/isEmptyTest.js";
 import "./max/maxTest.js";

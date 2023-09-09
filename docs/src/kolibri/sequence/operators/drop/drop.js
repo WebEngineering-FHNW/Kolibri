@@ -1,6 +1,6 @@
 import {dropWhile}             from "../dropWhile/dropWhile.js";
 import {createMonadicSequence} from "../../sequencePrototype.js";
-import {iteratorOf_}           from "../../util/helpers.js";
+import {iteratorOf}            from "../../util/helpers.js";
 
 export { drop }
 
@@ -34,7 +34,7 @@ const drop = count => iterable => {
   const dropIterator = () => {
     let start               = 0;
     const dropWhileIterable = dropWhile(_ => start++ < count)(iterable);
-    const inner             = iteratorOf_(dropWhileIterable);
+    const inner             = iteratorOf(dropWhileIterable);
 
     return { next : inner.next }
   };

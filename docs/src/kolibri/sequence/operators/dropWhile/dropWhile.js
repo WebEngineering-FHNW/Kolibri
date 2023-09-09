@@ -1,5 +1,5 @@
 import {createMonadicSequence} from "../../sequencePrototype.js";
-import {iteratorOf_}           from "../../util/helpers.js";
+import {iteratorOf}            from "../../util/helpers.js";
 
 export { dropWhile }
 
@@ -32,7 +32,7 @@ export { dropWhile }
 const dropWhile = predicate => iterable => {
 
   const dropWhileIterator = () => {
-    const inner = iteratorOf_(iterable);
+    const inner = iteratorOf(iterable);
     const next = () => {
       let { done, value } = inner.next();
 

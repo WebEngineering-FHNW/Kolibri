@@ -4,7 +4,7 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 
 ## Changes to the documented API:
 - introduce Walk as an alias for Range to support better discovery.
-- convenience constructors: seq(), seq(42, 99, 1000), seq(...array)
+- convenience constructors: seq(), seq(42, 99, 1000), seq(...array); toSeq(iterable)
 - rename rejectAll to dropWhere
 - rename retainAll to takeWhere
 - add tap operator to see each processed value, leaving the sequence unchanged
@@ -12,16 +12,16 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 - sequence of callback arguments in min$/safeMin$ (
 
 ## wishlist
-- add each operator to SequencePrototype (requires type modification)
-- isSequence
 - test against infinite sequence invariants (operator does not stall, lazy, take(0) === nil)
 - replace Builder with varargs for cons. 
 - add docs for divergent sequences ( repeat(1).dropWhere( x => x === 1 ) )
 - add alias "flatten" for "mconcat" ? Might suggest deep flattening.
-- for zip, zipWith and pairWith consider using a sequence of two elements instead of a pair.
+- for zip, zipWith and pairWith consider using a sequence of two elements instead of a pair (???).
 - consider min-/maxWithDefault variants instead of safeMin/-Max
+- since testingTable config.iterable() must be of type sequence - call it "sequenceCtor"?
 
 ## todo
+- resolve confusion of the stdlib management (e.g. Pair)
 - update references in production.js
 - check for better error messages when testing table fails
 - check logging setup in test support
