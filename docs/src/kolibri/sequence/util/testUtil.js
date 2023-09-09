@@ -4,6 +4,7 @@ import { Sequence, nil, PureSequence } from "../sequence.js";
 import { SequencePrototype }           from "../sequencePrototype.js";
 import { arrayEq }                     from "../../util/arrayFunctions.js";
 import { Just, Nothing }               from "../../stdlib/maybe.js";
+import {isSequence}                    from "./helpers.js";
 
 export {
   createTestConfig,
@@ -178,7 +179,7 @@ const testCBNotCalledAfterDone = config => assert => {
  *       }
  */
 const testPrototype = config => assert =>
-  assert.is(Object.getPrototypeOf(config.iterable()), SequencePrototype);
+  assert.is(isSequence(config.iterable()), true);
 
 
 /**

@@ -1,4 +1,4 @@
-import {iteratorOf_} from "../../util/helpers.js";
+import {iteratorOf} from "../../util/helpers.js";
 
 export { head }
 
@@ -28,7 +28,7 @@ export { head }
  * @type { HeadOperationType<_T_> }
  */
 const head = iterable => {
-  const inner = iteratorOf_(iterable);
+  const inner = iteratorOf(iterable);
   const { done, value } = inner.next();
 
   return done ? undefined : value;

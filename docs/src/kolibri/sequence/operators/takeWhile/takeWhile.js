@@ -1,5 +1,5 @@
 import {createMonadicSequence} from "../../sequencePrototype.js";
-import {iteratorOf_}           from "../../util/helpers.js";
+import {iteratorOf}            from "../../util/helpers.js";
 
 export { takeWhile }
 
@@ -32,7 +32,7 @@ export { takeWhile }
 const takeWhile = predicate => iterable => {
 
   const takeWhileIterator = () => {
-    const inner = iteratorOf_(iterable);
+    const inner = iteratorOf(iterable);
 
     const next = () => {
       const el = inner.next();

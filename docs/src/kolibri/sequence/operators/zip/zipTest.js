@@ -1,12 +1,12 @@
 import { addToTestingTable } from "../../util/testingTable.js";
 import { TestSuite }         from "../../../util/test.js";
-import { Pair, fst, snd }    from "../../../stdlib.js";
 import { zip, nil }          from "../../sequence.js"
 import {
   createTestConfig,
   newSequence,
   UPPER_SEQUENCE_BOUNDARY,
-}                            from "../../util/testUtil.js";
+}                       from "../../util/testUtil.js";
+import {fst, Pair, snd} from "../../../lambda/church.js";
 
 const testSuite = TestSuite("Sequence: operation zip");
 

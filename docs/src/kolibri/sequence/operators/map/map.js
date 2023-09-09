@@ -1,5 +1,5 @@
 import {createMonadicSequence} from "../../sequencePrototype.js";
-import {iteratorOf_}           from "../../util/helpers.js";
+import {iteratorOf}            from "../../util/helpers.js";
 
 export { map }
 
@@ -34,7 +34,7 @@ export { map }
 const map = mapper => iterable => {
 
   const mapIterator = () => {
-    const inner = iteratorOf_(iterable);
+    const inner = iteratorOf(iterable);
     let mappedValue;
 
     const next = () => {

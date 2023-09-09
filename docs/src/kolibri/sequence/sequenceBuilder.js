@@ -1,6 +1,6 @@
 import {nil}                     from "./constructors/nil/nil.js";
-import {createMonadicSequence}   from "./sequencePrototype.js";
-import {isIterable, iteratorOf_} from "./util/helpers.js";
+import {createMonadicSequence}  from "./sequencePrototype.js";
+import {isIterable, iteratorOf} from "./util/helpers.js";
 
 export { SequenceBuilder }
 
@@ -97,7 +97,7 @@ const toMonadicIterable = elements => {
       while (isIterable(elements[currentIdx])) {
         if (currentIterator === undefined) {
           // process next iterator
-          currentIterator = iteratorOf_(elements[currentIdx]);
+          currentIterator = iteratorOf(elements[currentIdx]);
         }
 
         const result = currentIterator.next();

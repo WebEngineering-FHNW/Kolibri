@@ -1,5 +1,5 @@
 import {Just, Nothing} from "../../../stdlib/maybe.js";
-import {iteratorOf_}   from "../../util/helpers.js";
+import {iteratorOf}    from "../../util/helpers.js";
 
 export { safeMax$ }
 
@@ -45,7 +45,7 @@ export { safeMax$ }
  * @type { SafeMaxOperationType<_T_> }
  */
 const safeMax$ = (iterable, comparator = (a, b) => a < b) => {
-  const inner = iteratorOf_(iterable);
+  const inner = iteratorOf(iterable);
 
   let {
     value: currentMax,

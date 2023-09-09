@@ -1,5 +1,4 @@
-import {SequencePrototype} from "../../sequencePrototype.js";
-import {toSeq}             from "../../util/helpers.js";
+import { ensureSequence } from "../../util/helpers.js";
 
 export { pipe }
 
@@ -32,14 +31,11 @@ export { pipe }
  */
 const pipe = (...transformers) => iterable => {
 
-  // assure that the iterable is monadic
-  if (Object.getPrototypeOf(iterable) !== SequencePrototype) {
-   iterable = toSeq(iterable);
-  }
+  iterable = ensureSequence(iterable);
 
   for (const transformer of transformers) {
     iterable = transformer(iterable);
   }
 
-  return /**@type {SequenceType} */ iterable;
+  return  iterable;
 };
