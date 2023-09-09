@@ -158,6 +158,23 @@ testSuite.add("test prototype: composition", assert => {
         .max$((a, b) => a[1] < b[1]);
     assert.iterableEq(result, [77031, 349]);
 
+    const sum     = reduce$((acc, cur) => acc + cur, 0);
+    const product = reduce$((acc, cur) => acc * cur, 1);
+    const naturalNumbers   = Range(1, Number.MAX_SAFE_INTEGER);
+    const alternatingSigns = Sequence(1, _ => true, x => -x);
+
+    // 3 + ( 4/(2*3*4) - 4/(4*5*6) + 4/(6*7*8) - 4/(8*9*10) + ...)
+    const piFractions = naturalNumbers
+        .map( n => n * 2 )
+        .map( n => [n, n+1, n+2] )
+        // .tap( x => console.log(x) ) // uncomment for debugging
+        .map( a => product(a) )
+        .map( n => 4 / n )
+        .zipWith( (r, s) => s * r ) (alternatingSigns)
+        ;
+
+    assert.is( Math.abs( Math.PI - ( 3 + sum(piFractions.take(100))) ) < 1E-6 , true);
+
 });
 
 testSuite.run();
