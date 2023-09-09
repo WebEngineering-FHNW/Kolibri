@@ -1,7 +1,7 @@
 import { pop, emptyStack, stackEquals } from "../../../../../../contrib/p6_brodwolf_andermatt/src/stack/stack.js";
-import { fst, snd }                     from "../../../stdlib.js";
-import { createMonadicSequence }        from "../../util/sequenceUtil/sequencePrototype.js";
-import { toJsBool }                     from "../../../lambda/church.js";
+import { fst, snd }              from "../../../stdlib.js";
+import { createMonadicSequence } from "../../sequencePrototype.js";
+import { toJsBool }              from "../../../lambda/church.js";
 
 export { StackSequence }
 

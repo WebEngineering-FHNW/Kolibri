@@ -1,20 +1,20 @@
 import { addToTestingTable }             from "../../util/testingTable.js";
 import { TestSuite }                     from "../../../util/test.js";
 import { createTestConfig, newSequence } from "../../util/testUtil.js";
-import { toMonadicIterable }             from "../../util/sequenceUtil/toMonadicIterable.js";
 import {
   Sequence,
   PureSequence,
   mconcat,
-  nil
-}                                        from "../../sequence.js";
+  nil,
+  Seq
+} from "../../sequence.js";
 
 const testSuite = TestSuite("Sequence: operation mconcat");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "mconcat",
-    iterable:   () => toMonadicIterable([ newSequence(2), newSequence(2), newSequence(2) ]),
+    iterable:   () => Seq(newSequence(2), newSequence(2), newSequence(2)),
     operation:  () => mconcat,
     expected:   [0, 1, 2, 0, 1, 2, 0, 1, 2],
     invariants: [

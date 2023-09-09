@@ -1,5 +1,5 @@
-import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence } from "../../util/sequenceUtil/sequencePrototype.js";
+import {createMonadicSequence} from "../../sequencePrototype.js";
+import {iteratorOf_}           from "../../util/helpers.js";
 
 export { takeWhere }
 
@@ -35,7 +35,7 @@ export { takeWhere }
 const takeWhere = predicate => iterable => {
 
   const retainAllIterator = () => {
-    const inner = iteratorOf(iterable);
+    const inner = iteratorOf_(iterable);
 
     const next = () => {
       while(true) {

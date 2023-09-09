@@ -1,17 +1,16 @@
-import { TestSuite }       from "../../../kolibri/util/test.js";
-import { Range, map, zip } from "../../../kolibri/sequence/sequence.js";
-import { iteratorOf }      from "../../../kolibri/sequence/util/sequenceUtil/iteratorOf.js";
-import { Pair }            from "../../../kolibri/stdlib/pair.js";
+import {TestSuite}                                                                    from "../../../kolibri/util/test.js";
 import {
-  Computer, evaluate,
-  hasWon,
-  Human,
-  moves,
-  NoPlayer,
-  opponent,
-  stone,
-  treeMap
-}                          from "./tictactoe.js";
+    map,
+    Range,
+    zip
+}                                                                                     from "../../../kolibri/sequence/sequence.js";
+import {
+    Pair
+}                                                                                     from "../../../kolibri/stdlib/pair.js";
+import {Computer, evaluate, hasWon, Human, moves, NoPlayer, opponent, stone, treeMap} from "./tictactoe.js";
+import {
+    iteratorOf_
+}                                                                                     from "../../../kolibri/sequence/util/helpers.js";
 
 const testSuite = TestSuite("examples/sequence/tictactoe");
 
@@ -46,8 +45,8 @@ testSuite.add("moves", assert => {
 
   const result = moves(sampleBoard);
 
-  const expectedIt = iteratorOf(expected);
-  const resultIt = iteratorOf(result);
+  const expectedIt = iteratorOf_(expected);
+  const resultIt = iteratorOf_(result);
 
   for (let i = 0; i < 8; i++) {
     assert.iterableEq(resultIt.next().value.fields, expectedIt.next().value.fields)

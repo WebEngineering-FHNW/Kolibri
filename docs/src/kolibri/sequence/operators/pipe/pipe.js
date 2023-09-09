@@ -1,5 +1,5 @@
-import { toMonadicIterable } from "../../util/sequenceUtil/toMonadicIterable.js";
-import { SequencePrototype } from "../../util/sequenceUtil/sequencePrototype.js";
+import {SequencePrototype} from "../../sequencePrototype.js";
+import {toSeq}             from "../../util/helpers.js";
 
 export { pipe }
 
@@ -34,7 +34,7 @@ const pipe = (...transformers) => iterable => {
 
   // assure that the iterable is monadic
   if (Object.getPrototypeOf(iterable) !== SequencePrototype) {
-   iterable = toMonadicIterable(iterable);
+   iterable = toSeq(iterable);
   }
 
   for (const transformer of transformers) {

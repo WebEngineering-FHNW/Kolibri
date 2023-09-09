@@ -1,13 +1,7 @@
-import { Just, Nothing }         from "../stdlib/maybe.js";
-import { iteratorOf }            from "../sequence/util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence } from "../sequence/util/sequenceUtil/sequencePrototype.js";
-import {
-  PureSequence,
-  nil,
-  isEmpty,
-  catMaybes,
-  mconcat,
-}                                from "../sequence/sequence.js";
+import {Just, Nothing}                                   from "../stdlib/maybe.js";
+import {createMonadicSequence}                           from "../sequence/sequencePrototype.js";
+import {catMaybes, isEmpty, mconcat, nil, PureSequence,} from "../sequence/sequence.js";
+import {iteratorOf_}                                     from "../sequence/util/helpers.js";
 
 export { JsonMonad }
 
@@ -93,7 +87,7 @@ const JsonMonad = jsObject => {
       (() => inner = nil)
       (it => inner = it);
 
-      return iteratorOf(inner);
+      return iteratorOf_(inner);
     };
 
     return {
@@ -120,7 +114,7 @@ const JsonMonad = jsObject => {
  */
 const innerIterable = (...elements) => {
   const iterator = () => {
-    const inner = iteratorOf(elements);
+    const inner = iteratorOf_(elements);
 
     const next = () => inner.next();
     return { next };

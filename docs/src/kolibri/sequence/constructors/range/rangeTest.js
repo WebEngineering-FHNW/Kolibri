@@ -1,9 +1,9 @@
-import { Range, Walk}               from "./range.js";
-import { TestSuite }                from "../../../util/test.js";
-import { iteratorOf }               from "../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence }    from "../../util/sequenceUtil/sequencePrototype.js";
-import { addToTestingTable, TESTS } from "../../util/testingTable.js";
-import { createTestConfig }         from "../../util/testUtil.js";
+import {Range, Walk}              from "./range.js";
+import {TestSuite}                from "../../../util/test.js";
+import {createMonadicSequence}    from "../../sequencePrototype.js";
+import {addToTestingTable, TESTS} from "../../util/testingTable.js";
+import {createTestConfig} from "../../util/testUtil.js";
+import {iteratorOf_}      from "../../util/helpers.js";
 
 const testSuite = TestSuite("Sequence constructor: Range");
 
@@ -73,7 +73,7 @@ testSuite.add("test typical case deconstruction", assert => {
 
 const testRange = (from, to, step, range, assert) => {
   // Given
-  const rangeIterator = iteratorOf(range);
+  const rangeIterator = iteratorOf_(range);
 
   // When
   for (let expected = from; expected <= to; expected += step) {
@@ -89,7 +89,7 @@ const testRange = (from, to, step, range, assert) => {
 
 const testRangeNegativeStepSize = (from, to, step, range, assert) => {
   // Given
-  const rangeIterator = iteratorOf(range);
+  const rangeIterator = iteratorOf_(range);
 
   // When
   for (let expected = from; expected >= to; expected += step) {
@@ -153,7 +153,7 @@ testSuite.add("test continue and break", assert => {
 testSuite.add("test running out of range", assert => {
   // Given
   const range = Range(2);
-  const rangeIterator = iteratorOf(range);
+  const rangeIterator = iteratorOf_(range);
 
   // When
   rangeIterator.next();
