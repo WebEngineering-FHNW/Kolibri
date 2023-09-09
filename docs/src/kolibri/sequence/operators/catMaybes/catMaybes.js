@@ -1,6 +1,6 @@
-import { iteratorOf }                from "../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence}      from "../../util/sequenceUtil/sequencePrototype.js";
-import { catMaybes as arrCatMaybes } from "../../../stdlib/stdlib.js";
+import {createMonadicSequence}     from "../../sequencePrototype.js";
+import {catMaybes as arrCatMaybes} from "../../../stdlib/stdlib.js";
+import {iteratorOf_}               from "../../util/helpers.js";
 
 export { catMaybes }
 
@@ -34,7 +34,7 @@ export { catMaybes }
 const catMaybes = iterable => {
 
   const catMaybesIterator = () =>  {
-    const inner = iteratorOf(iterable);
+    const inner = iteratorOf_(iterable);
 
     const next = () => {
       while (true) {

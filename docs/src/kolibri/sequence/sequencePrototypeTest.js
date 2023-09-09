@@ -1,6 +1,6 @@
-import {TestSuite}                                                 from "../../../util/test.js";
-import {map, show, nil, Range, Seq, drop, take, Sequence, reduce$} from "../../sequence.js";
-import {Just, Nothing}                                             from "../../../stdlib.js";
+import {TestSuite}                                                 from "../util/test.js";
+import {map, show, nil, Range, Seq, drop, take, Sequence, reduce$} from "./sequence.js";
+import {Just, Nothing}                                             from "../stdlib.js";
 
 const testSuite = TestSuite("Sequence Prototype Suite");
 

@@ -1,5 +1,5 @@
-import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence } from "../../util/sequenceUtil/sequencePrototype.js";
+import {createMonadicSequence} from "../../sequencePrototype.js";
+import {iteratorOf_}           from "../../util/helpers.js";
 
 export { take }
 
@@ -32,7 +32,7 @@ export { take }
 const take = count => iterable => {
 
   const takeIterator = () => {
-    const inner = iteratorOf(iterable);
+    const inner = iteratorOf_(iterable);
     let start = 0;
 
     const next = () => {

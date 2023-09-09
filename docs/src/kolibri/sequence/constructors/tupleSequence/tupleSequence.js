@@ -1,7 +1,7 @@
-import { map }                   from "../../operators/map/map.js";
-import { Sequence }              from "../sequence/Sequence.js";
-import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence } from "../../util/sequenceUtil/sequencePrototype.js";
+import {map}                   from "../../operators/map/map.js";
+import {Sequence}              from "../sequence/Sequence.js";
+import {createMonadicSequence} from "../../sequencePrototype.js";
+import {iteratorOf_}           from "../../util/helpers.js";
 
 export { TupleSequence }
 
@@ -29,7 +29,7 @@ const TupleSequence = tuple => {
 
   const tupleIterator = () => {
     // map over indices and grab corresponding element from tuple
-    const innerIterator = iteratorOf(map(idx => tuple(values => values[idx]))(indexSequence));
+    const innerIterator = iteratorOf_(map(idx => tuple(values => values[idx]))(indexSequence));
     return { next : innerIterator.next }
   };
 

@@ -1,16 +1,15 @@
-import { addToTestingTable, TESTS }     from "../../util/testingTable.js";
-import { TestSuite }                    from "../../../util/test.js";
-import { Just, Nothing }                from "../../../stdlib/maybe.js";
-import { createTestConfig }             from "../../util/testUtil.js";
-import { toMonadicIterable }            from "../../util/sequenceUtil/toMonadicIterable.js";
-import { catMaybes, nil, PureSequence } from "../../sequence.js"
+import { addToTestingTable, TESTS }          from "../../util/testingTable.js";
+import { TestSuite }                         from "../../../util/test.js";
+import { Just, Nothing }                     from "../../../stdlib/maybe.js";
+import { createTestConfig }                  from "../../util/testUtil.js";
+import { catMaybes, nil, PureSequence, Seq } from "../../sequence.js"
 
 const testSuite = TestSuite("Sequence: operation catMaybes");
 
 addToTestingTable(testSuite)(
   createTestConfig({
     name:       "catMaybes",
-    iterable:   () => toMonadicIterable([Just(5), Just(3), Nothing]),
+    iterable:   () => Seq(...[Just(5), Just(3), Nothing]),
     operation:  () => catMaybes,
     expected:   [5, 3],
     excludedTests: [TESTS.TEST_INVARIANTS],

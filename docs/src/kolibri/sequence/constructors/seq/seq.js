@@ -1,4 +1,4 @@
-import { createMonadicSequence } from "../../util/sequenceUtil/sequencePrototype.js";
+import { createMonadicSequence } from "../../sequencePrototype.js";
 
 export { Seq }
 

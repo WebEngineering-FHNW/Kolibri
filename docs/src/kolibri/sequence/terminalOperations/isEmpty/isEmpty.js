@@ -1,4 +1,4 @@
-import { iteratorOf } from "../../util/sequenceUtil/iteratorOf.js";
+import {iteratorOf_} from "../../util/helpers.js";
 
 export { isEmpty }
 
@@ -27,4 +27,4 @@ export { isEmpty }
  * @template _T_
  * @type { IsEmptyOperationType<_T_> }
  */
-const isEmpty = iterable => iteratorOf(iterable).next().done;
+const isEmpty = iterable => iteratorOf_(iterable).next().done;

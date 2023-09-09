@@ -1,5 +1,5 @@
-import { iteratorOf }            from "../../util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence } from "../../util/sequenceUtil/sequencePrototype.js";
+import {createMonadicSequence} from "../../sequencePrototype.js";
+import {iteratorOf_}           from "../../util/helpers.js";
 
 export { zipWith }
 
@@ -40,8 +40,8 @@ const zipWith = zipper => it1 => it2 => {
   let zippedValue;
 
   const zipWithIterator = () =>  {
-    const inner1 = iteratorOf(it1);
-    const inner2 = iteratorOf(it2);
+    const inner1 = iteratorOf_(it1);
+    const inner2 = iteratorOf_(it2);
 
     /**
      *

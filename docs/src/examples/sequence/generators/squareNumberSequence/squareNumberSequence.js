@@ -1,6 +1,6 @@
-import { Sequence }              from "../../../../kolibri/sequence/sequence.js"
-import { iteratorOf }            from "../../../../kolibri/sequence/util/sequenceUtil/iteratorOf.js";
-import { createMonadicSequence } from "../../../../kolibri/sequence/util/sequenceUtil/sequencePrototype.js";
+import {Sequence}              from "../../../../kolibri/sequence/sequence.js";
+import {createMonadicSequence} from "../../../../kolibri/sequence/sequencePrototype.js";
+import {iteratorOf_}           from "../../../../kolibri/sequence/util/helpers.js";
 
 export { SquareNumberSequence }
 
@@ -21,7 +21,7 @@ export { SquareNumberSequence }
 const SquareNumberSequence = () => {
 
   const squareNumberIterator = () => {
-    const odds  = iteratorOf(Sequence(1, _ => true, i => i + 2));
+    const odds  = iteratorOf_(Sequence(1, _ => true, i => i + 2));
     let prev    = 0;
 
     const next = () => {

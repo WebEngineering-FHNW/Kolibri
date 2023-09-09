@@ -1,9 +1,12 @@
 // noinspection GrazieInspection
 
-import { PureSequence }  from "../../constructors/pureSequence/pureSequence.js";
-import { isIterable }    from "./isIterable.js";
-import { LoggerFactory } from "../../../logger/loggerFactory.js";
-import { nil }           from "../../constructors/nil/nil.js";
+import {PureSequence} from "./constructors/pureSequence/pureSequence.js";
+import {
+  LoggerFactory
+}                     from "../logger/loggerFactory.js";
+import {
+  nil
+}                     from "./constructors/nil/nil.js";
 import {
   append,
   bind,
@@ -13,7 +16,6 @@ import {
   drop,
   dropWhere,
   dropWhile,
-  tap,
   map,
   mconcat,
   pipe,
@@ -22,9 +24,10 @@ import {
   take,
   takeWhere,
   takeWhile,
+  tap,
   zip,
   zipWith
-}                        from "../../operators/operators.js";
+}                     from "./operators/operators.js";
 import {
   eq$,
   foldr$,
@@ -37,8 +40,11 @@ import {
   safeMin$,
   show,
   uncons
-} from "../../terminalOperations/terminalOperations.js";
-import {forEach$} from "../../terminalOperations/forEach/forEach.js";
+}                     from "./terminalOperations/terminalOperations.js";
+import {
+  forEach$
+}                     from "./terminalOperations/forEach/forEach.js";
+import {isIterable}   from "./util/helpers.js";
 
 const log = LoggerFactory("kolibri.sequence");
 

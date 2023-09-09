@@ -1,16 +1,11 @@
-import { Just, Nothing }         from "../../../../kolibri/stdlib.js";
-import { createMonadicSequence } from "../../../../kolibri/sequence/util/sequenceUtil/sequencePrototype.js";
-import { choiceMaybe }           from "../../../../kolibri/stdlib/stdlib.js";
-import { uncurry }               from "../../../../kolibri/lambda/church.js";
-import { iteratorOf }            from "../../../../kolibri/sequence/util/sequenceUtil/iteratorOf.js";
+import {Just, Nothing} from "../../../../kolibri/stdlib.js";
 import {
-  Sequence,
-  Range,
-  cycle,
-  map,
-  pipe,
-  zipWith,
-}                                from "../../../../kolibri/sequence/sequence.js"
+    createMonadicSequence
+}                      from "../../../../kolibri/sequence/sequencePrototype.js";
+import {choiceMaybe}   from "../../../../kolibri/stdlib/stdlib.js";
+import {uncurry}                                     from "../../../../kolibri/lambda/church.js";
+import {cycle, map, pipe, Range, Sequence, zipWith,} from "../../../../kolibri/sequence/sequence.js";
+import {iteratorOf_}                                 from "../../../../kolibri/sequence/util/helpers.js";
 
 export { PrimeNumberSequence }
 
@@ -47,8 +42,8 @@ const PrimeNumberSequence = () => {
   )(Sequence(1, i => i <= prime, i => i + 1));
 
   const primeNumberIterator = () => {
-    let prevPrimesIterator  = iteratorOf(cycle([Nothing]));
-    const infiniteIterator  = iteratorOf(Range(2, Number.MAX_VALUE));
+    let prevPrimesIterator  = iteratorOf_(cycle([Nothing]));
+    const infiniteIterator  = iteratorOf_(Range(2, Number.MAX_VALUE));
 
     const next = () => {
       const nextValue  = infiniteIterator.next().value;
@@ -61,7 +56,7 @@ const PrimeNumberSequence = () => {
           const prevPrimes   = zipWith(uncurry(choiceMaybe))
                                  (prevIterable)
                                  (nextPrime);
-          prevPrimesIterator = iteratorOf(prevPrimes);
+          prevPrimesIterator = iteratorOf_(prevPrimes);
 
           return { value: nextValue, done: false};
         })      // Nothing, no number found that divides the current number, so it is prime
