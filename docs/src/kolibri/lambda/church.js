@@ -230,9 +230,10 @@ const Right = x => _f => g => g(x);
  */
 
 /**
- * Type of the {@link Nothing} constructor after _not_ being bound to anny value.
+ * Type of the {@link Nothing} constructor after _not_ being bound to any value.
  * @typedef NothingXType
- * @type    { <_T_, _U_>  (f:FunctionAtoBType<_T_, _U_>)  => (g:*) => _U_ }
+ * @template _T_
+ * @type    { <_U_>  (f:FunctionAtoBType<_T_, _U_>)  => (g:*) => _U_ }
  */
 /**
  * Nothing is the error case of the Maybe type. A "Maybe a" can be either Nothing or "{@link Just} a".
@@ -253,7 +254,8 @@ const Nothing = Left (undefined);
 /**
  * Type of the {@link Just} constructor after being bound to a value x of type _T_.
  * @typedef JustXType
- * @type    { <_T_, _U_>  (f:*)  => (f:FunctionAtoBType<_T_, _U_>) => _U_ }
+ * @template _T_
+ * @type    { <_U_>  (f:*)  => (g:FunctionAtoBType<_T_, _U_>) => _U_ }
  */
 
 /**
@@ -272,9 +274,8 @@ const Nothing = Left (undefined);
 const Just = Right;
 
 /**
- * @typedef { NothingXType<_T_, _U_> | JustXType<_T_, _U_> } MaybeType
+ * @typedef { NothingXType<_T_> | JustXType<_T_> } MaybeType
  * @template _T_
- * @template _U_
  * @pure
  */
 
@@ -420,15 +421,17 @@ const either = e => f => g => e(f)(g);
 
 /**
  * @callback HandleNothingCallback
- * @type { <_T_,_U_> (n:NothingXType<_T_,_U_>) => _U_ }
+ * @template _T_,_U_
+ * @type { (n:NothingXType<_T_>) => _U_ }
  */
 /**
  * @callback HandleJustCallback
- * @type { <_T_,_U_> (j:JustXType<_T_,_U_>) => _U_ }
+ * @template _T_,_U_
+ * @type { (j:JustXType<_T_>) => _U_ }
  */
 /**
  * Apply the f or g handling function to the Maybe value depending on whether it is a Just or a Nothing.
- * @type  { <_T_,_V_> (m:MaybeType<_T_,_V_>) => (hn:HandleNothingCallback<_T_,_V_>) => (hj:HandleJustCallback<_T_,_V_>) => _V_ }
+ * @type  { <_T_,_U_> (m:MaybeType<_T_>) => (hn:HandleNothingCallback<_T_,_U_>) => (hj:HandleJustCallback<_T_,_U_>) => _U_ }
  */
 const maybe = m => f => g => m(f)(g);
 
