@@ -1,30 +1,30 @@
 import { TestSuite } from "../util/test.js";
 import {
-  cons,
   reduce$,
-  SequenceBuilder,
   nil,
+  snoc,
 }                    from "./sequence.js";
+import { toSeq }     from "./util/helpers.js";
 
 const performanceSuite = TestSuite("PerformanceTest");
 
 performanceSuite.add("compare SequenceBuilder and cons: SequenceBuilder 50x faster", assert => {
-  const limit = 4000; // reduce limit value here when running into stack overflow
+  const limit = 5000; // reduce limit value here when running into stack overflow
 
   const builderTime = measure(() => {
-    const builder = SequenceBuilder();
-    for (let i = 0; i < limit; i++) { builder.prepend(i); }
-    const built = builder.build();
+    const builder = [];
+    for (let i = 0; i < limit; i++) { builder.push(i); }
+    const built = toSeq(builder);
     return reduce$( (acc, cur) => acc + cur, 0)(built);
-  }, "builder");
+  }, "array");
 
   const consTime = measure(() => {
     let consed = nil;
-    for (let i = 0; i < limit; i++) { consed = cons(i)(consed)}
+    for (let i = 0; i < limit; i++) { consed = snoc(i)(consed)}
     return reduce$( (acc, cur) => acc + cur, 0)(consed);
-  }, "Cons");
+  }, "snoc ");
 
-  assert.isTrue(consTime / 50 > builderTime);
+  assert.isTrue(consTime / 150 > builderTime);
 
 });
 

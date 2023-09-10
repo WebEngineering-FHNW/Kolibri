@@ -5,7 +5,6 @@ import "./constructors/constructorTestSuite.js";
 import "./operators/operatorsTestSuite.js";
 import "./terminalOperations/terminalOperationsTestSuite.js";
 import "./util/helperTest.js";
-import "./sequenceBuilderTest.js";
 import "./sequencePrototypeTest.js"
 
 // focus ring
