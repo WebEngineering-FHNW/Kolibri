@@ -27,7 +27,7 @@ const PrimeNumberSequence = () => {
   /**
    * Creates a repeated sequence pattern for the given prime
    * @param prime
-   * @returns { SequenceType<MaybeType> }
+   * @returns { SequenceType<MaybeType<Number>> }
    *
    * @example
    * const seq = patternForPrime(3);

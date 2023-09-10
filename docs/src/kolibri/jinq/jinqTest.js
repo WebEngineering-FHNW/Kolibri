@@ -61,7 +61,7 @@ jinqSuite.add("jinq with maybe", assert => {
   /**
    * @typedef PersonType
    * @property { String } name
-   * @property { MaybeType<PersonType, *> } boss
+   * @property { MaybeType<PersonType> } boss
    */
 
   /**
@@ -80,7 +80,7 @@ jinqSuite.add("jinq with maybe", assert => {
   /**
    *
    * @param   { PersonType } employee
-   * @returns { MaybeType<String, *> }
+   * @returns { MaybeType<String> }
    */
   const maybeBossNameOfBoss = employee =>
     from(Just(employee))

@@ -4,7 +4,7 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 
 ## Changes to the documented API:
 - introduce Walk as an alias for Range to support better discovery.
-- convenience constructors: seq(), seq(42, 99, 1000), seq(...array); toSeq(iterable)
+- convenience constructors: Seq(), Seq(42, 99, 1000), Seq(...array); toSeq(iterable)
 - rename rejectAll to dropWhere
 - rename retainAll to takeWhere
 - add tap operator to see each processed value, leaving the sequence unchanged

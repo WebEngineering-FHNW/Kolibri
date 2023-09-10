@@ -5,7 +5,7 @@ export { Nothing, Just, MaybePrototype }
 /**
  * @typedef MaybeMonadType
  * @template _T_,_U_
- * @property { <_V_> ((_T_) => MaybeType<_V_>) => MaybeType<_V_,_U_> } and -
+ * @property { <_V_> ((_T_) => MaybeType<_V_>) => MaybeType<_V_,_U_> } and
  * @property { <_V_> ((_T_) => _V_)            => MaybeType<_V_,_U_> } fmap
  * @property { <_V_> (_V_)                     => MaybeType<_V_,_U_> } pure
  * @property {       ()                        => MaybeType<_T_,_U_> } empty

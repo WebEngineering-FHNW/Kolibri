@@ -4,9 +4,8 @@ export { catMaybes, choiceMaybe }
  * The catMaybes function takes a list of Maybes and returns a list of all the Just values.
  *
  * @template _T_
- * @template _U_
  * @haskell [Maybe a] -> [a]
- * @param  { Array<MaybeType<_T_, _U_>> } maybes
+ * @param  { Iterable<MaybeType<_T_>> } maybes
  * @returns { Array<_T_> }
  */
 const catMaybes = maybes => {
