@@ -106,7 +106,7 @@ const JsonMonad = jsObject => {
 
 /**
  * Helper function to create a {@link SequenceType} from varargs.
- * {@link toMonadicIterable } can't be used here, because sub iterables shouldn't be consumed
+ * {@link toSeq } can't be used here, because sub iterables shouldn't be consumed
  *
  * @template _T_
  * @param  { ..._T_ } elements - the elements to iterate on

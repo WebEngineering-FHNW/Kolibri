@@ -9,7 +9,8 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 - rename retainAll to takeWhere
 - add tap operator to see each processed value, leaving the sequence unchanged
 - foldr: callback args are now switched to (acc, cur) as conventional in JS standard library. 
-- sequence of callback arguments in min$/safeMin$ (
+- sequence of callback arguments in min$/safeMin$ 
+- SequenceBuilder is gone, performance tests shows how to use an array as a builder with even better performance.
 
 ## wishlist
 - test against infinite sequence invariants (operator does not stall, lazy, take(0) === nil)
