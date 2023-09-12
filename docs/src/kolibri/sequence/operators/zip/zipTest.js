@@ -5,8 +5,8 @@ import {
   createTestConfig,
   newSequence,
   UPPER_SEQUENCE_BOUNDARY,
-}                       from "../../util/testUtil.js";
-import {fst, Pair, snd} from "../../../lambda/church.js";
+}                            from "../../util/testUtil.js";
+import { Pair, fst, snd }    from "../../../lambda/churchExports.js";
 
 const testSuite = TestSuite("Sequence: operation zip");
 

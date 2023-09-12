@@ -1,4 +1,4 @@
-import {Just, Nothing} from "../../../stdlib/maybe.js";
+import {Just, Nothing} from "../../../lambda/maybe.js";
 import {iteratorOf}    from "../../util/helpers.js";
 
 export { safeMax$ }

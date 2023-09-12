@@ -1,4 +1,4 @@
-import { Pair }    from "../../../stdlib/pair.js";
+import { Pair }    from "../../../lambda/pair.js";
 import { zipWith } from "../zipWith/zipWith.js";
 
 export { zip }

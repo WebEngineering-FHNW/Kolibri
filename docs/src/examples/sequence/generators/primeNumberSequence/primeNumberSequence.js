@@ -1,9 +1,9 @@
 import {Just, Nothing} from "../../../../kolibri/stdlib.js";
 import {
     createMonadicSequence
-}                      from "../../../../kolibri/sequence/sequencePrototype.js";
-import {choiceMaybe}   from "../../../../kolibri/stdlib/stdlib.js";
-import {uncurry}                                     from "../../../../kolibri/lambda/church.js";
+}                    from "../../../../kolibri/sequence/sequencePrototype.js";
+import {choiceMaybe} from "../../../../kolibri/lambda/maybe.js";
+import {uncurry}     from "../../../../kolibri/lambda/church.js";
 import {cycle, map, pipe, Range, Sequence, zipWith,} from "../../../../kolibri/sequence/sequence.js";
 import {iteratorOf}                                  from "../../../../kolibri/sequence/util/helpers.js";
 

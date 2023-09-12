@@ -2,7 +2,7 @@ import { TestSuite }                from "../../../kolibri/util/test.js";
 import { FocusRing }                from "./focusRing.js";
 import { Range, repeat }            from "../../../kolibri/sequence/sequence.js";
 
-const focusRingSuite = TestSuite("FocusRing");
+const focusRingSuite = TestSuite("example/FocusRing");
 
 focusRingSuite.add("basic access", assert => {
   // When

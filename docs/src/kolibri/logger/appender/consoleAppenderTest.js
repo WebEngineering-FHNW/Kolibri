@@ -4,7 +4,7 @@ import {T}         from "../../lambda/church.js";
 
 const { trace, debug, info, warn, error, fatal } = Appender();
 
-const consoleAppenderSuite = TestSuite("Console Appender");
+const consoleAppenderSuite = TestSuite("logger/Console Appender");
 
 consoleAppenderSuite.add("test add all kind of levels to console appender", assert => {
   const resultInfo   = info  ("info: expected log output from console appender: trace, debug, warn, error, fatal");

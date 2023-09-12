@@ -1,8 +1,8 @@
 // noinspection GrazieInspection
 
 import {createMonadicSequence} from "../../sequencePrototype.js";
-import {Pair}       from "../../../stdlib/pair.js";
-import {iteratorOf} from "../../util/helpers.js";
+import {Pair}                  from "../../../lambda/pair.js";
+import {iteratorOf}            from "../../util/helpers.js";
 
 export { uncons }
 

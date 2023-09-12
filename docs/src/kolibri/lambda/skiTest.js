@@ -1,8 +1,9 @@
 import {TestSuite}                         from "../util/test.js"
 import {I, K, C, KI, B, BB, V, S}          from "./ski.js";
-import {id, c, cmp, cmp2, snd, Pair, flip} from "./church.js";
+import {id, c, cmp, cmp2, snd, flip} from "./church.js";
+import {Pair}                              from "./pair.js";
 
-const skiSuite = TestSuite("ski");
+const skiSuite = TestSuite("lambda/ski");
 
 skiSuite.add("aliases", assert => {
     assert.is(I,  id);

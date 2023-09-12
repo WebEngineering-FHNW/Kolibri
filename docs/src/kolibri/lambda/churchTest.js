@@ -15,15 +15,12 @@ import {
     id,
     imp,
     jsBool,
-    Just,
     kite,
     konst, LazyIf,
     Left,
     maybe,
     not,
-    Nothing,
     or,
-    Pair,
     rec,
     Right,
     snd,
@@ -35,8 +32,10 @@ import {
 } from "./church.js";
 
 import { M, Th, Z }  from "./ski.js";
+import {Pair}          from "./pair.js";
+import {Just, Nothing} from "./maybe.js";
 
-const churchSuite = TestSuite("church");
+const churchSuite = TestSuite("lambda/church");
 
 churchSuite.add("identity", assert => {
 
@@ -251,8 +250,8 @@ churchSuite.add("deferred operations", assert => {
     }
 );
 
-churchSuite.add("Pair", assert => {
-        const p = Pair(0)(1);      // constituent of a product type
+churchSuite.add("Pair fst snd", assert => {
+        const p = Pair (0) (1);      // constituent of a product type
         assert.is( p(fst)   , 0);  // p(konst) (pick first element of pair)
         assert.is( p(snd)   , 1);  // p(kite)  (pick second element of pair)
     }

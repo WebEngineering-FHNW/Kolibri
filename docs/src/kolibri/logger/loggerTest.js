@@ -49,7 +49,7 @@ const withDebugTestArrayAppender = codeUnderTest => {
   }
 };
 
-const loggerSuite = TestSuite("Logger");
+const loggerSuite = TestSuite("logger/Logger");
 
 loggerSuite.add("simple logging", assert =>
     withDebugTestArrayAppender(appender => {

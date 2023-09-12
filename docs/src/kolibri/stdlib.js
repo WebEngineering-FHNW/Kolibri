@@ -8,10 +8,10 @@
 export {
     id, c,
     Tuple, Choice,
-    // Pair,  // todo dk: this now conflicts with the Pair from stdlib/pair.js, which makes auto-import confusing
-    fst, snd,
-    Left, Right, Nothing, Just
-} from "./lambda/church.js";
+    Pair, fst, snd,
+    Left, Right,
+    Nothing, Just
+} from "./lambda/churchExports.js";
 
 
 // to do

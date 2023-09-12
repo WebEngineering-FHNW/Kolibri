@@ -1,7 +1,7 @@
 import { TestSuite }                     from "../../util/test.js";
 import { isIterable, isSequence, toSeq } from "./helpers.js";
-import { Seq }                           from "../constructors/seq/seq.js";
-import { Pair }                          from "../../stdlib/pair.js";
+import { Seq }  from "../constructors/seq/seq.js";
+import { Pair } from "../../lambda/pair.js";
 // import {Pair} from "../../stdlib.js"; // todo dk: this might be suggested by auto-import, but it's not what we want
 
 const testSuite = TestSuite("Sequence: helper");

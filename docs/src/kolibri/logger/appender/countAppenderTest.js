@@ -5,7 +5,7 @@ import {T}         from "../../lambda/church.js";
 const { trace, debug, info, warn, error, fatal, getValue, reset } = Appender();
 reset(); // clear the state of the appender since it is a singleton
 
-const countAppenderSuite = TestSuite("Count Appender");
+const countAppenderSuite = TestSuite("logger/Count Appender");
 
 countAppenderSuite.add("test add debug value to count appender", assert => {
   const result = debug("debug (expected)");

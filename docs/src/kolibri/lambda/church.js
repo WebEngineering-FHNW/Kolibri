@@ -10,13 +10,14 @@ export {
     id, beta, konst, c, flip, kite, cmp, cmp2,
     T, F, and, not, beq, or, xor, imp,
     LazyIf, jsBool, churchBool, rec,
-    Pair, fst, snd,
+    fst, snd,                           // Pair and its types are exported from pair.js
     Tuple, Choice,
     either, Left, Right,
-    Nothing, Just, maybe,
+    maybe,                              // Nothing, Just and their types are exported from maybe.js
     curry, uncurry,
     toChurchBoolean, toJsBool
 }
+
 
 /**
  * Identity function, aka "I" in the SKI calculus or "Ibis" (or "Idiot") in the Smullyan bird metaphors.
@@ -133,33 +134,6 @@ const Choice = n => { // number of constructors
 
 // end of private ADT implementation details
 
-/**
- * A callback function that selects between two arguments that are given in curried style.
- * Only needed internally for the sake of proper JsDoc.
- * @callback PairSelectorType
- * @pure
- * @type { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
- */
-/**
- * @typedef PairType
- * @type {  <_T_, _U_>  (x: _T_) => (y: _U_) => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
- */
-/**
- * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
- * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
- * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
- * @haskell a -> b -> (a -> b -> a|b) -> a|b
- * @pure    if the selector function is pure, which it usually is
- * @type    PairType
- * @constructor
- * @example
- * const dierk = Pair("Dierk")("König");
- * dierk(fst) === "Dierk");
- * dierk(snd) === "König");
- */
-const Pair = x => y => selector => selector(x)(y);
-
-
 /*
  * The Either types.
  * @haskell Either a b
@@ -226,56 +200,6 @@ const Right = x => _f => g => g(x);
  * @typedef { LeftXType<_T_,_U_> | RightXType<_T_,_U_> } EitherType
  * @template _T_
  * @template _U_
- * @pure
- */
-
-/**
- * Type of the {@link Nothing} constructor after _not_ being bound to any value.
- * @typedef NothingXType
- * @template _T_
- * @type    { <_U_>  (f:FunctionAtoBType<_T_, _U_>)  => (g:*) => _U_ }
- */
-/**
- * Nothing is the error case of the Maybe type. A "Maybe a" can be either Nothing or "{@link Just} a".
- * Nothing is immutable. Nothing is a singleton.
- * Nothing is used to get around missing null/undefined checks.
- * @haskell Nothing :: Maybe a
- * @pure
- * @type    { <_T_, _U_>  (f:FunctionAtoBType<_T_, _U_>)  => (g:*) => _U_ }
- * 
- * @example
- * const mayFoo = (null == foo) ? Nothing : Just(foo);
- * mayFoo
- *      (_   => console.error("cannot find foo"))
- *      (x   => doSomethingWithFoo(x));
- */
-const Nothing = Left (undefined);
-
-/**
- * Type of the {@link Just} constructor after being bound to a value x of type _T_.
- * @typedef JustXType
- * @template _T_
- * @type    { <_U_>  (f:*)  => (g:FunctionAtoBType<_T_, _U_>) => _U_ }
- */
-
-/**
- * Just is the success case of the Maybe type. A "Maybe a" can be either {@link Nothing} or "Just a".
- * Just values are immutable.
- * Just is used to get around missing null/undefined checks.
- * @haskell Just a :: Maybe a
- * @pure
- * @type    { <_T_, _U_>  (x:_T_) =>  (f:*)  => (f:FunctionAtoBType<_T_, _U_>) => _U_ }
- * @example
- * const mayFoo = (null == foo) ? Nothing : Just(foo);
- * mayFoo
- *      (_   => console.error("cannot find foo"))
- *      (x   => doSomethingWithFoo(x));
- */
-const Just = Right;
-
-/**
- * @typedef { NothingXType<_T_> | JustXType<_T_> } MaybeType
- * @template _T_
  * @pure
  */
 
@@ -422,12 +346,12 @@ const either = e => f => g => e(f)(g);
 /**
  * @callback HandleNothingCallback
  * @template _T_,_U_
- * @type { (n:NothingXType<_T_>) => _U_ }
+ * @type { (n:NothingType<_T_>) => _U_ }
  */
 /**
  * @callback HandleJustCallback
  * @template _T_,_U_
- * @type { (j:JustXType<_T_>) => _U_ }
+ * @type { (j:JustType<_T_>) => _U_ }
  */
 /**
  * Apply the f or g handling function to the Maybe value depending on whether it is a Just or a Nothing.

@@ -2,9 +2,9 @@
 
 import { Sequence, nil, PureSequence } from "../sequence.js";
 import { SequencePrototype }           from "../sequencePrototype.js";
-import { arrayEq }                     from "../../util/arrayFunctions.js";
-import { Just, Nothing }               from "../../stdlib/maybe.js";
-import {isSequence}                    from "./helpers.js";
+import { arrayEq }       from "../../util/arrayFunctions.js";
+import { Just, Nothing } from "../../lambda/maybe.js";
+import {isSequence}      from "./helpers.js";
 
 export {
   createTestConfig,

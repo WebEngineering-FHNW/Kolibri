@@ -3,7 +3,8 @@
  * Peano numbers in the church encoding and their operations.
  */
 
-import {cmp,c,T,F,and,Pair,snd,fst} from "./church.js";
+import {cmp,c,T,F,and,snd,fst} from "./church.js";
+import {Pair}                  from "./pair.js";
 
 export {
     n0, n1, n2, n3, n4, n5, n6, n7, n8, n9,
@@ -119,7 +120,7 @@ const jsNum = cn => /** @type { Number } */ cn (n => n+1) (0); // We need a cast
  * @private
  * @type { (p:PairType<ChurchNumberType, ChurchNumberType>) => Pair<ChurchNumberType, ChurchNumberType> }
  */
-const phi = p => Pair(p(snd))(succ(p(snd)));
+const phi = p => Pair (p(snd)) (succ(p(snd)));
 
 /**
  * "less-than-or-equal-to" with church numbers

@@ -5,7 +5,7 @@ import {LOG_DEBUG, LOG_NOTHING}         from "../logLevel.js";
 
 const msg1 = "Some Log Message";
 
-const observableAppenderSuite = TestSuite("Observable Appender");
+const observableAppenderSuite = TestSuite("logger/Observable Appender");
 
 const arrayAppender      = ArrayAppender();
 let level;

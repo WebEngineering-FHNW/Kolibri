@@ -1,5 +1,5 @@
-import {Just, Nothing}                                   from "../stdlib/maybe.js";
-import {createMonadicSequence}                           from "../sequence/sequencePrototype.js";
+import {Just, Nothing}         from "../lambda/maybe.js";
+import {createMonadicSequence} from "../sequence/sequencePrototype.js";
 import {catMaybes, isEmpty, mconcat, nil, PureSequence,} from "../sequence/sequence.js";
 import {iteratorOf}                                      from "../sequence/util/helpers.js";
 

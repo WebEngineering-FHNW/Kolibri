@@ -9,7 +9,7 @@ reset(); // clears the state of the appender
 const msg1 = "Tobias Wyss";
 const msg2 = "Andri Wild";
 
-const arrayAppenderSuite = TestSuite("Array Appender");
+const arrayAppenderSuite = TestSuite("logger/Array Appender");
 
 arrayAppenderSuite.add("test add debug value to array appender", assert => {
   const result = debug("debug");

@@ -1,7 +1,7 @@
 import { addToTestingTable, TESTS }          from "../../util/testingTable.js";
-import { TestSuite }                         from "../../../util/test.js";
-import { Just, Nothing }                     from "../../../stdlib/maybe.js";
-import { createTestConfig }                  from "../../util/testUtil.js";
+import { TestSuite }        from "../../../util/test.js";
+import { Just, Nothing }    from "../../../lambda/maybe.js";
+import { createTestConfig } from "../../util/testUtil.js";
 import { catMaybes, nil, PureSequence, Seq } from "../../sequence.js"
 
 const testSuite = TestSuite("Sequence: operation catMaybes");

@@ -8,7 +8,7 @@ import {
 import {F, T} from "./church.js";
 
 
-const churchNumberSuite = TestSuite("church numbers");
+const churchNumberSuite = TestSuite("lambda/church numbers");
 
 churchNumberSuite.add("numbers", assert => {
 

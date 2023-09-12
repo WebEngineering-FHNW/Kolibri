@@ -3,7 +3,7 @@
 import { TestSuite }     from "../util/test.js";
 import { from }          from "./jinq.js";
 import { Range }         from "../sequence/sequence.js";
-import { Just, Nothing } from "../stdlib/maybe.js"
+import { Just, Nothing } from "../lambda/maybe.js"
 import { JsonMonad }     from "../json/jsonMonad.js";
 
 const jinqSuite = TestSuite("Jinq Suite");
