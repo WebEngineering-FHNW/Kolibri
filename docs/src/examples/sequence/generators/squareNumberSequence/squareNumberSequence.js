@@ -1,11 +1,11 @@
-import {Sequence}              from "../../../../kolibri/sequence/sequence.js";
-import {createMonadicSequence} from "../../../../kolibri/sequence/sequencePrototype.js";
-import {iteratorOf}            from "../../../../kolibri/sequence/util/helpers.js";
+import { Sequence } from "../../../../kolibri/sequence/sequence.js";
+import { Pair }     from "../../../../kolibri/stdlib/pair.js";
 
 export { SquareNumberSequence }
 
 /**
- * Generates the sequence of square numbers.
+ * Generates the sequence of square numbers by using the fact that the square of n+1 is
+ * the square of n plus 2n+1.
  *
  * @constructor
  * @pure
@@ -18,19 +18,6 @@ export { SquareNumberSequence }
  * console.log(...result);
  * // => Logs '1, 4, 9, 16, 25'
  */
-const SquareNumberSequence = () => {
-
-  const squareNumberIterator = () => {
-    const odds  = iteratorOf(Sequence(1, _ => true, i => i + 2));
-    let prev    = 0;
-
-    const next = () => {
-      prev = prev + odds.next().value;
-      return { value: prev, done: false }
-    };
-
-    return { next };
-  };
-
-  return createMonadicSequence(squareNumberIterator);
-};
+const SquareNumberSequence = () =>
+    Sequence(Pair(1)(1), _ => true, ([num, square]) => Pair (num + 1) (square + num + num + 1) )
+    .map( ([_num, square]) => square);
