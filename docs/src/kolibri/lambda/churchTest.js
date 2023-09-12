@@ -1,4 +1,4 @@
-import {TestSuite} from "../util/test.js";
+import { TestSuite } from "../util/test.js";
 
 import {
     and,
@@ -16,7 +16,8 @@ import {
     imp,
     jsBool,
     kite,
-    konst, LazyIf,
+    konst,
+    LazyIf,
     Left,
     maybe,
     not,
@@ -24,40 +25,41 @@ import {
     rec,
     Right,
     snd,
-    T, Tuple,
+    T,
+    Tuple,
     uncurry,
     xor,
     toChurchBoolean,
     toJsBool
 } from "./church.js";
 
-import { M, Th, Z }  from "./ski.js";
-import {Pair}          from "./pair.js";
-import {Just, Nothing} from "./maybe.js";
+import { M, Th, Z }      from "./ski.js";
+import { Pair }          from "./pair.js";
+import { Just, Nothing } from "./maybe.js";
 
 const churchSuite = TestSuite("lambda/church");
 
 churchSuite.add("identity", assert => {
 
         // noinspection EqualityComparisonWithCoercionJS
-        const weekEq = (a, b) => a == b;
+        const weakEq = (a, b) => a == b;
 
         // identity
         assert.is( id(0) , 0);
         assert.is( id(1) , 1);
         assert.is( id , id);                  // JS has function identity
-        assert.isTrue( weekEq("x => x", id)); // JS has weak function equivalence by string representation
+        assert.isTrue( weakEq("x => x", id)); // JS has weak function equivalence by string representation
 
         // function equivalence
         const other = x => x;
-        assert.isTrue( weekEq("x => x", other));
+        assert.isTrue( weakEq("x => x", other));
 
         const alpha = y => y;
-        assert.isTrue( ! weekEq(alpha, id ));  // JS has no alpha equivalence
+        assert.isTrue( ! weakEq(alpha, id ));  // JS has no alpha equivalence
 
         // in JS, a == b && a == c  does not imply b == c
-        assert.isTrue( ! weekEq(id, other));
-        assert.isTrue( weekEq(id.toString(), other.toString()));
+        assert.isTrue( ! weakEq(id, other));
+        assert.isTrue( weakEq(id.toString(), other.toString()));
     }
 );
 
