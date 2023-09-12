@@ -1,4 +1,4 @@
-import { dom }            from "../../util/dom.js";
+import { dom }            from "../../../../kolibri/util/dom.js";
 import { ROTATION_SPEED } from "./slotMachine.js";
 
 export { SlotMachineView, ResultView }

@@ -1,6 +1,6 @@
-import { TestSuite } from "../util/test.js";
-import { FocusRing } from "./focusRing.js";
-import { Range }     from "../sequence/sequence.js";
+import { TestSuite }                from "../../../kolibri/util/test.js";
+import { FocusRing }                from "./focusRing.js";
+import {cons, cycle, Range, repeat} from "../../../kolibri/sequence/sequence.js";
 
 const focusRingSuite = TestSuite("FocusRing");
 
@@ -34,6 +34,19 @@ focusRingSuite.add("test focus ring with single element", assert => {
   assert.is(ring.focus(),         0);
   assert.is(ring.right().focus(), 0);
   assert.is(ring.left().focus(),  0);
+});
+
+focusRingSuite.add("a focus ring can be infinite as long as you never reach left of initial head", assert => {
+  // Given
+  const infinite = repeat(0);
+  let ring = FocusRing(infinite);
+
+  // When
+  Range(10).forEach$(_ => ring = ring.right());
+  Range( 5).forEach$(_ => ring = ring.left());  // never go further left than you have gone right
+
+  // Then
+  assert.is(ring.focus(), 0);
 });
 
 focusRingSuite.run();
