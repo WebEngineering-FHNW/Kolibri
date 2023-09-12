@@ -20,8 +20,6 @@ Consider using
         rollup -o productionBundle.js -f es -w . production.js --no-treeshake --compact
 
 ### Latest statistics
-        2023-03-24 T 16:48:12 MEZ
-        bundle:   1026 LOC
-        tests:    1300 LOC (ca.)
-        examples:  700 LOC (ca.)
-        jsdoc:    2418 LOC
+        2023-09-12 T 16:08:22 MESZ
+        bundle:   3000 LOC
+        jsdoc:    4600 LOC
