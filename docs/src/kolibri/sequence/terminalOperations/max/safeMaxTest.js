@@ -1,6 +1,6 @@
 import { addToTestingTable, TESTS }             from "../../util/testingTable.js";
 import { TestSuite }                            from "../../../util/test.js";
-import { Just }                                 from "../../../stdlib/maybe.js";
+import { Just }                                 from "../../../lambda/maybe.js";
 import {PureSequence, replicate, safeMax$, nil} from "../../sequence.js";
 import {
   createTestConfig,

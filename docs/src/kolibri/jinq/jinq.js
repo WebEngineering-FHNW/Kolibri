@@ -1,6 +1,6 @@
 // noinspection GrazieInspection
 
-import { Pair } from "../stdlib/pair.js";
+import { Pair } from "../lambda/pair.js";
 
 export { from }
 

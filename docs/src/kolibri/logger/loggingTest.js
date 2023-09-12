@@ -11,7 +11,7 @@ import {
     onAppenderRemoved,
 } from "./logging.js";
 
-const loggingSuite = TestSuite("Logging");
+const loggingSuite = TestSuite("logger/Logging");
 
 loggingSuite.add("message formatter", assert => {
     const oldFormatter = getMessageFormatter();

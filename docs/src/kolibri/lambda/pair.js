@@ -11,11 +11,19 @@ export { Pair }
  */
 
 /**
- * @typedef PairType
- * @type {  <_T_, _U_>
+ * @typedef PairBaseType
+ * @template _T_, _U_
+ * @type {
  *      (x: _T_)
  *   => (y: _U_)
  *   => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
+ *
+ */
+/**
+ * @typedef PairType
+ * @template _T_, _U_
+ * @type {  PairBaseType<_T_, _U_> & Iterable<_T_ | _U_> }
+ * see {@link Pair}
  */
 
 /**

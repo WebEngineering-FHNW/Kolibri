@@ -21,7 +21,6 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 - since testingTable config.iterable() must be of type sequence - call it "sequenceCtor"?
 
 ## todo
-- resolve confusion of the stdlib management (e.g. Pair)
 - update references in production.js
 - check for better error messages when testing table fails
 - check logging setup in test support

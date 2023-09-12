@@ -6,7 +6,7 @@ import {
 }                                                                                     from "../../../kolibri/sequence/sequence.js";
 import {
     Pair
-}                                                                                     from "../../../kolibri/stdlib/pair.js";
+}                                                                                     from "../../../kolibri/lambda/pair.js";
 import {Computer, evaluate, hasWon, Human, moves, NoPlayer, opponent, stone, treeMap} from "./tictactoe.js";
 import {
     iteratorOf

@@ -10,7 +10,7 @@ import {
   setLoggingLevel,
 } from "../logging.js";
 
-const logUiControllerSuite = TestSuite("LogUiController");
+const logUiControllerSuite = TestSuite("logger/LogUiController");
 
 logUiControllerSuite.add("test binding log level as text", assert => {
 

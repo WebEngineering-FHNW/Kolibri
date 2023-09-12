@@ -1,5 +1,5 @@
 import { Sequence } from "../../../../kolibri/sequence/sequence.js";
-import { Pair }     from "../../../../kolibri/stdlib/pair.js";
+import { Pair }     from "../../../../kolibri/lambda/pair.js";
 
 export { SquareNumberSequence }
 

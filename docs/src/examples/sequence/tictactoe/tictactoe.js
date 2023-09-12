@@ -1,7 +1,7 @@
 import { Range, map, zip, foldl$, pipe, nil, max$, min$, isEmpty } from "../../../kolibri/sequence/sequence.js";
-import { from }                                                    from "../../../kolibri/jinq/jinq.js";
-import { Pair }                                                    from "../../../kolibri/stdlib/pair.js";
-import { snd }                                                     from "../../../kolibri/stdlib.js";
+import { from } from "../../../kolibri/jinq/jinq.js";
+import { Pair } from "../../../kolibri/lambda/pair.js";
+import { snd }  from "../../../kolibri/stdlib.js";
 
 export { nextBoard, nowValue, opponent, stone, Computer, Human, NoPlayer, moves, hasWon, treeMap, evaluate }
 

@@ -1,5 +1,5 @@
 import { Sequence, map } from "../../../../kolibri/sequence/sequence.js";
-import { Pair }          from "../../../../kolibri/stdlib/pair.js";
+import { Pair }          from "../../../../kolibri/lambda/pair.js";
 import { snd }           from "../../../../kolibri/stdlib.js";
 
 export { FibonacciSequence }

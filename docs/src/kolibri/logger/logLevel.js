@@ -1,4 +1,5 @@
-import {fst, Left, Pair, Right, snd}   from "../lambda/church.js";
+import {fst, Left, Right, snd}   from "../lambda/church.js";
+import {Pair}                    from "../stdlib.js";
 
 export {
   LOG_TRACE,

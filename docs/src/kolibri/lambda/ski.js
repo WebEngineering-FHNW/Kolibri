@@ -6,9 +6,11 @@
  * Graham Hutton: https://www.youtube.com/watch?v=9T8A89jgeTI
  */
 
+import {Pair} from "./pair.js";
+
 export { I, K, M, C, KI, B, BB, S, Z, Th, V }
 
-import {id, c, flip, snd, cmp, cmp2, Pair } from "./church.js"
+import {id, c, flip, snd, cmp, cmp2 } from "./church.js"
 
 /**
  * Identity, Ibis, I.

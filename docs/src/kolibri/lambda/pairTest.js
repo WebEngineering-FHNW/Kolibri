@@ -2,7 +2,7 @@ import { TestSuite } from "../util/test.js";
 import { Pair      } from "./pair.js";
 import { fst, snd  } from "../stdlib.js"
 
-const pairTestSuite = TestSuite("Pair");
+const pairTestSuite = TestSuite("lambda/Pair");
 
 pairTestSuite.add("test simple case pair", assert => {
   // Given
