@@ -1,16 +1,9 @@
-import {TestSuite}                                                                    from "../../../kolibri/util/test.js";
-import {
-    map,
-    Range,
-    zip
-}                                                                                     from "../../../kolibri/sequence/sequence.js";
-import {
-    Pair
-}                                                                                     from "../../../kolibri/lambda/pair.js";
-import {Computer, evaluate, hasWon, Human, moves, NoPlayer, opponent, stone, treeMap} from "./tictactoe.js";
-import {
-    iteratorOf
-}                                                                                     from "../../../kolibri/sequence/util/helpers.js";
+import { TestSuite }               from "../../../kolibri/util/test.js";
+import { map, Range, zip }         from "../../../kolibri/sequence/sequence.js";
+import { Pair}                     from "../../../kolibri/lambda/pair.js";
+import { Computer, evaluate, hasWon, Human, moves, NoPlayer, opponent, stone, treeMap }
+                                   from "./tictactoe.js";
+import { iteratorOf}               from "../../../kolibri/sequence/util/helpers.js";
 
 const testSuite = TestSuite("examples/sequence/tictactoe");
 
