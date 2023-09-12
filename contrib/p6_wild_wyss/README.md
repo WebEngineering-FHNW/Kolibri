@@ -12,6 +12,7 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 - sequence of callback arguments in min$/safeMin$ 
 - SequenceBuilder is gone, performance tests shows how to use an array as a builder with even better performance.
 - moved immutable FocusRing to the examples
+- merged sequence/stdlib with the kolibri stdlib and the lambda directory
 
 ## wishlist
 - test against infinite sequence invariants (operator does not stall, lazy, take(0) === nil)
