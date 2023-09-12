@@ -7,9 +7,6 @@ import "./terminalOperations/terminalOperationsTestSuite.js";
 import "./util/helperTest.js";
 import "./sequencePrototypeTest.js"
 
-// focus ring
-import "../focusring/focusRingTest.js";
-
 // stdlib
 import "../stdlib/stdlibTest.js";
 import "../stdlib/maybeTest.js";
