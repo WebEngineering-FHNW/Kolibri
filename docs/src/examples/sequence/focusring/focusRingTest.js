@@ -1,6 +1,6 @@
 import { TestSuite }                from "../../../kolibri/util/test.js";
 import { FocusRing }                from "./focusRing.js";
-import {cons, cycle, Range, repeat} from "../../../kolibri/sequence/sequence.js";
+import { Range, repeat }            from "../../../kolibri/sequence/sequence.js";
 
 const focusRingSuite = TestSuite("FocusRing");
 
