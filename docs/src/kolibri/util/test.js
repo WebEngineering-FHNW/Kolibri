@@ -5,24 +5,25 @@
  * The test "framework", exports the Suite function plus a total of how many assertions have been tested
  */
 
-import {accentColor, okColor} from "../style/kolibriStyle.js";
-import {id, Tuple}            from "../stdlib.js"
-import {Observable}           from "../observable.js"
-import {dom}                  from "./dom.js"
-import {LoggerFactory}        from "../logger/loggerFactory.js";
+import {accentColor, okColor}                      from "../style/kolibriStyle.js";
+import {id, Just, Tuple}                           from "../stdlib.js";
+import {Observable}                                from "../observable.js";
+import {dom}                                       from "./dom.js";
+import {LoggerFactory}                             from "../logger/loggerFactory.js";
 import {
     addToAppenderList,
+    getLoggingContext,
     getLoggingLevel,
     removeFromAppenderList,
-    setLoggingLevel,
     setLoggingContext,
-    setGlobalMessageFormatter
-}                             from "../logger/logging.js";
-import {LOG_DEBUG}            from "../logger/logLevel.js";
-import {Appender}             from "../logger/appender/consoleAppender.js";
-import {LOG_CONTEXT_KOLIBRI_TEST} from "../logger/logConstants.js";
+    setLoggingLevel
+}                                                  from "../logger/logging.js";
+import {LOG_DEBUG}                                 from "../logger/logLevel.js";
+import {Appender as ConsoleAppender}               from "../logger/appender/consoleAppender.js";
+import {LOG_CONTEXT_All, LOG_CONTEXT_KOLIBRI_TEST} from "../logger/logConstants.js";
+// import {Appender as ArrayAppender}    from "../logger/appender/arrayAppender.js";
 
-export { TestSuite, total, asyncTest }
+export { TestSuite, total, asyncTest, withAppender };
 
 const log = LoggerFactory(LOG_CONTEXT_KOLIBRI_TEST);
 
@@ -256,18 +257,12 @@ const TestSuite = suiteName => {
             addToTotal(suiteAssert.results.length);
             if (suiteAssert.results.every( id )) { // whole suite was ok, report whole suite
                 report(suiteName, suiteAssert.results, suiteAssert.messages);
-            } else { // some test in suite failed, rerun tests for better error indication
-                const prevLoggingLevel = getLoggingLevel();
-                setLoggingLevel(LOG_DEBUG);
-                setLoggingContext("");
-                const appender = Appender();
-                setGlobalMessageFormatter(
-                  context => logLevel => logMessage => `[${logLevel}]\t${context} ${suiteName}: ${logMessage}`
-                );
-                addToAppenderList(appender);
-                tests.forEach( testInfo => test( testInfo(name), testInfo(logic) ));
-                setLoggingLevel(prevLoggingLevel);
-                removeFromAppenderList(appender);
+            } else { // some test in suite failed, rerun tests for better error indication with debug logging
+                const consoleAppender = ConsoleAppender();
+                const formattingFn  = context => logLevel => logMessage => `[${logLevel}]\t'${context}' ${suiteName}: ${logMessage}`;
+                consoleAppender.setFormatter(Just(formattingFn));
+                withAppender(consoleAppender, LOG_CONTEXT_All, LOG_DEBUG)(() =>
+                    tests.forEach(testInfo => test(testInfo(name), testInfo(logic))));
             }
         }
     };
@@ -320,3 +315,27 @@ const report = (origin, results, messages) => {
  */
 const write = html => out.append(...dom(html));
 
+/**
+ * Convenience function to run an isolated test with a given appender, logging context and level.
+ * @type { <_T_>
+ *          (appender:AppenderType<_T_>, context:String, level:LogLevelType)
+ *          => (codeUnderTest: ConsumerType<void>)
+ *          => void
+ *        }
+ */
+const withAppender = (appender, context, level) => codeUnderTest => {
+    const oldLevel   = getLoggingLevel();
+    const oldContext = getLoggingContext();
+    try {
+        setLoggingContext(context);
+        setLoggingLevel(level);
+        addToAppenderList(appender);
+        codeUnderTest();
+    } catch (e) {
+        console.error(e, "withAppender logging test failed!");
+    } finally {
+        setLoggingLevel(oldLevel);
+        setLoggingContext(oldContext);
+        removeFromAppenderList(appender);
+    }
+};

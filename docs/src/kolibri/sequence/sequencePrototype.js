@@ -47,10 +47,11 @@ import {
 import {isIterable}   from "./util/helpers.js";
 import {LOG_CONTEXT_KOLIBRI_BASE} from "../logger/logConstants.js";
 
-const log = LoggerFactory(LOG_CONTEXT_KOLIBRI_BASE+".sequence");
 
-export { SequencePrototype, createMonadicSequence }
+export { SequencePrototype, createMonadicSequence, LOG_CONTEXT_KOLIBRI_SEQUENCE }
 
+const LOG_CONTEXT_KOLIBRI_SEQUENCE = LOG_CONTEXT_KOLIBRI_BASE+".sequence";
+const log = LoggerFactory(LOG_CONTEXT_KOLIBRI_SEQUENCE);
 /**
  * This function object serves as prototype for the {@link SequenceType}.
  * Singleton object.

@@ -1,28 +1,22 @@
-import { TestSuite }                    from "../util/test.js";
-import { Appender as ArrayAppender }    from "./appender/arrayAppender.js";
-import { Appender as CountAppender }    from "./appender/countAppender.js";
-import { LoggerFactory }                from "./loggerFactory.js";
-import { Just }                         from "../stdlib.js";
-import { debugLogger }                  from "./logger.js";
-import {
-    LOG_DEBUG,
-    LOG_NOTHING,
-    LOG_TRACE,
-    LOG_WARN,
-}                                       from "./logLevel.js";
+import {TestSuite, withAppender}   from "../util/test.js";
+import {Appender as ArrayAppender} from "./appender/arrayAppender.js";
+import {Appender as CountAppender}                    from "./appender/countAppender.js";
+import {LoggerFactory}                                from "./loggerFactory.js";
+import {Just}                                         from "../stdlib.js";
+import {debugLogger}                                  from "./logger.js";
+import {LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN,} from "./logLevel.js";
 
 import {
     addToAppenderList,
+    getGlobalMessageFormatter,
+    getLoggingContext,
+    getLoggingLevel,
     removeFromAppenderList,
+    setGlobalMessageFormatter,
     setLoggingContext,
     setLoggingLevel,
-    setGlobalMessageFormatter,
-    getGlobalMessageFormatter,
-    getLoggingLevel,
-    getLoggingContext,
-}                                       from "./logging.js";
-import {LOG_CONTEXT_KOLIBRI_TEST}       from "./logConstants.js";
-
+}                                 from "./logging.js";
+import {LOG_CONTEXT_KOLIBRI_TEST} from "./logConstants.js";
 
 const logMessage  = "log message from loggerTest.js";
 
@@ -51,26 +45,7 @@ const withDebugTestArrayAppender = codeUnderTest => {
   }
 };
 
-const withAppender = (appender, context, level) => codeUnderTest => {
-    const oldLevel   = getLoggingLevel();
-    const oldContext = getLoggingContext();
-    try {
-        setLoggingContext(context);
-        setLoggingLevel(level);
-        addToAppenderList(appender);
-        codeUnderTest();
-    } catch (e) {
-        console.error(e, "withAppender logging test failed!");
-    } finally {
-        setLoggingLevel(oldLevel);
-        setLoggingContext(oldContext);
-        removeFromAppenderList(appender);
-    }
-};
-
 const loggerSuite = TestSuite("logger/Logger");
-
-
 
 loggerSuite.add("simple logging", assert =>
     withDebugTestArrayAppender(appender => {

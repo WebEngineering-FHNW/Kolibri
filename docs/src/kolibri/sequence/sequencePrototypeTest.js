@@ -1,6 +1,9 @@
-import {TestSuite}                                                 from "../util/test.js";
-import {map, show, nil, Range, Seq, drop, take, Sequence, reduce$} from "./sequence.js";
+import {TestSuite, withAppender}                                   from "../util/test.js";
+import {drop, map, nil, Range, reduce$, Seq, Sequence, show, take} from "./sequence.js";
 import {Just, Nothing}                                             from "../stdlib.js";
+import {Appender as ArrayAppender}                                 from "../logger/appender/arrayAppender.js";
+import {LOG_WARN}                                                  from "../logger/logLevel.js";
+import {LOG_CONTEXT_KOLIBRI_SEQUENCE}                              from "./sequencePrototype.js";
 
 const testSuite = TestSuite("Sequence Prototype Suite");
 
@@ -27,14 +30,20 @@ testSuite.add("test prototype: empty", assert => {
   assert.iterableEq(result, []);
 });
 
-
 testSuite.add("test prototype: toString, show", assert => {
-  const range = Range(0, 3);
+    const range = Range(0, 3);
 
-  assert.is(range.toString(), range.show());
+    assert.is(range.toString(), range.show());
 
-  // noinspection JSCheckFunctionSignatures
-  assert.is(range.toString(2), range.show(2));
+    const arrayAppender = ArrayAppender();
+    const formattingFn  = _context => _lvl => msg => msg;
+    arrayAppender.setFormatter(Just(formattingFn));
+    // make sure this is logged on Warning level
+    withAppender(arrayAppender, LOG_CONTEXT_KOLIBRI_SEQUENCE, LOG_WARN)(() => {
+        // noinspection JSCheckFunctionSignatures
+        assert.is(range.toString(2), range.show(2));
+        assert.is(arrayAppender.getValue()[0], "Sequence.toString() with maxValues might lead to type inspection issues. Use show(2) instead.");
+    });
 });
 
 testSuite.add("test prototype: [==], eq$", assert => {

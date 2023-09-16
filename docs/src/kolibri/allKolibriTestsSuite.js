@@ -11,7 +11,6 @@ import "./logger/loggerTest.js";
 import "./logger/loggingTest.js";
 import "./logger/appender/arrayAppenderTest.js";
 import "./logger/appender/observableAppenderTest.js";
-import "./logger/loggingUi/loggingUiControllerTest.js";
 import "./rest/restClientTest.js";
 import "./dataflow/dataflowTest.js";
 import "./projector/projectorUtilsTest.js"
