@@ -1,9 +1,9 @@
 import { Appender as ConsoleAppender }              from "../../kolibri/logger/appender/consoleAppender.js";
 import { LoggerFactory }                            from "../../kolibri/logger/loggerFactory.js";
 import { projectLoggingUi, LOGGING_UI_CSS }         from "../../kolibri/logger/loggingUi/loggingUiProjector.js";
-import { LoggingUiController }                      from "../../kolibri/logger/loggingUi/loggingUiController.js";
-import { addToAppenderList, setMessageFormatter }   from "../../kolibri/logger/logging.js";
-import { dom }                                      from "../../kolibri/util/dom.js";
+import { LoggingUiController }                          from "../../kolibri/logger/loggingUi/loggingUiController.js";
+import { addToAppenderList, setGlobalMessageFormatter } from "../../kolibri/logger/logging.js";
+import { dom }                                          from "../../kolibri/util/dom.js";
 
 import  "../../kolibri/logger/loggingSupport.js";// allow changing the logging config through the browser console
 
@@ -14,7 +14,7 @@ const logMessageFormatter = context => logLevel => logMessage => {
 };
 
 // assume we have same logging configuration that we want to control
-setMessageFormatter(logMessageFormatter);
+setGlobalMessageFormatter(logMessageFormatter);
 addToAppenderList(ConsoleAppender());
 
 // create the UI that allows to control the logging

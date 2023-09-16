@@ -80,18 +80,24 @@ arrayAppenderSuite.add("test default appender overflow implementation", assert =
 });
 
 arrayAppenderSuite.add("test custom limit implementation", assert => {
-  let value = [];
+  let discardedValues = [];
   const onLimitReached = array => {
-    value = array;
+    discardedValues = array;
     return [];
   };
-  const {trace, reset} = Appender(1, onLimitReached);
+  const {trace, reset, getValue} = Appender(1, onLimitReached); // minimum of limit is 2
+  assert.is(discardedValues.length, 0);
+  assert.is(getValue().length,      0);
   trace(msg1);
+  assert.is(discardedValues.length, 0);
+  assert.is(getValue().length,      1);
   trace(msg1);
+  assert.is(discardedValues.length, 0);
+  assert.is(getValue().length,      2);
   trace(msg2);
-  assert.is(value.length, 2);
+  assert.is(discardedValues.length, 2);
+  assert.is(getValue().length,      1);
   assert.is(getValue()[0], msg2);
-  assert.is(getValue().length, 1);
   reset();
 });
 

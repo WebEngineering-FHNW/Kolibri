@@ -19,7 +19,15 @@
  * To log a simple message, just use a {@link String}.
  * If the log message is based on some calculations, you should consider to use a {@link ProducerType},
  * because the message can be lazily evaluated.
- * @typedef {String | ProducerType<String>} LogMeType
+ * @typedef { String | ProducerType<String> } LogMeType
+ */
+
+
+/**
+ * A function that takes logging arguments and creates a formatted string.
+ * @typedef LogMessageFormatterType
+ * @pure
+ * @type { (context: String) => (logLevel: String) => (logMessage: String) => String }
  */
 
 /**
@@ -34,7 +42,9 @@
  * @property { AppendCallback } error - Defines the appending strategy for the {@link LOG_ERROR}-level messages.
  * @property { AppendCallback } fatal - Defines the appending strategy for the {@link LOG_FATAL}-level messages.
  * @property { () => _ValueType_ } getValue - Some appender may produce a result, that can be collected using getValue.
- * @property { () => _ValueType_ } reset - Clean up the appender result. The next call of getValue returns the default value.
+ * @property { () => _ValueType_ } reset    - Clean up the appender result. The next call of getValue returns the default value.
+ * @property { (formatter: MaybeType<LogMessageFormatterType>) => void } setFormatter - set an appender specific formatter
+ * @property { () =>       MaybeType<LogMessageFormatterType>          } getFormatter - get the currently used formatter
  */
 
 /**
@@ -49,14 +59,6 @@
  */
 
 // callbacks
-
-/**
- * A function that takes logging arguments and creates a formatted string.
- * @callback FormatLogMessage
- * @function
- * @pure
- * @type { (context: String) => (logLevel: String) => (logMessage: String) => String}
- */
 
 /**
  * Logs a given message.

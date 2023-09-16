@@ -16,8 +16,8 @@ import {
   removeFromAppenderList,
   setLoggingContext,
   setLoggingLevel,
-  setMessageFormatter,
-  getMessageFormatter,
+  setGlobalMessageFormatter,
+  getGlobalMessageFormatter,
   getLoggingLevel,
   getLoggingContext,
 } from "./logging.js";
@@ -31,7 +31,7 @@ This might also be useful as a general way of resetting the log config after use
 const withDebugTestArrayAppender = codeUnderTest => {
   const level     = getLoggingLevel();
   const context   = getLoggingContext();
-  const formatter = getMessageFormatter();
+  const formatter = getGlobalMessageFormatter();
   const appender  = ArrayAppender();
   try {
     appender.reset();
@@ -44,7 +44,7 @@ const withDebugTestArrayAppender = codeUnderTest => {
   } finally {
     setLoggingLevel(level);
     setLoggingContext(context);
-    setMessageFormatter(formatter);
+    setGlobalMessageFormatter(formatter);
     removeFromAppenderList(appender);
   }
 };
@@ -120,7 +120,7 @@ loggerSuite.add("log higher logging level, should not log", assert =>
 loggerSuite.add("test debug tag formatted log message", assert =>
     withDebugTestArrayAppender(appender => {
       const levelFormatter = _ => lvl => msg => `[${lvl}] ${msg}`;
-      setMessageFormatter(levelFormatter);
+      setGlobalMessageFormatter(levelFormatter);
       setLoggingLevel(LOG_DEBUG);
       const debug = debugLogger("ch.fhnw.test");
 
@@ -132,7 +132,7 @@ loggerSuite.add("test debug tag formatted log message", assert =>
 loggerSuite.add("test context tag formatted log message", assert =>
     withDebugTestArrayAppender(appender => {
       const levelFormatter = ctx => _ => msg => `${ctx}: ${msg}`;
-      setMessageFormatter(levelFormatter);
+      setGlobalMessageFormatter(levelFormatter);
       setLoggingLevel(LOG_DEBUG);
       const context = "ch.fhnw.test";
       const debug   = debugLogger("ch.fhnw.test");
@@ -190,7 +190,7 @@ loggerSuite.add("test error in message formatting code", assert =>
       const badFormatter = _ctx => _lvl => _msg => {
         throw new Error("error in message formatting code");
       };
-      setMessageFormatter(badFormatter);
+      setGlobalMessageFormatter(badFormatter);
 
       setLoggingLevel(LOG_DEBUG);
       const debug  = debugLogger("ch.fhnw.test");

@@ -16,7 +16,7 @@ import {
     removeFromAppenderList,
     setLoggingLevel,
     setLoggingContext,
-    setMessageFormatter
+    setGlobalMessageFormatter
 }                             from "../logger/logging.js";
 import {LOG_DEBUG}            from "../logger/logLevel.js";
 import {Appender}             from "../logger/appender/consoleAppender.js";
@@ -260,7 +260,7 @@ const TestSuite = suiteName => {
                 setLoggingLevel(LOG_DEBUG);
                 setLoggingContext("");
                 const appender = Appender();
-                setMessageFormatter(
+                setGlobalMessageFormatter(
                   context => logLevel => logMessage => `[${logLevel}]\t${context} ${suiteName}: ${logMessage}`
                 );
                 addToAppenderList(appender);

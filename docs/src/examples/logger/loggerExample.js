@@ -14,7 +14,7 @@ import {
   addToAppenderList,
   removeFromAppenderList,
   getAppenderList,
-  setMessageFormatter
+  setGlobalMessageFormatter
 } from "../../kolibri/logger/logging.js";
 
 import { Appender as ArrayAppender }   from "../../kolibri/logger/appender/arrayAppender.js";
@@ -32,7 +32,7 @@ const formatLogMsg = context => logLevel => logMessage => {
 
 setLoggingContext(INITIAL_LOGGING_CONTEXT);
 setLoggingLevel(LOG_DEBUG);
-setMessageFormatter(formatLogMsg);
+setGlobalMessageFormatter(formatLogMsg);
 
 const consoleAppender = ConsoleAppender();
 const arrayAppender   = ArrayAppender();

@@ -4,9 +4,9 @@ import {Appender as ArrayAppender } from "./appender/arrayAppender.js";
 import {
     addToAppenderList,
     removeFromAppenderList,
-    setMessageFormatter,
-    getMessageFormatter,
-    onMessageFormatterChanged,
+    setGlobalMessageFormatter,
+    getGlobalMessageFormatter,
+    onGlobalMessageFormatterChanged,
     onAppenderAdded,
     onAppenderRemoved,
 } from "./logging.js";
@@ -14,15 +14,15 @@ import {
 const loggingSuite = TestSuite("logger/Logging");
 
 loggingSuite.add("message formatter", assert => {
-    const oldFormatter = getMessageFormatter();
+    const oldFormatter = getGlobalMessageFormatter();
     const newFormatter = _ => _lvl => msg => msg + " formatted";
     let changed        = false;
-    onMessageFormatterChanged(() => changed = true);
-    setMessageFormatter(newFormatter);
-    assert.is(getMessageFormatter(), newFormatter);
+    onGlobalMessageFormatterChanged(() => changed = true);
+    setGlobalMessageFormatter(newFormatter);
+    assert.is(getGlobalMessageFormatter(), newFormatter);
     assert.is(changed, true);
 
-    setMessageFormatter(oldFormatter);
+    setGlobalMessageFormatter(oldFormatter);
 });
 
 loggingSuite.add("listening to appender added/removed", assert => {

@@ -11,9 +11,9 @@ export {
   setLoggingContext,
   onLoggingContextChanged,
 
-  getMessageFormatter,
-  setMessageFormatter,
-  onMessageFormatterChanged,
+  getGlobalMessageFormatter,
+  setGlobalMessageFormatter,
+  onGlobalMessageFormatterChanged,
 
   getAppenderList,
   addToAppenderList,
@@ -96,36 +96,39 @@ const onLoggingContextChanged = loggingContextObs.onChange;
 
 /**
  * The formatting function used in this logging environment.
- * @type { IObservable<FormatLogMessage> }
+ * @type { IObservable<LogMessageFormatterType> }
  * @private
  */
-const messageFormatterObs = Observable(_context => _logLevel => id);
+const globalMessageFormatterObs = Observable(_context => _logLevel => id);
 
 /**
- * This function can be used to specify a custom function to format the log message.
- * When it is set, it will be applied to each log message before it gets logged.
- * @param { FormatLogMessage } formattingFunction
+ * This function can be used to specify a global formatting function for log messages.
+ * Appenders are free to use this global function (maybe as a default or as a fallback)
+ * or to use their own, specific formatting functions.
+ * @impure **Warning:** this is global mutable state and can have far-reaching effects on log formatting.
+ * @param { LogMessageFormatterType } formattingFunction
  * @example
  * const formatLogMsg = context => logLevel => logMessage => {
  *   const date = new Date().toISOString();
  *   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
  * }
- * setMessageFormatter(formatLogMsg);
+ * setGlobalMessageFormatter(formatLogMsg);
  */
-const setMessageFormatter = messageFormatterObs.setValue;
+const setGlobalMessageFormatter = globalMessageFormatterObs.setValue;
 
 /**
- * Returns the current formatting function. Can be useful to store and reset after change.
- * @type { () => FormatLogMessage }
+ * Returns the currently used global formatting function.
+ * @impure **Warning:** different values by come at different times.
+ * @type { () => LogMessageFormatterType }
  */
-const getMessageFormatter = messageFormatterObs.getValue;
+const getGlobalMessageFormatter = globalMessageFormatterObs.getValue;
 
 /**
  * What to do when the log formatting function changes.
- * @impure
- * @type { (cb:ValueChangeCallback<FormatLogMessage>) => void }
+ * @impure will typically change the side effects of logging.
+ * @type { (cb:ValueChangeCallback<LogMessageFormatterType>) => void }
  */
-const onMessageFormatterChanged = messageFormatterObs.onChange;
+const onGlobalMessageFormatterChanged = globalMessageFormatterObs.onChange;
 
 //                                                                -- logging appender list --
 

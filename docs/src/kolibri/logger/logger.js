@@ -1,5 +1,5 @@
-import {id}                                                                       from "../lambda/church.js";
-import {getAppenderList, getLoggingContext, getLoggingLevel, getMessageFormatter} from "./logging.js";
+import {id}                                                                                 from "../lambda/church.js";
+import {getAppenderList, getLoggingContext, getLoggingLevel, getGlobalMessageFormatter}     from "./logging.js";
 import {contains, toString, LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_TRACE, LOG_WARN} from "./logLevel.js";
 
 
@@ -21,7 +21,7 @@ export {
  * The log message will only be logged, if the loggingContext
  * (set with {@link setLoggingContext}) is a prefix of the logger context.
  *
- * The result of the callback function {@link FormatLogMessage}
+ * The result of the callback function {@link LogMessageFormatterType}
  * will be logged using the given {@link AppendCallback}.
  *
  * What's the difference between "logger" and "logging" and "log"?
@@ -36,7 +36,7 @@ export {
  * The word "log" is used when the abstraction can be used for both, the logger and the logging
  *
  * @function
- * @pure if the {@link AppendCallback} in the appender list and the parameter msgFormatter of type {@link FormatLogMessage} are pure.
+ * @pure if the {@link AppendCallback} in the appender list and the parameter msgFormatter of type {@link LogMessageFormatterType} are pure.
  * @type    {
  *               (loggerLevel:      LogLevelChoice)
  *            => (loggerContext:    LogContextType)
@@ -64,7 +64,7 @@ const logger = loggerLevel => loggerContext => msg =>
           }
           let formattedMessage = "Error: cannot format log message! '" + evaluatedMessage + "'!";
           try {
-              formattedMessage = getMessageFormatter()(loggerContext)(levelName)(evaluatedMessage); // formatting can fail
+              formattedMessage = getGlobalMessageFormatter()(loggerContext)(levelName)(evaluatedMessage); // formatting can fail
           } catch (e) {
               success = false;
           }
