@@ -20,10 +20,11 @@ import {
 }                             from "../logger/logging.js";
 import {LOG_DEBUG}            from "../logger/logLevel.js";
 import {Appender}             from "../logger/appender/consoleAppender.js";
+import {LOG_CONTEXT_KOLIBRI_TEST} from "../logger/logConstants.js";
 
 export { TestSuite, total, asyncTest }
 
-const log = LoggerFactory("kolibri.test");
+const log = LoggerFactory(LOG_CONTEXT_KOLIBRI_TEST);
 
 /**
  * The running total of executed test assertions

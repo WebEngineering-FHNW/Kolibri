@@ -45,8 +45,9 @@ import {
   forEach$
 }                     from "./terminalOperations/forEach/forEach.js";
 import {isIterable}   from "./util/helpers.js";
+import {LOG_CONTEXT_KOLIBRI_BASE} from "../logger/logConstants.js";
 
-const log = LoggerFactory("kolibri.sequence");
+const log = LoggerFactory(LOG_CONTEXT_KOLIBRI_BASE+".sequence");
 
 export { SequencePrototype, createMonadicSequence }
 
