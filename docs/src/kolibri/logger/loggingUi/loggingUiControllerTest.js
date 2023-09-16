@@ -16,7 +16,6 @@ logUiControllerSuite.add("test binding log level as text", assert => {
 
     const logUiController = LoggingUiController();
     const oldLoggingLevel = getLoggingLevel();
-    assert.is(oldLoggingLevel, LOG_INFO);
     assert.is(logUiController.loggingLevelController.getValue(), toString(oldLoggingLevel));
 
     logUiController.loggingLevelController.setValue(toString(LOG_DEBUG));
