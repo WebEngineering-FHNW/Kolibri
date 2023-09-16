@@ -2,7 +2,7 @@ import {TestSuite}           from "../../util/test.js";
 import {LoggingUiController} from "./loggingUiController.js";
 import {
     toString,
-    LOG_INFO, LOG_DEBUG,
+    LOG_DEBUG,
 }                            from "../logLevel.js";
 import {
     getLoggingContext,
