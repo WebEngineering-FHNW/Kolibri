@@ -21,9 +21,8 @@ import {
 import {LOG_DEBUG}                                 from "../logger/logLevel.js";
 import {Appender as ConsoleAppender}               from "../logger/appender/consoleAppender.js";
 import {LOG_CONTEXT_All, LOG_CONTEXT_KOLIBRI_TEST} from "../logger/logConstants.js";
-// import {Appender as ArrayAppender}    from "../logger/appender/arrayAppender.js";
 
-export { TestSuite, total, asyncTest, withAppender };
+export { TestSuite, total, failed, asyncTest, withAppender };
 
 const log = LoggerFactory(LOG_CONTEXT_KOLIBRI_TEST);
 
@@ -33,6 +32,13 @@ const log = LoggerFactory(LOG_CONTEXT_KOLIBRI_TEST);
  * @type { IObservable<Number> }
  */
 const total = Observable(0);
+
+/**
+ * Whether any test assertion has failed.
+ * @impure the reference does not change, but the contained value. Listeners will produce side effects like DOM changes.
+ * @type { IObservable<Boolean> }
+ */
+const failed = Observable(false);
 
 /** @type { (Number) => void } */
 const addToTotal = num => total.setValue( num + total.getValue());
@@ -83,7 +89,13 @@ const addToTotal = num => total.setValue( num + total.getValue());
  */
 const Assert = () => {
     /** @type Array<Boolean> */ const results  = []; // true if test passed, false otherwise
-    /** @type Array<String> */  const messages = [];
+    /** @type Array<String> */  const messages = []; // message for each test result at the same index
+    const addMessage = message => {
+        if (message !== "") {
+            failed.setValue(true);
+        }
+        messages.push(message);
+    };
     return {
         results,
         messages,
@@ -94,7 +106,7 @@ const Assert = () => {
                 message = "not true";
             }
             results .push(testResult);
-            messages.push(message);
+            addMessage(message);
         },
         is: (actual, expected) => {
             const testResult = actual === expected;
@@ -104,7 +116,7 @@ const Assert = () => {
                 log.error(message);
             }
             results .push(testResult);
-            messages.push(message);
+            addMessage(message);
         },
         iterableEq: (actual, expected, maxElementsToConsume = 1_000) => {
 
@@ -151,7 +163,7 @@ const Assert = () => {
 
             if (!testPassed) log.error(message);
             results.push(testPassed);
-            messages.push(message);
+            addMessage(message);
         },
         throws: (functionUnderTest, expectedErrorMsg = "") => {
             let testResult    = false;
@@ -174,7 +186,7 @@ const Assert = () => {
                 }
             }
             results .push(testResult);
-            messages.push(message);
+            addMessage(message);
         }
     }
 };

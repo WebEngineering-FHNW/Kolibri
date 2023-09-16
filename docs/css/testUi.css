@@ -13,6 +13,9 @@ body {
     padding:                2em;
     box-shadow:             var(--kolibri-box-shadow);
 }
+#out.failed {
+    box-shadow:             0 .7rem  2rem 0 var(--kolibri-color-accent);
+}
 #out div:nth-child(odd) {   /* count and file columns are output */
     color:                  var(--kolibri-color-output);
 }

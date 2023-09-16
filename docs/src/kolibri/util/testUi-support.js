@@ -2,7 +2,7 @@
  * @module util/testUI-support
  * Helper to update the test UI report while the tests are running
  */
-import {total}                              from "./test.js";
+import {total, failed}                      from "./test.js";
 import {versionInfo}                        from "../version.js";
 import {LOG_CONTEXT_KOLIBRI_TEST}           from "../logger/logConstants.js";
 import {setLoggingContext, setLoggingLevel} from "../logger/logging.js";
@@ -13,5 +13,11 @@ setLoggingContext(LOG_CONTEXT_KOLIBRI_TEST);
 setLoggingLevel(LOG_ERROR);
 
 total.onChange( value => document.getElementById('grossTotal').textContent = "" + value + " tests done.");
+failed.onChange( value => {
+    const classes = document.getElementById('out').classList;
+    value
+        ? classes.add('failed')
+        : classes.remove('failed');
+});
 
 document.querySelector("footer").textContent = "Built with Kolibri " + versionInfo;
