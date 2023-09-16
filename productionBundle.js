@@ -1449,36 +1449,39 @@ const onLoggingContextChanged = loggingContextObs.onChange;
 
 /**
  * The formatting function used in this logging environment.
- * @type { IObservable<FormatLogMessage> }
+ * @type { IObservable<LogMessageFormatterType> }
  * @private
  */
-const messageFormatterObs = Observable(_context => _logLevel => id);
+const globalMessageFormatterObs = Observable(_context => _logLevel => id);
 
 /**
- * This function can be used to specify a custom function to format the log message.
- * When it is set, it will be applied to each log message before it gets logged.
- * @param { FormatLogMessage } formattingFunction
+ * This function can be used to specify a global formatting function for log messages.
+ * Appenders are free to use this global function (maybe as a default or as a fallback)
+ * or to use their own, specific formatting functions.
+ * @impure **Warning:** this is global mutable state and can have far-reaching effects on log formatting.
+ * @param { LogMessageFormatterType } formattingFunction
  * @example
  * const formatLogMsg = context => logLevel => logMessage => {
  *   const date = new Date().toISOString();
  *   return `[${logLevel}]\t${date} ${context}: ${logMessage}`;
  * }
- * setMessageFormatter(formatLogMsg);
+ * setGlobalMessageFormatter(formatLogMsg);
  */
-const setMessageFormatter = messageFormatterObs.setValue;
+const setGlobalMessageFormatter = globalMessageFormatterObs.setValue;
 
 /**
- * Returns the current formatting function. Can be useful to store and reset after change.
- * @type { () => FormatLogMessage }
+ * Returns the currently used global formatting function.
+ * @impure **Warning:** different values by come at different times.
+ * @type { () => LogMessageFormatterType }
  */
-const getMessageFormatter = messageFormatterObs.getValue;
+const getGlobalMessageFormatter = globalMessageFormatterObs.getValue;
 
 /**
  * What to do when the log formatting function changes.
- * @impure
- * @type { (cb:ValueChangeCallback<FormatLogMessage>) => void }
+ * @impure will typically change the side effects of logging.
+ * @type { (cb:ValueChangeCallback<LogMessageFormatterType>) => void }
  */
-const onMessageFormatterChanged = messageFormatterObs.onChange;
+const onGlobalMessageFormatterChanged = globalMessageFormatterObs.onChange;
 
 //                                                                -- logging appender list --
 
@@ -1534,7 +1537,7 @@ const onAppenderRemoved = appenderListObs.onDel;/**
  * The log message will only be logged, if the loggingContext
  * (set with {@link setLoggingContext}) is a prefix of the logger context.
  *
- * The result of the callback function {@link FormatLogMessage}
+ * The result of the callback function {@link LogMessageFormatterType}
  * will be logged using the given {@link AppendCallback}.
  *
  * What's the difference between "logger" and "logging" and "log"?
@@ -1549,7 +1552,7 @@ const onAppenderRemoved = appenderListObs.onDel;/**
  * The word "log" is used when the abstraction can be used for both, the logger and the logging
  *
  * @function
- * @pure if the {@link AppendCallback} in the appender list and the parameter msgFormatter of type {@link FormatLogMessage} are pure.
+ * @pure if the {@link AppendCallback} in the appender list and the parameter msgFormatter of type {@link LogMessageFormatterType} are pure.
  * @type    {
  *               (loggerLevel:      LogLevelChoice)
  *            => (loggerContext:    LogContextType)
@@ -1577,7 +1580,10 @@ const logger = loggerLevel => loggerContext => msg =>
           }
           let formattedMessage = "Error: cannot format log message! '" + evaluatedMessage + "'!";
           try {
-              formattedMessage = getMessageFormatter()(loggerContext)(levelName)(evaluatedMessage); // formatting can fail
+              const formatter = appender.getFormatter()       // Maybe<LogMessageFormatterType>
+                   ( _ => getGlobalMessageFormatter() )       // use global formatter if no specific formatter is set
+                   ( id );                                    // use appender-specific formatter if set
+              formattedMessage = formatter (loggerContext) (levelName) (evaluatedMessage); // formatting can fail
           } catch (e) {
               success = false;
           }
@@ -1954,7 +1960,7 @@ const catMaybes = iterable => {
  * @template _T_
  * @type {AppendOperationType<_T_>}
  */
-const append$1 = it1 => it2 => mconcat([it1, it2]);/**
+const append = it1 => it2 => mconcat([it1, it2]);/**
  * Adds the given element to the front of an iterable.
  * @typedef ConsOperationType
  * @pure
@@ -1976,7 +1982,7 @@ const append$1 = it1 => it2 => mconcat([it1, it2]);/**
  * @type { ConsOperationType<_T_> }
  *
  */
-const cons = element => append$1( Seq(element) )  ;/**
+const cons = element => append( Seq(element) )  ;/**
  * see {@link CycleOperationType}
  * @template _T_
  * @type { CycleOperationType<_T_> }
@@ -2929,11 +2935,24 @@ const uncons = iterable => {
   const iterator = () => ({ next: () => inner.next() });
 
   return Pair(value)(createMonadicSequence(iterator));
-};// noinspection GrazieInspection
+};/**
+ * Constant for the log context that is used as the basis for all Kolibri-internal logging.
+ * @type { String } */
+const LOG_CONTEXT_KOLIBRI_BASE = "ch.fhnw.kolibri";
+
+/**
+ * Constant for the log context that is used for all Kolibri-internal testing.
+ * @type { String } */
+const LOG_CONTEXT_KOLIBRI_TEST = LOG_CONTEXT_KOLIBRI_BASE + ".test";
+
+/**
+ * Constant for the log context that logs for all contexts.
+ * @type { String } */
+const LOG_CONTEXT_All = "";// noinspection GrazieInspection
 
 
-const log$1 = LoggerFactory("kolibri.sequence");
-
+const LOG_CONTEXT_KOLIBRI_SEQUENCE = LOG_CONTEXT_KOLIBRI_BASE+".sequence";
+const log$1 = LoggerFactory(LOG_CONTEXT_KOLIBRI_SEQUENCE);
 /**
  * This function object serves as prototype for the {@link SequenceType}.
  * Singleton object.
@@ -3039,7 +3058,7 @@ SequencePrototype.uncons = function() {
 // "semigroup-like" sequence operations -------------------------------------
 
 SequencePrototype.append = function (sequence) {
-  return append$1(this)(sequence);
+  return append(this)(sequence);
 };
 SequencePrototype["++"] = SequencePrototype.append;
 
@@ -6476,20 +6495,20 @@ const FORM_CSS = `
  */
 
 
-const MAX_ARRAY_ELEMENTS    = Number.MAX_SAFE_INTEGER - 1;
-const MIN_ARRAY_LENGTH      = 2;
-const OVERFLOW_LOG_MESSAGE  =
-  "LOG ERROR: Despite running the chosen eviction strategy, the array was full! The first third of the log messages have been deleted!";
+const MAX_ARRAY_ELEMENTS   = Number.MAX_SAFE_INTEGER - 1;
+const MIN_ARRAY_LENGTH     = 2;
+const OVERFLOW_LOG_MESSAGE =
+          "LOG ERROR: Despite running the chosen eviction strategy, the array was full! The first third of the log messages have been deleted!";
 
 /**
  * @type { CacheEvictionStrategyType }
  * @pure
  */
-const DEFAULT_CACHE_EVICTION_STRATEGY  = cache => {
-  const oneThirdIndex = Math.round(cache.length / 3);
-  // if oneThird is smaller than the minimum of the array length, slice the whole array.
-  const deleteUntilIndex = oneThirdIndex > MIN_ARRAY_LENGTH ? oneThirdIndex: MIN_ARRAY_LENGTH;
-  return cache.slice(deleteUntilIndex);
+const DEFAULT_CACHE_EVICTION_STRATEGY = cache => {
+    const oneThirdIndex    = Math.round(cache.length / 3);
+    // if oneThird is smaller than the minimum of the array length, slice the whole array.
+    const deleteUntilIndex = oneThirdIndex > MIN_ARRAY_LENGTH ? oneThirdIndex : MIN_ARRAY_LENGTH;
+    return cache.slice(deleteUntilIndex);
 };
 
 /**
@@ -6501,119 +6520,125 @@ const DEFAULT_CACHE_EVICTION_STRATEGY  = cache => {
  *      defined limit of log messages is reached. You obtain the current appender
  *      value. Return a new value which will be used as the new value of this appender.
  *      If this parameter is not set, then all log messages until now will be discarded.
- * @returns {AppenderType<Array<String>>}
+ * @returns { AppenderType<Array<String>> }
  */
 const Appender$3 = (limit = MAX_ARRAY_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
-  const calculatedLimit = MIN_ARRAY_LENGTH < limit ? limit: MIN_ARRAY_LENGTH;
-  return {
+    const calculatedLimit = MIN_ARRAY_LENGTH < limit ? limit : MIN_ARRAY_LENGTH;
+
+    let formatter      = Nothing$1; // per default, we do not use a specific formatter.
+    const getFormatter = () => formatter;
+    const setFormatter = newFormatter => formatter = newFormatter;
+
     /**
-     * the function to append trace logs in this application
-     * @type { AppendCallback }
+     * Collects all log messages by storing them in the array.
+     * @private
+     * @type { Array<String> }
      */
-    trace: appenderCallback$2(calculatedLimit)(cacheEvictionStrategy),
+    let appenderArray = [];
+
     /**
-     * the function to append debug logs in this application
-     * @type { AppendCallback }
+     * Clears the current appender array.
+     * @impure
+     * @returns { Array<String> } - the last value before clearing
      */
-    debug: appenderCallback$2(calculatedLimit)(cacheEvictionStrategy),
+    const reset = () => {
+        const oldAppenderArray = appenderArray;
+        appenderArray              = [];
+        return oldAppenderArray;
+    };
+
     /**
-     * the function to append info logs in this application
-     * @type { AppendCallback }
+     * @returns { Array<String> } - The current value of the appender string
      */
-    info: appenderCallback$2(calculatedLimit)(cacheEvictionStrategy),
+    const getValue = () => appenderArray;
+
     /**
-     * the function to append warn logs in this application
-     * @type { AppendCallback }
+     * Appends the next log message to the array.
+     * @private
+     * @param limit
+     * @type  {
+     *          (limit:          Number) =>
+     *          (onOverflow:     CacheEvictionStrategyType) =>
+     *          (msg:            LogMeType) =>
+     *          ChurchBooleanType
+     *        }
      */
-    warn: appenderCallback$2(calculatedLimit)(cacheEvictionStrategy),
+    const appenderCallback = limit => onOverflow => msg =>
+        LazyIf$1(full(limit))
+            // if the array is full, call the overflow function and add the new value afterward.
+            (() => append(msg)(limit)(onOverflow))
+            // in any other case just append the new message.
+            (() => append(msg)(limit)(id));
+
     /**
-     * the function to append error logs in this application
-     * @type { AppendCallback }
+     * Returns {@link T} if the appender array length hits the limit.
+     * @param { Number } limit
+     * @returns ChurchBooleanType
+     * @private
      */
-    error: appenderCallback$2(calculatedLimit)(cacheEvictionStrategy),
+    const full = limit => churchBool$1(limit <= appenderArray.length);
+
     /**
-     * the function to append fatal logs in this application
-     * @type { AppendCallback }
+     * Appends the given message to the array.
+     * If the array length equals the param limit, the array cache will be evicted using the defined eviction strategy.
+     * @private
+     * @type  {
+     *          (msg: !LogMeType) =>
+     *          (limit: !Number) =>
+     *          (evictionStrategy: !CacheEvictionStrategyType) =>
+     *          ChurchBooleanType
+     *        }
      */
-    fatal: appenderCallback$2(calculatedLimit)(cacheEvictionStrategy),
-    getValue: getValue$1,
-    reset: reset$1,
-  };
-};
+    const append = msg => limit => evictionStrategy => {
+        // evict the array using the given evictionStrategy
+        appenderArray =  /** @type {Array<String>} */ evictionStrategy(appenderArray);
+        LazyIf$1(full(limit))
+            (() => {
+                // if array is full, despite using the set eviction strategy, use the default eviction strategy to make space.
+                appenderArray = /** @type {Array<String>} */DEFAULT_CACHE_EVICTION_STRATEGY(appenderArray);
+                appenderArray.push(OVERFLOW_LOG_MESSAGE);
+                appenderArray.push(msg);
+            })
+            (() => appenderArray.push(msg));
+        return /** @type {ChurchBooleanType} */ T$1;
+    };
 
-/**
- * Collects all log messages by storing them in the array.
- * @private
- * @type {Array<String>}
- */
-let appenderArray = [];
-
-/**
- * Clears the current appender array.
- * @returns {Array} - the last value before clearing
- */
-const reset$1 = () => {
-  const currentAppenderArray  = appenderArray;
-  appenderArray               = [];
-  return currentAppenderArray;
-};
-
-/**
- * @returns {Array<String>} - The current value of the appender string
- */
-const getValue$1 = () => appenderArray;
-
-/**
- * Appends the next log message to the array.
- * @private
- * @param limit
- * @type  {
- *          (limit:          Number) =>
- *          (onOverflow:     CacheEvictionStrategyType) =>
- *          (msg:            LogMeType) =>
- *          ChurchBooleanType
- *        }
- */
-const appenderCallback$2 = limit => onOverflow => msg =>
-  LazyIf$1(full(limit))
-    // if the array is full, call the overflow function and add the new value afterward.
-    (() => append(msg)(limit)(onOverflow))
-    // in any other case just append the new message.
-    (() => append(msg)(limit)(    id    ));
-
-/**
- * Returns {@link T} if the appender array length hits the limit.
- * @param { Number } limit
- * @returns ChurchBooleanType
- * @private
- */
-const full = limit => churchBool$1(limit <= appenderArray.length);
-
-
-
-/**
- * Appends the given message to the array.
- * If the array length equals the param limit, the array cache will be evicted using the defined eviction strategy.
- * @private
- * @type  {
- *          (msg: !LogMeType) =>
- *          (limit: !Number) =>
- *          (evictionStrategy: !CacheEvictionStrategyType) =>
- *          ChurchBooleanType
- *        }
- */
-const append = msg => limit => evictionStrategy => {
-  // evict the array using the given evictionStrategy
-  appenderArray =  /** @type {Array<String>} */ evictionStrategy(appenderArray);
-  LazyIf$1(full(limit))
-    (() => {
-      // if array is full, despite using the set eviction strategy, use the default eviction strategy to make space.
-      appenderArray = /** @type {Array<String>} */DEFAULT_CACHE_EVICTION_STRATEGY(appenderArray);
-      appenderArray.push(OVERFLOW_LOG_MESSAGE);
-      appenderArray.push(msg);
-    })
-    (() => appenderArray.push(msg));
-  return /** @type {ChurchBooleanType} */ T$1;
+    return {
+        /**
+         * the function to append trace logs in this application
+         * @type { AppendCallback }
+         */
+        trace: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+        /**
+         * the function to append debug logs in this application
+         * @type { AppendCallback }
+         */
+        debug: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+        /**
+         * the function to append info logs in this application
+         * @type { AppendCallback }
+         */
+        info: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+        /**
+         * the function to append warn logs in this application
+         * @type { AppendCallback }
+         */
+        warn: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+        /**
+         * the function to append error logs in this application
+         * @type { AppendCallback }
+         */
+        error: appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+        /**
+         * the function to append fatal logs in this application
+         * @type { AppendCallback }
+         */
+        fatal:        appenderCallback(calculatedLimit)(cacheEvictionStrategy),
+        getValue,
+        reset,
+        setFormatter,
+        getFormatter
+    };
 };/**
  * @module logger/observableAppender
  * The observable Appender is a decorator for other {@link AppenderType}s that notifies a listener about new log messages or
@@ -6635,115 +6660,134 @@ const append = msg => limit => evictionStrategy => {
  *     AppenderType<_T_>
  * }
  */
-const Appender$2 = appender => listener => (
-  /** @type {AppenderType} */ {
-    trace:  arg => { const x = appender.trace(arg); listener(LOG_TRACE, arg); return x },
-    debug:  arg => { const x = appender.debug(arg); listener(LOG_DEBUG, arg); return x },
-    info:   arg => { const x = appender.info (arg); listener(LOG_INFO , arg); return x },
-    warn:   arg => { const x = appender.warn (arg); listener(LOG_WARN , arg); return x },
-    error:  arg => { const x = appender.error(arg); listener(LOG_ERROR, arg); return x },
-    fatal:  arg => { const x = appender.fatal(arg); listener(LOG_FATAL, arg); return x },
-    reset:  ()  => { const x = appender.reset();  listener(LOG_NOTHING); return x }, // we notify via log nothing to indicate the reset
-    getValue: appender.getValue
-  });/**
+const Appender$2 = appender => listener => {
+
+    const trace =  arg => { const x = appender.trace(arg); listener(LOG_TRACE, arg); return x };
+    const debug =  arg => { const x = appender.debug(arg); listener(LOG_DEBUG, arg); return x };
+    const info  =  arg => { const x = appender.info (arg); listener(LOG_INFO , arg); return x };
+    const warn  =  arg => { const x = appender.warn (arg); listener(LOG_WARN , arg); return x };
+    const error =  arg => { const x = appender.error(arg); listener(LOG_ERROR, arg); return x };
+    const fatal =  arg => { const x = appender.fatal(arg); listener(LOG_FATAL, arg); return x };
+    const reset =  ()  => { const x = appender.reset();    listener(LOG_NOTHING);    return x };  // we notify via log nothing to indicate the reset
+    const getFormatter = appender.getFormatter;
+    const setFormatter = appender.setFormatter;
+    const getValue     = appender.getValue;
+
+
+  return /** @type {AppenderType} */ {trace, debug, info, warn, error, fatal, reset, getFormatter, setFormatter, getValue}};/**
  * Provides an appender that logs to the console how many log messages have been issued on the various levels.
  * @returns { AppenderType<StatisticType> }
  * @constructor
  */
-const Appender$1 = () => ({
-  trace: trace$1,
-  debug: debug$1,
-  info: info$1,
-  warn: warn$1,
-  error: error$1,
-  fatal: fatal$1,
-  getValue,
-  reset,
-});
+const Appender$1 = () => {
+    let formatter      = Nothing$1; // per default, we do not use a specific formatter.
+    const getFormatter = () => formatter;
+    const setFormatter = newFormatter => formatter = newFormatter;
 
-/**
- * @typedef { {warn: Number, trace: Number, debug: Number, error: Number, info: Number, fatal: Number} } StatisticType
- */
+    /**
+     * @typedef { {warn: Number, trace: Number, debug: Number, error: Number, info: Number, fatal: Number} } StatisticType
+     */
 
-/**
- * @type { StatisticType }
- */
-let statistic = { trace: 0, debug: 0, info: 0, warn: 0, error: 0, fatal: 0};
+    /**
+     * @type { StatisticType }
+     */
+    let statistic = {trace: 0, debug: 0, info: 0, warn: 0, error: 0, fatal: 0};
 
-/**
- * Resets the values of all level to zero.
- * @return { StatisticType }
- */
-const reset = () => {
-  statistic = { trace: 0, debug: 0, info: 0, warn: 0, error: 0, fatal: 0 };
-  return statistic
-};
+    /**
+     * Resets the values of all level to zero.
+     * @return { StatisticType }
+     */
+    const reset = () => {
+        statistic = {trace: 0, debug: 0, info: 0, warn: 0, error: 0, fatal: 0};
+        return statistic;
+    };
 
-/**
- * Returns an object with summarized counter values.
- * @returns { StatisticType }
- */
-const getValue = () => statistic;
+    /**
+     * Returns an object with summarized counter values.
+     * @returns { StatisticType }
+     */
+    const getValue = () => statistic;
 
-/**
- * @type { (String) => (callback:ConsumerType<String>) => (String) => ChurchBooleanType }
- */
-const appenderCallback$1 = type => callback => msg => {
-  statistic[type] = statistic[type] + 1;
-  callback(` (${statistic[type]}) ` + msg);
-  return /** @type {ChurchBooleanType} */T$1;
-};
+    /**
+     * @type { (String) => (callback:ConsumerType<String>) => (String) => ChurchBooleanType }
+     */
+    const appenderCallback = type => callback => msg => {
+        statistic[type] = statistic[type] + 1;
+        callback(` (${statistic[type]}) ` + msg);
+        return /** @type {ChurchBooleanType} */T$1;
+    };
 
-/**
- * the function to append trace logs in this application
- * @type { AppendCallback }
- */
-const trace$1 = appenderCallback$1("trace")(console.trace);
+    /**
+     * the function to append trace logs in this application
+     * @type { AppendCallback }
+     */
+    const trace = appenderCallback("trace")(console.trace);
 
-/**
- * the function to append debug logs in this application
- * @type { AppendCallback }
- */
-const debug$1 = appenderCallback$1("debug")(console.debug);
+    /**
+     * the function to append debug logs in this application
+     * @type { AppendCallback }
+     */
+    const debug = appenderCallback("debug")(console.debug);
 
-/**
- * the function to append info logs in this application
- * @type { AppendCallback }
- */
-const info$1 = appenderCallback$1("info")(console.info);
+    /**
+     * the function to append info logs in this application
+     * @type { AppendCallback }
+     */
+    const info = appenderCallback("info")(console.info);
 
-/**
- * the function to append warn logs in this application
- * @type { AppendCallback }
- */
-const warn$1 = appenderCallback$1("warn")(console.warn);
+    /**
+     * the function to append warn logs in this application
+     * @type { AppendCallback }
+     */
+    const warn = appenderCallback("warn")(console.warn);
 
-/**
- * the function to append error logs in this application
- * @type { AppendCallback }
- */
-const error$1 = appenderCallback$1("error")(console.error);
+    /**
+     * the function to append error logs in this application
+     * @type { AppendCallback }
+     */
+    const error = appenderCallback("error")(console.error);
 
-/**
- * the function to append fatal logs in this application
- * @type { AppendCallback }
- */
-const fatal$1 = appenderCallback$1("fatal")(console.error);/**
+    /**
+     * the function to append fatal logs in this application
+     * @type { AppendCallback }
+     */
+    const fatal = appenderCallback("fatal")(console.error);
+
+    return {
+        trace,
+        debug,
+        info,
+        warn,
+        error,
+        fatal,
+        getValue,
+        reset,
+        getFormatter,
+        setFormatter
+    };
+};/**
  * Provides console appender.
  * Using this appender you are able to log to the console.
  * @returns { AppenderType<void> }
  * @constructor
  */
-const Appender = () => ({
-  trace,
-  debug,
-  info,
-  warn,
-  error,
-  fatal,
-  getValue: () => { /* Nothing to do */ },
-  reset:    () => { /* Nothing to do */ }
-});
+const Appender = () => {
+  let formatter      = Nothing$1; // per default, we do not use a specific formatter.
+  const getFormatter = () => formatter;
+  const setFormatter = newFormatter => formatter = newFormatter;
+  return {
+    trace,
+    debug,
+    info,
+    warn,
+    error,
+    fatal,
+    getValue: () => { /* Nothing to do */},
+    reset:    () => { /* Nothing to do */},
+    getFormatter,
+    setFormatter
+  };
+};
 
 /**
  * @type { (AppendCallback) => (String) => ChurchBooleanType }
@@ -6808,13 +6852,21 @@ const fatal = appenderCallback(console.error);/**
  * To log a simple message, just use a {@link String}.
  * If the log message is based on some calculations, you should consider to use a {@link ProducerType},
  * because the message can be lazily evaluated.
- * @typedef {String | ProducerType<String>} LogMeType
+ * @typedef { String | ProducerType<String> } LogMeType
+ */
+
+
+/**
+ * A function that takes logging arguments and creates a formatted string.
+ * @typedef LogMessageFormatterType
+ * @pure
+ * @type { (context: String) => (logLevel: String) => (logMessage: String) => String }
  */
 
 /**
  * Provides appender for loglevel types  "trace", "debug", "info", "warn", "error" & "fatal".
- * Some appender may have a result, that can be collected using the getValue function.
- * @typedef { object } AppenderType
+ * Some appenders may have a result, that can be collected using the getValue function.
+ * @typedef  AppenderType
  * @template _ValueType_
  * @property { AppendCallback } trace - Defines the appending strategy for the {@link LOG_TRACE}-level messages.
  * @property { AppendCallback } debug - Defines the appending strategy for the {@link LOG_DEBUG}-level messages.
@@ -6822,8 +6874,10 @@ const fatal = appenderCallback(console.error);/**
  * @property { AppendCallback } warn  - Defines the appending strategy for the {@link LOG_WARN}-level messages.
  * @property { AppendCallback } error - Defines the appending strategy for the {@link LOG_ERROR}-level messages.
  * @property { AppendCallback } fatal - Defines the appending strategy for the {@link LOG_FATAL}-level messages.
- * @property { function(String=): _ValueType_} getValue - Some appender may produce a result, that can be collected using getValue.
- * @property { function(): _ValueType_ } reset - Clean up the appender result. The next call of getValue returns the default value.
+ * @property { () => _ValueType_ } getValue - Some appender may produce a result, that can be collected using getValue.
+ * @property { () => _ValueType_ } reset    - Clean up the appender result. The next call of getValue returns the default value.
+ * @property { (formatter: MaybeType<LogMessageFormatterType>) => void } setFormatter - set an appender specific formatter
+ * @property { () =>       MaybeType<LogMessageFormatterType>          } getFormatter - get the currently used formatter
  */
 
 /**
@@ -6838,14 +6892,6 @@ const fatal = appenderCallback(console.error);/**
  */
 
 // callbacks
-
-/**
- * A function that takes logging arguments and creates a formatted string.
- * @callback FormatLogMessage
- * @function
- * @pure
- * @type { (context: String) => (logLevel: String) => (logMessage: String) => String}
- */
 
 /**
  * Logs a given message.
@@ -6932,6 +6978,7 @@ const projectLoggingChoice = loggingLevelController => {
  * @property { SimpleInputControllerType<String> } loggingContextController
  * @property { SimpleInputControllerType<String> } loggingLevelController
  * @property { SimpleInputControllerType<String> } lastLogMessageController
+ * @property { () => void }                        cleanup - make sure no more log messages are processed
  */
 
 /**
@@ -6943,52 +6990,55 @@ const projectLoggingChoice = loggingLevelController => {
  */
 const LoggingUiController = () => {
 
-  const setLoggingLevelByString = levelStr =>
-    fromString(levelStr)
-      (msg   => { throw new Error(msg); })
-      (level => setLoggingLevel(level));
+    const setLoggingLevelByString = levelStr =>
+        fromString(levelStr)
+        (msg => {
+            throw new Error(msg);
+        })
+        (level => setLoggingLevel(level));
 
-  const loggingLevelController = SimpleInputController({
-    value:  toString(getLoggingLevel()),
-    label:  "Logging Level",
-    name:   "loggingLevel",
-    type:   "text", // we treat the logging level as a string in the presentation layer
-  });
-  // presentation binding: when the logging level string changes, we need to set the global logging level
-  loggingLevelController.onValueChanged(setLoggingLevelByString);
-  // domain binding: when the global logging level changes, we need to update the string of the logging level
-  onLoggingLevelChanged(level => loggingLevelController.setValue(toString(level)));
+    const loggingLevelController = SimpleInputController({
+       value: toString(getLoggingLevel()),
+       label: "Logging Level",
+       name:  "loggingLevel",
+       type:  "text", // we treat the logging level as a string in the presentation layer
+    });
+    // presentation binding: when the logging level string changes, we need to set the global logging level
+    loggingLevelController.onValueChanged(setLoggingLevelByString);
+    // domain binding: when the global logging level changes, we need to update the string of the logging level
+    onLoggingLevelChanged(level => loggingLevelController.setValue(toString(level)));
 
-  const loggingContextController = SimpleInputController({
-    value:  getLoggingContext(),
-    label:  "Logging Context",
-    name:   "loggingContext",
-    type:   "text",
-  });
-  // presentation binding: when the string of the context changes, we need to update the global logging context
-  loggingContextController.onValueChanged(contextStr => setLoggingContext(contextStr));
-  // domain binding: when the global logging context changes, we need to update the string of the logging context
-  onLoggingContextChanged(context => loggingContextController.setValue(context));
+    const loggingContextController = SimpleInputController({
+       value: getLoggingContext(),
+       label: "Logging Context",
+       name:  "loggingContext",
+       type:  "text",
+    });
+    // presentation binding: when the string of the context changes, we need to update the global logging context
+    loggingContextController.onValueChanged(contextStr => setLoggingContext(contextStr));
+    // domain binding: when the global logging context changes, we need to update the string of the logging context
+    onLoggingContextChanged(context => loggingContextController.setValue(context));
 
-  const lastLogMessageController = SimpleInputController({
-    value:  "no message, yet",
-    label:  "Last Log Message",
-    name:   "lastLogMessage",
-    type:   "text",
-  });
-  const observableAppender = Appender$2
-    ( Appender$1() )
-    ( (level, msg) => lastLogMessageController.setValue(msg));
+    const lastLogMessageController = SimpleInputController({
+       value: "no message, yet",
+       label: "Last Log Message",
+       name:  "lastLogMessage",
+       type:  "text",
+    });
+    const observableAppender       = Appender$2
+    (Appender$1())
+    ((level, msg) => lastLogMessageController.setValue(msg));
 
-  addToAppenderList(observableAppender);
+    addToAppenderList(observableAppender);
 
+    const cleanup = () => removeFromAppenderList(observableAppender);
 
-
-  return {
-    loggingLevelController,
-    loggingContextController,
-    lastLogMessageController,
-  }
+    return {
+        loggingLevelController,
+        loggingContextController,
+        lastLogMessageController,
+        cleanup,
+    };
 };const {projectDebounceInput, projectInstantInput} = InputProjector;
 
 /**
@@ -7024,7 +7074,7 @@ const LOGGING_UI_CSS = `
 `;// noinspection FunctionTooLongJS
 
 
-const log = LoggerFactory("kolibri.test");
+const log = LoggerFactory(LOG_CONTEXT_KOLIBRI_TEST);
 
 /**
  * The running total of executed test assertions
@@ -7256,18 +7306,12 @@ const TestSuite = suiteName => {
             addToTotal(suiteAssert.results.length);
             if (suiteAssert.results.every( id )) { // whole suite was ok, report whole suite
                 report(suiteName, suiteAssert.results, suiteAssert.messages);
-            } else { // some test in suite failed, rerun tests for better error indication
-                const prevLoggingLevel = getLoggingLevel();
-                setLoggingLevel(LOG_DEBUG);
-                setLoggingContext("");
-                const appender = Appender();
-                setMessageFormatter(
-                  context => logLevel => logMessage => `[${logLevel}]\t${context} ${suiteName}: ${logMessage}`
-                );
-                addToAppenderList(appender);
-                tests.forEach( testInfo => test( testInfo(name), testInfo(logic) ));
-                setLoggingLevel(prevLoggingLevel);
-                removeFromAppenderList(appender);
+            } else { // some test in suite failed, rerun tests for better error indication with debug logging
+                const consoleAppender = Appender();
+                const formattingFn  = context => logLevel => logMessage => `[${logLevel}]\t'${context}' ${suiteName}: ${logMessage}`;
+                consoleAppender.setFormatter(Just$1(formattingFn));
+                withAppender(consoleAppender, LOG_CONTEXT_All, LOG_DEBUG)(() =>
+                    tests.forEach(testInfo => test(testInfo(name), testInfo(logic))));
             }
         }
     };
@@ -7318,7 +7362,32 @@ const report = (origin, results, messages) => {
  * @param { !String } html - HTML string of the to-be-appended DOM
  * @private
  */
-const write = html => out.append(...dom(html));const release     = "0.9.0";
+const write = html => out.append(...dom(html));
+
+/**
+ * Convenience function to run an isolated test with a given appender, logging context and level.
+ * @type { <_T_>
+ *          (appender:AppenderType<_T_>, context:String, level:LogLevelType)
+ *          => (codeUnderTest: ConsumerType<void>)
+ *          => void
+ *        }
+ */
+const withAppender = (appender, context, level) => codeUnderTest => {
+    const oldLevel   = getLoggingLevel();
+    const oldContext = getLoggingContext();
+    try {
+        setLoggingContext(context);
+        setLoggingLevel(level);
+        addToAppenderList(appender);
+        codeUnderTest();
+    } catch (e) {
+        console.error(e, "withAppender logging test failed!");
+    } finally {
+        setLoggingLevel(oldLevel);
+        setLoggingContext(oldContext);
+        removeFromAppenderList(appender);
+    }
+};const release     = "0.9.0";
 
 const dateStamp   = "2023-09-12 T 15:44:57 MESZ";
 
