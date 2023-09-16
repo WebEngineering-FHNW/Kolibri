@@ -39,7 +39,7 @@ const DEFAULT_CACHE_EVICTION_STRATEGY = cache => {
 const Appender = (limit = MAX_ARRAY_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
     const calculatedLimit = MIN_ARRAY_LENGTH < limit ? limit : MIN_ARRAY_LENGTH;
 
-    let formatter      = Nothing(); // per default, we do not use a specific formatter.
+    let formatter      = Nothing; // per default, we do not use a specific formatter.
     const getFormatter = () => formatter;
     const setFormatter = newFormatter => formatter = newFormatter;
 

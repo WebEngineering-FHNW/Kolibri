@@ -10,7 +10,7 @@ export { Appender}
  * @constructor
  */
 const Appender = () => {
-  let formatter      = Nothing(); // per default, we do not use a specific formatter.
+  let formatter      = Nothing; // per default, we do not use a specific formatter.
   const getFormatter = () => formatter;
   const setFormatter = newFormatter => formatter = newFormatter;
   return {
