@@ -64,7 +64,10 @@ const logger = loggerLevel => loggerContext => msg =>
           }
           let formattedMessage = "Error: cannot format log message! '" + evaluatedMessage + "'!";
           try {
-              formattedMessage = getGlobalMessageFormatter()(loggerContext)(levelName)(evaluatedMessage); // formatting can fail
+              const formatter = appender.getFormatter()       // Maybe<LogMessageFormatterType>
+                   ( _ => getGlobalMessageFormatter() )       // use global formatter if no specific formatter is set
+                   ( id );                                    // use appender-specific formatter if set
+              formattedMessage = formatter (loggerContext) (levelName) (evaluatedMessage); // formatting can fail
           } catch (e) {
               success = false;
           }

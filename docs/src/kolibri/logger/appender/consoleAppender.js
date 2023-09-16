@@ -1,4 +1,5 @@
 import { T }  from "../../lambda/church.js";
+import {Nothing} from "../../lambda/maybe.js";
 
 export { Appender}
 
@@ -8,16 +9,23 @@ export { Appender}
  * @returns { AppenderType<void> }
  * @constructor
  */
-const Appender = () => ({
-  trace,
-  debug,
-  info,
-  warn,
-  error,
-  fatal,
-  getValue: () => { /* Nothing to do */ },
-  reset:    () => { /* Nothing to do */ }
-});
+const Appender = () => {
+  let formatter      = Nothing(); // per default, we do not use a specific formatter.
+  const getFormatter = () => formatter;
+  const setFormatter = newFormatter => formatter = newFormatter;
+  return {
+    trace,
+    debug,
+    info,
+    warn,
+    error,
+    fatal,
+    getValue: () => { /* Nothing to do */},
+    reset:    () => { /* Nothing to do */},
+    getFormatter,
+    setFormatter
+  };
+};
 
 /**
  * @type { (AppendCallback) => (String) => ChurchBooleanType }

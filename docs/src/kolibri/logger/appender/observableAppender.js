@@ -22,15 +22,18 @@ export { Appender}
  *     AppenderType<_T_>
  * }
  */
-const Appender = appender => listener => (
-  /** @type {AppenderType} */ {
-    trace:  arg => { const x = appender.trace(arg); listener(LOG_TRACE, arg); return x },
-    debug:  arg => { const x = appender.debug(arg); listener(LOG_DEBUG, arg); return x },
-    info:   arg => { const x = appender.info (arg); listener(LOG_INFO , arg); return x },
-    warn:   arg => { const x = appender.warn (arg); listener(LOG_WARN , arg); return x },
-    error:  arg => { const x = appender.error(arg); listener(LOG_ERROR, arg); return x },
-    fatal:  arg => { const x = appender.fatal(arg); listener(LOG_FATAL, arg); return x },
-    reset:  ()  => { const x = appender.reset();  listener(LOG_NOTHING); return x }, // we notify via log nothing to indicate the reset
-    getValue: appender.getValue
-  });
+const Appender = appender => listener => {
 
+    const trace =  arg => { const x = appender.trace(arg); listener(LOG_TRACE, arg); return x };
+    const debug =  arg => { const x = appender.debug(arg); listener(LOG_DEBUG, arg); return x };
+    const info  =  arg => { const x = appender.info (arg); listener(LOG_INFO , arg); return x };
+    const warn  =  arg => { const x = appender.warn (arg); listener(LOG_WARN , arg); return x };
+    const error =  arg => { const x = appender.error(arg); listener(LOG_ERROR, arg); return x };
+    const fatal =  arg => { const x = appender.fatal(arg); listener(LOG_FATAL, arg); return x };
+    const reset =  ()  => { const x = appender.reset();    listener(LOG_NOTHING);    return x };  // we notify via log nothing to indicate the reset
+    const getFormatter = appender.getFormatter;
+    const setFormatter = appender.setFormatter;
+    const getValue     = appender.getValue;
+
+
+  return /** @type {AppenderType} */ {trace, debug, info, warn, error, fatal, reset, getFormatter, setFormatter, getValue}};
