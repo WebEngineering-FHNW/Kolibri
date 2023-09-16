@@ -18,9 +18,8 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 - test against infinite sequence invariants (operator does not stall, lazy, take(0) === nil)
 - add docs for divergent sequences ( repeat(1).dropWhere( x => x === 1 ) )
 - add alias "flatten" for "mconcat" ? Might suggest deep flattening.
-- consider min-/maxWithDefault variants instead of safeMin/-Max
+- consider min-/maxWithDefault variants instead of safeMin/-Max, make comparators align with Array.sort?
 - since testingTable config.iterable() must be of type sequence - call it "sequenceCtor"?
 
 ## todo
 - check for better error messages when testing table fails
-- check logging setup in test support
