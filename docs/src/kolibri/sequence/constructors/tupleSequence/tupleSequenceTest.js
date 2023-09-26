@@ -1,8 +1,8 @@
 import { TestSuite }                from "../../../util/test.js";
 import { createTestConfig }         from "../../util/testUtil.js";
-import { Tuple }                    from "../../../../../../contrib/p6_haefliger_misic/branch-projector-pattern/church/rock.js";
 import { TupleSequence }            from "./tupleSequence.js";
 import { addToTestingTable, TESTS } from "../../util/testingTable.js";
+import { Tuple }                    from "../../../stdlib.js";
 
 const testSuite = TestSuite("Sequence: constructor TupleSequence");
 

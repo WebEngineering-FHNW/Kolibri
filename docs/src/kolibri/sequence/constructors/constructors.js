@@ -1,6 +1,5 @@
 export * from "./sequence/Sequence.js";
 export * from "./tupleSequence/tupleSequence.js";
-export * from "./stackSequence/stackSequence.js";
 export * from "./nil/nil.js";
 export * from "./pureSequence/pureSequence.js";
 export * from "./seq/seq.js";
