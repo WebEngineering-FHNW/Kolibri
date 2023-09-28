@@ -1,9 +1,9 @@
-import {TestSuite, withAppender}                                   from "../util/test.js";
-import {drop, map, nil, Range, reduce$, Seq, Sequence, show, take} from "./sequence.js";
-import {Just, Nothing}                                             from "../stdlib.js";
-import {Appender as ArrayAppender}                                 from "../logger/appender/arrayAppender.js";
-import {LOG_WARN}                                                  from "../logger/logLevel.js";
-import {LOG_CONTEXT_KOLIBRI_SEQUENCE}                              from "./sequencePrototype.js";
+import { TestSuite, withAppender}                                             from "../util/test.js";
+import { drop, forever, map, nil, Range, reduce$, Seq, Sequence, show, take } from "./sequence.js";
+import { Just, Nothing }                                                      from "../stdlib.js";
+import { Appender as ArrayAppender }                                          from "../logger/appender/arrayAppender.js";
+import { LOG_WARN }                                                           from "../logger/logLevel.js";
+import { LOG_CONTEXT_KOLIBRI_SEQUENCE }                                       from "./sequencePrototype.js";
 
 const testSuite = TestSuite("Sequence Prototype Suite");
 
@@ -170,7 +170,7 @@ testSuite.add("test prototype: composition", assert => {
     const sum     = reduce$((acc, cur) => acc + cur, 0);
     const product = reduce$((acc, cur) => acc * cur, 1);
     const naturalNumbers   = Range(1, Number.MAX_SAFE_INTEGER);
-    const alternatingSigns = Sequence(1, _ => true, x => -x);
+    const alternatingSigns = Sequence(1, forever, x => -x);
 
     // 3 + ( 4/(2*3*4) - 4/(4*5*6) + 4/(6*7*8) - 4/(8*9*10) + ...)
     const piFractions = naturalNumbers

@@ -1,6 +1,7 @@
 import { Sequence, map } from "../../../../kolibri/sequence/sequence.js";
 import { Pair }          from "../../../../kolibri/lambda/pair.js";
 import { snd }           from "../../../../kolibri/stdlib.js";
+import { Th as apply }   from "../../../../kolibri/lambda/ski.js";
 
 export { FibonacciSequence }
 
@@ -20,4 +21,4 @@ const incrFn  = ([fst, snd]) => Pair(snd)(fst + snd);
  * console.log(...result);
  * // => Logs '1, 1, 2, 3, 5, 8, 13, 21'
  */
-const FibonacciSequence = map (pair => pair(snd)) (Sequence(start, whileFn, incrFn));
+const FibonacciSequence = map (apply(snd)) (Sequence(start, whileFn, incrFn));

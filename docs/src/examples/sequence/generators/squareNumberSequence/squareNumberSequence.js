@@ -1,5 +1,7 @@
-import { Sequence } from "../../../../kolibri/sequence/sequence.js";
-import { Pair }     from "../../../../kolibri/lambda/pair.js";
+import { Sequence }         from "../../../../kolibri/sequence/sequence.js";
+import { Pair }             from "../../../../kolibri/lambda/pair.js";
+import { Th as apply }      from "../../../../kolibri/lambda/ski.js";
+import { snd }              from "../../../../kolibri/stdlib.js";
 
 export { SquareNumberSequence }
 
@@ -20,4 +22,4 @@ export { SquareNumberSequence }
  */
 const SquareNumberSequence = () =>
     Sequence(Pair(1)(1), _ => true, ([num, square]) => Pair (num + 1) (square + num + num + 1) )
-    .map( ([_num, square]) => square);
+    .map( apply(snd) );

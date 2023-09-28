@@ -5,7 +5,7 @@ import {
   createTestConfig,
   newSequence,
   UPPER_SEQUENCE_BOUNDARY,
-}                         from "../../util/testUtil.js";
+}                                from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: operation dropWhere");
 

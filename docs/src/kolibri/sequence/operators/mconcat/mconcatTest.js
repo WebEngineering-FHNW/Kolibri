@@ -6,7 +6,8 @@ import {
   PureSequence,
   mconcat,
   nil,
-  Seq
+  Seq,
+  forever
 } from "../../sequence.js";
 
 const testSuite = TestSuite("Sequence: operation mconcat");
@@ -46,7 +47,7 @@ testSuite.add("test append with infinity: mconcat", assert => {
   let called  = false;
   let counter = 0;
 
-  const endless                = Sequence(0, _ => true, i => i + 1);
+  const endless                = Sequence(0, forever, i => i + 1);
   const iterableWithSideEffect = Sequence(false, _ => false, _ => called = true);
   const concatenated           = mconcat([endless, iterableWithSideEffect]);
 

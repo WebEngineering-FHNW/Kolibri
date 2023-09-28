@@ -2,7 +2,7 @@ import { map }               from "../operators/map/map.js"
 import { id }                from "../../stdlib.js"
 import { SequencePrototype } from "../sequencePrototype.js";
 
-export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence }
+export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence, forever }
 
 /**
  * Casts an arbitrary {@link Iterable} into the {@link SequenceType}.
@@ -49,3 +49,9 @@ const ensureSequence = iterable =>
     isSequence(iterable)
     ? iterable
     : toSeq(iterable);
+
+/**
+ * A convenience constant that can be used when a Sequence is infinite.
+ * @type { ConsumingPredicateType<Boolean> }
+ */
+const forever = _ => true;

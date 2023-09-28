@@ -1,11 +1,11 @@
-import { addToTestingTable } from "../../util/testingTable.js";
-import { TestSuite }         from "../../../util/test.js";
-import { takeWhile, nil }    from "../../sequence.js";
+import { addToTestingTable }       from "../../util/testingTable.js";
+import { TestSuite }               from "../../../util/test.js";
+import { takeWhile, nil, forever } from "../../sequence.js";
 import {
   createTestConfig,
   newSequence,
   UPPER_SEQUENCE_BOUNDARY,
-}                            from "../../util/testUtil.js";
+}                                from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: operation takeWhile");
 
@@ -17,7 +17,7 @@ addToTestingTable(testSuite)(
     param:      el => el < 2,
     expected:   [0, 1],
     invariants: [
-      it => takeWhile(_ => true)(it)  ["=="] (it),
+      it => takeWhile(forever)   (it) ["=="] (it),
       it => takeWhile(_ => false)(it) ["=="] (nil),
     ]
   })
@@ -29,7 +29,7 @@ testSuite.add("test advanced case: takeWhile inner iterable is shorter", assert 
 
   // When
   // take all elements
-  const some    = takeWhile(_ => true)(sequence);
+  const some    = takeWhile(forever)(sequence);
 
   // Then
   assert.iterableEq([0, 1, 2, 3, 4], some);

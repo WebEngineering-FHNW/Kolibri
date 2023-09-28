@@ -1,7 +1,7 @@
-import { addToTestingTable }             from "../../util/testingTable.js";
-import { TestSuite }                     from "../../../util/test.js";
-import { append, Sequence, nil, Range }  from "../../sequence.js";
-import { createTestConfig, newSequence } from "../../util/testUtil.js";
+import { addToTestingTable }                        from "../../util/testingTable.js";
+import { TestSuite }                                from "../../../util/test.js";
+import { append, Sequence, nil, Range, forever }    from "../../sequence.js";
+import { createTestConfig, newSequence }            from "../../util/testUtil.js";
 
 const testSuite = TestSuite("Sequence: operation append");
 
@@ -50,8 +50,8 @@ testSuite.add("test append with infinity: append", assert => {
   let called  = false;
   let counter = 0;
 
-  const endless                = Sequence(0, _ => true, i => i + 1);
-  const iterableWithSideEffect = Sequence(false, _ => true, _ => called = true);
+  const endless                = Sequence(0, forever, i => i + 1);
+  const iterableWithSideEffect = Sequence(false, forever, _ => called = true);
   const concatenated           = append(endless)(iterableWithSideEffect);
 
   // When
