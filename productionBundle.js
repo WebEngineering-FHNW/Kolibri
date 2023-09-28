@@ -1759,7 +1759,13 @@ const isSequence = candidate =>
 const ensureSequence = iterable =>
     isSequence(iterable)
     ? iterable
-    : toSeq(iterable);/**
+    : toSeq(iterable);
+
+/**
+ * A convenience constant that can be used when a Sequence is infinite.
+ * @type { ConsumingPredicateType<Boolean> }
+ */
+const forever = _ => true;/**
  * Transforms each element using the given {@link Functor function}.
  *
  * @function
@@ -3258,7 +3264,7 @@ const TupleSequence = tuple => {
  * console.log(...result);
  * // => Logs '1, 1, 1'
  */
-const repeat = arg => Sequence(arg, _ => true, _ => arg);/**
+const repeat = arg => Sequence(arg, forever, _ => arg);/**
  * `replicate(n)(x)` creates a {@link SequenceType} of length `n` with `x` the value of every element.
  *
  * @constructor
