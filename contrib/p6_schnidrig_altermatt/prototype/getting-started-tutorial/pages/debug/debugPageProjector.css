@@ -1,0 +1,121 @@
+.debug #debug-table {
+    display: none;
+}
+
+.debug.open #debug-table {
+    position: fixed;
+    right: 0;
+    padding: 10px;
+    background-color: hsl(231, 28%, 95%);
+    box-shadow: 0 2px 5px 0 hsla(234, 18%, 68.4%, 1);
+    border-right: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    display: inline;
+    border-spacing: 16px;
+}
+
+.debug #debug-table .close-button {
+    cursor: pointer;
+    background-color: #EBECFE;
+    box-shadow: 0 2px 2px hsla(234, 18%, 68.4%, 1);
+    min-height: 30px;
+    min-width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.debug.open #debug-table tr td:first-child {
+    font-weight: bold;
+}
+
+.debug #debug-table input {
+    border: 2px solid hsl(241,  91%, 87%);
+    border-radius: 4px;
+    background-color: #F7F7FC;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.debug #debug-table input:focus {
+    border-color:  hsl(263, 100%, 50%);
+}
+
+.debug #debug-table input:hover {
+    border-color: hsl(326, 100%, 59%);
+}
+
+
+.debug #debug-table input:disabled {
+    background-color: hsla(233, 26.7%, 88.2%, 1);
+    border: 2px solid hsla(233, 26.7%, 88.2%, 1);
+}
+
+.debug #debug-table input:disabled:hover {
+    border: 2px solid hsla(233, 26.7%, 88.2%, 1);
+}
+
+.debug .closed-debug-bubble {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    right: 40px;
+    bottom: 40px;
+    background-color: #EBECFE;
+    box-shadow: 0 2px 5px 0 hsla(234, 18%, 68.4%, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.debug .closed-debug-bubble:hover img {
+    filter: invert(51%) sepia(76%) saturate(6321%) hue-rotate(306deg) brightness(100%) contrast(105%); /* convert svg color to --kb-color-hsl-pink-500 */
+}
+
+.debug.open .closed-debug-bubble {
+    display: none;
+}
+
+.debug .toggle-switch {
+    width: 50px;
+    height: 24px;
+    border-radius: 18px;
+    background-color: hsla(234, 18%, 68.4%, 1);
+    padding-top: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+    cursor: pointer;
+}
+
+.debug .toggle-switch.selected {
+    background-color: hsl( 99, 100%, 84%);
+}
+
+.debug .toggle-switch.disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.debug .toggle-switch div {
+    background-color: hsla(231, 28%, 95.1%, 1);
+    transform: translateX(0px);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    transition: 300ms;
+    box-shadow: 1px 1px 5px 0 hsla(247, 15.3%, 34.7%, 1);
+}
+
+
+.debug .toggle-switch.selected div {
+    transform: translateX(26px);
+    transition: 300ms;
+}
+
+.debug .toggle-checkbox {
+    display: none;
+}

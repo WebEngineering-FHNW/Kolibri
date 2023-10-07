@@ -1,0 +1,56 @@
+<div id="content-wrapper">
+  <section>
+    <h2>Simple Kolibri Forms</h2>
+    <p> Kolibri can create model-view-controller (MVC) forms by using the
+      <a href="https://dierk.github.io/Home/projectorPattern/ProjectorPattern.html" target="_blank">projector pattern</a>.
+    </p>
+    <p> It only takes a single line of code to create the form,
+      set up the presentation models, and bind all required listeners such that
+      model and view are always kept in sync. After that, any controller can solely
+      work on the presentation models without ever touching the view.
+    </p>
+    <p> Only <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/simpleForm/starter.js" target="_blank"
+    >starter.js</a> is application-specific. It sets up the information of
+      what the form should consist of.
+    </p>
+    <p> Our initial, simplistic form does not contain any business logic and can therefore use the
+      generic
+      <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleFormController.js" target="_blank"
+      >SimpleFormController</a>.
+      If we had any business logic, we would put it in a specialized
+      controller and write test cases against that controller. Since we currently have no business
+      logic, we have no specialized controller and no test cases for the logic.
+    </p>
+    <p> Models, view, and bindings are totally generic and provided by Kolibri. The current generic
+      <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleFormProjector.js" target="_blank"
+      >simpleFormProjector</a> creates a simple form with
+      simple input types. Each such type is created and bound by the generic
+      <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleInputProjector.js" target="_blank"
+      >simpleInputProjector</a>.
+      "Simple" means types that the standard HTML Input element can handle it (no selects or multiple values).
+    </p>
+    <p> The remaining non-generic thing to test is the general setup. We test this in
+      <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/simpleForm/simpleFormViewTest.js" target="_blank"
+      >simpleFormViewTest.js</a>.
+      It also serves as an example of how to do integration testing.
+    </p>
+  </section>
+
+  <div id="form-holder">
+
+  </div>
+
+
+  <section>
+    <h2>Next Step</h2>
+    <p>
+      If all we ever wanted is a passive web form that we can submit, we wouldn't bother
+      creating controllers, models, binding, and so on. But our investment will pay off as
+      soon as there is interactivity and business logic in our application.
+    </p>
+    <p>
+      Proceed with <a href="#workday">work day</a> where we
+      combine form elements with business rules.
+    </p>
+  </section>
+</div>
