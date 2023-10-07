@@ -1,9 +1,0 @@
-.grid-container {
-    display: grid;
-    grid-auto-rows: 200px;
-    grid-auto-columns: 100px;
-}
-
-.grid-item {
-    background: red;
-}
