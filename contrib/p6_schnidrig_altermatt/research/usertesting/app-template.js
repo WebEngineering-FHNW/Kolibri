@@ -1,5 +1,5 @@
 import { PageController }                 from "../../prototype/pages/pageController.js";
-// import { NavigationController }           from "../../prototype/navigation/navigationController.js";
+import { NavigationController }           from "../../prototype/navigation/navigationController.js";
 import { PageProjector }                  from "./pages/pageProjector/pageProjector.js";
 import { DebugPageProjector }             from "./pages/debug/debugPageProjector.js";
 import { NavigationProjector }            from "./navigations/bubble-state/bubblestateNavigationProjector.js";

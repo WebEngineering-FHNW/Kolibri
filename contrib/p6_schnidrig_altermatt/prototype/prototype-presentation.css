@@ -4,7 +4,7 @@ body {
     margin-top: 0;
 }
 
-.side-navigation {
+.dashboard-refined-nav {
     top: auto;
     min-height: calc(100vh - 96px);
     z-index: 1;
