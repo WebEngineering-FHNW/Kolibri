@@ -1,0 +1,11 @@
+.grid-container {
+    display: grid;
+    grid-auto-rows: minmax(100px, 100px);
+    grid-auto-columns: minmax(200px, 200px);
+    grid-auto-flow: column dense;
+    gap: 10px;
+}
+
+.grid-item {
+    background: red;
+}

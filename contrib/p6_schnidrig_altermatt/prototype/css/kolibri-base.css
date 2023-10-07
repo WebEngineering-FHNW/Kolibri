@@ -1,0 +1,160 @@
+/* make sure to keep in line with kolibriStyle.js */
+
+@font-face {
+    font-family: "RobotoSlab-Light";
+    src: local("RobotoSlab-Light"),
+         url("../font/Roboto_Slab/static/RobotoSlab-Light.ttf") format("truetype");
+}
+@font-face {
+    font-family: "RobotoSlab-Regular";
+    src: local("RobotoSlab-Bold"),
+         url("../font/Roboto_Slab/static/RobotoSlab-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Rubik-Light";
+    src: local("Rubik-Light"),
+         url("../font/Rubik/static/Rubik-Light.ttf") format("truetype");
+}
+@font-face {
+    font-family: "JetBrainsMono-VariableFont_wght";
+    src: local("JetBrainsMono-VariableFont_wght"),
+         url("../font/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf") format("truetype");
+}
+
+:root {
+    --kolibri-color-accent:  hsl( 322, 73%, 52%);
+    --kolibri-color-output:  hsl( 256, 82%, 55%);
+    --kolibri-color-ok:      hsl( 104, 89%, 28%);
+    --kolibri-color-select:  hsl(  46, 90%, 84%);
+    --kolibri-color-neutral: hsl(   0,  0%, 74%);
+    --kolibri-color-shadow:  hsla(256, 82%, 55%, 0.2);
+    --kolibri-box-shadow:    0 4px  8px 0 var(--kolibri-color-shadow),
+                             0 6px 20px 0 var(--kolibri-color-shadow);
+    padding:    0;
+    margin:     0;
+}
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+::selection {
+    background-color: var(--kolibri-color-select);
+}
+
+/* --- typography --- */
+
+:root {
+    --font-serif:       "RobotoSlab-Light",   serif;
+    --font-serif-bold:  "RobotoSlab-Regular", serif;
+    --font-sans-serif:  "Rubik-Light", ui-sans-serif, sans-serif;
+    --font-mono:        "JetBrainsMono-VariableFont_wght", monospace;
+
+    font-family: var(--font-serif);
+}
+header h1 {
+    color: var(--kolibri-color-output);
+    letter-spacing: 0.06em;
+}
+header .subtitle {
+    color: var(--kolibri-color-output);
+}
+h1, h2, h3 {
+    font-family: var(--font-serif-bold);
+}
+p, li, div {
+    letter-spacing: 0.02em;
+}
+form, fieldset, label, input, button {
+    font-family: var(--font-sans-serif);
+    letter-spacing: 0.02em;
+}
+
+/* --- default invalid handling --- */
+:invalid {
+    border-color: var(--kolibri-color-accent);
+}
+input:invalid {
+    border-color: transparent transparent var(--kolibri-color-accent) transparent;
+}
+input[type=text]:invalid {
+    color: var(--kolibri-color-accent);
+}
+/* We cannot use pseudo elements with input type text so we introduce an extra following span.
+   Note that the html structure is label - span ( input - span) like in simpleInputProjector.
+*/
+label + span { /* the "holder" span for the input comes right after a label */
+    position:   relative; /* such that we can position against it */
+}
+label + span > input + span {
+    position:   absolute; /* get it out of the stacking context */
+    top:        0;
+    left:       0;
+    width:      1ch;
+    aspect-ratio: 1;
+    transform:  translateX(-5ch);
+}
+label + span > input:invalid + span {
+    background-image: radial-gradient(circle closest-side, white 0%, white 20%, var(--kolibri-color-accent) 99%, transparent 100%);
+    filter:           drop-shadow(0 0 .2ch var(--kolibri-color-accent));
+    transform:        translateX(-1ch);
+    transition:       transform 0.5s ease-out;
+}
+/* --- end default invalid handling --- */
+
+
+/* --- logo handling -- */
+/* The information about where the actual logo file is, the format, etc. should
+   not be distributed over all the files but kept in one place.
+   Since the logo is decorative only, we avoid having to set fake "alt" attributes.
+ */
+
+.kolibri-logo {
+	height:             342px;
+	aspect-ratio:       1;
+	background-image:   url("../img/logo/logo.svg"); /* keep in one place */
+	background-repeat:  no-repeat;
+    background-size:    contain;
+}
+
+/* --- fun stuff with the logo --- */
+
+.kolibri-logo-anim {
+	animation:          kolibri_fly_in 2s ease;
+}
+@keyframes kolibri_fly_in {
+	0% {
+		transform: scaleX(-1)  scale(0.4) translateX(400%) rotate(-30deg);
+	}
+	60% {
+		transform:             scale(0.6) translateX(300%) rotate(-30deg);
+	}
+	100% {
+		transform:             scale(1.0) translateX(0)    rotate(  0deg) ;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+    .kolibri-logo-anim {
+        animation-duration: 0.01ms ;
+  }
+}
+
+/* --- a11y support: the "skip" link --- */
+
+a.skip-link { /* position top center */
+    position:     absolute;
+    z-index:      100;
+    top:          1em;
+    left:         50%;
+    transform:    translateX(-50%);
+}
+
+/* hide if not tabbed to
+   but in such a way that it still can be tabbed to */
+a.skip-link:not(:focus):not(:active) {
+    position:   absolute;
+    overflow:   hidden;
+    height:     1px;
+    width:      1px;
+    clip:       rect(0 0 0 0);
+    clip-path:  inset(50%);
+    white-space: nowrap;
+}

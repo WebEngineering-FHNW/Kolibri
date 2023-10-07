@@ -1,0 +1,15 @@
+.one {
+    width: 100px;
+    height: 20px;
+    background-color: yellow;
+}
+
+.two {
+    width: 100px;
+    height: 40px;
+    background-color: dodgerblue;
+}
+
+.three {
+    display: none;
+}

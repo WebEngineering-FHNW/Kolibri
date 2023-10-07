@@ -1,0 +1,15 @@
+#content .home h1 {
+    margin-top: 35px;
+}
+
+#content .home .message-wrapper {
+    text-align: center;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+#content .home button {
+    padding: 5px;
+    margin-top: 32px;
+}

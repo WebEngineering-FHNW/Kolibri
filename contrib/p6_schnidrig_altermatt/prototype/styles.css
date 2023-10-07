@@ -1,0 +1,117 @@
+@import "https://webengineering-fhnw.github.io/Kolibri/css/kolibri-light-colors.css";
+@import "https://webengineering-fhnw.github.io/Kolibri/css/kolibri-light-fonts.css";
+@import "./css/kolibri-base.css";
+
+:root {
+    --background: #FFFFFF;
+}
+
+* {
+    box-sizing: border-box;
+    font-family:      var(--kb-font-rubik-light-regular);
+}
+
+body {
+    overflow-anchor: none;
+    margin: auto auto 7em auto;
+    padding-top: 6em;
+}
+
+section {
+    max-width:  48em;
+    margin:     1em auto 4em auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+a.btn {
+    display: block;
+    text-align: center;
+    width: 12em;
+    padding: 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: var(--kolibri-box-shadow);
+
+}
+
+a.btn.primary {
+    color: #FFFFFF;
+    background-color: var(--kb-hsla-primary-accent);
+    border: 2px solid var(--kolibri-color-shadow);
+}
+
+a.btn.accent {
+    color: var(--kb-hsla-primary-accent);
+    background-color: #FFFFFF;
+    border: 2px solid var(--kb-hsla-primary-accent);
+}
+
+.glow {
+    position: relative;
+}
+
+.glow::before, .glow::after {
+    content:'';
+    position:absolute;
+    left: 0;
+    top: 0;
+    background: linear-gradient(45deg, #993333, #ff00ff, #6e0dd0, #099fff, #ff00 ,#993333);
+    background-size: 400%;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    z-index: -1;
+    animation: animate 20s linear infinite;
+}
+
+@keyframes animate {
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 400% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+
+a.glow::before {
+    filter: blur(20px);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+a.glow:hover::before {
+    opacity: 100;
+}
+
+input[type=text] {
+    font-size:      1.1em;
+    color:          var(--kolibri-color-output);
+    border-width:   0 0 1px 0;
+
+    background-image:    linear-gradient(orange, orange);
+    background-position: left bottom;
+    background-repeat:   no-repeat;
+    background-size:     0 1px; /* default:  do not show */
+}
+
+input[type=text]:focus {
+    outline:             transparent none 0;
+    border-bottom-color: transparent;
+
+    background-size:     100% 1px;
+    transition:          background-size linear .5s;
+}
+
+.darkTheme {
+    filter: invert(85%) hue-rotate(180deg);
+}
+
+body {
+    background-color: white;
+}
