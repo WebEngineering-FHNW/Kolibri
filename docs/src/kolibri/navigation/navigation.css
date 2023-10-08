@@ -1,8 +1,8 @@
-@import "final-prototypes/bread-crumbs/breadCrumbProjector.css";
-@import "final-prototypes/bubble-state/bubblestateNavigationProjector.css";
-@import "structure-prototypes/dashboard/dashboardNavigationProjector.css";
-@import "final-prototypes/dashboard-refined/dashboardRefinedNavigationProjector.css";
-@import "final-prototypes/card/cardNavigationProjector.css";
-@import "final-prototypes/flower/flowerNavigationProjector.css";
-@import "final-prototypes/page-switch/pageSwitchProjector.css";
-@import "final-prototypes/page-switch/github-gists-styles.css";
+@import "docs/src/kolibri/navigation/projector/bread-crumbs/breadCrumbProjector.css";
+@import "docs/src/kolibri/navigation/projector/bubble-state/bubblestateNavigationProjector.css";
+@import "docs/src/examples/navigation/dashboard/dashboardNavigationProjector.css";
+@import "docs/src/kolibri/navigation/projector/dashboard/dashboardNavigationProjector.css";
+@import "docs/src/kolibri/navigation/projector/card/cardNavigationProjector.css";
+@import "docs/src/kolibri/navigation/projector/flower/flowerNavigationProjector.css";
+@import "docs/src/kolibri/navigation/projector/page-switch/pageSwitchProjector.css";
+@import "docs/src/kolibri/navigation/projector/page-switch/github-gists-styles.css";
