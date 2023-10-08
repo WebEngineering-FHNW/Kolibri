@@ -1,7 +1,7 @@
-import {TestSuite} from '../kolibri/util/test.js';
-import {PageController} from '../pages/pageController.js';
 import {NavigationController} from './navigationController.js';
-import {DEBUGMODE, FAVICON, HOMEPAGE, LOGO, NAME} from "../kolibri/presentationModel.js";
+// import {DEBUGMODE, FAVICON, HOMEPAGE, LOGO, NAME} from "../kolibri/presentationModel.js";
+import {PageController} from "./pageController.js";
+import {TestSuite} from "../util/test.js";
 
 const navigationSuite = TestSuite('navigationController');
 
