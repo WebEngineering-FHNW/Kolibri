@@ -1,6 +1,6 @@
 import { ObservableList } from "../../../kolibri/observable.js";
-import { dom } from "../../../kolibri/util/dom.js";
-import { GridProjector } from "../../utility-projectors/GridProjector.js";
+import { dom }           from "../../../kolibri/util/dom.js";
+import { GridProjector } from "../utils/gridProjector.js";
 
 export { NavigationProjector as CardNavigationProjector }
 
