@@ -1,7 +1,7 @@
-import {NavigationController, DEBUGMODE, FAVICON, HOMEPAGE, LOGO, NAME} from './navigationController.js';
-import {PageController} from "./pageController.js";
-import {TestSuite} from "../util/test.js";
-import {NO_SUCH_LOCATION}                                               from "./navigationModel.js";
+import {TestSuite} from '../kolibri/util/test.js';
+import {PageController} from '../pages/pageController.js';
+import {NavigationController} from './navigationController.js';
+import {DEBUGMODE, FAVICON, HOMEPAGE, LOGO, NAME} from "../kolibri/presentationModel.js";
 
 const navigationSuite = TestSuite('navigationController');
 
@@ -27,27 +27,27 @@ navigationSuite.add('deletePageController', assert => {
     assert.is(navigationController.getPageController('#home'), undefined);
 });
 
-navigationSuite.add('setHomeLocation', assert => {
+navigationSuite.add('setHomepage', assert => {
     const homePageController = PageController('home', null);
     const navigationController = NavigationController();
 
     navigationController.addPageControllers(homePageController);
 
-    assert.is(navigationController.getHomeLocation(), NO_SUCH_LOCATION);
+    assert.is(navigationController.getHomePage(), null);
 
-    navigationController.setHomeLocationByHash(homePageController.getHash());
+    navigationController.setHomePage(homePageController);
 
-    assert.is(navigationController.getHomeLocation().getHash(), '#home');
+    assert.is(navigationController.getHomePage().getHash(), '#home');
 });
 
 navigationSuite.add('onNavigationHashAddAndDel', assert => {
-    const homePageController  = PageController('home', null);
+    const homePageController = PageController('home', null);
     const navigationController = NavigationController();
     let newHash;
     let isDeleted = false;
 
-    navigationController.onLocationAdded(location => newHash = location.getHash());
-    navigationController.onLocationRemoved(() => isDeleted = true);
+    navigationController.onNavigationHashAdd(hash => newHash = hash);
+    navigationController.onNavigationHashDel(() => isDeleted = true);
 
     navigationController.addPageControllers(homePageController);
 
@@ -107,7 +107,7 @@ navigationSuite.add('setConfiguration', assert => {
     assert.is(navigationController.getWebsiteName(), "TestName");
     assert.is(navigationController.getWebsiteLogo(), "./logo/kolibri.png");
     assert.is(navigationController.getFavIcon(), "./favicon/kolibri.png");
-    assert.is(navigationController.getHomeLocation(), homePageController);
+    assert.is(navigationController.getHomePage(), homePageController);
     assert.is(navigationController.isDebugMode(), true);
 });
 

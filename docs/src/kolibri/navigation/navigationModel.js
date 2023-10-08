@@ -1,48 +1,36 @@
-import { Observable, ObservableList } from "../observable.js";
+import { Attribute, valueOf, NAME, LOGO, VISIBLE, HOMEPAGE, FAVICON, DEBUGMODE } from "../kolibri/presentationModel.js";
+import { ObservableList } from "../kolibri/observable.js";
 
-export { NavigationModel, NO_SUCH_LOCATION}
-
-/**
- * @typedef { PageControllerType } LocationType
- * This is a type alias for places where a page controller is used to reference a location in the sitemap.
- */
-
-/** @type { LocationType } */
-const NO_SUCH_LOCATION = undefined;
+export { NavigationModel }
 
 /**
- * NavigationModelType stores the navigation-data for the overall application:
- *  all accessible locations,
- *  which of the locations is considered the homepage,
- *  which of the locations is currently active,
- *  the website name, favicon, and the website logo.
- *
+ * NavigationModelType is the Model that contains the navigation-data from the application.
+ * The model holds the page hashes of the accessible pages, the homepage, the websites name and the website logo.
  * @typedef NavigationModelType
- * @property { (location: !LocationType) => void } addLocation          -
- * @property { (location: !LocationType) => void } removeLocation       -
- * @property { (pageHash: !String) => void } removeLocationByHash       -
- * @property { (cb: ConsumerType<String>) => Boolean } onLocationAdded            - registers an {@link ConsumerType} that will be called whenever a page hash is added.
- * @property { (cb: ConsumerType<String>) => Boolean } onLocationRemoved            - registers an {@link ConsumerType} that will be called whenever a page hash is deleted.
- * @property { (newHomepage: !LocationType) => void } setHomeLocation - sets the given PageController as the homepage. the homepage is the fallback page which gets opened when no hash is provided in the request url. Calling all registered {@link ValueChangeCallback}s.
- * @property { () => ?LocationType }           getHomeLocation        - returns the PageController of the homepage. See {@link setHomeLocation} for more details. Returns null if no homepage has been defined.
- * @property { (debugModeActive: Boolean) => void }  setDebugMode       - sets the debug mode active state. calling all registered {@link ValueChangeCallback}s.
- * @property { () => Boolean }                       isDebugMode        - returns if the debug mode is active.
- * @property { (name: String) => void }              setWebsiteName     - sets the name for the website, calling all registered {@link ValueChangeCallback}s. The name can be displayed by a {@link NavigationProjectorType}.
- * @property { () => String }                        getWebsiteName     - returns the name for the website. See {@link setWebsiteName} for more details.
- * @property { (logoSrcPath: String) => void }       setWebsiteLogo     - sets the path to the website logo, calling all registered {@link ValueChangeCallback}s. The website logo can be displayed by a {@link NavigationProjectorType}.
- * @property { () => String }                        getWebsiteLogo     - returns the path to the website logo. See {@link setWebsiteLogo}
- * @property { (favIconSrcPath: String) => void }    setFavIcon         - sets the favicon, calling all registered {@link ValueChangeCallback}s. The favicon path can be set with a {@link NavigationProjectorType} in the index.html.
- * @property { () => String }                        getFavIcon         - returns the path to the favicon. See {@link setFavIcon} for more details.
- * @property { () => LocationType }                  getCurrentLocation -
- * @property { (newLocation: LocationType) => void } setCurrentLocation -
- * @property { (cb: ValueChangeCallback<LocationType>)  => void } onCurrentLocationChanged -
- * @property { (cb: ValueChangeCallback<String>)  => void } onWebsiteNameChanged - registers an {@link ValueChangeCallback} that will be called whenever the page name changes.
- * @property { (cb: ValueChangeCallback<String>)  => void } onWebsiteLogoChanged - registers an {@link ValueChangeCallback} that will be called whenever the page logo changes.
- * @property { (cb: ValueChangeCallback<String>)  => void } onFavIconChanged     - registers an {@link ValueChangeCallback} that will be called whenever the fav icon changes.
- * @property { (cb: ValueChangeCallback<LocationType>) => void } onHomeLocationChanged - registers an {@link ValueChangeCallback} that will be called whenever the homepage changes.
- * @property { (cb: ValueChangeCallback<Boolean>) => void } onDebugModeChanged   - registers an {@link ValueChangeCallback} that will be called whenever the debug mode changes.
- * @property { (hash: String ) => ?LocationType } findLocationByHash - returns location or {@link NO_SUCH_LOCATION} if not found.
+ * @template T
+ * @property { (obsType: !String) => IObservable<T> } getNavObs         - a function that returns the navigation observable for the given observable type string. Throws an error, if observable does not exist in the model.
+ * @property { (pageHash: !String) => void } addNavigationHash          - a function that adds the hash of a page, calling all registered {@link observableListCallback}s.
+ * @property { (pageHash: !String) => void } deleteNavigationHash       - a function that deletes the hash of a page, calling all registered {@link observableListCallback}s.
+ * @property { (callback: observableListCallback) => Boolean } onAdd    - a function that registers an {@link observableListCallback} that will be called whenever a page hash is added.
+ * @property { (callback: observableListCallback) => Boolean } onDel    - a function that registers an {@link observableListCallback} that will be called whenever a page hash is deleted.
+ * @property { (newHomepage: !PageControllerType) => void } setHomepage - a function that sets the given PageController as the homepage. the homepage is the fallback page which gets opened when no hash is provided in the request url. Calling all registered {@link onValueChangeCallback}s.
+ * @property { () => ?PageControllerType }           getHomepage        - a function that returns the PageController of the homepage. See {@link setHomepage} for more details. Returns null if no homepage has been defined.
+ * @property { (debugModeActive: Boolean) => void }  setDebugMode       - a function that sets the debug mode active state. calling all registered {@link onValueChangeCallback}s.
+ * @property { () => Boolean }                       isDebugMode        - a function that returns if the debug mode is active.
+ * @property { (name: String) => void }              setWebsiteName     - a function that sets the name for the website, calling all registered {@link onValueChangeCallback}s. The name can be displayed by a {@link NavigationProjectorType}.
+ * @property { () => String }                        getWebsiteName     - a function that returns the name for the website. See {@link setWebsiteName} for more details.
+ * @property { (logoSrcPath: String) => void }       setWebsiteLogo     - a function that sets the path to the website logo, calling all registered {@link onValueChangeCallback}s. The website logo can be displayed by a {@link NavigationProjectorType}.
+ * @property { () => String }                        getWebsiteLogo     - a function that returns the path to the website logo. See {@link setWebsiteLogo}
+ * @property { (favIconSrcPath: String) => void }    setFavIcon         - a function that sets the favicon, calling all registered {@link onValueChangeCallback}s. The favicon path can be set with a {@link NavigationProjectorType} in the index.html.
+ * @property { () => String }                        getFavIcon         - a function that returns the path to the favicon. See {@link setFavIcon} for more details.
+ * @property { (callback: onValueChangeCallback<String>)  => void } onWebsiteNameChanged - a function that registers an {@link onValueChangeCallback} that will be called whenever the page name is changed.
+ * @property { (callback: onValueChangeCallback<String>)  => void } onWebsiteLogoChanged - a function that registers an {@link onValueChangeCallback} that will be called whenever the page logo is changed.
+ * @property { (callback: onValueChangeCallback<String>)  => void } onFavIconChanged     - a function that registers an {@link onValueChangeCallback} that will be called whenever the fav icon is changed.
+ * @property { (callback: onValueChangeCallback<String>)  => void } onHomepageChanged    - a function that registers an {@link onValueChangeCallback} that will be called whenever the homepage is changed.
+ * @property { (callback: onValueChangeCallback<Boolean>) => void } onDebugModeChanged   - a function that registers an {@link onValueChangeCallback} that will be called whenever the debug mode active state is changed.
+ * @property { (callback: onValueChangeCallback<Boolean>) => void } onVisibleChanged     - a function that registers an {@link onValueChangeCallback} that will be called whenever a pages visibility is changed.
  */
+
 /**
  * Constructor for a NavigationModelType.
  * @return { NavigationModelType }
@@ -54,56 +42,37 @@ const NO_SUCH_LOCATION = undefined;
  */
 
 const NavigationModel = () => {
-    /** @type { Array<LocationType> } */
-    const locationList      = [];
-    const locations         = ObservableList(locationList);
-    
-    /** @type { IObservable<LocationType> } */
-    const homeLocationObs   = Observable(NO_SUCH_LOCATION);
-    const debugModeObs      = Observable(false);
-    const faviconObs        = Observable('');
-    const websiteNameObs    = Observable('');
-    const websiteLogoObs    = Observable('');
+    const navigationHashes = Attribute(ObservableList([]));
 
-    /** @type { IObservable<LocationType> } */
-    const currentLocationObs = Observable(NO_SUCH_LOCATION);
+    navigationHashes.getObs(HOMEPAGE, null);
+    navigationHashes.getObs(DEBUGMODE, 'false');
 
-    const findLocationByHash = hash => locationList.find( location => {
-        return location.getHash() === hash;
-    });
-
-    return /** @type { NavigationModelType } */ {
-        addLocation:          locations.add,
-        removeLocation:       locations.del,
-        removeLocationByHash: hash => locations.del(findLocationByHash(hash)),
-        onLocationAdded:      locations.onAdd,
-        onLocationRemoved:    locations.onDel,
-
-        setWebsiteName:       websiteNameObs.setValue,
-        getWebsiteName:       websiteNameObs.getValue,
-        onWebsiteNameChanged: websiteNameObs.onChange,
-
-        setWebsiteLogo:       websiteLogoObs.setValue,
-        getWebsiteLogo:       websiteLogoObs.getValue,
-        onWebsiteLogoChanged: websiteLogoObs.onChange,
-
-        setFavIcon:           faviconObs.setValue,
-        getFavIcon:           faviconObs.getValue,
-        onFavIconChanged:     faviconObs.onChange,
-
-        setHomeLocation:       homeLocationObs.setValue,
-        getHomeLocation:       homeLocationObs.getValue,
-        onHomeLocationChanged: homeLocationObs.onChange,
-
-        setDebugMode:         debugModeObs.setValue,
-        isDebugMode:          debugModeObs.getValue,
-        onDebugModeChanged:   debugModeObs.onChange,
-
-        setCurrentLocation:       currentLocationObs.setValue,
-        getCurrentLocation:       currentLocationObs.getValue,
-        onCurrentLocationChanged: currentLocationObs.onChange,
-
-        findLocationByHash,
-
+    return {
+        getNavObs: obsType => {
+            if (!navigationHashes.hasObs(obsType)) {
+                throw new Error(obsType + ' is not defined for navigationModel.')
+            }
+            return navigationHashes.getObs(obsType)
+        },
+        addNavigationHash:    pageHash => valueOf(navigationHashes).add(pageHash),
+        deleteNavigationHash: pageHash => valueOf(navigationHashes).del(pageHash),
+        onAdd:                valueOf(navigationHashes).onAdd,
+        onDel:                valueOf(navigationHashes).onDel,
+        setWebsiteName:       navigationHashes.getObs(NAME).setValue,
+        getWebsiteName:       navigationHashes.getObs(NAME).getValue,
+        setWebsiteLogo:       navigationHashes.getObs(LOGO).setValue,
+        getWebsiteLogo:       navigationHashes.getObs(LOGO).getValue,
+        setFavIcon:           navigationHashes.getObs(FAVICON).setValue,
+        getFavIcon:           navigationHashes.getObs(FAVICON).getValue,
+        setHomepage:          navigationHashes.getObs(HOMEPAGE).setValue,
+        getHomepage:          navigationHashes.getObs(HOMEPAGE).getValue,
+        setDebugMode:         navigationHashes.getObs(DEBUGMODE).setValue,
+        isDebugMode:          navigationHashes.getObs(DEBUGMODE).getValue,
+        onWebsiteLogoChanged: navigationHashes.getObs(LOGO).onChange,
+        onWebsiteNameChanged: navigationHashes.getObs(NAME).onChange,
+        onFavIconChanged:     navigationHashes.getObs(FAVICON).onChange,
+        onHomepageChanged:    navigationHashes.getObs(HOMEPAGE).onChange,
+        onDebugModeChanged:   navigationHashes.getObs(DEBUGMODE).onChange,
+        onVisibleChanged:     navigationHashes.getObs(VISIBLE).onChange,
     }
 };
