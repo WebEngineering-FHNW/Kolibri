@@ -4,8 +4,8 @@
  */
 
 
-import { SimpleInputController } from "../../../../kolibri/projector/simpleForm/simpleInputController.js";
-import { Attribute, VALUE }      from "../../../../kolibri/presentationModel.js";
+import { SimpleInputController } from "../../kolibri/projector/simpleForm/simpleInputController.js";
+import { Attribute, VALUE }      from "../../kolibri/presentationModel.js";
 
 export { DayController }
 
@@ -37,7 +37,7 @@ const DayModel = () => {
  * @property { SimpleInputControllerType<Number> }  pmStartCtrl
  * @property { SimpleInputControllerType<Number> }  pmEndCtrl
  * @property { () => Number }                       getTotal        - the total minutes in this day, derived
- * @property { (callback: !ValueChangeCallback<Number>) => void } onTotalChanged - when total changes
+ * @property { (callback: !onValueChangeCallback<Number>) => void } onTotalChanged - when total changes
  */
 /**
  * Creating a day controller made from four simple input controllers for the four time values (as numbers

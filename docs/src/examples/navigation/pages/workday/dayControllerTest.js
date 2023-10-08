@@ -1,6 +1,6 @@
 // noinspection DuplicatedCode
 
-import { TestSuite }     from "../../../../kolibri/util/test.js";
+import { TestSuite }     from "../../kolibri/util/test.js";
 import { DayController } from "./dayController.js";
 
 const dayControllerSuite = TestSuite("examples/workday/dayController");

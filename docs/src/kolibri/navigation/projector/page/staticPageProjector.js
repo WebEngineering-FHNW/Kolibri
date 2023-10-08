@@ -1,5 +1,3 @@
-import {dom} from "../../../util/dom.js";
-
 export { StaticPageProjector }
 
 /**
@@ -17,18 +15,16 @@ export { StaticPageProjector }
  * @param { !PageControllerType } pageController - the pageController that controls the PageModelType we want to observe. Mandatory.
  * @param { !HTMLDivElement } pinToElement - the element in the DOM that we want to bind to append the pageContent. Mandatory.
  * @param { String } contentFilePath - the path to the static html content relative to index.html! Can be null.
- * @param { ?String } styleFilePath  - the path to the static css file! Optional. Defaults to ''.
  * @returns { PageProjectorType }
  * @example
  * const homePageController = PageController("home", null);
  * homePageController.setIcon('./navigation/icons/house.svg');
  * HomePageProjector(homePageController, pinToContentElement, './pages/home/home.html');
  */
-const StaticPageProjector = (pageController, pinToElement, contentFilePath, styleFilePath = '') => {
+const StaticPageProjector = (pageController, pinToElement, contentFilePath) => {
     const pageWrapper = pinToElement;
     const contentWrapper = document.createElement("div");
     const header = document.createElement("h1");
-    const [styleSheetElement] = dom(`<link rel="stylesheet" href="${styleFilePath}">`);
 
     /**
      * A function that initializes the content and stores it in the pageWrapper.
@@ -84,7 +80,7 @@ const StaticPageProjector = (pageController, pinToElement, contentFilePath, styl
      * @param filePath - the filePath that belongs to the static page content
      * @return { Promise<String> }
      */
-    const fetchPageContent = async (filePath) => { // TODO: use utility function
+    const fetchPageContent = async (filePath) => {
         try {
             const response = await fetch(filePath, {
                     headers: {
@@ -97,7 +93,6 @@ const StaticPageProjector = (pageController, pinToElement, contentFilePath, styl
                 const content = await response.text();
                 return content;
             } else {
-                // TODO: proper logging.
                 throw new Error(`HTTP error: ${response.status}`);
             }
         } catch (e) {
@@ -105,16 +100,9 @@ const StaticPageProjector = (pageController, pinToElement, contentFilePath, styl
         }
     };
 
-    pageController.onActiveChanged( active => {
+    pageController.onActiveChanged(active => {
         if (active) {
             projectPage();
-        }
-        if(styleFilePath) {
-            if (active) {
-                document.head.append(styleSheetElement);
-            } else {
-                styleSheetElement.parentElement.removeChild(styleSheetElement);
-            }
         }
     });
 
@@ -125,7 +113,7 @@ const StaticPageProjector = (pageController, pinToElement, contentFilePath, styl
      */
     const setH1 = newValue => {
         if (undefined !== newValue) {
-            header.textContent = newValue
+            header.innerText = newValue
         }
     };
 

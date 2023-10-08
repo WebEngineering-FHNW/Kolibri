@@ -4,8 +4,8 @@
  * We do it anyway to follow the canonical structure of classical MVC where
  * views only ever know the controller API, not the model directly.
  */
-import { ObservableList, Observable }   from "../../../../kolibri/observable.js";
-import { EDITABLE, VALUE }              from "../../../../kolibri/presentationModel.js";
+import { ObservableList, Observable }   from "../../kolibri/observable.js";
+import { EDITABLE, VALUE }              from "../../kolibri/presentationModel.js";
 import { Person, reset }                from "./person.js";
 
 export { ListController as PersonListController, SelectionController as PersonSelectionController }
@@ -58,7 +58,7 @@ noSelection.detailed .getObs(VALUE)   .setValue(false);    // detail view can fo
  * @property { (T) => void } setSelectedModel
  * @property { ()  => T    } getSelectedModel
  * @property { () => void  } clearSelection
- * @property { (callback: ValueChangeCallback<T>) => void } onModelSelected
+ * @property { (callback: onValueChangeCallback<T>) => void } onModelSelected
  */
 
 /**

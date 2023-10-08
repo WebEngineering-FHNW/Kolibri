@@ -1,6 +1,6 @@
 import '../../kolibri/allKolibriTestsSuite.js';
-import { total, project } from "../../../../kolibri/util/test.js";
-import { versionInfo } from "../../../../kolibri/version.js";
+import { total, project } from "../../kolibri/util/test.js";
+import { versionInfo } from "../../kolibri/version.js";
 
 export { TestProjector }
 
