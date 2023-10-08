@@ -1,4 +1,4 @@
-import { ObservableList } from "../../kolibri/observable.js";
+import { ObservableList } from "../../observable.js";
 
 export { NavigationProjector }
 
