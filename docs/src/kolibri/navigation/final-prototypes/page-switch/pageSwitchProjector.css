@@ -1,0 +1,87 @@
+.switch-nav {
+
+    max-width: 48em;
+    position: relative;
+    margin: auto;
+    box-shadow: 2px 2px 5px #888888;
+}
+
+.switch-nav .ensemble-navigation {
+    height: 60px;
+    background-color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    border-bottom: 3px solid #EBECFE;
+}
+
+.switch-nav .ensemble-navigation a {
+    width: 300px;
+    text-align: center;
+    background-color: #FFFFFF;
+    font-size: 16px;
+    line-height: 60px;
+    text-decoration: none;
+    color: #A0A3BD;
+    border-bottom: 4px solid #FFFFFF;
+}
+
+.switch-nav .ensemble-navigation a:hover {
+    color: #F066FF;
+}
+
+.switch-nav .ensemble-navigation a.active {
+    background-color: #FFFFFF;
+    color: #000000;
+    border-color: #D059FF;
+    margin-bottom: -4px;
+}
+
+.switch-nav .ensemble-navigation a img {
+    height: 16px;
+    padding-right: 6px;
+    position: relative;
+    top: 2px;
+    filter: invert(59%) sepia(54%) saturate(6075%) hue-rotate(249deg) brightness(99%) contrast(103%);
+}
+
+.switch-nav .ensemble-navigation a:hover img {
+    filter: invert(80%) sepia(55%) saturate(7141%) hue-rotate(247deg) brightness(100%) contrast(103%);
+}
+
+.switch-nav .ensemble-navigation a.active img {
+    filter: none;
+}
+
+.switch-nav .ensemble-content {
+    position: relative;
+    overflow: scroll;
+    overflow-x: hidden;
+    height: 66vh;
+    background-color: #FFFFFF;
+    padding: 6px;
+}
+
+.switch-nav .ensemble-content div.example {
+    padding-top: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.switch-nav .invisible {
+    display: none;
+}
+
+.switch-nav ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.switch-nav ::-webkit-scrollbar-track {
+    background: #EFF0F6;
+}
+
+.switch-nav ::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #FF2CA5 0.03%, #9317EC 99.98%);
+    border-radius: 9px;
+}
