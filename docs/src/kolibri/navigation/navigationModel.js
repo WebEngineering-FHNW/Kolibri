@@ -4,8 +4,8 @@ import { Observable, ObservableList } from "../observable.js";
 export { NavigationModel }
 
 /**
- * NavigationModelType is the Model that contains the navigation-data for the application.
- * The model holds the page hashes of the accessible pages, the homepage, the websites name and the website logo.
+ * NavigationModelType is the Model that contains the navigation-data for the overall application.
+ * The model holds the page hashes of the accessible pages, the homepage, the website name, and the website logo.
  * @typedef NavigationModelType
  * @property { (pageHash: !String) => void } addNavigationHash          - adds the hash of a page, calling all registered {@link ConsumerType}s.
  * @property { (pageHash: !String) => void } deleteNavigationHash       - deletes the hash of a page, calling all registered {@link ConsumerType}s.
@@ -40,6 +40,7 @@ export { NavigationModel }
  */
 
 const NavigationModel = () => {
+    /** @type { IObservableList<String> } */
     const navigationHashes = ObservableList([]);
     
     /** @type { IObservable<PageControllerType> } */
