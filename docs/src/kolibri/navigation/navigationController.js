@@ -1,5 +1,6 @@
-import { Attribute, HASH, PARENT, PATH, VALUE, valueOf } from "../kolibri/presentationModel.js";
+// import { Attribute, HASH, PARENT, PATH, VALUE, valueOf } from "../kolibri/presentationModel.js";
 import { NavigationModel } from "./navigationModel.js";
+import {Attribute}         from "../presentationModel.js";
 
 export { NavigationController }
 
@@ -14,33 +15,33 @@ export { NavigationController }
  * The controller passes the website logo path, the homepage, the websites name and the page controllers to the {@link NavigationModel}.
  *
  * @typedef NavigationControllerType
- * @property { (pageControllerToAdd: PageControllerType) => void }       addPageController           - a function that adds a page controller to the navigation controller and adds the page hash to the {@link NavigationModel}. Throws an error if the qualifier is not valid or has already been added to the {@link NavigationModel}.
- * @property { (...pageControllersToAdd: PageControllerType[]) => void } addPageControllers          - a function that adds one or more page controllers to the {@link NavigationModel}. See {@link addPageController} for more details.
- * @property { (pageHash: String) => PageControllerType }                getPageController           - a function that returns the page controller of a specific hash.
- * @property { (pageHash: String) => void }                              deletePageController        - a function that deletes the page controller of a specific hash.
- * @property { (anchor: HTMLAnchorElement) => void }                     registerAnchorClickListener - a function that registers a click listener on an anchor. this binding triggers a location change trough navigate based on the hash the anchor has.
- * @property { (confObj: ModelConfigurationObject) => boolean }          setConfiguration            - a function that sets the attributes of this navigation for all keys in object to their value.
- * @property { (newHomepage: !PageControllerType) => void } setHomePage - a function that sets the given PageController as the homepage. the homepage is the fallback page which gets opened when no hash is provided in the request url. Calling all registered {@link onValueChangeCallback}s.
- * @property { () => ?PageControllerType}            getHomePage        - a function that returns the PageController of the homepage. See {@link setHomepage} for more details. Returns null if no homepage has been defined.
- * @property { (newPath: String) => void }           setPath            - a function that sets the current path. The path consists of the string that is passed after the '#' in the url. The path can be used for granular sub-routing.
- * @property { () => String}                         getPath            - a function that returns the current path. See {@link setPath} for more details.
- * @property { (name: String) => void }              setWebsiteName     - a function that sets the name for the website, calling all registered {@link onValueChangeCallback}s. The name can be displayed by a {@link NavigationProjectorType}.
- * @property { () => String }                        getWebsiteName     - a function that returns the name for the website. See {@link setWebsiteName} for more details.
- * @property { (logoSrcPath: String) => void }       setWebsiteLogo     - a function that sets the path to the website logo, calling all registered {@link onValueChangeCallback}s. The website logo can be displayed by a {@link NavigationProjectorType}.
- * @property { () => String }                        getWebsiteLogo     - a function that returns the path to the website logo. See {@link setWebsiteLogo}
- * @property { (favIconSrcPath: String) => void }    setFavIcon         - a function that sets the favicon, calling all registered {@link onValueChangeCallback}s. The favicon path can be set with a {@link NavigationProjectorType} in the index.html.
- * @property { () => String }                        getFavIcon         - a function that returns the path to the favicon. See {@link setFavIcon} for more details.
- * @property { (debugModeActive: Boolean) => void }  setDebugMode       - a function that sets the debug mode active state. calling all registered {@link onValueChangeCallback}s.
- * @property { () => Boolean }                       isDebugMode        - a function that returns if the debug mode is active.
- * @property { (callback: observableListCallback) => Boolean }                 onNavigationHashAdd  - a function that registers an {@link observableListCallback} that will be called whenever a page hash is added.
- * @property { (callback: observableListCallback) => Boolean }                 onNavigationHashDel  - a function that registers an {@link observableListCallback} that will be called whenever a page hash is deleted.
- * @property { (callback: onValueChangeCallback<PageControllerType>) => void } onLocationChanged    - a function that registers an {@link onValueChangeCallback} that will be called whenever the current location is changed.
- * @property { (callback: onValueChangeCallback<String>) => void }             onPathChanged        - a function that registers an {@link onValueChangeCallback} that will be called whenever the current path is changed.
- * @property { (callback: onValueChangeCallback<String>)  => void }            onWebsiteNameChanged - a function that registers an {@link onValueChangeCallback} that will be called whenever the page name is changed.
- * @property { (callback: onValueChangeCallback<String>)  => void }            onWebsiteLogoChanged - a function that registers an {@link onValueChangeCallback} that will be called whenever the page logo is changed.
- * @property { (callback: onValueChangeCallback<String>)  => void }            onFavIconChanged     - a function that registers an {@link onValueChangeCallback} that will be called whenever the favicon is changed.
- * @property { (callback: onValueChangeCallback<Boolean>) => void }            onVisibleChanged     - a function that registers an {@link onValueChangeCallback} that will be called whenever a pages visibility is changed.
- * @property { (callback: onValueChangeCallback<Boolean>) => void }            onDebugModeChanged   - a function that registers an {@link onValueChangeCallback} that will be called whenever the debug mode active state is changed.
+ * @property { (pageControllerToAdd: PageControllerType) => void }       addPageController           - adds a page controller to the navigation controller and adds the page hash to the {@link NavigationModel}. Throws an error if the qualifier is not valid or has already been added to the {@link NavigationModel}.
+ * @property { (...pageControllersToAdd: PageControllerType[]) => void } addPageControllers          - adds one or more page controllers to the {@link NavigationModel}. See {@link addPageController} for more details.
+ * @property { (pageHash: String) => PageControllerType }                getPageController           - returns the page controller of a specific hash.
+ * @property { (pageHash: String) => void }                              deletePageController        - deletes the page controller of a specific hash.
+ * @property { (anchor: HTMLAnchorElement) => void }                     registerAnchorClickListener - registers a click listener on an anchor. this binding triggers a location change trough navigate based on the hash the anchor has.
+ * @property { (confObj: ModelConfigurationObject) => boolean }          setConfiguration            - sets the attributes of this navigation for all keys in object to their value.
+ * @property { (newHomepage: !PageControllerType) => void } setHomePage - sets the given PageController as the homepage. the homepage is the fallback page which gets opened when no hash is provided in the request url. Calling all registered {@link ValueChangeCallback}s.
+ * @property { () => ?PageControllerType}            getHomePage        - returns the PageController of the homepage. See {@link setHomepage} for more details. Returns null if no homepage has been defined.
+ * @property { (newPath: String) => void }           setPath            - sets the current path. The path consists of the string that is passed after the '#' in the url. The path can be used for granular sub-routing.
+ * @property { () => String}                         getPath            - returns the current path. See {@link setPath} for more details.
+ * @property { (name: String) => void }              setWebsiteName     - sets the name for the website, calling all registered {@link ValueChangeCallback}s. The name can be displayed by a {@link NavigationProjectorType}.
+ * @property { () => String }                        getWebsiteName     - returns the name for the website. See {@link setWebsiteName} for more details.
+ * @property { (logoSrcPath: String) => void }       setWebsiteLogo     - sets the path to the website logo, calling all registered {@link ValueChangeCallback}s. The website logo can be displayed by a {@link NavigationProjectorType}.
+ * @property { () => String }                        getWebsiteLogo     - returns the path to the website logo. See {@link setWebsiteLogo}
+ * @property { (favIconSrcPath: String) => void }    setFavIcon         - sets the favicon, calling all registered {@link ValueChangeCallback}s. The favicon path can be set with a {@link NavigationProjectorType} in the index.html.
+ * @property { () => String }                        getFavIcon         - returns the path to the favicon. See {@link setFavIcon} for more details.
+ * @property { (debugModeActive: Boolean) => void }  setDebugMode       - sets the debug mode active state. calling all registered {@link ValueChangeCallback}s.
+ * @property { () => Boolean }                       isDebugMode        - returns if the debug mode is active.
+ * @property { (callback: ConsumerType<String>) => Boolean }                 onNavigationHashAdd  - registers an {@link ConsumerType} that will be called whenever a page hash is added.
+ * @property { (callback: ConsumerType<String>) => Boolean }                 onNavigationHashDel  - registers an {@link ConsumerType} that will be called whenever a page hash is deleted.
+ * @property { (callback: ValueChangeCallback<PageControllerType>) => void } onLocationChanged    - registers an {@link ValueChangeCallback} that will be called whenever the current location is changed.
+ * @property { (callback: ValueChangeCallback<String>) => void }             onPathChanged        - registers an {@link ValueChangeCallback} that will be called whenever the current path is changed.
+ * @property { (callback: ValueChangeCallback<String>)  => void }            onWebsiteNameChanged - registers an {@link ValueChangeCallback} that will be called whenever the page name is changed.
+ * @property { (callback: ValueChangeCallback<String>)  => void }            onWebsiteLogoChanged - registers an {@link ValueChangeCallback} that will be called whenever the page logo is changed.
+ * @property { (callback: ValueChangeCallback<String>)  => void }            onFavIconChanged     - registers an {@link ValueChangeCallback} that will be called whenever the favicon is changed.
+ * @property { (callback: ValueChangeCallback<Boolean>) => void }            onVisibleChanged     - registers an {@link ValueChangeCallback} that will be called whenever a pages visibility is changed.
+ * @property { (callback: ValueChangeCallback<Boolean>) => void }            onDebugModeChanged   - registers an {@link ValueChangeCallback} that will be called whenever the debug mode active state is changed.
  */
 
 /**
@@ -58,7 +59,7 @@ const NavigationController = () => {
     const pageControllers  = {};
 
     /**
-     * A function that navigates to the route
+     * navigates to the route
      * that is found for a given hash.
      *
      * @function
@@ -95,7 +96,7 @@ const NavigationController = () => {
     };
 
     /**
-     * A function that finds the correct route for a path
+     * finds the correct route for a path
      * and returns the corresponding pageController.
      *
      * @function
