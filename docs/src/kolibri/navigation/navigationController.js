@@ -1,6 +1,9 @@
+
+// TODO: how to model HASH, PARENT, PATH, etc.
+
 // import { Attribute, HASH, PARENT, PATH, VALUE, valueOf } from "../kolibri/presentationModel.js";
 import { NavigationModel } from "./navigationModel.js";
-import {Attribute}         from "../presentationModel.js";
+import { Attribute }       from "../presentationModel.js";
 
 export { NavigationController }
 
