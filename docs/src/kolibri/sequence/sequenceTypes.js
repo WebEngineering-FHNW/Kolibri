@@ -117,6 +117,10 @@
  *           - Check for element-wise equality
  *           - **Warning**: This only works on finite sequences as indicated by the name ending with `$`
  *           - Example: `Seq(1, 2).eq$(Seq(1, 2))`
+ * @property { ReduceSequenceOperationType<_T_> } foldl$
+ *           - Type: {@link ReduceSequenceOperationType}, same as `reduce$`
+ *           - Combines the elements of a **non-empty** sequence left-to-right using the provided start value and an accumulation function.
+ *           - example: `Seq(1, 2, 3).foldl$((acc, cur) => "" + acc + cur, "") === "123"`
  * @property { FoldrOperationType<_T_> } foldr$
  *           - Type: {@link FoldrOperationType}
  *           - **Must not be called on infinite sequences!**

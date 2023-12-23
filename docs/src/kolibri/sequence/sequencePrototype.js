@@ -31,6 +31,7 @@ import {
 import {
   eq$,
   foldr$,
+  foldl$,
   head,
   isEmpty,
   max$,
@@ -116,6 +117,10 @@ SequencePrototype["=="] = SequencePrototype.eq$;
 
 SequencePrototype.foldr$ = function(callback, start) {
     return foldr$(callback, start)(this);
+};
+
+SequencePrototype.foldl$ = function(callback, start) {
+    return foldl$(callback, start)(this);
 };
 
 SequencePrototype.forEach$ = function(callback) {
