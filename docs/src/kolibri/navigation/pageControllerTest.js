@@ -1,16 +1,7 @@
-import {TestSuite}      from '../kolibri/util/test.js';
 import {PageController} from './pageController.js';
-import {
-    DESCRIPTION,
-    ICONPATH,
-    NAVIGATIONAL,
-    VALUE,
-    VISIBLE,
-    ACTIVE,
-    VISITED,
-    PARENT,
-    HASH
-}                       from "../kolibri/presentationModel.js";
+import {VALUE}                       from "../presentationModel.js";
+import {TestSuite}                                                                              from "../util/test.js";
+import {ACTIVE, DESCRIPTION, HASH, ICONPATH, NAVIGATIONAL, PARENT, TARGET_ID, VISIBLE, VISITED} from "./pageModel.js";
 
 const pageSuite = TestSuite('pageController');
 
@@ -55,7 +46,7 @@ pageSuite.add('initializePageFail', assert => {
 
     assert.is(e1, 'Qualifiers cannot be empty.');
     assert.is(e2, 'Qualifiers cannot contain spaces or new lines. Consider replacing them with "-" or "_" characters. Try: ' + q2.replace(/[\s\n]+/g, "-"));
-    assert.is(e3, 'Qualifiers cannot start with a number. Please remove the number at the start of qualifier: ' + q3);
+    assert.is(e3, 'Qualifiers cannot start with a number. Please remove the number at the start of targetId: ' + q3);
 
 });
 
@@ -214,10 +205,10 @@ pageSuite.add('onParentChanged', assert => {
 });
 
 pageSuite.add('setConfigurationSuccess', assert => {
-    const pageController = PageController('page', null);
+    const pageController = PageController('home', null);
 
     const configurationSuccessful = pageController.setConfiguration(/** @type ModelConfigurationObject*/{
-        [VALUE]:        "TestName",
+        [TARGET_ID]:        "TestName",
         [DESCRIPTION]:  "Description",
         [ICONPATH]:     "./icon/kolibri.png",
         [ACTIVE]:       true,
@@ -226,8 +217,9 @@ pageSuite.add('setConfigurationSuccess', assert => {
         [NAVIGATIONAL]: false,
     });
 
+
     assert.is(configurationSuccessful, true);
-    assert.is(pageController.getQualifier(), "page");
+    assert.is(pageController.getQualifier(), "Page.home.targetId");
     assert.is(pageController.getValue(), "TestName");
     assert.is(pageController.getDescription(), "Description");
     assert.is(pageController.getIconPath(), "./icon/kolibri.png");
