@@ -4,12 +4,13 @@ import {
     HASH,
     ICONPATH,
     NAVIGATIONAL,
+    PageModel,
     PARENT,
-    VALUE,
+    TARGET_ID,
     VISIBLE,
     VISITED
-}                    from "../kolibri/presentationModel.js";
-import { PageModel } from "./pageModel.js";
+}              from "./pageModel.js";
+import {VALUE} from "../presentationModel.js";
 
 export { PageController }
 
@@ -48,13 +49,13 @@ export { PageController }
  * @property { () => ?PageControllerType } getParent                - a getter function that returns the parent of the page or null. See {@link setParent} for more details.
  * @property { (isNavigational: Boolean) => void } setNavigational  - a setter function that sets the navigational state of the page. The navigational state declares if a page should be reachable through navigation or if an error should be returned to the user. Note: a page can be unnavigational but still visible meaning that a user can see the page in the navigation but cannot navigate to it directly with the hash. See {@link setVisible} if you want to make it invisible.
  * @property { () => Boolean } isNavigational                       - a getter function that returns the navigational state of the page. See {@link setNavigational} for more details.
- * @property { (callback: onValueChangeCallback<Boolean>) => void } onActiveChanged             - a function that registers an {@link onValueChangeCallback} that will be called whenever the active state changes.
- * @property { (callback: onValueChangeCallback<String>) => void } onIconPathChanged            - a function that registers an {@link onValueChangeCallback} that will be called whenever the icon path changes.
- * @property { (callback: onValueChangeCallback<Boolean>) => void } onVisitedChanged            - a function that registers an {@link onValueChangeCallback} that will be called whenever the visited state changes.
- * @property { (callback: onValueChangeCallback<String>) => void } onValueChanged               - a function that registers an {@link onValueChangeCallback} that will be called whenever the value changes.
- * @property { (callback: onValueChangeCallback<Boolean>) => void } onNavigationalChanged       - a function that registers an {@link onValueChangeCallback} that will be called whenever the navigational state changes.
- * @property { (callback: onValueChangeCallback<Boolean>) => void } onVisibleChanged            - a function that registers an {@link onValueChangeCallback} that will be called whenever the visible state changes.
- * @property { (callback: onValueChangeCallback<?PageControllerType>) => void } onParentChanged - a function that registers an {@link onValueChangeCallback} that will be called whenever the parent changes.
+ * @property { (callback: ValueChangeCallback<Boolean>) => void } onActiveChanged             - a function that registers an {@link ValueChangeCallback} that will be called whenever the active state changes.
+ * @property { (callback: ValueChangeCallback<String>) => void } onIconPathChanged            - a function that registers an {@link ValueChangeCallback} that will be called whenever the icon path changes.
+ * @property { (callback: ValueChangeCallback<Boolean>) => void } onVisitedChanged            - a function that registers an {@link ValueChangeCallback} that will be called whenever the visited state changes.
+ * @property { (callback: ValueChangeCallback<String>) => void } onValueChanged               - a function that registers an {@link ValueChangeCallback} that will be called whenever the value changes.
+ * @property { (callback: ValueChangeCallback<Boolean>) => void } onNavigationalChanged       - a function that registers an {@link ValueChangeCallback} that will be called whenever the navigational state changes.
+ * @property { (callback: ValueChangeCallback<Boolean>) => void } onVisibleChanged            - a function that registers an {@link ValueChangeCallback} that will be called whenever the visible state changes.
+ * @property { (callback: ValueChangeCallback<?PageControllerType>) => void } onParentChanged - a function that registers an {@link ValueChangeCallback} that will be called whenever the parent changes.
  */
 
 /**
@@ -62,7 +63,7 @@ export { PageController }
  *
  * @template T
  * @constructor
- * @param { !String } qualifier             - unique qualifier for the page. The hash will be inferred from the qualifier, e.g. 'home' -> '#hash' and will be immutable. The qualifier will also be the initial page name that can be changed later.
+ * @param { !String } targetId             - unique targetId for the page. The hash will be inferred from the targetId, e.g. 'home' -> '#home' and will be immutable. The targetId will also be the initial page name that can be changed later.
  * @param { [T] } dynamicContentControllers - Dynamic content controllers control a model that can be projected at runtime by a {@link PageProjectorType}. Can be null if none are present.
  * @returns PageControllerType
  * @example
@@ -70,75 +71,95 @@ export { PageController }
  * homePageController.setIconPath('./navigation/icons/house.svg');
  * HomePageProjector(homePageController, pinToContentElement, './pages/home/home.html');
  */
-const PageController = (qualifier, dynamicContentControllers) => {
-    const pageModel = PageModel(qualifier);
-    const pageContentControllers = dynamicContentControllers;
+const PageController = (targetId, dynamicContentControllers) => {
+    const pageModel = PageModel(targetId);
+    const activate = () => {
+        pageModel.activeAttr .getObs(VALUE).setValue(true);
+        pageModel.visitedAttr.getObs(VALUE).setValue(true);
+    };
+    const passivate = () => pageModel.activeAttr.getObs(VALUE).setValue(false);
+
+    const setConfiguration = confObj => {
+        for (const [key, value] of Object.entries(confObj)) {
+            if (HASH === key) {
+                // TODO: proper error handling
+                console.error('You cannot change that hash');
+                return false;
+            }
+            if (PARENT === key) {
+                // TODO: proper error handling
+                console.error('You can only call setParent() after this PageController has successfully been added to the NavigationController');
+                return false;
+            }
+            const attrByKey = {
+                [TARGET_ID]:    pageModel.targetIdAttr,
+                [ACTIVE]:       pageModel.activeAttr,
+                [DESCRIPTION]:  pageModel.descriptionAttr,
+                [HASH]:         pageModel.hashAttr,
+                [ICONPATH]:     pageModel.iconPathAttr,
+                [NAVIGATIONAL]: pageModel.navigationalAttr,
+                [PARENT]:       pageModel.parentAttr,
+                [VISIBLE]:      pageModel.visibleAttr,
+                [VISITED]:      pageModel.visitedAttr,
+            };
+            attrByKey[key].getObs(VALUE).setValue(value);
+
+        }
+        return true;
+    };
+
+    const setParent = newParent => {
+        if (null === newParent) {
+            pageModel.parentAttr.getObs(VALUE).setValue(null);
+            return;
+        }
+
+        let parent = newParent;
+        let canAddParent = true;
+        // iterate through all parents and check if thisNode is already a parent in the hierarchy
+        while (null !== parent) {
+            if (parent.getHash() === pageModel.hashAttr.getObs(VALUE).getValue()) {
+                // TODO: proper error handling, logging
+                console.error('Parent of this node cannot be a child of this node or this node itself.');
+                canAddParent = false;
+                break;
+            }
+            parent = parent.getParent();
+        }
+        if (canAddParent) {
+            pageModel.parentAttr.getObs(VALUE).setValue(newParent);
+        }
+    };
 
     return {
-        activate: () => {
-            pageModel.getPageObs(ACTIVE).setValue(true);
-            pageModel.getPageObs(VISITED).setValue(true);
-        },
-        passivate: () => pageModel.getPageObs(ACTIVE).setValue(false),
-        getDynamicContentControllers: () => pageContentControllers,
-        setConfiguration: confObj => {
-            for (const [key, value] of Object.entries(confObj)) {
-                if (HASH === key){
-                    console.error('You cannot change that hash');
-                    return false;
-                } else if (PARENT === key){
-                    console.error('You can only call setParent() after this PageController has successfully been added to the NavigationController');
-                    return false;
-                } else {
-                    pageModel.getPageObs(key).setValue(value);
-                }
-            }
-            return true;
-        },
-        setParent: newParent => {
-            if (null !== newParent) {
-                let parent = newParent;
-                let canAddParent = true;
-                // iterate through all parents and check if thisNode is already a parent in the hierarchy
-                while (null !== parent) {
-                    if (parent.getHash() === pageModel.getPageObs(HASH).getValue()) {
-                        console.error('Parent of this node cannot be a child of this node or this node itself.');
-                        canAddParent = false;
-                        break;
-                    }
-                    parent = parent.getParent();
-                }
-                if (canAddParent) {
-                    pageModel.getPageObs(PARENT).setValue(newParent);
-                }
-            } else {
-                // allow null as parent
-                pageModel.getPageObs(PARENT).setValue(newParent);
-            }
-        },
-        getQualifier:            pageModel.getQualifier,
-        getHash:                 pageModel.getPageObs(HASH).getValue,
-        setValue:                pageModel.getPageObs(VALUE).setValue,
-        getValue:                pageModel.getPageObs(VALUE).getValue,
-        setDescription:          pageModel.getPageObs(DESCRIPTION).setValue,
-        getDescription:          pageModel.getPageObs(DESCRIPTION).getValue,
-        setIconPath:             pageModel.getPageObs(ICONPATH).setValue,
-        getIconPath:             pageModel.getPageObs(ICONPATH).getValue,
-        setActive:               pageModel.getPageObs(ACTIVE).setValue,
-        isActive:                pageModel.getPageObs(ACTIVE).getValue,
-        setVisited:              pageModel.getPageObs(VISITED).setValue,
-        getVisited:              pageModel.getPageObs(VISITED).getValue,
-        setVisible:              pageModel.getPageObs(VISIBLE).setValue,
-        isVisible:               pageModel.getPageObs(VISIBLE).getValue,
-        setNavigational:         pageModel.getPageObs(NAVIGATIONAL).setValue,
-        isNavigational:          pageModel.getPageObs(NAVIGATIONAL).getValue,
-        getParent:               pageModel.getPageObs(PARENT).getValue,
-        onActiveChanged:         pageModel.getPageObs(ACTIVE).onChange,
-        onIconPathChanged:       pageModel.getPageObs(ICONPATH).onChange,
-        onVisitedChanged:        pageModel.getPageObs(VISITED).onChange,
-        onValueChanged:          pageModel.getPageObs(VALUE).onChange,
-        onNavigationalChanged:   pageModel.getPageObs(NAVIGATIONAL).onChange,
-        onVisibleChanged:        pageModel.getPageObs(VISIBLE).onChange,
-        onParentChanged:         pageModel.getPageObs(PARENT).onChange,
+        activate,
+        passivate,
+        getDynamicContentControllers: () => dynamicContentControllers,
+        setConfiguration,
+        setParent,
+        getQualifier:            pageModel.targetIdAttr.getQualifier,
+        getHash:                 pageModel.hashAttr.        getObs(VALUE).getValue,
+        setValue:                pageModel.targetIdAttr.    getObs(VALUE).setValue,
+        getValue:                pageModel.targetIdAttr.    getObs(VALUE).getValue,
+        setDescription:          pageModel.descriptionAttr. getObs(VALUE).setValue,
+        getDescription:          pageModel.descriptionAttr. getObs(VALUE).getValue,
+        setIconPath:             pageModel.iconPathAttr.    getObs(VALUE).setValue,
+        getIconPath:             pageModel.iconPathAttr.    getObs(VALUE).getValue,
+        setActive:               pageModel.activeAttr.      getObs(VALUE).setValue,
+        isActive:                pageModel.activeAttr.      getObs(VALUE).getValue,
+        setVisited:              pageModel.visitedAttr.     getObs(VALUE).setValue,
+        getVisited:              pageModel.visitedAttr.     getObs(VALUE).getValue,
+        setVisible:              pageModel.visibleAttr.     getObs(VALUE).setValue,
+        isVisible:               pageModel.visibleAttr.     getObs(VALUE).getValue,
+        setNavigational:         pageModel.navigationalAttr.getObs(VALUE).setValue,
+        isNavigational:          pageModel.navigationalAttr.getObs(VALUE).getValue,
+        getParent:               pageModel.parentAttr.      getObs(VALUE).getValue,
+        onActiveChanged:         pageModel.activeAttr.      getObs(VALUE).onChange,
+        onIconPathChanged:       pageModel.iconPathAttr.    getObs(VALUE).onChange,
+        onVisitedChanged:        pageModel.visitedAttr.     getObs(VALUE).onChange,
+        onValueChanged:          pageModel.targetIdAttr.    getObs(VALUE).onChange,
+        onNavigationalChanged:   pageModel.navigationalAttr.getObs(VALUE).onChange,
+        onVisibleChanged:        pageModel.visibleAttr.     getObs(VALUE).onChange,
+        onParentChanged:         pageModel.parentAttr.      getObs(VALUE).onChange,
     }
 };
