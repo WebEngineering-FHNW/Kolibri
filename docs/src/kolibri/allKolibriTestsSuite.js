@@ -13,6 +13,7 @@ import "./logger/appender/arrayAppenderTest.js";
 import "./logger/appender/observableAppenderTest.js";
 import "./rest/restClientTest.js";
 import "./dataflow/dataflowTest.js";
+import "./navigation/navigationTestSuite.js"
 import "./projector/projectorUtilsTest.js"
 import "./projector/simpleForm/simpleInputModelTest.js"
 import "./projector/simpleForm/simpleInputControllerTest.js"
