@@ -2,10 +2,16 @@
 // TODO: how to model HASH, PARENT, PATH, etc.
 
 // import { Attribute, HASH, PARENT, PATH, VALUE, valueOf } from "../kolibri/presentationModel.js";
-import { NavigationModel } from "./navigationModel.js";
-import { Attribute }       from "../presentationModel.js";
+import {Location, NavigationModel} from "./navigationModel.js";
+import {Attribute, VALUE, valueOf} from "../presentationModel.js";
 
-export { NavigationController }
+export { NavigationController, NAME, LOGO, FAVICON, HOMEPAGE, DEBUGMODE }
+
+const NAME      =  "websiteName";
+const LOGO      = "websiteLogo";
+const FAVICON   = "favicon";
+const HOMEPAGE  = "homepage";
+const DEBUGMODE = "debugMode";
 
 /**
  * @template T
@@ -24,8 +30,8 @@ export { NavigationController }
  * @property { (pageHash: String) => void }                              deletePageController        - deletes the page controller of a specific hash.
  * @property { (anchor: HTMLAnchorElement) => void }                     registerAnchorClickListener - registers a click listener on an anchor. this binding triggers a location change trough navigate based on the hash the anchor has.
  * @property { (confObj: ModelConfigurationObject) => boolean }          setConfiguration            - sets the attributes of this navigation for all keys in object to their value.
- * @property { (newHomepage: !PageControllerType) => void } setHomePage - sets the given PageController as the homepage. the homepage is the fallback page which gets opened when no hash is provided in the request url. Calling all registered {@link ValueChangeCallback}s.
- * @property { () => ?PageControllerType}            getHomePage        - returns the PageController of the homepage. See {@link setHomepage} for more details. Returns null if no homepage has been defined.
+ * @property { (newHomepage: !PageControllerType) => void } setHomeLocation - sets the given PageController as the homepage. the homepage is the fallback page which gets opened when no hash is provided in the request url. Calling all registered {@link ValueChangeCallback}s.
+ * @property { () => ?PageControllerType}            getHomeLocation        - returns the PageController of the homepage. See {@link setHomeLocation} for more details. Returns null if no homepage has been defined.
  * @property { (newPath: String) => void }           setPath            - sets the current path. The path consists of the string that is passed after the '#' in the url. The path can be used for granular sub-routing.
  * @property { () => String}                         getPath            - returns the current path. See {@link setPath} for more details.
  * @property { (name: String) => void }              setWebsiteName     - sets the name for the website, calling all registered {@link ValueChangeCallback}s. The name can be displayed by a {@link NavigationProjectorType}.
@@ -58,144 +64,148 @@ export { NavigationController }
  */
 const NavigationController = () => {
     const navigationModel  = NavigationModel();
-    const currentLocation  = Attribute(null);
-    const pageControllers  = {};
+
 
     /**
-     * navigates to the route
-     * that is found for a given hash.
+     * Navigates to the {@link LocationType location}
+     * that is found for a given hash. This includes side-effecting the model, the browser incl. history, and
+     * activating / passivating the involved {@link PageControllerType controllers}.
      *
      * @function
-     * @param { String } hash
+     * @param { String } hash - will be normalized to start with # sign
      * @return { void }
+     *
      */
-    const navigate = hash => {
+    const navigateToHash = hash => {
         // check if hash is empty to redirect to fallback homepage
-        if(hash === '' || hash === '#') {
-            const homepageController = navigationModel.getHomepage();
-            if (null !== homepageController) {
-                hash = homepageController.getHash();
-            } else  {
-                // return if fallback homepage is not defined
-                return;
-            }
+
+        if ( ! hash.startsWith("#")) { // todo: find out if this ever happens
+            hash = "#" + hash;
         }
 
-        window.location.hash = hash;
-        const newLocation = getRoutingLocation(hash);
+        // todo: this block should not be needed at all.
+        // if(hash === '' || hash === '#') { // todo: check if null
+        //     const homepageController = navigationModel.getHomepage(); // todo: why is the homepage not part of the locations?
+        //     if (null !== homepageController) {
+        //         hash = homepageController.getHash();
+        //     } else  {
+        //         // return if fallback homepage is not defined
+        //         // todo: check what happens here: error, log?
+        //         return;
+        //     }
+        // }
 
-        // on initialization the currentLocation can be null and therefore not passivated
-        if (valueOf(currentLocation) !== null) {
-            valueOf(currentLocation).passivate();
-        }
+        // todo: should  this line move between passivation of last and activation of next location?
+        window.location.hash = hash; // effect: navigate to hash, trigger hashchanged event (?), add to history
 
-        newLocation.activate();
-        currentLocation.getObs(VALUE).setValue(newLocation);
+        const newLocation = findTargetLocation(hash);
 
-        if (navigationModel.isDebugMode()) {
-            const debugController = pageControllers['#debug'];
-            debugController.setParent(newLocation);
+        // on initialization the currentLocation can be null and passivation should not fail in that case
+        navigationModel.getCurrentLocation() ?. passivate();
+
+        newLocation.pageController.activate();
+
+        navigationModel.setCurrentLocation(newLocation);
+
+        if (navigationModel.isDebugMode()) { // todo: why is this done here? Shouldn't this be automatic on hash change?
+            const debugController = navigationModel.findLocationByHash('#debug').pageController;
+            debugController.setParent(newLocation.pageController);
         }
     };
 
     /**
-     * finds the correct route for a path
-     * and returns the corresponding pageController.
+     * Find the correct location for a hashPath
+     * and return the corresponding {@link LocationType location}.
      *
-     * @function
-     * @param { String } path
-     * @return { PageControllerType }
+     * @param { String } hashPath - can contain subHashes like '#myHash/mySubHash'
+     * @return { LocationType } the new location where navigation should proceed
      */
-    const getRoutingLocation = path => {
-        const [hash] = path.split('/');
-        /** @type { PageControllerType } */ let newLocation = pageControllers[hash];
+    const findTargetLocation = hashPath => {
+        const [hash] = hashPath.split('/'); // if there are subHashes, take the parent
 
-        currentLocation.getObs(PATH).setValue(path);
+        const targetLocation = navigationModel.findLocationByHash(hash);
 
-        if(newLocation === undefined) { // if newLocation is undefined, navigate to an error page
-            newLocation = pageControllers['#E404'];
-
-        } else if (!newLocation.isNavigational()) { // if the newLocation exists but is not navigational we return a 403 forbidden error
-            newLocation = pageControllers['#E403'];
+        if(targetLocation === navigationModel.NO_SUCH_LOCATION) { // if newLocation is undefined, navigate to an error page
+            return navigationModel.findLocationByHash('#E404');
         }
-        return newLocation
+        if (!targetLocation.pageController.isNavigational()) { // if the newLocation exists but is not navigational we return a 403 forbidden error
+            return navigationModel.findLocationByHash('#E403');
+        }
+        return targetLocation;
     };
 
     // handles initial page load and page reload
     window.onload = () => {
         const hash = window.location.hash;
-        navigate(hash);
+        navigateToHash(hash);
     };
 
-    // handles navigation through the browser URL field
+    // handles navigation through the browser URL field, bookmarking, or browser previous/next
     window.onhashchange = () => {
         const hash = window.location.hash;
-        if (hash !== valueOf(currentLocation).getHash()) {
-            navigate(hash);
+        if (hash !== navigationModel.getCurrentLocation()?.hash) {
+            navigateToHash(hash);
         }
     };
 
-    const addPageController = pageControllerToAdd => {
-        if (pageControllerToAdd && pageControllers[pageControllerToAdd.getHash()] === undefined) {
-            const hash = pageControllerToAdd.getHash();
-            pageControllers[hash] = pageControllerToAdd;
-            navigationModel.addNavigationHash(hash);
+    const addLocation = newLocation => {
+        if (navigationModel.findLocationByHash(newLocation.hash) === navigationModel.NO_SUCH_LOCATION) {
+            navigationModel.addLocation(newLocation);
         } else {
-            throw new Error('PageController could not be added to the NavigationModel. Please check that the qualifier is valid and has not already been added to the navigation: ' + pageControllerToAdd.getQualifier());
+            throw new Error('PageController could not be added to the NavigationModel. Please check that the hash is valid and has not already been added to the navigation: ' + newLocation.getHash());
         }
     };
 
     return {
-        addPageController: addPageController,
+        addPageController: pageController => addLocation(Location(pageController)),
         addPageControllers: (...pageControllersToAdd) => {
             for (const pageController of pageControllersToAdd) {
-                addPageController(pageController);
+                addLocation(Location(pageController));
             }
         },
-        getPageController: pageHash => pageControllers[pageHash],
+        getPageController: pageHash => navigationModel.findLocationByHash(pageHash)?.pageController,
         deletePageController: pageHash => {
-            navigationModel.deleteNavigationHash(pageHash);
-            delete pageControllers[pageHash];
+            navigationModel.removeLocation(pageHash);
         },
         registerAnchorClickListener: anchor => {
             anchor.onclick = e => {
                 e.preventDefault();
                 const hash = e.currentTarget.getAttribute('href');
-                navigate(hash);
+                navigateToHash(hash);
             };
         },
-        setConfiguration: confObj => {
+        setConfiguration:     confObj => {
             for (const [key, value] of Object.entries(confObj)) {
-                if (HASH === key){
-                    console.error('You cannot change that hash');
-                    return false;
-                } else if (PARENT === key){
-                    console.error('You can only call setParent() after this PageController has successfully been added to the NavigationController');
-                    return false;
-                } else {
-                    navigationModel.getNavObs(key).setValue(value);
+                switch (key) {
+                    case NAME      : navigationModel.setWebsiteName(value); break;
+                    case LOGO      : navigationModel.setWebsiteLogo(value); break;
+                    case FAVICON   : navigationModel.setFavIcon    (value); break;
+                    case HOMEPAGE  : navigationModel.setHomeLocation (Location(value)); break;
+                    case DEBUGMODE : navigationModel.setDebugMode  (value); break;
+                    default: console.error("can't find key " + key);
                 }
             }
             return true;
         },
-        setWebsiteName:         navigationModel.setWebsiteName,
-        getWebsiteName:         navigationModel.getWebsiteName,
-        setWebsiteLogo:         navigationModel.setWebsiteLogo,
-        getWebsiteLogo:         navigationModel.getWebsiteLogo,
-        setFavIcon:             navigationModel.setFavIcon,
-        getFavIcon:             navigationModel.getFavIcon,
-        setHomePage:            navigationModel.setHomepage,
-        getHomePage:            navigationModel.getHomepage,
-        setDebugMode:           navigationModel.setDebugMode,
-        isDebugMode:            navigationModel.isDebugMode,
-        setPath:                currentLocation.getObs(PATH).setValue,
-        getPath:                currentLocation.getObs(PATH).getValue,
-        onNavigationHashAdd:    navigationModel.onAdd,
-        onNavigationHashDel:    navigationModel.onDel,
-        onLocationChanged:      currentLocation.getObs(VALUE).onChange,
-        onPathChanged:          currentLocation.getObs(PATH).onChange,
-        onWebsiteNameChanged:   navigationModel.onWebsiteNameChanged,
-        onWebsiteLogoChanged:   navigationModel.onWebsiteLogoChanged,
+        setWebsiteName:       navigationModel.setWebsiteName,
+        getWebsiteName:       navigationModel.getWebsiteName,
+        setWebsiteLogo:       navigationModel.setWebsiteLogo,
+        getWebsiteLogo:       navigationModel.getWebsiteLogo,
+        setFavIcon:           navigationModel.setFavIcon,
+        getFavIcon:           navigationModel.getFavIcon,
+        setHomeLocation:      navigationModel.setHomeLocation,
+        setHomeHash:          hash => navigationModel.setHomeLocation(navigationModel.findLocationByHash(hash)),
+        getHomeLocation:      navigationModel.getHomeLocation,
+        setDebugMode:         navigationModel.setDebugMode,
+        isDebugMode:          navigationModel.isDebugMode,
+        setPath:              (val) => console.error(" "+val),
+        getPath:              (val) => console.error(" "+val),
+        onNavigationHashAdd:  navigationModel.onLocationAdded,
+        onNavigationHashDel:  navigationModel.onLocationRemoved,
+        onLocationChanged:    (val) => console.error(" "+val),
+        onPathChanged:        (val) => console.error(" "+val),
+        onWebsiteNameChanged: navigationModel.onWebsiteNameChanged,
+        onWebsiteLogoChanged: navigationModel.onWebsiteLogoChanged,
         onFavIconChanged:       navigationModel.onFavIconChanged,
         onDebugModeChanged:     navigationModel.onDebugModeChanged,
         onVisibleChanged:       navigationModel.onVisibleChanged,
