@@ -90,6 +90,8 @@ const PageModel = targetId => {
     const navigationalAttr  = Attribute(true,                                   qualify(NAVIGATIONAL));
     const descriptionAttr   = Attribute('',                                     qualify(DESCRIPTION));
 
+    // TODO: there is a dependency between the targetID and the hash that needs to be maintained
+    // through the controller or through respective converters.
 
     // TODO: check if this is really needed (if so, consider QualifiedAttribute)
     targetIdAttr.getObs(VALUE).setValue(targetId); // set value explicitly, so it overrides any state the model world has

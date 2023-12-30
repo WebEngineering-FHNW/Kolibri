@@ -139,6 +139,7 @@ const PageController = (targetId, dynamicContentControllers) => {
         setParent,
         getQualifier:            pageModel.targetIdAttr.getQualifier,
         getHash:                 pageModel.hashAttr.        getObs(VALUE).getValue,
+        setHash:                 pageModel.hashAttr.        getObs(VALUE).setValue, // TODO: check for effects on qualifier and targetId
         setValue:                pageModel.targetIdAttr.    getObs(VALUE).setValue,
         getValue:                pageModel.targetIdAttr.    getObs(VALUE).getValue,
         setDescription:          pageModel.descriptionAttr. getObs(VALUE).setValue,
