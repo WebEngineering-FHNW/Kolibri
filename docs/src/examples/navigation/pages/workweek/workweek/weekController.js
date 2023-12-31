@@ -4,7 +4,7 @@
  * Collaborates with {@link DayController}.
  */
 
-import {Attribute, VALUE} from "../../../kolibri/presentationModel.js";
+import {Attribute, VALUE} from "../../../../../kolibri/presentationModel.js";
 import "../../../kolibri/util/array.js"
 
 export { WeekController }
@@ -31,7 +31,7 @@ const WeekModel = () => {
 /**
  * @typedef WeekControllerType
  * @property { (dayController: !DayControllerType )       => void } addDayController
- * @property { (callback: !onValueChangeCallback<Number>) => void } onTotalWeekMinutesChanged
+ * @property { (callback: !ValueChangeCallback<Number>) => void } onTotalWeekMinutesChanged
  */
 
 /**

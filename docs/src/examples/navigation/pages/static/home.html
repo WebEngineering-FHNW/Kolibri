@@ -1,6 +1,69 @@
 
 <div id="content-wrapper">
+    <style>
+                a.btn {
+                    display: block;
+                    text-align: center;
+                    width: 12em;
+                    padding: 1rem;
+                    border-radius: 8px;
+                    text-decoration: none;
+                    box-shadow: var(--kolibri-box-shadow);
 
+                }
+
+                a.btn.primary {
+                    color: #FFFFFF;
+                    background-color: var(--kb-hsla-primary-accent);
+                    border: 2px solid var(--kolibri-color-shadow);
+                }
+
+                a.btn.accent {
+                    color: var(--kb-hsla-primary-accent);
+                    background-color: #FFFFFF;
+                    border: 2px solid var(--kb-hsla-primary-accent);
+                }
+
+                .glow {
+                    position: relative;
+                }
+
+                .glow::before, .glow::after {
+                    content:'';
+                    position:absolute;
+                    left: 0;
+                    top: 0;
+                    background: linear-gradient(45deg, #993333, #ff00ff, #6e0dd0, #099fff, #ff00 ,#993333);
+                    background-size: 400%;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 8px;
+                    z-index: -1;
+                    animation: animate 20s linear infinite;
+                }
+
+                @keyframes animate {
+                    0% {
+                        background-position: 0 0;
+                    }
+                    50% {
+                        background-position: 400% 0;
+                    }
+                    100% {
+                        background-position: 0 0;
+                    }
+                }
+
+                a.glow::before {
+                    filter: blur(20px);
+                    opacity: 0;
+                    transition: opacity 0.5s ease-in-out;
+                }
+
+                a.glow:hover::before {
+                    opacity: 100;
+                }
+            </style>
   <header>
     <div class="kolibri-logo-svg kolibri-logo-anim">
       <svg viewBox="0 0 305 342" fill="none" xmlns="http://www.w3.org/2000/svg">

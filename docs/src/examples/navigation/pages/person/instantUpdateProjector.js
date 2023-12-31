@@ -1,7 +1,7 @@
-import { dom }                              from "../../kolibri/util/dom.js";
-import { VALUE }                            from "../../kolibri/presentationModel.js";
-import { projectInstantInput }              from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
-import { SimpleAttributeInputController }   from "../../kolibri/projector/simpleForm/simpleInputController.js";
+import { dom }                              from "../../../../kolibri/util/dom.js";
+import { VALUE }                            from "../../../../kolibri/presentationModel.js";
+import { projectInstantInput }              from "../../../../kolibri/projector/simpleForm/simpleInputProjector.js";
+import { SimpleAttributeInputController }   from "../../../../kolibri/projector/simpleForm/simpleInputController.js";
 
 export { projectListItem, selectListItemForModel, removeListItemForModel, projectForm,  masterClassName, pageCss as personPageCss}
 

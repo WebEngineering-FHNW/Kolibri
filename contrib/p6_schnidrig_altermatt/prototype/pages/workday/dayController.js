@@ -37,7 +37,7 @@ const DayModel = () => {
  * @property { SimpleInputControllerType<Number> }  pmStartCtrl
  * @property { SimpleInputControllerType<Number> }  pmEndCtrl
  * @property { () => Number }                       getTotal        - the total minutes in this day, derived
- * @property { (callback: !onValueChangeCallback<Number>) => void } onTotalChanged - when total changes
+ * @property { (callback: !ValueChangeCallback<Number>) => void } onTotalChanged - when total changes
  */
 /**
  * Creating a day controller made from four simple input controllers for the four time values (as numbers

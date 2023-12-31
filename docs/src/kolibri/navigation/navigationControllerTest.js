@@ -35,9 +35,9 @@ navigationSuite.add('setHomeLocation', assert => {
 
     assert.is(navigationController.getHomeLocation(), NO_SUCH_LOCATION);
 
-    navigationController.setHomeHash(homePageController.getHash());
+    navigationController.setHomeLocationByHash(homePageController.getHash());
 
-    assert.is(navigationController.getHomeLocation().hash, '#home');
+    assert.is(navigationController.getHomeLocation().getHash(), '#home');
 });
 
 navigationSuite.add('onNavigationHashAddAndDel', assert => {
@@ -46,8 +46,8 @@ navigationSuite.add('onNavigationHashAddAndDel', assert => {
     let newHash;
     let isDeleted = false;
 
-    navigationController.onNavigationHashAdd(location => newHash = location.hash);
-    navigationController.onNavigationHashDel(() => isDeleted = true);
+    navigationController.onLocationAdded(location => newHash = location.getHash());
+    navigationController.onLocationRemoved(() => isDeleted = true);
 
     navigationController.addPageControllers(homePageController);
 
@@ -107,7 +107,7 @@ navigationSuite.add('setConfiguration', assert => {
     assert.is(navigationController.getWebsiteName(), "TestName");
     assert.is(navigationController.getWebsiteLogo(), "./logo/kolibri.png");
     assert.is(navigationController.getFavIcon(), "./favicon/kolibri.png");
-    assert.is(navigationController.getHomeLocation().pageController, homePageController);
+    assert.is(navigationController.getHomeLocation(), homePageController);
     assert.is(navigationController.isDebugMode(), true);
 });
 

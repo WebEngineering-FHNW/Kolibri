@@ -8,23 +8,38 @@
 
         <!--        Styles that should apply to all pages in the Kolibri app       -->
 
-        <link rel="stylesheet" href="../../../css/kolibri-base-light.css" >
+        <link href="../../../css/kolibri-light-fonts.css" rel="stylesheet">
+        <link href="../../../css/kolibri-light-colors.css" rel="stylesheet">
+        <link href="../../../css/kolibri-base.css" rel="stylesheet">
+        <link rel="stylesheet" href="./pages/static/home.css">
+        <link rel="stylesheet" href="./pages/static/about.css">
 
-<!--        TODO: projector-specific styles should be added dynamically-->
-        <link rel="stylesheet" href="../../kolibri/navigation/projector/sideNavigation/sideNavigationProjector.css">
+<!--        <link rel="stylesheet" href="../../kolibri/navigation/projector/navigation.css">-->
+        <link rel="stylesheet" href="../../kolibri/navigation/projector/dashboard/dashboardNavigationProjector.css">
 
         <style>
+            :root {
+                --background: #FFFFFF;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+
             h1 {
                 margin-top: 1em;
                 text-align: center;
             }
+
             section {
                 max-width:  40em;
                 margin:     1em auto 4em auto;
             }
-        </style>
 
-        <!-- Page-specific styles will dynamically be added below -->
+        </style>
     </head>
     <body>
 <!--    The main hooks  that any content can be pinned to-->
