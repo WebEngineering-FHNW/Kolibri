@@ -1,4 +1,4 @@
-import { projectForm }         from "../../kolibri/projector/simpleForm/simpleFormProjector.js"
+import { projectForm }         from "../../../../kolibri/projector/simpleForm/simpleFormProjector.js"
 
 export { SimpleFormPageProjector }
 

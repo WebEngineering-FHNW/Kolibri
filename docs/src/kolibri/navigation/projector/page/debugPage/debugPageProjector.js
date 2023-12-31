@@ -1,4 +1,4 @@
-import { dom } from "../../kolibri/util/dom.js";
+import { dom } from "../../../../util/dom.js";
 
 export { DebugPageProjector }
 

@@ -1,5 +1,5 @@
-import { ObservableList } from "../kolibri/observable.js";
-import { dom } from "../kolibri/util/dom.js";
+import { ObservableList } from "../../../observable.js";
+import { dom }            from "../../../util/dom.js";
 
 export { NavigationProjector }
 
@@ -80,10 +80,10 @@ const NavigationProjector = (controller, pinToElement) => {
         // add favicon to website
     });
 
-    controller.onNavigationHashAdd(hash => {
-        const pageController = controller.getPageController(hash);
+    controller.onLocationAdded( location => {
+        const pageController = location;
         const pageName = pageController.getValue();
-        const newNavPoint = initializeNavigationPoint(hash, pageName);
+        const newNavPoint = initializeNavigationPoint(location.getHash(), pageName);
         observableNavigationAnchors.add(newNavPoint);
 
         // CREATE BINDINGS

@@ -1,5 +1,5 @@
-import { ObservableList } from "../../../kolibri/observable.js";
-import { dom }           from "../../../kolibri/util/dom.js";
+import { ObservableList } from "../../../observable.js";
+import { dom }           from "../../../util/dom.js";
 import { GridProjector } from "../util/gridProjector.js";
 
 export { NavigationProjector as CardNavigationProjector }

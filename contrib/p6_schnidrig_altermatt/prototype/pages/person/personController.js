@@ -58,7 +58,7 @@ noSelection.detailed .getObs(VALUE)   .setValue(false);    // detail view can fo
  * @property { (T) => void } setSelectedModel
  * @property { ()  => T    } getSelectedModel
  * @property { () => void  } clearSelection
- * @property { (callback: onValueChangeCallback<T>) => void } onModelSelected
+ * @property { (callback: ValueChangeCallback<T>) => void } onModelSelected
  */
 
 /**

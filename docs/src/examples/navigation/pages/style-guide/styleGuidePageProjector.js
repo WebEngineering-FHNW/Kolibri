@@ -1,4 +1,4 @@
-import { dom } from "../../kolibri/util/dom.js";
+import { dom } from "../../../../kolibri/util/dom.js";
 import { UseStylesProjector } from "./useStylesProjector.js";
 
 export { StyleGuidePageProjector }
