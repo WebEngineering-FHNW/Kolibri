@@ -38,7 +38,8 @@ const NavigationProjector = (controller, pinToElement) => {
         navigationAnchors.push(anchor);
     });
 
-    controller.onNavigationHashAdd(hash => {
+    controller.onLocationAdded(location => {
+        const hash = location.getHash();
         const newNavPoint = document.createElement('a');
         newNavPoint.setAttribute('href', hash);
         newNavPoint.innerText = hash.substring(1);

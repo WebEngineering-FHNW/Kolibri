@@ -1,4 +1,4 @@
-import {Attribute, EDITABLE, LABEL, TYPE, VALUE, VALID } from "../../kolibri/presentationModel.js";
+import {Attribute, EDITABLE, LABEL, TYPE, VALUE, VALID } from "../../../../kolibri/presentationModel.js";
 
 export { Person, reset, ALL_ATTRIBUTE_NAMES, selectionMold as personSelectionMold}
 

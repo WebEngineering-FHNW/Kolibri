@@ -1,5 +1,5 @@
 
-import { dom } from "../../kolibri/util/dom.js"
+import { dom } from "../../../../kolibri/util/dom.js"
 import {
     accentColor, okColor, neutralColor, selectColor, outputColor, shadowColor, shadowCss,
     primaryDark,     primaryAccent, primaryBg,    primaryLight,
@@ -7,7 +7,7 @@ import {
     successAccent,   successDark,   successLight, successBg,
     warningAccent,   warningDark,   warningBg,    warningLight,
     dangerAccent,    dangerDark,    dangerBg,     dangerLight
-} from "../../kolibri/style/kolibriStyle.js"
+} from "../../../../kolibri/style/kolibriStyle.js"
 
 export { UseStylesProjector }
 

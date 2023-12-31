@@ -1,6 +1,6 @@
 import { personProjectMasterView, personProjectDetailView } from "./masterDetailProjector.js";
 import { personPageCss } from "./instantUpdateProjector.js";
-import { dom } from "../../kolibri/util/dom.js";
+import { dom } from "../../../../kolibri/util/dom.js";
 
 export { PersonPageProjector }
 

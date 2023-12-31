@@ -1,17 +1,17 @@
-import { NavigationController }                            from '../navigation/navigationController.js';
-import { CardNavigationProjector }                         from '../navigation/final-prototypes/card/cardNavigationProjector.js';
-import { DashboardRefinedProjector }                       from "../navigation/final-prototypes/dashboard-refined/dashboardRefinedNavigationProjector.js";
-import { FlowerNavigationProjector }                       from "../navigation/final-prototypes/flower/flowerNavigationProjector.js";
-import { BubbleStateNavigationProjector }                  from "../navigation/final-prototypes/bubble-state/bubblestateNavigationProjector.js";
-import { BreadCrumbProjector }                             from "../navigation/final-prototypes/bread-crumbs/breadCrumbProjector.js";
-import { PageSwitchProjector }                             from '../navigation/final-prototypes/page-switch/pageSwitchProjector.js';
+import { NavigationController }                            from '../../../../docs/src/kolibri/navigation/navigationController.js';
+import { CardNavigationProjector }                         from '../../../../docs/src/kolibri/navigation/projector/card/cardNavigationProjector.js';
+// import { DashboardRefinedProjector }                       from "../../../../docs/src/kolibri/navigation/projector/dashboard-refined/dashboardRefinedNavigationProjector.js";
+import { FlowerNavigationProjector }                       from "../../../../docs/src/kolibri/navigation/projector/flower/flowerNavigationProjector.js";
+import { BubbleStateNavigationProjector }                  from "../../../../docs/src/kolibri/navigation/projector/bubble/bubbleNavigationProjector.js";
+import { BreadCrumbProjector }                             from "../../../../docs/src/kolibri/navigation/projector/breadcrumb/breadCrumbProjector.js";
+// import { PageSwitchProjector }                             from '../../../../docs/src/kolibri/navigation/projector/page-switch/pageSwitchProjector.js';
 import { PageController }                                  from '../pages/pageController.js';
 import { ForbiddenPageProjector }                          from '../pages/error-pages/403/forbiddenPageProjector.js';
 import { PageNotFoundProjector }                           from '../pages/error-pages/404/pageNotFoundProjector.js';
 import { StaticPageProjector }                             from '../pages/StaticPageProjector.js';
 import { DebugPageProjector }                              from '../pages/debug/debugPageProjector.js';
 import { StyleGuidePageProjector }                         from '../pages/style-guide/styleGuidePageProjector.js';
-import { SimpleFormController }                            from "../kolibri/projector/simpleForm/simpleFormController.js";
+import { SimpleFormController }                            from "../../../../docs/src/kolibri/projector/simpleForm/simpleFormController.js";
 import { SimpleFormPageProjector }                         from "../pages/simpleform/simpleFormPageProjector.js";
 import { TestCasesPageProjector }                          from "../pages/test-cases/testCasesPageProjector.js";
 import { DayController }                                   from "../pages/workday/dayController.js";
@@ -29,7 +29,7 @@ import {
     LOGO,
     NAME, NAVIGATIONAL, VALUE,
     VISIBLE
-} from '../kolibri/presentationModel.js';
+} from '../../../../docs/src/kolibri/presentationModel.js';
 import {
     CHECKBOX,
     COLOR,
@@ -37,7 +37,11 @@ import {
     NUMBER,
     TEXT,
     TIME
-} from "../kolibri/util/dom.js";
+} from "../../../../docs/src/kolibri/util/dom.js";
+import {PageSwitchProjector} from "../../../../docs/src/kolibri/navigation/projector/pageSwitch/pageSwitchProjector.js";
+import {
+    DashboardRefinedProjector
+} from "../../../../docs/src/kolibri/navigation/projector/dashboard/dashboardNavigationProjector.js";
 
 /* ********************************************* PIN TO ELEMENTS ************************************************************ */
 const pinToCardNavElement          = document.getElementById('card-nav');

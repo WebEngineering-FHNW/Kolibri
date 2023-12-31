@@ -1,5 +1,5 @@
-import { ObservableList } from "../../../kolibri/observable.js";
-import { dom } from "../../../kolibri/util/dom.js";
+import { ObservableList } from "../../../observable.js";
+import { dom } from "../../../util/dom.js";
 
 export { NavigationProjector as DashboardRefinedProjector }
 
@@ -24,14 +24,14 @@ const NavigationProjector = (controller, pinToElement) => {
 
     // ************** Create overview and detail wrapper *******************
 
-    const arrowSVGPathRelativeIndex = "../navigation/icons/right-arrow-gradient.svg";
+    const arrowSVGPathRelativeIndex = "../../../img/icons/right-arrow-gradient.svg";
 
     const [overviewWrapper,  overviewLogo, overviewContentWrapper, overviewToggle] = dom(`
         <!-- create overview wrapper -->
         <div class="overview"></div>
         
         <!-- create overview header -->
-        <a class="logo" href="${controller.getHomePage() ? controller.getHomePage().getHash() : '#'}">
+        <a class="logo" href="${controller.getHomeLocation() ? controller.getHomeLocation().getHash() : '#'}">
             <img src="" alt="website-logo">
         </a>
         
@@ -316,7 +316,8 @@ const NavigationProjector = (controller, pinToElement) => {
         }
     });
 
-    controller.onNavigationHashAdd(hash => {
+    controller.onLocationAdded( location => {
+        const hash = location.getHash();
         const pageController = controller.getPageController(hash);
         const qualifier = pageController.getQualifier();
 
