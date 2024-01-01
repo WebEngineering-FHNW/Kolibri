@@ -2,6 +2,7 @@ import {PageController} from './pageController.js';
 import {VALUE}                       from "../presentationModel.js";
 import {TestSuite}                                                                              from "../util/test.js";
 import {ACTIVE, DESCRIPTION, HASH, ICONPATH, NAVIGATIONAL, PARENT, TARGET_ID, VISIBLE, VISITED} from "./pageModel.js";
+import {resourceBaseURI} from "./applicationConfig.js";
 
 const pageSuite = TestSuite('pageController');
 
@@ -116,7 +117,7 @@ pageSuite.add('onIconPathChanged', assert => {
 
     homePageController.onIconPathChanged(icon => changedIcon = icon);
 
-    assert.is(changedIcon, '../navigation/icons/placeholder.svg');
+    assert.is(changedIcon, resourceBaseURI + 'img/icons/placeholder.svg');
 
     homePageController.setIconPath('../navigation/icons/house.svg');
 

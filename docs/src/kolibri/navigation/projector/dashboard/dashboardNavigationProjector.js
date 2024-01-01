@@ -489,7 +489,7 @@ const NavigationProjector = (controller, pinToElement) => {
             overviewIcon.src = newIcon;
             detailIcon.src = newIcon;
         } else if (null !== detailIcon) {
-            detailIcon.src = '../navigation/icons/line.png';
+            detailIcon.src = '/kolibri/docs/img/icons/line.png'; // todo: set resource path from outside
         }
     };
 
