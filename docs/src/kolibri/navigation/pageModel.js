@@ -2,6 +2,7 @@ import {
     Attribute,
     VALUE,
 } from "../presentationModel.js";
+import {resourceBaseURI} from "./applicationConfig.js";
 
 export { PageModel,
     TARGET_ID   ,
@@ -84,7 +85,7 @@ const PageModel = targetId => {
     const activeAttr        = Attribute(false   ,                               qualify(ACTIVE));
     const hashAttr          = Attribute('#' + targetId.replace(' ', '')   ,     qualify(HASH));
     const visitedAttr       = Attribute(false,                                  qualify(VISITED));
-    const iconPathAttr      = Attribute('../navigation/icons/placeholder.svg',  qualify(ICONPATH));
+    const iconPathAttr      = Attribute(resourceBaseURI + 'img/icons/placeholder.svg',  qualify(ICONPATH));
     const visibleAttr       = Attribute(true,                                   qualify(VISIBLE));
     const parentAttr        = Attribute(null,                                   qualify(PARENT));
     const navigationalAttr  = Attribute(true,                                   qualify(NAVIGATIONAL));
