@@ -19,13 +19,15 @@ registerSiteMap(null /* no parent at start */, navigationController,
             icon:  resourceBaseURI + "img/icons/house.svg",  // override naming convention
             pages: [
                 {
-                    name: "home",
-                    file: './pages/static/home.html',
-                    home: true,
+                    home:  true,
+                    name:  "home",
+                    file:  './pages/static/home.html',
+                    style: './pages/static/home.css',
                 },
                 {
-                    name: "about",
-                    file: './pages/static/about.html'
+                    name:  "about",
+                    file:  './pages/static/about.html',
+                    style: './pages/static/about.css'
                 },
             ]
         }

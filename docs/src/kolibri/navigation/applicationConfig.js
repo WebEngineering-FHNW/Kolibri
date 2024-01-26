@@ -25,7 +25,8 @@ const registerSiteMap = (parentController, navigationController, pages) => {
             StaticPageProjector(
                 /** @type { !PageControllerType } */ pageController,
                 document.getElementById("content"),
-                page.file);
+                page.file,
+                page.style);
         }
         registerSiteMap(pageController, navigationController, page.pages);
     });
