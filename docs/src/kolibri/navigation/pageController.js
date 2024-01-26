@@ -49,13 +49,13 @@ export { PageController }
  * @property { () => ?PageControllerType } getParent                - a getter function that returns the parent of the page or null. See {@link setParent} for more details.
  * @property { (isNavigational: Boolean) => void } setNavigational  - a setter function that sets the navigational state of the page. The navigational state declares if a page should be reachable through navigation or if an error should be returned to the user. Note: a page can be unnavigational but still visible meaning that a user can see the page in the navigation but cannot navigate to it directly with the hash. See {@link setVisible} if you want to make it invisible.
  * @property { () => Boolean } isNavigational                       - a getter function that returns the navigational state of the page. See {@link setNavigational} for more details.
- * @property { (callback: ValueChangeCallback<Boolean>) => void } onActiveChanged             - a function that registers an {@link ValueChangeCallback} that will be called whenever the active state changes.
- * @property { (callback: ValueChangeCallback<String>) => void } onIconPathChanged            - a function that registers an {@link ValueChangeCallback} that will be called whenever the icon path changes.
- * @property { (callback: ValueChangeCallback<Boolean>) => void } onVisitedChanged            - a function that registers an {@link ValueChangeCallback} that will be called whenever the visited state changes.
- * @property { (callback: ValueChangeCallback<String>) => void } onValueChanged               - a function that registers an {@link ValueChangeCallback} that will be called whenever the value changes.
- * @property { (callback: ValueChangeCallback<Boolean>) => void } onNavigationalChanged       - a function that registers an {@link ValueChangeCallback} that will be called whenever the navigational state changes.
- * @property { (callback: ValueChangeCallback<Boolean>) => void } onVisibleChanged            - a function that registers an {@link ValueChangeCallback} that will be called whenever the visible state changes.
- * @property { (callback: ValueChangeCallback<?PageControllerType>) => void } onParentChanged - a function that registers an {@link ValueChangeCallback} that will be called whenever the parent changes.
+ * @property { (cb: ValueChangeCallback<Boolean>) => void } onActiveChanged             - a function that registers an {@link ValueChangeCallback} that will be called whenever the active state changes.
+ * @property { (cb: ValueChangeCallback<String>) => void } onIconPathChanged            - a function that registers an {@link ValueChangeCallback} that will be called whenever the icon path changes.
+ * @property { (cb: ValueChangeCallback<Boolean>) => void } onVisitedChanged            - a function that registers an {@link ValueChangeCallback} that will be called whenever the visited state changes.
+ * @property { (cb: ValueChangeCallback<String>) => void } onValueChanged               - a function that registers an {@link ValueChangeCallback} that will be called whenever the value changes.
+ * @property { (cb: ValueChangeCallback<Boolean>) => void } onNavigationalChanged       - a function that registers an {@link ValueChangeCallback} that will be called whenever the navigational state changes.
+ * @property { (cb: ValueChangeCallback<Boolean>) => void } onVisibleChanged            - a function that registers an {@link ValueChangeCallback} that will be called whenever the visible state changes.
+ * @property { (cb: ValueChangeCallback<?PageControllerType>) => void } onParentChanged - a function that registers an {@link ValueChangeCallback} that will be called whenever the parent changes.
  */
 
 /**
