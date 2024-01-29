@@ -1,7 +1,7 @@
 import { ObservableList } from "../../../observable.js";
 import { dom } from "../../../util/dom.js";
 
-export { NavigationProjector as DashboardRefinedProjector }
+export { NavigationProjector as SideNavigationProjector }
 
 /**
  * @typedef NavigationProjectorType
@@ -39,7 +39,7 @@ const NavigationProjector = (controller, pinToElement) => {
         <div class="content" id="overview-content-wrapper"></div>
         
         <!-- create overview footer -->
-        <div class="toggle" onclick="document.getElementById('dashboard-refined-nav').classList.toggle('open')">
+        <div class="toggle" onclick="document.getElementById('side-navigation').classList.toggle('open')">
             <img src="${arrowSVGPathRelativeIndex}" alt="arrow">
         </div>
     `);
@@ -111,8 +111,8 @@ const NavigationProjector = (controller, pinToElement) => {
      */
     const initializeBaseStructure = () => {
         navigationDiv = document.createElement("div");
-        navigationDiv.id = 'dashboard-refined-nav';
-        navigationDiv.classList.add('dashboard-refined-nav');
+        navigationDiv.id = 'side-navigation';
+        navigationDiv.classList.add('side-navigation');
 
         overviewWrapper.append(overviewLogo);
         overviewWrapper.append(overviewContentWrapper);
