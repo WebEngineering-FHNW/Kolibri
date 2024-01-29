@@ -1,6 +1,6 @@
-import {NavigationController}                                 from "../../kolibri/navigation/navigationController.js";
-import {SideNavigationProjector}                            from "../../kolibri/navigation/projector/sideNavigation/sideNavigationProjector.js";
-import {registerSiteMap, resourceBaseURI, setResourceBaseURI} from "../../kolibri/navigation/applicationConfig.js";
+import { NavigationController }                                 from "../../kolibri/navigation/navigationController.js";
+import { SideNavigationProjector }                              from "../../kolibri/navigation/projector/sideNavigation/sideNavigationProjector.js";
+import { registerSiteMap, resourceBaseURI, setResourceBaseURI } from "../../kolibri/navigation/applicationConfig.js";
 
 // where all the resources reside relative to the home URL.
 setResourceBaseURI("../../../");
