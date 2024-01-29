@@ -13,6 +13,7 @@
     --header-height:  calc(4/5 * var(--base-unit));
     --std-padding:    calc(1/5 * var(--base-unit));
     font-family:      var(--kb-font-rubik-light-regular);
+    box-shadow:       var(--kolibri-box-shadow);
 
     /* docked to the left, full height*/
     position: fixed;
@@ -23,7 +24,8 @@
     grid-template-columns: var(--base-unit);                        /* default: closed, only one column*/
 
     &.open {
-        grid-template-columns: var(--base-unit) var(--detail-width); /* two columns if open */
+        /*grid-template-columns: var(--base-unit) var(--detail-width); !* two columns if open *!*/
+        grid-template-columns: var(--base-unit) max-content; /* two columns if open */
     }
 }
 
@@ -77,39 +79,13 @@
     filter: invert(51%) sepia(76%) saturate(6321%) hue-rotate(306deg) brightness(100%) contrast(105%); /* convert svg color to --kb-color-hsl-pink-500 */
 }
 
-/* when opened, the overview nav should show now content */
+/* when opened, the overview nav should show no content
+experimentally disabled to see whether hiding the content is an improvement or not
+todo: make a decision
 .side-navigation.open .overview .content .row img {
     display: none;
 }
-
-/* background circle for the open/closed toggle "button" */
-.side-navigation .overview .toggle {
-    /*it needs to go to the bottom, possibly on top of any menu items if there are many*/
-    position:   absolute;
-    bottom:     var(--std-padding);
-    z-index:    20;
-
-    /*the included image must be centered*/
-    display:     grid;
-    place-items: center;
-
-    min-height:       calc(1/2 * var(--base-unit));
-    aspect-ratio:     1 / 1;
-    border-radius:    50%;
-    background-color: var(--kb-hsla-primary-bg);
-}
-
-.side-navigation .overview .toggle img {
-    height:       calc(9/20 * var(--base-unit));
-    aspect-ratio: 1;
-    transition:   transform ease-in-out 0.2s;
-    cursor:       pointer;
-}
-
-.side-navigation.open .overview .toggle img {
-    transform:    rotate(180deg);
-    transition:   transform ease-in-out 0.2s;
-}
+*/
 
 /* end of overview */
 
@@ -131,9 +107,7 @@
 
 .side-navigation .detail .header {
     height:           var(--header-height);
-    padding-top:      var(--std-padding);
-    padding-bottom:   var(--std-padding);
-    padding-left:     var(--std-padding);
+    padding:          var(--std-padding);
     display:          flex;
     flex-direction:   column;
     justify-content:  center;
