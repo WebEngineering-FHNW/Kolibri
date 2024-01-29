@@ -18,24 +18,30 @@ export { NavigationProjector as SideNavigationProjector }
  */
 const NavigationProjector = (controller, pinToElement) => {
     const positionWrapper = pinToElement;
-    const observableNavigationAnchors = ObservableList([]); // todo: this should be provided by the controller
+    const observableNavigationAnchors = ObservableList([]);
 
     let navigationDiv = null;
 
     // ************** Create overview and detail wrapper *******************
 
-    const [overviewWrapper,  overviewLogo, overviewContentWrapper] = dom(`
+    const arrowSVGPathRelativeIndex = "../../../img/icons/right-arrow-gradient.svg";
+
+    const [overviewWrapper,  overviewLogo, overviewContentWrapper, overviewToggle] = dom(`
         <!-- create overview wrapper -->
-        <div class="overview" title="Click for details"></div>
+        <div class="overview"></div>
         
         <!-- create overview header -->
-        <a class="logo" href="${controller.getHomeLocation()?.getHash() ?? '#'}">
+        <a class="logo" href="${controller.getHomeLocation() ? controller.getHomeLocation().getHash() : '#'}">
             <img src="" alt="website-logo">
         </a>
         
         <!-- create overview content wrapper -->
         <div class="content" id="overview-content-wrapper"></div>
-
+        
+        <!-- create overview footer -->
+        <div class="toggle" onclick="document.getElementById('side-navigation').classList.toggle('open')">
+            <img src="${arrowSVGPathRelativeIndex}" alt="arrow">
+        </div>
     `);
 
     const [detailWrapper, detailHeader, detailTree] = dom(`
@@ -104,19 +110,18 @@ const NavigationProjector = (controller, pinToElement) => {
      * @return void
      */
     const initializeBaseStructure = () => {
-        navigationDiv = document.createElement("nav");
+        navigationDiv = document.createElement("div");
+        navigationDiv.id = 'side-navigation';
         navigationDiv.classList.add('side-navigation');
 
         overviewWrapper.append(overviewLogo);
         overviewWrapper.append(overviewContentWrapper);
+        overviewWrapper.append(overviewToggle);
 
         detailWrapper.append(detailHeader);
         detailWrapper.append(detailTree);
 
         navigationDiv.append(overviewWrapper, detailWrapper);
-
-        overviewWrapper.addEventListener("click",      _evt => navigationDiv.classList.toggle("open"));
-        detailWrapper  .addEventListener("mouseleave", _evt => navigationDiv.classList.remove("open"));
     };
 
     /**
@@ -465,7 +470,7 @@ const NavigationProjector = (controller, pinToElement) => {
         const pageName = controller.getPageController(hash).getValue();
         if (active) {
             const title = document.getElementsByTagName("title")[0];
-            title.textContent = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+            title.innerText = pageName.charAt(0).toUpperCase() + pageName.slice(1);
         }
     };
 
@@ -480,14 +485,10 @@ const NavigationProjector = (controller, pinToElement) => {
         const qualifier = pageController.getQualifier();
         const overviewIcon = findElementById(overviewContentWrapper, qualifier + '-overview-icon');
         const detailIcon   = findElementById(detailTree, qualifier + '-detail-icon');
-        if (
-            null === pageController.getParent() &&
-            null !== overviewIcon &&
-            null !== detailIcon
-        ) {
+        if (null === pageController.getParent() && null !== overviewIcon && null !== detailIcon) {
             overviewIcon.src = newIcon;
-            detailIcon  .src = newIcon;
-        } else if (null !== detailIcon) { // show an indentation line if there is a parent
+            detailIcon.src = newIcon;
+        } else if (null !== detailIcon) {
             detailIcon.src = '/kolibri/docs/img/icons/line.png'; // todo: set resource path from outside
         }
     };
@@ -522,6 +523,6 @@ const NavigationProjector = (controller, pinToElement) => {
     const setNavpointName = (qualifier, hash, newValue) => {
         const navigationNode   = document.getElementById(`${qualifier}-node`);
         const navigationAnchor = navigationNode.getElementsByTagName('a')[0];
-        navigationAnchor.textContent = newValue;
+        navigationAnchor.innerText = newValue;
     };
 };

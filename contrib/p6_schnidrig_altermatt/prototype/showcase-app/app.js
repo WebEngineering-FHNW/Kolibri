@@ -1,6 +1,6 @@
 import { NavigationController }                            from '../../../../docs/src/kolibri/navigation/navigationController.js';
 import { CardNavigationProjector }                         from '../../../../docs/src/kolibri/navigation/projector/card/cardNavigationProjector.js';
-// import { DashboardRefinedProjector }                       from "../../../../docs/src/kolibri/navigation/projector/dashboard-refined/dashboardRefinedNavigationProjector.js";
+// import { SideNavigationProjector }                       from "../../../../docs/src/kolibri/navigation/projector/dashboard-refined/dashboardRefinedNavigationProjector.js";
 import { FlowerNavigationProjector }                       from "../../../../docs/src/kolibri/navigation/projector/flower/flowerNavigationProjector.js";
 import { BubbleStateNavigationProjector }                  from "../../../../docs/src/kolibri/navigation/projector/bubble/bubbleNavigationProjector.js";
 import { BreadCrumbProjector }                             from "../../../../docs/src/kolibri/navigation/projector/breadcrumb/breadCrumbProjector.js";
@@ -40,8 +40,8 @@ import {
 } from "../../../../docs/src/kolibri/util/dom.js";
 import {PageSwitchProjector} from "../../../../docs/src/kolibri/navigation/projector/pageSwitch/pageSwitchProjector.js";
 import {
-    DashboardRefinedProjector
-} from "../../../../docs/src/kolibri/navigation/projector/dashboard/dashboardNavigationProjector.js";
+    SideNavigationProjector
+}                            from "../../../../docs/src/kolibri/navigation/projector/sideNavigation/sideNavigationProjector.js";
 
 /* ********************************************* PIN TO ELEMENTS ************************************************************ */
 const pinToCardNavElement          = document.getElementById('card-nav');
@@ -206,7 +206,7 @@ cardGridProjector.setGridForPage(workWeekPageController.getQualifier(), { rowSpa
 
 FlowerNavigationProjector(navigationController, pinToFlowerNavElement);
 BubbleStateNavigationProjector(navigationController, pinToBubbleStateNavElement);
-DashboardRefinedProjector(navigationController, pinToDashboardNavElement);
+SideNavigationProjector(navigationController, pinToDashboardNavElement);
 BreadCrumbProjector(navigationController, pinToBreadCrumbsElement);
 /* ********************************************* CONSTRUCTION THE PAGE  ************************************************************ */
 
