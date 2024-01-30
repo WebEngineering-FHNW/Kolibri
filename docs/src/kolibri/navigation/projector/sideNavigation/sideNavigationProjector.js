@@ -481,10 +481,14 @@ const NavigationProjector = (controller, pinToElement) => {
         const qualifier = pageController.getQualifier();
         const overviewIcon = findElementById(overviewContentWrapper, qualifier + '-overview-icon');
         const detailIcon   = findElementById(detailTree, qualifier + '-detail-icon');
-        if (null === pageController.getParent() && null !== overviewIcon && null !== detailIcon) {
+        if (
+            null === pageController.getParent() &&
+            null !== overviewIcon &&
+            null !== detailIcon
+        ) {
             overviewIcon.src = newIcon;
-            detailIcon.src = newIcon;
-        } else if (null !== detailIcon) {
+            detailIcon  .src = newIcon;
+        } else if (null !== detailIcon) { // show an indentation line if there is a parent
             detailIcon.src = '/kolibri/docs/img/icons/line.png'; // todo: set resource path from outside
         }
     };

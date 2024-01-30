@@ -21,11 +21,13 @@
     z-index:  10;
 
     display: grid;
-    grid-template-columns: var(--base-unit);                        /* default: closed, only one column*/
+    grid-template-columns: var(--base-unit) 0;                        /* default: closed, only one column*/
+    transition: grid-template-columns 600ms;
 
     &.open {
-        /*grid-template-columns: var(--base-unit) var(--detail-width); !* two columns if open *!*/
-        grid-template-columns: var(--base-unit) max-content; /* two columns if open */
+        grid-template-columns: var(--base-unit) var(--detail-width); /* two columns if open */
+        /*grid-template-columns: var(--base-unit) max-content; !* this is more flexible but does not work with animation *!*/
+        transition: grid-template-columns 600ms;
     }
 }
 
@@ -92,17 +94,17 @@ todo: make a decision
 /* start detail (expanded right column) */
 
 .side-navigation .detail {
-    display: none;
-}
-
-.side-navigation.open .detail {
-    display:          initial;
+    overflow:         clip;
     min-height:       100%;
     background-color: var(--kb-hsla-primary-bg);
     border-radius:    0
                       calc(1/6 * var(--base-unit))
                       calc(1/6 * var(--base-unit))
                       0;
+}
+
+.side-navigation .detail * {
+    white-space:      nowrap;
 }
 
 .side-navigation .detail .header {
