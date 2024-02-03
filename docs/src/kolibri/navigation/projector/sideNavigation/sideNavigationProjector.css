@@ -1,4 +1,3 @@
-
 /*
     Styling for the dashboard navigation.
 
@@ -8,26 +7,26 @@
 
 .side-navigation {
 
-    --base-unit:      4rem;
-    --detail-width:   calc(  4 * var(--base-unit));
-    --header-height:  calc(4/5 * var(--base-unit));
-    --std-padding:    calc(1/5 * var(--base-unit));
-    font-family:      var(--kb-font-rubik-light-regular);
-    box-shadow:       var(--kolibri-box-shadow);
+    --base-unit:           4rem;
+    --detail-width:        calc(4 * var(--base-unit));
+    --header-height:       calc(4 / 5 * var(--base-unit));
+    --std-padding:         calc(1 / 5 * var(--base-unit));
+    font-family:           var(--kb-font-rubik-light-regular);
+    box-shadow:            var(--kolibri-box-shadow);
 
     /* docked to the left, full height*/
-    position: fixed;
-    inset:    0 auto 0 0;
-    z-index:  10;
+    position:              fixed;
+    inset:                 0 auto 0 0;
+    z-index:               10;
 
-    display: grid;
-    grid-template-columns: var(--base-unit) 0;                        /* default: closed, only one column*/
-    transition: grid-template-columns 600ms;
+    display:               grid;
+    grid-template-columns: var(--base-unit) 0; /* default: closed, only one column*/
+    transition:            grid-template-columns 600ms;
 
     &.open {
         grid-template-columns: var(--base-unit) var(--detail-width); /* two columns if open */
         /*grid-template-columns: var(--base-unit) max-content; !* this is more flexible but does not work with animation *!*/
-        transition: grid-template-columns 600ms;
+        transition:            grid-template-columns 600ms;
     }
 }
 
@@ -38,24 +37,21 @@
 /* start overview (left column) */
 
 .side-navigation .overview {
-    min-height:         100%;
-    background-color:   #F7F7FC;
-    display:            flex;
-    flex-direction:     column;
-    align-items:        center;
-    border-radius:      0
-                        calc(1/6 * var(--base-unit))
-                        calc(1/6 * var(--base-unit))
-                        0;
+    min-height:       100%;
+    background-color: #F7F7FC;
+    display:          flex;
+    flex-direction:   column;
+    align-items:      center;
+    border-radius:    0 calc(1 / 6 * var(--base-unit)) calc(1 / 6 * var(--base-unit)) 0;
 }
 
 .side-navigation.open .overview {
-    border-radius:      0;
+    border-radius: 0;
 }
 
 .side-navigation .overview .logo {
-    padding-top:      var(--std-padding) ;
-    padding-bottom:   var(--std-padding);
+    padding-top:    var(--std-padding);
+    padding-bottom: var(--std-padding);
 }
 
 .side-navigation .overview .logo img {
@@ -68,26 +64,19 @@
 }
 
 .side-navigation .overview .content .row img {
-    height:       calc(4/9 * var(--base-unit));
+    height:       calc(4 / 9 * var(--base-unit));
     aspect-ratio: 1;
-    filter: invert(92%) sepia(11%) saturate(202%) hue-rotate(196deg) brightness(92%) contrast(98%);
+    filter:       invert(92%) sepia(11%) saturate(202%) hue-rotate(196deg) brightness(92%) contrast(98%);
 }
 
 .side-navigation .overview .content .row img.active {
+    /*todo: use the svg inline and set the stroke color*/
     filter: invert(9%) sepia(99%) saturate(6728%) hue-rotate(266deg) brightness(103%) contrast(125%); /* convert svg color to --kb-color-hsl-primary-accent */
 }
 
 .side-navigation .overview .content .row img:hover {
     filter: invert(51%) sepia(76%) saturate(6321%) hue-rotate(306deg) brightness(100%) contrast(105%); /* convert svg color to --kb-color-hsl-pink-500 */
 }
-
-/* when opened, the overview nav should show no content
-experimentally disabled to see whether hiding the content is an improvement or not
-todo: make a decision
-.side-navigation.open .overview .content .row img {
-    display: none;
-}
-*/
 
 /* end of overview */
 
@@ -97,42 +86,39 @@ todo: make a decision
     overflow:         clip;
     min-height:       100%;
     background-color: var(--kb-hsla-primary-bg);
-    border-radius:    0
-                      calc(1/6 * var(--base-unit))
-                      calc(1/6 * var(--base-unit))
-                      0;
+    border-radius:    0 calc(1 / 6 * var(--base-unit)) calc(1 / 6 * var(--base-unit)) 0;
 }
 
 .side-navigation .detail * {
-    white-space:      nowrap;
+    white-space: nowrap;
 }
 
 .side-navigation .detail .header {
-    height:           var(--header-height);
-    padding:          var(--std-padding);
-    display:          flex;
-    flex-direction:   column;
-    justify-content:  center;
-    font-size:        var(--font-size-h5);
-    color:            black;
+    height:          var(--header-height);
+    padding:         var(--std-padding);
+    display:         flex;
+    flex-direction:  column;
+    justify-content: center;
+    font-size:       var(--font-size-h5);
+    color:           black;
 }
 
 .side-navigation .detail .content {
-    margin-bottom: calc(3/5 * var(--base-unit));
+    margin-bottom: calc(3 / 5 * var(--base-unit));
 }
 
- /*Wrapper*/
+/*Wrapper*/
 .side-navigation .tree {
-    display: flex;
+    display:        flex;
     flex-direction: column;
-    padding-left: calc(2/9 * var(--base-unit));
-    padding-right: calc(2/9 * var(--base-unit));
-    overflow: hidden;
+    padding-left:   calc(2 / 9 * var(--base-unit));
+    padding-right:  calc(2 / 9 * var(--base-unit));
+    overflow:       hidden;
 }
 
- /*Root Nodes*/
-.side-navigation .tree > .tree-node  {
-    margin-bottom: calc(3/5 * var(--base-unit))
+/*Root Nodes*/
+.side-navigation .tree > .tree-node {
+    margin-bottom: calc(3 / 5 * var(--base-unit))
 }
 
 .side-navigation .tree > .tree-node.invisible {
@@ -140,27 +126,27 @@ todo: make a decision
 }
 
 .side-navigation .tree > .tree-node > span {
-    display: flex;
-    align-items: center;
-    gap: 0 1em;
-    margin-bottom: calc(1/5 * var(--base-unit));
+    display:        flex;
+    align-items:    center;
+    gap:            0 1em;
+    margin-bottom:  calc(1 / 5 * var(--base-unit));
     text-transform: uppercase;
-    font-size: var(--font-size-textM);
-    color: black;
+    font-size:      var(--font-size-textM);
+    color:          black;
 }
 
 .side-navigation .tree > .tree-node > span > a {
-    font-size: var(--font-size-textM);
-    letter-spacing: 0.01em;
+    font-size:       var(--font-size-textM);
+    letter-spacing:  0.01em;
     text-decoration: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: black;
-    pointer-events: none;
+    overflow:        hidden;
+    text-overflow:   ellipsis;
+    color:           black;
+    pointer-events:  none;
 }
 
 .side-navigation .tree > .tree-node > span > img {
-    height: calc(2/5 * var(--base-unit));
+    height:       calc(2 / 5 * var(--base-unit));
     aspect-ratio: 1;
 }
 
@@ -168,9 +154,9 @@ todo: make a decision
     filter: invert(9%) sepia(99%) saturate(6728%) hue-rotate(266deg) brightness(103%) contrast(125%); /* convert svg color to --kb-color-hsl-primary-accent */
 }
 
- /*Child Nodes*/
+/*Child Nodes*/
 .side-navigation .tree-node > .tree-node {
-    margin-left: calc(2/5 * var(--base-unit));
+    margin-left: calc(2 / 5 * var(--base-unit));
 }
 
 .side-navigation .tree-node > .tree-node.invisible {
@@ -182,16 +168,16 @@ todo: make a decision
 }
 
 .side-navigation .tree-node > .tree-node > span {
-    display: flex;
-    align-items: center;
-    gap: 0 1em;
-    margin-bottom: calc(1/20 * var(--base-unit));
+    display:       flex;
+    align-items:   center;
+    gap:           0 1em;
+    margin-bottom: calc(1 / 20 * var(--base-unit));
 }
 
 .side-navigation .tree-node > .tree-node > span > img {
     filter: invert(80%) sepia(10%) saturate(568%) hue-rotate(196deg) brightness(81%) contrast(88%); /* convert svg color to --kb--light--black-500 */
-    width: calc(2/5 * var(--base-unit));
-    height: calc(2/5 * var(--base-unit));
+    width:  calc(2 / 5 * var(--base-unit));
+    height: calc(2 / 5 * var(--base-unit));
 }
 
 .side-navigation .tree-node > .tree-node > span > img.active {
@@ -199,24 +185,24 @@ todo: make a decision
 }
 
 .side-navigation .tree-node > .tree-node > span > a {
-    font-size: var(--font-size-textM);
-    letter-spacing: 0.01em;
+    font-size:       var(--font-size-textM);
+    letter-spacing:  0.01em;
     text-decoration: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: var(--kolibri--light---black--500);
+    overflow:        hidden;
+    text-overflow:   ellipsis;
+    color:           var(--kolibri--light---black--500);
 }
 
 .side-navigation .tree-node > .tree-node > span > a.active {
     font-style: var(--kb-font-rubik-light-medium);
-    color: var(--kb-color-hsl-bg-dark);
+    color:      var(--kb-color-hsl-bg-dark);
 }
 
 .side-navigation .tree-node > .tree-node > span > a:hover {
     color: var(--kb-color-hsl-pink-500);
 }
 
-.side-navigation .tree > div.tree-node:not(:has(div.tree-node)){
+.side-navigation .tree > div.tree-node:not(:has(div.tree-node)) {
     display: none;
 }
 
