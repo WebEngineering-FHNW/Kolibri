@@ -24,7 +24,7 @@ const NavigationProjector = (controller, pinToElement) => {
 
     // ************** Create overview and detail wrapper *******************
 
-    const [overviewWrapper,  overviewLogo, overviewContentWrapper, overviewToggle] = dom(`
+    const [overviewWrapper,  overviewLogo, overviewContentWrapper] = dom(`
         <!-- create overview wrapper -->
         <div class="overview" title="Click for details"></div>
         
@@ -104,8 +104,7 @@ const NavigationProjector = (controller, pinToElement) => {
      * @return void
      */
     const initializeBaseStructure = () => {
-        navigationDiv = document.createElement("div");      // todo: should be a nav element
-        navigationDiv.id = 'side-navigation';               // todo: do we need this?
+        navigationDiv = document.createElement("nav");
         navigationDiv.classList.add('side-navigation');
 
         overviewWrapper.append(overviewLogo);
