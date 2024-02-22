@@ -33,7 +33,7 @@ export { SimpleInputModel }
 const SimpleInputModel = ({value, label, name, type= TEXT}) => {
     const singleAttr = Attribute(value);
     singleAttr.getObs(TYPE)    .setValue(type);
-    singleAttr.getObs(EDITABLE).setValue(true);
+    singleAttr.getObs(EDITABLE).setValue(true); // todo: maybe not if choice
     singleAttr.getObs(VALID)   .setValue(true);
     if (null != label) singleAttr.getObs(LABEL).setValue(label);
     if (null != name ) singleAttr.getObs(NAME) .setValue(name);

@@ -7,7 +7,7 @@
 export {
     dom, fireEvent, fireChangeEvent,
     CLICK, INPUT, CHANGE,
-    TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR
+    TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR, CHOICE
 }
 
 /**
@@ -61,11 +61,12 @@ const fireEvent = (element, eventTypeString) => {
 const fireChangeEvent = element => fireEvent(element, CHANGE);
 
 
-/** @typedef { "text"|"number"|"checkbox"|"time"|"date"|"color" } InputTypeString */
+/** @typedef { "text"|"number"|"checkbox"|"time"|"date"|"color"|"choice" } InputTypeString */
 
 /** @type InputTypeString */ const TEXT     = "text";
 /** @type InputTypeString */ const NUMBER   = "number";
-/** @type InputTypeString */ const CHECKBOX = "checkbox";
+/** @type InputTypeString */ const CHECKBOX = "checkbox"; // think about radio
 /** @type InputTypeString */ const TIME     = "time";
 /** @type InputTypeString */ const DATE     = "date";
 /** @type InputTypeString */ const COLOR    = "color";
+/** @type InputTypeString */ const CHOICE   = "choice"; // special name for input type that chooses from values

@@ -1,6 +1,7 @@
-import { projectForm, FORM_CSS }                     from "../../kolibri/projector/simpleForm/simpleFormProjector.js"
-import { SimpleFormController }                      from "../../kolibri/projector/simpleForm/simpleFormController.js"
-import { CHECKBOX, NUMBER, TEXT, COLOR, DATE, TIME } from "../../kolibri/util/dom.js";
+import { projectForm, FORM_CSS }  from "../../kolibri/projector/simpleForm/simpleFormProjector.js"
+import { SimpleFormController }   from "../../kolibri/projector/simpleForm/simpleFormController.js"
+import { CHECKBOX, NUMBER, TEXT,
+    COLOR, DATE, TIME, CHOICE }   from "../../kolibri/util/dom.js";
 
 export { start } // exported for testing purposes
 
@@ -11,6 +12,7 @@ const start = () => {
         {value: "1968-04-19", label: "Date",   name: "date",   type: DATE     },
         {value: 12 * 60 + 15, label: "Time",   name: "time",   type: TIME     },
         {value: false,        label: "Check",  name: "check",  type: CHECKBOX },
+        // {value: "first",      label: "Choice", name: "choice", type: CHOICE   },
         {value: "",           label: "Color",  name: "color",  type: COLOR    }
     ];
     const controller = SimpleFormController(formStructure);

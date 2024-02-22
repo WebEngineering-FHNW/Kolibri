@@ -25,6 +25,68 @@ export { InputProjector }
  */
 let counter = 0;
 
+/** @private */
+const createInputView = (id, inputController) => {
+    // create view
+    const elements = dom(`
+        <label for="${id}"></label>
+        <span  data-id="${id}">
+            <input type="${inputController.getType()}" id="${id}">
+            <span aria-hidden="true"></span>
+        </span>
+    `);
+    /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
+    /** @type {HTMLSpanElement}  */ const spanElement  = elements[1]; // only for the sake of type casting, otherwise...
+    /** @type {HTMLInputElement} */ const inputElement = spanElement.firstElementChild; // ... we would use array deconstruction
+    return [elements, labelElement, inputElement];
+};
+
+/**
+ * @private
+ * "hh:mm" in the vies vs minutes since midnight in the model
+ */
+const bindTimeValue = (inputElement, eventType, inputController) => {
+    inputElement.addEventListener(eventType, _ =>
+        inputController.setValue(/** @type { * } */ timeStringToMinutes(inputElement.value))
+    );
+    inputController.onValueChanged(val => inputElement.value = totalMinutesToTimeString(/** @type { * } */ val));
+};
+/**
+ * @private
+ * "checked" attribute vs boolean in model
+ */
+const bindCheckboxValue = (inputElement, eventType, inputController) => {
+    inputElement.addEventListener(eventType, _ => inputController.setValue(/** @type { * } */ inputElement.checked));
+    inputController.onValueChanged(val => inputElement.checked = /** @type { * } */ val);
+};
+/**
+ * @private
+ */
+const bindViewDebounceValue = (inputElement, eventType, inputController, timeout) => {
+    let timeoutId; // maybe move down inside function
+    inputElement.addEventListener(eventType, _event => {
+        if (timeoutId !== undefined) clearTimeout(timeoutId);
+        timeoutId = setTimeout( _timestamp =>
+           inputController.setValue(/** @type { * } */ inputElement.value),
+           timeout
+        );
+    });
+};
+
+/**
+ * @private
+ */
+const bindViewUnbouncedValue = (inputElement, eventType, inputController) => {
+    inputElement.addEventListener(eventType, _ => inputController.setValue(/** @type { * } */ inputElement.value));
+};
+
+/**
+ * @private
+ */
+const bindDataValue = (inputController, inputElement) => {
+    inputController.onValueChanged(val => inputElement.value = /** @type { * } */ val);
+};
+
 /**
  * @private
  * Implementation for the exported projection functions. Configured via curried parameters.
@@ -37,42 +99,28 @@ const projectInput = (timeout) => (eventType) =>
         return;
     }
     const id = formCssClassName + "-id-" + (counter++);
-    // create view
-    const elements = dom(`
-        <label for="${id}"></label>
-        <span  data-id="${id}">
-            <input type="${inputController.getType()}" id="${id}">
-            <span aria-hidden="true"></span>
-        </span>
-    `);
-    /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
-    /** @type {HTMLSpanElement}  */ const spanElement  = elements[1]; // only for the sake of type casting, otherwise...
-    /** @type {HTMLInputElement} */ const inputElement = spanElement.firstElementChild; // ... we would use array deconstruction
+    const shallDebounce = () => timeout !== 0;
+
+    let elements, labelElement, inputElement;
 
     // view and data binding can depend on the type
-    if (inputController.getType() === TIME) { // "hh:mm" in the vies vs minutes since midnight in the model
-        inputElement.addEventListener(eventType, _ =>
-            inputController.setValue(/** @type { * } */ timeStringToMinutes(inputElement.value))
-        );
-        inputController.onValueChanged(val => inputElement.value = totalMinutesToTimeString(/** @type { * } */ val));
-    } else
-    if (inputController.getType() === CHECKBOX) { // "checked" attribute vs boolean in model
-        inputElement.addEventListener(eventType, _ => inputController.setValue(/** @type { * } */ inputElement.checked));
-        inputController.onValueChanged(val => inputElement.checked = /** @type { * } */ val);
-    } else {
-        if(timeout !== 0) {
-            let timeoutId;
-            inputElement.addEventListener(eventType, _event => {
-                if(timeoutId !== undefined) clearTimeout(timeoutId);
-                timeoutId = setTimeout( _timestamp =>
-                    inputController.setValue(/** @type { * } */ inputElement.value),
-                    timeout
-                );
-            });
-        } else {
-            inputElement.addEventListener(eventType, _ => inputController.setValue(/** @type { * } */ inputElement.value));
-        }
-        inputController.onValueChanged(val => inputElement.value = /** @type { * } */ val);
+    switch (inputController.getType()) {
+        case TIME:
+            [elements, labelElement, inputElement] = createInputView(id, inputController);
+            bindTimeValue(inputElement, eventType, inputController);
+            break;
+        case CHECKBOX:
+            [elements, labelElement, inputElement] = createInputView(id, inputController);
+            bindCheckboxValue(inputElement, eventType, inputController);
+            break;
+        default:
+            [elements, labelElement, inputElement] = createInputView(id, inputController);
+            if(shallDebounce()) {
+                bindViewDebounceValue(inputElement, eventType, inputController, timeout);
+            } else {
+                bindViewUnbouncedValue(inputElement, eventType, inputController);
+            }
+            bindDataValue(inputController, inputElement);
     }
 
     inputController.onLabelChanged (  label => {
@@ -86,7 +134,7 @@ const projectInput = (timeout) => (eventType) =>
         ? inputElement.removeAttribute("readonly")
         : inputElement.setAttribute("readonly", "on"));
 
-    return /** @type { [HTMLLabelElement, HTMLInputElement] } */ elements;
+    return /** @type { [HTMLLabelElement, HTMLInputElement] } */ elements; // todo: fix second element type
 };
 
 /**
