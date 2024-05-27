@@ -22,7 +22,7 @@ export { arrayEq, removeItem, removeAt, times, sum }
  * arrayEq ([1]) ([2]) === false;
  */
 const arrayEq = arrayA => arrayB =>
-    arrayA.length === arrayB.length && arrayA.every( (it, idx) => it === arrayB[idx])
+    arrayA.length === arrayB.length && arrayA.every( (it, idx) => it === arrayB[idx]);
 
 /**
  * From the {@link array}, remove the item at position "index". The arguments are given in curried style.
@@ -63,29 +63,24 @@ const removeItem = array => item => {
 };
 
 /**
- * @callback timesCallback
- * @param {!number} index
- * @template T
- * @return {T}
+ * @typedef { <_T_> (!Number) => _T_ } TimesCallback<_T_>
  */
 
 /**
- * A function that executes the optional {@link timesCallback} "soMany" times, assembles the results and returns them in an
+ * A function that executes the optional {@link TimesCallback} "soMany" times, assembles the results and returns them in an
  * {@link array} of length "soMany". The arguments are given in curried style.
  * If no callback is given, the unaltered index is returned. Indexes go from 0 to soMany-1.
  * @impure if the callback is impure
  * @haskell  Int -> (Int -> a) -> [a]
  * @function times
- * @template T
- * @type    { (soMany:!number) => (callback:?timesCallback) => Array<T> }
- * @param   { !number | string } soMany - how often to execute the callback. Negative values will be treated like 0. Mandatory.
- * @returns { (callback:?timesCallback) => Array<T> } - finally returns an array of the assembled callback results
+ * @type    { <_T_> (soMany: !Number) => (cb: ?TimesCallback) => Array<_T_> }
+ * soMany - how often to execute the callback. Negative values will be treated like 0. Mandatory.
  * @throws  { TypeError } - if soMany is given as a String but does not represent a number
  * @example
  * times(3)(i => console.log(i)); // logs 0, 1, 2
  * times(5)(x=>x*x); // returns [0, 1, 4, 9, 16]
  */
-const times = soMany => (callback= undefined) => {
+const times = soMany => (callback) => {
     const number = Number(soMany.valueOf());
     if (isNaN(number)) {
         throw new TypeError("Object '" + soMany + "' is not a valid number.");
@@ -94,28 +89,21 @@ const times = soMany => (callback= undefined) => {
 };
 
 /**
- * @callback sumCallback
- * @template T
- * @param {!T} item
- * @param {?number} index
- * @return {number}
+ * @typedef { <_T_> (!_T_, index: ?Number) => Number } SumCallback<_T_>
  */
 
 /**
- * A function that sums up all items from an {@link array} by applying the {@link sumCallback} to each item before adding up.
+ * A function that sums up all items from an {@link array} by applying the {@link SumCallback} to each item before adding up.
  * The arguments are given in curried style.
- * If no callback is given, the Number constructor is used.
  * @impure   if the callback is impure
  * @haskell  Num n => [a] -> (a -> n) -> n
- * @function times
- * @template T
- * @type    { (array:!Array<T>) => (callback:?sumCallback) => number }
- * @param   { array:!Array<T> } array - the array to sum up. Mandatory.
- * @returns { (callback:?sumCallback) => number } - finally returns the sum
+ * @type    { <_T_> (array:!Array<_T_>) => (cb:  ProducerType<Number> | ?SumCallback<_T_>) => Number }
  * @example
  * sum([1,2,3])()     === 1 + 2 + 3;
  * sum(["1"])(Number) === 1;
  */
-const sum = array => (callback = Number) =>
-    array.reduce( (acc, cur, idx) => acc + callback(cur, idx), 0);
+const sum = array => (callback = Number) => {
+    const cb = /** @type {ProducerType<Number> | ?SumCallback} */ callback;
+    return array.reduce( (acc, cur, idx) => acc + cb(cur, idx), 0);
+};
 

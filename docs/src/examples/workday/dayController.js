@@ -37,7 +37,7 @@ const DayModel = () => {
  * @property { SimpleInputControllerType<Number> }  pmStartCtrl
  * @property { SimpleInputControllerType<Number> }  pmEndCtrl
  * @property { () => Number }                       getTotal        - the total minutes in this day, derived
- * @property { (callback: !onValueChangeCallback<Number>) => void } onTotalChanged - when total changes
+ * @property { (cb: !ValueChangeCallback<Number>) => void } onTotalChanged - when total changes
  */
 /**
  * Creating a day controller made from four simple input controllers for the four time values (as numbers
@@ -118,14 +118,13 @@ const lunchBreakRule = (amEndCtrl, pmStartCtrl) => () => { // 40 min lunch break
     if (pmStartTime - amEndTime < 40) {       // lunchtime too short
         pmStartCtrl.setValue(amEndTime + 40); // make it last longer
     }
-}
+};
 
 /**
  * For any start and end value, the start must be no later than the end value.
  * If violated, we move the end value back.
  * @private
  * @impure - might change the value of the end input
- * @type { (startInputCtrl:SimpleInputControllerType<Number>,endInputCtrl:SimpleInputControllerType<Number>) => () => void }
  * @param  {SimpleInputControllerType<Number>} startInputCtrl
  * @param  {SimpleInputControllerType<Number>} endInputCtrl
  * @return { () => void } - the sequence rule handler as a side-effecting function
@@ -137,7 +136,7 @@ const sequenceRule = (startInputCtrl, endInputCtrl) => () => { // start must be 
     if (start_val > end_val) {            // start after end not allowed
         endInputCtrl.setValue(start_val); // move the end time back
     }
-}
+};
 
 /**
  * Convenience function to check all validation constraints in order of precedence.
@@ -161,7 +160,7 @@ const checkValidityRules = timeControllers => {
         ctrl.setValid(ctrl.getValue() >=  4 * 60
                    && ctrl.getValue() <= 22 * 60)
     );
-}
+};
 
 /**
  * Calculate the total number of minutes worked this day, given the inputs.
@@ -171,4 +170,4 @@ const checkValidityRules = timeControllers => {
 const totalValue = timeControllers => {
     const [am_start_val, am_end_val, pm_start_val, pm_end_val] = timeControllers.map( ctrl => ctrl.getValue());
     return am_end_val - am_start_val + pm_end_val - pm_start_val;
-}
+};

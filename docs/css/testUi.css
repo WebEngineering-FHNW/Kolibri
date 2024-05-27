@@ -1,0 +1,36 @@
+@import "kolibri-base.css";
+body {
+    width:                  max-content;
+    margin-inline:          auto;
+}
+#out {
+    max-height:             calc(100vh - 20rem);
+    overflow:               scroll;
+    display:                grid;
+    grid-template-columns:  repeat(4, max-content);
+    grid-column-gap:        2em;
+    grid-row-gap:           .5em;
+    padding:                2em;
+    box-shadow:             var(--kolibri-box-shadow);
+}
+#out.failed {
+    box-shadow:             0 .7rem  2rem 0 var(--kolibri-color-accent);
+}
+#out div:nth-child(odd) {   /* count and file columns are output */
+    color:                  var(--kolibri-color-output);
+}
+#out div:nth-child(4n-3) {  /* count column should be right-aligned */
+    justify-self:           end;
+}
+#grossTotal {
+    color:                  var(--kolibri-color-output);
+}
+footer {
+    position:               fixed;
+    inset:                  auto 0 0 0; /* anchor to bottom */
+    text-align:             center;
+    color:                  white;
+    background:             var(--kolibri-color-neutral);
+    padding:                .5em;
+;
+}

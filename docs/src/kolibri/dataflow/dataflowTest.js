@@ -48,26 +48,24 @@ asyncTest("dataflow/scheduler (async)", assert => {
     const result = [];
 
     const scheduler = Scheduler();
-    scheduler.add(ok => {
-        setTimeout(_ => {   // we wait before pushing
-            result.push(1);
-            ok();
-        }, 100)
-    });
+    scheduler.add(ok =>
+      setTimeout(_ => {   // we wait before pushing
+          result.push(1);
+          ok();
+      }, 100));
     scheduler.add(ok => {   // we push "immediately"
         result.push(2);
         ok();
     });
     scheduler.addOk ( () => result.push(3)); // convenience
 
-    return new Promise( resultDone => {
-        scheduler.addOk( _ => {
+    return new Promise( resultDone =>
+        scheduler.addOk(_ => {
             assert.is(result[0], 1); // sequence is still ensured
             assert.is(result[1], 2);
             assert.is(result[2], 3);
             resultDone();
-        });
-    });
+        }));
 });
 
 dataflowSuite.run();

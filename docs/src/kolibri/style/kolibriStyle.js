@@ -1,3 +1,5 @@
+// noinspection JSUnusedLocalSymbols
+
 /**
  * @module kolibriStyle
  * Common constants and facilities for a consistent look.

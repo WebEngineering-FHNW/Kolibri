@@ -1,7 +1,7 @@
 // noinspection PointlessArithmeticExpressionJS
 
-import { TestSuite } from "./test.js";
 import { arrayEq, removeItem, removeAt, times, sum } from "./arrayFunctions.js";
+import { TestSuite }                                 from "./test.js";
 
 const arrayFunctionsSuite = TestSuite("util/arrayFunctions");
 

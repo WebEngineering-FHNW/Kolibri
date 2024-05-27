@@ -44,7 +44,7 @@ arraySuite.add("times", assert => {
     assert.is( (10).times().eq([0,1,2,3,4,5,6,7,8,9]), true);
     assert.is(  (5).times(x=>x*x).eq([0,1,4,9,16]), true);
     let counter = 0;
-    "5".times( _ => counter++); // also works from strings. Mapping can side-effect.
+    "5".times( _ => counter++); // also works from strings. Mapping can side effect.
     assert.is(counter, 5);
     try {
         "isNoNumber".times();

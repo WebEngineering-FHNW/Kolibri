@@ -12,20 +12,20 @@ export {
 
 /**
  * See {@link arrayEq}.
- * @template T
- * @param  { Array<T> } array
+ * @template _T_
+ * @param  { Array<_T_> } array
  * @return { Boolean  }
  * @example
  * [1].eq([1]); // true
  */
-Array.prototype.eq = function(array) { return arrayEq(this)(array);}
+Array.prototype.eq = function(array) { return arrayEq(this)(array);};
 
 /**
  * See {@link removeAt}.
- * @template T
+ * @template _T_
  * @impure Modifies the array instance.
  * @param  { Number } index
- * @return { Array<T> }
+ * @return { Array<_T_> }
  * @example
  * [1,2,3].removeAt(0);
  */
@@ -33,10 +33,10 @@ Array.prototype.removeAt = function(index){ return removeAt(this)(index); };
 
 /**
  * See {@link removeItem}.
- * @template T
+ * @template _T_
  * @impure Modifies the array instance.
- * @param  { T } item
- * @return { Array<T> }
+ * @param  { _T_ } item
+ * @return { Array<_T_> }
  * @example
  * ["a","b","c"].removeItem("b");
  */
@@ -44,9 +44,9 @@ Array.prototype.removeItem = function(item){ return removeItem(this)(item); };
 
 /**
  * See {@link times}.
- * @template T
- * @param  { ?timesCallback } callback
- * @return { Array<T> }
+ * @template _T_
+ * @param  { ?TimesCallback } callback
+ * @return { Array<_T_> }
  * @example
  * "10".times(it => console.log(it));
  */
@@ -54,9 +54,9 @@ String.prototype.times = function(callback = undefined){ return times(this)(call
 
 /**
  * See {@link times}.
- * @template T
- * @param  { ?timesCallback } callback
- * @return { Array<T> }
+ * @template _T_
+ * @param  { ?TimesCallback } callback
+ * @return { Array<_T_> }
  * @example
  * (5).times(x => x * x); // [0, 1, 4, 9, 16]
  */
@@ -64,8 +64,8 @@ Number.prototype.times = function(callback= undefined){ return times(this)(callb
 
 /**
  * See {@link sum}.
- * @param  { ?sumCallback } callback
- * @return { number }
+ * @param  { ?SumCallback } callback
+ * @return { Number }
  * @example
  * [1,2,3].sum();     // 6
  * ["1"].sum(Number); // 1

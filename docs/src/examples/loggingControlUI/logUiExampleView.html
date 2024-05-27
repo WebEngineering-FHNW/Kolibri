@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logging Control</title>
+    <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+    <link rel="stylesheet"    type="text/css"  href="../../../css/kolibri-base.css">
+    <style>
+        .sidebar {
+            --sidebar-width: 50em;
+            position: absolute;
+            background: white;
+            top: 0;
+            height: 100%;
+            right: calc(var(--sidebar-width) * -1);
+            width: var(--sidebar-width);
+            padding: 20px;
+            transition: 0.3s;
+            border-left: 3px solid var(--kolibri-color-shadow);
+        }
+
+        .sidebar .toggleButton {
+            position: absolute;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            border-radius: 5px 0 0 5px;
+            width: 2rem;
+            height: 2rem;
+            top: 1rem;
+            left: -2rem;
+            border: 3px solid var(--kolibri-color-shadow);
+            border-right: none;
+            transition: 0.2s;
+        }
+
+        .sidebar .toggleButton:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+
+        /*noinspection CssUnusedSymbol*/
+        .sidebar .toggleButton.open {
+            left: 0;
+            border: none;
+        }
+
+        /*noinspection CssUnusedSymbol*/
+        .sidebar.hidden {
+            right: 0;
+        }
+
+        img {
+            height: 100%;
+            transition: 0.7s;
+        }
+
+        /*noinspection CssUnusedSymbol*/
+        img.buttonClose {
+            transition: 0.7s;
+            transform: scaleX(-1);
+        }
+
+        div h2 {
+            display: flex;
+            justify-content: center;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar" id="sidebar" >
+        <div><h2>Logging Control Panel</h2></div>
+        <div class="toggleButton" id="btn" onclick="move()">
+            <img src="../../../img/logo/logo.svg" alt="kolibri-logo" id="sliderButton" />
+        </div>
+        <div id="loggingUiContainer"></div>
+    </div>
+
+    <script>
+        const move = () => {
+          const sliderButton    = document.getElementById("sliderButton");
+          const sidebar         = document.getElementById("sidebar");
+          const btn             = document.getElementById("btn");
+          sliderButton          .classList.toggle("buttonClose");
+          sidebar               .classList.toggle("hidden");
+          btn                   .classList.toggle("open");
+        };
+    </script>
+
+    <script src="logUiExample.js" type="module"></script>
+
+</body>
+</html>

@@ -1,41 +1,82 @@
+// noinspection FunctionTooLongJS
+
 /**
  * @module util/test
  * The test "framework", exports the Suite function plus a total of how many assertions have been tested
  */
-import {accentColor, okColor} from "../style/kolibriStyle.js";
 
-export { TestSuite, total, asyncTest }
+import {accentColor, okColor}                      from "../style/kolibriStyle.js";
+import {id, Just, Tuple}                           from "../stdlib.js";
+import {Observable}                                from "../observable.js";
+import {dom}                                       from "./dom.js";
+import {LoggerFactory}                             from "../logger/loggerFactory.js";
+import {
+    addToAppenderList,
+    getLoggingContext,
+    getLoggingLevel,
+    removeFromAppenderList,
+    setLoggingContext,
+    setLoggingLevel
+}                                                  from "../logger/logging.js";
+import {LOG_DEBUG}                                 from "../logger/logLevel.js";
+import {Appender as ConsoleAppender}               from "../logger/appender/consoleAppender.js";
+import {LOG_CONTEXT_All, LOG_CONTEXT_KOLIBRI_TEST} from "../logger/logConstants.js";
 
-import { dom }        from "./dom.js";
-import { id, Tuple }  from "../stdlib.js";
-import { Observable } from "../observable.js";
+export { TestSuite, total, failed, asyncTest, withAppender };
+
+const log = LoggerFactory(LOG_CONTEXT_KOLIBRI_TEST);
 
 /**
- * The running total of executed test assertions.
+ * The running total of executed test assertions
  * @impure the reference does not change, but the contained value. Listeners will produce side effects like DOM changes.
  * @type { IObservable<Number> }
  */
 const total = Observable(0);
 
+/**
+ * Whether any test assertion has failed.
+ * @impure the reference does not change, but the contained value. Listeners will produce side effects like DOM changes.
+ * @type { IObservable<Boolean> }
+ */
+const failed = Observable(false);
+
 /** @type { (Number) => void } */
 const addToTotal = num => total.setValue( num + total.getValue());
 
 /** @typedef equalityCheckFunction
- * @template T
+ * @template _T_
  * @function
- * @param { T } actual
- * @param { T } expected
- * @return void
+ * @param { _T_ } actual
+ * @param { _T_ } expected
+ * @returns void
  * */
 
 /**
- * @typedef  { Object }  AssertType
- * @property { Array<String> }         messages - stores all assertions messages, one for each entry in "results"
- * @property { Array<Boolean> }        results  - stores all assertion results
- * @property { (Boolean)  => void }    isTrue   - assert that expression is true, side effects "results" and "messages"
- * @property { equalityCheckFunction } is       - assert that two expressions are equal,
- *                                                side effects "results" and "messages", and
- *                                                logs an error to the console incl. stack trace in case of failure.
+ * @callback AssertThrows
+ * @param { () => void } functionUnderTest - this function should throw an error
+ * @param { String = ""} expectedErrorMsg  - if set, the thrown errors message will be compared to this string
+ * @returns void
+ */
+
+/**
+ * @callback IterableEq
+ * @param { Iterable<*> } actual            - the actual iterable
+ * @param { Iterable<*> } expected          - an iterable with the expected elements
+ * @param { number } [maxElementsToConsume] - if set, the thrown errors message will be compared to this string
+ * @returns void
+ */
+
+/**
+ * @typedef  { Object }                AssertType
+ * @property { Array<String> }         messages     - stores all assertions messages, one for each entry in "results"
+ * @property { Array<Boolean> }        results      - stores all assertion results
+ * @property { (Boolean)  => void }    isTrue       - assert that expression is true, side effects "results" and "messages"
+ * @property { equalityCheckFunction } is           - assert that two expressions are equal,
+ *                                                    side effects "results" and "messages", and
+ *                                                    logs an error to the console incl. stack trace in case of failure
+ * @property { AssertThrows }          throws       - assert that the given function throws an exception,
+ *                                                    logs an error to the console incl. stack trace in case of failure
+ * @property { IterableEq }            iterableEq   - assert that two objects conform to the [JS iteration protocols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols) are equal.
  */
 
 /**
@@ -47,29 +88,105 @@ const addToTotal = num => total.setValue( num + total.getValue());
  * @impure assembles test results.
  */
 const Assert = () => {
-    /** @type Array<Boolean> */ const results  = []; // [Bool], true if test passed, false otherwise
-    /** @type Array<String> */  const messages = [];
+    /** @type Array<Boolean> */ const results  = []; // true if test passed, false otherwise
+    /** @type Array<String> */  const messages = []; // message for each test result at the same index
+    const addMessage = message => {
+        if (message !== "") {
+            failed.setValue(true);
+        }
+        messages.push(message);
+    };
     return {
         results,
         messages,
         isTrue: testResult => {
             let message = "";
             if (!testResult) {
-                console.error("test failed");
+                log['error']("test failed");
                 message = "not true";
             }
-            results.push(testResult);
-            messages.push(message);
+            results .push(testResult);
+            addMessage(message);
         },
         is: (actual, expected) => {
             const testResult = actual === expected;
             let message = "";
             if (!testResult) {
-                message = "Got '"+ actual +"', expected '" + expected +"'";
-                console.error(message);
+                message = `Got '${actual}', expected '${expected}'`;
+                log.error(message);
             }
-            results.push(testResult);
-            messages.push(message);
+            results .push(testResult);
+            addMessage(message);
+        },
+        iterableEq: (actual, expected, maxElementsToConsume = 1_000) => {
+
+            if (actual[Symbol.iterator]   === undefined) log.error("actual is not iterable!");
+            if (expected[Symbol.iterator] === undefined) log.error("expected is not iterable!");
+
+            const actualIt     = actual[Symbol.iterator]();
+            const expectedIt   = expected[Symbol.iterator]();
+
+            let iterationCount = 0;
+            let testPassed     = true;
+            let message        = "";
+
+            while (true) {
+                const { value: actualValue,   done: actualDone   } = actualIt.next();
+                const { value: expectedValue, done: expectedDone } = expectedIt.next();
+
+                const oneIteratorDone      = actualDone || expectedDone;
+                const bothIteratorDone     = actualDone && expectedDone;
+                const tooManyIterations    = iterationCount > maxElementsToConsume;
+
+                if (bothIteratorDone) break;
+                if (oneIteratorDone) {
+                    testPassed = false;
+                    const actualMsg = actualDone ? "had no more elements" : "still had elements";
+                    message = `Actual and expected do not have the same length! After comparing ${iterationCount} 
+                               elements, actual ${actualMsg}, which was not expected!`;
+                    break;
+                }
+                if (tooManyIterations) {
+                    message = `It took more iterations than ${maxElementsToConsume}. Aborting.\n`;
+                    testPassed = false;
+                    break;
+                }
+
+                if (actualValue !== expectedValue) {
+                    testPassed = false;
+                    message = `Values were not equal in iteration ${iterationCount}! Expected ${expectedValue} but was ${actualValue}\n`;
+                    break;
+                }
+
+                iterationCount++;
+            }
+
+            if (!testPassed) log.error(message);
+            results.push(testPassed);
+            addMessage(message);
+        },
+        throws: (functionUnderTest, expectedErrorMsg = "") => {
+            let testResult    = false;
+            let message       = "";
+            const hasErrorMsg = expectedErrorMsg !== "";
+
+            try {
+                functionUnderTest();
+
+                message = "Did not throw an error!";
+                if (hasErrorMsg) {
+                    message += ` Expected: '${expectedErrorMsg}'`;
+                }
+                log.error(message);
+            } catch (e) {
+                testResult = true;
+
+                if (hasErrorMsg) {
+                    testResult = expectedErrorMsg === e.message;
+                }
+            }
+            results .push(testResult);
+            addMessage(message);
         }
     }
 };
@@ -125,6 +242,7 @@ const asyncTest = (name, asyncCallback) => {
  * @typedef { Object } TestSuiteType
  * @property { (testName:String, callback:TestCallback) => void} test - running a test function for this suite
  * @property { (testName:String, callback:TestCallback) => void} add  - adding a test function for later execution
+ * @property { () => void} run                                        - runs the given test suite
  * @property { function(): void } run:                                - running and reporting the suite
  */
 /**
@@ -151,8 +269,12 @@ const TestSuite = suiteName => {
             addToTotal(suiteAssert.results.length);
             if (suiteAssert.results.every( id )) { // whole suite was ok, report whole suite
                 report(suiteName, suiteAssert.results, suiteAssert.messages);
-            } else { // some test in suite failed, rerun tests for better error indication
-                tests.forEach( testInfo => test( testInfo(name), testInfo(logic) ) )
+            } else { // some test in suite failed, rerun tests for better error indication with debug logging
+                const consoleAppender = ConsoleAppender();
+                const formattingFn  = context => logLevel => logMessage => `[${logLevel}]\t'${context}' ${suiteName}: ${logMessage}`;
+                consoleAppender.setFormatter(Just(formattingFn));
+                withAppender(consoleAppender, LOG_CONTEXT_All, LOG_DEBUG)(() =>
+                    tests.forEach(testInfo => test(testInfo(name), testInfo(logic))));
             }
         }
     };
@@ -205,3 +327,27 @@ const report = (origin, results, messages) => {
  */
 const write = html => out.append(...dom(html));
 
+/**
+ * Convenience function to run an isolated test with a given appender, logging context and level.
+ * @type { <_T_>
+ *          (appender:AppenderType<_T_>, context:String, level:LogLevelType)
+ *          => (codeUnderTest: ConsumerType<void>)
+ *          => void
+ *        }
+ */
+const withAppender = (appender, context, level) => codeUnderTest => {
+    const oldLevel   = getLoggingLevel();
+    const oldContext = getLoggingContext();
+    try {
+        setLoggingContext(context);
+        setLoggingLevel(level);
+        addToAppenderList(appender);
+        codeUnderTest();
+    } catch (e) {
+        console.error(e, "withAppender logging test failed!");
+    } finally {
+        setLoggingLevel(oldLevel);
+        setLoggingContext(oldContext);
+        removeFromAppenderList(appender);
+    }
+};
