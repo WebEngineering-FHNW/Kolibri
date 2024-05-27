@@ -3797,16 +3797,19 @@ const totalMinutesToTimeString = totalMinutes => {
  */
 
 /**
- * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'} ObservableTypeString
+ * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'|'designSystem'|'emphasis'|'state'} ObservableTypeString
  * Feel free to extend this type with new unique type strings as needed for your application.
  */
 
-/** @type ObservableTypeString */ const VALUE    = "value";
-/** @type ObservableTypeString */ const VALID    = "valid";
-/** @type ObservableTypeString */ const EDITABLE = "editable";
-/** @type ObservableTypeString */ const LABEL    = "label";
-/** @type ObservableTypeString */ const NAME     = "name";
-/** @type ObservableTypeString */ const TYPE     = "type"; // HTML input types: text, number, checkbox, etc.
+/** @type ObservableTypeString */ const VALUE           = "value";
+/** @type ObservableTypeString */ const VALID           = "valid";
+/** @type ObservableTypeString */ const EDITABLE        = "editable";
+/** @type ObservableTypeString */ const LABEL           = "label";
+/** @type ObservableTypeString */ const NAME            = "name";
+/** @type ObservableTypeString */ const TYPE            = "type"; // HTML input types: text, number, checkbox, etc. HTML Button types: submit, reset, button.
+/** @type ObservableTypeString */ const DESIGNSYSTEM    = "designSystem";
+/** @type ObservableTypeString */ const EMPHASIS        = "emphasis";
+/** @type ObservableTypeString */ const STATE           = "state";
 
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
@@ -4097,16 +4100,21 @@ const fireEvent = (element, eventTypeString) => {
 const fireChangeEvent = element => fireEvent(element, CHANGE);
 
 
-/** @typedef { "text"|"number"|"checkbox"|"time"|"date"|"color"|"choice" } InputTypeString */
+/** @typedef { "text"|"number"|"checkbox"|"time"|"date"|"color"} InputTypeString */
 
-/** @type InputTypeString */ const TEXT     = "text";
-/** @type InputTypeString */ const NUMBER   = "number";
-/** @type InputTypeString */ const CHECKBOX = "checkbox"; // think about radio
-/** @type InputTypeString */ const TIME     = "time";
-/** @type InputTypeString */ const DATE     = "date";
-/** @type InputTypeString */ const COLOR    = "color";
-/** @type InputTypeString */ const CHOICE   = "choice"; // special name for input type that chooses from values
-/**
+/** @type InputTypeString */ const TEXT         = "text";
+/** @type InputTypeString */ const NUMBER       = "number";
+/** @type InputTypeString */ const CHECKBOX     = "checkbox";
+/** @type InputTypeString */ const TIME         = "time";
+/** @type InputTypeString */ const DATE         = "date";
+/** @type InputTypeString */ const COLOR        = "color";
+
+
+/** @typedef { "text"|"icon"|"leadingIcon"|"trailingIcon"} ButtonTypeString */
+/** @type ButtonTypeString */ const TEXTBTN         = "textBtn";
+/** @type ButtonTypeString */ const ICONBTN         = "iconBtn";
+/** @type ButtonTypeString */ const LEADINGICONBTN  = "leadingIconBtn";
+/** @type ButtonTypeString */ const TRAILINGICONBTN = "trailingIconBtn";/**
  * @typedef { object } InputAttributes
  * @template _T_
  * @property { !_T_ } value      - mandatory value, will become the input value, defaults to undefined
@@ -4135,7 +4143,7 @@ const fireChangeEvent = element => fireEvent(element, CHANGE);
 const SimpleInputModel = ({value, label, name, type= TEXT}) => {
     const singleAttr = Attribute(value);
     singleAttr.getObs(TYPE)    .setValue(type);
-    singleAttr.getObs(EDITABLE).setValue(true); // todo: maybe not if choice
+    singleAttr.getObs(EDITABLE).setValue(true);
     singleAttr.getObs(VALID)   .setValue(true);
     if (null != label) singleAttr.getObs(LABEL).setValue(label);
     if (null != name ) singleAttr.getObs(NAME) .setValue(name);
@@ -4344,13 +4352,11 @@ const primaryAccent     = purple500;
 const primaryLight      = purple200;
 const primaryBg         = purple100;
 
-
 /* --- secondary --- */
 const secondaryDark     = blue800;
 const secondaryAccent   = blue500;
 const secondaryLight    = blue200;
 const secondaryBg       = blue100;
-
 
 /* --- success --- */
 const successDark       = green800;
@@ -4358,19 +4364,72 @@ const successAccent     = green500;
 const successLight      = green200;
 const successBg         = green100;
 
-
 /* --- warning --- */
 const warningDark       = yellow600;
 const warningAccent     = yellow500;
 const warningLight      = yellow200;
 const warningBg         = yellow100;
 
-
 /* --- danger --- */
 const dangerDark        = pink900;
 const dangerAccent      = pink500;
 const dangerLight       = pink200;
-const dangerBg          = pink100;/**
+const dangerBg          = pink100;
+
+/* --- typography --- */
+const lightRubik     = 'Rubik-Light,    ui-sans-serif, serif';
+const mediumRubik    = 'Rubik-Medium,   ui-sans-serif, serif';
+const regularRubik   = 'Rubik-Regular,  ui-sans-serif, serif';
+const semiboldRubik  = 'Rubik-SemiBold, ui-sans-serif, serif';
+
+
+/* --- font-sizes --- */
+const fontSizeH1         = '6.0rem';
+const fontSizeH2         = '3.7rem';
+const fontSizeH3         = '3.0rem';
+const fontSizeH4         = '2.0rem';
+const fontSizeH5         = '1.5rem';
+const fontSizeH6         = '1.0rem';
+
+const fontSizeTextL      = '1.25rem';
+const fontSizeTextM      = '1.0rem';
+const fontSizeTextS      = '0.875rem';
+const fontSizeTextXS     = '0.75rem';
+
+const fontSizeLinkL      = '1.25rem';
+const fontSizeLinkM      = '1.125rem';
+const fontSizeLinkS      = '1.0rem';
+const fontSizeLinkXS     = '0.875rem';
+
+const fontSizeCaption    = '0.875rem';
+const fontSizeOverline   = '0.625rem';
+
+
+/* --- spacing in rem--- */
+const remSpacer1         = '0.3rem';
+const remSpacer2         = '0.5rem';
+const remSpacer3         = '0.8rem';
+const remSpacer4         = '1.0rem';
+const remSpacer5         = '1.3rem';
+const remSpacer6         = '1.5rem';
+const remSpacer7         = '1.8rem';
+const remSpacer8         = '2.0rem';
+const remSpacer9         = '2.2rem';
+const remSpacer10        = '2.5rem';
+const remSpacer12        = '3.0rem';
+
+/* --- spacing in px--- */
+const pxSpacer1          = '4px;';
+const pxSpacer2          = '8px;';
+const pxSpacer3          = '12px';
+const pxSpacer4          = '16px';
+const pxSpacer5          = '20px';
+const pxSpacer6          = '24px';
+const pxSpacer7          = '28px';
+const pxSpacer8          = '32px';
+const pxSpacer9          = '36px';
+const pxSpacer10         = '40px';
+const pxSpacer12         = '48px';/**
  * @module projector/simpleForm/simpleInputProjector
  *
  * Following the projector pattern, this module exports an implementation of the {@link IInputProjector}
@@ -4393,68 +4452,6 @@ const dangerBg          = pink100;/**
  */
 let counter = 0;
 
-/** @private */
-const createInputView = (id, inputController) => {
-    // create view
-    const elements = dom(`
-        <label for="${id}"></label>
-        <span  data-id="${id}">
-            <input type="${inputController.getType()}" id="${id}">
-            <span aria-hidden="true"></span>
-        </span>
-    `);
-    /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
-    /** @type {HTMLSpanElement}  */ const spanElement  = elements[1]; // only for the sake of type casting, otherwise...
-    /** @type {HTMLInputElement} */ const inputElement = spanElement.firstElementChild; // ... we would use array deconstruction
-    return [elements, labelElement, inputElement];
-};
-
-/**
- * @private
- * "hh:mm" in the vies vs minutes since midnight in the model
- */
-const bindTimeValue = (inputElement, eventType, inputController) => {
-    inputElement.addEventListener(eventType, _ =>
-        inputController.setValue(/** @type { * } */ timeStringToMinutes(inputElement.value))
-    );
-    inputController.onValueChanged(val => inputElement.value = totalMinutesToTimeString(/** @type { * } */ val));
-};
-/**
- * @private
- * "checked" attribute vs boolean in model
- */
-const bindCheckboxValue = (inputElement, eventType, inputController) => {
-    inputElement.addEventListener(eventType, _ => inputController.setValue(/** @type { * } */ inputElement.checked));
-    inputController.onValueChanged(val => inputElement.checked = /** @type { * } */ val);
-};
-/**
- * @private
- */
-const bindViewDebounceValue = (inputElement, eventType, inputController, timeout) => {
-    let timeoutId; // maybe move down inside function
-    inputElement.addEventListener(eventType, _event => {
-        if (timeoutId !== undefined) clearTimeout(timeoutId);
-        timeoutId = setTimeout( _timestamp =>
-           inputController.setValue(/** @type { * } */ inputElement.value),
-           timeout
-        );
-    });
-};
-
-/**
- * @private
- */
-const bindViewUnbouncedValue = (inputElement, eventType, inputController) => {
-    inputElement.addEventListener(eventType, _ => inputController.setValue(/** @type { * } */ inputElement.value));
-};
-
-/**
- * @private
- */
-const bindDataValue = (inputController, inputElement) => {
-    inputController.onValueChanged(val => inputElement.value = /** @type { * } */ val);
-};
-
 /**
  * @private
  * Implementation for the exported projection functions. Configured via curried parameters.
@@ -4467,28 +4464,42 @@ const projectInput = (timeout) => (eventType) =>
         return;
     }
     const id = formCssClassName + "-id-" + (counter++);
-    const shallDebounce = () => timeout !== 0;
-
-    let elements, labelElement, inputElement;
+    // create view
+    const elements = dom(`
+        <label for="${id}"></label>
+        <span  data-id="${id}">
+            <input type="${inputController.getType()}" id="${id}">
+            <span aria-hidden="true"></span>
+        </span>
+    `);
+    /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
+    /** @type {HTMLSpanElement}  */ const spanElement  = elements[1]; // only for the sake of type casting, otherwise...
+    /** @type {HTMLInputElement} */ const inputElement = spanElement.firstElementChild; // ... we would use array deconstruction
 
     // view and data binding can depend on the type
-    switch (inputController.getType()) {
-        case TIME:
-            [elements, labelElement, inputElement] = createInputView(id, inputController);
-            bindTimeValue(inputElement, eventType, inputController);
-            break;
-        case CHECKBOX:
-            [elements, labelElement, inputElement] = createInputView(id, inputController);
-            bindCheckboxValue(inputElement, eventType, inputController);
-            break;
-        default:
-            [elements, labelElement, inputElement] = createInputView(id, inputController);
-            if(shallDebounce()) {
-                bindViewDebounceValue(inputElement, eventType, inputController, timeout);
-            } else {
-                bindViewUnbouncedValue(inputElement, eventType, inputController);
-            }
-            bindDataValue(inputController, inputElement);
+    if (inputController.getType() === TIME) { // "hh:mm" in the vies vs minutes since midnight in the model
+        inputElement.addEventListener(eventType, _ =>
+            inputController.setValue(/** @type { * } */ timeStringToMinutes(inputElement.value))
+        );
+        inputController.onValueChanged(val => inputElement.value = totalMinutesToTimeString(/** @type { * } */ val));
+    } else
+    if (inputController.getType() === CHECKBOX) { // "checked" attribute vs boolean in model
+        inputElement.addEventListener(eventType, _ => inputController.setValue(/** @type { * } */ inputElement.checked));
+        inputController.onValueChanged(val => inputElement.checked = /** @type { * } */ val);
+    } else {
+        if(timeout !== 0) {
+            let timeoutId;
+            inputElement.addEventListener(eventType, _event => {
+                if(timeoutId !== undefined) clearTimeout(timeoutId);
+                timeoutId = setTimeout( _timestamp =>
+                    inputController.setValue(/** @type { * } */ inputElement.value),
+                    timeout
+                );
+            });
+        } else {
+            inputElement.addEventListener(eventType, _ => inputController.setValue(/** @type { * } */ inputElement.value));
+        }
+        inputController.onValueChanged(val => inputElement.value = /** @type { * } */ val);
     }
 
     inputController.onLabelChanged (  label => {
@@ -4502,7 +4513,7 @@ const projectInput = (timeout) => (eventType) =>
         ? inputElement.removeAttribute("readonly")
         : inputElement.setAttribute("readonly", "on"));
 
-    return /** @type { [HTMLLabelElement, HTMLInputElement] } */ elements; // todo: fix second element type
+    return /** @type { [HTMLLabelElement, HTMLInputElement] } */ elements;
 };
 
 /**
@@ -4581,7 +4592,8 @@ const projectForm = formController => {
 			</fieldset>
 		</form>
     `);
-    /** @type { HTMLFormElement } */ const form = elements[0];
+    /** @type { HTMLFormElement } */
+    const form = elements[0];
     const fieldset = form.children[0];
 
     formController.forEach( inputController =>
