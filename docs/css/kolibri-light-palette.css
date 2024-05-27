@@ -12,8 +12,10 @@ todo: color->palette
 
     --kb-purple:  hsl(266, 85%, 43%);
     --kb-white:   hsl(240, 45%, 98%);
-    --kb-mix:     color-mix(in hsl, hsl(266, 85%, 43%) 50%,  hsl(240, 45%, 98%));
+    --kb-mix:     color-mix(in hsl, var(--kb-purple) 50%,  hsl(240, 45%, 98%));
 
+    --color-primary: #8A9B0F;
+    --color-primary-darker:  color-mix(in srgb,var(--color-primary), #000 15%);
 
 
     /* --- purple --- */
