@@ -4,11 +4,17 @@
 
 /*
 todo: color->palette
+
  */
+
 
 :root {
 
-    --kb-color-purple-800: hsl(263, 100%, 25%);
+    --kb-purple:  hsl(266, 85%, 43%);
+    --kb-white:   hsl(240, 45%, 98%);
+    --kb-mix:     color-mix(in hsl, hsl(266, 85%, 43%) 50%,  hsl(240, 45%, 98%));
+
+
 
     /* --- purple --- */
     --kb-color-rgb-purple-800:   #310082;
