@@ -11,14 +11,22 @@ todo: color->palette
 
 :root {
 
-    --kb-purple:  hsl(266, 85%, 43%);
-    --kb-white:   hsl(240, 45%, 98%);
+    --kb-primary-color:       hsl(266, 85%, 43%);
+    --kb-primary-color-h:     266;
+    --kb-primary-color-s:     85%;
+    --kb-primary-color-l:     43%;
 
-    --color-primary: #8A9B0F;
-    --color-primary-darker:  color-mix(in srgb,var(--color-primary), #000 15%);
+    /* not sure with the naming. Have a talk with the Master (Dierk) about it!! */
+
+        --kb-primary-blackish:   hsl(266, 85%, 16%);
+        --kb-primary-whitsh:     hsl(266, 85%, 94%);
 
 
-    /* --- purple --- */
+        --color-primary: #8A9B0F;
+        --color-primary-darker:  color-mix(in srgb,var(--color-primary), #000 15%);
+
+
+        /* --- purple --- */
     --kb-color-rgb-purple-800:   #310082;
     --kb-color-rgb-purple-700:   #4300B3;
     --kb-color-rgb-purple-600:   #5F0FDF;
