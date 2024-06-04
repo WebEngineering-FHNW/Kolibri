@@ -1,0 +1,58 @@
+@import "./Default_Palette.css";
+:root {
+
+    /* mapping from palette to semantic channels */
+
+    --kb-clr-base-h:    var(--kb-clr-purple-h);
+    --kb-clr-base-s:    var(--kb-clr-purple-s);
+    --kb-clr-base-l:    var(--kb-clr-purple-l);
+
+    --kb-clr-accent-h:  var(--kb-clr-crimson-h);
+    --kb-clr-accent-s:  var(--kb-clr-crimson-s);
+    --kb-clr-accent-l:  var(--kb-clr-crimson-l);
+
+    /* setting semantic colors */
+
+    --kb-clr-base:      var(--kb-clr-purple);
+    --kb-clr-accent:    var(--kb-clr-crimson);
+
+    /* setting variants */
+
+    --kb-clr-base-dark: hsla(    var(--kb-clr-base-h),
+    calc(var(--kb-clr-base-s) * 1),
+    calc(var(--kb-clr-base-l) * 0.7),
+    1 );
+
+    --kb-clr-base-light: hsla(   var(--kb-clr-base-h),
+    calc(var(--kb-clr-base-s) * 1),
+    calc(var(--kb-clr-base-l) * 1.3),
+    1 );
+
+    --kb-clr-base-bg:    hsla(   var(--kb-clr-base-h),
+    calc(var(--kb-clr-base-s) * 0.7),
+    calc(var(--kb-clr-base-l) * 1.3),
+    1 );
+
+    --kb-clr-base-shadow: hsla(  var(--kb-clr-base-h),
+    calc(var(--kb-clr-base-s) * 0.8),
+    calc(var(--kb-clr-base-l) * 1),
+    0.2 );
+
+
+    --kb-box-shadow:  0 4px  8px 0 var(--kb-clr-base-shadow),
+    0 6px 20px 0 var(--kb-clr-base-shadow);
+
+
+    --kb-clr-accent-light: hsla( var(--kb-clr-accent-h),
+    calc(var(--kb-clr-accent-s) * 1.3),
+    calc(var(--kb-clr-accent-l) * 1.3),
+    1 );;
+
+    /* to be included later
+    --kb-clr-output:  var(--kb-clr-base);
+    --kb-clr-ok:      hsl(104, 89%, 28%);
+    --kb-clr-select:  hsl(46, 90%, 84%);
+    --kb-clr-neutral: hsl(0, 0%, 74%);
+
+     */
+}
