@@ -1,0 +1,45 @@
+/**
+This file is a one-to-one implementation of the design system
+todo:
+- line-height?, letter-spacing?, running text font size 1.2em
+one for code examples
+ */
+@import "../font/Saira/font-face.css";
+@import "../font/JetBrains_Mono/font-face.css";
+
+/* Not needed at the moment - un-comment if needed. */
+/*@import "../font/Rubik/font-face.css";*/
+/*@import "../font/Roboto_Slab/font-face.css";*/
+
+:root {
+
+    /* --- typography --- */
+    --kb-font-family-default:       system-ui;
+    --kb-font-family-stylish:       "Saira";          /* no sensible fallback */
+    --kb-font-family-running-text:  system-ui  ;      /* fallback depends on the context */
+    --kb-font-family-mono:          "JetBrains Mono", monotype;
+
+    /* --- font-sizes --- */
+    --font-size-h1:         6.0rem;
+    --font-size-h2:         3.75rem;
+    --font-size-h3:         3.0rem;
+    --font-size-h4:         2.0rem;
+    --font-size-h5:         1.5rem;
+    --font-size-h6:         1.0rem;
+
+    --font-size-textL:      1.25rem;
+    --font-size-textM:      1.0rem;
+    --font-size-textS:      0.875rem;
+    --font-size-textXS:     0.75rem;
+
+    --font-size-linkL:      1.25rem;
+    --font-size-linkM:      1.125rem;
+    --font-size-linkS:      1.0rem;
+    --font-size-linkXS:     0.875rem;
+
+    --font-size-caption:    0.875rem;
+    --font-size-overline:   0.625rem;
+
+
+}
+

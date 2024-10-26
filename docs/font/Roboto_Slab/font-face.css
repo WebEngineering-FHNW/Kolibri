@@ -1,0 +1,8 @@
+/* To be imported when this variable font is to be used as a font family */
+
+@font-face {
+    font-family:    "Roboto Slab";
+    src:            local("Roboto Slab"),
+                    url("./RobotoSlab-VariableFont_wght.ttf") format("truetype");
+    font-weight: 100 900;
+}
