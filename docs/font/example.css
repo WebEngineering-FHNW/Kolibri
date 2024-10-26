@@ -1,0 +1,19 @@
+/* Common styles for the font example files */
+
+.animate_on_hover {
+    transition: all linear 1.5s;
+}
+.animate_on_hover:hover {
+    font-weight: 800;
+}
+
+.font_numeric {
+    font-variant-numeric: tabular-nums slashed-zero;
+}
+.font_numeric_fraction {
+    font-variant-numeric: diagonal-fractions;
+}
+
+dt {
+    margin-top: .5em;
+}
