@@ -1,6 +1,7 @@
 import { TestSuite } from "../util/test.js";
 import { Pair      } from "./pair.js";
-import { fst, snd  } from "../stdlib.js"
+// noinspection ES6PreferShortImport
+import { fst, snd  } from "../stdlib.js";
 
 const pairTestSuite = TestSuite("lambda/Pair");
 

@@ -39,7 +39,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: red;
+    box-shadow: 0 0 .5em 0 red;
 }
 
 #wheels {

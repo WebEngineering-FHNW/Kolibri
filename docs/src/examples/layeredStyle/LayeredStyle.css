@@ -11,8 +11,11 @@
    This is not true for the @layer syntax.
    It also must be in this sequence or it won't work.
  */
+/*noinspection CssInvalidImport*/
 @import "../../../css/kolibri-light-colors.css" layer(kolibri-light-colors);
+/*noinspection CssInvalidImport*/
 @import "../../../css/kolibri-light-fonts.css"  layer(kolibri-light-fonts);
+/*noinspection CssInvalidImport*/
 @import "../../../css/kolibri-base.css"         layer(kolibri-base);
 
 @layer example-application {

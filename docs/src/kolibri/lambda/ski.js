@@ -21,7 +21,7 @@ const I = id ;
 /**
  * Mockingbird, M, \f.ff , self-application of f.
  * Is also SII and the boolean "or" operator.
- * Basis for the Y combinator.
+ * Basis for the Y-combinator.
  * @type {function(function): function}
  */
 const M = f => f(f);  // beta(f)(f)
@@ -65,7 +65,7 @@ const BB = cmp2;
  */
 const S = f => g => x => f(x)(g(x));
 
-// The Y combinator appears only as a comment here, because it is of little use in a strict language.
+// The Y-combinator appears only as a comment here, because it is of little use in a strict language.
 // Y combinator: \f. (\x.f(x x)) (\x.f(x x))
 // Y = f => ( x => f(x(x)) )  ( x => f(x(x)) )
 // Y is a fixed point for every f: Y(f) == Y(Y(f))
@@ -74,7 +74,7 @@ const S = f => g => x => f(x)(g(x));
 
 /**
  * Z combinator, \f. M(\x. f(\v. Mxv)) .
- * The replacement for the Y combinator in a strict language to capture recursion and looping.
+ * The replacement for the Y-combinator in a strict language to capture recursion and looping.
  */
 const Z = f => M(x => f(v => M(x)(v) ));
 
