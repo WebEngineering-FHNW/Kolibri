@@ -18,7 +18,7 @@ personSuite.add("master add remove", assert => {
     const [masterContainer]     = projectMasterView(masterController, selectionController);
     projectDetailView(selectionController, detailCard);
 
-    const elementsPerRow = 1 + 2 * 2; // delete button plus 2 times label with input
+    const elementsPerRow = 1 ; // used to be one delete button plus 2 times label with input but is now one row div
 
     assert.is(masterContainer.children.length, 0*elementsPerRow);
 

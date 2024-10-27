@@ -34,7 +34,7 @@ const elementId = (attributeName, model) =>
 /**
  * Returns a unique id for the html delete button that is to represent the model such that we can create the
  * element in a way that allows later retrieval when it needs to be removed.
- * The resulting String should follow the constraints for properly formatted html ids, i.e. not dots allowed.
+ * The resulting String should follow the constraints for properly formatted html ids, i.e. no dots allowed.
  * @template _T_
  * @private
  * @pure
@@ -74,21 +74,10 @@ const selectListItemForModel = (attributeNames, root) => (newModel, oldModel) =>
  * @return { (model:_T_) => void }
  */
 const removeListItemForModel = (attributeNames, root) => model => {
-    const deleteButton = root.querySelector("#" + deleteButtonId(attributeNames, model));
-    if (deleteButton) {
-        deleteButton.parentElement.removeChild(deleteButton);               // remove delete button
+    const rowDiv = root.querySelector("div.row:has(#" + deleteButtonId(attributeNames, model) +")");
+    if (rowDiv) {
+        rowDiv.parentElement.removeChild(rowDiv);               // remove whole row from master view
     }
-    attributeNames.forEach( attributeName => {
-        const id = elementId(attributeName, model);
-        const spanElement = root.querySelector(`span[data-id=${id}]`);
-        if ( spanElement) {                                                // remove all input elements of this row
-            spanElement.parentElement.removeChild(spanElement);
-        }
-        const labelElement = root.querySelector(`label[for="${id}"]`);
-        if (labelElement ){
-            labelElement.parentElement.removeChild(labelElement);           // remove all label elements of this row
-        }
-    });
 };
 
 /**
@@ -97,35 +86,36 @@ const removeListItemForModel = (attributeNames, root) => model => {
  * @param { ListControllerType<_T_> }         listController
  * @param { SelectionControllerType<_T_> }    selectionController
  * @param { _T_ }                             model
- * @param { String[] }                      attributeNames
+ * @param { String[] }                        attributeNames
  * @return { HTMLElement[] }
  */
 const projectListItem = (listController, selectionController, model, attributeNames) => {
 
-    const deleteButton      = document.createElement("Button");
-    deleteButton.setAttribute("class","delete");
-    deleteButton.innerHTML  = "&times;";
-    deleteButton.onclick    = _ => listController.removeModel(model);
-    deleteButton.id         = deleteButtonId(attributeNames, model);
+    /** @type { HTMLDivElement } */
+    const rowDiv = dom(`<div class="row"></div>`)[0];
 
-    const elements          = [];
+    const [deleteButton] = dom(`<button class="delete">&times;</button>`);
+    deleteButton.onclick = _ => listController.removeModel(model);
+    deleteButton.id      = deleteButtonId(attributeNames, model);
+
+    rowDiv.append(deleteButton);
 
     attributeNames.forEach( attributeName => {
-
+        const [cellDiv] = dom(`<div class="cell"></div>`);
         const inputController = SimpleAttributeInputController(model[attributeName]);
         const [labelElement, spanElement] = InputProjector.projectInstantInput(inputController, "ListItem");
         const inputElement   = spanElement.querySelector("input");
         inputElement.onfocus = _ => selectionController.setSelectedModel(model);
-        // id's have been dynamically generated, but we have to change that
+        // id's have been dynamically generated, but we have to make them unique
         // (and keep the input.id and label.for consistency intact)
         const id = elementId(attributeName, model);
-        spanElement .setAttribute("data-id",    id); // we will need that later when removing
-        inputElement.setAttribute("id",         id);
-        labelElement.setAttribute("for",        id);
-        elements.push(labelElement, spanElement);
+        inputElement.setAttribute("id",  id);
+        labelElement.setAttribute("for", id);
+        cellDiv.append(labelElement, spanElement);
+        rowDiv.append(cellDiv);
     });
 
-    return [ deleteButton, ...elements];
+    return [ rowDiv ];
 };
 
 
@@ -179,12 +169,34 @@ const pageCss = `
         grid-gap:       0.5em;
         grid-row-gap:   0.5em;
         grid-template-columns: 2em auto auto; /* default: to be overridden dynamically */        
-        align-items:    baseline;
         margin-bottom:  0.5em ;
+        
+        & label { /* labels are not shown in the master view but are in the dom for validity */
+            display:        none;
+        }  
+        
+        & .delete {
+            background-color:   transparent;
+            border:             none;
+            color:              var(--kolibri-color-accent);
+            font-size:          1.3em;
+        }   
+        
+        & .row {
+            display:        grid;
+            grid-template-columns: subgrid;
+            align-items:    baseline;
+            grid-column:    1 / -1;
+            --color-select: color-mix(in srgb , var(--kolibri-color-select), white 60%);
+        }            
+        & .row:has(button.selected) {
+            box-shadow: 0 0 .3em 0 var(--color-select);
+        }        
+        & .row:has(button.selected), & .row:has(button.selected) * {
+            background-color:  var(--color-select);
+        }    
     }
-    .${masterClassName} label { /* labels are not shown in the master view but are in the dom for validity */
-        display:        none;
-    }
+
     .${detailClassName} {
         display:            grid;
         grid-gap:           0.5em;
@@ -198,26 +210,13 @@ const pageCss = `
         transition-delay:   200ms;
         transform:          rotateX(-60deg);
         transform-origin:   top center;
-    }    
-    .delete {
-        background-color:   transparent;
-        border:             none;
-        color:              var(--kolibri-color-accent);
-        font-size:          1.3em;
-    }    
+    }     
     .card h1 {
         font-family:        var(--font-sans-serif);
         margin-top:         0;
     }
-    button.selected {
-        position:           relative;
-    }    
-    button.selected::before {
-        content:            '';
-        position:           absolute;        
-        inset:              0 0 0 0;       
-        background:         var(--kolibri-color-select);
-        transform:          translateX(-100%);
-        clip-path:          polygon(0 0, 100% 50%, 0 100%);
+    span[aria-hidden=true] {
+        width:  0;
+        height: 0;
     }
 `;
