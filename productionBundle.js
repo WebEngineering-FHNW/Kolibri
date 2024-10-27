@@ -5468,9 +5468,9 @@ const withAppender = (appender, context, level) => codeUnderTest => {
         setLoggingContext(oldContext);
         removeFromAppenderList(appender);
     }
-};const release     = "0.9.1";
+};const release     = "0.9.2";
 
-const dateStamp   = "2023-09-16 T 18:49:46 MESZ";
+const dateStamp   = "2024-10-27 T 02:56:56 MESZ";
 
 const versionInfo = release + " at " + dateStamp;
 
