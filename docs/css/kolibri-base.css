@@ -1,21 +1,10 @@
 /* make sure to keep in line with kolibriStyle.js */
 
 @import "./kolibri-fonts.css";
-@import "./kolibri-light-palette.css"; /* must choose the palette to make the colors work */
 @import "./kolibri-colors.css";
 
 
 :root {
-    --_kolibri-color-product-base: 280 90% 30%;                       /* allow for transparent variants */
-    --kolibri-color-product: hsl(var(--_kolibri-color-product-base)); /* the color that identifies the Kolibri product */
-    --kolibri-color-accent:  var(--kb-hsla-danger-accent);
-    --kolibri-color-output:  var(--kb-hsla-secondary-dark);
-    --kolibri-color-ok:      var(--kb-hsla-success-accent);
-    --kolibri-color-select:  var(--kb-color-hsl-yellow-400); /* make custom use of the palette */
-    --kolibri-color-neutral: var(--kb-color-hsla-black-40);
-    --kolibri-color-shadow:  hsla(var(--_kolibri-color-product-base) / 20%);
-    --kolibri-box-shadow:    0 4px  8px 0 var(--kolibri-color-shadow),
-                             0 6px 20px 0 var(--kolibri-color-shadow);
     padding:                 0;
     margin:                  0;
 }
