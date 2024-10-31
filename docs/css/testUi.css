@@ -14,7 +14,7 @@ body {
     box-shadow:             var(--kolibri-box-shadow);
 }
 #out.failed {
-    box-shadow:             0 .7rem  2rem 0 var(--kolibri-color-accent);
+    box-shadow:             0 .7rem  2rem 0 var(--kolibri-color-danger-accent);
 }
 #out div:nth-child(odd) {   /* count and file columns are output */
     color:                  var(--kolibri-color-output);
