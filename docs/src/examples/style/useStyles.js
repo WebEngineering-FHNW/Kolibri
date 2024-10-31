@@ -22,12 +22,11 @@ const stanza = ( colorName, color, cssName) => dom (`
 const stanza2= ( colorName, color, cssName) => dom (`
 <!--suppress CssUnresolvedCustomProperty -->
     <p>${colorName}</p>    
-    <p>${"--kb-rgb-" + cssName}, ${"--kb-hsla-" + cssName}</p>
+    <p>${"--kolibri-color-" + cssName}</p>
 
     <div class="drop-size drop-shape" style="background: ${color};"></div>
     <div class="flow">
-        <div class="drop-size drop-shape" style="background: var(${"--kb-rgb-"  + cssName});"></div>
-        <div class="drop-size drop-shape" style="background: var(${"--kb-hsla-" + cssName});"></div>
+        <div class="drop-size drop-shape" style="background: var(${"--kolibri-color-"  + cssName});"></div>
     </div>
 `);
 

@@ -65,82 +65,77 @@ const hsl  = (hue, sat, light)        => `hsl(${hue}, ${sat}%, ${light}%)`;
  */
 const hsla = (hue, sat, light, alpha) => `hsl(${hue}, ${sat}%, ${light}%, ${alpha})`;
 
-const accentColor  = hsl(322, 73, 52);
-const okColor      = hsl(104, 89, 28);
-const neutralColor = hsl(  0,  0, 74);
-const selectColor  = hsl( 46, 90, 84);
+const accentColor  = "var(--kolibri-color-accent)";
+const okColor      = "var(--kolibri-color-ok)";
+const neutralColor = "var(--kolibri-color-neutral)";
+const selectColor  = "var(--kolibri-color-select)";
 
-const outputColorValues = [256, 82, 55];
-const outputColor = hsl (...outputColorValues);
-const shadowColor = hsla(...outputColorValues, 0.2);
+const outputColor = "var(--kolibri-color-output)";
+const shadowColor = "var(--kolibri-color-shadow)";
 
-const shadowCss = `        
-      0 4px  8px 0 ${shadowColor}, 
-      0 6px 20px 0 ${shadowColor};
-`;
+const shadowCss   = "var(--kolibri-box-shadow)";
 
 // -- All colors according to Design File in Figma --
 
 /* --- purple --- */
-const purple800     = hsl(263, 100, 25);
-const purple700     = hsl(262, 100, 35);
-const purple600     = hsl(263, 87,  47);
-const purple500     = hsl(263, 100, 50);
-const purple400     = hsl(263, 100, 59);
-const purple300     = hsl(259, 100, 74);
-const purple200     = hsl(241, 91,  87);
-const purple100     = hsl(237, 90,  96);
+const purple800     = "var(--kolibri-palette-purple-800)";
+const purple700     = "var(--kolibri-palette-purple-700)";
+const purple600     = "var(--kolibri-palette-purple-600)";
+const purple500     = "var(--kolibri-palette-purple-500)";
+const purple400     = "var(--kolibri-palette-purple-400)";
+const purple300     = "var(--kolibri-palette-purple-300)";
+const purple200     = "var(--kolibri-palette-purple-200)";
+const purple100     = "var(--kolibri-palette-purple-100)";
 
 /* --- lavender --- */
-const lavender800   = hsl(281, 100, 17);
-const lavender700   = hsl(277, 100, 34);
-const lavender600   = hsl(275,  85, 51);
-const lavender500   = hsl(275, 100, 60);
-const lavender400   = hsl(267, 100, 73);
-const lavender300   = hsl(262, 100, 77);
-const lavender200   = hsl(252, 100, 86);
-const lavender100   = hsl(217, 100, 95);
+const lavender800   = "var(--kolibri-palette-lavender-800)";
+const lavender700   = "var(--kolibri-palette-lavender-700)";
+const lavender600   = "var(--kolibri-palette-lavender-600)";
+const lavender500   = "var(--kolibri-palette-lavender-500)";
+const lavender400   = "var(--kolibri-palette-lavender-400)";
+const lavender300   = "var(--kolibri-palette-lavender-300)";
+const lavender200   = "var(--kolibri-palette-lavender-200)";
+const lavender100   = "var(--kolibri-palette-lavender-100)";
 
 /* --- blue --- */
-const blue800       = hsl(241, 100, 25);
-const blue700       = hsl(241,  76, 38);
-const blue600       = hsl(241, 100, 39);
-const blue500       = hsl(241, 100, 55);
-const blue400       = hsl(241, 100, 71);
-const blue300       = hsl(232, 100, 65);
-const blue200       = hsl(223, 100, 86);
-const blue100       = hsl(242, 100, 95);
+const blue800       = "var(--kolibri-palette-blue-800)";
+const blue700       = "var(--kolibri-palette-blue-700)";
+const blue600       = "var(--kolibri-palette-blue-600)";
+const blue500       = "var(--kolibri-palette-blue-500)";
+const blue400       = "var(--kolibri-palette-blue-400)";
+const blue300       = "var(--kolibri-palette-blue-300)";
+const blue200       = "var(--kolibri-palette-blue-200)";
+const blue100       = "var(--kolibri-palette-blue-100)";
 
 /* --- green --- */
-const green800      = hsl(122,  85, 18);
-const green700      = hsl(120,  90, 24);
-const green600      = hsl(120, 100, 30);
-const green500      = hsl(116,  88, 39);
-const green400      = hsl(107,  91, 66);
-const green300      = hsl(103,  88, 75);
-const green200      = hsl( 99, 100, 84);
-const green100      = hsl( 93,  69, 92);
+const green800      = "var(--kolibri-palette-green-800)";
+const green700      = "var(--kolibri-palette-green-700)";
+const green600      = "var(--kolibri-palette-green-600)";
+const green500      = "var(--kolibri-palette-green-500)";
+const green400      = "var(--kolibri-palette-green-400)";
+const green300      = "var(--kolibri-palette-green-300)";
+const green200      = "var(--kolibri-palette-green-200)";
+const green100      = "var(--kolibri-palette-green-100)";
 
 /* --- yellow --- */
-const yellow800     = hsl(40,  51, 19);
-const yellow700     = hsl(40,  52, 31);
-const yellow600     = hsl(40, 100, 29);
-const yellow500     = hsl(40,  92, 54);
-const yellow400     = hsl(41, 100, 66);
-const yellow300     = hsl(41, 100, 78);
-const yellow200     = hsl(41, 100, 84);
-const yellow100     = hsl(41, 100, 94);
+const yellow800     = "var(--kolibri-palette-yellow-800)";
+const yellow700     = "var(--kolibri-palette-yellow-700)";
+const yellow600     = "var(--kolibri-palette-yellow-600)";
+const yellow500     = "var(--kolibri-palette-yellow-500)";
+const yellow400     = "var(--kolibri-palette-yellow-400)";
+const yellow300     = "var(--kolibri-palette-yellow-300)";
+const yellow200     = "var(--kolibri-palette-yellow-200)";
+const yellow100     = "var(--kolibri-palette-yellow-100)";
 
 /* --- pink --- */
-const pink900       = hsl(339, 100, 31);
-const pink800       = hsl(321, 100, 29);
-const pink700       = hsl(328, 100, 37);
-const pink600       = hsl(330, 100, 42);
-const pink500       = hsl(326, 100, 59);
-const pink400       = hsl(334, 100, 50);
-const pink300       = hsl(326, 100, 59);
-const pink200       = hsl(316, 100, 84);
-const pink100       = hsl(309, 100, 96);
+const pink800       = "var(--kolibri-palette-pink-800)";
+const pink700       = "var(--kolibri-palette-pink-700)";
+const pink600       = "var(--kolibri-palette-pink-600)";
+const pink500       = "var(--kolibri-palette-pink-500)";
+const pink400       = "var(--kolibri-palette-pink-400)";
+const pink300       = "var(--kolibri-palette-pink-300)";
+const pink200       = "var(--kolibri-palette-pink-200)";
+const pink100       = "var(--kolibri-palette-pink-100)";
 
 /* --- monochrome --- */
 const black         = hsl(240,  15,  9);
@@ -197,16 +192,19 @@ const warningBg         = yellow100;
 
 
 /* --- danger --- */
-const dangerDark        = pink900;
+const dangerDark        = pink800;
 const dangerAccent      = pink500;
 const dangerLight       = pink200;
 const dangerBg          = pink100;
 
+// todo dk: the whole typography section needs to be reworked, maybe it can even be removed
+// todo dk: atm we have no visual testing of the outcome
+
 /* --- typography --- */
-const lightRubik     = 'Rubik-Light,    ui-sans-serif, serif';
-const mediumRubik    = 'Rubik-Medium,   ui-sans-serif, serif';
-const regularRubik   = 'Rubik-Regular,  ui-sans-serif, serif';
-const semiboldRubik  = 'Rubik-SemiBold, ui-sans-serif, serif';
+const lightRubik     = 'Rubik-Light,    system-ui, serif';
+const mediumRubik    = 'Rubik-Medium,   system-ui, serif';
+const regularRubik   = 'Rubik-Regular,  system-ui, serif';
+const semiboldRubik  = 'Rubik-SemiBold, system-ui, serif';
 
 
 /* --- font-sizes --- */
