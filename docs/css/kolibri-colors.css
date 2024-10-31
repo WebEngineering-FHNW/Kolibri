@@ -63,6 +63,6 @@
     --kolibri-color-accent:  var(--kolibri-palette-lavender-500);
     --kolibri-color-output:  var(--kolibri-palette-blue-700);
     --kolibri-color-ok:      var(--kolibri-palette-green-600);
-    --kolibri-color-select:  var(--kolibri-palette-yellow-400);
-    --kolibri-color-neutral: var(--kolibri-palette-mono-400);
+    --kolibri-color-select:  var(--kolibri-palette-yellow-100);
+    --kolibri-color-neutral: var(--kolibri-palette-mono-200);
 }
