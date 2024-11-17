@@ -32,7 +32,7 @@ export {
  * @type { IObservable<LogLevelType> }
  * @private
  */
-const loggingLevelObs = Observable(LOG_INFO);
+const loggingLevelObs = /** @type { IObservable<LogLevelType> } */ Observable(LOG_INFO);
 
 /**
  * This function can be used to set the logging level for the logging framework.

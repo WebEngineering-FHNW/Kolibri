@@ -50,7 +50,7 @@ export { Pair }
 const Pair = x => y => {
   /**
    * @template _T_, _U_
-   * @type { PairSelectorType<_T_,_U_> }
+   * @type { PairType<_T_,_U_> }
    */
   const pair = selector => selector(x)(y);
 
