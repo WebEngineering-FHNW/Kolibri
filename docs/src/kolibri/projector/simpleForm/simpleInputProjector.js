@@ -37,12 +37,14 @@ const projectInput = (timeout) => (eventType) =>
         return;
     }
     const id = formCssClassName + "-id-" + (counter++);
-    // create view
+    // Create view.
+    // The input element sits in a span that allows identification and css reference for
+    // the span that serves as the invalidation marker. See kolibri-base.css for details.
     const elements = dom(`
         <label for="${id}"></label>
         <span  data-id="${id}">
             <input type="${inputController.getType()}" id="${id}">
-            <span aria-hidden="true"></span>
+            <span class="invalidation_marker" aria-hidden="true"></span>
         </span>
     `);
     /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
@@ -60,10 +62,11 @@ const projectInput = (timeout) => (eventType) =>
         inputElement.addEventListener(eventType, _ => inputController.setValue(/** @type { * } */ inputElement.checked));
         inputController.onValueChanged(val => inputElement.checked = /** @type { * } */ val);
     } else {
-        if(timeout !== 0) {
+        // standard binding for all remaining types, esp. TEXT and NUMBER.
+        if(timeout !== 0) { // we need debounce behavior
             let timeoutId;
             inputElement.addEventListener(eventType, _event => {
-                if(timeoutId !== undefined) clearTimeout(timeoutId);
+                if(timeoutId !== undefined) clearTimeout(timeoutId); // debounce time is already running - stop that one
                 timeoutId = setTimeout( _timestamp =>
                     inputController.setValue(/** @type { * } */ inputElement.value),
                     timeout

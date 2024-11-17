@@ -84,7 +84,8 @@ input[type=text]:invalid {
 label + span { /* the "holder" span for the input comes right after a label */
     position:   relative; /* such that we can position against it */
 }
-label + span > input + span {
+label + span > input + span.invalidation_marker {
+    /* background is transparent by default, so nothing is shown unless input becomes invalid */
     position:   absolute; /* get it out of the stacking context */
     top:        0;
     left:       0;
@@ -92,7 +93,7 @@ label + span > input + span {
     aspect-ratio: 1;
     transform:  translateX(-5ch);
 }
-label + span > input:invalid + span {
+label + span > input:invalid + span.invalidation_marker {
     background-image: radial-gradient(circle closest-side, white 0%, white 20%, var(--kolibri-color-accent) 99%, transparent 100%);
     filter:           drop-shadow(0 0 .2ch var(--kolibri-color-accent));
     transform:        translateX(-1ch);
