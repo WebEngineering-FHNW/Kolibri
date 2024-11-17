@@ -48,7 +48,7 @@
     --font-sans-serif:  "Rubik-Light", ui-sans-serif, sans-serif;
     --font-mono:        "JetBrainsMono-VariableFont_wght", monospace;
 
-    font-family: var(--font-serif);
+    font-family: var(--font-serif), system-ui;
 }
 header h1 {
     color: var(--kolibri-color-output);
@@ -58,13 +58,13 @@ header .subtitle {
     color: var(--kolibri-color-output);
 }
 h1, h2, h3 {
-    font-family: var(--font-serif-bold);
+    font-family: var(--font-serif-bold), system-ui;
 }
 p, li, div {
     letter-spacing: 0.02em;
 }
 form, fieldset, label, input, button {
-    font-family: var(--font-sans-serif);
+    font-family: var(--font-sans-serif), system-ui;
     letter-spacing: 0.02em;
 }
 
