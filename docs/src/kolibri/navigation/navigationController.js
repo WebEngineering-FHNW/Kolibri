@@ -9,8 +9,8 @@ const HOMEPAGE  = "homepage";
 const DEBUGMODE = "debugMode";
 
 /**
- * @template T
- * @typedef { Object.<ObservableTypeString, T>} ModelConfigurationObject
+ * @template _T_
+ * @typedef { Object.<ObservableTypeString, _T_>} ModelConfigurationObject
  */
 
 /**

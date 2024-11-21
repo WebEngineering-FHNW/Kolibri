@@ -15,8 +15,8 @@ import {VALUE} from "../presentationModel.js";
 export { PageController }
 
 /**
- * @template T
- * @typedef { Object.<ObservableTypeString, T>} ModelConfigurationObject
+ * @template _T_
+ * @typedef { Object.<ObservableTypeString, _T_>} ModelConfigurationObject
  */
 
 
@@ -25,11 +25,11 @@ export { PageController }
  * It coordinates the state of the PageModelType and communicates changes to the PageProjectorTypes that are bound to the PageModelType and external observers.
  * The PageControllerType is responsible for the lifecycle handling of a PageModelType.
  *
- * @template T
+ * @template _T_
  * @typedef PageControllerType
  * @property { () => void } activate    - a lifecycle function that allows a page to do initialization before displaying. This function will be called by a NavigationController on activation of this page.
  * @property { () => void } passivate   - a lifecycle function that allows a page to clean up before removing it from display. This function will be called by a NavigationController on passivation of this page.
- * @property { () => ?[T] } getDynamicContentControllers - a getter function that returns the dynamic content controllers. Dynamic content controllers control a model that can be projected at runtime by a {@link PageProjectorType}. Can be null if none are present.
+ * @property { () => ?[_T_] } getDynamicContentControllers - a getter function that returns the dynamic content controllers. Dynamic content controllers control a model that can be projected at runtime by a {@link PageProjectorType}. Can be null if none are present.
  * @property { (confObj: ModelConfigurationObject) => boolean } setConfiguration - a function that sets the observables of this page for all keys in object to their value.
  * @property { () => String } getQualifier                          - a getter function that returns the qualifier for this page. The qualifier can be used for styling as it is unique and immutable.
  * @property { () => String } getHash                               - a getter function that returns the hash of the page. The hash is used for navigation by a {@link NavigationControllerType} and is unique and immutable.
@@ -61,10 +61,10 @@ export { PageController }
 /**
  * Constructor for a PageControllerType.
  *
- * @template T
+ * @template _T_
  * @constructor
  * @param { !String } targetId             - unique targetId for the page. The hash will be inferred from the targetId, e.g. 'home' -> '#home' and will be immutable. The targetId will also be the initial page name that can be changed later.
- * @param { [T] } dynamicContentControllers - Dynamic content controllers control a model that can be projected at runtime by a {@link PageProjectorType}. Can be null if none are present.
+ * @param { [_T_] } dynamicContentControllers - Dynamic content controllers control a model that can be projected at runtime by a {@link PageProjectorType}. Can be null if none are present.
  * @returns PageControllerType
  * @example
  * const homePageController = PageController('home', null);

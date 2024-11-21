@@ -13,9 +13,9 @@ export { projectMasterView as personProjectMasterView, projectDetailView as pers
 /**
  * Create the master view, bind against the controllers, and return the view.
  * @impure - since we change the state of the controller. The DOM remains unchanged.
- * @template T
- * @param { ListControllerType<T> }      listController
- * @param { SelectionControllerType<T> } selectionController
+ * @template _T_
+ * @param { ListControllerType<_T_> }      listController
+ * @param { SelectionControllerType<_T_> } selectionController
  * @return { [HTMLDivElement] }          - master view
  */
 const projectMasterView = (listController, selectionController) => {
@@ -46,9 +46,9 @@ const projectMasterView = (listController, selectionController) => {
 
 /**
  * Create the detail view, bind against the detail controller, and return the view.
- * @template T
+ * @template _T_
  * @impure - since we change the state of the controller. The DOM remains unchanged.
- * @param  { SelectionControllerType<T> } selectionController
+ * @param  { SelectionControllerType<_T_> } selectionController
  * @param  { HTMLElement }                detailCard - element that holds the detail view and can be folded away
  * @return { [HTMLFormElement] }          - master view
  */

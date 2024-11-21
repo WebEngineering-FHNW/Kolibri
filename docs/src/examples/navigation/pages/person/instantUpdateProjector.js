@@ -21,11 +21,11 @@ const detailClassName = 'instant-update-detail';
  * Returns a unique id for the html element that is to represent the attribute such that we can create the
  * element in a way that allows later retrieval when it needs to be removed.
  * The resulting String should follow the constraints for properly formatted html ids, i.e. not dots allowed.
- * @template T
+ * @template _T_
  * @private
  * @pure
  * @param  { String } attributeName
- * @param  { T }      model
+ * @param  { _T_ }      model
  * @return { String }
  */
 const elementId = (attributeName, model) =>
@@ -35,11 +35,11 @@ const elementId = (attributeName, model) =>
  * Returns a unique id for the html delete button that is to represent the model such that we can create the
  * element in a way that allows later retrieval when it needs to be removed.
  * The resulting String should follow the constraints for properly formatted html ids, i.e. not dots allowed.
- * @template T
+ * @template _T_
  * @private
  * @pure
  * @param  { String[] } attributeNames
- * @param  { T }        model
+ * @param  { _T_ }        model
  * @return { String }
  */
 const deleteButtonId = (attributeNames, model) => {
@@ -50,10 +50,10 @@ const deleteButtonId = (attributeNames, model) => {
 /**
  * When a selection changes, the change must become visible in the master view.
  * The old selected model must be deselected, the new one selected.
- * @template T
+ * @template _T_
  * @param { String[] }    attributeNames
  * @param { HTMLElement } root
- * @return { (newModel:T, oldModel:T) => void}
+ * @return { (newModel:_T_, oldModel:_T_) => void}
  */
 const selectListItemForModel = (attributeNames, root) => (newModel, oldModel) => {
     const oldDeleteButton = root.querySelector("#" + deleteButtonId(attributeNames, oldModel));
@@ -68,10 +68,10 @@ const selectListItemForModel = (attributeNames, root) => (newModel, oldModel) =>
 
 /**
  * When a model is removed from the master view, the respective view elements must be removed as well.
- * @template T
+ * @template _T_
  * @param { String[] }    attributeNames
  * @param { HTMLElement } root
- * @return { (model:T) => void }
+ * @return { (model:_T_) => void }
  */
 const removeListItemForModel = (attributeNames, root) => model => {
     const deleteButton = root.querySelector("#" + deleteButtonId(attributeNames, model));
@@ -93,10 +93,10 @@ const removeListItemForModel = (attributeNames, root) => model => {
 
 /**
  * Creating the views and bindings for an item in the list view, binding for instant value updates.
- * @template T
- * @param { ListControllerType<T> }         listController
- * @param { SelectionControllerType<T> }    selectionController
- * @param { T }                             model
+ * @template _T_
+ * @param { ListControllerType<_T_> }         listController
+ * @param { SelectionControllerType<_T_> }    selectionController
+ * @param { _T_ }                             model
  * @param { String[] }                      attributeNames
  * @return { HTMLElement[] }
  */
@@ -132,10 +132,10 @@ const projectListItem = (listController, selectionController, model, attributeNa
 
 /**
  * Creating the views and bindings for an item in the list view, binding for instant value updates.
- * @template T
- * @param {SelectionControllerType<T>}    detailController
+ * @template _T_
+ * @param {SelectionControllerType<_T_>}    detailController
  * @param { HTMLElement }                   detailCard
- * @param { T }                             model
+ * @param { _T_ }                             model
  * @param { String[] }                      attributeNames
  * @return { HTMLFormElement[] }
  */
