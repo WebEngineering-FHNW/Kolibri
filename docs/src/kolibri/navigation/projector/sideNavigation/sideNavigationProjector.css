@@ -1,5 +1,5 @@
 /*
-    Styling for the dashboard navigation.
+    Styling for the side navigation.
 
     This style depends on Kolibri-base being set such that all respective
     colors, fonts, and defaults are available.
@@ -11,7 +11,7 @@
     --detail-width:        calc(4 * var(--base-unit));
     --header-height:       calc(4 / 5 * var(--base-unit));
     --std-padding:         calc(1 / 5 * var(--base-unit));
-    font-family:           var(--kb-font-rubik-light-regular);
+    font-family:           var(--kb-font-rubik-light-regular); /* TODO dk: check that the font vars align with the revised styling */
     box-shadow:            var(--kolibri-box-shadow);
 
     /* docked to the left, full height*/
@@ -25,7 +25,7 @@
 
     &.open {
         grid-template-columns: var(--base-unit) var(--detail-width); /* two columns if open */
-        /*grid-template-columns: var(--base-unit) max-content; !* this is more flexible but does not work with animation *!*/
+        /*grid-template-columns: var(--base-unit) max-content; !* this is more flexible but does not work with animation *! TODO: check interpolate-size: allow-keywords*/
         transition:            grid-template-columns 600ms;
     }
 }

@@ -14,11 +14,11 @@ export { WorkDayPageProjector }
  * A constructor for a PageProjectorType.
  *
  * @constructor
- * @template T
+ * @template _T_
  * @param { !PageControllerType } pageController - the pageController that controls the PageModelType we want to observe. Mandatory.
  * @param { !HTMLDivElement } pinToElement - the element in the DOM that we want to bind to append the pageContent. Mandatory.
  * @param { String } contentFilePath - the path to the static html content relative to index.html! Can be null.
- * @param { ...?T } pageContentProjectors - optional pageContentProjectors used to project dynamic content.
+ * @param { ...?_T_ } pageContentProjectors - optional pageContentProjectors used to project dynamic content.
  * @returns { PageProjectorType }
  * @example
  * const workDayController = PageController("home", null);

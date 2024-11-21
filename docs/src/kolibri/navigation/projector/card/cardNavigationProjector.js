@@ -379,8 +379,8 @@ const NavigationProjector = (controller, pinToElement) => {
 
     /**
      * A utility function that removes an array element at index i.
-     * @template T
-     * @param { T[] } arr
+     * @template _T_
+     * @param { _T_[] } arr
      * @param { number } i
      */
     const removeAtIndex = (arr, i) => {
