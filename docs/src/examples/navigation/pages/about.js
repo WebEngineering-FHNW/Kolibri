@@ -1,8 +1,10 @@
-import {dom} from "../../../kolibri/util/dom.js";
+import { dom }                                 from "../../../kolibri/util/dom.js";
+import { URI_HASH_ABOUT, URI_HASH_HOME, href } from "./uriHashes.js";
 
-export { AboutPage, URI_HASH_ABOUT }
 
-/** @type { UriHash } */ const URI_HASH_ABOUT  = "#about";
+
+export { AboutPage }
+
 
 // namespace object pattern
 const AboutPage = () => {
@@ -10,6 +12,8 @@ const AboutPage = () => {
         titleText,
         styleElement,
         contentElement,
+        passivate : () => console.log("about passivated"),
+        activate : () => console.log("about activated"),
     }
 };
 
@@ -45,8 +49,8 @@ const contentElement = dom(`
         <section class="buttons">
             <p>These "buttons" should not be styled.</p>
             <p>This is to make sure that styles from the home page do not spill over to this page.</p>
-            <a class="btn primary glow" href="${URI_HASH_HOME}">Home</a>
-            <a class="btn accent  glow" href="${URI_HASH_ABOUT}">No Style</a>
+            <a class="btn primary glow" ${href(URI_HASH_HOME)}>Home</a>
+            <a class="btn accent  glow" ${href(URI_HASH_ABOUT)}>No Style</a>
         </section>
     </div>
 </div>
