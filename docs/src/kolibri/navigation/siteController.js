@@ -4,6 +4,9 @@
 
 import {Observable} from "../observable.js";
 
+// TODO dk: production must not depend on examples. SiteModel should know what the error hash is.
+import {URI_HASH_ERROR} from "../../examples/navigation/pages/uriHashes.js";
+
 export { SiteController }
 
 
@@ -21,14 +24,14 @@ const SiteController = siteModel => {
     const mainHash = uriHash => uriHash.split('/')[0]; // if there are subHashes, take the parent
 
     /**
-     * Navigates to the {@link PageControllerType page} for the given {@link UriHash}.
+     * Navigates to the {@link PageControllerType page} for the given {@link UriHashType}.
      * This includes side-effecting the model, the browser incl. history, and
      * activating / passivating the involved {@link PageControllerType controllers}.
      *
      * @private
      * @impure
-     * @param { !UriHash } newUriHash - this might include subHashes like `#parent/sub`
-     * @param { ?UriHash } oldUriHash
+     * @param { !UriHashType } newUriHash - this might include subHashes like `#parent/sub`
+     * @param { ?UriHashType } oldUriHash
      * @return { void }
      */
     const activateHash = (newUriHash, oldUriHash) => {
@@ -44,7 +47,7 @@ const SiteController = siteModel => {
 
     siteModel.activeUriHashObs.onChange( (newUriHash, oldUriHash) => {
         if ( null == siteModel.allPages[mainHash(newUriHash)] ) {
-            gotoUriHash(ERROR_URI_HASH);
+            gotoUriHash(URI_HASH_ERROR);
         } else {
             activateHash(newUriHash, oldUriHash);
         }
