@@ -3,135 +3,26 @@ import {URI_HASH_ABOUT, href} from "./uriHashes.js";
 
 export { HomePage }
 
-
 // namespace object pattern
 const HomePage = () => {
     return {
         titleText,
         styleElement,
         contentElement,
-        passivate : () => console.log("home passivated"),
-        activate : () => console.log("home activated"),
     }
 };
 
 const titleText      = `Home`;
 
-// one could also use a <link rel="stylesheet"> element
-const styleElement   = dom(`
-<style>
-    #content .home header {
-        display:        flex;
-        flex-direction: column;
-        align-items:    center;
-    }
-
-    #content .home div.kolibri-logo-svg {
-        height:       250px;
-        aspect-ratio: 1;
-        padding:      2em;
-        transition:   transform .4s linear;
-    }
-
-    #content .home svg {
-        overflow: visible;
-    }
-
-    #content .home .flatter {
-        animation-name:            kolibri-wings;
-        animation-duration:        .2s;
-        animation-iteration-count: 15;
-        animation-direction:       reverse;
-        animation-timing-function: ease-in;
-        transform-origin:          45% 45%;
-    }
-
-    #content .home @keyframes kolibri-wings {
-        from {
-            transform: scaleX(1) rotate(0deg);
-        }
-        to {
-            transform: scaleX(-1) rotate(30deg);
-        }
-    }
-
-    #content .home section.buttons {
-        display:         flex;
-        justify-content: center;
-    }
-
-    #content .home a.btn {
-        margin-right: 2em;
-    }
-
-
-    a.btn {
-        display:         block;
-        text-align:      center;
-        width:           12em;
-        padding:         1rem;
-        border-radius:   8px;
-        text-decoration: none;
-        box-shadow:      var(--kolibri-box-shadow);
-    }
-
-    a.btn.primary {
-        color:            #FFFFFF;
-        background-color: var(--kb-hsla-primary-accent);
-        border:           2px solid var(--kolibri-color-shadow);
-    }
-
-    a.btn.accent {
-        color:            var(--kb-hsla-primary-accent);
-        background-color: #FFFFFF;
-        border:           2px solid var(--kb-hsla-primary-accent);
-    }
-
-    .glow {
-        position: relative;
-    }
-
-    .glow::before, .glow::after {
-        content:         '';
-        position:        absolute;
-        left:            0;
-        top:             0;
-        background:      linear-gradient(45deg, #993333, #ff00ff, #6e0dd0, #099fff, #ff00, #993333);
-        background-size: 400%;
-        width:           100%;
-        height:          100%;
-        border-radius:   8px;
-        z-index:         -1;
-        animation:       animate 20s linear infinite;
-    }
-
-    @keyframes animate {
-        0% {
-            background-position: 0 0;
-        }
-        50% {
-            background-position: 400% 0;
-        }
-        100% {
-            background-position: 0 0;
-        }
-    }
-
-    a.glow::before {
-        filter:     blur(.8em);
-        opacity:    0;
-        transition: opacity 0.5s ease-in-out;
-    }
-
-    a.glow:hover::before {
-        opacity: 100;
-    }
-</style>
+// One could also use a <link rel="stylesheet"> element when the style is purely static.
+// This solution allows to create the style with dynamic content.
+const [styleElement]   = dom(`
+    <link rel="stylesheet" href="./pages/static/home.css">
 `);
 
 
-const contentElement = dom(`
-<div id="content-wrapper">
+const [contentElement] = dom(`
+<div id="content-wrapper" class="home">
 
   <header>
     <div class="kolibri-logo-svg kolibri-logo-anim">
@@ -157,7 +48,7 @@ const contentElement = dom(`
     </section>
 
     <section class="buttons">
-      <a class="btn primary glow" ${href("#getting-started-not-known-on-purpose")}>Get Started</a>
+      <a class="btn primary glow" ${href("#getting-started-not-known-on-purpose")}>Get Started (defect on purpose)</a>
       <a class="btn accent  glow" ${href(URI_HASH_ABOUT)}>Go to the about page</a>
     </section>
 
