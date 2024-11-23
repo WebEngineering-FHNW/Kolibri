@@ -18,7 +18,16 @@ import {
 import {
   setLoggingLevel,
   setLoggingContext,
+  addToAppenderList,
 } from "./logging.js"
+
+import {
+  Appender as ConsoleAppender
+} from "./appender/consoleAppender.js";
+
+export {
+  defaultConsoleLogging
+}
 
 window["LOG_TRACE"  ] = LOG_TRACE  ;
 window["LOG_DEBUG"  ] = LOG_DEBUG  ;
@@ -30,3 +39,9 @@ window["LOG_NOTHING"] = LOG_NOTHING;
 
 window["setLoggingLevel"  ] = setLoggingLevel  ;
 window["setLoggingContext"] = setLoggingContext;
+
+const defaultConsoleLogging = (context, level) => {
+  addToAppenderList(ConsoleAppender());
+  setLoggingContext(context);
+  setLoggingLevel(level);
+};
