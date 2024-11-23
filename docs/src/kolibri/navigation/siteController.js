@@ -10,28 +10,27 @@ const { warn, info } = LoggerFactory("ch.fhnw.kolibri.navigation.siteController"
 
 const SiteController = () => {
 
-    const allPages  = {};  // URI_HASH to Page
-    let lastUriHash = "#"; // note: we could use last pageModel
+    const allPages     = {};  // URI_HASH to Page
+    let currentUriHash = "#"; // note: we could use last pageModel
 
     // the main Hash relates to the Controller that is used for activation and passivation
     const mainHash = uriHash => uriHash.split('/')[0]; // if there are subHashes, take the parent
 
-    const gotoUriHash = uriHash => {
+    const gotoUriHash = (uriHash, direct) => {
         uriHash = uriHash || "#";                                       // handle "", null, undefined => home
         if ( null == allPages[mainHash(uriHash)] ) {
             warn(`cannot activate page for hash "${uriHash}"`);
             alert(`Sorry, the target "${uriHash}" is not available.`);  // todo dk: make message i18n
             return;
         }
-        activateHash(uriHash);
+        pageTransition(uriHash, direct);
     };
 
-    // handles initial page load and page reload
-    window.onload       = () => gotoUriHash(window.location.hash);
+    // handles initial page load and page reload, it jumps "direct"ly to the hash without transition
+    window.onload       = () => gotoUriHash(window.location.hash, /* direct */ true);
 
     // handles navigation through the browser URL field, bookmarking, or browser previous/next
-    window.onhashchange = () => gotoUriHash(window.location.hash);
-
+    window.onhashchange = () => gotoUriHash(window.location.hash, /* direct */ false);
 
     const activate = pageModel => {
         const titleElement = document.head.querySelector("title");
@@ -58,15 +57,43 @@ const SiteController = () => {
      * @param { !UriHashType } newUriHash - this might include subHashes like `#parent/sub`
      * @return { void }
      */
-    const activateHash = newUriHash => {
-        info(`page transition from ${lastUriHash} to ${newUriHash}`);
-        passivate(allPages[mainHash(lastUriHash)]);
+    const pageTransition = (newUriHash, direct) => {
+        info(`page transition from ${currentUriHash} to ${newUriHash}`);
 
-        // effect: navigate to hash, trigger onhashchange event (but not if same), add to history
-        window.location.hash = newUriHash;
+        const currentPage = allPages[mainHash(currentUriHash)];
+        const newPage     = allPages[mainHash(newUriHash)];
 
-        lastUriHash = newUriHash;
-        activate(allPages[mainHash(newUriHash)]);
+        const doAnimate   = !direct && newUriHash !== currentUriHash;
+
+        // allow the current page to animate passivation
+        if (doAnimate) {
+            currentPage.contentElement.classList.add("passivate");
+        }
+        const passivationCSS = getComputedStyle(currentPage.contentElement, null)
+            .getPropertyValue("--passivation-ms");
+        const passivationMs = doAnimate ? Number( passivationCSS || 500) : 0;
+        setTimeout( _time => { // give the passivation anim some time
+
+            passivate(currentPage);
+            currentPage.contentElement.classList.remove("passivate");
+
+            // effect: navigate to hash, trigger onhashchange event (but not if same), add to history
+            window.location.hash = newUriHash;
+            currentUriHash = newUriHash; // todo dk: check: do I really need to maintain this?
+
+            if (doAnimate) {
+                newPage.contentElement.classList.add("activate");
+            }
+            activate(newPage);
+            const activationCSS = getComputedStyle(newPage.contentElement, null)
+                .getPropertyValue("--activation-ms");
+            const activationMs = doAnimate ? Number( activationCSS || 500) : 0;
+            setTimeout( _time => { // give activation anim its time
+                newPage.contentElement.classList.remove("activate");
+            }, activationMs );
+
+        }, passivationMs);
+
     };
 
     const registerPage = ( uriHash, page) => {

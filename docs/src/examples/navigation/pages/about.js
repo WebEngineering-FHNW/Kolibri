@@ -5,43 +5,59 @@ import { URI_HASH_ABOUT, URI_HASH_HOME, href } from "./uriHashes.js";
 
 export { AboutPage }
 
+const PAGE_CLASS     = "about";
+const ACTIVATION_MS  = 1000;
+const PASSIVATION_MS = 1000;
 
 // namespace object pattern
 const AboutPage = () => {
     return {
-        titleText,
+        titleText : "About",
         styleElement,
         contentElement,
     }
 };
 
-const [titleText]      = `About`;
-
 // one could also use a <link rel="stylesheet"> element
+// here we see a variant that allows for dynamic content
 const [styleElement]   = dom(`
     <style>
-        .about {
-            h1 {
-                margin-top: 2em;
-                color:      var(--kb-hsla-primary-accent);
-            }
-            .message-wrapper {
-                text-align:         center;
-                padding:            1em;
+        .${PAGE_CLASS} {        
+            margin-top: 2em;
+            
+            &.message-wrapper {
                 display:            flex;
+                gap:                1em;
                 justify-content:    center;
-                color:              var(--kb-hsla-primary-accent);
+            }     
+                  
+            &.activate {
+                --activation-ms:    ${ACTIVATION_MS};
+                animation:          ${PAGE_CLASS}_activation calc(var(--activation-ms, 500) * 1ms) ease-in-out;
+            }         
+            &.passivate {
+                --passivation-ms:   ${PASSIVATION_MS};
+                opacity:            0.5;
+                transform:          translateX(-100vw);
+                transition:         all calc(var(--passivation-ms, 500) * 1ms) ease-in-out;
+            }                       
+        }       
+        
+        @keyframes ${PAGE_CLASS}_activation {
+            0% {
+                opacity:        0.5;
+                transform:      translateX(100vw);
             }
-            .buttons {
-                padding:            5px;
-                margin-top:         2em;
-            }                                
-        }
+            100% {
+                opacity:        1;
+                transform:      translateX(0);
+            }
+        }            
     </style>
 `);
 
 const [contentElement] = dom(`
-    <div class="about">
+    <div class="${PAGE_CLASS}">
         <h1>About</h1>
         <div class="message-wrapper">
             <section class="buttons">
