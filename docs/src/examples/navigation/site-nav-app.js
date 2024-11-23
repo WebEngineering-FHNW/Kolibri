@@ -6,17 +6,10 @@ import {URI_HASH_HOME, URI_HASH_ABOUT }                   from "./pages/uriHashe
 
 defaultConsoleLogging("ch.fhnw.kolibri", LOG_INFO);
 
-const SiteModel = () => {
-    const allPages = {
-        [URI_HASH_HOME]  : HomePage(),
-        [URI_HASH_ABOUT] : AboutPage(),
-    };
-    return {
-        allPages,
-    }
-};
+const siteController = SiteController();
 
-const siteModel = SiteModel();
-const siteController = SiteController(siteModel);
+siteController.registerPage(URI_HASH_HOME,  HomePage());
+siteController.registerPage(URI_HASH_ABOUT, AboutPage());
+
 siteController.gotoUriHash(URI_HASH_HOME);
 

@@ -8,8 +8,9 @@ export { SiteController }
 
 const { warn, info } = LoggerFactory("ch.fhnw.kolibri.navigation.siteController");
 
-const SiteController = siteModel => {
+const SiteController = () => {
 
+    const allPages  = {};  // URI_HASH to Page
     let lastUriHash = "#"; // note: we could use last pageModel
 
     // the main Hash relates to the Controller that is used for activation and passivation
@@ -17,7 +18,7 @@ const SiteController = siteModel => {
 
     const gotoUriHash = uriHash => {
         uriHash = uriHash || "#";                                       // handle "", null, undefined => home
-        if ( null == siteModel.allPages[mainHash(uriHash)] ) {
+        if ( null == allPages[mainHash(uriHash)] ) {
             warn(`cannot activate page for hash "${uriHash}"`);
             alert(`Sorry, the target "${uriHash}" is not available.`);  // todo dk: make message i18n
             return;
@@ -59,16 +60,21 @@ const SiteController = siteModel => {
      */
     const activateHash = newUriHash => {
         info(`page transition from ${lastUriHash} to ${newUriHash}`);
-        passivate(siteModel.allPages[mainHash(lastUriHash)]);
+        passivate(allPages[mainHash(lastUriHash)]);
 
         // effect: navigate to hash, trigger onhashchange event (but not if same), add to history
         window.location.hash = newUriHash;
 
         lastUriHash = newUriHash;
-        activate(siteModel.allPages[mainHash(newUriHash)]);
+        activate(allPages[mainHash(newUriHash)]);
+    };
+
+    const registerPage = ( uriHash, page) => {
+        allPages[uriHash] = page;
     };
 
     return /** @type { SiteControllerType } */{
-        gotoUriHash
+        gotoUriHash,
+        registerPage // protocol: your must first register before you can go to it
     }
 };
