@@ -38,15 +38,15 @@ const [styleElement]   = dom(`
             &.passivate {
                 --passivation-ms:   ${PASSIVATION_MS};
                 opacity:            0.5;
-                transform:          translateX(-100vw);
+                transform:          translateX(-100cqw);
                 transition:         all calc(var(--passivation-ms, 500) * 1ms) ease-in-out;
             }                       
         }       
-        
+        /* cannot be nested */
         @keyframes ${PAGE_CLASS}_activation {
             0% {
                 opacity:        0.5;
-                transform:      translateX(100vw);
+                transform:      translateX(100cqw);
             }
             100% {
                 opacity:        1;
