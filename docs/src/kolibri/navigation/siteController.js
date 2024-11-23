@@ -2,7 +2,11 @@
  * @module kolibri.navigation.siteController
  */
 
+import { LoggerFactory } from "../logger/loggerFactory.js";
+
 export { SiteController }
+
+const { warn, info } = LoggerFactory("ch.fhnw.kolibri.navigation.siteController");
 
 const SiteController = siteModel => {
 
@@ -14,7 +18,7 @@ const SiteController = siteModel => {
     const gotoUriHash = uriHash => {
         uriHash = uriHash || "#";                                       // handle "", null, undefined => home
         if ( null == siteModel.allPages[mainHash(uriHash)] ) {
-            console.warn(`cannot activate page for hash "${uriHash}"`); // todo dk: proper logging
+            warn(`cannot activate page for hash "${uriHash}"`);
             alert(`Sorry, the target "${uriHash}" is not available.`);  // todo dk: make message i18n
             return;
         }
@@ -54,9 +58,7 @@ const SiteController = siteModel => {
      * @return { void }
      */
     const activateHash = newUriHash => {
-
-        console.info("page transition", { lastUriHash, newUriHash }); // todo dk: proper logging
-
+        info(`page transition from ${lastUriHash} to ${newUriHash}`);
         passivate(siteModel.allPages[mainHash(lastUriHash)]);
 
         // effect: navigate to hash, trigger onhashchange event (but not if same), add to history
