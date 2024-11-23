@@ -9,25 +9,49 @@
 
         <link rel="stylesheet" href="../../../css/kolibri-base-light.css" >
         <style>
+            body {
+                margin: 0;
+                display:                grid;
+                grid-template-columns:  min-content auto;
+                grid-template-areas:    "logo       top-nav"
+                                        "side-nav   content";
+            }
+
+            #top-nav {
+                grid-area: top-nav;
+            }
+            #side-nav {
+                grid-area: side-nav;
+            }
+            #logo {
+                grid-area: logo;
+            }
+            #top-nav, #side-nav, #logo {
+                padding:            .5rem;
+                background-color:   var(--kb-color-hsl-bg-light);
+            }
+
             #content {
+                grid-area: content;
                 container-name: content-container;
                 container-type: inline-size; /* only looks at the width */
                 overflow:       hidden;
-                margin-left:    4em;
+                padding:        2rem;
             }
 
         </style>
 
     </head>
     <body>
-    <p>Experiment with type-safe navigation structure.</p>
+        <div id="logo"></div>
+        <div id="top-nav">top nav stand-in: Experiment with type-safe navigation structure.</div>
 
-    <!--    The main hooks  that any content can be pinned to-->
-            <div  id="nav"></div>
-            <div  id="content">
-                <!-- page content will be added here -->
-            </div>
+<!--    The main hooks  that any content can be pinned to-->
+        <div  id="side-nav">side nav stand-in</div>
 
+        <div  id="content">
+            <!-- page content will be added here -->
+        </div>
     </body>
     <script type="module" src="site-nav-app.js"></script>
 </html>
