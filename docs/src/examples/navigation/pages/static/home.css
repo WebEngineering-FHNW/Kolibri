@@ -83,10 +83,10 @@ a.btn.accent {
     height:          100%;
     border-radius:   8px;
     z-index:         -1;
-    animation:       animate 20s linear infinite;
+    animation:       animate_glow 20s linear infinite;
 }
 
-@keyframes animate {
+@keyframes animate_glow {
     0% {
         background-position: 0 0;
     }
@@ -108,5 +108,22 @@ a.glow:hover::before {
     opacity: 100;
 }
 
+.activate {
+    --activation-ms : 500;
+    animation: home_activation calc(var(--activation-ms, 500) * 1ms) linear;
+}
+@keyframes home_activation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
 
+.passivate {
+    --passivation-ms : 500;
+    opacity: 0;
+    transition: all calc(var(--passivation-ms, 500) * 1ms) linear;
+}
 
