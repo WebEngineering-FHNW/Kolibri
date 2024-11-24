@@ -1,6 +1,7 @@
 import { dom }                                 from "../../../kolibri/util/dom.js";
 import { URI_HASH_ABOUT, URI_HASH_HOME, href } from "./uriHashes.js";
 import {Observable}                            from "../../../kolibri/observable.js";
+import {Page}                                  from "./page.js";
 
 
 export { AboutPage }
@@ -9,22 +10,15 @@ const PAGE_CLASS     = "about";
 const ACTIVATION_MS  = 1000;
 const PASSIVATION_MS = 1000;
 
-// namespace object pattern
-const AboutPage = () => {
-    const visitedObs = Observable(false);
-    return {
-        titleText : "About",
-        styleElement,
-        contentElement,
-        getVisited: visitedObs.getValue,
-        setVisited: visitedObs.setValue,
-        onVisited : visitedObs.onChange,
-    }
-};
+const AboutPage = () => Page({
+     titleText:         "About",
+     activationMs:      ACTIVATION_MS,
+     passivationMs:     PASSIVATION_MS,
+     styleElement,
+     contentElement,
+ });
 
-// one could also use a <link rel="stylesheet"> element
-// here we see a variant that allows for dynamic content
-const [styleElement]   = dom(`
+const [styleElement, contentElement] = dom(`
     <style>
         .${PAGE_CLASS} {        
             margin-top: 2em;
@@ -58,9 +52,6 @@ const [styleElement]   = dom(`
             }
         }            
     </style>
-`);
-
-const [contentElement] = dom(`
     <div class="${PAGE_CLASS}">
         <h1>About</h1>
         <div class="message-wrapper">

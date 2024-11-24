@@ -11,8 +11,8 @@ const { warn, info } = LoggerFactory("ch.fhnw.kolibri.navigation.siteController"
 
 const SiteController = () => {
 
-    const allPages     = {};  // URI_HASH to Page
-    const currentUriHash = Observable("#"); // note: we could use last pageModel
+    const allPages       = {};  // URI_HASH to Page
+    const currentUriHash = Observable("#");
 
     // the main Hash relates to the Controller that is used for activation and passivation
     const mainHash = uriHash => uriHash.split('/')[0]; // if there are subHashes, take the parent
@@ -34,19 +34,18 @@ const SiteController = () => {
     window.onhashchange = () => gotoUriHash(window.location.hash, /* direct */ false);
 
     const activate = pageModel => {
-        const titleElement = document.head.querySelector("title");
+        const titleElement = document.head.querySelector("title"); // todo dk: view specifics should go to a site projector
         titleElement.textContent = pageModel.titleText;
-        document.head.appendChild(pageModel.styleElement);
         const mainElement = document.body.querySelector("#content");
-        mainElement.appendChild(pageModel.contentElement);
+        mainElement.append(pageModel.styleElement, pageModel.contentElement);
         pageModel.setVisited(true);
     };
 
     const passivate = pageModel => {
         // there is no need to blank out the title
         // on initialization the active page might be null/undefined and passivation should not fail in that case
-        pageModel?.styleElement  .remove();
-        pageModel?.contentElement.remove();
+        pageModel.styleElement  .remove();
+        pageModel.contentElement.remove();
     };
 
     /**
@@ -57,6 +56,7 @@ const SiteController = () => {
      * @private
      * @impure
      * @param { !UriHashType } newUriHash - this might include subHashes like `#parent/sub`
+     * @param { Boolean }      direct     - show the page directly without page transition animation
      * @return { void }
      */
     const pageTransition = (newUriHash, direct) => {
@@ -67,13 +67,11 @@ const SiteController = () => {
 
         const doAnimate   = !direct && newUriHash !== currentUriHash.getValue();
 
-        // allow the current page to animate passivation
         if (doAnimate) {
             currentPage.contentElement.classList.add("passivate");
         }
-        const passivationCSS = getComputedStyle(currentPage.contentElement, null)
-            .getPropertyValue("--passivation-ms");
-        const passivationMs = doAnimate ? Number( passivationCSS || 500) : 0;
+
+        const passivationMs = doAnimate ? currentPage.passivationMs : 0;
         setTimeout( _time => { // give the passivation anim some time
 
             passivate(currentPage);
@@ -87,14 +85,12 @@ const SiteController = () => {
                 newPage.contentElement.classList.add("activate");
             }
             activate(newPage);
-            const activationCSS = getComputedStyle(newPage.contentElement, null)
-                .getPropertyValue("--activation-ms");
-            const activationMs = doAnimate ? Number( activationCSS || 500) : 0;
-            setTimeout( _time => { // give activation anim its time
+            const activationMs = doAnimate ? newPage.activationMs : 0;
+            setTimeout( _time => {                                          // give activation anim its time
                 newPage.contentElement.classList.remove("activate");
             }, activationMs );
 
-        }, passivationMs);
+        }, passivationMs); // might be 0 in which case we run async but immediately
 
     };
 

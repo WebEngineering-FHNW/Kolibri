@@ -109,7 +109,7 @@ a.glow:hover::before {
 }
 
 .activate {
-    --activation-ms : 50;
+    --activation-ms : 500;
     animation: home_activation calc(var(--activation-ms, 500) * 1ms) linear;
 }
 @keyframes home_activation {
