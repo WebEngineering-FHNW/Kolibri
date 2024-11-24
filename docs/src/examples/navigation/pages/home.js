@@ -1,18 +1,23 @@
 import {dom} from "../../../kolibri/util/dom.js";
 import {URI_HASH_ABOUT, href} from "./uriHashes.js";
+import {Observable} from "../../../kolibri/observable.js";
 
 export { HomePage }
 
 // namespace object pattern
 const HomePage = () => {
+    const visitedObs = Observable(false);
     return {
         titleText,
         styleElement,
         contentElement,
+        getVisited: visitedObs.getValue,
+        setVisited: visitedObs.setValue,
+        onVisited : visitedObs.onChange,
     }
 };
 
-const titleText      = `Home`;
+const titleText      = `Home Page`;
 
 // One could also use a <link rel="stylesheet"> element when the style is purely static.
 // This solution allows to create the style with dynamic content.

@@ -3,6 +3,7 @@
  */
 
 import { LoggerFactory } from "../logger/loggerFactory.js";
+import {Observable}      from "../observable.js";
 
 export { SiteController }
 
@@ -11,7 +12,7 @@ const { warn, info } = LoggerFactory("ch.fhnw.kolibri.navigation.siteController"
 const SiteController = () => {
 
     const allPages     = {};  // URI_HASH to Page
-    let currentUriHash = "#"; // note: we could use last pageModel
+    const currentUriHash = Observable("#"); // note: we could use last pageModel
 
     // the main Hash relates to the Controller that is used for activation and passivation
     const mainHash = uriHash => uriHash.split('/')[0]; // if there are subHashes, take the parent
@@ -38,6 +39,7 @@ const SiteController = () => {
         document.head.appendChild(pageModel.styleElement);
         const mainElement = document.body.querySelector("#content");
         mainElement.appendChild(pageModel.contentElement);
+        pageModel.setVisited(true);
     };
 
     const passivate = pageModel => {
@@ -58,12 +60,12 @@ const SiteController = () => {
      * @return { void }
      */
     const pageTransition = (newUriHash, direct) => {
-        info(`page transition from ${currentUriHash} to ${newUriHash}`);
+        info(`page transition from ${currentUriHash.getValue()} to ${newUriHash}`);
 
-        const currentPage = allPages[mainHash(currentUriHash)];
+        const currentPage = allPages[mainHash(currentUriHash.getValue())];
         const newPage     = allPages[mainHash(newUriHash)];
 
-        const doAnimate   = !direct && newUriHash !== currentUriHash;
+        const doAnimate   = !direct && newUriHash !== currentUriHash.getValue();
 
         // allow the current page to animate passivation
         if (doAnimate) {
@@ -79,7 +81,7 @@ const SiteController = () => {
 
             // effect: navigate to hash, trigger onhashchange event (but not if same), add to history
             window.location.hash = newUriHash;
-            currentUriHash = newUriHash; // todo dk: check: do I really need to maintain this?
+            currentUriHash.setValue(newUriHash);
 
             if (doAnimate) {
                 newPage.contentElement.classList.add("activate");
@@ -102,6 +104,8 @@ const SiteController = () => {
 
     return /** @type { SiteControllerType } */{
         gotoUriHash,
-        registerPage // protocol: your must first register before you can go to it
+        registerPage,                           // protocol: your must first register before you can go to it
+        getAllPages: () => ({...allPages}),     // defensive copy
+        uriHashChanged : currentUriHash.onChange,
     }
 };
