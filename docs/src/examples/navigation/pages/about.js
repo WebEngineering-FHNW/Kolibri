@@ -1,6 +1,6 @@
 import { dom }                                 from "../../../kolibri/util/dom.js";
 import { URI_HASH_ABOUT, URI_HASH_HOME, href } from "./uriHashes.js";
-
+import {Observable}                            from "../../../kolibri/observable.js";
 
 
 export { AboutPage }
@@ -11,10 +11,14 @@ const PASSIVATION_MS = 1000;
 
 // namespace object pattern
 const AboutPage = () => {
+    const visitedObs = Observable(false);
     return {
         titleText : "About",
         styleElement,
         contentElement,
+        getVisited: visitedObs.getValue,
+        setVisited: visitedObs.setValue,
+        onVisited : visitedObs.onChange,
     }
 };
 
@@ -42,7 +46,7 @@ const [styleElement]   = dom(`
                 transition:         all calc(var(--passivation-ms, 500) * 1ms) ease-in-out;
             }                       
         }       
-        /* cannot be nested */
+        /* cannot be nested and must be uniquely named */
         @keyframes ${PAGE_CLASS}_activation {
             0% {
                 opacity:        0.5;
