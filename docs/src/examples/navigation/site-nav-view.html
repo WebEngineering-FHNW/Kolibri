@@ -11,40 +11,77 @@
         <style>
             body {
                 margin: 0;
+            }
+            #application-frame {
+                position:               fixed;
+                inset:                  0;
+
                 display:                grid;
                 grid-template-columns:  min-content auto;
+                grid-template-rows:     min-content auto;
                 grid-template-areas:    "logo       top-nav"
                                         "side-nav   content";
             }
 
             #top-nav {
-                grid-area: top-nav;
+                grid-area:              top-nav;
+                align-self:             center;
+                filter:                 drop-shadow(0 0 .5rem white);
+                --kolibri-color-accent: var(--kb-color-hsl-bg-light);
+                font-weight:            bold;
+                & a {
+                    margin-right:       1em;
+                }
             }
             #side-nav {
-                grid-area: side-nav;
+                grid-area:              side-nav;
+                background-color:       var(--kb-color-hsl-bg-light);
             }
             #logo {
-                grid-area: logo;
+                grid-area:              logo;
+                justify-self:           center;
+                & a img {
+                    display:            block;
+                    border-radius:      50%;
+                    background-color:   var(--kb-color-hsl-bg-light);
+                    width:              3rem;
+                    aspect-ratio:       1 / 1;
+                    box-shadow:         1px 1px .2rem 0 #9317EC inset;
+                }
             }
             #top-nav, #side-nav, #logo {
-                padding:            .5rem;
-                background-color:   var(--kb-color-hsl-bg-light);
+                padding:                .5rem;
+            }
+            #top-backdrop {
+                grid-row:               1;
+                grid-column:            1 / -1;
+                background-image:       linear-gradient( 90deg,
+                                            #FF2CA5 55%,
+                                            #9317EC
+                                        );
             }
 
             #content {
-                grid-area: content;
-                container-name: content-container;
-                container-type: inline-size; /* only looks at the width */
-                overflow:       hidden;
-                padding:        2rem;
+                grid-area:              content;
+                container-name:         content-container;
+                container-type:         inline-size; /* only looks at the width */
+                overflow:               hidden;
+                padding:                2rem;
             }
 
         </style>
 
     </head>
     <body>
-        <div id="logo"></div>
+        <div id="application-frame">
+        <div id="top-backdrop"></div>
+        <div id="logo">
+            <a href="#">
+                <img src="../../../img/logo/logo-new-128.svg" alt="Kolibri-logo">
+            </a>
+        </div>
         <div id="top-nav">top nav stand-in: Experiment with type-safe navigation structure.</div>
+
 
 <!--    The main hooks  that any content can be pinned to-->
         <div  id="side-nav">side nav stand-in</div>
@@ -52,6 +89,7 @@
         <div  id="content">
             <!-- page content will be added here -->
         </div>
+    </div>
     </body>
     <script type="module" src="site-nav-app.js"></script>
 </html>
