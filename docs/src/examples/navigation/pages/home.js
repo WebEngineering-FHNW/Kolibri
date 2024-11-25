@@ -4,21 +4,24 @@ import {Page} from "./page.js";
 
 export { HomePage }
 
+const PAGE_CLASS = "home";
+
 const HomePage = () => Page({
     titleText:         "Home Page",
-    activationMs:       500,
-    passivationMs:      500,
-    styleElement           ,
-    contentElement         ,
+    activationMs:       1000,
+    passivationMs:      1000,
+    pageClass:          PAGE_CLASS,
+    styleElement        ,
+    contentElement      ,
  });
 
 
 const [styleElement, contentElement] = dom(`
-    <style>
+    <style data-style-id="${PAGE_CLASS}">
         @import "./pages/static/home.css";
     </style>  
     
-    <div id="content-wrapper" class="home">            
+    <div id="content-wrapper" class="${PAGE_CLASS}">            
       <header>
         <div class="kolibri-logo-svg kolibri-logo-anim">
           <svg viewBox="0 0 305 342" fill="none" xmlns="http://www.w3.org/2000/svg">

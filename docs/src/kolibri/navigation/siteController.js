@@ -36,15 +36,19 @@ const SiteController = () => {
     const activate = pageModel => {
         const titleElement = document.head.querySelector("title"); // todo dk: view specifics should go to a site projector
         titleElement.textContent = pageModel.titleText;
+        const styleElement = document.head.querySelector(`style[data-style-id="${pageModel.pageClass}"]`);
+        if (null === styleElement) {
+            document.head.append(pageModel.styleElement);
+        }
         const mainElement = document.body.querySelector("#content");
-        mainElement.append(pageModel.styleElement, pageModel.contentElement);
+        mainElement.append(pageModel.contentElement);
         pageModel.setVisited(true);
     };
 
     const passivate = pageModel => {
         // there is no need to blank out the title
         // on initialization the active page might be null/undefined and passivation should not fail in that case
-        pageModel.styleElement  .remove();
+        // pageModel.styleElement  .remove(); // we let the styles sit in the page header
         pageModel.contentElement.remove();
     };
 
@@ -68,29 +72,33 @@ const SiteController = () => {
         const doAnimate   = !direct && newUriHash !== currentUriHash.getValue();
 
         if (doAnimate) {
-            currentPage.contentElement.classList.add("passivate");
+            const backdropElement = document.body.querySelector("#content-passivated");
+            backdropElement.append(currentPage.contentElement);    // moves from content to passivated
+            currentPage.contentElement.classList.add("passivate"); // starts any passivation animation
         }
 
-        const passivationMs = doAnimate ? currentPage.passivationMs : 0;
-        setTimeout( _time => { // give the passivation anim some time
+        if(!direct) { // for direct calls we don't want any passivation at all - or we might run into async issues and remove ourselves
+            const passivationMs = doAnimate ? currentPage.passivationMs : 0;
+            setTimeout( _time => {                      // give the passivation anim some time
+                passivate(currentPage);                 // before we remove the old content and stop passivation anim (cleanup)
+                currentPage.contentElement.classList.remove("passivate");
+            }, passivationMs); // might be 0 in which case we run async without delay
+        }
 
-            passivate(currentPage);
-            currentPage.contentElement.classList.remove("passivate");
 
-            // effect: navigate to hash, trigger onhashchange event (but not if same), add to history
-            window.location.hash = newUriHash;
-            currentUriHash.setValue(newUriHash);
+        // effect: navigate to hash, trigger onhashchange event (but not if same), add to history
+        window.location.hash = newUriHash;
+        currentUriHash.setValue(newUriHash);
 
-            if (doAnimate) {
-                newPage.contentElement.classList.add("activate");
-            }
-            activate(newPage);
-            const activationMs = doAnimate ? newPage.activationMs : 0;
-            setTimeout( _time => {                                          // give activation anim its time
-                newPage.contentElement.classList.remove("activate");
-            }, activationMs );
-
-        }, passivationMs); // might be 0 in which case we run async but immediately
+        // no matter whether the passivation anim runs, we immediately start the activation anim
+        if (doAnimate) {
+            newPage.contentElement.classList.add("activate");
+        }
+        activate(newPage);
+        const activationMs = doAnimate ? newPage.activationMs : 0;
+        setTimeout( _time => {                                          // give activation anim its time
+            newPage.contentElement.classList.remove("activate");
+        }, activationMs );
 
     };
 
