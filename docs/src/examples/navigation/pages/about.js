@@ -14,12 +14,13 @@ const AboutPage = () => Page({
      titleText:         "About",
      activationMs:      ACTIVATION_MS,
      passivationMs:     PASSIVATION_MS,
+     pageClass:         PAGE_CLASS,
      styleElement,
      contentElement,
  });
 
 const [styleElement, contentElement] = dom(`
-    <style>
+    <style data-style-id="${PAGE_CLASS}">
         .${PAGE_CLASS} {        
             margin-top: 2em;
             
@@ -37,7 +38,7 @@ const [styleElement, contentElement] = dom(`
                 --passivation-ms:   ${PASSIVATION_MS};
                 opacity:            0.5;
                 transform:          translateX(-100cqw);
-                transition:         all calc(var(--passivation-ms, 500) * 1ms) ease-in-out;
+                animation:          ${PAGE_CLASS}_passivation calc(var(--passivation-ms, 500) * 1ms) ease-in-out;
             }                       
         }       
         /* cannot be nested and must be uniquely named */
@@ -50,7 +51,17 @@ const [styleElement, contentElement] = dom(`
                 opacity:        1;
                 transform:      translateX(0);
             }
-        }            
+        }  
+        @keyframes ${PAGE_CLASS}_passivation {
+            0% {
+                opacity:        1;
+                transform:      translateX(0);
+            }
+            100% {
+                opacity:        0.5;
+                transform:      translateX(-100cqw);
+            }
+        }              
     </style>
     <div class="${PAGE_CLASS}">
         <h1>About</h1>
