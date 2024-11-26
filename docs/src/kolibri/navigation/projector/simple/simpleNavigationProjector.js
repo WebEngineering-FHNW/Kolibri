@@ -4,15 +4,27 @@ export { SimpleNavigationProjector }
 const PAGE_CLASS = "simpleNavigationProjector";
 
 /**
+ * A projector of anchors to all pages that are registered in the {@link SiteControllerType}.
+ * It binds each anchor to the "visited" state and highlights the currently selected page (uriHash).
+ * The highlighting is part of the style but layouting of the anchors is left to the parent
+ * such that the same projector can be used for horizontal and vertical display.
  * @constructor
- * @param { !SiteControllerType } controller todo dk: adapt
- * @param { !HTMLDivElement } root
+ * @param { !SiteControllerType } siteController - the source of the information that we display
+ * @param { !HTMLDivElement } root               - where to mount the view
  * @return { NavigationProjectorType }
  * @example
- * todo: fill
+ * // set up
+ * const siteController = SiteController();
+ * const siteProjector  = SiteProjector(siteController);
+ * // add pages
+ * siteController.registerPage(URI_HASH_HOME,  HomePage());
+ * siteController.registerPage(URI_HASH_ABOUT, AboutPage());
+ * // mount the navigation. We can even have multiple ones!
+ * SimpleNavigationProjector(siteController, siteProjector.sideNavigationElement);
+ * SimpleNavigationProjector(siteController, siteProjector.topNavigationElement);
  */
 
-const SimpleNavigationProjector = (controller, root) => {
+const SimpleNavigationProjector = (siteController, root) => {
 
     root.innerHTML = ` <nav class="${PAGE_CLASS}"></nav> `;
 
@@ -27,20 +39,20 @@ const SimpleNavigationProjector = (controller, root) => {
 
         // view is just so many anchors
         navigationDiv.innerHTML =
-            Object.entries(controller.getAllPages())
+            Object.entries(siteController.getAllPages())
               .map( ([hash, page]) => `<a href="${hash}">${page.titleText}</a>`)
               .join(" ");
 
         // view binding is done by the browser implicitly when following the link
 
         // bind all anchors to their "visited" state (:visited does not allow much)
-        Object.entries(controller.getAllPages())
+        Object.entries(siteController.getAllPages())
               .forEach( ([hash, page]) => page.onVisited( visited => {
                   if (!visited) return;
                   navigationDiv.querySelector(`a[href="${hash}"]`).classList.add("visited");
               } ));
         // update which anchor shows the current page
-        controller.uriHashChanged( (newHash, oldHash) => {
+        siteController.uriHashChanged( (newHash, oldHash) => {
             navigationDiv.querySelector(`a[href="${oldHash}"]`)?.classList?.remove("current");
             navigationDiv.querySelector(`a[href="${newHash}"]`)?.classList?.add   ("current");
         });

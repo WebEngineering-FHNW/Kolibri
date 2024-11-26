@@ -2,29 +2,43 @@
  * @module kolibri.navigation.siteController
  */
 
-import {LoggerFactory} from "../logger/loggerFactory.js";
-import {Observable}                    from "../observable.js";
-import {URI_HASH_EMPTY, URI_HASH_HOME} from "../../customize/uriHashes.js";
-import {EmptyPage}                     from "../../examples/navigation/simple/empty.js";
+import { LoggerFactory }                    from "../logger/loggerFactory.js";
+import { Observable }                       from "../observable.js";
+import { URI_HASH_EMPTY, URI_HASH_HOME }    from "../../customize/uriHashes.js";
+import { EmptyPage }                        from "../../examples/navigation/simple/empty.js";
 
 export { SiteController }
 
 const { warn, info, debug } = LoggerFactory("ch.fhnw.kolibri.navigation.siteController");
 
+/**
+ * @typedef SiteControllerType
+ * @property { (uriHash:UriHashType, page:PageType) => void }   registerPage     - protocol: do this first
+ * @property { (uriHash:UriHashType, direct:Boolean) => void }  gotoUriHash      - navigate to the page for this uriHash
+ * @property { () => Object.<UriHashType, PageType>}            getAllPages      - call after all pages were registered
+ * @property { (cb:ConsumerType<UriHashType>) => void }         uriHashChanged   - notify anchors
+ * @property { (cb:ConsumerType<PageType>) => void }            onPageActivated  - notify site projector
+ * @property { (cb:ConsumerType<PageType>) => void}             onPagePassivated - notify site projector
+ */
+
+/**
+ * @return { SiteControllerType }
+ * @constructor
+ */
 
 const SiteController = () => {
 
     const emptyPage      = EmptyPage();
-    const pageActivated  = Observable(emptyPage);
-    const pagePassivated = Observable(emptyPage);
+    const pageActivated  = /** @type { IObservable<PageType> } */ Observable(emptyPage);
+    const pagePassivated = /** @type { IObservable<PageType> } */ Observable(emptyPage);
 
     const allPages       = {};  // URI_HASH to Page
-    const currentUriHash = Observable(URI_HASH_EMPTY);
+    const currentUriHash = /** @type { IObservable<UriHashType> } */ Observable(URI_HASH_EMPTY);
 
     // the main Hash relates to the Controller that is used for activation and passivation
     const mainHash = uriHash => uriHash.split('/')[0]; // if there are subHashes, take the parent
 
-    const gotoUriHash = (uriHash, direct) => {
+    const gotoUriHash = (uriHash, direct=false) => {
         uriHash = uriHash || URI_HASH_HOME;                             // handle "", "#", null, undefined => home
         if ( null == allPages[mainHash(uriHash)] ) {
             warn(`cannot activate page for hash "${uriHash}"`);
@@ -65,12 +79,6 @@ const SiteController = () => {
         const activePage = pageActivated.getValue();
         const newPage     = allPages[mainHash(newUriHash)];
 
-        // todo: remove this comment when time has shown that it is no longer needed.
-        // if (newPage === activePage) {
-        //     debug(`new page is already active -> no transition`);
-        //     return;
-        // }
-
         if (!direct) {
             debug(`passivate ${activePage.titleText}`);
             pagePassivated.setValue(activePage);
@@ -88,7 +96,7 @@ const SiteController = () => {
         allPages[uriHash] = page;
     };
 
-    return /** @type { SiteControllerType } */{
+    return /** @type { SiteControllerType } */ {
         gotoUriHash,
         registerPage,                           // protocol: your must first register before you can go to it
         getAllPages: () => ({...allPages}),     // defensive copy

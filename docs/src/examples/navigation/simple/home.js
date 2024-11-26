@@ -4,9 +4,14 @@ import {Page}                                from "../../../kolibri/navigation/p
 
 export { HomePage }
 
-const PAGE_CLASS = "home";
+const PAGE_CLASS = URI_HASH_HOME.substring(1);
 
-const HomePage = () => Page({
+/**
+ * The Home Page should always be available.
+ * @return { PageType }
+ * @constructor
+ */
+const HomePage = () => Page(/** @type { PageDataType } */{
     titleText:         "Home Page",
     activationMs:       1000,
     passivationMs:      1000,
@@ -67,9 +72,9 @@ const [contentElement] = dom(`
 
 `);
 
-// Note that we can refer to external css files for the styling. (more difficult to keep in sync)
+// Note that we can refer to external css files for the styling. (see discussion there)
 const [styleElement] = dom(`
     <style data-style-id="${PAGE_CLASS}">
-        @import "../pages/static/home.css";
+        @import "./home.css";
     </style>      
 `);

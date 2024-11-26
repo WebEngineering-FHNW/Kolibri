@@ -1,15 +1,18 @@
-import { dom  }  from "../../../kolibri/util/dom.js";
-import { Page }  from "../../../kolibri/navigation/page.js";
+import { dom  }               from "../../../kolibri/util/dom.js";
+import { Page }               from "../../../kolibri/navigation/page.js";
+import { URI_HASH_EMPTY }     from "../../../customize/uriHashes.js";
+
+export { EmptyPage }
+
+const PAGE_CLASS     = URI_HASH_EMPTY.substring(1);
 
 /**
  * This page will never be displayed.
  * It serves as a stand-in just like Null Objects.
+ * @return { PageType }
+ * @constructor
  */
-export { EmptyPage }
-
-const PAGE_CLASS     = "empty";
-
-const EmptyPage = () => Page({
+const EmptyPage = () => Page(/** @type { PageDataType } */{
      titleText:         "Empty",
      activationMs:      0,
      passivationMs:     0,
@@ -22,6 +25,6 @@ const [styleElement, contentElement] = dom(`
     <style data-style-id="${PAGE_CLASS}">  
     </style>
     <div class="${PAGE_CLASS}">
-        Empty       
+        Empty Page      
     </div>
 `);

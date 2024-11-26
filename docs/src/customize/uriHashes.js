@@ -10,7 +10,7 @@ export {
 }
 
 /**
- * @typedef { "#empty", #home" | "#about" } UriHashType
+ * @typedef { "#empty" | "#home" | "#about" } UriHashType
  * UriHashes must be unique, start with a hash character and be formatted like in proper URIs.
  */
 
