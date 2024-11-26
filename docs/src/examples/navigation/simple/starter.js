@@ -18,5 +18,5 @@ siteController.registerPage(URI_HASH_ABOUT, AboutPage());
 SimpleNavigationProjector(siteController, siteProjector.sideNavigationElement);
 SimpleNavigationProjector(siteController, siteProjector.topNavigationElement);
 
-siteController.gotoUriHash(window.location.hash, /* direct */ true);
+siteController.gotoUriHash(window.location.hash);
 

@@ -14,7 +14,7 @@ const { warn, info, debug } = LoggerFactory("ch.fhnw.kolibri.navigation.siteCont
 /**
  * @typedef SiteControllerType
  * @property { (uriHash:UriHashType, page:PageType) => void }   registerPage     - protocol: do this first
- * @property { (uriHash:UriHashType, direct:Boolean) => void }  gotoUriHash      - navigate to the page for this uriHash
+ * @property { (uriHash:UriHashType) => void }                  gotoUriHash      - navigate to the page for this uriHash
  * @property { () => Object.<UriHashType, PageType>}            getAllPages      - call after all pages were registered
  * @property { (cb:ConsumerType<UriHashType>) => void }         uriHashChanged   - notify anchors
  * @property { (cb:ConsumerType<PageType>) => void }            onPageActivated  - notify site projector
@@ -38,14 +38,14 @@ const SiteController = () => {
     // the main Hash relates to the Controller that is used for activation and passivation
     const mainHash = uriHash => uriHash.split('/')[0]; // if there are subHashes, take the parent
 
-    const gotoUriHash = (uriHash, direct=false) => {
+    const gotoUriHash = uriHash => {
         uriHash = uriHash || URI_HASH_HOME;                             // handle "", "#", null, undefined => home
         if ( null == allPages[mainHash(uriHash)] ) {
             warn(`cannot activate page for hash "${uriHash}"`);
             alert(`Sorry, the target "${uriHash}" is not available.`);  // todo dk: make message i18n
             return;
         }
-        pageTransition(uriHash, direct);
+        pageTransition(uriHash);
     };
 
     // handles initial page load and page reload, it jumps "direct"ly to the hash without transition
@@ -55,17 +55,16 @@ const SiteController = () => {
     window.onhashchange = () => gotoUriHash(window.location.hash, /* direct */ false);
 
     /**
-     * Navigates to the {@link PageControllerType page} for the given {@link UriHashType}.
+     * Navigates to the {@link PageType page} for the given {@link UriHashType}.
      * This includes side-effecting the model, the browser incl. history, and
-     * activating / passivating the involved {@link PageControllerType controllers}.
+     * activating / passivating the involved {@link PageType pages}.
      *
      * @private
      * @impure
      * @param { !UriHashType } newUriHash - this might include subHashes like `#parent/sub`
-     * @param { Boolean }      direct     - show the page directly without page transition animation
      * @return { void }
      */
-    const pageTransition = (newUriHash, direct) => {
+    const pageTransition = newUriHash => {
 
         if(currentUriHash.getValue() === newUriHash) { // guard
             return;
@@ -79,12 +78,8 @@ const SiteController = () => {
         const activePage = pageActivated.getValue();
         const newPage     = allPages[mainHash(newUriHash)];
 
-        if (!direct) {
             debug(`passivate ${activePage.titleText}`);
             pagePassivated.setValue(activePage);
-        } else {
-            debug("direct call -> no passivation");
-        }
 
         newPage.setVisited(true);
 
