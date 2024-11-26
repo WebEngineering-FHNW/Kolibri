@@ -2,14 +2,18 @@ import { dom }                                 from "../../../kolibri/util/dom.j
 import { URI_HASH_ABOUT, URI_HASH_HOME, href } from "../../../customize/uriHashes.js";
 import { Page }                                from "../../../kolibri/navigation/page.js";
 
-
 export { AboutPage }
 
-const PAGE_CLASS     = "about";
+const PAGE_CLASS     = URI_HASH_ABOUT.substring(1); // share between page, content, and style
 const ACTIVATION_MS  = 1000;
 const PASSIVATION_MS = 1000;
 
-const AboutPage = () => Page({
+/**
+ * The About page comes with a slide-in / slide-out animation.
+ * @return { PageType }
+ * @constructor
+ */
+const AboutPage = () => Page( /** @type { PageDataType } */ {
      titleText:         "About",
      activationMs:      ACTIVATION_MS,
      passivationMs:     PASSIVATION_MS,
@@ -38,13 +42,13 @@ const [styleElement] = dom(`
                                 
             &.activate {
                 --activation-ms:    ${ACTIVATION_MS};
-                animation:          ${PAGE_CLASS}_activation calc(var(--activation-ms) * 1ms) ease-in-out forwards;
+                animation:          ${PAGE_CLASS}_activation calc(var(--activation-ms) * 1ms) ease-out forwards;
             }         
             &.passivate {
                 --passivation-ms:   ${PASSIVATION_MS};
                 opacity:            0.5;
                 transform:          translateX(-100cqw);
-                animation:          ${PAGE_CLASS}_passivation calc(var(--passivation-ms) * 1ms) ease-in-out forwards;
+                animation:          ${PAGE_CLASS}_passivation calc(var(--passivation-ms) * 1ms) ease-in forwards;
             }                       
         }       
         /* cannot be nested and must be uniquely named */

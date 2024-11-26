@@ -4,7 +4,7 @@ import { HomePage  }                     from "./home.js";
 import { AboutPage }                     from "./about.js";
 import { URI_HASH_HOME, URI_HASH_ABOUT } from "../../../customize/uriHashes.js";
 import { SimpleNavigationProjector }     from "../../../kolibri/navigation/projector/simple/simpleNavigationProjector.js";
-import {SiteProjector}                   from "./siteProjector.js";
+import { SiteProjector }                 from "./siteProjector.js";
 
 // defaultConsoleLogging("ch.fhnw.kolibri", LOG_INFO);
 defaultConsoleLogging("ch.fhnw.kolibri.navigation", LOG_DEBUG);
