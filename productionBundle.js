@@ -5011,7 +5011,13 @@ window["LOG_FATAL"  ] = LOG_FATAL  ;
 window["LOG_NOTHING"] = LOG_NOTHING;
 
 window["setLoggingLevel"  ] = setLoggingLevel  ;
-window["setLoggingContext"] = setLoggingContext;let idPostfix = 0; // makes sure we have unique ids in case of many such controls
+window["setLoggingContext"] = setLoggingContext;
+
+const defaultConsoleLogging = (context, level) => {
+  addToAppenderList(Appender());
+  setLoggingContext(context);
+  setLoggingLevel(level);
+};let idPostfix = 0; // makes sure we have unique ids in case of many such controls
 
 /**
  * Projects a select to change the global logging level.
