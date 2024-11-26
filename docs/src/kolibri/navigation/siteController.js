@@ -3,9 +3,9 @@
  */
 
 import {LoggerFactory} from "../logger/loggerFactory.js";
-import {Observable}    from "../observable.js";
-import {URI_HASH_HOME} from "../../customize/uriHashes.js";
-import {EmptyPage}     from "../../examples/navigation/simple/empty.js";
+import {Observable}                    from "../observable.js";
+import {URI_HASH_EMPTY, URI_HASH_HOME} from "../../customize/uriHashes.js";
+import {EmptyPage}                     from "../../examples/navigation/simple/empty.js";
 
 export { SiteController }
 
@@ -19,7 +19,7 @@ const SiteController = () => {
     const pagePassivated = Observable(emptyPage);
 
     const allPages       = {};  // URI_HASH to Page
-    const currentUriHash = Observable(URI_HASH_HOME);
+    const currentUriHash = Observable(URI_HASH_EMPTY);
 
     // the main Hash relates to the Controller that is used for activation and passivation
     const mainHash = uriHash => uriHash.split('/')[0]; // if there are subHashes, take the parent
@@ -52,6 +52,10 @@ const SiteController = () => {
      * @return { void }
      */
     const pageTransition = (newUriHash, direct) => {
+
+        if(currentUriHash.getValue() === newUriHash) { // guard
+            return;
+        }
         info(`page transition from ${currentUriHash.getValue()} to ${newUriHash}`);
 
         // effect: navigate to hash, trigger onhashchange event (but not if same), add to history
@@ -61,10 +65,11 @@ const SiteController = () => {
         const activePage = pageActivated.getValue();
         const newPage     = allPages[mainHash(newUriHash)];
 
-        if (newPage === activePage) {
-            debug(`new page is already active -> no transition`);
-            return;
-        }
+        // todo: remove this comment when time has shown that it is no longer needed.
+        // if (newPage === activePage) {
+        //     debug(`new page is already active -> no transition`);
+        //     return;
+        // }
 
         if (!direct) {
             debug(`passivate ${activePage.titleText}`);
