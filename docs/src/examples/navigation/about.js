@@ -1,6 +1,6 @@
-import { dom }                                 from "../../../kolibri/util/dom.js";
+import { dom }                                 from "../../kolibri/util/dom.js";
 import { URI_HASH_ABOUT, URI_HASH_HOME, href } from "./uriHashes.js";
-import {Observable}                            from "../../../kolibri/observable.js";
+import {Observable}                            from "../../kolibri/observable.js";
 import {Page}                                  from "./page.js";
 
 

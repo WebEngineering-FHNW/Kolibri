@@ -7,11 +7,11 @@ export {
 }
 
 /**
- * @typedef { "#" | "#E404" | "#about" } UriHashType
+ * @typedef { "#home" | "#E404" | "#about" } UriHashType
  * UriHashes must be unique, start with a hash character and be formatted like in proper URIs.
  */
 
-/** @type { UriHashType } */ const URI_HASH_HOME  = "#";
+/** @type { UriHashType } */ const URI_HASH_HOME  = "#home";
 /** @type { UriHashType } */ const URI_HASH_ERROR = "#E404";
 /** @type { UriHashType } */ const URI_HASH_ABOUT = "#about";
 
