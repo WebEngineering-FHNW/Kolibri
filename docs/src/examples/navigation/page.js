@@ -1,4 +1,4 @@
-import { Observable } from "../../../kolibri/observable.js";
+import { Observable } from "../../kolibri/observable.js";
 
 export { Page }
 
