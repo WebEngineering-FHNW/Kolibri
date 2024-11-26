@@ -1,46 +1,45 @@
-import { ObservableList } from "../../observable.js";
-import {SiteController}   from "../siteController.js";
 
-export { BasicNavigationProjector }
+export { SimpleNavigationProjector }
 
-/**
- * @typedef NavigationProjectorType
- */
+const PAGE_CLASS = "simpleNavigationProjector";
 
 /**
  * @constructor
- * @param { !NavigationControllerType } controller todo dk: adapt
+ * @param { !SiteControllerType } controller todo dk: adapt
  * @param { !HTMLDivElement } root
  * @return { NavigationProjectorType }
  * @example
- * const navigationController = NavigationController();
- * DashboardNavigationProjector(navigationController, pinToNavElement);
+ * todo: fill
  */
 
-const BasicNavigationProjector = (controller, root) => {
+const SimpleNavigationProjector = (controller, root) => {
 
-    root.innerHTML = `
-        ${projectorStyle}
-        <nav class="basicNavigationProjector"></nav>
-    `;
+    root.innerHTML = ` <nav class="${PAGE_CLASS}"></nav> `;
 
     const projectNavigation = () => {
-        const navigationDiv = root.querySelector("nav.basicNavigationProjector");
 
-        // view
+        // add specific style if not yet available
+        if (null === document.head.querySelector(`style[data-style-id="${PAGE_CLASS}"]`)) {
+            document.head.innerHTML += projectorStyle;
+        }
+
+        const navigationDiv = root.querySelector(`nav.${PAGE_CLASS}`);
+
+        // view is just so many anchors
         navigationDiv.innerHTML =
             Object.entries(controller.getAllPages())
               .map( ([hash, page]) => `<a href="${hash}">${page.titleText}</a>`)
               .join(" ");
 
-        // view binding id done by the browser implicitly when following the link
-        // data binding
+        // view binding is done by the browser implicitly when following the link
+
+        // bind all anchors to their "visited" state (:visited does not allow much)
         Object.entries(controller.getAllPages())
               .forEach( ([hash, page]) => page.onVisited( visited => {
                   if (!visited) return;
                   navigationDiv.querySelector(`a[href="${hash}"]`).classList.add("visited");
               } ));
-
+        // update which anchor shows the current page
         controller.uriHashChanged( (newHash, oldHash) => {
             navigationDiv.querySelector(`a[href="${oldHash}"]`)?.classList?.remove("current");
             navigationDiv.querySelector(`a[href="${newHash}"]`)?.classList?.add   ("current");
@@ -51,8 +50,8 @@ const BasicNavigationProjector = (controller, root) => {
 };
 
 const projectorStyle = `
-    <style>
-        .basicNavigationProjector {
+    <style data-style-id="${PAGE_CLASS}">
+        .${PAGE_CLASS} {
             a {
                 text-wrap: nowrap;
                 font-family: system-ui;

@@ -1,4 +1,5 @@
-import {dom} from "../../kolibri/util/dom.js";
+import {dom}                 from "../../../kolibri/util/dom.js";
+import {href, URI_HASH_HOME} from "../../../customize/uriHashes.js";
 
 export { SiteProjector }
 
@@ -15,7 +16,6 @@ const SiteProjector = siteController => {
      document.body.append(bodyElement);
 
      siteController.onPageActivated( pageModel => {
-          // if (! pageModel) return;
 
           // set the title
           const titleElement = document.head.querySelector("title");
@@ -57,10 +57,10 @@ const SiteProjector = siteController => {
 const headElements = dom(`
 
         <title>(no title - will be replaced)</title>
-        <link id="favicon" rel="icon" type="image/x-icon" href='../../../img/logo/logo.svg'>
-        <link rel="stylesheet" href="../../../css/kolibri-base-light.css" >
+        <link id="favicon" rel="icon" type="image/x-icon" href='../../../../img/logo/logo.svg'>
         
         <style data-style-id="${PAGE_CLASS}">
+            @import "../../../../css/kolibri-base-light.css";
             body {
                 margin: 0;
             }
@@ -136,19 +136,16 @@ const [bodyElement] = dom(`
     <div id="application-frame">
         <div id="top-backdrop"></div>
         <div id="logo">
-            <a href="#">
-                <img src="../../../img/logo/logo-new-128.svg" alt="Kolibri-logo">
+            <a ${href(URI_HASH_HOME)}>
+                <img src="../../../../img/logo/logo-new-128.svg" alt="Kolibri-logo">
             </a>
         </div>
-        <div id="top-nav">top nav stand-in: Experiment with type-safe navigation structure.</div>
-
-
-<!--    The main hooks  that any content can be pinned to-->
+        <div  id="top-nav"> top  nav stand-in</div>
         <div  id="side-nav">side nav stand-in</div>
-        <div  id="content-passivated" class="content">
+        <div  id="content-passivated"   class="content">
             <!-- holder to display content during passivation -->
         </div>
-        <div  id="content" class="content">
+        <div  id="content"              class="content">
             <!-- page content will be added here -->
         </div>
 

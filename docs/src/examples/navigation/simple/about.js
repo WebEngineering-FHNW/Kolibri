@@ -1,7 +1,6 @@
-import { dom }                                 from "../../kolibri/util/dom.js";
-import { URI_HASH_ABOUT, URI_HASH_HOME, href } from "./uriHashes.js";
-import {Observable}                            from "../../kolibri/observable.js";
-import {Page}                                  from "./page.js";
+import { dom }                                 from "../../../kolibri/util/dom.js";
+import { URI_HASH_ABOUT, URI_HASH_HOME, href } from "../../../customize/uriHashes.js";
+import { Page }                                from "../../../kolibri/navigation/page.js";
 
 
 export { AboutPage }
@@ -19,26 +18,33 @@ const AboutPage = () => Page({
      contentElement,
  });
 
-const [styleElement, contentElement] = dom(`
+const [contentElement] = dom(`
+    <div class="${PAGE_CLASS}">
+        <h1>About</h1>
+            <section>
+                <p>The "buttons" below should not be styled.</p>
+                <p>This is to make sure that styles from the home page do not spill over to this page.</p>
+                <p>
+                     <a class="btn primary glow" ${href(URI_HASH_HOME)}>Home</a>
+                     <a class="btn accent  glow" ${href(URI_HASH_ABOUT)}>About</a>
+                </p>
+            </section>
+    </div>
+`);
+
+const [styleElement] = dom(`
     <style data-style-id="${PAGE_CLASS}">
         .${PAGE_CLASS} {        
-            margin-top: 2em;
-            
-            &.message-wrapper {
-                display:            flex;
-                gap:                1em;
-                justify-content:    center;
-            }     
-                  
+                                
             &.activate {
                 --activation-ms:    ${ACTIVATION_MS};
-                animation:          ${PAGE_CLASS}_activation calc(var(--activation-ms, 500) * 1ms) ease-in-out;
+                animation:          ${PAGE_CLASS}_activation calc(var(--activation-ms) * 1ms) ease-in-out forwards;
             }         
             &.passivate {
                 --passivation-ms:   ${PASSIVATION_MS};
                 opacity:            0.5;
                 transform:          translateX(-100cqw);
-                animation:          ${PAGE_CLASS}_passivation calc(var(--passivation-ms, 500) * 1ms) ease-in-out;
+                animation:          ${PAGE_CLASS}_passivation calc(var(--passivation-ms) * 1ms) ease-in-out forwards;
             }                       
         }       
         /* cannot be nested and must be uniquely named */
@@ -63,15 +69,4 @@ const [styleElement, contentElement] = dom(`
             }
         }              
     </style>
-    <div class="${PAGE_CLASS}">
-        <h1>About</h1>
-        <div class="message-wrapper">
-            <section class="buttons">
-                <p>These "buttons" should not be styled.</p>
-                <p>This is to make sure that styles from the home page do not spill over to this page.</p>
-                <a class="btn primary glow" ${href(URI_HASH_HOME)}>Home</a>
-                <a class="btn accent  glow" ${href(URI_HASH_ABOUT)}>No Style</a>
-            </section>
-        </div>
-    </div>
 `);
