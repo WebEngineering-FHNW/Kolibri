@@ -22,12 +22,15 @@
     }
 
     section.buttons {
-        display:         flex;
-        justify-content: center;
+        display:            flex;
+        flex-wrap:          wrap;
+        gap:                1em 2em;
+        justify-content:    center;
     }
-    a.btn {
-        margin-right: 2em;
+    section.buttons > * {
+        min-width:          fit-content; /* intrinsic layout */
     }
+
     a.btn {
         display:         block;
         text-align:      center;
