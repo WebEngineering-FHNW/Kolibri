@@ -27,7 +27,10 @@ const SiteProjector = siteController => {
               document.head.append(pageModel.styleElement);
           }
 
-          // trigger the activation anim
+          // make sure the animation timings in model and css are the same
+          pageModel.contentElement.style.setProperty("--activation-ms" ,pageModel.activationMs);
+          pageModel.contentElement.style.setProperty("--passivation-ms",pageModel.passivationMs);
+
           pageModel.contentElement.classList.add("activate");
           setTimeout( _time => {                                      // allow activation anim its time
                pageModel.contentElement.classList.remove("activate"); // we have to remove or we cannot start again
@@ -37,7 +40,6 @@ const SiteProjector = siteController => {
      });
 
      siteController.onPagePassivated( pageModel => {
-          // if (! pageModel) return;
           passiveContentElement.replaceChildren(pageModel.contentElement);    // moves from content to passivated
 
           // trigger the passivation anim
