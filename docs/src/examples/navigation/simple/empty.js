@@ -1,17 +1,18 @@
-import { dom }                                 from "../../kolibri/util/dom.js";
-import {Page}                                  from "./page.js";
+import { dom  }  from "../../../kolibri/util/dom.js";
+import { Page }  from "../../../kolibri/navigation/page.js";
 
-
+/**
+ * This page will never be displayed.
+ * It serves as a stand-in just like Null Objects.
+ */
 export { EmptyPage }
 
 const PAGE_CLASS     = "empty";
-const ACTIVATION_MS  = 0;
-const PASSIVATION_MS = 0;
 
 const EmptyPage = () => Page({
      titleText:         "Empty",
-     activationMs:      ACTIVATION_MS,
-     passivationMs:     PASSIVATION_MS,
+     activationMs:      0,
+     passivationMs:     0,
      pageClass:         PAGE_CLASS,
      styleElement,
      contentElement,

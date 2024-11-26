@@ -1,6 +1,6 @@
-import {dom}                  from "../../kolibri/util/dom.js";
-import {URI_HASH_ABOUT, href} from "./uriHashes.js";
-import {Page}                 from "./page.js";
+import {dom}                                 from "../../../kolibri/util/dom.js";
+import {URI_HASH_ABOUT, href, URI_HASH_HOME} from "../../../customize/uriHashes.js";
+import {Page}                                from "../../../kolibri/navigation/page.js";
 
 export { HomePage }
 
@@ -16,11 +16,7 @@ const HomePage = () => Page({
  });
 
 
-const [styleElement, contentElement] = dom(`
-    <style data-style-id="${PAGE_CLASS}">
-        @import "./pages/static/home.css";
-    </style>  
-    
+const [contentElement] = dom(`
     <div id="content-wrapper" class="${PAGE_CLASS}">            
       <header>
         <div class="kolibri-logo-svg kolibri-logo-anim">
@@ -47,7 +43,7 @@ const [styleElement, contentElement] = dom(`
         </section>
     
         <section class="buttons">
-          <a class="btn primary glow" ${href("#getting-started-not-known-on-purpose")}>Get Started (defect on purpose)</a>
+          <a class="btn primary glow" ${href(URI_HASH_HOME)}>Home Page</a> 
           <a class="btn accent  glow" ${href(URI_HASH_ABOUT)}>Go to the about page</a>
         </section>
     
@@ -58,8 +54,22 @@ const [styleElement, contentElement] = dom(`
             <p>Whether you're an experienced developer or just starting out, we believe that Kolibri has something to offer you. Our extensive documentation and testing facilities make it easy to get started with Kolibri.</p>
             <p>So why wait? Try out Kolibri today and see for yourself why it's the best choice for building Single Page Applications for the web!</p>
         </section>
+        
+        <section>
+            <h2>Developer Special</h2>
+            <p> Example of a <a ${href("#no-such-uri")}>broken link</a> that appears in the code
+                as a type error!
+            </p>
+        </section>
     
       </main>
     </div>
 
+`);
+
+// Note that we can refer to external css files for the styling. (more difficult to keep in sync)
+const [styleElement] = dom(`
+    <style data-style-id="${PAGE_CLASS}">
+        @import "../pages/static/home.css";
+    </style>      
 `);

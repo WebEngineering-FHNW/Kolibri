@@ -1,18 +1,19 @@
-
+/**
+ * Use this module to define a type for each URI hash in your application
+ * that serves as a target for a page that the user can navigate to.
+ */
 export {
     href,
     URI_HASH_HOME,
-    URI_HASH_ERROR,
     URI_HASH_ABOUT
 }
 
 /**
- * @typedef { "#home" | "#E404" | "#about" } UriHashType
+ * @typedef { "#home" | "#about" } UriHashType
  * UriHashes must be unique, start with a hash character and be formatted like in proper URIs.
  */
 
-/** @type { UriHashType } */ const URI_HASH_HOME  = "#home";
-/** @type { UriHashType } */ const URI_HASH_ERROR = "#E404";
+/** @type { UriHashType } */ const URI_HASH_HOME  = "#home"; // should always be available
 /** @type { UriHashType } */ const URI_HASH_ABOUT = "#about";
 
 /**
@@ -20,7 +21,7 @@ export {
  * @param  { UriHashType } uriHash
  * @return { String } - a properly formatted HTML href attribute
  * @example
- * href(URI_HASH_HOME); //
+ * `<a ${href(URI_HASH_HOME)}> Home </a>` // error marker if not known
  */
 const href = uriHash => ` href="${uriHash}" `;
 
