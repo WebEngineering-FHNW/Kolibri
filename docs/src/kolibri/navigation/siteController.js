@@ -78,8 +78,8 @@ const SiteController = () => {
         const activePage = pageActivated.getValue();
         const newPage     = allPages[mainHash(newUriHash)];
 
-            debug(`passivate ${activePage.titleText}`);
-            pagePassivated.setValue(activePage);
+        debug(`passivate ${activePage.titleText}`);
+        pagePassivated.setValue(activePage);
 
         newPage.setVisited(true);
 
