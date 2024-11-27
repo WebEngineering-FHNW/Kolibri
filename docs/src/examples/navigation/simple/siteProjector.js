@@ -75,8 +75,10 @@ const headElements = dom(`
                 grid-template-rows:     min-content auto;
                 grid-template-areas:    "logo       top-nav"
                                         "side-nav   content";
+            }            
+            #top-nav, #side-nav, #logo {
+                padding:                .5rem;
             }
-
             #top-nav {
                 grid-area:              top-nav;
                 align-self:             center;
@@ -91,9 +93,10 @@ const headElements = dom(`
                 grid-area:              side-nav;
                 background-color:       var(--kb-color-hsl-bg-light);
                 box-shadow:             var(--kolibri-box-shadow);
+                padding-block:          1lh;
                 & a {
-                    display: block;
-                    margin-top: .5em;
+                    display:            block;
+                    margin-top:         .5lh;
                 }
             }
             #logo {
@@ -105,25 +108,22 @@ const headElements = dom(`
                     background-color:   var(--kb-color-hsl-bg-light);
                     width:              3rem;
                     aspect-ratio:       1 / 1;
-                    box-shadow:         1px 1px .2rem 0 #9317EC inset; /* todo dk: use named colors*/
+                    box-shadow:         1px 1px .2rem 0 var(--kb-color-hsl-lavender-700) inset; 
                 }
-            }
-            #top-nav, #side-nav, #logo {
-                padding:                .5rem;
             }
             #top-backdrop {
                 grid-row:               1;
                 grid-column:            1 / -1;
                 z-index:                -10;
                 background-image:       linear-gradient( 90deg,
-                                            #FF2CA5 55%, /* todo dk: use named colors*/
-                                            #9317EC
+                                            var(--kb-color-hsl-pink-300) 50%,
+                                            var(--kb-color-hsl-lavender-700)
                                         );
             }
 
             .content {                  /* must be shared in #content and #content-passivated */
                 grid-area:              content;
-                container-type:         inline-size; /* only looks at the width */
+                container-type:         size; 
                 overflow:               auto;
                 padding:                2rem;
             }
