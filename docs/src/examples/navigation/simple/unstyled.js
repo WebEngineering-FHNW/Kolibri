@@ -1,37 +1,43 @@
-import { dom }                                 from "../../../kolibri/util/dom.js";
-import { URI_HASH_ABOUT, URI_HASH_HOME, href } from "../../../customize/uriHashes.js";
-import { Page }                                from "../../../kolibri/navigation/page/page.js";
+import { dom }                                    from "../../../kolibri/util/dom.js";
+import { URI_HASH_UNSTYLED, URI_HASH_HOME, href } from "../../../customize/uriHashes.js";
+import { Page }                                   from "../../../kolibri/navigation/page/page.js";
 
 export { AboutPage }
 
-const PAGE_CLASS     = URI_HASH_ABOUT.substring(1); // share between page, content, and style
+const PAGE_CLASS     = URI_HASH_UNSTYLED.substring(1); // share between page, content, and style
 const ACTIVATION_MS  = 1000;
 const PASSIVATION_MS = 1000;
+const TITLE          = "Unstyled";
 
 /**
  * The About page comes with a slide-in / slide-out animation.
  * @return { PageType }
  * @constructor
  */
-const AboutPage = () => Page( /** @type { PageDataType } */ {
-     titleText:         "About",
+const AboutPage = () => Page( {
+     titleText:         TITLE,
      activationMs:      ACTIVATION_MS,
      passivationMs:     PASSIVATION_MS,
      pageClass:         PAGE_CLASS,
-     styleElement,
-     contentElement,
+     styleElement  :    /** @type { HTMLStyleElement } */ styleElement,
+     contentElement:    /** @type { HTMLElement }      */ contentElement,
  });
 
 const [contentElement] = dom(`
-    <div class="${PAGE_CLASS}">
-        <h1>About</h1>
+    <div class="${PAGE_CLASS} prosa">
+        <h1>${TITLE}</h1>
             <section>
-                <p>The "buttons" below should not be styled.</p>
-                <p>This is to make sure that styles from the home page do not spill over to this page.</p>
+                <p>The links below should not appear in button style even though they use the same
+                   style classes as the home page.</p>
                 <p>
                      <a class="btn primary glow" ${href(URI_HASH_HOME)}>Home</a>
-                     <a class="btn accent  glow" ${href(URI_HASH_ABOUT)}>About</a>
+                     <a class="btn accent  glow" ${href(URI_HASH_UNSTYLED)}>About</a>
                 </p>
+                <p>This shows <em>style isolation</em>: styles from previous pages do not contaminate any following pages.</p>
+            </section>
+            <section>
+                <p>This page has no special styling except for animating the page transitions.
+                It appears as slide-in from the right and disappears with a slide-left.</p>
             </section>
     </div>
 `);

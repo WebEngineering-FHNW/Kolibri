@@ -48,24 +48,39 @@
     --font-sans-serif:  "Rubik-Light", ui-sans-serif, sans-serif;
     --font-mono:        "JetBrainsMono-VariableFont_wght", monospace;
 
-    font-family: var(--font-serif), system-ui;
+    font-family:    var(--font-serif), system-ui;
 }
 header h1 {
     color: var(--kolibri-color-output);
     letter-spacing: 0.06em;
 }
 header .subtitle {
-    color: var(--kolibri-color-output);
+    color:          var(--kolibri-color-output);
 }
 h1, h2, h3 {
-    font-family: var(--font-serif-bold), system-ui;
+    font-family:    var(--font-serif-bold), system-ui;
+    text-wrap:      balance;
 }
-p, li, div {
+p, li, div, figcaption {
     letter-spacing: 0.02em;
 }
 form, fieldset, label, input, button {
-    font-family: var(--font-sans-serif), system-ui;
+    font-family:    var(--font-sans-serif), system-ui;
     letter-spacing: 0.02em;
+}
+figcaption {
+    font-style:     italic;
+    font-size:      var(--font-size-caption);
+    text-align:     end;
+}
+ul {
+    padding-left:       1em;
+}
+ul li::marker {
+  color:                var(--kb-hsla-primary-accent);
+}
+figure {
+    margin-inline:      0;
 }
 
 /* --- default invalid handling --- */
@@ -101,7 +116,6 @@ label + span > input:invalid + span.invalidation_marker {
 }
 /* --- end default invalid handling --- */
 
-
 /* --- logo handling -- */
 /* The information about where the actual logo file is, the format, etc. should
    not be distributed over all the files but kept in one place.
@@ -109,7 +123,7 @@ label + span > input:invalid + span.invalidation_marker {
  */
 
 .kolibri-logo {
-	height:             342px;
+	width:              342px;
 	aspect-ratio:       1;
 	background-image:   url("../img/logo/logo.svg"); /* keep in one place */
 	background-repeat:  no-repeat;
@@ -120,6 +134,14 @@ label + span > input:invalid + span.invalidation_marker {
 
 .kolibri-logo-anim {
 	animation:          kolibri_fly_in 2s ease;
+    .wing {
+        animation-name:            kolibri-flapping;
+        animation-duration:        .2s;
+        animation-iteration-count: 15;
+        animation-direction:       reverse;
+        animation-timing-function: ease-in;
+        transform-origin:          45% 45%;
+    }
 }
 @keyframes kolibri_fly_in {
 	0% {
@@ -132,6 +154,16 @@ label + span > input:invalid + span.invalidation_marker {
 		transform:             scale(1.0) translateX(0)    rotate(  0deg) ;
 	}
 }
+@keyframes kolibri-flapping {
+      from {
+          transform:            scaleX(1)  rotate(0deg);
+      }
+      to {
+          transform:            scaleX(-1) rotate(30deg);
+      }
+ }
+
+
 @media (prefers-reduced-motion: reduce) {
     .kolibri-logo-anim {
         animation-duration: 0.01ms ;
@@ -159,3 +191,29 @@ a.skip-link:not(:focus):not(:active) {
     clip-path:  inset(50%);
     white-space: nowrap;
 }
+
+/* --- end of a11y support --- */
+
+/* --- utility classes --- */
+
+.prosa {
+    margin-inline:  auto;
+    max-width:      70ch;
+    text-rendering: optimizeLegibility;
+    text-wrap:      pretty;
+    letter-spacing: 0.03em;
+}
+em {
+    position: relative;
+    &::before {
+        content:"";
+        position: absolute;
+        inset:  -3px;
+        background-color: var(--kolibri-color-select);
+        z-index: -1;
+        rotate: -2deg;
+        opacity: 60%;
+    }
+}
+
+/* --- end of utility classes --- */
