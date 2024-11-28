@@ -1,6 +1,6 @@
-import { dom  }               from "../../../kolibri/util/dom.js";
-import { Page }               from "../../../kolibri/navigation/page.js";
-import { URI_HASH_EMPTY }     from "../../../customize/uriHashes.js";
+import { dom  }           from "../../util/dom.js";
+import { Page }           from "./page.js";
+import { URI_HASH_EMPTY } from "../../../customize/uriHashes.js";
 
 export { EmptyPage }
 

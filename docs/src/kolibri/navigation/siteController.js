@@ -4,8 +4,8 @@
 
 import { LoggerFactory }                    from "../logger/loggerFactory.js";
 import { Observable }                       from "../observable.js";
-import { URI_HASH_EMPTY, URI_HASH_HOME }    from "../../customize/uriHashes.js";
-import { EmptyPage }                        from "../../examples/navigation/simple/empty.js";
+import { URI_HASH_EMPTY, URI_HASH_HOME } from "../../customize/uriHashes.js";
+import { EmptyPage }                     from "./page/empty.js";
 
 export { SiteController }
 
