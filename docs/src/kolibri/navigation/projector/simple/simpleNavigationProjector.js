@@ -52,7 +52,7 @@ const SimpleNavigationProjector = (siteController, root) => {
                   navigationDiv.querySelector(`a[href="${hash}"]`).classList.add("visited");
               } ));
         // update which anchor shows the current page
-        siteController.uriHashChanged( (newHash, oldHash) => {
+        siteController.onUriHashChanged((newHash, oldHash) => {
             navigationDiv.querySelector(`a[href="${oldHash}"]`)?.classList?.remove("current");
             navigationDiv.querySelector(`a[href="${newHash}"]`)?.classList?.add   ("current");
         });

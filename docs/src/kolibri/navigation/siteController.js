@@ -16,7 +16,7 @@ const { warn, info, debug } = LoggerFactory("ch.fhnw.kolibri.navigation.siteCont
  * @property { (uriHash:UriHashType, page:PageType) => void }   registerPage     - protocol: do this first
  * @property { (uriHash:UriHashType) => void }                  gotoUriHash      - navigate to the page for this uriHash
  * @property { () => Object.<UriHashType, PageType>}            getAllPages      - call after all pages were registered
- * @property { (cb:ConsumerType<UriHashType>) => void }         uriHashChanged   - notify anchors
+ * @property { (cb:ConsumerType<UriHashType>) => void }         onUriHashChanged - notify anchors
  * @property { (cb:ConsumerType<PageType>) => void }            onPageActivated  - notify site projector
  * @property { (cb:ConsumerType<PageType>) => void}             onPagePassivated - notify site projector
  * @property { (cb:ConsumerType<String>)   => void}             onUnsupportedUriHash - navigation failure callback
@@ -98,10 +98,10 @@ const SiteController = () => {
     return /** @type { SiteControllerType } */ {
         gotoUriHash,
         registerPage,                           // protocol: your must first register before you can go to it
-        getAllPages:          () => ({...allPages}),     // defensive copy
-        onUnsupportedUriHash,                            // navigation failure callback
-        uriHashChanged :      currentUriHash.onChange,   // notify navigation projectors
-        onPageActivated:      pageActivated.onChange,    // notify site projector
-        onPagePassivated:     pagePassivated.onChange,   // notify site projector
+        getAllPages:       () => ({...allPages}),     // defensive copy
+        onUnsupportedUriHash,                         // navigation failure callback
+        onUriHashChanged : currentUriHash.onChange,   // notify navigation projectors
+        onPageActivated:   pageActivated.onChange,    // notify site projector
+        onPagePassivated:  pagePassivated.onChange,   // notify site projector
     }
 };

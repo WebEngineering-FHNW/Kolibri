@@ -13,7 +13,7 @@ siteControllerSuite.add('typical sequence', assert => {
     const uriHash     = [];
     const activePage  = [];
     const passivePage = [];
-    siteController.uriHashChanged  ( it => uriHash    .push(it));
+    siteController.onUriHashChanged(it => uriHash.push(it));
     siteController.onPageActivated ( it => activePage .push(it.titleText));
     siteController.onPagePassivated( it => passivePage.push(it.titleText));
     assert.iterableEq(uriHash,     ["#empty"]);
@@ -52,7 +52,7 @@ siteControllerSuite.add('unknown uriHash', assert => {
     const activePage  = [];
     const passivePage = [];
     const unsupportedHashes = [];
-    siteController.uriHashChanged   ( it => uriHash    .push(it));
+    siteController.onUriHashChanged (it => uriHash.push(it));
     siteController.onPageActivated  ( it => activePage .push(it.titleText));
     siteController.onPagePassivated ( it => passivePage.push(it.titleText));
     siteController.onUnsupportedUriHash( it => unsupportedHashes.push(it));
@@ -64,13 +64,12 @@ siteControllerSuite.add('unknown uriHash', assert => {
     const noSuchUriHash = /** @type { UriHashType } */" #no-such-uri-hash"; // cheating the type system :-(
     siteController.gotoUriHash(noSuchUriHash);
 
-    // no activation or passivation - only the callback is used
+    // no uriHash change, activation, or passivation - only the callback is used
 
     assert.iterableEq(uriHash,     ["#empty"]);
     assert.iterableEq(activePage , ["Empty"] );
     assert.iterableEq(passivePage, ["Empty"] );
     assert.iterableEq(unsupportedHashes, [noSuchUriHash] );
-
 
 });
 
