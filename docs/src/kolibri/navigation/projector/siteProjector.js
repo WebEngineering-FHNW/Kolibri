@@ -1,4 +1,4 @@
-import {dom}                 from "../../../kolibri/util/dom.js";
+import {dom}                 from "../../util/dom.js";
 import {href, URI_HASH_HOME} from "../../../customize/uriHashes.js";
 
 export { SiteProjector }
