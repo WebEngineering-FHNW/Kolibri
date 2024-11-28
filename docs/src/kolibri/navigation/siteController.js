@@ -19,6 +19,7 @@ const { warn, info, debug } = LoggerFactory("ch.fhnw.kolibri.navigation.siteCont
  * @property { (cb:ConsumerType<UriHashType>) => void }         uriHashChanged   - notify anchors
  * @property { (cb:ConsumerType<PageType>) => void }            onPageActivated  - notify site projector
  * @property { (cb:ConsumerType<PageType>) => void}             onPagePassivated - notify site projector
+ * @property { (cb:ConsumerType<String>)   => void}             onUnsupportedUriHash - navigation failure callback
  */
 
 /**
@@ -27,6 +28,9 @@ const { warn, info, debug } = LoggerFactory("ch.fhnw.kolibri.navigation.siteCont
  */
 
 const SiteController = () => {
+
+    let   unsupportedHashReaction = _uriHash => undefined;
+    const onUnsupportedUriHash = handler => unsupportedHashReaction = handler;
 
     const emptyPage      = EmptyPage();
     const pageActivated  = /** @type { IObservable<PageType> } */ Observable(emptyPage);
@@ -42,7 +46,7 @@ const SiteController = () => {
         uriHash = uriHash || URI_HASH_HOME;                             // handle "", "#", null, undefined => home
         if ( null == allPages[mainHash(uriHash)] ) {
             warn(`cannot activate page for hash "${uriHash}"`);
-            alert(`Sorry, the target "${uriHash}" is not available.`);  // todo dk: make message i18n
+            unsupportedHashReaction(uriHash);
             return;
         }
         pageTransition(uriHash);
@@ -94,9 +98,10 @@ const SiteController = () => {
     return /** @type { SiteControllerType } */ {
         gotoUriHash,
         registerPage,                           // protocol: your must first register before you can go to it
-        getAllPages: () => ({...allPages}),     // defensive copy
-        uriHashChanged :    currentUriHash.onChange,  // notify navigation projectors
-        onPageActivated:    pageActivated.onChange,   // notify site projector
-        onPagePassivated:   pagePassivated.onChange,
+        getAllPages:          () => ({...allPages}),     // defensive copy
+        onUnsupportedUriHash,                            // navigation failure callback
+        uriHashChanged :      currentUriHash.onChange,   // notify navigation projectors
+        onPageActivated:      pageActivated.onChange,    // notify site projector
+        onPagePassivated:     pagePassivated.onChange,   // notify site projector
     }
 };

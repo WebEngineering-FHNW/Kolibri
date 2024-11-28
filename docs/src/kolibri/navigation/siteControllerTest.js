@@ -43,4 +43,35 @@ siteControllerSuite.add('typical sequence', assert => {
     assert.iterableEq(passivePage, ["Empty", "Sample"] );
 });
 
+siteControllerSuite.add('unknown uriHash', assert => {
+
+    const siteController = SiteController();
+    assert.is(Object.entries(siteController.getAllPages()).length, 0);
+
+    const uriHash     = [];
+    const activePage  = [];
+    const passivePage = [];
+    const unsupportedHashes = [];
+    siteController.uriHashChanged   ( it => uriHash    .push(it));
+    siteController.onPageActivated  ( it => activePage .push(it.titleText));
+    siteController.onPagePassivated ( it => passivePage.push(it.titleText));
+    siteController.onUnsupportedUriHash( it => unsupportedHashes.push(it));
+    assert.iterableEq(uriHash,     ["#empty"]);
+    assert.iterableEq(activePage , ["Empty"] );
+    assert.iterableEq(passivePage, ["Empty"] );
+    assert.iterableEq(unsupportedHashes, [] );
+
+    const noSuchUriHash = /** @type { UriHashType } */" #no-such-uri-hash"; // cheating the type system :-(
+    siteController.gotoUriHash(noSuchUriHash);
+
+    // no activation or passivation - only the callback is used
+
+    assert.iterableEq(uriHash,     ["#empty"]);
+    assert.iterableEq(activePage , ["Empty"] );
+    assert.iterableEq(passivePage, ["Empty"] );
+    assert.iterableEq(unsupportedHashes, [noSuchUriHash] );
+
+
+});
+
 siteControllerSuite.run();
