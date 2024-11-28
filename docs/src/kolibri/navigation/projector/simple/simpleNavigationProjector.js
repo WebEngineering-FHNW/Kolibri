@@ -18,7 +18,7 @@ const PAGE_CLASS = "simpleNavigationProjector";
  * const siteProjector  = SiteProjector(siteController);
  * // add pages
  * siteController.registerPage(URI_HASH_HOME,  HomePage());
- * siteController.registerPage(URI_HASH_ABOUT, AboutPage());
+ * siteController.registerPage(URI_HASH_UNSTYLED, AboutPage());
  * // mount the navigation. We can even have multiple ones!
  * SimpleNavigationProjector(siteController, siteProjector.sideNavigationElement);
  * SimpleNavigationProjector(siteController, siteProjector.topNavigationElement);

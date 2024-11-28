@@ -10,22 +10,6 @@
         flex-direction: column;
         align-items:    center;
     }
-    div.kolibri-logo-svg {
-        height:       250px;
-        aspect-ratio: 1;
-        padding:      2em;
-    }
-    svg {
-        overflow: visible;
-    }
-    .flatter {
-        animation-name:            kolibri-wings;
-        animation-duration:        .2s;
-        animation-iteration-count: 15;
-        animation-direction:       reverse;
-        animation-timing-function: ease-in;
-        transform-origin:          45% 45%;
-    }
 
     section.buttons {
         display:            flex;
@@ -112,14 +96,6 @@
 	}
 }
 
-@keyframes kolibri-wings {
-    from {
-        transform: scaleX(1) rotate(0deg);
-    }
-    to {
-        transform: scaleX(-1) rotate(30deg);
-    }
-}
 
 @keyframes animate_glow {
     0% {
