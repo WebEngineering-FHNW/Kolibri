@@ -15,6 +15,10 @@ const SiteProjector = siteController => {
      document.head.append(...headElements);
      document.body.append(bodyElement);
 
+     siteController.onUnsupportedHash( uriHash =>                     // think about monolog and i18n
+         alert(`Sorry, the target "${uriHash}" is not available.`)
+     );
+
      siteController.onPageActivated( pageModel => {
 
           // set the title
