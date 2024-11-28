@@ -1,7 +1,7 @@
 import { SiteController }                   from './siteController.js';
 import { TestSuite }                        from "../util/test.js";
-import { URI_HASH_EMPTY, URI_HASH_HOME }    from "../../customize/uriHashes.js";
-import {Page}                               from "./page.js";
+import { URI_HASH_EMPTY, URI_HASH_HOME } from "../../customize/uriHashes.js";
+import {Page}                            from "./page/page.js";
 
 const siteControllerSuite = TestSuite('siteController');
 

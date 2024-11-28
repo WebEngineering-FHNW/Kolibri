@@ -1,4 +1,4 @@
-import { Observable } from "../observable.js";
+import { Observable } from "../../observable.js";
 
 export { Page }
 

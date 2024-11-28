@@ -1,6 +1,6 @@
 import { dom }                                 from "../../../kolibri/util/dom.js";
 import { URI_HASH_ABOUT, URI_HASH_HOME, href } from "../../../customize/uriHashes.js";
-import { Page }                                from "../../../kolibri/navigation/page.js";
+import { Page }                                from "../../../kolibri/navigation/page/page.js";
 
 export { AboutPage }
 
