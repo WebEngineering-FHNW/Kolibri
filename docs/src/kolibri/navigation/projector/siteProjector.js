@@ -19,39 +19,43 @@ const SiteProjector = siteController => {
          alert(`Sorry, the target "${uriHash}" is not available.`)
      );
 
-     siteController.onPageActivated( pageModel => {
+     siteController.onPageActivated( page => {
 
           // set the title
           const titleElement = document.head.querySelector("title");
-          titleElement.textContent = pageModel.titleText;
+          titleElement.textContent = page.titleText;
 
           // make sure that the required page style is in the head
-          const styleElement = document.head.querySelector(`style[data-style-id="${pageModel.pageClass}"]`);
+          const styleElement = document.head.querySelector(`style[data-style-id="${page.pageClass}"]`);
           if (null === styleElement) {
-              document.head.append(pageModel.styleElement);
+              document.head.append(page.styleElement);
           }
 
           // make sure the animation timings in model and css are the same
-          pageModel.contentElement.style.setProperty("--activation-ms" ,pageModel.activationMs);
-          pageModel.contentElement.style.setProperty("--passivation-ms",pageModel.passivationMs);
+          page.contentElement.style.setProperty("--activation-ms" ,page.activationMs);
+          page.contentElement.style.setProperty("--passivation-ms",page.passivationMs);
 
-          pageModel.contentElement.classList.add("activate");
-          setTimeout( _time => {                                      // allow activation anim its time
-               pageModel.contentElement.classList.remove("activate"); // we have to remove or we cannot start again
-          }, pageModel.activationMs );
+          page.contentElement.classList.add("activate");
+          setTimeout( _time => {                                           // allow activation anim its time
+               page.contentElement.classList.remove("activate");           // we have to remove or we cannot start again
+          }, page.activationMs );
 
-          activeContentElement.replaceChildren(pageModel.contentElement);      // finally mount the page
+          activeContentElement.replaceChildren(page.contentElement);       // finally mount the page
      });
 
-     siteController.onPagePassivated( pageModel => {
-          passiveContentElement.replaceChildren(pageModel.contentElement);    // moves from content to passivated
+     siteController.onPagePassivated( page => {
+          passiveContentElement.replaceChildren(page.contentElement);      // moves from content to passivated
 
           // trigger the passivation anim
-          pageModel.contentElement.classList.add("passivate");
+          page.contentElement.classList.add("passivate");
           setTimeout( _time => {                                           // give the passivation anim some time
-               pageModel.contentElement.classList.remove("passivate");     // just to be sure
+               page.contentElement.classList.remove("passivate");          // just to be sure
                passiveContentElement.innerHTML = "";                       // remove all children
-          }, pageModel.passivationMs);
+               page.styleElement.remove();                                 // proper cleanup, even though it should not be needed
+               // Note that while an overlapping page transition animation runs, the style elements from
+               // both pages are still in the head. So it is still best practice to user proper css nesting
+               // as in the examples to avoid conflicts.
+          }, page.passivationMs);
      });
 
      return {
