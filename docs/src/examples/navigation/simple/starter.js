@@ -6,8 +6,7 @@ import { URI_HASH_HOME, URI_HASH_UNSTYLED } from "../../../customize/uriHashes.j
 import { SimpleNavigationProjector }        from "../../../kolibri/navigation/projector/simple/simpleNavigationProjector.js";
 import { SiteProjector }             from "../../../kolibri/navigation/projector/siteProjector.js";
 
-// defaultConsoleLogging("ch.fhnw.kolibri", LOG_INFO);
-defaultConsoleLogging("ch.fhnw.kolibri.navigation", LOG_DEBUG);
+defaultConsoleLogging("ch.fhnw.kolibri", LOG_INFO);
 
 const siteController = SiteController();
 const siteProjector  = SiteProjector(siteController);

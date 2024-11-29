@@ -1,3 +1,5 @@
+// noinspection JSValidateTypes
+
 import { Range, map, zip, foldl$, pipe, nil, max$, min$, isEmpty } from "../../../kolibri/sequence/sequence.js";
 import { from } from "../../../kolibri/jinq/jinq.js";
 import { Pair } from "../../../kolibri/lambda/pair.js";
