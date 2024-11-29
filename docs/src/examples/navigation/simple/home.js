@@ -87,10 +87,18 @@ const [contentElement] = dom(`
                 </figure>
             </p>
         </section>
-    
+        
+        <section>
+            <h2>References</h2>
+            <p>The Kolibri navigation support is based on a bachelor project by
+               our FHNW students Altermatt and Schnidrig.</p>            
+            <p>You can find a showcase of the initial contribution with many more features
+                <a href="https://kolibri-navigation.github.io/ip6-kolibri-navigation/prototype/showcase-app/#home">here</a>.
+            </p>
+        </section>
+        
       </main>
     </div>
-
 `);
 
 // Note that we can refer to external css files for the styling. (see discussion there)
