@@ -141,9 +141,11 @@ const Assert = () => {
                 if (bothIteratorDone) break;
                 if (oneIteratorDone) {
                     testPassed = false;
-                    const actualMsg = actualDone ? "had no more elements" : "still had elements";
+                    const actualMsg = actualDone
+                        ? "had no more elements but expected still had more"
+                        : "still had elements but expected had no more.";
                     message = `Actual and expected do not have the same length! After comparing ${iterationCount} 
-                               elements, actual ${actualMsg}, which was not expected!`;
+                               elements, actual ${actualMsg}!`;
                     break;
                 }
                 if (tooManyIterations) {

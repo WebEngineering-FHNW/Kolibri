@@ -14,6 +14,7 @@ export { from }
  * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               select   - alias for map
  * @property { <_U_> ((prev: _T_) => MonadType<_U_>) => JinqType<_U_> }               inside   - maps the current value to a new {@link MonadType}
  * @property { <_U_> (monad:     MonadType<_U_>)     => JinqType<PairType<_T_,_U_>> } pairWith - combines the underlying data structure with the given data structure as {@link PairType}
+ * @property { <_U_> (monadCtor: (_T_) =>  MonadType<_U_>)    => JinqType<PairType<_T_,_U_>> } pairWithCtor - combines the underlying data structure with the given constructor as {@link PairType}
  * @property {       (predicate: ConsumingPredicateType<_T_>) => JinqType<_T_> }      where    - only keeps the items that fulfill the predicate
  * @property {       ()                              => MonadType<_T_> }              result   - returns the result of this query
  */
@@ -44,12 +45,13 @@ export { from }
  *   .result();
  */
 const jinq = monad => ({
-  pairWith: pairWith(monad),
-  where:    where   (monad),
-  select:   select  (monad),
-  map:      map     (monad),
-  inside:   inside  (monad),
-  result:   () =>    monad
+  pairWith:     pairWith    (monad),
+  pairWithCtor: pairWithCtor(monad),
+  where:        where       (monad),
+  select:       select      (monad),
+  map:          map         (monad),
+  inside:       inside      (monad),
+  result:       () =>        monad
 });
 
 /**
@@ -117,8 +119,7 @@ const inside = monad => f => {
  * Combines elementwise two {@link MonadType}s.
  * It returns a {@link PairType} which holds a combination of two values.
  *
- * @template _T_, _U_
- * @type {
+ * @type { <_T_, _U_>
  *           (monad1: MonadType<_T_>)
  *        => (monad2: MonadType<_U_>)
  *        => JinqType<PairType<_T_,_U_>>
@@ -139,7 +140,39 @@ const pairWith = monad1 => monad2 => {
   const processed = monad1.and(x =>
     monad2.fmap(y => Pair(x)(y))
   );
+  return jinq(processed)
+};
 
+/**
+ * Combines elementwise two {@link MonadType monad}s much like
+ * {@link pairWith} but the second monad is given as a constructor.
+ * This allows usages that come closer to list comprehensions.
+ * It returns a {@link PairType} which holds a combination of two values.
+ *
+ *
+ * @type { <_T_, _U_>
+ *           (monad1:     MonadType<_T_>)
+ *        => (monad2ctor: (arg:_T_) => MonadType<_U_>)
+ *        => JinqType<PairType<_T_,_U_>>
+ *      }
+ *
+ * @example
+ *  const result =
+ *     from(                         Range(2, Number.MAX_VALUE)) // infinite sequence
+ *       .pairWithCtor( z         => Range(2, z) )
+ *       .pairWithCtor( ([_z, y]) => Range(2, y) )
+ *       .where ( ([[ z, y ], x]) => x*x + y*y === z*z )
+ *       .result()                                               // monad to sequence
+ *       .take(2)                                                // lazy pruning
+ *       .map ( ([[ z, y ], x]) => `${x} ${y} ${z}`)             // easy to compare
+ *   ;
+ *
+ *   assert.is( [...result].join(" - "), "3 4 5 - 6 8 10");
+ */
+const pairWithCtor = monad1 => monad2ctor => {
+  const processed = monad1.and(x =>
+    monad2ctor(x).fmap(y => Pair(x)(y))
+  );
   return jinq(processed)
 };
 

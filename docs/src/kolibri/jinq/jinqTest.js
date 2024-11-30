@@ -1,10 +1,10 @@
 // noinspection SpellCheckingInspection
 
-import { TestSuite }     from "../util/test.js";
-import { from }          from "./jinq.js";
-import { Range }         from "../sequence/sequence.js";
-import { Just, Nothing } from "../lambda/maybe.js"
-import { JsonMonad }     from "../json/jsonMonad.js";
+import {TestSuite}     from "../util/test.js";
+import {from}          from "./jinq.js";
+import {Range}         from "../sequence/sequence.js";
+import {Just, Nothing} from "../lambda/maybe.js";
+import {JsonMonad}     from "../json/jsonMonad.js";
 
 const jinqSuite = TestSuite("Jinq Suite");
 
@@ -19,7 +19,7 @@ jinqSuite.add("simple with iterable", assert => {
       .result();
 
   // Then
-  assert.iterableEq([0, 2, 4, 6], [...result]);
+  assert.iterableEq([...result], [0, 2, 4, 6] );
 });
 
 jinqSuite.add("pairWith with iterable", assert => {
@@ -33,13 +33,28 @@ jinqSuite.add("pairWith with iterable", assert => {
       .where   (([fst, snd]) => fst === snd)
       .result  ();
 
-  const values = [];
+  const values = [];                // flatten for easier checking
   for (const element of result) {
     values.push(...element);
   }
 
   // Then
-  assert.iterableEq([0,0,1,1,2,2,3,3], values);
+  assert.iterableEq(values, [0,0,1,1,2,2,3,3] );
+});
+
+jinqSuite.add("pairWithCtor for pyth triples", assert => {
+
+  const result =
+    from(                         Range(2, Number.MAX_VALUE)) // infinite
+      .pairWithCtor( z         => Range(2, z) )
+      .pairWithCtor( ([_z, y]) => Range(2, y) )
+      .where ( ([[ z, y ], x]) => x*x + y*y === z*z )
+      .result()                                               // monad to sequence
+      .take(2)                                                // lazy pruning
+      .map ( ([[ z, y ], x]) => `${x} ${y} ${z}`)             // easy to compare
+  ;
+
+  assert.is( [...result].join(" - "), "3 4 5 - 6 8 10");
 });
 
 jinqSuite.add("select with iterable", assert => {
