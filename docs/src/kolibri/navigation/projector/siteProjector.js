@@ -51,10 +51,8 @@ const SiteProjector = siteController => {
           setTimeout( _time => {                                           // give the passivation anim some time
                page.contentElement.classList.remove("passivate");          // just to be sure
                passiveContentElement.innerHTML = "";                       // remove all children
-               page.styleElement.remove();                                 // proper cleanup, even though it should not be needed
-               // Note that while an overlapping page transition animation runs, the style elements from
-               // both pages are still in the head. So it is still best practice to user proper css nesting
-               // as in the examples to avoid conflicts.
+               // we do not remove the page styleElement because of issues when
+               // passivation and re-activation styling overlaps
           }, page.passivationMs);
      });
 
