@@ -14,6 +14,7 @@ main branch as of 2023-09-01 T 14:21:43 MESZ
 - moved immutable FocusRing to the examples
 - merged sequence/stdlib with the kolibri stdlib and the lambda directory
 - removed stackSequence because it had dependencies to the contrib dir that is not published
+- added jinq pairWithCtor for better alignment with list comprehensions (now remove pairWith?)
 
 ## wishlist
 - test against infinite sequence invariants (operator does not stall, lazy, take(0) === nil)
