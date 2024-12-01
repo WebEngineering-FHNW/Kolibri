@@ -89,6 +89,7 @@ const SiteController = () => {
 
         debug(`activate ${newPage.titleText}`);
         pageActivated.setValue(newPage);
+        newPage.onBootstrap(); // self-aware to only execute at most once
     };
 
     const registerPage = ( uriHash, page) => {

@@ -2,7 +2,7 @@ import { dom }                                    from "../../../kolibri/util/do
 import { URI_HASH_UNSTYLED, URI_HASH_HOME, href } from "../../../customize/uriHashes.js";
 import { Page }                                   from "../../../kolibri/navigation/page/page.js";
 
-export { AboutPage }
+export { UnstyledPage }
 
 const PAGE_CLASS     = URI_HASH_UNSTYLED.substring(1); // share between page, content, and style
 const ACTIVATION_MS  = 1000;
@@ -10,11 +10,11 @@ const PASSIVATION_MS = 1000;
 const TITLE          = "Unstyled";
 
 /**
- * The About page comes with a slide-in / slide-out animation.
+ * The Unstyled page comes with a slide-in / slide-out animation.
  * @return { PageType }
  * @constructor
  */
-const AboutPage = () => Page( {
+const UnstyledPage = () => Page({
      titleText:         TITLE,
      activationMs:      ACTIVATION_MS,
      passivationMs:     PASSIVATION_MS,

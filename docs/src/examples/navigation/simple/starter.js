@@ -1,10 +1,10 @@
-import { SiteController }                from "../../../kolibri/navigation/siteController.js";
-import { defaultConsoleLogging }         from "../../../kolibri/logger/loggingSupport.js"; // allow console manipulation
-import { HomePage  }                     from "./home.js";
-import { AboutPage }                        from "./unstyled.js";
+import { SiteController }                   from "../../../kolibri/navigation/siteController.js";
+import { defaultConsoleLogging }            from "../../../kolibri/logger/loggingSupport.js"; // allow console manipulation
+import { HomePage  }                        from "./home.js";
+import { UnstyledPage }                     from "./unstyled.js";
 import { URI_HASH_HOME, URI_HASH_UNSTYLED } from "../../../customize/uriHashes.js";
 import { SimpleNavigationProjector }        from "../../../kolibri/navigation/projector/simple/simpleNavigationProjector.js";
-import { SiteProjector }             from "../../../kolibri/navigation/projector/siteProjector.js";
+import { SiteProjector }                    from "../../../kolibri/navigation/projector/siteProjector.js";
 
 // defaultConsoleLogging("ch.fhnw.kolibri", LOG_INFO);
 defaultConsoleLogging("ch.fhnw.kolibri.navigation", LOG_DEBUG);
@@ -12,8 +12,8 @@ defaultConsoleLogging("ch.fhnw.kolibri.navigation", LOG_DEBUG);
 const siteController = SiteController();
 const siteProjector  = SiteProjector(siteController);
 
-siteController.registerPage(URI_HASH_HOME,  HomePage());
-siteController.registerPage(URI_HASH_UNSTYLED, AboutPage());
+siteController.registerPage(URI_HASH_HOME,     HomePage());
+siteController.registerPage(URI_HASH_UNSTYLED, UnstyledPage());
 
 SimpleNavigationProjector(siteController, siteProjector.sideNavigationElement);
 SimpleNavigationProjector(siteController, siteProjector.topNavigationElement);
