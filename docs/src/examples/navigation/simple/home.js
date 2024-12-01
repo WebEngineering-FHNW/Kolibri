@@ -36,7 +36,7 @@ const [contentElement] = dom(`
         <section>
           <h2>Basic Navigation</h2>
             <p>Kolibri allows to navigate between <em>pages</em> of a <em>site</em>.</p>
-            <p>This basic site has only two pages: 
+            <p>This basic site starts with two pages: 
                 <a ${href(URI_HASH_HOME)}>Home Page</a> and <a ${href(URI_HASH_UNSTYLED)}>Unstyled</a>.</p>
             <p>Please try the links in the text above, the buttons below, or in the top or side navigation.</p>
         </section>
@@ -62,7 +62,8 @@ const [contentElement] = dom(`
             <ul>
                 <li><em>animated page transitions</em> that are specific per page and can overlap</li>
                 <li><em>style isolation</em> to avoid conflicting page styles and contamination</li>
-                <li><em>typesafe</em> navigation.</li>
+                <li><em>typesafe</em> navigation</li>
+                <li>pages with interactive content <em>maintain their state</em> throughout navigation.</li>
             </ul>
         </section>
         

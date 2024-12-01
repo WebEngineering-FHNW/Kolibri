@@ -17,8 +17,8 @@ const PAGE_CLASS = "simpleNavigationProjector";
  * const siteController = SiteController();
  * const siteProjector  = SiteProjector(siteController);
  * // add pages
- * siteController.registerPage(URI_HASH_HOME,  HomePage());
- * siteController.registerPage(URI_HASH_UNSTYLED, AboutPage());
+ * siteController.registerPage(URI_HASH_HOME,     HomePage());
+ * siteController.registerPage(URI_HASH_UNSTYLED, UnstyledPage());
  * // mount the navigation. We can even have multiple ones!
  * SimpleNavigationProjector(siteController, siteProjector.sideNavigationElement);
  * SimpleNavigationProjector(siteController, siteProjector.topNavigationElement);
@@ -62,21 +62,24 @@ const SimpleNavigationProjector = (siteController, root) => {
 };
 
 const projectorStyle = `
-    <style data-style-id="${PAGE_CLASS}">
-        .${PAGE_CLASS} {
-            a {
-                text-wrap: nowrap;
-                font-family: system-ui;
-            }
-            a.visited {
-                text-decoration: none;
-            }
-            a.visited:not(.current) {
-                filter: brightness(150%) grayscale(60%);
-            }
-            a.current {
-                color: var(--kolibri-color-accent, deeppink);
+    <style data-style-id="${PAGE_CLASS}">    
+        @layer navigationLayer {
+            .${PAGE_CLASS} {
+                a {
+                    text-wrap: nowrap;
+                    font-family: system-ui;
+                }
+                a.visited {
+                    text-decoration: none;
+                }
+                a.visited:not(.current) {
+                    filter: brightness(150%) grayscale(60%);
+                }
+                a.current {
+                    color: var(--kolibri-color-accent, deeppink);
+                }
             }
         }
+
     </style>
 `;

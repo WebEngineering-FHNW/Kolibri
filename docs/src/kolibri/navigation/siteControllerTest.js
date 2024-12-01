@@ -3,7 +3,7 @@ import { TestSuite }                        from "../util/test.js";
 import { URI_HASH_EMPTY, URI_HASH_HOME } from "../../customize/uriHashes.js";
 import {Page}                            from "./page/page.js";
 
-const siteControllerSuite = TestSuite('siteController');
+const siteControllerSuite = TestSuite('navigation/siteController');
 
 siteControllerSuite.add('typical sequence', assert => {
 
@@ -20,9 +20,11 @@ siteControllerSuite.add('typical sequence', assert => {
     assert.iterableEq(activePage , ["Empty"] );
     assert.iterableEq(passivePage, ["Empty"] );
 
+    let bootstrapCounter = 0;
     const samplePage = Page({
       titleText:      "Sample",
       pageClass:      "sample",
+      onBootstrap:    () => { bootstrapCounter++ },
       styleElement:   undefined,
       contentElement: undefined
     });
@@ -30,15 +32,18 @@ siteControllerSuite.add('typical sequence', assert => {
     siteController.registerPage(URI_HASH_HOME, samplePage);
 
     assert.is(Object.entries(siteController.getAllPages()).length, 1);
+    assert.is(bootstrapCounter, 0);                         // not yet called
 
     siteController.gotoUriHash(URI_HASH_HOME);
+    assert.is(bootstrapCounter, 1);                         // now it is called
     assert.iterableEq(uriHash,     ["#empty", "#home"]);
-    assert.iterableEq(activePage , ["Empty",  "Sample"] ); // activation is immediate
-    assert.iterableEq(passivePage, ["Empty"] );            // nothing to passivate, yet
+    assert.iterableEq(activePage , ["Empty",  "Sample"] );  // activation is immediate
+    assert.iterableEq(passivePage, ["Empty"] );             // nothing to passivate, yet
 
     siteController.registerPage(URI_HASH_EMPTY, samplePage); // register same under another hash
 
     siteController.gotoUriHash(URI_HASH_EMPTY);
+    assert.is(bootstrapCounter, 1);                          // not called a second time
     // now the old active page gets passivated.
     assert.iterableEq(passivePage, ["Empty", "Sample"] );
 });

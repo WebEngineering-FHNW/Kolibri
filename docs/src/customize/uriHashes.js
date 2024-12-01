@@ -6,17 +6,24 @@ export {
     href,
     URI_HASH_EMPTY,
     URI_HASH_HOME,
-    URI_HASH_UNSTYLED
+    URI_HASH_UNSTYLED,
+    URI_HASH_MASTER_DETAIL
 }
 
 /**
- * @typedef { "#empty" | "#home" | "#unstyled" } UriHashType
+ * @typedef {
+ *        "#empty"
+ *      | "#home"
+ *      | "#unstyled"
+ *      | "#masterDetail"
+ *      }  UriHashType
  * UriHashes must be unique, start with a hash character and be formatted like in proper URIs.
  */
 
-/** @type { UriHashType } */ const URI_HASH_EMPTY       = "#empty"; // should always be available
-/** @type { UriHashType } */ const URI_HASH_HOME        = "#home";  // should always be available
-/** @type { UriHashType } */ const URI_HASH_UNSTYLED    = "#unstyled";
+/** @type { UriHashType } */ const URI_HASH_EMPTY         = "#empty"; // should always be available
+/** @type { UriHashType } */ const URI_HASH_HOME          = "#home";  // should always be available
+/** @type { UriHashType } */ const URI_HASH_UNSTYLED      = "#unstyled";
+/** @type { UriHashType } */ const URI_HASH_MASTER_DETAIL = "#masterDetail";
 
 /**
  * Typesafe creation of link hrefs. One cannot create hrefs if the uriHash is not registered by type.

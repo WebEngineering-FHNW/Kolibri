@@ -10,6 +10,7 @@ export { Page }
  * @property { !String }            pageClass      - name of the CSS class that identifies the style of this page in the html page header
  * @property { Number= }            activationMs   - milliseconds to run the activation animation, optional with default value
  * @property { Number= }            passivationMs  - milliseconds to run the passivation animation, optional with default value
+ * @property { Function= }          onBootstrap    - behavior after first mount, optional: no operation for static pages
  */
 
 /**
@@ -41,13 +42,28 @@ export { Page }
  *      contentElement,
  *  })
  */
-const Page = ( {titleText, styleElement, contentElement, pageClass, activationMs=500, passivationMs=500}) => {
+const Page = ( {
+                   titleText,
+                   styleElement,
+                   contentElement,
+                   pageClass,
+                   onBootstrap   = () => undefined, // default is do nothing
+                   activationMs  = 500,
+                   passivationMs = 500
+              } ) => {
     const visitedObs = Observable(false);
+    let   bootStrapped = false;
+    const mayBootstrap = () => {
+        if (bootStrapped) { return; }
+        onBootstrap();
+        bootStrapped = true;
+    };
     return /** @type { PageType } */ {
         titleText        ,
         styleElement     ,
         contentElement   ,
         pageClass        ,
+        onBootstrap:     mayBootstrap, // make sure onBootstrap is called at most once
         activationMs     ,
         passivationMs    ,
         getVisited:      visitedObs.getValue,

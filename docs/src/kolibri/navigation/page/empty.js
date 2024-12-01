@@ -24,6 +24,9 @@ const EmptyPage = () => Page({
 
 const [styleElement, contentElement] = dom(`
     <style data-style-id="${PAGE_CLASS}">  
+        @layer pageStyle {
+             /* no style */
+        }
     </style>
     <div class="${PAGE_CLASS}">
         Empty Page      
