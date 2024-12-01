@@ -52,8 +52,6 @@ const [styleElement] = dom(`
             }         
             &.passivate {
                 --passivation-ms:   ${PASSIVATION_MS};
-                opacity:            0.5;
-                transform:          translateX(-100cqw);
                 animation:          ${PAGE_CLASS}_passivation calc(var(--passivation-ms) * 1ms) ease-in forwards;
             }                       
         }       

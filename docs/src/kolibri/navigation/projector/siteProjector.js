@@ -65,10 +65,11 @@ const SiteProjector = siteController => {
 const headElements = dom(`
 
         <title>(no title - will be replaced)</title>
-        <link id="favicon" rel="icon" type="image/x-icon" href='../../../../img/logo/logo.svg'>
+        <link id="favicon" rel="icon" type="image/x-icon" href='${window.BASE_URI}img/logo/logo.svg'>
         
         <style data-style-id="${PAGE_CLASS}">
-            @import "../../../../css/kolibri-base-light.css";
+        
+            @import "${window.BASE_URI}css/kolibri-base-light.css";
             body {
                 margin: 0;
             }
@@ -145,7 +146,7 @@ const [bodyElement] = dom(`
         <div id="top-backdrop"></div>
         <div id="logo">
             <a ${href(URI_HASH_HOME)}>
-                <img src="../../../../img/logo/logo-new-128.svg" alt="Kolibri-logo">
+                <img src="${window.BASE_URI}img/logo/logo-new-128.svg" alt="Kolibri-logo">
             </a>
         </div>
         <div  id="top-nav"> top  nav stand-in</div>
