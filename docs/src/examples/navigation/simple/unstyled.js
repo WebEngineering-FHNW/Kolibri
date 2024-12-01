@@ -44,37 +44,39 @@ const [contentElement] = dom(`
 
 const [styleElement] = dom(`
     <style data-style-id="${PAGE_CLASS}">
-        .${PAGE_CLASS} {        
-                                
-            &.activate {
-                --activation-ms:    ${ACTIVATION_MS};
-                animation:          ${PAGE_CLASS}_activation calc(var(--activation-ms) * 1ms) ease-out forwards;
-            }         
-            &.passivate {
-                --passivation-ms:   ${PASSIVATION_MS};
-                animation:          ${PAGE_CLASS}_passivation calc(var(--passivation-ms) * 1ms) ease-in forwards;
-            }                       
-        }       
-        /* cannot be nested and must be uniquely named */
-        @keyframes ${PAGE_CLASS}_activation {
-            0% {
-                opacity:        0.5;
-                transform:      translateX(100cqw);
-            }
-            100% {
-                opacity:        1;
-                transform:      translateX(0);
-            }
-        }  
-        @keyframes ${PAGE_CLASS}_passivation {
-            0% {
-                opacity:        1;
-                transform:      translateX(0);
-            }
-            100% {
-                opacity:        0.5;
-                transform:      translateX(-100cqw);
-            }
-        }              
+        @layer pageLayer {      
+             .${PAGE_CLASS} {        
+                                     
+                 &.activate {
+                     --activation-ms:    ${ACTIVATION_MS};
+                     animation:          ${PAGE_CLASS}_activation calc(var(--activation-ms) * 1ms) ease-out forwards;
+                 }         
+                 &.passivate {
+                     --passivation-ms:   ${PASSIVATION_MS};
+                     animation:          ${PAGE_CLASS}_passivation calc(var(--passivation-ms) * 1ms) ease-in forwards;
+                 }                       
+             }       
+             /* cannot be nested and must be uniquely named */
+             @keyframes ${PAGE_CLASS}_activation {
+                 0% {
+                     opacity:        0.5;
+                     transform:      translateX(100cqw);
+                 }
+                 100% {
+                     opacity:        1;
+                     transform:      translateX(0);
+                 }
+             }  
+             @keyframes ${PAGE_CLASS}_passivation {
+                 0% {
+                     opacity:        1;
+                     transform:      translateX(0);
+                 }
+                 100% {
+                     opacity:        0.5;
+                     transform:      translateX(-100cqw);
+                 }
+             }              
+        }
     </style>
 `);

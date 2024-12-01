@@ -1,11 +1,11 @@
 import { dom }                                         from "../../../kolibri/util/dom.js";
-import { URI_HASH_MASTER_DETAIL, URI_HASH_HOME, href } from "../../../customize/uriHashes.js";
+import { URI_HASH_MASTER_DETAIL }                      from "../../../customize/uriHashes.js";
 import { Page }                                        from "../../../kolibri/navigation/page/page.js";
 
 import {ListController, SelectionController}           from "../../person/personController.js";
 import {Person, selectionMold}                         from "../../person/person.js";
 import {projectDetailView, projectMasterView}          from "../../person/masterDetailProjector.js";
-import {pageCss as instantUpdateProjectorCSS}                                       from "../../person/instantUpdateProjector.js";
+import {pageCss as instantUpdateProjectorCSS}          from "../../person/instantUpdateProjector.js";
 
 
 export { MasterDetailPage }
@@ -129,31 +129,55 @@ const [contentElement] = dom(`
 
 const [styleElement] = dom(`
     <style data-style-id="${PAGE_CLASS}">
+      @layer pageLayer {  
         .${PAGE_CLASS} {        
             ${ instantUpdateProjectorCSS }
             
             /* we assume that kolibri base is already imported */
             
-            perspective: 100cqw;
+            perspective:            100cqw;
             
             .card {
-                transition: all ease-in-out .5s;
-                max-width:  40em;
-                margin:     1em auto 2em auto;
-                padding:    2em;
-                box-shadow: var(--kolibri-box-shadow);
+                transition:         all ease-in-out .5s;
+                max-width:          40em;
+                margin:             1em auto 2em auto;
+                padding:            2em;
+                box-shadow:         var(--kolibri-box-shadow);
             }
             h1 {
-                text-align: center;
+                text-align:         center;
             }
             .holder {
-                margin: 0 3em 0 3em;
+                margin:             0 3em 0 3em;
             }
             
             #plus {
-                position: relative;
-                top: -1em;
-            }          
+                position:           relative;
+                top:                -1em;
+            }     
+            
+            /*  here, the layers pay off, because the kolibri can provide invalidation
+                styling independent of our specificity
+            */
+            input[type=text] {
+                font-size:          1.1em;
+                color:              var(--kolibri-color-output);
+                border-width:       0 0 1px 0;
+            
+                background-image:    linear-gradient(orange, orange);
+                background-position: left bottom;
+                background-repeat:   no-repeat;
+                background-size:     0 1px; /* default:  do not show */
+            }
+            
+            input[type=text]:focus {
+                outline:             transparent none 0;
+                border-bottom-color: transparent;
+            
+                background-size:     100% 1px;
+                transition:          background-size linear .5s;
+            }     
+       
             
             &.activate .card {
                 --activation-ms:    ${ACTIVATION_MS};
@@ -187,28 +211,6 @@ const [styleElement] = dom(`
                 transform:      translateY(-100%);
             }
         }   
-        
-       /*  this goes top level such that invalidation handling in 
-           kolibri-base.css can do its work. Consider using layers.
-       */
-       input[type=text] {
-           font-size:      1.1em;
-           color:          var(--kolibri-color-output);
-           border-width:   0 0 1px 0;
-       
-           background-image:    linear-gradient(orange, orange);
-           background-position: left bottom;
-           background-repeat:   no-repeat;
-           background-size:     0 1px; /* default:  do not show */
-       }
-       
-       input[type=text]:focus {
-           outline:             transparent none 0;
-           border-bottom-color: transparent;
-       
-           background-size:     100% 1px;
-           transition:          background-size linear .5s;
-       }
-                
+     }           
     </style>
 `);

@@ -62,21 +62,24 @@ const SimpleNavigationProjector = (siteController, root) => {
 };
 
 const projectorStyle = `
-    <style data-style-id="${PAGE_CLASS}">
-        .${PAGE_CLASS} {
-            a {
-                text-wrap: nowrap;
-                font-family: system-ui;
-            }
-            a.visited {
-                text-decoration: none;
-            }
-            a.visited:not(.current) {
-                filter: brightness(150%) grayscale(60%);
-            }
-            a.current {
-                color: var(--kolibri-color-accent, deeppink);
+    <style data-style-id="${PAGE_CLASS}">    
+        @layer navigationLayer {
+            .${PAGE_CLASS} {
+                a {
+                    text-wrap: nowrap;
+                    font-family: system-ui;
+                }
+                a.visited {
+                    text-decoration: none;
+                }
+                a.visited:not(.current) {
+                    filter: brightness(150%) grayscale(60%);
+                }
+                a.current {
+                    color: var(--kolibri-color-accent, deeppink);
+                }
             }
         }
+
     </style>
 `;

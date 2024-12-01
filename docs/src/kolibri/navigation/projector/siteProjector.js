@@ -69,73 +69,80 @@ const headElements = dom(`
         
         <style data-style-id="${PAGE_CLASS}">
         
-            @import "${window.BASE_URI}css/kolibri-base-light.css";
-            body {
-                margin: 0;
-            }
-            #application-frame {
-                position:               fixed;
-                inset:                  0;
-
-                display:                grid;
-                grid-template-columns:  min-content auto;
-                grid-template-rows:     min-content auto;
-                grid-template-areas:    "logo       top-nav"
-                                        "side-nav   content";
-            }            
-            #top-nav, #side-nav, #logo {
-                padding:                .5rem;
-            }
-            #top-nav {
-                grid-area:              top-nav;
-                align-self:             center;
-                filter:                 drop-shadow(0 0 .5rem white);
-                --kolibri-color-accent: var(--kb-color-hsl-bg-light);
-                font-weight:            bold;
-                & a {
-                    margin-right:       1em;
-                }
-            }
-            #side-nav {
-                grid-area:              side-nav;
-                background-color:       var(--kb-color-hsl-bg-light);
-                box-shadow:             var(--kolibri-box-shadow);
-                padding-block:          1lh;
-                & a {
-                    display:            block;
-                    margin-top:         .5lh;
-                }
-            }
-            #logo {
-                grid-area:              logo;
-                justify-self:           center;
-                & a img {
-                    display:            block;
-                    border-radius:      50%;
-                    background-color:   var(--kb-color-hsl-bg-light);
-                    width:              3rem;
-                    aspect-ratio:       1 / 1;
-                    box-shadow:         1px 1px .2rem 0 var(--kb-color-hsl-lavender-700) inset; 
-                }
-            }
-            #top-backdrop {
-                grid-row:               1;
-                grid-column:            1 / -1;
-                z-index:                -10;
-                background-image:       linear-gradient( 90deg,
-                                            var(--kb-color-hsl-pink-300) 50%,
-                                            var(--kb-color-hsl-lavender-700)
-                                        );
-            }
-
-            .content {                  /* must be shared in #content and #content-passivated */
-                grid-area:              content;
-                container-type:         size; 
-                overflow:               auto;
-                padding:                2rem;
-            }
-            #content-passivated {
-                z-index:                -10;
+            /*  use layers to avoid overriding defaults by accident */
+            @layer pageLayer, navigationLayer, siteLayer, kolibriLayer;
+        
+            @import "${window.BASE_URI}css/kolibri-base-light.css" layer(kolibriLayer);
+            
+            @layer siteLayer { // styles for the whole website 
+                 body {
+                     margin: 0;
+                 }
+                 #application-frame {
+                     position:               fixed;
+                     inset:                  0;
+     
+                     display:                grid;
+                     grid-template-columns:  min-content auto;
+                     grid-template-rows:     min-content auto;
+                     grid-template-areas:    "logo       top-nav"
+                                             "side-nav   content";
+                 }            
+                 #top-nav, #side-nav, #logo {
+                     padding:                .5rem;
+                 }
+                 #top-nav {
+                     grid-area:              top-nav;
+                     align-self:             center;
+                     filter:                 drop-shadow(0 0 .5rem white);
+                     --kolibri-color-accent: var(--kb-color-hsl-bg-light);
+                     font-weight:            bold;
+                     & a {
+                         margin-right:       1em;
+                     }
+                 }
+                 #side-nav {
+                     grid-area:              side-nav;
+                     background-color:       var(--kb-color-hsl-bg-light);
+                     box-shadow:             var(--kolibri-box-shadow);
+                     padding-block:          1lh;
+                     & a {
+                         display:            block;
+                         margin-top:         .5lh;
+                     }
+                 }
+                 #logo {
+                     grid-area:              logo;
+                     justify-self:           center;
+                     & a img {
+                         display:            block;
+                         border-radius:      50%;
+                         background-color:   var(--kb-color-hsl-bg-light);
+                         width:              3rem;
+                         aspect-ratio:       1 / 1;
+                         box-shadow:         1px 1px .2rem 0 var(--kb-color-hsl-lavender-700) inset; 
+                     }
+                 }
+                 #top-backdrop {
+                     grid-row:               1;
+                     grid-column:            1 / -1;
+                     z-index:                -10;
+                     background-image:       linear-gradient( 90deg,
+                                                 var(--kb-color-hsl-pink-300) 50%,
+                                                 var(--kb-color-hsl-lavender-700)
+                                             );
+                 }
+     
+                 .content {                  /* must be shared in #content and #content-passivated */
+                     grid-area:              content;
+                     container-type:         size; 
+                     container-name:         pageContainer;
+                     overflow:               auto;
+                     padding:                2rem;
+                 }
+                 #content-passivated {
+                     z-index:                -10;
+                 }
             }
 
         </style>
