@@ -35,12 +35,12 @@ const SiteProjector = siteController => {
           page.contentElement.style.setProperty("--activation-ms" ,page.activationMs);
           page.contentElement.style.setProperty("--passivation-ms",page.passivationMs);
 
-          page.contentElement.classList.add("activate");
           setTimeout( _time => {                                           // allow activation anim its time
                page.contentElement.classList.remove("activate");           // we have to remove or we cannot start again
           }, page.activationMs );
 
           activeContentElement.replaceChildren(page.contentElement);       // finally mount the page
+          page.contentElement.classList.add("activate");
      });
 
      siteController.onPagePassivated( page => {
