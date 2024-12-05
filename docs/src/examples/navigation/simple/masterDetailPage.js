@@ -136,7 +136,7 @@ const [styleElement] = dom(`
             
             /* we assume that kolibri base is already imported */
             
-            perspective:            100cqw;
+            perspective:            100rem; /* on mobile, this should not be too small */
             
             .card {
                 transition:         all ease-in-out .5s;
