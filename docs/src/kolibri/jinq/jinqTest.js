@@ -1,10 +1,10 @@
 // noinspection SpellCheckingInspection
 
-import {TestSuite}     from "../util/test.js";
-import {from}          from "./jinq.js";
-import {Range}         from "../sequence/sequence.js";
-import {Just, Nothing} from "../lambda/maybe.js";
-import {JsonMonad}     from "../json/jsonMonad.js";
+import { TestSuite }     from "../util/test.js";
+import { from }          from "./jinq.js";
+import { Range }         from "../sequence/sequence.js";
+import { Just, Nothing } from "../lambda/maybe.js";
+import { JsonMonad }     from "../json/jsonMonad.js";
 
 const jinqSuite = TestSuite("Jinq Suite");
 
@@ -42,12 +42,12 @@ jinqSuite.add("pairWith with iterable", assert => {
   assert.iterableEq(values, [0,0,1,1,2,2,3,3] );
 });
 
-jinqSuite.add("pairWithCtor for pyth triples", assert => {
+jinqSuite.add("combine for pyth triples", assert => {
 
   const result =
     from(                         Range(2, Number.MAX_VALUE)) // infinite
-      .pairWithCtor( z         => Range(2, z) )
-      .pairWithCtor( ([_z, y]) => Range(2, y) )
+      .combine( z              => Range(2, z) )
+      .combine( ([_z, y])      => Range(2, y) )
       .where ( ([[ z, y ], x]) => x*x + y*y === z*z )
       .result()                                               // monad to sequence
       .take(2)                                                // lazy pruning
