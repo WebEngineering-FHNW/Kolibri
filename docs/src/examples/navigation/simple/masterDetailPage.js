@@ -16,7 +16,8 @@ const PASSIVATION_MS = 1000;
 const TITLE          = "Master - Detail";
 
 /**
- * todo
+ * Constructor for a page that shows a typical master-detail view with direct manipulation and
+ * instant update from the Kolibri examples along with explaining text.
  * @return { PageType }
  * @constructor
  */
@@ -135,7 +136,7 @@ const [styleElement] = dom(`
             
             /* we assume that kolibri base is already imported */
             
-            perspective:            100cqw;
+            perspective:            100rem; /* on mobile, this should not be too small */
             
             .card {
                 transition:         all ease-in-out .5s;
