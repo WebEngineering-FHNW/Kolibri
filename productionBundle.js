@@ -1798,7 +1798,25 @@ const ensureSequence = iterable =>
  * A convenience constant that can be used when a Sequence is infinite.
  * @type { ConsumingPredicateType<Boolean> }
  */
-const forever = _ => true;/**
+const forever = _ => true;
+
+/**
+ * Convenience function to be used in reduce situations where the
+ * plus operation should be used as a projection.
+ * Works with both, strings or numbers.
+ * @param { String | Number } acc
+ * @param { String | Number } cur
+ * @return { String | Number }
+ * @example
+ *   const nums = Seq(1,2,3);
+ *   const result  = nums.reduce$( plus, 0);
+ *   assert.is(result, 6 );
+ *   
+ *   const strings = "a b c".split(" ");
+ *   const string  = strings.reduce( plus, "");
+ *   assert.is( string, "abc" );
+ */
+const plus$1 = (acc, cur) => acc + cur;/**
  * Transforms each element using the given {@link Functor function}.
  *
  * @function
@@ -5500,7 +5518,7 @@ const report = (origin, results, messages) => {
  * @param { !String } html - HTML string of the to-be-appended DOM
  * @private
  */
-const write = html => out.append(...dom(html));
+const write = html => document.getElementById("out").append(...dom(html));
 
 /**
  * Convenience function to run an isolated test with a given appender, logging context and level.
