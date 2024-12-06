@@ -327,7 +327,7 @@ const report = (origin, results, messages) => {
  * @param { !String } html - HTML string of the to-be-appended DOM
  * @private
  */
-const write = html => out.append(...dom(html));
+const write = html => document.getElementById("out").append(...dom(html));
 
 /**
  * Convenience function to run an isolated test with a given appender, logging context and level.

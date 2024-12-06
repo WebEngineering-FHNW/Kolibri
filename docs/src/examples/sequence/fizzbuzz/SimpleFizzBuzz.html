@@ -33,7 +33,7 @@
 
     const result = nums.zipWith( (n, s) => s === "" ? n : s )(rules);
 
-    out.innerHTML = result
+    document.getElementById("out").innerHTML = result
         .drop(0)
         .take(200)
         .foldl$( (acc,it) => `${acc} <span>${it}</span>`, "");
