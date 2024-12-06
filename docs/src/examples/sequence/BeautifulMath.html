@@ -6,8 +6,12 @@
   <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
 </head>
 <style>
+    body {
+        margin: 1em;
+    }
     svg {
         margin-inline:  auto;
+        max-width:      90vmin ;
         aspect-ratio:   1 / 1;
     }
     svg * {
@@ -23,21 +27,29 @@
     circle {
         fill: transparent;
     }
-    input {
-        max-width:    4em;
-        margin-right: 2em;
+    .inputs {
+        display: grid;
+        grid-template-columns: max-content 3ch auto;
+        gap: .5em 1em;
+        & span {
+            font-variant-numeric: tabular-nums;
+            text-align: end;
+        }
     }
-
 </style>
 <body>
 <header>
   <h2>Simple SVG Graphics: Beautiful Math</h2>
 </header>
-<label for="slices"     >Slices</label> <input id="slices"      type="number" value="10" max="500">
-<label for="tableFactor">Factor</label> <input id="tableFactor" type="number" value="2"  max="50" >
 
 <div id="out">
 </div>
+
+<div class="inputs">
+    <label for="slices"     >Slices</label><span>10</span><input id="slices"      type="range" value="10" min="10" max="500" step="1">
+    <label for="tableFactor">Factor</label><span>2 </span><input id="tableFactor" type="range" value="2"  min="2" max="50"   step="1">
+</div>
+
 
 <p> More solutions in
     <a href="https://dierk.github.io/tryPux/beautifulMathInTS/index.html">TypeScript,  PureScript, and Elm</a>.</p>
@@ -72,7 +84,10 @@
         svg.innerHTML = lines;
     };
     draw();
-    [tableFactorEl, slicesEl].forEach( el => el.oninput = draw);
+    [tableFactorEl, slicesEl].forEach( el => el.oninput = () => {
+        draw();
+        el.previousSibling.textContent = el.value;
+    });
 </script>
 </body>
 </html>
