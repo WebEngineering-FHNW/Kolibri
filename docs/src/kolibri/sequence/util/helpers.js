@@ -2,7 +2,7 @@ import { map }               from "../operators/map/map.js"
 import { id }                from "../../stdlib.js"
 import { SequencePrototype } from "../sequencePrototype.js";
 
-export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence, forever }
+export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence, forever, plus }
 
 /**
  * Casts an arbitrary {@link Iterable} into the {@link SequenceType}.
@@ -55,3 +55,21 @@ const ensureSequence = iterable =>
  * @type { ConsumingPredicateType<Boolean> }
  */
 const forever = _ => true;
+
+/**
+ * Convenience function to be used in reduce situations where the
+ * plus operation should be used as a projection.
+ * Works with both, strings or numbers.
+ * @param { String | Number } acc
+ * @param { String | Number } cur
+ * @return { String | Number }
+ * @example
+ *   const nums = Seq(1,2,3);
+ *   const result  = nums.reduce$( plus, 0);
+ *   assert.is(result, 6 );
+ *   
+ *   const strings = "a b c".split(" ");
+ *   const string  = strings.reduce( plus, "");
+ *   assert.is( string, "abc" );
+ */
+const plus = (acc, cur) => acc + cur;
