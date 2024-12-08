@@ -1,7 +1,10 @@
 
-import {Observable, ObservableList} from "./observable.js"
-import "./util/array.js"
-import {TestSuite} from "./util/test.js";
+import {Observable, ObservableList}         from "./observable.js"
+import {TestSuite}                          from "./util/test.js";
+import {Walk}                               from "./sequence/constructors/range/range.js";
+import {withDebugTestArrayAppender}         from "./logger/loggerTest.js";
+import {setLoggingContext, setLoggingLevel} from "./logger/logging.js";
+import {LOG_WARN}                           from "./logger/logLevel.js";
 
 const observableSuite = TestSuite("observable");
 
@@ -102,6 +105,22 @@ observableSuite.add("list", assert => {
     assert.is(list.countIf( _ => true), 0);
     assert.is(raw.length, 0);
 
+});
+
+observableSuite.add("memory leak warning", assert => {
+    const obs = Observable( 0 ); // decorator pattern
+
+    withDebugTestArrayAppender(appender => {
+        setLoggingLevel(LOG_WARN);
+        setLoggingContext("ch.fhnw.kolibri.observable");
+
+        Walk(100).forEach$( _n => obs.onChange( _x => undefined) );
+        obs.onChange( _x => undefined); // one to many
+
+        assert.is(appender.getValue()[0], 'Beware of memory leak. 101 listeners.');
+    });
+
+    assert.is(obs.getValue(), 0);
 });
 
 observableSuite.run();

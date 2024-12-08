@@ -1,7 +1,17 @@
-
-import "./util/array.js"
+import "./util/array.js";
+import { LoggerFactory }            from "./logger/loggerFactory.js";
+import { LOG_CONTEXT_KOLIBRI_BASE } from "./logger/logConstants.js";
 
 export {Observable, ObservableList}
+
+const { warn } = LoggerFactory(LOG_CONTEXT_KOLIBRI_BASE + ".observable");
+
+/** @private */
+function checkWarning(list) {
+    if (list.length > 100) {
+        warn(`Beware of memory leak. ${list.length} listeners.`);
+    }
+}
 
 /**
  * @typedef { <_T_> (newValue:_T_, oldValue: ?_T_) => void } ValueChangeCallback<_T_>
@@ -37,26 +47,27 @@ export {Observable, ObservableList}
  * obs.onChange(val => console.log(val));
  * obs.setValue("some other value"); // will be logged
  */
-const Observable = value => {
+function Observable(value) {
     const listeners = [];
     return {
         onChange: callback => {
+            checkWarning(listeners);
             listeners.push(callback);
             callback(value, value);
         },
-        getValue: ()       => value,
+        getValue: () => value,
         setValue: newValue => {
             if (value === newValue) return;
             const oldValue = value;
-            value = newValue;
+            value          = newValue;
             listeners.forEach(callback => {
                 if (value === newValue) { // pre-ordered listeners might have changed this and thus the callback no longer applies
                     callback(value, oldValue);
                 }
             });
         }
-    }
-};
+    };
+}
 
 /**
  * IObservableList<_T_> is the interface for lists that can be observed for add or delete operations.
@@ -87,27 +98,33 @@ const Observable = value => {
  * list.onAdd( item => console.log(item));
  * list.add(1);
  */
-const ObservableList = list => {
-    const addListeners = [];
-    const delListeners = [];
+function ObservableList(list) {
+    const addListeners         = [];
+    const delListeners         = [];
     const removeAddListener    = addListener => addListeners.removeItem(addListener);
     const removeDeleteListener = delListener => delListeners.removeItem(delListener);
 
     return {
-        onAdd: listener => addListeners.push(listener),
-        onDel: listener => delListeners.push(listener),
-        add: item => {
-            list.push(item);
-            addListeners.forEach( listener => listener(item))
+        onAdd:   listener => {
+            checkWarning(addListeners);
+            addListeners.push(listener);
         },
-        del: item => {
+        onDel:   listener => {
+            checkWarning(delListeners);
+            delListeners.push(listener);
+        },
+        add:     item => {
+            list.push(item);
+            addListeners.forEach(listener => listener(item));
+        },
+        del:     item => {
             list.removeItem(item);
             const safeIterate = [...delListeners]; // shallow copy as we might change the listeners array while iterating
-            safeIterate.forEach( listener => listener(item, () => removeDeleteListener(listener) ));
+            safeIterate.forEach(listener => listener(item, () => removeDeleteListener(listener)));
         },
         removeAddListener,
         removeDeleteListener,
-        count:   ()   => list.length,
-        countIf: pred => list.reduce( (sum, item) => pred(item) ? sum + 1 : sum, 0)
-    }
-};
+        count:   () => list.length,
+        countIf: pred => list.reduce((sum, item) => pred(item) ? sum + 1 : sum, 0)
+    };
+}
