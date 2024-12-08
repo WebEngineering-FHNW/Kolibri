@@ -312,11 +312,12 @@ const report = (origin, results, messages) => {
     `);
     results.forEach((result, idx) => {
         if (result) return;
+        const message = messages[idx].replaceAll("<","&lt;").replaceAll(">","&gt;");
         write(`
                 <!--suppress ALL -->
                 <div></div>
                 <div>assertion </div> 
-                <div ${failedStyle}>#${idx+1}: ${messages[idx]}</div>
+                <div ${failedStyle}>#${idx+1}: ${message}</div>
                 <div ${failedStyle}>failed</div> 
         `);
     });
