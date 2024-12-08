@@ -539,7 +539,7 @@ const jinq = monad => ({
   pairWith:     pairWith(monad),
   combine:      combine (monad),
   where:        where   (monad),
-  select:       select  (monad),
+  select:       select$1  (monad),
   map:          map$1     (monad),
   inside:       inside  (monad),
   result:       () =>    monad
@@ -712,7 +712,7 @@ const where = monad => predicate => {
  * console.log(result);
  * // => Logs '0, 2, 4, 6'
  */
-const select = monad => mapper => {
+const select$1 = monad => mapper => {
   const processed = monad.fmap(mapper);
   return jinq(processed);
 };
@@ -737,7 +737,7 @@ const select = monad => mapper => {
  * console.log(result);
  * // => Logs '0, 2, 4, 6'
  */
-const map$1 = select;/**
+const map$1 = select$1;/**
  * @module lambda/church
  * Church encoding of the lambda calculus in JavaScript
  * to the extent that we need it in Kolibri.
@@ -1750,9 +1750,8 @@ const LoggerFactory = context => /** @type { LoggerType } */({
  */
 const nil = Seq();/**
  * Casts an arbitrary {@link Iterable} into the {@link SequenceType}.
- * @template _T_
- * @param { Iterable<_T_> } iterable
- * @return { SequenceType<_T_> }
+ * The casting is lazy and does not touch (or even exhaust) the iterable.
+ * @type { <_T_>  (iterable:Iterable<_T_>) => SequenceType<_T_> }
  */
 const toSeq = iterable => map(id)(iterable);
 
@@ -1816,7 +1815,15 @@ const forever = _ => true;
  *   const string  = strings.reduce( plus, "");
  *   assert.is( string, "abc" );
  */
-const plus$1 = (acc, cur) => acc + cur;/**
+const plus$1 = (acc, cur) => acc + cur;
+
+/**
+ * Convenience function to count the number of elements in a {@link SequenceType sequence}.
+ * @template _T_
+ * @param  { SequenceType<_T_> } sequence - must be finite as indicated by the trailing "$"
+ * @return { Number } zero or positive integer number
+ */
+const count$ = sequence => sequence.foldl$( (acc, _cur) => ++acc, 0);/**
  * Transforms each element using the given {@link Functor function}.
  *
  * @function
@@ -4097,6 +4104,8 @@ const Attribute = (value, qualifier) => {
 };// noinspection JSUnusedGlobalSymbols
 
 
+const { warn: warn$1 } = LoggerFactory("ch.fhnw.kolibri.util.dom");
+
 /**
  * Create DOM objects from an HTML string.
  * @param  { String } innerString - The string representation of the inner HTML that will be returned as an HTML collection.
@@ -4155,7 +4164,23 @@ const fireChangeEvent = element => fireEvent(element, CHANGE);
 /** @type InputTypeString */ const CHECKBOX = "checkbox";
 /** @type InputTypeString */ const TIME     = "time";
 /** @type InputTypeString */ const DATE     = "date";
-/** @type InputTypeString */ const COLOR    = "color";/**
+/** @type InputTypeString */ const COLOR    = "color";
+
+/**
+ * Utility function that works like Element.querySelectorAll but logs a descriptive warning when
+ * the resulting NodeList is empty. Wraps the result in a {@link SequenceType } such that the
+ * Kolibri goodies become available.
+ * @param { Element! } element - a DOM element (typically HTMLElement)
+ * @param { String! } selector - a CSS query selector, might contain operators
+ * @return { SequenceType<Node> }
+ */
+const select = (element, selector) => {
+    const result = toSeq( /** @type { Iterable<Node> } */ element.querySelectorAll(selector));
+    if (result.isEmpty()) {
+        warn$1(`Selector "${selector}" did not select any nodes in "${element.outerHTML}"`);
+    }
+    return result;
+};/**
  * @typedef { object } InputAttributes
  * @template _T_
  * @property { !_T_ } value      - mandatory value, will become the input value, defaults to undefined
@@ -5503,11 +5528,12 @@ const report = (origin, results, messages) => {
     `);
     results.forEach((result, idx) => {
         if (result) return;
+        const message = messages[idx].replaceAll("<","&lt;").replaceAll(">","&gt;");
         write(`
                 <!--suppress ALL -->
                 <div></div>
                 <div>assertion </div> 
-                <div ${failedStyle}>#${idx+1}: ${messages[idx]}</div>
+                <div ${failedStyle}>#${idx+1}: ${message}</div>
                 <div ${failedStyle}>failed</div> 
         `);
     });
@@ -5543,9 +5569,9 @@ const withAppender = (appender, context, level) => codeUnderTest => {
         setLoggingContext(oldContext);
         removeFromAppenderList(appender);
     }
-};const release     = "0.9.4";
+};const release     = "0.9.5";
 
-const dateStamp   = "2024-11-29 T 15:18:22 MEZ";
+const dateStamp   = "2024-12-08 T 16:12:25 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
