@@ -1,10 +1,10 @@
-import {TestSuite, withAppender}   from "../util/test.js";
-import {Appender as ArrayAppender} from "./appender/arrayAppender.js";
-import {Appender as CountAppender}                    from "./appender/countAppender.js";
-import {LoggerFactory}                                from "./loggerFactory.js";
-import {Just}                                         from "../stdlib.js";
-import {debugLogger}                                  from "./logger.js";
-import {LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN,} from "./logLevel.js";
+import { TestSuite, withAppender }                     from "../util/test.js";
+import { Appender as ArrayAppender }                   from "./appender/arrayAppender.js";
+import { Appender as CountAppender }                   from "./appender/countAppender.js";
+import { LoggerFactory}                                from "./loggerFactory.js";
+import { Just}                                         from "../stdlib.js";
+import { debugLogger}                                  from "./logger.js";
+import { LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN } from "./logLevel.js";
 
 import {
     addToAppenderList,
@@ -18,10 +18,15 @@ import {
 }                                 from "./logging.js";
 import {LOG_CONTEXT_KOLIBRI_TEST} from "./logConstants.js";
 
+export { withDebugTestArrayAppender }
+
 const logMessage  = "log message from loggerTest.js";
 
-/*
-This might also be useful as a general way of resetting the log config after use.
+/**
+ * Test helper function that places the code under test into a
+ * logging environment that allows to inspect whether that code
+ * logs correctly. Restores the logging environment after use.
+ * @type { (codeUnderTest: ConsumerType<void> ) => void }
  */
 const withDebugTestArrayAppender = codeUnderTest => {
   const level     = getLoggingLevel();
@@ -112,7 +117,6 @@ loggerSuite.add("log higher logging level, should not log", assert =>
         assert.is(result, false);
         assert.is(appender.getValue().length, 0);
     }));
-
 loggerSuite.add("test debug tag formatted log message", assert =>
     withDebugTestArrayAppender(appender => {
         const levelFormatter = _ => lvl => msg => `[${lvl}] ${msg}`;
