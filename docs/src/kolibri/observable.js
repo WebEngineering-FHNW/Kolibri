@@ -4,11 +4,13 @@ import { LOG_CONTEXT_KOLIBRI_BASE } from "./logger/logConstants.js";
 
 export {Observable, ObservableList}
 
-const { warn } = LoggerFactory(LOG_CONTEXT_KOLIBRI_BASE + ".observable");
-
+let warn = undefined;
 /** @private */
 function checkWarning(list) {
     if (list.length > 100) {
+        if (!warn) {
+            warn = LoggerFactory(LOG_CONTEXT_KOLIBRI_BASE + ".observable").warn;
+        }
         warn(`Beware of memory leak. ${list.length} listeners.`);
     }
 }
