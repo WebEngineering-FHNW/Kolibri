@@ -92,7 +92,7 @@ em {                    /* emphasis looks like highlighted with text marker */
     &::before {
         content:        "";
         position:       absolute;
-        inset:          -3px;
+        inset:          0;  /* -3px leads to strange line-break issues */
         background-color: var(--kolibri-color-select);
         z-index:        -10;
         rotate:         -2deg;

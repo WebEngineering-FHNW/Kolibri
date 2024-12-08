@@ -21,8 +21,8 @@ siteController.registerPage(URI_HASH_HOME,          HomePage());
 siteController.registerPage(URI_HASH_UNSTYLED,      UnstyledPage());
 siteController.registerPage(URI_HASH_MASTER_DETAIL, MasterDetailPage());
 
-SimpleNavigationProjector(siteController, siteProjector.sideNavigationElement);
-SimpleNavigationProjector(siteController, siteProjector.topNavigationElement);
+SimpleNavigationProjector(siteController, siteProjector.sideNavigationElement, true);
+SimpleNavigationProjector(siteController, siteProjector.topNavigationElement, false);
 
 siteController.gotoUriHash(window.location.hash);
 

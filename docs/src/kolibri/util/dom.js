@@ -78,9 +78,10 @@ const fireChangeEvent = element => fireEvent(element, CHANGE);
 /** @type InputTypeString */ const COLOR    = "color";
 
 /**
- * Utility function that works like Element.querySelectorAll but logs a descriptive warning when
+ * Utility function that works like {@link Element.querySelectorAll} but logs a descriptive warning when
  * the resulting NodeList is empty. Wraps the result in a {@link SequenceType } such that the
  * Kolibri goodies become available.
+ * It is a suitable function when a result is **always** expected.
  * @param { Element! } element - a DOM element (typically HTMLElement)
  * @param { String! } selector - a CSS query selector, might contain operators
  * @return { SequenceType<Node> }
