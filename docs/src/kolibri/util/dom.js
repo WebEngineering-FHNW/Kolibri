@@ -4,11 +4,18 @@
  * @module util/dom
  * Helper functions to work with the DOM.
  */
+
+import { LoggerFactory } from "../logger/loggerFactory.js";
+import { toSeq }         from "../sequence/util/helpers.js";
+
 export {
     dom, fireEvent, fireChangeEvent,
     CLICK, INPUT, CHANGE,
-    TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR
+    TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR,
+    select
 }
+
+const { warn } = LoggerFactory("ch.fhnw.kolibri.util.dom");
 
 /**
  * Create DOM objects from an HTML string.
@@ -69,3 +76,19 @@ const fireChangeEvent = element => fireEvent(element, CHANGE);
 /** @type InputTypeString */ const TIME     = "time";
 /** @type InputTypeString */ const DATE     = "date";
 /** @type InputTypeString */ const COLOR    = "color";
+
+/**
+ * Utility function that works like Element.querySelectorAll but logs a descriptive warning when
+ * the resulting NodeList is empty. Wraps the result in a {@link SequenceType } such that the
+ * Kolibri goodies become available.
+ * @param { Element! } element - a DOM element (typically HTMLElement)
+ * @param { String! } selector - a CSS query selector, might contain operators
+ * @return { SequenceType<Node> }
+ */
+const select = (element, selector) => {
+    const result = toSeq( /** @type { Iterable<Node> } */ element.querySelectorAll(selector));
+    if (result.isEmpty()) {
+        warn(`Selector "${selector}" did not select any nodes in "${element.outerHTML}"`);
+    }
+    return result;
+};
