@@ -1278,11 +1278,13 @@ const LOG_CONTEXT_KOLIBRI_TEST = LOG_CONTEXT_KOLIBRI_BASE + ".test";
 /**
  * Constant for the log context that logs for all contexts.
  * @type { String } */
-const LOG_CONTEXT_All = "";const { warn: warn$2 } = LoggerFactory(LOG_CONTEXT_KOLIBRI_BASE + ".observable");
-
+const LOG_CONTEXT_All = "";let warn$2 = undefined;
 /** @private */
 function checkWarning(list) {
     if (list.length > 100) {
+        if (!warn$2) {
+            warn$2 = LoggerFactory(LOG_CONTEXT_KOLIBRI_BASE + ".observable").warn;
+        }
         warn$2(`Beware of memory leak. ${list.length} listeners.`);
     }
 }
