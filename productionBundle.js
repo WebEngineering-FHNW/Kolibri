@@ -263,481 +263,6 @@ Number.prototype.times = function(callback= undefined){ return times(this)(callb
  * ["1"].sum(Number); // 1
  */
 Array.prototype.sum = function(callback = undefined){ return sum(this)(callback); };/**
- * @typedef { <_T_> (newValue:_T_, oldValue: ?_T_) => void } ValueChangeCallback<_T_>
- * This is a specialized {@link ConsumerType} with an optional second value.
- * The "oldValue" contains the value before the change.
- */
-
-/**
- * IObservable<_T_> is the interface from the GoF Observable design pattern.
- * In this variant, we allow to register many observers but do not provide means to unregister.
- * Observers are not garbage-collected before the observable itself is collected.
- * IObservables are intended to be used with the concept of "stable binding", i.e. with
- * listeners that do not change after setup.
- * @typedef IObservable<_T_>
- * @template _T_
- * @impure   Observables change their inner state (value) and maintain a list of observers that changes over time.    
- * @property { ()  => _T_ }   getValue - a function that returns the current value
- * @property { (_T_) => void} setValue - a function that sets a new value, calling all registered {@link ValueChangeCallback}s
- * @property { (cb: ValueChangeCallback<_T_>) => void } onChange -
- *              a function that registers an {@link ValueChangeCallback} that will be called whenever the value changes.
- *              Immediately called back on registration.
- */
-
-/**
- * Constructor for an IObservable<_T_>.
- * @pure
- * @template _T_
- * @param    {!_T_} value      - the initial value to set. Mandatory.
- * @returns  { IObservable<_T_> }
- * @constructor
- * @example
- * const obs = Observable("");
- * obs.onChange(val => console.log(val));
- * obs.setValue("some other value"); // will be logged
- */
-const Observable = value => {
-    const listeners = [];
-    return {
-        onChange: callback => {
-            listeners.push(callback);
-            callback(value, value);
-        },
-        getValue: ()       => value,
-        setValue: newValue => {
-            if (value === newValue) return;
-            const oldValue = value;
-            value = newValue;
-            listeners.forEach(callback => {
-                if (value === newValue) { // pre-ordered listeners might have changed this and thus the callback no longer applies
-                    callback(value, oldValue);
-                }
-            });
-        }
-    }
-};
-
-/**
- * IObservableList<_T_> is the interface for lists that can be observed for add or delete operations.
- * In this variant, we allow registering and unregistering many observers.
- * Observers that are still registered are not garbage collected before the observable list itself is collected.
- * @typedef IObservableList
- * @template _T_
- * @impure   Observables change their inner decorated list and maintain two lists of observers that changes over time.  
- * @property { (cb:ConsumerType<_T_>) => void }  onAdd - register an observer that is called whenever an item is added.
- * @property { (cb:ConsumerType<_T_>) => void }  onDel - register an observer that is called whenever an item is added.
- * @property { (_T_) => void }  add - add an item to the observable list and notify the observers. Modifies the list.
- * @property { (_T_) => void }  del - delete an item to the observable list and notify the observers. Modifies the list.
- * @property { (cb:ConsumerType<_T_>) => void }  removeAddListener - unregister the "add" observer
- * @property { (cb:ConsumerType<_T_>) => void }  removeDeleteListener - unregister the "delete" observer
- * @property { () => Number }                    count   - current length of the inner list.
- * @property { (cb:ConsumingPredicateType<_T_>) => Number }  countIf - number of items in the list that satisfy the given predicate.
- */
-
-/**
- * Constructor for an IObservableList<_T_>.
- * @pure
- * @template _T_
- * @param {!Array<_T_>} list - the inner list that is to be decorated with observability. Mandatory. See also GoF decorator pattern.
- * @returns IObservableList<_T_>
- * @constructor
- * @example
- * const list = ObservableList( [] );
- * list.onAdd( item => console.log(item));
- * list.add(1);
- */
-const ObservableList = list => {
-    const addListeners = [];
-    const delListeners = [];
-    const removeAddListener    = addListener => addListeners.removeItem(addListener);
-    const removeDeleteListener = delListener => delListeners.removeItem(delListener);
-
-    return {
-        onAdd: listener => addListeners.push(listener),
-        onDel: listener => delListeners.push(listener),
-        add: item => {
-            list.push(item);
-            addListeners.forEach( listener => listener(item));
-        },
-        del: item => {
-            list.removeItem(item);
-            const safeIterate = [...delListeners]; // shallow copy as we might change the listeners array while iterating
-            safeIterate.forEach( listener => listener(item, () => removeDeleteListener(listener) ));
-        },
-        removeAddListener,
-        removeDeleteListener,
-        count:   ()   => list.length,
-        countIf: pred => list.reduce( (sum, item) => pred(item) ? sum + 1 : sum, 0)
-    }
-};/**
- * @module stdtypes
- * The js doc definitions of the types that are most commonly used.
- */
-
-/**
- * @typedef { <_T_> (...x) => _T_ } ProducerType<_T_>
- * A function that takes arbitrary arguments (possibly none) and produces a value of type _T_.
- */
-
-/**
- * @typedef { <_T_> (_T_) => void } ConsumerType<_T_>
- * A function that consumes a value of type _T_ and returns nothing.
- */
-
-/**
- * @typedef { <_T_> (_T_) => Boolean } ConsumingPredicateType<_T_>
- * A function that consumes a value of type _T_ and returns a Boolean.
- */
-
-/**
- * @typedef { <_T_>  (_T_) => _T_ } UnaryOperatorType<_T_>
- * A unary operator on _T_.
- */
-/**
- * A callback which takes one argument of type {@link _A_} and transforms it to {@link _B_}.
- * @template _A_
- * @template _B_
- * @callback Functor
- * @param   { _A_ } value
- * @returns { _B_ }
- */
-
-/**
- * A callback which takes two arguments of type {@link _A_} and transforms it to {@link _A_}.
- * @template _A_
- * @callback BiOperation
- * @param   { _A_ } value1
- * @param   { _A_ } value2
- * @returns { _A_ }
- */
-
-/**
- * A callback which takes two arguments of type _T_ and _U_}and transforms it to _R_.
- * @callback BiFunction
- * @type {  <_T_, _U_, _R_> (value1:_T_, value2:_U_) => _R_ }
- */
-
-/**
- * A callback which takes an argument of type {@link _A_} and
- * a second argument of type {@link _A_} and returns a boolean.
- * @template _A_
- * @template _B_
- * @callback BiPredicate
- * @param   { _A_ } value1
- * @param   { _B_ } value2
- * @returns { boolean }
- */
-
-/**
- * Defines a Monad.
- * @template  _T_
- * @typedef  MonadType
- * @property { <_U_> (bindFn: (_T_) => MonadType<_U_>) => MonadType<_U_> } and
- * @property { <_U_> (f:      (_T_) => _U_)            => MonadType<_U_> } fmap
- * @property {       (_T_)                             => MonadType<_T_> } pure
- * @property {       ()                                => MonadType<_T_> } empty
- *//**
- * A callback function that selects between two arguments that are given in curried style.
- * Only needed internally for the sake of proper JsDoc.
- * @callback PairSelectorType
- * @pure
- * @template _T_, _U_
- * @type     { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
- * @property { () => { next: () => IteratorResult<_T_ | _U_, undefined> } } Symbol.iterator
- */
-
-/**
- * @typedef PairBaseType
- * @template _T_, _U_
- * @type {
- *      (x: _T_)
- *   => (y: _U_)
- *   => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
- *
- */
-/**
- * @typedef PairType
- * @template _T_, _U_
- * @type {  PairBaseType<_T_, _U_> & Iterable<_T_ | _U_> }
- * see {@link Pair}
- */
-
-/**
- * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
- * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
- * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
- *
- * @constructor
- * @pure
- * @haskell a -> b -> (a -> b -> a|b) -> a|b
- * @template _T_, _U_
- * @type    { PairType<_T_, _U_> }
- *
- * @example
- * const values = Pair("Tobi")("Andri");
- * values(fst) === "Tobi";
- * values(snd) === "Andri";
- *
- * // a pair is also iterable
- * const [tobi, andri] = values;
- * console.log(tobi, andri);
- * // => Logs '"Tobi", "Andri"'
- */
-const Pair = x => y => {
-  /**
-   * @template _T_, _U_
-   * @type { PairType<_T_,_U_> }
-   */
-  const pair = selector => selector(x)(y);
-
-  pair[Symbol.iterator] = () => [x,y][Symbol.iterator]();
-  return pair;
-};// noinspection GrazieInspection
-
-
-/**
- * JINQ brings query capabilities to any monadic type.
- * With it, it is possible to query different data sources using the one and same query language.
- *
- * @template _T_
- * @typedef JinqType
- * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               map      - maps the current value to a new value
- * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               select   - alias for map
- * @property { <_U_> ((prev: _T_) => MonadType<_U_>) => JinqType<_U_> }               inside   - maps the current value to a new {@link MonadType}
- * @property { <_U_> (monad:     MonadType<_U_>)     => JinqType<PairType<_T_,_U_>> } pairWith - combines the underlying data structure with the given data structure as {@link PairType}
- * @property { <_U_> (monadCtor: (_T_) =>  MonadType<_U_>)    => JinqType<PairType<_T_,_U_>> } combine - combines the underlying data structure with the given constructor as {@link PairType}
- * @property {       (predicate: ConsumingPredicateType<_T_>) => JinqType<_T_> }      where    - only keeps the items that fulfill the predicate
- * @property {       ()                              => MonadType<_T_> }              result   - returns the result of this query
- */
-
-/**
- * JINQ (JavaScript integrated query) is the implementation of LINQ for JavaScript.
- * It can handle any data that conforms to the {@link MonadType}. Therefore, JINQ can
- * handle monadic iterables like {@link SequenceType} and every monadic type such as
- * {@link MaybeType} or {@link JsonMonad}.
- *
- * Note: Despite the similarity to SQL, it is important to note that the functionalities are not exactly the same.
- *
- * @see https://learn.microsoft.com/en-us/dotnet/csharp/linq/
- * @template _T_
- * @param { MonadType<_T_> } monad
- * @returns { JinqType<_T_> }
- *
- * @example
- * const devs = [ {"name": "Tobi", "salary": 0},
- *                {"name": "Michael", "salary": 50000},
- *                ...
- *              ]
- * const salaryOfMichael = devs =>
- * from(JsonMonad(devs))
- *   .where( dev => dev.name != null)
- *   .where( dev => dev.name.startsWith("Michael"))
- *   .select(dev => dev.salary)
- *   .result();
- */
-const jinq = monad => ({
-  pairWith:     pairWith(monad),
-  combine:      combine (monad),
-  where:        where   (monad),
-  select:       select$1  (monad),
-  map:          map$1     (monad),
-  inside:       inside  (monad),
-  result:       () =>    monad
-});
-
-/**
- * Serves as starting point to enter JINQ and specifies a data source.
- * Consider {@link jinq} linked below for further information.
- *
- * @see {jinq}
- * @template _T_
- * @param { MonadType<_T_> } monad
- * @returns { JinqType<_T_> }
- *
- * @example
- *  const range  = Range(7);
- *  const result =
- *  from(range)
- *    .where(x => x % 2 === 0)
- *    .result();
- *
- * console.log(result);
- * // => Logs '0 2 4 6'
- */
-const from = jinq;
-
-
-/**
- * Transforms each element of a collection using a selector function.
- *
- * @template _T_, _U_
- * @type {
- *           (monad1: MonadType<_T_>)
- *        => (selector: (_T_) => MonadType<_U_>)
- *        => JinqType<PairType<_T_,_U_>>
- *      }
- *
- * @example
- *  const Person = (name, maybeBoss) => ({name, boss: maybeBoss});
- *  const ceo   = Person("Paul",  Nothing);
- *  const cto   = Person("Tom",   Just(ceo));
- *  const andri = Person("Andri", Just(cto));
- *
- * const maybeBossNameOfBoss = employee =>
- *   from(Just(employee))
- *     .inside(p => p.boss)
- *     .inside(p => p.boss)
- *     .select(p => p.name)
- *     .result();
- *
- * const maybeName = maybeBossNameOfBoss(andri);
- * const noName    = maybeBossNameOfBoss(ceo);
- *
- * assert.is(noName, Nothing);
- * maybeName
- *    (_    => console.log("No valid result"))
- *    (name => console.log(name);
- *
- * // => Logs 'Paul'
- *
- */
-const inside = monad => f => {
-  const processed = monad.and(f);
-  return jinq(processed);
-};
-
-/**
- * Combines elementwise two {@link MonadType}s.
- * It returns a {@link PairType} which holds a combination of two values.
- *
- * @type { <_T_, _U_>
- *           (monad1: MonadType<_T_>)
- *        => (monad2: MonadType<_U_>)
- *        => JinqType<PairType<_T_,_U_>>
- *      }
- *
- * @example
- * const range  = Range(3);
- * const result =
- * from(range)
- *    .pairWith(range)
- *    .where (([fst, snd]) => fst === snd)
- *    .result();
- *
- * console.log(result);
- * // => Logs '0 0 1 1 2 2 3 3'
- */
-const pairWith = monad1 => monad2 => {
-  const processed = monad1.and(x =>
-    monad2.fmap(y => Pair(x)(y))
-  );
-  return jinq(processed)
-};
-
-/**
- * Combines elementwise two {@link MonadType monad}s much like
- * {@link pairWith} but the second monad is given as a constructor.
- * This allows usages that come closer to list comprehensions.
- * It returns a {@link PairType} which holds a combination of two values.
- *
- *
- * @type { <_T_, _U_>
- *           (monad1:     MonadType<_T_>)
- *        => (monad2ctor: (arg:_T_) => MonadType<_U_>)
- *        => JinqType<PairType<_T_,_U_>>
- *      }
- *
- * @example
- *  const result =
- *     from(                         Range(2, Number.MAX_VALUE)) // infinite sequence
- *       .combine( z              => Range(2, z) )
- *       .combine( ([_z, y])      => Range(2, y) )
- *       .where ( ([[ z, y ], x]) => x*x + y*y === z*z )
- *       .result()                                               // monad to sequence
- *       .take(2)                                                // lazy pruning
- *       .map ( ([[ z, y ], x]) => `${x} ${y} ${z}`)             // easy to compare
- *   ;
- *
- *   assert.is( [...result].join(" - "), "3 4 5 - 6 8 10");
- */
-const combine = monad1 => monad2ctor => {
-  const processed = monad1.and(x =>
-    monad2ctor(x).fmap(y => Pair(x)(y))
-  );
-  return jinq(processed)
-};
-
-/**
- * Filters elements based on a given condition.
- *
- * @type { <_T_>
- *            (monad: MonadType<_T_>)
- *         => (predicate: ConsumingPredicateType<_T_>)
- *         => JinqType<_T_>
- *       }
- *
- * @example
- *  const range  = Range(7);
- *  const result =
- *  from(range)
- *    .where(x => x % 2 === 0)
- *    .result();
- *
- * console.log(result);
- * // => Logs '0 2 4 6'
-
- */
-const where = monad => predicate => {
-  const processed = monad.and(a => predicate(a) ? monad.pure(a) : monad.empty());
-  return jinq(processed);
-};
-
-/**
- * Applies a function to each element of the collection.
- *
- * @alias map
- * @type { <_T_, _U_>
- *           (monad: MonadType<_T_>)
- *        => (selector: Functor<_T_, _U_>)
- *        => JinqType<_U_>
- *       }
- *
- * @example
- * const range  = Range(3);
- * const result =
- * from(range)
- *    .select(x => 2 * x)
- *    .result();
- *
- * console.log(result);
- * // => Logs '0, 2, 4, 6'
- */
-const select$1 = monad => mapper => {
-  const processed = monad.fmap(mapper);
-  return jinq(processed);
-};
-
-/**
- * Applies a function to each element of the collection.
- *
- * @alias select
- * @type { <_T_, _U_>
- *           (monad: MonadType<_T_>)
- *        => (mapper: Functor<_T_, _U_>)
- *        => JinqType<_U_>
- *       }
- *
- * @example
- * const range  = Range(3);
- * const result =
- * from(range)
- *    .select(x => 2 * x)
- *    .result();
- *
- * console.log(result);
- * // => Logs '0, 2, 4, 6'
- */
-const map$1 = select$1;/**
  * @module lambda/church
  * Church encoding of the lambda calculus in JavaScript
  * to the extent that we need it in Kolibri.
@@ -1116,6 +641,62 @@ const toChurchBoolean = value => /** @type { ChurchBooleanType& Function } */ va
  * @return { Boolean }
  */
 const toJsBool = churchBoolean =>  churchBoolean(true)(false);/**
+ * A callback function that selects between two arguments that are given in curried style.
+ * Only needed internally for the sake of proper JsDoc.
+ * @callback PairSelectorType
+ * @pure
+ * @template _T_, _U_
+ * @type     { <_T_, _U_> (x:_T_) => (y:_U_) => ( _T_ | _U_ ) }
+ * @property { () => { next: () => IteratorResult<_T_ | _U_, undefined> } } Symbol.iterator
+ */
+
+/**
+ * @typedef PairBaseType
+ * @template _T_, _U_
+ * @type {
+ *      (x: _T_)
+ *   => (y: _U_)
+ *   => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) }
+ *
+ */
+/**
+ * @typedef PairType
+ * @template _T_, _U_
+ * @type {  PairBaseType<_T_, _U_> & Iterable<_T_ | _U_> }
+ * see {@link Pair}
+ */
+
+/**
+ * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
+ * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
+ * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
+ *
+ * @constructor
+ * @pure
+ * @haskell a -> b -> (a -> b -> a|b) -> a|b
+ * @template _T_, _U_
+ * @type    { PairType<_T_, _U_> }
+ *
+ * @example
+ * const values = Pair("Tobi")("Andri");
+ * values(fst) === "Tobi";
+ * values(snd) === "Andri";
+ *
+ * // a pair is also iterable
+ * const [tobi, andri] = values;
+ * console.log(tobi, andri);
+ * // => Logs '"Tobi", "Andri"'
+ */
+const Pair = x => y => {
+  /**
+   * @template _T_, _U_
+   * @type { PairType<_T_,_U_> }
+   */
+  const pair = selector => selector(x)(y);
+
+  pair[Symbol.iterator] = () => [x,y][Symbol.iterator]();
+  return pair;
+};/**
  * @typedef MaybeMonadType
  * @template _T_
  * @property { <_V_> ((_T_) => MaybeType<_V_>) => MaybeType<_V_> } and
@@ -1245,55 +826,6 @@ const choiceMaybe = maybe1 => maybe2 =>
   maybe1
     (_ => maybe2)
     (_ => maybe1);/**
- * Creates a {@link SequenceType} which contains all given arguments as values.
- * The argument list might be empty, resulting in an empty iterator.
- *
- * @constructor
- * @pure
- * @template _T_
- * @param   { ..._T_ } values
- * @returns { SequenceType<_T_> }
- *
- * @example
- * const result = Seq(1, 2);
- *
- * console.log(...result);
- * // => Logs '1' '2'
- */
-const Seq = (...values) => {
-
-  const seqIterator = () => {
-    let index = 0;
-
-    const next = () => {
-      const result = ( index > values.length -1 )
-        ?  { done: true,  value: undefined }
-        :  { done: false, value: values[index] };
-      index++;
-      return result;
-    };
-
-    return { next }
-  };
-
-  return createMonadicSequence( seqIterator )
-};/**
- * Creates a {@link SequenceType} which contains just the given value.
- *
- * @constructor
- * @pure
- * @haskell pure :: a -> [a]
- * @template _T_
- * @param   { _T_ } value
- * @returns { SequenceType<_T_> }
- *
- * @example
- * const seq = PureSequence(1);
- *
- * console.log(...seq);
- * // => Logs '1'
- */
-const PureSequence = value => Seq(value);/**
  * @module stdlib
  * Kolibri standard library with functions and data structures that are most commonly used.
  * The stdlib has no dependencies.
@@ -1734,6 +1266,503 @@ const LoggerFactory = context => /** @type { LoggerType } */({
       error:  errorLogger(context),
       fatal:  fatalLogger(context),
 });/**
+ * Constant for the log context that is used as the basis for all Kolibri-internal logging.
+ * @type { String } */
+const LOG_CONTEXT_KOLIBRI_BASE = "ch.fhnw.kolibri";
+
+/**
+ * Constant for the log context that is used for all Kolibri-internal testing.
+ * @type { String } */
+const LOG_CONTEXT_KOLIBRI_TEST = LOG_CONTEXT_KOLIBRI_BASE + ".test";
+
+/**
+ * Constant for the log context that logs for all contexts.
+ * @type { String } */
+const LOG_CONTEXT_All = "";const { warn: warn$2 } = LoggerFactory(LOG_CONTEXT_KOLIBRI_BASE + ".observable");
+
+/** @private */
+function checkWarning(list) {
+    if (list.length > 100) {
+        warn$2(`Beware of memory leak. ${list.length} listeners.`);
+    }
+}
+
+/**
+ * @typedef { <_T_> (newValue:_T_, oldValue: ?_T_) => void } ValueChangeCallback<_T_>
+ * This is a specialized {@link ConsumerType} with an optional second value.
+ * The "oldValue" contains the value before the change.
+ */
+
+/**
+ * IObservable<_T_> is the interface from the GoF Observable design pattern.
+ * In this variant, we allow to register many observers but do not provide means to unregister.
+ * Observers are not garbage-collected before the observable itself is collected.
+ * IObservables are intended to be used with the concept of "stable binding", i.e. with
+ * listeners that do not change after setup.
+ * @typedef IObservable<_T_>
+ * @template _T_
+ * @impure   Observables change their inner state (value) and maintain a list of observers that changes over time.    
+ * @property { ()  => _T_ }   getValue - a function that returns the current value
+ * @property { (_T_) => void} setValue - a function that sets a new value, calling all registered {@link ValueChangeCallback}s
+ * @property { (cb: ValueChangeCallback<_T_>) => void } onChange -
+ *              a function that registers an {@link ValueChangeCallback} that will be called whenever the value changes.
+ *              Immediately called back on registration.
+ */
+
+/**
+ * Constructor for an IObservable<_T_>.
+ * @pure
+ * @template _T_
+ * @param    {!_T_} value      - the initial value to set. Mandatory.
+ * @returns  { IObservable<_T_> }
+ * @constructor
+ * @example
+ * const obs = Observable("");
+ * obs.onChange(val => console.log(val));
+ * obs.setValue("some other value"); // will be logged
+ */
+function Observable(value) {
+    const listeners = [];
+    return {
+        onChange: callback => {
+            checkWarning(listeners);
+            listeners.push(callback);
+            callback(value, value);
+        },
+        getValue: () => value,
+        setValue: newValue => {
+            if (value === newValue) return;
+            const oldValue = value;
+            value          = newValue;
+            listeners.forEach(callback => {
+                if (value === newValue) { // pre-ordered listeners might have changed this and thus the callback no longer applies
+                    callback(value, oldValue);
+                }
+            });
+        }
+    };
+}
+
+/**
+ * IObservableList<_T_> is the interface for lists that can be observed for add or delete operations.
+ * In this variant, we allow registering and unregistering many observers.
+ * Observers that are still registered are not garbage collected before the observable list itself is collected.
+ * @typedef IObservableList
+ * @template _T_
+ * @impure   Observables change their inner decorated list and maintain two lists of observers that changes over time.  
+ * @property { (cb:ConsumerType<_T_>) => void }  onAdd - register an observer that is called whenever an item is added.
+ * @property { (cb:ConsumerType<_T_>) => void }  onDel - register an observer that is called whenever an item is added.
+ * @property { (_T_) => void }  add - add an item to the observable list and notify the observers. Modifies the list.
+ * @property { (_T_) => void }  del - delete an item to the observable list and notify the observers. Modifies the list.
+ * @property { (cb:ConsumerType<_T_>) => void }  removeAddListener - unregister the "add" observer
+ * @property { (cb:ConsumerType<_T_>) => void }  removeDeleteListener - unregister the "delete" observer
+ * @property { () => Number }                    count   - current length of the inner list.
+ * @property { (cb:ConsumingPredicateType<_T_>) => Number }  countIf - number of items in the list that satisfy the given predicate.
+ */
+
+/**
+ * Constructor for an IObservableList<_T_>.
+ * @pure
+ * @template _T_
+ * @param {!Array<_T_>} list - the inner list that is to be decorated with observability. Mandatory. See also GoF decorator pattern.
+ * @returns IObservableList<_T_>
+ * @constructor
+ * @example
+ * const list = ObservableList( [] );
+ * list.onAdd( item => console.log(item));
+ * list.add(1);
+ */
+function ObservableList(list) {
+    const addListeners         = [];
+    const delListeners         = [];
+    const removeAddListener    = addListener => addListeners.removeItem(addListener);
+    const removeDeleteListener = delListener => delListeners.removeItem(delListener);
+
+    return {
+        onAdd:   listener => {
+            checkWarning(addListeners);
+            addListeners.push(listener);
+        },
+        onDel:   listener => {
+            checkWarning(delListeners);
+            delListeners.push(listener);
+        },
+        add:     item => {
+            list.push(item);
+            addListeners.forEach(listener => listener(item));
+        },
+        del:     item => {
+            list.removeItem(item);
+            const safeIterate = [...delListeners]; // shallow copy as we might change the listeners array while iterating
+            safeIterate.forEach(listener => listener(item, () => removeDeleteListener(listener)));
+        },
+        removeAddListener,
+        removeDeleteListener,
+        count:   () => list.length,
+        countIf: pred => list.reduce((sum, item) => pred(item) ? sum + 1 : sum, 0)
+    };
+}/**
+ * @module stdtypes
+ * The js doc definitions of the types that are most commonly used.
+ */
+
+/**
+ * @typedef { <_T_> (...x) => _T_ } ProducerType<_T_>
+ * A function that takes arbitrary arguments (possibly none) and produces a value of type _T_.
+ */
+
+/**
+ * @typedef { <_T_> (_T_) => void } ConsumerType<_T_>
+ * A function that consumes a value of type _T_ and returns nothing.
+ */
+
+/**
+ * @typedef { <_T_> (_T_) => Boolean } ConsumingPredicateType<_T_>
+ * A function that consumes a value of type _T_ and returns a Boolean.
+ */
+
+/**
+ * @typedef { <_T_>  (_T_) => _T_ } UnaryOperatorType<_T_>
+ * A unary operator on _T_.
+ */
+/**
+ * A callback which takes one argument of type {@link _A_} and transforms it to {@link _B_}.
+ * @template _A_
+ * @template _B_
+ * @callback Functor
+ * @param   { _A_ } value
+ * @returns { _B_ }
+ */
+
+/**
+ * A callback which takes two arguments of type {@link _A_} and transforms it to {@link _A_}.
+ * @template _A_
+ * @callback BiOperation
+ * @param   { _A_ } value1
+ * @param   { _A_ } value2
+ * @returns { _A_ }
+ */
+
+/**
+ * A callback which takes two arguments of type _T_ and _U_}and transforms it to _R_.
+ * @callback BiFunction
+ * @type {  <_T_, _U_, _R_> (value1:_T_, value2:_U_) => _R_ }
+ */
+
+/**
+ * A callback which takes an argument of type {@link _A_} and
+ * a second argument of type {@link _A_} and returns a boolean.
+ * @template _A_
+ * @template _B_
+ * @callback BiPredicate
+ * @param   { _A_ } value1
+ * @param   { _B_ } value2
+ * @returns { boolean }
+ */
+
+/**
+ * Defines a Monad.
+ * @template  _T_
+ * @typedef  MonadType
+ * @property { <_U_> (bindFn: (_T_) => MonadType<_U_>) => MonadType<_U_> } and
+ * @property { <_U_> (f:      (_T_) => _U_)            => MonadType<_U_> } fmap
+ * @property {       (_T_)                             => MonadType<_T_> } pure
+ * @property {       ()                                => MonadType<_T_> } empty
+ */// noinspection GrazieInspection
+
+
+/**
+ * JINQ brings query capabilities to any monadic type.
+ * With it, it is possible to query different data sources using the one and same query language.
+ *
+ * @template _T_
+ * @typedef JinqType
+ * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               map      - maps the current value to a new value
+ * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               select   - alias for map
+ * @property { <_U_> ((prev: _T_) => MonadType<_U_>) => JinqType<_U_> }               inside   - maps the current value to a new {@link MonadType}
+ * @property { <_U_> (monad:     MonadType<_U_>)     => JinqType<PairType<_T_,_U_>> } pairWith - combines the underlying data structure with the given data structure as {@link PairType}
+ * @property { <_U_> (monadCtor: (_T_) =>  MonadType<_U_>)    => JinqType<PairType<_T_,_U_>> } combine - combines the underlying data structure with the given constructor as {@link PairType}
+ * @property {       (predicate: ConsumingPredicateType<_T_>) => JinqType<_T_> }      where    - only keeps the items that fulfill the predicate
+ * @property {       ()                              => MonadType<_T_> }              result   - returns the result of this query
+ */
+
+/**
+ * JINQ (JavaScript integrated query) is the implementation of LINQ for JavaScript.
+ * It can handle any data that conforms to the {@link MonadType}. Therefore, JINQ can
+ * handle monadic iterables like {@link SequenceType} and every monadic type such as
+ * {@link MaybeType} or {@link JsonMonad}.
+ *
+ * Note: Despite the similarity to SQL, it is important to note that the functionalities are not exactly the same.
+ *
+ * @see https://learn.microsoft.com/en-us/dotnet/csharp/linq/
+ * @template _T_
+ * @param { MonadType<_T_> } monad
+ * @returns { JinqType<_T_> }
+ *
+ * @example
+ * const devs = [ {"name": "Tobi", "salary": 0},
+ *                {"name": "Michael", "salary": 50000},
+ *                ...
+ *              ]
+ * const salaryOfMichael = devs =>
+ * from(JsonMonad(devs))
+ *   .where( dev => dev.name != null)
+ *   .where( dev => dev.name.startsWith("Michael"))
+ *   .select(dev => dev.salary)
+ *   .result();
+ */
+const jinq = monad => ({
+  pairWith:     pairWith(monad),
+  combine:      combine (monad),
+  where:        where   (monad),
+  select:       select$1  (monad),
+  map:          map$1     (monad),
+  inside:       inside  (monad),
+  result:       () =>    monad
+});
+
+/**
+ * Serves as starting point to enter JINQ and specifies a data source.
+ * Consider {@link jinq} linked below for further information.
+ *
+ * @see {jinq}
+ * @template _T_
+ * @param { MonadType<_T_> } monad
+ * @returns { JinqType<_T_> }
+ *
+ * @example
+ *  const range  = Range(7);
+ *  const result =
+ *  from(range)
+ *    .where(x => x % 2 === 0)
+ *    .result();
+ *
+ * console.log(result);
+ * // => Logs '0 2 4 6'
+ */
+const from = jinq;
+
+
+/**
+ * Transforms each element of a collection using a selector function.
+ *
+ * @template _T_, _U_
+ * @type {
+ *           (monad1: MonadType<_T_>)
+ *        => (selector: (_T_) => MonadType<_U_>)
+ *        => JinqType<PairType<_T_,_U_>>
+ *      }
+ *
+ * @example
+ *  const Person = (name, maybeBoss) => ({name, boss: maybeBoss});
+ *  const ceo   = Person("Paul",  Nothing);
+ *  const cto   = Person("Tom",   Just(ceo));
+ *  const andri = Person("Andri", Just(cto));
+ *
+ * const maybeBossNameOfBoss = employee =>
+ *   from(Just(employee))
+ *     .inside(p => p.boss)
+ *     .inside(p => p.boss)
+ *     .select(p => p.name)
+ *     .result();
+ *
+ * const maybeName = maybeBossNameOfBoss(andri);
+ * const noName    = maybeBossNameOfBoss(ceo);
+ *
+ * assert.is(noName, Nothing);
+ * maybeName
+ *    (_    => console.log("No valid result"))
+ *    (name => console.log(name);
+ *
+ * // => Logs 'Paul'
+ *
+ */
+const inside = monad => f => {
+  const processed = monad.and(f);
+  return jinq(processed);
+};
+
+/**
+ * Combines elementwise two {@link MonadType}s.
+ * It returns a {@link PairType} which holds a combination of two values.
+ *
+ * @type { <_T_, _U_>
+ *           (monad1: MonadType<_T_>)
+ *        => (monad2: MonadType<_U_>)
+ *        => JinqType<PairType<_T_,_U_>>
+ *      }
+ *
+ * @example
+ * const range  = Range(3);
+ * const result =
+ * from(range)
+ *    .pairWith(range)
+ *    .where (([fst, snd]) => fst === snd)
+ *    .result();
+ *
+ * console.log(result);
+ * // => Logs '0 0 1 1 2 2 3 3'
+ */
+const pairWith = monad1 => monad2 => {
+  const processed = monad1.and(x =>
+    monad2.fmap(y => Pair(x)(y))
+  );
+  return jinq(processed)
+};
+
+/**
+ * Combines elementwise two {@link MonadType monad}s much like
+ * {@link pairWith} but the second monad is given as a constructor.
+ * This allows usages that come closer to list comprehensions.
+ * It returns a {@link PairType} which holds a combination of two values.
+ *
+ *
+ * @type { <_T_, _U_>
+ *           (monad1:     MonadType<_T_>)
+ *        => (monad2ctor: (arg:_T_) => MonadType<_U_>)
+ *        => JinqType<PairType<_T_,_U_>>
+ *      }
+ *
+ * @example
+ *  const result =
+ *     from(                         Range(2, Number.MAX_VALUE)) // infinite sequence
+ *       .combine( z              => Range(2, z) )
+ *       .combine( ([_z, y])      => Range(2, y) )
+ *       .where ( ([[ z, y ], x]) => x*x + y*y === z*z )
+ *       .result()                                               // monad to sequence
+ *       .take(2)                                                // lazy pruning
+ *       .map ( ([[ z, y ], x]) => `${x} ${y} ${z}`)             // easy to compare
+ *   ;
+ *
+ *   assert.is( [...result].join(" - "), "3 4 5 - 6 8 10");
+ */
+const combine = monad1 => monad2ctor => {
+  const processed = monad1.and(x =>
+    monad2ctor(x).fmap(y => Pair(x)(y))
+  );
+  return jinq(processed)
+};
+
+/**
+ * Filters elements based on a given condition.
+ *
+ * @type { <_T_>
+ *            (monad: MonadType<_T_>)
+ *         => (predicate: ConsumingPredicateType<_T_>)
+ *         => JinqType<_T_>
+ *       }
+ *
+ * @example
+ *  const range  = Range(7);
+ *  const result =
+ *  from(range)
+ *    .where(x => x % 2 === 0)
+ *    .result();
+ *
+ * console.log(result);
+ * // => Logs '0 2 4 6'
+
+ */
+const where = monad => predicate => {
+  const processed = monad.and(a => predicate(a) ? monad.pure(a) : monad.empty());
+  return jinq(processed);
+};
+
+/**
+ * Applies a function to each element of the collection.
+ *
+ * @alias map
+ * @type { <_T_, _U_>
+ *           (monad: MonadType<_T_>)
+ *        => (selector: Functor<_T_, _U_>)
+ *        => JinqType<_U_>
+ *       }
+ *
+ * @example
+ * const range  = Range(3);
+ * const result =
+ * from(range)
+ *    .select(x => 2 * x)
+ *    .result();
+ *
+ * console.log(result);
+ * // => Logs '0, 2, 4, 6'
+ */
+const select$1 = monad => mapper => {
+  const processed = monad.fmap(mapper);
+  return jinq(processed);
+};
+
+/**
+ * Applies a function to each element of the collection.
+ *
+ * @alias select
+ * @type { <_T_, _U_>
+ *           (monad: MonadType<_T_>)
+ *        => (mapper: Functor<_T_, _U_>)
+ *        => JinqType<_U_>
+ *       }
+ *
+ * @example
+ * const range  = Range(3);
+ * const result =
+ * from(range)
+ *    .select(x => 2 * x)
+ *    .result();
+ *
+ * console.log(result);
+ * // => Logs '0, 2, 4, 6'
+ */
+const map$1 = select$1;/**
+ * Creates a {@link SequenceType} which contains all given arguments as values.
+ * The argument list might be empty, resulting in an empty iterator.
+ *
+ * @constructor
+ * @pure
+ * @template _T_
+ * @param   { ..._T_ } values
+ * @returns { SequenceType<_T_> }
+ *
+ * @example
+ * const result = Seq(1, 2);
+ *
+ * console.log(...result);
+ * // => Logs '1' '2'
+ */
+const Seq = (...values) => {
+
+  const seqIterator = () => {
+    let index = 0;
+
+    const next = () => {
+      const result = ( index > values.length -1 )
+        ?  { done: true,  value: undefined }
+        :  { done: false, value: values[index] };
+      index++;
+      return result;
+    };
+
+    return { next }
+  };
+
+  return createMonadicSequence( seqIterator )
+};/**
+ * Creates a {@link SequenceType} which contains just the given value.
+ *
+ * @constructor
+ * @pure
+ * @haskell pure :: a -> [a]
+ * @template _T_
+ * @param   { _T_ } value
+ * @returns { SequenceType<_T_> }
+ *
+ * @example
+ * const seq = PureSequence(1);
+ *
+ * console.log(...seq);
+ * // => Logs '1'
+ */
+const PureSequence = value => Seq(value);/**
  * This constant represents a sequence with no values in it.
  *
  * @constructor
@@ -2999,20 +3028,7 @@ const uncons = iterable => {
   const iterator = () => ({ next: () => inner.next() });
 
   return Pair(value)(createMonadicSequence(iterator));
-};/**
- * Constant for the log context that is used as the basis for all Kolibri-internal logging.
- * @type { String } */
-const LOG_CONTEXT_KOLIBRI_BASE = "ch.fhnw.kolibri";
-
-/**
- * Constant for the log context that is used for all Kolibri-internal testing.
- * @type { String } */
-const LOG_CONTEXT_KOLIBRI_TEST = LOG_CONTEXT_KOLIBRI_BASE + ".test";
-
-/**
- * Constant for the log context that logs for all contexts.
- * @type { String } */
-const LOG_CONTEXT_All = "";// noinspection GrazieInspection
+};// noinspection GrazieInspection
 
 
 const LOG_CONTEXT_KOLIBRI_SEQUENCE = LOG_CONTEXT_KOLIBRI_BASE+".sequence";
