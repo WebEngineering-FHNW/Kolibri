@@ -94,7 +94,7 @@ const projectorStyle = `
                     } 
                 }
                 .toggler {              /* provide a box for the svg */
-                    justify-self:       center;
+                    margin-inline:      auto;
                     width:              2rem;
                     aspect-ratio:       1 / 1;
                     rotate:             180deg;
