@@ -1,8 +1,8 @@
-import { TestSuite }                         from "../../util/test.js";
-import {isIterable, isSequence, plus, toSeq} from "./helpers.js";
-import { Seq }                               from "../constructors/seq/seq.js";
-import { Pair } from "../../lambda/pair.js";
-// import {Pair} from "../../stdlib.js"; // todo dk: this might be suggested by auto-import, but it's not what we want
+import { TestSuite }                           from "../../util/test.js";
+import { Seq }                                 from "../constructors/seq/seq.js";
+import { Pair }                                      from "../../lambda/pair.js";
+import {count$, isIterable, isSequence, plus, toSeq} from "./helpers.js";
+import {Walk} from "../constructors/range/range.js";
 
 const testSuite = TestSuite("Sequence: helper");
 
@@ -20,6 +20,22 @@ testSuite.add("pair as sequence", assert => {
   assert.is( toSeq(p).show(),    "[1,2]");
 });
 
+testSuite.add("toSeq is lazy", assert => {
+  let trace = 0;
+  const iterable = { [Symbol.iterator]: () => ({
+      next: () => {
+        trace++;
+        return { value: 42, done:false }; // infinite iterator
+      }
+    }) };
+  assert.is(trace, 0);
+  const seq = toSeq(iterable);  // the iterable is not called, yet
+  assert.is(trace, 0);
+  const firstValue = seq.head(); // only now
+  assert.is(trace, 1);
+  assert.is(firstValue, 42);
+});
+
 testSuite.add("plus with string", assert => {
   const strings = "a b c".split(" ");
   const string  = strings.reduce( plus, "");
@@ -30,6 +46,12 @@ testSuite.add("plus with numbers", assert => {
   const nums = Seq(1,2,3);
   const result  = nums.reduce$( plus, 0);
   assert.is(result, 6 );
+});
+
+testSuite.add("count$", assert => {
+  assert.is(count$(Seq()),        0 );
+  assert.is(count$(Seq("x")),     1 );
+  assert.is(count$(Walk(1,1000)), 1000 );
 });
 
 testSuite.run();

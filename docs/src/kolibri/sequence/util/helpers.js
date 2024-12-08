@@ -2,13 +2,12 @@ import { map }               from "../operators/map/map.js"
 import { id }                from "../../stdlib.js"
 import { SequencePrototype } from "../sequencePrototype.js";
 
-export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence, forever, plus }
+export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence, forever, plus, count$ }
 
 /**
  * Casts an arbitrary {@link Iterable} into the {@link SequenceType}.
- * @template _T_
- * @param { Iterable<_T_> } iterable
- * @return { SequenceType<_T_> }
+ * The casting is lazy and does not touch (or even exhaust) the iterable.
+ * @type { <_T_>  (iterable:Iterable<_T_>) => SequenceType<_T_> }
  */
 const toSeq = iterable => map(id)(iterable);
 
@@ -73,3 +72,11 @@ const forever = _ => true;
  *   assert.is( string, "abc" );
  */
 const plus = (acc, cur) => acc + cur;
+
+/**
+ * Convenience function to count the number of elements in a {@link SequenceType sequence}.
+ * @template _T_
+ * @param  { SequenceType<_T_> } sequence - must be finite as indicated by the trailing "$"
+ * @return { Number } zero or positive integer number
+ */
+const count$ = sequence => sequence.foldl$( (acc, _cur) => ++acc, 0);
