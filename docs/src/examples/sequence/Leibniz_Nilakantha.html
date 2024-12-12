@@ -3,9 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Kolibri Tryout</title>
+    <style>
+        body {
+            font-family: system-ui;
+            font-variant-numeric: tabular-nums;
+            padding: 2em;
+        }
+    </style>
 
 </head>
 <body>
+
+<h1>The Heros approximating PI</h1>
+
 <pre>
     Gregory - Leibniz Series
 
@@ -13,7 +23,7 @@
     ---  -  ---  +  ---  -  ---  +  ---  ...
      1       3       5       7       9
 
-
+    <span id="leibnizOut"></span>
 
     Nilakantha Series
 
@@ -21,12 +31,16 @@
     3 +  ---  -  ---  +  ---  -  ---     ...
         2*3*4   4*5*6   6*7*8   8*9*10
 
+    
+    <span id="nilaOut"></span>
+    
 </pre>
 
 
 <script type="module">
 
-    import {ALL, Walk, limit, plus, Seq} from "../../kolibri/sequence/sequence.js";
+    import { ALL, Walk, limit, plus, Seq } from "../../kolibri/sequence/sequence.js";
+    import { select }                      from "../../kolibri/util/dom.js";
 
 
     const partialSum = numSeq => n =>
@@ -50,12 +64,27 @@
             .map( n => 1 / (n * (n + 1) * (n + 2)))
             .zipWith((x, sign) => sign * x)(plusMinus);
 
-    const leibniz      =     4 * limit(1e-3,  partialSumSeq(leib_seq) );
-    const nilakantha   = 3 + 4 * limit(1e-8,  partialSumSeq(nila_seq) );
-    console.log( leibniz );
-    console.log( nilakantha );
-    console.log( Math.PI );
+    const partialLeibnizSums  = partialSumSeq(leib_seq);
+    const leibniz             = 4 * limit(1e-3, partialLeibnizSums );
 
+    const partialNilaSums     = partialSumSeq(nila_seq);
+    const nilakantha          = 3 + 4 * limit(1e-8, partialNilaSums );
+
+    const [lout] = select(document.body, "#leibnizOut");
+    lout.textContent = `
+Partial sum sequence
+${partialLeibnizSums.show()}
+
+Limit * 4:      ${leibniz}
+    `;
+
+    const [nout] = select(document.body, "#nilaOut");
+    nout.textContent = `
+Partial sum sequence
+${partialNilaSums.show()}
+
+limit * 4 + 3:   ${nilakantha}
+    `;
 </script>
 
 
