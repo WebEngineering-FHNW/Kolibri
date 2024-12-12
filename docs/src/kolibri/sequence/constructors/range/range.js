@@ -1,6 +1,17 @@
 import { Sequence } from "../sequence/Sequence.js";
 
-export { Range, Walk }
+export { Range, Walk, ALL }
+
+/** A convenience value to use as the highest possible but still reliable upper bound
+ * in a long {@link Walk} or extensive {@link Range} over
+ * all integral numbers with integral increments.
+ * Higher numbers like {@link Number.MAX_VALUE} or {@link Number.POSITIVE_INFINITY}
+ * do not always increment to the next Integer reliably.
+ * @example
+ * const allFromZero = Walk(ALL);
+ * const allEven     = Walk(0, ALL, 2);
+ * */
+const ALL = Number.MAX_SAFE_INTEGER;
 
 /**
  * Creates a range of numbers between two inclusive boundaries,

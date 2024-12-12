@@ -1,5 +1,5 @@
-import {Range, Walk}              from "./range.js";
-import {TestSuite}                from "../../../util/test.js";
+import {ALL, Range, Walk} from "./range.js";
+import {TestSuite}        from "../../../util/test.js";
 import {createMonadicSequence}    from "../../sequencePrototype.js";
 import {addToTestingTable, TESTS} from "../../util/testingTable.js";
 import {createTestConfig} from "../../util/testUtil.js";
@@ -141,7 +141,7 @@ testSuite.add("test use range twice", assert => {
 
 testSuite.add("test continue and break", assert => {
   // When
-  for (const value of Range(Number.MAX_VALUE)) {
+  for (const value of Range(ALL)) {
     if(4 > value) continue; // dropWhile value < 4
     if(4 < value) break;    // take(1)
 
