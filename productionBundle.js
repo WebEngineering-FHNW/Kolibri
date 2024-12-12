@@ -1854,7 +1854,27 @@ const plus$1 = (acc, cur) => acc + cur;
  * @param  { SequenceType<_T_> } sequence - must be finite as indicated by the trailing "$"
  * @return { Number } zero or positive integer number
  */
-const count$ = sequence => sequence.foldl$( (acc, _cur) => ++acc, 0);/**
+const count$ = sequence => sequence.foldl$( (acc, _cur) => ++acc, 0);
+
+/**
+ * Calculate the limit that the number sequence approaches by comparing successive elements until they are
+ * less than epsilon apart.
+ * Return {@link undefined} if no limit matches the criteria.
+ * @WARNING **Might not finish when sequence is infinite and limit cannot be found.**
+ * @param { Number }                epsilon
+ * @param { SequenceType<Number> }  numberSequence
+ * @return { undefined| Number }    the first element with less than epsilon distance from its predecessor
+ */
+const limit = (epsilon, numberSequence) => {
+    let last = numberSequence.head();
+    for (const it of numberSequence.drop(1)) {
+        if ( Math.abs(last - it) <= epsilon) {
+            return it;
+        }
+        last = it;
+    }
+    return undefined;
+};/**
  * Transforms each element using the given {@link Functor function}.
  *
  * @function
@@ -3362,7 +3382,18 @@ const repeat = arg => Sequence(arg, forever, _ => arg);/**
  * console.log(...trues);
  * // => Logs 'true, true, true'
  */
-const replicate = n => value => take(n)(repeat(value));/**
+const replicate = n => value => take(n)(repeat(value));/** A convenience value to use as the highest possible but still reliable upper bound
+ * in a long {@link Walk} or extensive {@link Range} over
+ * all integral numbers with integral increments.
+ * Higher numbers like {@link Number.MAX_VALUE} or {@link Number.POSITIVE_INFINITY}
+ * do not always increment to the next Integer reliably.
+ * @example
+ * const allFromZero = Walk(ALL);
+ * const allEven     = Walk(0, ALL, 2);
+ * */
+const ALL = Number.MAX_SAFE_INTEGER;
+
+/**
  * Creates a range of numbers between two inclusive boundaries,
  * that implements the JS iteration protocol.
  * First and second boundaries can be specified in arbitrary order,
