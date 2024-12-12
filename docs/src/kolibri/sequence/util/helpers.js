@@ -2,7 +2,7 @@ import { map }               from "../operators/map/map.js"
 import { id }                from "../../stdlib.js"
 import { SequencePrototype } from "../sequencePrototype.js";
 
-export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence, forever, plus, count$ }
+export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence, forever, plus, count$, limit }
 
 /**
  * Casts an arbitrary {@link Iterable} into the {@link SequenceType}.
@@ -80,3 +80,23 @@ const plus = (acc, cur) => acc + cur;
  * @return { Number } zero or positive integer number
  */
 const count$ = sequence => sequence.foldl$( (acc, _cur) => ++acc, 0);
+
+/**
+ * Calculate the limit that the number sequence approaches by comparing successive elements until they are
+ * less than epsilon apart.
+ * Return {@link undefined} if no limit matches the criteria.
+ * @WARNING **Might not finish when sequence is infinite and limit cannot be found.**
+ * @param { Number }                epsilon
+ * @param { SequenceType<Number> }  numberSequence
+ * @return { undefined| Number }    the first element with less than epsilon distance from its predecessor
+ */
+const limit = (epsilon, numberSequence) => {
+    let last = numberSequence.head();
+    for (const it of numberSequence.drop(1)) {
+        if ( Math.abs(last - it) <= epsilon) {
+            return it;
+        }
+        last = it;
+    }
+    return undefined;
+};

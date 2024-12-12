@@ -1,8 +1,9 @@
-import { TestSuite }                           from "../../util/test.js";
-import { Seq }                                 from "../constructors/seq/seq.js";
-import { Pair }                                      from "../../lambda/pair.js";
-import {count$, isIterable, isSequence, plus, toSeq} from "./helpers.js";
-import {Walk} from "../constructors/range/range.js";
+import { TestSuite }                                                  from "../../util/test.js";
+import { Seq }                                                        from "../constructors/seq/seq.js";
+import { Pair }                                                       from "../../lambda/pair.js";
+import { count$, forever, isIterable, isSequence, plus, toSeq,limit } from "./helpers.js";
+import { Walk }                                                       from "../constructors/range/range.js";
+import { Sequence }                                                   from "../constructors/sequence/Sequence.js";
 
 const testSuite = TestSuite("Sequence: helper");
 
@@ -52,6 +53,17 @@ testSuite.add("count$", assert => {
   assert.is(count$(Seq()),        0 );
   assert.is(count$(Seq("x")),     1 );
   assert.is(count$(Walk(1,1000)), 1000 );
+});
+
+testSuite.add("limit ok", assert => {
+  const halves = Sequence(1, forever, n => n/2);
+  assert.is(limit(1/2,    halves),       1/2    );
+  assert.is(limit(1/1024, halves),       1/1024 );
+});
+
+testSuite.add("limit not found", assert => {
+  assert.is(limit(1, Seq()),       undefined );
+  assert.is(limit(1, Seq(10,5,3)), undefined );
 });
 
 testSuite.run();

@@ -7,7 +7,7 @@ import { LoggerFactory } from "../logger/loggerFactory.js";
 
 export { memoize }
 
-const { debug, trace } = LoggerFactory("ch.fhnw.kolibri.util.memoize");
+const { debug } = LoggerFactory("ch.fhnw.kolibri.util.memoize");
 
 /** @private */ const MAX_CACHE_SIZE = 1000;
 
