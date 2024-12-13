@@ -1849,14 +1849,6 @@ const forever = _ => true;
 const plus$1 = (acc, cur) => acc + cur;
 
 /**
- * Convenience function to count the number of elements in a {@link SequenceType sequence}.
- * @template _T_
- * @param  { SequenceType<_T_> } sequence - must be finite as indicated by the trailing "$"
- * @return { Number } zero or positive integer number
- */
-const count$ = sequence => sequence.foldl$( (acc, _cur) => ++acc, 0);
-
-/**
  * Calculate the limit that the number sequence approaches by comparing successive elements until they are
  * less than epsilon apart.
  * Return {@link undefined} if no limit matches the criteria.
@@ -2576,6 +2568,87 @@ const zip = it1 => it2 => zipWith((i,j) => Pair(i)(j))(it1)(it2);/**
  * @type {TapOperationType<_T_>}
  */
 const tap = callback => map(x => { callback(x); return x; } );/**
+ * Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
+ * @see foldl$ is an alias for reduce$
+ * @typedef ReduceSequenceOperationType
+ * @template _T_
+ * @function
+ * @pure
+ * @haskell foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
+ *
+ * @type { <_U_>
+ *             (accumulationFn: BiFunction<_U_, _T_, _U_>, start: _U_)
+ *          => _T_
+ *       }
+ */
+
+/**
+ * Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
+ * @see foldl$ is an alias for reduce$
+ *
+ * @template _T_
+ * @function
+ * @pure
+ * @haskell foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
+ *
+ * @type { <_U_>
+ *             (accumulationFn: BiFunction<_U_, _T_, _U_>, start: _U_)
+ *          => (iterable: Iterable<_T_>)
+ *          => _T_
+ *       }
+ *
+ * @example
+ * const number = [0, 1, 2, 3, 4, 5];
+ * const res = foldl$((acc, cur) => acc + cur, 0)(numbers);
+ *
+ * console.log(res);
+ * // => Logs "15"
+ */
+const reduce$ = (accumulationFn, start) => iterable => {
+  let accumulator = start;
+  for (const current of iterable) {
+    accumulator = accumulationFn(accumulator, current);
+  }
+
+  return accumulator;
+};
+
+const foldl$ = reduce$;/**
+ * @typedef CountSequenceOperationType
+ * @type { () => CountOperationType }
+ */
+/**
+ *  Count the number of elements in a **finite** {@link Iterable}.
+ *  The **finite** constraint is indicated by the trailing **$** in the function name.
+ *
+ *  _Note_:
+ *  When erroneously called on an **infinite** iterable, the function **does not return**.
+ *  So better be safe and first {@link TakeOperationType take} as many elements as you consider the allowed maximum count.
+ *
+ *
+ * @typedef CountOperationType
+ * @function
+ * @pure
+ * @haskell [a] -> Int
+ * @param   { Iterable } iterable - a finite iterable
+ * @returns { Number   }
+ *
+ * @example
+ * const numbers = [1, 3, 0, 5];
+ * const count   = count$(numbers);
+ *
+ * console.log(count);
+ * // => Logs '4'
+ *
+ * const infinite = Sequence(0, forever, id);   // this cannot be counted
+ * assert.is(count$( take(10)(infinite) ), 10); // take with upper limit
+ */
+
+/**
+ * see {@link CountOperationType}
+ * @type { CountOperationType }
+ */
+const count$ = iterable => /** @type { Number } */ reduce$( (acc, _cur) => acc + 1, 0)(iterable);/**
  * Checks the equality of two non-infinite {@link Iterable iterables}.
  *
  * _Note_: Two iterables are considered as equal if they contain or create the exactly same values in the same order.
@@ -2941,52 +3014,6 @@ const min$ = (iterable, comparator = (a, b) => a < b) => max$(iterable, (a,b) =>
  * @type { SafeMinOperationType<_T_> }
  */
 const safeMin$ = (iterable, comparator = (a, b) => a < b) => safeMax$(iterable, (a,b) => ! comparator(a,b));/**
- * Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
- * @see foldl$ is an alias for reduce$
- * @typedef ReduceSequenceOperationType
- * @template _T_
- * @function
- * @pure
- * @haskell foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
- *
- * @type { <_U_>
- *             (accumulationFn: BiFunction<_U_, _T_, _U_>, start: _U_)
- *          => _T_
- *       }
- */
-
-/**
- * Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value.
- * @see foldl$ is an alias for reduce$
- *
- * @template _T_
- * @function
- * @pure
- * @haskell foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
- *
- * @type { <_U_>
- *             (accumulationFn: BiFunction<_U_, _T_, _U_>, start: _U_)
- *          => (iterable: Iterable<_T_>)
- *          => _T_
- *       }
- *
- * @example
- * const number = [0, 1, 2, 3, 4, 5];
- * const res = foldl$((acc, cur) => acc + cur, 0)(numbers);
- *
- * console.log(res);
- * // => Logs "15"
- */
-const reduce$ = (accumulationFn, start) => iterable => {
-  let accumulator = start;
-  for (const current of iterable) {
-    accumulator = accumulationFn(accumulator, current);
-  }
-
-  return accumulator;
-};
-
-const foldl$ = reduce$;/**
  * Transforms the passed {@link Iterable} into a {@link String}.
  * Elements are passes through the String() constructor, separated by a commas and enclosed in square brackets.
  * @typedef ShowOperationType
@@ -3108,6 +3135,10 @@ SequencePrototype.toString = function (maxValues = 50) {
     log$1.warn("Sequence.toString() with maxValues might lead to type inspection issues. Use show("+ maxValues+") instead.");
   }
   return show(this, maxValues);
+};
+
+SequencePrototype.count$ = function() {
+  return count$(this);
 };
 
 SequencePrototype.eq$ = function(that) {
@@ -3698,6 +3729,11 @@ const innerIterable = (...elements) => {
  * Collection of all terminal operations that are defined on a {@link SequenceType}.
  * @template  _T_
  * @typedef  SequenceTerminalOperationTypes
+ * @property { CountSequenceOperationType } count$
+ *           - Type: {@link CountSequenceOperationType}
+ *           - Count the number of elements
+ *           - **Warning**: This only works on finite sequences
+ *           - Example: `Seq(1, 2).count$() === 2`
  * @property { EqualOperationType<_T_> } "=="
  *           - Type: {@link EqualOperationType}
  *           - Check for element-wise equality
@@ -5619,9 +5655,9 @@ const withAppender = (appender, context, level) => codeUnderTest => {
         setLoggingContext(oldContext);
         removeFromAppenderList(appender);
     }
-};const release     = "0.9.5";
+};const release     = "0.9.6";
 
-const dateStamp   = "2024-12-08 T 16:12:25 MEZ";
+const dateStamp   = "2024-12-13 T 17:51:07 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
