@@ -20,9 +20,9 @@ const { debug } = LoggerFactory("ch.fhnw.kolibri.util.memoize");
  * The cache hit count is logged on {@link LOG_DEBUG} level.
  * @type {  <_T_, _U_>  (f: Functor<_T_,_U_>) => Functor<_T_,_U_> }
  * @example
- *     const fib = n => n < 2 ? 1 : memFib(n-1) + memFib(n-2);
- *     const memFib = memoize(fib);
- *     memFib(10);
+   let fib = n => n < 2 ? 1 : fib(n-1) + fib(n-2);
+   fib = memoize(fib);
+   fib(2)  // is 2
  */
 const memoize = f => {
     const cache = new Map();

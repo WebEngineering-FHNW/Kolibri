@@ -7,9 +7,9 @@ import { memoize }                            from "./memoize.js";
 const memoizeSuite = TestSuite("util/memoize");
 
 const makeFib = () => {
-    const fib = n => n < 2 ? 1 : memFib(n-1) + memFib(n-2);
-    const memFib = memoize(fib);
-    return memFib;
+    let fib = n => n < 2 ? 1 : fib(n-1) + fib(n-2);
+    fib = memoize(fib);
+    return fib;
 };
 
 // this must come first or the logging numbers spill over

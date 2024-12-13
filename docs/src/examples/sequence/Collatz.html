@@ -54,21 +54,21 @@
     import { memoize }     from "../../kolibri/util/memoize.js";
     import { dom, select } from "../../kolibri/util/dom.js";
 
-    const collatzSeq = n =>
+    let collatz = n =>
         n < 2
             ? Seq(1)
             : n % 2 === 0
-                ?  memCollatz( n / 2 )    .cons(n)
-                :  memCollatz( n * 3 + 1 ).cons(n)
+                ?  collatz( n / 2 )    .cons(n)
+                :  collatz( n * 3 + 1 ).cons(n)
      ;
-    const memCollatz = memoize(collatzSeq);
+    collatz = memoize(collatz);
 
     const [input] = select(document.body, "#input");
     const [out]   = select(document.body, "#out");
 
     input.onchange = _e => {
         const n = Number(input.value);
-        const seq = memCollatz(n);
+        const seq = collatz(n);
         const [table] = dom(`
             <table>
                 <tr>
