@@ -76,12 +76,11 @@
         const table       = S.Walk(1, slices).map( n => [n, n * tableFactor]);
         const angles      = S.Walk(0, Number.MAX_VALUE, Math.PI * 2 / slices);
 
-        const lines = table
+        svg.innerHTML = table
             .map(valuePair => valuePair.map(n => angles.drop(n).head()))
             .map(anglePair => anglePair.map(angle2point))
             .map(points2Line)
-            .foldl$(S.plus, circle );
-        svg.innerHTML = lines;
+            .foldl$(S.plus, circle);
     };
     draw();
     [tableFactorEl, slicesEl].forEach( el => el.oninput = () => {

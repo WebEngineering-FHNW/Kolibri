@@ -3,7 +3,6 @@ import { withDebugTestArrayAppender }         from "../logger/loggerTest.js";
 import { setLoggingLevel, setLoggingContext } from "../logger/logging.js";
 import { LOG_WARN }                           from "../logger/logLevel.js";
 import { dom, fireChangeEvent, select }       from "./dom.js";
-import { count$ }                             from "../sequence/terminalOperations/count/count.js";
 
 const domSuite = TestSuite("util/dom");
 
@@ -30,9 +29,9 @@ domSuite.add("select with children", assert => {
     const [result1] = select(root, "a");       // one hit
     assert.is(result1.nodeName, "A");
     const result2 = select(root, "p, a");      // combined selector
-    assert.is(count$(result2), 2);
+    assert.is(result2.count$(), 2);
     const result3 = select(root, "*");         // wildcard does not include the root
-    assert.is(count$(result3), 2);
+    assert.is(result3.count$(), 2);
 });
 
 domSuite.add("failed select should log a warning", assert => {
@@ -43,7 +42,7 @@ domSuite.add("failed select should log a warning", assert => {
 
         const result = select(root, "no-such-selector");
 
-        assert.is(result.length, 0);
+        assert.is(result.count$(), 0);
         assert.is(appender.getValue()[0], 'Selector "no-such-selector" did not select any nodes in "<div><p><a></a></p></div>"');
     });
 });
