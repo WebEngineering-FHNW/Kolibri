@@ -107,6 +107,11 @@
  * Collection of all terminal operations that are defined on a {@link SequenceType}.
  * @template  _T_
  * @typedef  SequenceTerminalOperationTypes
+ * @property { CountSequenceOperationType } count$
+ *           - Type: {@link CountSequenceOperationType}
+ *           - Count the number of elements
+ *           - **Warning**: This only works on finite sequences
+ *           - Example: `Seq(1, 2).count$() === 2`
  * @property { EqualOperationType<_T_> } "=="
  *           - Type: {@link EqualOperationType}
  *           - Check for element-wise equality

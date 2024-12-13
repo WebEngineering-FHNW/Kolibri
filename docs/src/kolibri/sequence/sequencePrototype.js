@@ -29,6 +29,7 @@ import {
   zipWith
 }                     from "./operators/operators.js";
 import {
+  count$,
   eq$,
   foldr$,
   foldl$,
@@ -106,6 +107,10 @@ SequencePrototype.toString = function (maxValues = 50) {
     log.warn("Sequence.toString() with maxValues might lead to type inspection issues. Use show("+ maxValues+") instead.");
   }
   return show(this, maxValues);
+};
+
+SequencePrototype.count$ = function() {
+  return count$(this);
 };
 
 SequencePrototype.eq$ = function(that) {

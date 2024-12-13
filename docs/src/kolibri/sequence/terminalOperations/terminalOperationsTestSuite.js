@@ -1,3 +1,4 @@
+import "./count/countTest.js"
 import "./eq/eqTest.js"
 import "./foldr/foldrTest.js";
 import "./forEach/forEachTest.js";

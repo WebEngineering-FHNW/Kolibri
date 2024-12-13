@@ -53,7 +53,6 @@
     import { Seq }         from "../../kolibri/sequence/sequence.js";
     import { memoize }     from "../../kolibri/util/memoize.js";
     import { dom, select } from "../../kolibri/util/dom.js";
-    import { count$ }      from "../../kolibri/sequence/util/helpers.js";
 
     const collatzSeq = n =>
         n < 2
@@ -74,7 +73,7 @@
             <table>
                 <tr>
                     <td>${n}</td>
-                    <td>${count$(seq)}</td>
+                    <td>${seq.count$()}</td>
                     <td>${seq.max$()}</td>
                     <td>${seq.show(10_000)}</td>
                 </tr>

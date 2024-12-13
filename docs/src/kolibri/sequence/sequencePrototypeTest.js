@@ -1,6 +1,6 @@
-import { TestSuite, withAppender}                                             from "../util/test.js";
-import { drop, forever, map, nil, Range, reduce$, Seq, Sequence, show, take } from "./sequence.js";
-import { Just, Nothing }                                                      from "../stdlib.js";
+import { TestSuite, withAppender}                                                 from "../util/test.js";
+import {drop, forever, map, nil, Range, reduce$, Seq, Sequence, show, take, Walk} from "./sequence.js";
+import { Just, Nothing }                                                          from "../stdlib.js";
 import { Appender as ArrayAppender }                                          from "../logger/appender/arrayAppender.js";
 import { LOG_WARN }                                                           from "../logger/logLevel.js";
 import { LOG_CONTEXT_KOLIBRI_SEQUENCE }                                       from "./sequencePrototype.js";
@@ -44,6 +44,10 @@ testSuite.add("test prototype: toString, show", assert => {
         assert.is(range.toString(2), range.show(2));
         assert.is(arrayAppender.getValue()[0], "Sequence.toString() with maxValues might lead to type inspection issues. Use show(2) instead.");
     });
+});
+
+testSuite.add("test prototype: count$", assert => {
+  assert.is(Walk(0).count$(), 1);
 });
 
 testSuite.add("test prototype: [==], eq$", assert => {

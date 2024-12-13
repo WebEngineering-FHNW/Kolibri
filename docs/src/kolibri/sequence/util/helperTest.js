@@ -1,8 +1,7 @@
 import { TestSuite }                                                  from "../../util/test.js";
 import { Seq }                                                        from "../constructors/seq/seq.js";
 import { Pair }                                                       from "../../lambda/pair.js";
-import { count$, forever, isIterable, isSequence, plus, toSeq,limit } from "./helpers.js";
-import { Walk }                                                       from "../constructors/range/range.js";
+import { forever, isIterable, isSequence, plus, toSeq,limit }         from "./helpers.js";
 import { Sequence }                                                   from "../constructors/sequence/Sequence.js";
 
 const testSuite = TestSuite("Sequence: helper");
@@ -47,12 +46,6 @@ testSuite.add("plus with numbers", assert => {
   const nums = Seq(1,2,3);
   const result  = nums.reduce$( plus, 0);
   assert.is(result, 6 );
-});
-
-testSuite.add("count$", assert => {
-  assert.is(count$(Seq()),        0 );
-  assert.is(count$(Seq("x")),     1 );
-  assert.is(count$(Walk(1,1000)), 1000 );
 });
 
 testSuite.add("limit ok", assert => {

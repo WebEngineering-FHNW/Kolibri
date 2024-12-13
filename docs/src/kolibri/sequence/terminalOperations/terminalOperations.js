@@ -1,3 +1,4 @@
+export * from "./count/count.js";
 export * from "./eq/eq.js";
 export * from "./foldr/foldr.js";
 export * from "./forEach/forEach.js";

@@ -2,7 +2,7 @@ import { map }               from "../operators/map/map.js"
 import { id }                from "../../stdlib.js"
 import { SequencePrototype } from "../sequencePrototype.js";
 
-export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence, forever, plus, count$, limit }
+export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence, forever, plus, limit }
 
 /**
  * Casts an arbitrary {@link Iterable} into the {@link SequenceType}.
@@ -72,14 +72,6 @@ const forever = _ => true;
  *   assert.is( string, "abc" );
  */
 const plus = (acc, cur) => acc + cur;
-
-/**
- * Convenience function to count the number of elements in a {@link SequenceType sequence}.
- * @template _T_
- * @param  { SequenceType<_T_> } sequence - must be finite as indicated by the trailing "$"
- * @return { Number } zero or positive integer number
- */
-const count$ = sequence => sequence.foldl$( (acc, _cur) => ++acc, 0);
 
 /**
  * Calculate the limit that the number sequence approaches by comparing successive elements until they are

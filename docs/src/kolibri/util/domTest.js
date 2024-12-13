@@ -2,8 +2,8 @@ import { TestSuite }                          from "./test.js";
 import { withDebugTestArrayAppender }         from "../logger/loggerTest.js";
 import { setLoggingLevel, setLoggingContext } from "../logger/logging.js";
 import { LOG_WARN }                           from "../logger/logLevel.js";
-import { count$ }                             from "../sequence/util/helpers.js";
 import { dom, fireChangeEvent, select }       from "./dom.js";
+import { count$ }                             from "../sequence/terminalOperations/count/count.js";
 
 const domSuite = TestSuite("util/dom");
 
