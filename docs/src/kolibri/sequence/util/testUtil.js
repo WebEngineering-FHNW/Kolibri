@@ -1,10 +1,13 @@
 // noinspection GrazieInspection
 
-import { Sequence, nil, PureSequence } from "../sequence.js";
-import { SequencePrototype }           from "../sequencePrototype.js";
-import { arrayEq }       from "../../util/arrayFunctions.js";
-import { Just, Nothing } from "../../lambda/maybe.js";
-import {isSequence}      from "./helpers.js";
+import { Sequence, nil, PureSequence, Walk }  from "../sequence.js";
+import { SequencePrototype }                  from "../sequencePrototype.js";
+import { arrayEq }                            from "../../util/arrayFunctions.js";
+import { Just, Nothing }                      from "../../lambda/maybe.js";
+import { isSequence }                         from "./helpers.js";
+import { LoggerFactory }                      from "../../logger/loggerFactory.js";
+import { LOG_CONTEXT_KOLIBRI_TEST }           from "../../logger/logConstants.js";
+import { id }                                 from "../../stdlib.js";
 
 export {
   createTestConfig,
@@ -18,7 +21,7 @@ export {
   testInvariants,
 }
 
-const id = x => x;
+const { error } = LoggerFactory(LOG_CONTEXT_KOLIBRI_TEST);
 
 /**
  * This type is used to create testing table entry.
@@ -90,7 +93,7 @@ const id = x => x;
  * @param { Number } limit
  * @returns { SequenceType<Number> }
  */
-const newSequence = limit => Sequence(0, current => current <= limit, current => current + 1); // todo dk: Range(limit) ?
+const newSequence = limit => Walk(limit);
 const UPPER_SEQUENCE_BOUNDARY = 4;
 
 /**
@@ -208,17 +211,19 @@ const testInvariants = config => assert => {
  */
 const invariantPenetration = invariant => assert => {
   const testingLists = [
-    nil,                                                   // edge case
-    newSequence(1),                                        // edge case, done calculated
-    newSequence(3),                                        // typical number
-                                                           // no big iterable, needs extra test
-    PureSequence("testString"),                            // edge case, done set explicitly
-    ['a', 'b', 'c', 1, 2, 3, Nothing, Just("testString")], // mixing types
-    [PureSequence(1), newSequence(4), '#', "abc", 1]       // iterable of iterables
+    { candidate: nil,                                                   purpose: "edge case nil"},
+    { candidate: newSequence(1),                                        purpose: "edge case, done calculated"},
+    { candidate: newSequence(3),                                        purpose: "typical number"},
+    { candidate: PureSequence("testString"),                            purpose: "edge case, done set explicitly"},
+    { candidate: ['a', 'b', 'c', 1, 2, 3, Nothing, Just("testString")], purpose: "mixing types"},
+    { candidate: [PureSequence(1), newSequence(4), '#', "abc", 1],      purpose: "iterable of iterables"},
   ];
 
   for (const list of testingLists) {
-    const result = invariant(list);
+    const result = invariant(list.candidate);
+    if (!result) {
+      console.error("error while evaluating invariant: "+list.purpose); // debugging entry point
+    }
     assert.isTrue(result);
   }
 };
@@ -247,9 +252,13 @@ const createTestConfig = config => ({
  * @param { AssertType }          assert
  * @param { EvalCallback<_T_> }   [evalFn] - An evaluation function if the iterables shouldn't be compared using standard iterable test.
  */
-const evaluate = (expected, actual, assert, evalFn ) => {
+const evaluate = (expected, actual, assert, evalFn) => {
   if (evalFn) {
-    assert.isTrue(evalFn(expected)(actual));
+    const result = evalFn(expected)(actual);
+    if (!result) {
+      error(`test error expecting: '${expected}' but got '${actual}'`); // debugging entry point
+    }
+    assert.isTrue(result);
   } else {
     assert.iterableEq(actual, expected);
   }

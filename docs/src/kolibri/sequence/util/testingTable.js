@@ -27,7 +27,7 @@ export { addToTestingTable, TESTS }
  *           TEST_SIMPLE:                   TestingFunction,
  *           TEST_PURITY:                   TestingFunction,
  *           TEST_PROTOTYPE:                TestingFunction,
- *           TEST_INVARIANTS:                      TestingFunction,
+ *           TEST_INVARIANTS:               TestingFunction,
  *           TEST_CB_NOT_CALLED_AFTER_DONE: TestingFunction,
  *           TEST_ITERATE_MULTIPLE_TIMES:   TestingFunction,
  *         }
