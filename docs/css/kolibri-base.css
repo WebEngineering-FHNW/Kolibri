@@ -89,13 +89,15 @@ figure {
 
 em {                    /* emphasis looks like highlighted with text marker */
     position:           relative;
+    padding-inline:     0.2em 0.3em;
     &::before {
         content:        "";
         position:       absolute;
-        inset:          0;  /* -3px leads to strange line-break issues */
+        inset:          0 0 -.2em 0;  /* inline -3px leads to strange line-break issues */
+        border-radius:  5% 5% 20% 20%;
         background-color: var(--kolibri-color-select);
         z-index:        -10;
-        rotate:         -2deg;
+        rotate:         -3deg;
         opacity:        60%;
     }
 }
