@@ -10,14 +10,16 @@
         margin: 1em;
     }
     svg {
+        display:        block;
         margin-inline:  auto;
-        max-width:      90vmin ;
+        max-width:      70vmin ;
         aspect-ratio:   1 / 1;
     }
     svg * {
         stroke:       rgba(87, 87, 165, 0.5);
         stroke-width: .01; /* in SVG units */
     }
+    /* un-comment to play with styles */
     /*svg *:nth-child(2n) {*/
     /*    stroke:       rgba(162, 87, 165, 0.5);*/
     /*}*/
@@ -30,7 +32,7 @@
     .inputs {
         display: grid;
         grid-template-columns: max-content 3ch auto;
-        gap: .5em 1em;
+        gap: 1em;
         & span {
             font-variant-numeric: tabular-nums;
             text-align: end;
@@ -46,17 +48,22 @@
 </div>
 
 <div class="inputs">
-    <label for="slices"     >Slices</label><span>10</span><input id="slices"      type="range" value="10" min="10" max="500" step="1">
-    <label for="tableFactor">Factor</label><span>2 </span><input id="tableFactor" type="range" value="2"  min="2" max="50"   step="1">
+    <label for="slices"     >Slices</label><span>10</span><input id="slices"      type="range" value="10" min="10" max="500" step="1" autofocus>
+    <label for="tableFactor">Factor</label><span>2 </span><input id="tableFactor" type="range" value="2"  min= "2" max="50"  step="1">
 </div>
 
 
+<p> Explanation of the math and more visualizations at the
+    <a href="https://www.youtube.com/watch?v=qhbuKbxJsk8">Mathologer (Youtube)</a>.
+</p>
 <p> More solutions in
-    <a href="https://dierk.github.io/tryPux/beautifulMathInTS/index.html">TypeScript,  PureScript, and Elm</a>.</p>
+    <a href="https://dierk.github.io/tryPux/beautifulMathInTS/index.html">TypeScript,  PureScript, and Elm</a>.
+</p>
 
 <script type="module">
-    import * as S  from "../../kolibri/sequence/sequence.js";
-    import { dom } from "../../kolibri/util/dom.js";
+    import { Walk, plus } from "../../kolibri/sequence/sequence.js";
+    import { dom  }       from "../../kolibri/util/dom.js";
+    import { ALL  }       from "../../kolibri/sequence/constructors/range/range.js";
 
     const tableFactorEl = document.getElementById("tableFactor");
     const slicesEl      = document.getElementById("slices");
@@ -73,14 +80,14 @@
         const tableFactor = Number(tableFactorEl.value);
         const slices      = Number(slicesEl     .value);
 
-        const table       = S.Walk(1, slices).map( n => [n, n * tableFactor]);
-        const angles      = S.Walk(0, Number.MAX_VALUE, Math.PI * 2 / slices);
+        const table       = Walk(1, slices).map( n => [n, n * tableFactor]);
+        const angles      = Walk(0, ALL, Math.PI * 2 / slices);
 
         svg.innerHTML = table
             .map(valuePair => valuePair.map(n => angles.drop(n).head()))
             .map(anglePair => anglePair.map(angle2point))
             .map(points2Line)
-            .foldl$(S.plus, circle);
+            .foldl$(plus, circle);
     };
     draw();
     [tableFactorEl, slicesEl].forEach( el => el.oninput = () => {
