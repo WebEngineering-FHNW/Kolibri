@@ -1,8 +1,8 @@
-import {TestSuite} from "../../util/test.js";
-import {Appender}  from "./consoleAppender.js";
-import {T}         from "../../lambda/church.js";
+import { TestSuite }       from "../../util/test.js";
+import { ConsoleAppender } from "./consoleAppender.js";
+import { T }               from "../../lambda/church.js";
 
-const { trace, debug, info, warn, error, fatal } = Appender();
+const { trace, debug, info, warn, error, fatal } = ConsoleAppender();
 
 const consoleAppenderSuite = TestSuite("logger/Console Appender");
 

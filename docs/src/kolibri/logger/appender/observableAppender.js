@@ -3,9 +3,9 @@
  * The observable Appender is a decorator for other {@link AppenderType}s that notifies a listener about new log messages or
  * other interesting events.
  */
-import {LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_NOTHING, LOG_TRACE, LOG_WARN} from "../logLevel.js";
+import { LOG_DEBUG, LOG_ERROR, LOG_FATAL, LOG_INFO, LOG_NOTHING, LOG_TRACE, LOG_WARN } from "../logLevel.js";
 
-export { Appender}
+export { ObservableAppender}
 
 /**
  * @typedef { (logLevel: LogLevelType, msg: ?String) => void } AppendListenerType
@@ -22,7 +22,7 @@ export { Appender}
  *     AppenderType<_T_>
  * }
  */
-const Appender = appender => listener => {
+const ObservableAppender = appender => listener => {
 
     const trace =  arg => { const x = appender.trace(arg); listener(LOG_TRACE, arg); return x };
     const debug =  arg => { const x = appender.debug(arg); listener(LOG_DEBUG, arg); return x };

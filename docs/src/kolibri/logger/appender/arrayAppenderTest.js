@@ -1,8 +1,8 @@
-import {Appender}  from "./arrayAppender.js";
-import {id, T}    from "../../lambda/church.js";
-import {TestSuite} from "../../util/test.js";
+import { ArrayAppender }  from "./arrayAppender.js";
+import { id, T }          from "../../lambda/church.js";
+import { TestSuite }      from "../../util/test.js";
 
-const { trace, debug, info, warn, error, fatal, getValue, reset } = Appender();
+const { trace, debug, info, warn, error, fatal, getValue, reset } = ArrayAppender();
 
 reset(); // clears the state of the appender
 
@@ -63,7 +63,7 @@ arrayAppenderSuite.add("test add all kind of levels to array appender", assert =
 
 arrayAppenderSuite.add("test default appender overflow implementation", assert => {
   // limit will be lifted to at least 2
-  const {trace, getValue, reset} = Appender(1);
+  const {trace, getValue, reset} = ArrayAppender(1);
   const result = trace(msg1);
   assert.is(getValue().length, 1);
   assert.is(result, T);
@@ -85,7 +85,7 @@ arrayAppenderSuite.add("test custom limit implementation", assert => {
     discardedValues = array;
     return [];
   };
-  const {trace, reset, getValue} = Appender(1, onLimitReached); // minimum of limit is 2
+  const {trace, reset, getValue} = ArrayAppender(1, onLimitReached); // minimum of limit is 2
   assert.is(discardedValues.length, 0);
   assert.is(getValue().length,      0);
   trace(msg1);
@@ -104,7 +104,7 @@ arrayAppenderSuite.add("test custom limit implementation", assert => {
 arrayAppenderSuite.add(
   "test appender should fallback to default eviction strategy, if array reaches limit and has not been cleaned up.",
   assert => {
-    const {trace, getValue, reset} = Appender(2, id);
+    const {trace, getValue, reset} = ArrayAppender(2, id);
     trace(msg1);
     trace(msg1);
 

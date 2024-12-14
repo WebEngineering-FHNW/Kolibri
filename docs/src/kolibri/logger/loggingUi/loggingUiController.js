@@ -1,5 +1,5 @@
-import {Appender as CountAppender}      from "../appender/countAppender.js";
-import {Appender as ObservableAppender} from "../appender/observableAppender.js";
+import { CountAppender }            from "../appender/countAppender.js";
+import { ObservableAppender }       from "../appender/observableAppender.js";
 import {
   getLoggingLevel,
   setLoggingLevel,
@@ -8,9 +8,9 @@ import {
   setLoggingContext,
   onLoggingContextChanged,
   addToAppenderList, removeFromAppenderList
-} from "../logging.js";
-import {toString, fromString}           from "../logLevel.js";
-import {SimpleInputController}          from "../../projector/simpleForm/simpleInputController.js";
+}                                   from "../logging.js";
+import { toString, fromString }     from "../logLevel.js";
+import { SimpleInputController }    from "../../projector/simpleForm/simpleInputController.js";
 
 export {LoggingUiController};
 

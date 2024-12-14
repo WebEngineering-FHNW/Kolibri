@@ -1,5 +1,5 @@
-import { TestSuite }                 from "../util/test.js";
-import { Appender as ArrayAppender } from "./appender/arrayAppender.js";
+import { TestSuite }        from "../util/test.js";
+import { ArrayAppender }    from "./appender/arrayAppender.js";
 
 import {
     addToAppenderList,

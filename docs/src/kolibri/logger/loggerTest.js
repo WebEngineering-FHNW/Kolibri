@@ -1,10 +1,10 @@
-import { TestSuite, withAppender }                     from "../util/test.js";
-import { Appender as ArrayAppender }                   from "./appender/arrayAppender.js";
-import { Appender as CountAppender }                   from "./appender/countAppender.js";
-import { LoggerFactory}                                from "./loggerFactory.js";
-import { Just}                                         from "../stdlib.js";
-import { debugLogger}                                  from "./logger.js";
-import { LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN } from "./logLevel.js";
+import { TestSuite, withAppender }                      from "../util/test.js";
+import { ArrayAppender }                                from "./appender/arrayAppender.js";
+import { CountAppender }                                from "./appender/countAppender.js";
+import { LoggerFactory }                                from "./loggerFactory.js";
+import { Just }                                         from "../stdlib.js";
+import { debugLogger }                                  from "./logger.js";
+import { LOG_DEBUG, LOG_NOTHING, LOG_TRACE, LOG_WARN }  from "./logLevel.js";
 
 import {
     addToAppenderList,

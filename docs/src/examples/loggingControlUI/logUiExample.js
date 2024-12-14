@@ -1,6 +1,6 @@
-import { Appender as ConsoleAppender }              from "../../kolibri/logger/appender/consoleAppender.js";
-import { LoggerFactory }                            from "../../kolibri/logger/loggerFactory.js";
-import { projectLoggingUi, LOGGING_UI_CSS }         from "../../kolibri/logger/loggingUi/loggingUiProjector.js";
+import { ConsoleAppender }                              from "../../kolibri/logger/appender/consoleAppender.js";
+import { LoggerFactory }                                from "../../kolibri/logger/loggerFactory.js";
+import { projectLoggingUi, LOGGING_UI_CSS }             from "../../kolibri/logger/loggingUi/loggingUiProjector.js";
 import { LoggingUiController }                          from "../../kolibri/logger/loggingUi/loggingUiController.js";
 import { addToAppenderList, setGlobalMessageFormatter } from "../../kolibri/logger/logging.js";
 import { dom }                                          from "../../kolibri/util/dom.js";

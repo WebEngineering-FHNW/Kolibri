@@ -1,14 +1,14 @@
-import {T}       from "../../lambda/church.js";
-import {Nothing} from "../../lambda/maybe.js";
+import { T }       from "../../lambda/church.js";
+import { Nothing } from "../../lambda/maybe.js";
 
-export {Appender};
+export {CountAppender};
 
 /**
  * Provides an appender that logs to the console how many log messages have been issued on the various levels.
  * @returns { AppenderType<StatisticType> }
  * @constructor
  */
-const Appender = () => {
+const CountAppender = () => {
     let formatter      = Nothing; // per default, we do not use a specific formatter.
     const getFormatter = () => formatter;
     const setFormatter = newFormatter => formatter = newFormatter;

@@ -1,8 +1,8 @@
-import {TestSuite} from "../../util/test.js";
-import {Appender}  from "./countAppender.js";
-import {T}         from "../../lambda/church.js";
+import { TestSuite }     from "../../util/test.js";
+import { CountAppender } from "./countAppender.js";
+import { T }             from "../../lambda/church.js";
 
-const { trace, debug, info, warn, error, fatal, getValue, reset } = Appender();
+const { trace, debug, info, warn, error, fatal, getValue, reset } = CountAppender();
 reset(); // clear the state of the appender since it is a singleton
 
 const countAppenderSuite = TestSuite("logger/Count Appender");

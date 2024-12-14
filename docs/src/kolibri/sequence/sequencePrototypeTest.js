@@ -1,9 +1,9 @@
-import { TestSuite, withAppender}                                                 from "../util/test.js";
-import {drop, forever, map, nil, Range, reduce$, Seq, Sequence, show, take, Walk} from "./sequence.js";
-import { Just, Nothing }                                                          from "../stdlib.js";
-import { Appender as ArrayAppender }                                          from "../logger/appender/arrayAppender.js";
-import { LOG_WARN }                                                           from "../logger/logLevel.js";
-import { LOG_CONTEXT_KOLIBRI_SEQUENCE }                                       from "./sequencePrototype.js";
+import { TestSuite, withAppender }                                                  from "../util/test.js";
+import { ALL, drop, map, nil, Range, reduce$, Seq, Sequence, show, take }           from "./sequence.js";
+import { Just, Nothing }                                                            from "../stdlib.js";
+import { ArrayAppender }                                                            from "../logger/appender/arrayAppender.js";
+import { LOG_WARN }                                                                 from "../logger/logLevel.js";
+import { LOG_CONTEXT_KOLIBRI_SEQUENCE }                                             from "./sequencePrototype.js";
 
 const testSuite = TestSuite("Sequence Prototype Suite");
 
@@ -44,10 +44,6 @@ testSuite.add("test prototype: toString, show", assert => {
         assert.is(range.toString(2), range.show(2));
         assert.is(arrayAppender.getValue()[0], "Sequence.toString() with maxValues might lead to type inspection issues. Use show(2) instead.");
     });
-});
-
-testSuite.add("test prototype: count$", assert => {
-  assert.is(Walk(0).count$(), 1);
 });
 
 testSuite.add("test prototype: [==], eq$", assert => {
@@ -118,8 +114,10 @@ testSuite.add("test prototype: terminal operations", assert => {
     assert.is(Seq(1, 2, 3).head(),      1);
     assert.is(nil.head(),               undefined);
     assert.is(nil.isEmpty(),            true);
+    assert.is(nil.count$(),             0);
     assert.is(Seq(1).isEmpty(),         false);
     assert.is(Seq(1,2,3).max$(),         3);
+    assert.is(Seq(1,2,3).count$(),       3);
     assert.is(show(Seq(1,2,3).uncons()), "[1,[2,3]]");
 
     let x = "";
@@ -159,7 +157,6 @@ testSuite.add("test prototype: composition", assert => {
             .pipe(sort),                    // custom operator
         Seq(50, 50, 51, 51));
 
-    const count = reduce$( acc => acc + 1, 0);
     const collatz = x => Sequence(
         x,
         n => n > 2,
@@ -168,16 +165,16 @@ testSuite.add("test prototype: composition", assert => {
              : 3 * n + 1);
 
     const result = Range(2, 100_000)
-        .map(n => [n, count(collatz(n))] )
+        .map(n => [n, collatz(n).count$()] )
         .max$((a, b) => a[1] < b[1]);
     assert.iterableEq(result, [77031, 349]);
 
     const sum     = reduce$((acc, cur) => acc + cur, 0);
     const product = reduce$((acc, cur) => acc * cur, 1);
-    const naturalNumbers   = Range(1, Number.MAX_SAFE_INTEGER);
-    const alternatingSigns = Sequence(1, forever, x => -x);
+    const naturalNumbers   = Range(1, ALL);
+    const alternatingSigns = Seq(1, -1).cycle();
 
-    // 3 + ( 4/(2*3*4) - 4/(4*5*6) + 4/(6*7*8) - 4/(8*9*10) + ...)
+    // Nilakantha series: 3 + ( 4/(2*3*4) - 4/(4*5*6) + 4/(6*7*8) - 4/(8*9*10) + ...)
     const piFractions = naturalNumbers
         .map( n => n * 2 )
         .map( n => [n, n+1, n+2] )

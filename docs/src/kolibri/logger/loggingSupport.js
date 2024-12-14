@@ -22,7 +22,7 @@ import {
 } from "./logging.js"
 
 import {
-  Appender as ConsoleAppender
+  ConsoleAppender as ConsoleAppender
 } from "./appender/consoleAppender.js";
 
 export {

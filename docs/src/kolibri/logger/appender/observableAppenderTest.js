@@ -1,7 +1,7 @@
-import {Appender as ArrayAppender}      from "./arrayAppender.js";
-import {Appender as ObservableAppender} from "./observableAppender.js";
-import {TestSuite}                      from "../../util/test.js";
-import {LOG_DEBUG, LOG_NOTHING}         from "../logLevel.js";
+import { ArrayAppender }            from "./arrayAppender.js";
+import { ObservableAppender }       from "./observableAppender.js";
+import { TestSuite }                from "../../util/test.js";
+import { LOG_DEBUG, LOG_NOTHING }   from "../logLevel.js";
 
 const msg1 = "Some Log Message";
 

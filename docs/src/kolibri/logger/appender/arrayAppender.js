@@ -5,9 +5,9 @@
  */
 
 import { id, T, LazyIf, churchBool } from "../../lambda/church.js";
-import {Nothing}                     from "../../stdlib.js";
+import { Nothing }                   from "../../stdlib.js";
 
-export { Appender };
+export { ArrayAppender };
 
 const MAX_ARRAY_ELEMENTS   = Number.MAX_SAFE_INTEGER - 1;
 const MIN_ARRAY_LENGTH     = 2;
@@ -36,7 +36,7 @@ const DEFAULT_CACHE_EVICTION_STRATEGY = cache => {
  *      If this parameter is not set, then all log messages until now will be discarded.
  * @returns { AppenderType<Array<String>> }
  */
-const Appender = (limit = MAX_ARRAY_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
+const ArrayAppender = (limit = MAX_ARRAY_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
     const calculatedLimit = MIN_ARRAY_LENGTH < limit ? limit : MIN_ARRAY_LENGTH;
 
     let formatter      = Nothing; // per default, we do not use a specific formatter.

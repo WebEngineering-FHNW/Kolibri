@@ -1,7 +1,7 @@
-import { T }  from "../../lambda/church.js";
-import {Nothing} from "../../lambda/maybe.js";
+import { T }        from "../../lambda/church.js";
+import { Nothing }  from "../../lambda/maybe.js";
 
-export { Appender}
+export { ConsoleAppender}
 
 /**
  * Provides console appender.
@@ -9,7 +9,7 @@ export { Appender}
  * @returns { AppenderType<void> }
  * @constructor
  */
-const Appender = () => {
+const ConsoleAppender = () => {
   let formatter      = Nothing; // per default, we do not use a specific formatter.
   const getFormatter = () => formatter;
   const setFormatter = newFormatter => formatter = newFormatter;
