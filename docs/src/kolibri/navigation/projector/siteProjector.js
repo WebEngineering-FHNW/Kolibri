@@ -3,7 +3,7 @@ import {href, URI_HASH_HOME} from "../../../customize/uriHashes.js";
 
 export { SiteProjector }
 
-const PAGE_CLASS     = "site";
+const SITE_CLASS     = "site";
 
 const SiteProjector = siteController => {
 
@@ -67,14 +67,14 @@ const headElements = dom(`
         <title>(no title - will be replaced)</title>
         <link id="favicon" rel="icon" type="image/x-icon" href='${window.BASE_URI}img/logo/logo.svg'>
         
-        <style data-style-id="${PAGE_CLASS}">
+        <style data-style-id="${SITE_CLASS}">
         
             /*  use layers to avoid overriding defaults by accident */
             @layer pageLayer, navigationLayer, siteLayer, kolibriLayer;
         
             @import "${window.BASE_URI}css/kolibri-base-light.css" layer(kolibriLayer);
             
-            @layer siteLayer { // styles for the whole website 
+            @layer ${SITE_CLASS}Layer { /* styles for the whole website */ 
                  body {
                      margin: 0;
                  }
@@ -142,6 +142,15 @@ const headElements = dom(`
                  }
                  #content-passivated {
                      z-index:                -10;
+                 }
+                 
+                 @media (width < 90ch) {  /* --kolibri-prosa-width plus side-nave hidden width */
+                    .content {                        
+                        grid-column: 1 / -1;
+                    }
+                    #side-nav {
+                        display: none;
+                    }
                  }
             }
 
