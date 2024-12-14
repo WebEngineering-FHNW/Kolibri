@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Try Kolibri Production Bundle</title>
+    </head>
+    <body>
+    <h1>Try Kolibri Production Bundle</h1>
+
+    <pre id="out"> waiting ... </pre>
+
+    <script> window.BASE_URI = "../"; </script>
+    <script src="./kolibri-0.9.6.js"></script>
+    <script >
+        defaultConsoleLogging("ch", LOG_DEBUG);
+        const asCH = new Intl.NumberFormat("ch-DE").format;
+
+        let fib = n => n < 2 ? 1 : fib(n - 1) + fib(n - 2);
+        fib = memoize(fib);
+
+        out.textContent = `
+            ${asCH( fib(44) )}
+
+            built with Kolibri ${versionInfo}
+        `;
+
+    </script>
+
+    </body>
+
+
+</html>
