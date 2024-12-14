@@ -5655,39 +5655,7 @@ const withAppender = (appender, context, level) => codeUnderTest => {
         setLoggingContext(oldContext);
         removeFromAppenderList(appender);
     }
-};const release     = "0.9.6";
-
-const dateStamp   = "2024-12-13 T 17:51:07 MEZ";
-
-const versionInfo = release + " at " + dateStamp;
-
-const stamp       = () => Math.random().toString(36).slice(2).padEnd(11,"X").slice(0,11);
-
-/**
- * A constant random string of 22 lowercase characters/digits, probability: 1 of 36 ** 22 > 1.7e+34,
- * generated at construction time.
- * The typical use case is to identify the client in a team application / multi-user environment
- * such that value changes can be properly attributed and conflicts can be avoided.
- * @type { String }
- */
-const clientId    = stamp() + stamp();/**
- * @module util/testUI-support
- * Helper to update the test UI report while the tests are running
- */
-
-// users might want to change this temporarily to see logs from the domain or a lower log level
-setLoggingContext(LOG_CONTEXT_KOLIBRI_TEST);
-setLoggingLevel(LOG_ERROR);
-
-total.onChange( value => document.getElementById('grossTotal').textContent = "" + value + " tests done.");
-failed.onChange( value => {
-    const classes = document.getElementById('out').classList;
-    value
-        ? classes.add('failed')
-        : classes.remove('failed');
-});
-
-document.querySelector("footer").textContent = "Built with Kolibri " + versionInfo;/**
+};/**
  * @module util/memoize
  * Helper functions for caching previous results.
  */
@@ -5726,7 +5694,22 @@ const memoize = f => {
         }
         return y;
     }
-};/**
+};const release     = "0.9.6";
+
+const dateStamp   = "2024-12-13 T 17:51:07 MEZ";
+
+const versionInfo = release + " at " + dateStamp;
+
+const stamp       = () => Math.random().toString(36).slice(2).padEnd(11,"X").slice(0,11);
+
+/**
+ * A constant random string of 22 lowercase characters/digits, probability: 1 of 36 ** 22 > 1.7e+34,
+ * generated at construction time.
+ * The typical use case is to identify the client in a team application / multi-user environment
+ * such that value changes can be properly attributed and conflicts can be avoided.
+ * @type { String }
+ */
+const clientId    = stamp() + stamp();/**
  * @module lambda/ski
  * The SKI combinators for the church encoding of lambda calculus wrt the Smullyan bird names.
  * Recommended reading: https://en.wikipedia.org/wiki/SKI_combinator_calculus,

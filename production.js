@@ -30,7 +30,7 @@ import '../src/kolibri/logger/loggingUi/loggingLevelProjector.js'
 import '../src/kolibri/logger/loggingUi/loggingUiController.js'
 import '../src/kolibri/logger/loggingUi/loggingUiProjector.js'
 import '../src/kolibri/util/test.js'
-import '../src/kolibri/util/testUi-support.js'
+// import '../src/kolibri/util/testUi-support.js'  // interacts with UI
 import '../src/kolibri/util/arrayFunctions.js'
 import '../src/kolibri/util/memoize.js'
 import '../src/kolibri/util/array.js'
