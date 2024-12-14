@@ -9,7 +9,7 @@
     <style>
         .icon {
             height:             2em;
-
+            aspect-ratio:       1;
             fill:               rebeccapurple;
             stroke:             none;
             stroke-width:       2;
@@ -43,12 +43,19 @@
 </div>
 
 <script type="module">
-    import { icon }                                                from "../../kolibri/style/icon.js";
-    import { dom  }                                                from "../../kolibri/util/dom.js";
-    import {ICON_EMPTY, ICON_HOUSE, ICON_ONE_TWO, ICON_PLUS_MINUS} from "../../customize/icons.js";
+    import {icon}                                                                 from "../../kolibri/style/icon.js";
+    import {dom}                                                                  from "../../kolibri/util/dom.js";
+    import {
+        ICON_EMPTY,
+        ICON_HOUSE,
+        ICON_KOLIBRI,
+        ICON_ONE_TWO,
+        ICON_PLUS_MINUS,
+        ICON_TERMINAL
+    } from "../../customize/icons.js";
 
     [
-        ICON_EMPTY, ICON_HOUSE, ICON_ONE_TWO, ICON_PLUS_MINUS
+        ICON_EMPTY, ICON_KOLIBRI, ICON_HOUSE, ICON_ONE_TWO, ICON_PLUS_MINUS, ICON_TERMINAL
     ].forEach( iconName => {
         const [entryDiv] = dom(`
             <div title="${iconName.toUpperCase()}">
