@@ -4768,7 +4768,7 @@ const DEFAULT_CACHE_EVICTION_STRATEGY = cache => {
  *      If this parameter is not set, then all log messages until now will be discarded.
  * @returns { AppenderType<Array<String>> }
  */
-const Appender$3 = (limit = MAX_ARRAY_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
+const ArrayAppender = (limit = MAX_ARRAY_ELEMENTS, cacheEvictionStrategy = DEFAULT_CACHE_EVICTION_STRATEGY) => {
     const calculatedLimit = MIN_ARRAY_LENGTH < limit ? limit : MIN_ARRAY_LENGTH;
 
     let formatter      = Nothing; // per default, we do not use a specific formatter.
@@ -4906,7 +4906,7 @@ const Appender$3 = (limit = MAX_ARRAY_ELEMENTS, cacheEvictionStrategy = DEFAULT_
  *     AppenderType<_T_>
  * }
  */
-const Appender$2 = appender => listener => {
+const ObservableAppender = appender => listener => {
 
     const trace =  arg => { const x = appender.trace(arg); listener(LOG_TRACE, arg); return x };
     const debug =  arg => { const x = appender.debug(arg); listener(LOG_DEBUG, arg); return x };
@@ -4925,7 +4925,7 @@ const Appender$2 = appender => listener => {
  * @returns { AppenderType<StatisticType> }
  * @constructor
  */
-const Appender$1 = () => {
+const CountAppender = () => {
     let formatter      = Nothing; // per default, we do not use a specific formatter.
     const getFormatter = () => formatter;
     const setFormatter = newFormatter => formatter = newFormatter;
@@ -5017,7 +5017,7 @@ const Appender$1 = () => {
  * @returns { AppenderType<void> }
  * @constructor
  */
-const Appender = () => {
+const ConsoleAppender = () => {
   let formatter      = Nothing; // per default, we do not use a specific formatter.
   const getFormatter = () => formatter;
   const setFormatter = newFormatter => formatter = newFormatter;
@@ -5189,7 +5189,7 @@ window["setLoggingLevel"  ] = setLoggingLevel  ;
 window["setLoggingContext"] = setLoggingContext;
 
 const defaultConsoleLogging = (context, level) => {
-  addToAppenderList(Appender());
+  addToAppenderList(ConsoleAppender());
   setLoggingContext(context);
   setLoggingLevel(level);
 };let idPostfix = 0; // makes sure we have unique ids in case of many such controls
@@ -5277,8 +5277,8 @@ const LoggingUiController = () => {
        name:  "lastLogMessage",
        type:  "text",
     });
-    const observableAppender       = Appender$2
-    (Appender$1())
+    const observableAppender       = ObservableAppender
+    (CountAppender())
     ((level, msg) => lastLogMessageController.setValue(msg));
 
     addToAppenderList(observableAppender);
@@ -5574,7 +5574,7 @@ const TestSuite = suiteName => {
             if (suiteAssert.results.every( id )) { // whole suite was ok, report whole suite
                 report(suiteName, suiteAssert.results, suiteAssert.messages);
             } else { // some test in suite failed, rerun tests for better error indication with debug logging
-                const consoleAppender = Appender();
+                const consoleAppender = ConsoleAppender();
                 const formattingFn  = context => logLevel => logMessage => `[${logLevel}]\t'${context}' ${suiteName}: ${logMessage}`;
                 consoleAppender.setFormatter(Just(formattingFn));
                 withAppender(consoleAppender, LOG_CONTEXT_All, LOG_DEBUG)(() =>
