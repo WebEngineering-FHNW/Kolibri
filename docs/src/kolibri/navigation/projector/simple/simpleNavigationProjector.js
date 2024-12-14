@@ -83,6 +83,7 @@ const projectorStyle = `
     <style data-style-id="${PAGE_CLASS}">    
         @layer navigationLayer {
             .${PAGE_CLASS} {
+                overflow-x: clip;
                 &.hide {                 
                     .toggler {                    
                         rotate:         0deg;
@@ -98,7 +99,7 @@ const projectorStyle = `
                     width:              2rem;
                     aspect-ratio:       1 / 1;
                     rotate:             180deg;
-                    transition:         rotate .3s ease-in-out;
+                    transition:         rotate .3s ease-in-out .1s; /* delayed and shorter than the width transition */
                 }
                 svg {
                     fill:               none;
@@ -107,11 +108,16 @@ const projectorStyle = `
                     stroke-linejoin:    round;
                 }
                 a {
+                    width:              auto;
                     color:              revert;
                     pointer-events:     revert;
                     user-select:        none;
                     text-wrap:          nowrap;
                     font-family:        system-ui;
+                    transition-property:        width;
+                    transition-duration:        .5s;
+                    transition-timing-function: ease-out;
+                    transition-behavior:        allow-discrete; /* progressive enhancement*/
                 }
                 a.visited {
                     text-decoration:    none;

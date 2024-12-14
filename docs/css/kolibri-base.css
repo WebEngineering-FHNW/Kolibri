@@ -188,12 +188,20 @@ label + span > input:invalid + span.invalidation_marker {
       }
  }
 
-
+/* --- standard values --- */
 @media (prefers-reduced-motion: reduce) {
     * {
         animation-duration: 0.01ms ;
   }
 }
+:root {
+    /*
+        Needed to animate e.g. from height:0 to height:auto.
+        Works in Chrome but does not work in FF, Safari yet (dec.24).
+    */
+    interpolate-size: allow-keywords; /* progressive enhancement*/
+}
+/* --- end of standard values --- */
 
 /* --- a11y support: the "skip" link --- */
 
