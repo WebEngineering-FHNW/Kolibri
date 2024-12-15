@@ -12,7 +12,6 @@ import {
 }                                                   from "../../../customize/uriHashes.js";
 import {ICON_HOUSE, ICON_PLUS_MINUS, ICON_TERMINAL} from "../../../customize/icons.js";
 
-
 defaultConsoleLogging("ch.fhnw.kolibri", LOG_INFO);
 
 const siteController = SiteController();
@@ -29,8 +28,8 @@ const hash2icon = /** @type { Object } */{
 };
 const noIcons = /** @type { Object } */ {}; // pass to avoid icons in the navigation
 
-SimpleNavigationProjector(siteController, siteProjector.sideNavigationElement, hash2icon, true);
-SimpleNavigationProjector(siteController, siteProjector.topNavigationElement,  hash2icon,   false);
+siteProjector.sideNavigationElement.append(...SimpleNavigationProjector(siteController, hash2icon, true));
+siteProjector.topNavigationElement .append(...SimpleNavigationProjector(siteController, noIcons,   false));
 
 siteController.gotoUriHash(window.location.hash);
 

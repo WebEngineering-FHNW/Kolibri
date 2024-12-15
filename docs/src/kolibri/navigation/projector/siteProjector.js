@@ -1,5 +1,7 @@
-import {dom}                 from "../../util/dom.js";
-import {href, URI_HASH_HOME} from "../../../customize/uriHashes.js";
+import { dom, select }         from "../../util/dom.js";
+import { href, URI_HASH_HOME } from "../../../customize/uriHashes.js";
+import {ICON_KOLIBRI}          from "../../../customize/icons.js";
+import {icon}                  from "../../style/icon.js";
 
 export { SiteProjector }
 
@@ -7,13 +9,16 @@ const SITE_CLASS     = "site";
 
 const SiteProjector = siteController => {
 
-     const sideNavigationElement = bodyElement.querySelector("#side-nav");
-     const topNavigationElement  = bodyElement.querySelector("#top-nav");
-     const activeContentElement  = bodyElement.querySelector("#content");
-     const passiveContentElement = bodyElement.querySelector("#content-passivated");
+     const [logoAnchorElement]     = select(bodyElement,"#logo a");
+     const [sideNavigationElement] = select(bodyElement,"#side-nav");
+     const [topNavigationElement ] = select(bodyElement,"#top-nav");
+     const [activeContentElement ] = select(bodyElement,"#content");
+     const [passiveContentElement] = select(bodyElement,"#content-passivated");
 
      document.head.append(...headElements);
      document.body.append(bodyElement);
+
+     logoAnchorElement.append(...icon(ICON_KOLIBRI));
 
      siteController.onUnsupportedUriHash( uriHash =>                     // think about monolog and i18n
          alert(`Sorry, the target "${uriHash}" is not available.`)
@@ -70,9 +75,11 @@ const headElements = dom(`
         <style data-style-id="${SITE_CLASS}">
         
             /*  use layers to avoid overriding defaults by accident */
-            @layer pageLayer, navigationLayer, siteLayer, kolibriLayer;
+            @layer pageLayer, navigationLayer, siteLayer, kolibriLayer, kolibriLightLayer;
         
-            @import "${window.BASE_URI}css/kolibri-base-light.css" layer(kolibriLayer);
+            /* the new styling will have import such that we only need one line here. */
+            @import "${window.BASE_URI}css/kolibri-base-light.css"   layer(kolibriLightLayer);
+            @import "${window.BASE_URI}css/kolibri-base.css"         layer(kolibriLayer);
             
             @layer ${SITE_CLASS}Layer { /* styles for the whole website */ 
                  body {
@@ -114,12 +121,12 @@ const headElements = dom(`
                  #logo {
                      grid-area:              logo;
                      justify-self:           center;
-                     & a img {
+                     & a svg {                        
+                         width:              3rem;                         
+                         aspect-ratio:       1 / 1;
                          display:            block;
                          border-radius:      50%;
                          background-color:   var(--kb-color-hsl-bg-light);
-                         width:              3rem;
-                         aspect-ratio:       1 / 1;
                          box-shadow:         1px 1px .2rem 0 var(--kb-color-hsl-lavender-700) inset; 
                      }
                  }
@@ -144,12 +151,12 @@ const headElements = dom(`
                      z-index:                -10;
                  }
                  
-                 @media (width < 90ch) {  /* --kolibri-prosa-width plus side-nave hidden width */
+                 @media (width < 90ch) {    /* --kolibri-prosa-width plus side-nav hidden width */
                     .content {                        
-                        grid-column: 1 / -1;
+                        grid-column:        1 / -1;
                     }
                     #side-nav {
-                        display: none;
+                        display:            none;
                     }
                  }
             }
@@ -162,11 +169,10 @@ const [bodyElement] = dom(`
         <div id="top-backdrop"></div>
         <div id="logo">
             <a ${href(URI_HASH_HOME)}>
-                <img src="${window.BASE_URI}img/logo/logo-new-128.svg" alt="Kolibri-logo">
             </a>
         </div>
-        <div  id="top-nav"> top  nav stand-in</div>
-        <div  id="side-nav">side nav stand-in</div>
+        <div  id="top-nav"></div>
+        <div  id="side-nav"></div>
         <div  id="content-passivated"   class="content">
             <!-- holder to display content during passivation -->
         </div>
