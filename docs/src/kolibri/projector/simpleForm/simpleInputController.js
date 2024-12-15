@@ -1,5 +1,5 @@
-import {SimpleInputModel}                          from "./simpleInputModel.js";
-import {EDITABLE, LABEL, NAME, TYPE, VALID, VALUE} from "../../presentationModel.js";
+import {SimpleInputModel}                                   from "./simpleInputModel.js";
+import {EDITABLE, LABEL, NAME, TOOLTIP, TYPE, VALID, VALUE} from "../../presentationModel.js";
 
 export { SimpleInputController, SimpleAttributeInputController }
 
@@ -41,11 +41,13 @@ const SimpleAttributeInputController = attribute => ( {
     setValue:          attribute.setConvertedValue,
     getValue:          attribute.getObs(VALUE).getValue,
     setValid:          attribute.getObs(VALID).setValue,
+    setTooltip:        attribute.getObs(TOOLTIP).setValue,
     getType:           attribute.getObs(TYPE).getValue,
     onValueChanged:    attribute.getObs(VALUE).onChange,
     onValidChanged:    attribute.getObs(VALID).onChange,
     onLabelChanged:    attribute.getObs(LABEL).onChange,
     onNameChanged:     attribute.getObs(NAME).onChange,
+    onTooltipChanged:  attribute.getObs(TOOLTIP).onChange,
     onEditableChanged: attribute.getObs(EDITABLE).onChange,
     setConverter:      attribute.setConverter,
 } );

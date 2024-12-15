@@ -8,10 +8,10 @@ import { id }         from "./stdlib.js";
 export { Attribute, QualifiedAttribute,
          presentationModelFromAttributeNames,
          valueOf, readQualifierValue,
-         VALID, VALUE, EDITABLE, LABEL, NAME, TYPE }
+         VALID, VALUE, EDITABLE, LABEL, NAME, TOOLTIP, TYPE }
 
 /**
- * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'} ObservableTypeString
+ * @typedef {'value'|'valid'|'editable'|'label'|'name'|'tooltip'|'type'} ObservableTypeString
  * Feel free to extend this type with new unique type strings as needed for your application.
  */
 
@@ -20,6 +20,7 @@ export { Attribute, QualifiedAttribute,
 /** @type ObservableTypeString */ const EDITABLE = "editable";
 /** @type ObservableTypeString */ const LABEL    = "label";
 /** @type ObservableTypeString */ const NAME     = "name";
+/** @type ObservableTypeString */ const TOOLTIP  = "tooltip";
 /** @type ObservableTypeString */ const TYPE     = "type"; // HTML input types: text, number, checkbox, etc.
 
 /**

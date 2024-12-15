@@ -13,8 +13,10 @@
  * to the application while all business logic and their test cases remain untouched.
  */
 
-import {CHANGE, dom, INPUT, TIME, CHECKBOX}               from "../../util/dom.js";
+import {CHANGE, dom, select, INPUT, TIME, CHECKBOX}       from "../../util/dom.js";
 import { timeStringToMinutes, totalMinutesToTimeString}   from "../projectorUtils.js";
+import {ICON_CHRISTMAS_TREE}                              from "../../../customize/icons.js";
+import {icon}                                             from "../../style/icon.js";
 
 export { InputProjector }
 
@@ -42,14 +44,16 @@ const projectInput = (timeout) => (eventType) =>
     // the span that serves as the invalidation marker. See kolibri-base.css for details.
     const elements = dom(`
         <label for="${id}"></label>
-        <span  data-id="${id}">
+        <span  data-id="${id}" class="popover_anchor" style="anchor-name: --anchor-${id};">
             <input type="${inputController.getType()}" id="${id}">
             <span class="invalidation_marker" aria-hidden="true"></span>
+            <span class="popover_tooltip" popover style="position-anchor: --anchor-${id};" ></span>
         </span>
     `);
-    /** @type {HTMLLabelElement} */ const labelElement = elements[0]; // only for the sake of type casting, otherwise...
-    /** @type {HTMLSpanElement}  */ const spanElement  = elements[1]; // only for the sake of type casting, otherwise...
-    /** @type {HTMLInputElement} */ const inputElement = spanElement.firstElementChild; // ... we would use array deconstruction
+    /** @type {HTMLLabelElement} */ const labelElement      = elements[0]; // only for the sake of type casting, otherwise...
+    /** @type {HTMLSpanElement}  */ const spanElement       = elements[1]; // only for the sake of type casting, otherwise...
+    /** @type {HTMLInputElement} */ const inputElement      = spanElement.firstElementChild; // ... we would use array deconstruction
+    /** @type {HTMLSpanElement}  */ const [popoverElement]  = select(spanElement, "[popover]"); // the element that pops
 
     // view and data binding can depend on the type
     if (inputController.getType() === TIME) { // "hh:mm" in the vies vs minutes since midnight in the model
@@ -80,7 +84,7 @@ const projectInput = (timeout) => (eventType) =>
 
     inputController.onLabelChanged (  label => {
         labelElement.textContent = /** @type {String} */ label;
-        inputElement.setAttribute("title", label);
+        inputController.setTooltip(label);
     });
     inputController.onNameChanged  (name  => inputElement.setAttribute("name", name || id));
     inputController.onValidChanged (valid => inputElement.setCustomValidity(valid ? "" : "invalid"));
@@ -88,6 +92,23 @@ const projectInput = (timeout) => (eventType) =>
     inputController.onEditableChanged(isEditable => isEditable
         ? inputElement.removeAttribute("readonly")
         : inputElement.setAttribute("readonly", "on"));
+
+    inputController.onTooltipChanged( text => {
+        popoverElement.innerHTML = text;                            // think about textContent or HTML
+        popoverElement.prepend(...icon(ICON_CHRISTMAS_TREE));
+        const hide  = _e => popoverElement.hidePopover();
+        const show  = _e => popoverElement.showPopover();
+        spanElement .removeEventListener("mouseenter", show);       // avoid duplicate listeners
+        spanElement .removeEventListener("mouseleave", hide);
+        labelElement.removeEventListener("click", show);
+        inputElement.removeEventListener("input", hide);
+        if (text.length > 0  ) {
+            spanElement .addEventListener("mouseenter", show);
+            spanElement .addEventListener("mouseleave", hide);
+            labelElement.addEventListener("click", show);
+            inputElement.addEventListener("input", hide);
+        }
+    });
 
     return /** @type { [HTMLLabelElement, HTMLInputElement] } */ elements;
 };
