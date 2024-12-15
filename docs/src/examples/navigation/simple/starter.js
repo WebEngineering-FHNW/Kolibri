@@ -9,7 +9,8 @@ import {
         URI_HASH_HOME,
         URI_HASH_MASTER_DETAIL,
         URI_HASH_UNSTYLED
-}                                           from "../../../customize/uriHashes.js";
+}                                                   from "../../../customize/uriHashes.js";
+import {ICON_HOUSE, ICON_PLUS_MINUS, ICON_TERMINAL} from "../../../customize/icons.js";
 
 
 defaultConsoleLogging("ch.fhnw.kolibri", LOG_INFO);
@@ -21,8 +22,15 @@ siteController.registerPage(URI_HASH_HOME,          HomePage());
 siteController.registerPage(URI_HASH_UNSTYLED,      UnstyledPage());
 siteController.registerPage(URI_HASH_MASTER_DETAIL, MasterDetailPage());
 
-SimpleNavigationProjector(siteController, siteProjector.sideNavigationElement, true);
-SimpleNavigationProjector(siteController, siteProjector.topNavigationElement, false);
+const hash2icon = /** @type { Object } */{
+    [URI_HASH_HOME]             : ICON_HOUSE,
+    [URI_HASH_UNSTYLED]         : ICON_TERMINAL,
+    [URI_HASH_MASTER_DETAIL]    : ICON_PLUS_MINUS,
+};
+const noIcons = /** @type { Object } */ {}; // pass to avoid icons in the navigation
+
+SimpleNavigationProjector(siteController, siteProjector.sideNavigationElement, hash2icon, true);
+SimpleNavigationProjector(siteController, siteProjector.topNavigationElement,  hash2icon,   false);
 
 siteController.gotoUriHash(window.location.hash);
 

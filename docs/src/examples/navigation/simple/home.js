@@ -13,7 +13,7 @@ const PAGE_CLASS = URI_HASH_HOME.substring(1);
  * @constructor
  */
 const HomePage = () => Page(/** @type { PageDataType } */{
-    titleText:         "Kolibri New Navigation",
+    titleText:         "New Navigation",
     activationMs:       1000,
     passivationMs:      1000,
     pageClass:          PAGE_CLASS,

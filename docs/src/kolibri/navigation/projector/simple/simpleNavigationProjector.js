@@ -1,4 +1,5 @@
-import {select} from "../../../util/dom.js";
+import {select, dom } from "../../../util/dom.js";
+import {icon}         from "../../../style/icon.js";
 
 export { SimpleNavigationProjector }
 
@@ -23,6 +24,7 @@ const iconSVGStr = `
  * @constructor
  * @param { !SiteControllerType } siteController - the source of the information that we display
  * @param { !HTMLDivElement }     root           - where to mount the view
+ * @param { Object.<UriHashType, IconNameType> } hash2icon - maps hashes to their icons
  * @param { Boolean= }            canHide        - whether this navigation can hide itself, defaults to false
  * @return { NavigationProjectorType }
  * @example
@@ -37,7 +39,7 @@ const iconSVGStr = `
  * SimpleNavigationProjector(siteController, siteProjector.topNavigationElement);
  */
 
-const SimpleNavigationProjector = (siteController, root, canHide=false) => {
+const SimpleNavigationProjector = (siteController, root, hash2icon, canHide=false) => {
 
     root.innerHTML = `<nav class="${PAGE_CLASS}"></nav> `;
 
@@ -55,6 +57,19 @@ const SimpleNavigationProjector = (siteController, root, canHide=false) => {
             Object.entries(siteController.getAllPages())
               .map( ([hash, page]) => `<a href="${hash}">${page.titleText}</a>`)
               .join(" ");
+
+        if (Object.keys(hash2icon).length > 0) { // add icons to the anchors if requested
+            const anchors = select(navigationEl, "a");
+            anchors.forEach$( anchorElement => {
+                const hash = anchorElement.getAttribute("href");
+                // const [div] = dom(`<div class="icon_anchor"></div>`);
+                const iconSVG = icon(hash2icon[hash]);
+                // div.append(...iconSVG);
+                anchorElement.prepend(...iconSVG);
+                // div.append(anchorElement);
+            })
+
+        }
 
         // view binding is done by the browser implicitly when following the link
 
@@ -91,7 +106,6 @@ const projectorStyle = `
                     a, a.current {      /* hide the anchors */
                         width:          0;
                         color:          transparent;
-                        pointer-events: none;
                     } 
                 }
                 .toggler {              /* provide a box for the svg */
@@ -100,6 +114,15 @@ const projectorStyle = `
                     aspect-ratio:       1 / 1;
                     rotate:             180deg;
                     transition:         rotate .3s ease-in-out .1s; /* delayed and shorter than the width transition */
+                }
+                a svg {
+                    --icon-width:       1.6rem;
+                    width:              var(--icon-width);
+                    margin-inline:      calc( (3rem - var(--icon-width)) / 2); /* logo-width 3rem */
+                    fill:               var(--kb-color-hsl-lavender-700);
+                    aspect-ratio:       1;
+                    stroke:             none;
+                    transform:          translateY(20%);
                 }
                 svg {
                     fill:               none;
@@ -122,11 +145,14 @@ const projectorStyle = `
                 a.visited {
                     text-decoration:    none;
                 }
-                a.visited:not(.current) {
+                a.visited:not(.current), a.visited:not(.current) svg {
                     filter:             brightness(150%) grayscale(60%);
                 }
                 a.current {
                     color:              var(--kolibri-color-accent, deeppink);
+                }
+                a.current svg {
+                    fill:               var(--kolibri-color-accent, deeppink);
                 }
             }
         }
