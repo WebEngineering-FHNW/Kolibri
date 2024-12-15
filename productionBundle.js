@@ -6100,7 +6100,80 @@ const [styleElement, contentElement] = dom(`
     <div class="${PAGE_CLASS$1}">
         Empty Page      
     </div>
-`);const PAGE_CLASS = "simpleNavigationProjector";
+`);/**
+ * A typesafe way to create icons from svg and ensure consistent styling.
+ * Many icon SVGs based on www.svgrepo.com.
+ */
+
+/**
+ * @typedef {
+ *        "empty"
+ *      | "house"
+ *      | "one_two"
+ *      | "plus_minus"
+ *      | "terminal"
+ *      | "kolibri"
+ *      }  IconNameType
+ */
+
+/** @type { IconNameType } */ const ICON_EMPTY      = "empty";
+/** @type { IconNameType } */ const ICON_HOUSE      = "house";
+/** @type { IconNameType } */ const ICON_ONE_TWO    = "one_two";
+/** @type { IconNameType } */ const ICON_PLUS_MINUS = "plus_minus";
+/** @type { IconNameType } */ const ICON_TERMINAL   = "terminal";
+/** @type { IconNameType } */ const ICON_KOLIBRI    = "kolibri";
+
+
+const svg = /** @type { Object.<IconNameType, String>  } */ {};
+
+svg[ICON_EMPTY] = `
+    <svg id="icon_${ICON_EMPTY}" viewBox="0 0 1 1" >
+    </svg>
+`;
+svg[ICON_HOUSE] = `
+    <svg id="icon_${ICON_HOUSE}" viewBox="0 0 30 32" >
+        <path d="M1 12.5815C1 11.6147 1.46592 10.7072 2.25152 10.1437L15 1L27.7485 10.1437C28.5341 10.7072 29 11.6147 29 12.5815V28.5C29 29.8807 27.8807 31 26.5 31H20.2C19.6477 31 19.2 30.5523 19.2 30V21.2727C19.2 20.9966 18.9761 20.7727 18.7 20.7727H11.3C11.0239 20.7727 10.8 20.9966 10.8 21.2727V30C10.8 30.5523 10.3523 31 9.8 31H3.5C2.11929 31 1 29.8807 1 28.5V12.5815Z" />
+    </svg>
+`;
+svg[ICON_ONE_TWO] = `
+    <svg id="icon_${ICON_ONE_TWO}" viewBox="0 0 24 24" >
+        <path d="M3.604 3.089A.75.75 0 014 3.75V8.5h.75a.75.75 0 010 1.5h-3a.75.75 0 110-1.5h.75V5.151l-.334.223a.75.75 0 01-.832-1.248l1.5-1a.75.75 0 01.77-.037zM8.75 5.5a.75.75 0 000 1.5h11.5a.75.75 0 000-1.5H8.75zm0 6a.75.75 0 000 1.5h11.5a.75.75 0 000-1.5H8.75zm0 6a.75.75 0 000 1.5h11.5a.75.75 0 000-1.5H8.75zM5.5 15.75c0-.704-.271-1.286-.72-1.686a2.302 2.302 0 00-1.53-.564c-.535 0-1.094.178-1.53.565-.449.399-.72.982-.72 1.685a.75.75 0 001.5 0c0-.296.104-.464.217-.564A.805.805 0 013.25 15c.215 0 .406.072.533.185.113.101.217.268.217.565 0 .332-.069.48-.21.657-.092.113-.216.24-.403.419l-.147.14c-.152.144-.33.313-.52.504l-1.5 1.5a.75.75 0 00-.22.53v.25c0 .414.336.75.75.75H5A.75.75 0 005 19H3.31l.47-.47c.176-.176.333-.324.48-.465l.165-.156a5.98 5.98 0 00.536-.566c.358-.447.539-.925.539-1.593z"/>
+    </svg>
+`;
+svg[ICON_PLUS_MINUS] = `
+    <svg id="icon_${ICON_PLUS_MINUS}" viewBox="0 0 24 24" >
+        <path d="M12.5 6.75a.75.75 0 00-1.5 0V9H8.75a.75.75 0 000 1.5H11v2.25a.75.75 0 001.5 0V10.5h2.25a.75.75 0 000-1.5H12.5V6.75zM8.75 16a.75.75 0 000 1.5h6a.75.75 0 000-1.5h-6z"/><path fill-rule="evenodd" d="M5 1a2 2 0 00-2 2v18a2 2 0 002 2h14a2 2 0 002-2V7.018a2 2 0 00-.586-1.414l-4.018-4.018A2 2 0 0014.982 1H5zm-.5 2a.5.5 0 01.5-.5h9.982a.5.5 0 01.354.146l4.018 4.018a.5.5 0 01.146.354V21a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V3z"/>
+    </svg>
+`;
+svg[ICON_TERMINAL] = `
+    <svg id="icon_${ICON_TERMINAL}" viewBox="0 0 24 24" >
+        <path d="M9.25 12a.75.75 0 01-.22.53l-2.75 2.75a.75.75 0 01-1.06-1.06L7.44 12 5.22 9.78a.75.75 0 111.06-1.06l2.75 2.75c.141.14.22.331.22.53zm2 2a.75.75 0 000 1.5h5a.75.75 0 000-1.5h-5z"/><path fill-rule="evenodd" d="M0 4.75C0 3.784.784 3 1.75 3h20.5c.966 0 1.75.784 1.75 1.75v14.5A1.75 1.75 0 0122.25 21H1.75A1.75 1.75 0 010 19.25V4.75zm1.75-.25a.25.25 0 00-.25.25v14.5c0 .138.112.25.25.25h20.5a.25.25 0 00.25-.25V4.75a.25.25 0 00-.25-.25H1.75z"/>
+    </svg>
+`;
+svg[ICON_KOLIBRI] = `
+<svg id="icon_${ICON_KOLIBRI}" viewBox="0 0 128 128" style="fill:none" >
+    <path d="M82.375 106C80.0436 75.8514 58.9236 72.2085 48.775 67.9375C49.3236 74.8465 65.9582 80.6396 70.2898 84.7704C76.6469 90.8328 81.2331 95.8391 82.375 106Z" fill="#1E19FF"/>
+    <path d="M52.7125 54.025C52.7125 34.075 33.1562 26.4625 22 22C43.315 32.29 42.3438 42.8687 43.1312 58.225C44.8375 78.8312 63.2125 82.5062 63.2125 82.5062C50.875 72.5312 52.7125 63.2125 52.7125 54.025Z" fill="#FF2CA5"/>
+    <path d="M62.1239 84.2567C48.0491 78.3159 44.767 74.1573 43.525 60.85C43.525 60.85 48.5519 74.6326 62.1239 78.3159C75.696 81.9992 82.2075 98.0393 82.375 106C78.2095 91.148 75.6573 89.9689 62.1239 84.2567Z" fill="#6000FF"/>
+    <path d="M58.4127 62.7124C62.7709 39.208 83.6844 51.0936 94.8144 28.3C89.5866 54.8305 65.1945 55.0495 58.4127 62.7124Z" fill="#1E19FF"/>
+    <path d="M58.4156 62.7193C69.1306 44.5994 89.6791 52.8668 105.942 34.2029C97.3011 51.9087 87.6772 66.7312 58.4156 62.7193Z" fill="#FF2CA5"/>
+    <path d="M58.4064 62.7154C69.2766 74.3202 90.1304 65.5289 96.8058 58.0697C87.5516 63.8076 73.8789 55.7374 58.4064 62.7154Z" fill="#6000FF"/>
+    <ellipse cx="48.1188" cy="37.8812" rx="2.49375" ry="2.49375" fill="#14141B"/>
+    <path d="M51.4253 33.3451C47.9627 30.8207 43.78 33.9764 37.4875 29.4554C46.1943 30.0331 49.8099 26.8381 54.657 31.6257C59.5498 37.2528 55.1288 44.5092 59.9453 50.8416C54.2063 48.6284 55.7238 36.4788 51.4253 33.3451Z" fill="#1E19FF"/>
+</svg>
+`;const xmlns ="http://www.w3.org/2000/svg";
+
+const icon = iconName => {
+    const [iconSVG] = dom(svg[iconName]);
+    iconSVG.removeAttribute("height"); // remove attributes that we like to override via class styling
+    iconSVG.removeAttribute("width");
+    iconSVG.removeAttribute("stroke-width");
+    iconSVG.removeAttribute("stroke-linecap");
+    iconSVG.removeAttribute("stroke-linejoin");
+    iconSVG.setAttribute("xmlns", xmlns);
+    iconSVG.setAttribute("class", "icon");
+    return [iconSVG];
+};const PAGE_CLASS = "simpleNavigationProjector";
 
 const iconSVGStr = `
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -6121,6 +6194,7 @@ const iconSVGStr = `
  * @constructor
  * @param { !SiteControllerType } siteController - the source of the information that we display
  * @param { !HTMLDivElement }     root           - where to mount the view
+ * @param { Object.<UriHashType, IconNameType> } hash2icon - maps hashes to their icons
  * @param { Boolean= }            canHide        - whether this navigation can hide itself, defaults to false
  * @return { NavigationProjectorType }
  * @example
@@ -6135,7 +6209,7 @@ const iconSVGStr = `
  * SimpleNavigationProjector(siteController, siteProjector.topNavigationElement);
  */
 
-const SimpleNavigationProjector = (siteController, root, canHide=false) => {
+const SimpleNavigationProjector = (siteController, root, hash2icon, canHide=false) => {
 
     root.innerHTML = `<nav class="${PAGE_CLASS}"></nav> `;
 
@@ -6153,6 +6227,19 @@ const SimpleNavigationProjector = (siteController, root, canHide=false) => {
             Object.entries(siteController.getAllPages())
               .map( ([hash, page]) => `<a href="${hash}">${page.titleText}</a>`)
               .join(" ");
+
+        if (Object.keys(hash2icon).length > 0) { // add icons to the anchors if requested
+            const anchors = select(navigationEl, "a");
+            anchors.forEach$( anchorElement => {
+                const hash = anchorElement.getAttribute("href");
+                // const [div] = dom(`<div class="icon_anchor"></div>`);
+                const iconSVG = icon(hash2icon[hash]);
+                // div.append(...iconSVG);
+                anchorElement.prepend(...iconSVG);
+                // div.append(anchorElement);
+            });
+
+        }
 
         // view binding is done by the browser implicitly when following the link
 
@@ -6189,7 +6276,6 @@ const projectorStyle = `
                     a, a.current {      /* hide the anchors */
                         width:          0;
                         color:          transparent;
-                        pointer-events: none;
                     } 
                 }
                 .toggler {              /* provide a box for the svg */
@@ -6198,6 +6284,15 @@ const projectorStyle = `
                     aspect-ratio:       1 / 1;
                     rotate:             180deg;
                     transition:         rotate .3s ease-in-out .1s; /* delayed and shorter than the width transition */
+                }
+                a svg {
+                    --icon-width:       1.6rem;
+                    width:              var(--icon-width);
+                    margin-inline:      calc( (3rem - var(--icon-width)) / 2); /* logo-width 3rem */
+                    fill:               var(--kb-color-hsl-lavender-700);
+                    aspect-ratio:       1;
+                    stroke:             none;
+                    transform:          translateY(20%);
                 }
                 svg {
                     fill:               none;
@@ -6220,11 +6315,14 @@ const projectorStyle = `
                 a.visited {
                     text-decoration:    none;
                 }
-                a.visited:not(.current) {
+                a.visited:not(.current), a.visited:not(.current) svg {
                     filter:             brightness(150%) grayscale(60%);
                 }
                 a.current {
                     color:              var(--kolibri-color-accent, deeppink);
+                }
+                a.current svg {
+                    fill:               var(--kolibri-color-accent, deeppink);
                 }
             }
         }
