@@ -238,6 +238,9 @@ a.skip-link:not(:focus):not(:active) {
 
 /* --- end of utility classes --- */
 
+
+/* --- experimental popover and anchor positioning --- */
+
 [popover] {             /* style that pops for all elements with popover attribute */
       flex-direction:     column;
       gap:                .5em;
@@ -257,24 +260,29 @@ a.skip-link:not(:focus):not(:active) {
       animation-timing-function:  ease-in-out;
       animation-fill-mode:        forwards;
   }
-  :popover-open::backdrop {
-      background-color:           color-mix(in hsl, white, transparent 70%);
-      transition:                 background-color 1s linear;
-      @starting-style {
-          background-color:       transparent;
-      }
-  }
+
+  /*For the moment, don't do this as it makes the UI appear flickering when*/
+  /*the popover closes. Sadly, there seems to be no way to transition back on close. Reserve for later.*/
+  /*:popover-open::backdrop {*/
+  /*    background-color:           color-mix(in hsl, white, transparent 70%);*/
+  /*    transition:                 background-color 1s linear;*/
+  /*    @starting-style {*/
+  /*        background-color:       transparent;*/
+  /*    }*/
+  /*}*/
 
   .popover_anchor {
       /* anchor-name will be set on the element */
       position:           relative;
+      display:            inline-flex;  /* for FF and Safari or it does not always work */
   }
   .popover_tooltip {
       /* position-anchor will be set on the element */
-      position:           absolute;   /* override the popover-hidden default */
+      position:           absolute;     /* override the popover-hidden default */
       inset:              unset;
-      top:                anchor(bottom);
+      top:                anchor(top);  /* dirty trick for FF and Safari (anchor(bottom) does not work) */
       left:               anchor(left);
+      translate:          0 1.2lh;      /* dirty trick for FF and Safari */
 
       transform-origin:   top center; /* makes expandY a drop-down */
   }

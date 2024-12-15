@@ -32,10 +32,10 @@ const projectDay = dayController => {
     /** @type {HTMLDivElement} */ const amDiv = elements[0];
     /** @type {HTMLDivElement} */ const pmDiv = elements[1];
 
-    amDiv.querySelector("#am_start").append(amStartViewLabel, amStartViewSpan);
-    amDiv.querySelector("#am_end")  .append(amEndViewLabel,   amEndViewSpan);
-    pmDiv.querySelector("#pm_start").append(pmStartViewLabel, pmStartViewSpan);
-    pmDiv.querySelector("#pm_end")  .append(pmEndViewLabel,   pmEndViewSpan);
+    amDiv.querySelector("#am_start").replaceWith(amStartViewLabel, amStartViewSpan);
+    amDiv.querySelector("#am_end")  .replaceWith(amEndViewLabel,   amEndViewSpan);
+    pmDiv.querySelector("#pm_start").replaceWith(pmStartViewLabel, pmStartViewSpan);
+    pmDiv.querySelector("#pm_end")  .replaceWith(pmEndViewLabel,   pmEndViewSpan);
 
     // no special view and data binding since that is all done by the simpleInputProjector
 
