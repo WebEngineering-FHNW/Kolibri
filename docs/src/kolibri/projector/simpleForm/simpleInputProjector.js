@@ -102,7 +102,7 @@ const projectInput = (timeout) => (eventType) =>
         spanElement .removeEventListener("mouseleave", hide);
         labelElement.removeEventListener("click", show);
         inputElement.removeEventListener("input", hide);
-        if (text.length > 0  ) {
+        if (text && text.length > 0  ) {
             spanElement .addEventListener("mouseenter", show);
             spanElement .addEventListener("mouseleave", hide);
             labelElement.addEventListener("click", show);

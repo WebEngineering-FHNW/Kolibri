@@ -44,7 +44,6 @@ const projectDayWithTotal = (dayController, weekDay) => {
 
     // for consistency and a11y, make each title, name and label text unique for the weekDay
     [amDiv, pmDiv].flatMap(el => Array.from(el.querySelectorAll("input"))).forEach( input => {
-        input.setAttribute("title", weekDay + " " + input.getAttribute("title"));
         input.setAttribute("name",  weekDay + "_" + input.getAttribute("name"));
     });
     [amDiv, pmDiv].flatMap(el => Array.from(el.querySelectorAll("label"))).forEach( label =>

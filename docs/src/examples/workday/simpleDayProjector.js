@@ -9,10 +9,10 @@ const { projectChangeInput } = InputProjector;
  * @type { DayProjectionType }
  */
 const projectDay = dayController => {
-    const [amStartViewLabel ,amStartViewInput] =  projectChangeInput(dayController.amStartCtrl, "DAY" );
-    const [amEndViewLabel   ,amEndViewInput  ] =  projectChangeInput(dayController.amEndCtrl,   "DAY" );
-    const [pmStartViewLabel ,pmStartViewInput] =  projectChangeInput(dayController.pmStartCtrl, "DAY" );
-    const [pmEndViewLabel   ,pmEndViewInput  ] =  projectChangeInput(dayController.pmEndCtrl,   "DAY" );
+    const [amStartViewLabel ,amStartViewSpan] =  projectChangeInput(dayController.amStartCtrl, "DAY" );
+    const [amEndViewLabel   ,amEndViewSpan  ] =  projectChangeInput(dayController.amEndCtrl,   "DAY" );
+    const [pmStartViewLabel ,pmStartViewSpan] =  projectChangeInput(dayController.pmStartCtrl, "DAY" );
+    const [pmEndViewLabel   ,pmEndViewSpan  ] =  projectChangeInput(dayController.pmEndCtrl,   "DAY" );
 
     // create layout from a template and put the pieces in through replacement.
     // this is not the most efficient way, but it gives a good overview where things go.
@@ -32,10 +32,10 @@ const projectDay = dayController => {
     /** @type {HTMLDivElement} */ const amDiv = elements[0];
     /** @type {HTMLDivElement} */ const pmDiv = elements[1];
 
-    amDiv.querySelector("#am_start").replaceWith(amStartViewLabel, amStartViewInput);
-    amDiv.querySelector("#am_end")  .replaceWith(amEndViewLabel,   amEndViewInput);
-    pmDiv.querySelector("#pm_start").replaceWith(pmStartViewLabel, pmStartViewInput);
-    pmDiv.querySelector("#pm_end")  .replaceWith(pmEndViewLabel,   pmEndViewInput);
+    amDiv.querySelector("#am_start").append(amStartViewLabel, amStartViewSpan);
+    amDiv.querySelector("#am_end")  .append(amEndViewLabel,   amEndViewSpan);
+    pmDiv.querySelector("#pm_start").append(pmStartViewLabel, pmStartViewSpan);
+    pmDiv.querySelector("#pm_end")  .append(pmEndViewLabel,   pmEndViewSpan);
 
     // no special view and data binding since that is all done by the simpleInputProjector
 
