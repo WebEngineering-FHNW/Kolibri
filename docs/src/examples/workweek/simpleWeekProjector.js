@@ -1,4 +1,4 @@
-import { dom }                       from "../../kolibri/util/dom.js";
+import { dom, select }                       from "../../kolibri/util/dom.js";
 import { totalMinutesToTimeString }  from "../../kolibri/projector/projectorUtils.js"
 import { DayController }             from "../workday/dayController.js";
 import { DayProjector }              from "../workday/simpleDayProjector.js";
@@ -42,13 +42,13 @@ const projectDayWithTotal = (dayController, weekDay) => {
     /** @type HTMLDivElement */ const weekDayElement = dom(`<div>${weekDay}</div>`)[0];
     /** @type HTMLDivElement */ const totalElement   = dom(`<div><output>00:00</output></div>`)[0];
 
-    // for consistency and a11y, make each title, name and label text unique for the weekDay
-    [amDiv, pmDiv].flatMap(el => Array.from(el.querySelectorAll("input"))).forEach( input => {
-        input.setAttribute("name",  weekDay + "_" + input.getAttribute("name"));
-    });
-    [amDiv, pmDiv].flatMap(el => Array.from(el.querySelectorAll("label"))).forEach( label =>
-        label.textContent = weekDay + " " + label.textContent
-    );
+    // prefix name, tooltip and label with day name to make it unique for the weekDay
+    "amStartCtrl amEndCtrl pmStartCtrl pmEndCtrl".split(" ")
+        .forEach(inputName => {
+            dayController[inputName].setName   (weekDay + "_" + dayController[inputName].getName());
+            dayController[inputName].setLabel  (weekDay + " " + dayController[inputName].getLabel());
+            // tooltip changes automatically when the label changes
+        });
 
     dayController.onTotalChanged  ( minutes =>
         totalElement.firstElementChild.textContent = totalMinutesToTimeString(minutes)
