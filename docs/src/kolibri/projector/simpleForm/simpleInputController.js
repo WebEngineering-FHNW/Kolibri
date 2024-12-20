@@ -3,6 +3,7 @@ import {EDITABLE, LABEL, NAME, TOOLTIP, TYPE, VALID, VALUE} from "../../presenta
 
 export { SimpleInputController, SimpleAttributeInputController }
 
+// todo: add tooltip and label
 /**
  * @typedef { object } SimpleInputControllerType
  * @template _T_
