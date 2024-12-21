@@ -18,7 +18,9 @@ const { debug } = LoggerFactory("ch.fhnw.kolibri.util.memoize");
  * cache for successive invocation of **f(x)**.
  * Where **x** should be a scalar value that can be used as a key in a {@link Map}.
  * The cache hit count is logged on {@link LOG_DEBUG} level.
- * @type {  <_T_, _U_>  (f: Functor<_T_,_U_>) => Functor<_T_,_U_> }
+ *
+ * @template _T_, _U_
+ * @type {  <_T_, _U_>  (f: FunctionType<_T_,_U_>) => FunctionType<_T_,_U_> }
  * @example
    let fib = n => n < 2 ? 1 : fib(n-1) + fib(n-2);
    fib = memoize(fib);

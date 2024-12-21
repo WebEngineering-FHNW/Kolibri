@@ -4,31 +4,33 @@
  */
 
 /**
- * @typedef { <_T_> (...x) => _T_ } ProducerType<_T_>
+ * @template  _T_
+ * @typedef { <_T_> (...x) => _T_ } ProducerType
  * A function that takes arbitrary arguments (possibly none) and produces a value of type _T_.
  */
 
 /**
- * @typedef { <_T_> (_T_) => void } ConsumerType<_T_>
+ * @template  _T_
+ * @typedef { <_T_> (_T_) => void } ConsumerType
  * A function that consumes a value of type _T_ and returns nothing.
  */
 
 /**
- * @typedef { <_T_> (_T_) => Boolean } ConsumingPredicateType<_T_>
+ * @template  _T_
+ * @typedef { <_T_> (_T_) => Boolean } ConsumingPredicateType
  * A function that consumes a value of type _T_ and returns a Boolean.
  */
 
 /**
- * @typedef { <_T_>  (_T_) => _T_ } UnaryOperatorType<_T_>
+ * @template  _T_
+ * @typedef { <_T_>  (_T_) => _T_ } UnaryOperatorType
  * A unary operator on _T_.
  */
+
 /**
- * A callback which takes one argument of type {@link _A_} and transforms it to {@link _B_}.
- * @template _A_
- * @template _B_
- * @callback Functor
- * @param   { _A_ } value
- * @returns { _B_ }
+ * A function which takes one argument of type {@link _A_} and transforms it to {@link _B_}.
+ * @template _A_, _B_
+ * @typedef { <_A_,_B_>  (_A_) => _B_ } FunctionType
  */
 
 /**
@@ -41,6 +43,7 @@
  */
 
 /**
+ * @template  _T_, _U_, _R_
  * A callback which takes two arguments of type _T_ and _U_}and transforms it to _R_.
  * @callback BiFunction
  * @type {  <_T_, _U_, _R_> (value1:_T_, value2:_U_) => _R_ }

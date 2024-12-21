@@ -9,14 +9,15 @@ export { from }
  * With it, it is possible to query different data sources using the one and same query language.
  *
  * @template _T_
+ * @template _U_
  * @typedef JinqType
- * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               map      - maps the current value to a new value
- * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               select   - alias for map
- * @property { <_U_> ((prev: _T_) => MonadType<_U_>) => JinqType<_U_> }               inside   - maps the current value to a new {@link MonadType}
- * @property { <_U_> (monad:     MonadType<_U_>)     => JinqType<PairType<_T_,_U_>> } pairWith - combines the underlying data structure with the given data structure as {@link PairType}
- * @property { <_U_> (monadCtor: (_T_) =>  MonadType<_U_>)    => JinqType<PairType<_T_,_U_>> } combine - combines the underlying data structure with the given constructor as {@link PairType}
- * @property {       (predicate: ConsumingPredicateType<_T_>) => JinqType<_T_> }      where    - only keeps the items that fulfill the predicate
- * @property {       ()                              => MonadType<_T_> }              result   - returns the result of this query
+ * @property { <_U_> (selector:  FunctionType<_T_, _U_>)      => JinqType<_U_> }               map      - maps the current value to a new value
+ * @property { <_U_> (selector:  FunctionType<_T_, _U_>)      => JinqType<_U_> }               select   - alias for map
+ * @property { <_U_> ((prev: _T_) => MonadType<_U_>)          => JinqType<_U_> }               inside   - maps the current value to a new {@link MonadType}
+ * @property { <_U_> (monad:     MonadType<_U_>)              => JinqType<PairType<_T_,_U_>> } pairWith - combines the underlying data structure with the given data structure as {@link PairType}
+ * @property { <_U_> (monadCtor: (_T_) =>  MonadType<_U_>)    => JinqType<PairType<_T_,_U_>> } combine  - combines the underlying data structure with the given constructor as {@link PairType}
+ * @property {       (predicate: ConsumingPredicateType<_T_>) => JinqType<_T_> }               where    - only keeps the items that fulfill the predicate
+ * @property {       ()                                       => MonadType<_T_> }              result   - returns the result of this query
  */
 
 /**
@@ -149,7 +150,7 @@ const pairWith = monad1 => monad2 => {
  * This allows usages that come closer to list comprehensions.
  * It returns a {@link PairType} which holds a combination of two values.
  *
- *
+ * @template _T_, _U_
  * @type { <_T_, _U_>
  *           (monad1:     MonadType<_T_>)
  *        => (monad2ctor: (arg:_T_) => MonadType<_U_>)
@@ -179,6 +180,7 @@ const combine = monad1 => monad2ctor => {
 /**
  * Filters elements based on a given condition.
  *
+ * @template _T_, _U_
  * @type { <_T_>
  *            (monad: MonadType<_T_>)
  *         => (predicate: ConsumingPredicateType<_T_>)
@@ -204,10 +206,11 @@ const where = monad => predicate => {
 /**
  * Applies a function to each element of the collection.
  *
+ * @template _T_, _U_
  * @alias map
  * @type { <_T_, _U_>
  *           (monad: MonadType<_T_>)
- *        => (selector: Functor<_T_, _U_>)
+ *        => (selector: FunctionType<_T_, _U_>)
  *        => JinqType<_U_>
  *       }
  *
@@ -229,10 +232,11 @@ const select = monad => mapper => {
 /**
  * Applies a function to each element of the collection.
  *
+ * @template _T_, _U_
  * @alias select
  * @type { <_T_, _U_>
  *           (monad: MonadType<_T_>)
- *        => (mapper: Functor<_T_, _U_>)
+ *        => (mapper: FunctionType<_T_, _U_>)
  *        => JinqType<_U_>
  *       }
  *

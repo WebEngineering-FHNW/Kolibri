@@ -52,7 +52,7 @@ const Rule = (nr = 1, text = "change me") => {
  */
 const FizzBuzzModel = () => {
   const rules         = Observable([]);
-  const result        = Observable(nil);
+  const result        = /** @type { IObservable<SequenceType<RuleType>> } */ Observable(nil);
   const upperBoundary = Observable(30);
   const lowerBoundary = Observable(1);
 

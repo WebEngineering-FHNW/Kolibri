@@ -4,7 +4,7 @@ import {iteratorOf}            from "../../util/helpers.js";
 export { map }
 
 /**
- * Transforms each element using the given {@link Functor function}.
+ * Transforms each element using the given {@link FunctionType function}.
  *
  * @function
  * @pure
@@ -13,7 +13,7 @@ export { map }
  * @template _T_
  * @template _U_
  * @type {
- *            (mapper: Functor<_T_, _U_>)
+ *            (mapper: FunctionType<_T_, _U_>)
  *         => SequenceOperation<_T_, _U_>
  *       }
  *
@@ -29,7 +29,7 @@ export { map }
  * see {@link MapOperationType}
  * @template _T_
  * @template _U_
- * @type {MapOperationType<_T_, _U_>}
+ * @type { MapOperationType<_T_, _U_> }
  */
 const map = mapper => iterable => {
 
