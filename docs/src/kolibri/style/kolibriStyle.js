@@ -24,6 +24,7 @@ export {
     purple400, blue500
 }
 
+/* todo: these might have been lost in the merging
 export {
     pxSpacer1,  pxSpacer2,  pxSpacer3,   pxSpacer4,  pxSpacer5,  pxSpacer6,
     pxSpacer7,  pxSpacer8,  pxSpacer9,   pxSpacer10, pxSpacer12, remSpacer1,
@@ -41,6 +42,7 @@ export {
 export {
     lightRubik, mediumRubik, regularRubik, semiboldRubik,
 }
+*/
 
 /**
  * Css string value for the given color. We keep values as HSL to allow easier manipulation.
@@ -138,6 +140,7 @@ const pink200       = "var(--kolibri-palette-pink-200)";
 const pink100       = "var(--kolibri-palette-pink-100)";
 
 /* --- monochrome --- */
+/* todo dk: these names make issues when used through the production bundle. Better prefix with "color-" or so.*/
 const black         = hsl(240,  15,  9);
 const body          = hsl(247,  15, 35);
 const label         = hsl(235,  14, 50);
@@ -192,121 +195,6 @@ const dangerDark        = pink800;
 const dangerAccent      = pink500;
 const dangerLight       = pink200;
 const dangerBg          = pink100;
-
-// todo dk: the whole typography section needs to be reworked, maybe it can even be removed
-// todo dk: atm we have no visual testing of the outcome
-
-/* --- typography --- */
-const lightRubik     = 'Rubik-Light,    system-ui, serif';
-const mediumRubik    = 'Rubik-Medium,   system-ui, serif';
-const regularRubik   = 'Rubik-Regular,  system-ui, serif';
-const semiboldRubik  = 'Rubik-SemiBold, system-ui, serif';
-
-
-/* --- font-sizes --- */
-const fontSizeH1         = '6.0rem';
-const fontSizeH2         = '3.7rem';
-const fontSizeH3         = '3.0rem';
-const fontSizeH4         = '2.0rem';
-const fontSizeH5         = '1.5rem';
-const fontSizeH6         = '1.0rem';
-
-const fontSizeTextL      = '1.25rem';
-const fontSizeTextM      = '1.0rem';
-const fontSizeTextS      = '0.875rem';
-const fontSizeTextXS     = '0.75rem';
-
-const fontSizeLinkL      = '1.25rem';
-const fontSizeLinkM      = '1.125rem';
-const fontSizeLinkS      = '1.0rem';
-const fontSizeLinkXS     = '0.875rem';
-
-const fontSizeCaption    = '0.875rem';
-const fontSizeOverline   = '0.625rem';
-
-
-/* --- spacing in rem--- */
-const remSpacer1         = '0.3rem';
-const remSpacer2         = '0.5rem';
-const remSpacer3         = '0.8rem';
-const remSpacer4         = '1.0rem';
-const remSpacer5         = '1.3rem';
-const remSpacer6         = '1.5rem';
-const remSpacer7         = '1.8rem';
-const remSpacer8         = '2.0rem';
-const remSpacer9         = '2.2rem';
-const remSpacer10        = '2.5rem';
-const remSpacer12        = '3.0rem';
-
-/* --- spacing in px--- */
-const pxSpacer1          = '4px;';
-const pxSpacer2          = '8px;';
-const pxSpacer3          = '12px';
-const pxSpacer4          = '16px';
-const pxSpacer5          = '20px';
-const pxSpacer6          = '24px';
-const pxSpacer7          = '28px';
-const pxSpacer8          = '32px';
-const pxSpacer9          = '36px';
-const pxSpacer10         = '40px';
-const pxSpacer12         = '48px';
-// todo dk: the whole typography section needs to be reworked, maybe it can even be removed
-// todo dk: atm we have no visual testing of the outcome
-
-/* --- typography --- */
-const lightRubik     = 'Rubik-Light,    system-ui, serif';
-const mediumRubik    = 'Rubik-Medium,   system-ui, serif';
-const regularRubik   = 'Rubik-Regular,  system-ui, serif';
-const semiboldRubik  = 'Rubik-SemiBold, system-ui, serif';
-
-
-/* --- font-sizes --- */
-const fontSizeH1         = '6.0rem';
-const fontSizeH2         = '3.7rem';
-const fontSizeH3         = '3.0rem';
-const fontSizeH4         = '2.0rem';
-const fontSizeH5         = '1.5rem';
-const fontSizeH6         = '1.0rem';
-
-const fontSizeTextL      = '1.25rem';
-const fontSizeTextM      = '1.0rem';
-const fontSizeTextS      = '0.875rem';
-const fontSizeTextXS     = '0.75rem';
-
-const fontSizeLinkL      = '1.25rem';
-const fontSizeLinkM      = '1.125rem';
-const fontSizeLinkS      = '1.0rem';
-const fontSizeLinkXS     = '0.875rem';
-
-const fontSizeCaption    = '0.875rem';
-const fontSizeOverline   = '0.625rem';
-
-
-/* --- spacing in rem--- */
-const remSpacer1         = '0.3rem';
-const remSpacer2         = '0.5rem';
-const remSpacer3         = '0.8rem';
-const remSpacer4         = '1.0rem';
-const remSpacer5         = '1.3rem';
-const remSpacer6         = '1.5rem';
-const remSpacer7         = '1.8rem';
-const remSpacer8         = '2.0rem';
-const remSpacer9         = '2.2rem';
-const remSpacer10        = '2.5rem';
-const remSpacer12        = '3.0rem';
-
-/* --- spacing in px--- */
-const pxSpacer1          = '4px;';
-const pxSpacer2          = '8px;';
-const pxSpacer3          = '12px';
-const pxSpacer4          = '16px';
-const pxSpacer5          = '20px';
-const pxSpacer6          = '24px';
-const pxSpacer7          = '28px';
-const pxSpacer8          = '32px';
-const pxSpacer9          = '36px';
-const pxSpacer10         = '40px';
-const pxSpacer12         = '48px';
 
 const KOLIBRI_LOGO_SVG = `
 <svg class="kolibri-logo-svg" viewBox="0 0 305 342" fill="none" xmlns="http://www.w3.org/2000/svg">

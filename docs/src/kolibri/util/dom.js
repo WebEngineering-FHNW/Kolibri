@@ -9,7 +9,7 @@ import { LoggerFactory } from "../logger/loggerFactory.js";
 import { toSeq }         from "../sequence/util/helpers.js";
 
 export {
-    dom, fireEvent, fireChangeEvent,
+    dom, select, fireEvent, fireChangeEvent,
     CLICK, INPUT, CHANGE,
     TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR, TEXTBTN, ICONBTN, LEADINGICONBTN, TRAILINGICONBTN
 }
@@ -77,7 +77,7 @@ const fireChangeEvent = element => fireEvent(element, CHANGE);
 /** @type InputTypeString */ const COLOR        = "color";
 
 
-/** @typedef { "text"|"icon"|"leadingIcon"|"trailingIcon"} ButtonTypeString */
+/** @typedef { "textBtn"|"iconBtn"|"leadingIconBtn"|"trailingIconBtn"} ButtonTypeString */
 /** @type ButtonTypeString */ const TEXTBTN         = "textBtn";
 /** @type ButtonTypeString */ const ICONBTN         = "iconBtn";
 /** @type ButtonTypeString */ const LEADINGICONBTN  = "leadingIconBtn";

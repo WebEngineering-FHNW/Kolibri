@@ -8,14 +8,10 @@ import { id }         from "./stdlib.js";
 export { Attribute, QualifiedAttribute,
          presentationModelFromAttributeNames,
          valueOf, readQualifierValue,
-         VALID, VALUE, EDITABLE, LABEL, NAME, TYPE , DESIGNSYSTEM, EMPHASIS, STATE }
-         VALID, VALUE, EDITABLE, LABEL, NAME, TOOLTIP, TYPE }
-         VALID, VALUE, EDITABLE, LABEL, NAME, TYPE , DESIGNSYSTEM, EMPHASIS, STATE }
+         VALID, VALUE, EDITABLE, LABEL, NAME, TOOLTIP, TYPE , DESIGNSYSTEM, EMPHASIS, STATE }
 
 /**
- * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'|'designSystem'|'emphasis'|'state'} ObservableTypeString
- * @typedef {'value'|'valid'|'editable'|'label'|'name'|'tooltip'|'type'} ObservableTypeString
- * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'|'designSystem'|'emphasis'|'state'} ObservableTypeString
+ * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'|'tooltip'|'designSystem'|'emphasis'|'state'} ObservableTypeString
  * Feel free to extend this type with new unique type strings as needed for your application.
  */
 
@@ -25,22 +21,7 @@ export { Attribute, QualifiedAttribute,
 /** @type ObservableTypeString */ const LABEL           = "label";
 /** @type ObservableTypeString */ const NAME            = "name";
 /** @type ObservableTypeString */ const TYPE            = "type"; // HTML input types: text, number, checkbox, etc. HTML Button types: submit, reset, button.
-/** @type ObservableTypeString */ const DESIGNSYSTEM    = "designSystem";
-/** @type ObservableTypeString */ const EMPHASIS        = "emphasis";
-/** @type ObservableTypeString */ const STATE           = "state";
-/** @type ObservableTypeString */ const VALUE    = "value";
-/** @type ObservableTypeString */ const VALID    = "valid";
-/** @type ObservableTypeString */ const EDITABLE = "editable";
-/** @type ObservableTypeString */ const LABEL    = "label";
-/** @type ObservableTypeString */ const NAME     = "name";
-/** @type ObservableTypeString */ const TOOLTIP  = "tooltip";
-/** @type ObservableTypeString */ const TYPE     = "type"; // HTML input types: text, number, checkbox, etc.
-/** @type ObservableTypeString */ const VALUE           = "value";
-/** @type ObservableTypeString */ const VALID           = "valid";
-/** @type ObservableTypeString */ const EDITABLE        = "editable";
-/** @type ObservableTypeString */ const LABEL           = "label";
-/** @type ObservableTypeString */ const NAME            = "name";
-/** @type ObservableTypeString */ const TYPE            = "type"; // HTML input types: text, number, checkbox, etc. HTML Button types: submit, reset, button.
+/** @type ObservableTypeString */ const TOOLTIP         = "tooltip";
 /** @type ObservableTypeString */ const DESIGNSYSTEM    = "designSystem";
 /** @type ObservableTypeString */ const EMPHASIS        = "emphasis";
 /** @type ObservableTypeString */ const STATE           = "state";
