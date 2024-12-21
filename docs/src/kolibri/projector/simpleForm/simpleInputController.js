@@ -3,16 +3,20 @@ import {EDITABLE, LABEL, NAME, TOOLTIP, TYPE, VALID, VALUE} from "../../presenta
 
 export { SimpleInputController, SimpleAttributeInputController }
 
-// todo: add tooltip and label
 /**
- * @typedef { object } SimpleInputControllerType
+ * @typedef  SimpleInputControllerType
  * @template _T_
- * @property { ()  => _T_ }                 getValue
- * @property { (_T_) => void }              setValue
- * @property { ()  => String}               getType
- * @property { (valid: !Boolean) => void }  setValid
+ * @property { ()       => _T_ }                            getValue
+ * @property { (_T_)    => void }                           setValue
+ * @property { ()       => String }                         getLabel
+ * @property { (String) => void }                           setLabel
+ * @property { ()       => String }                         getTooltip
+ * @property { (String) => void }                           setTooltip
+ * @property { ()       => String}                          getType
+ * @property { (valid: !Boolean) => void }                  setValid
  * @property { (converter: Converter<_T_>)        => void } setConverter
  * @property { (cb: ValueChangeCallback<String>)  => void } onLabelChanged
+ * @property { (cb: ValueChangeCallback<String>)  => void } onTooltipChanged
  * @property { (cb: ValueChangeCallback<Boolean>) => void } onValidChanged
  * @property { (cb: ValueChangeCallback<_T_>)     => void } onValueChanged
  * @property { (cb: ValueChangeCallback<String>)  => void } onNameChanged
@@ -39,20 +43,20 @@ export { SimpleInputController, SimpleAttributeInputController }
 const SimpleInputController = args => SimpleAttributeInputController(SimpleInputModel(args));
 
 const SimpleAttributeInputController = attribute => ( {
+    getValue:          attribute.getObs(VALUE)  .getValue,
     setValue:          attribute.setConvertedValue,
-    getValue:          attribute.getObs(VALUE).getValue,
-    setValid:          attribute.getObs(VALID).setValue,
-    setLabel:          attribute.getObs(LABEL).setValue,
-    getLabel:          attribute.getObs(LABEL).getValue,
-    setName:           attribute.getObs(NAME).setValue,
-    getName:           attribute.getObs(NAME).getValue,
-    setTooltip:        attribute.getObs(TOOLTIP).setValue,
+    setValid:          attribute.getObs(VALID)  .setValue,
+    getLabel:          attribute.getObs(LABEL)  .getValue,
+    setLabel:          attribute.getObs(LABEL)  .setValue,
+    getName:           attribute.getObs(NAME)   .getValue,
+    setName:           attribute.getObs(NAME)   .setValue,
     getTooltip:        attribute.getObs(TOOLTIP).getValue,
-    getType:           attribute.getObs(TYPE).getValue,
-    onValueChanged:    attribute.getObs(VALUE).onChange,
-    onValidChanged:    attribute.getObs(VALID).onChange,
-    onLabelChanged:    attribute.getObs(LABEL).onChange,
-    onNameChanged:     attribute.getObs(NAME).onChange,
+    setTooltip:        attribute.getObs(TOOLTIP).setValue,
+    getType:           attribute.getObs(TYPE)   .getValue,
+    onValueChanged:    attribute.getObs(VALUE)  .onChange,
+    onValidChanged:    attribute.getObs(VALID)  .onChange,
+    onLabelChanged:    attribute.getObs(LABEL)  .onChange,
+    onNameChanged:     attribute.getObs(NAME)   .onChange,
     onTooltipChanged:  attribute.getObs(TOOLTIP).onChange,
     onEditableChanged: attribute.getObs(EDITABLE).onChange,
     setConverter:      attribute.setConverter,

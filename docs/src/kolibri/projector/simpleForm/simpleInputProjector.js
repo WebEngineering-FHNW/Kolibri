@@ -83,7 +83,7 @@ const projectInput = (timeout) => (eventType) =>
     }
 
     inputController.onLabelChanged (  label => {
-        labelElement.textContent = /** @type {String} */ label;
+        labelElement.textContent = label;
         inputController.setTooltip(label);
     });
     inputController.onNameChanged  (name  => inputElement.setAttribute("name", name || id));
@@ -98,15 +98,17 @@ const projectInput = (timeout) => (eventType) =>
         popoverElement.prepend(...icon(ICON_CHRISTMAS_TREE));
         const hide  = _e => popoverElement.hidePopover();
         const show  = _e => popoverElement.showPopover();
-        spanElement .removeEventListener("mouseenter", show);       // avoid duplicate listeners
-        spanElement .removeEventListener("mouseleave", hide);
-        labelElement.removeEventListener("click", show);
-        inputElement.removeEventListener("input", hide);
+        spanElement .removeEventListener("mouseenter",  show);      // avoid duplicate listeners
+        spanElement .removeEventListener("mouseleave",  hide);
+        labelElement.removeEventListener("click",       show);
+        inputElement.removeEventListener("input",       hide);
+        document.removeEventListener("touchstart",      hide);
         if (text && text.length > 0  ) {
             spanElement .addEventListener("mouseenter", show);
             spanElement .addEventListener("mouseleave", hide);
-            labelElement.addEventListener("click", show);
-            inputElement.addEventListener("input", hide);
+            labelElement.addEventListener("click",      show);
+            inputElement.addEventListener("input",      hide);
+            document    .addEventListener("touchstart", hide);
         }
     });
 

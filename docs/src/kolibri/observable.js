@@ -16,7 +16,8 @@ function checkWarning(list) {
 }
 
 /**
- * @typedef { <_T_> (newValue:_T_, oldValue: ?_T_) => void } ValueChangeCallback<_T_>
+ * @template _T_
+ * @typedef { (newValue:_T_, oldValue: ?_T_) => void } ValueChangeCallback
  * This is a specialized {@link ConsumerType} with an optional second value.
  * The "oldValue" contains the value before the change.
  */
