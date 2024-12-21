@@ -12,8 +12,6 @@ export {
     dom, fireEvent, fireChangeEvent,
     CLICK, INPUT, CHANGE,
     TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR, TEXTBTN, ICONBTN, LEADINGICONBTN, TRAILINGICONBTN
-    TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR,
-    select
 }
 
 const { warn } = LoggerFactory("ch.fhnw.kolibri.util.dom");

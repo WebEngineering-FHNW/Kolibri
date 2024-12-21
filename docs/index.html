@@ -1,15 +1,31 @@
 <!doctype html>
 <html lang=en>
 <head>
-    <meta charset="UTF-8">
-    <title>Kolibri</title>
-    <link rel="shortcut icon" type="image/png" href="./img/logo/logo-60x54.png"/>
-    <link rel="stylesheet" href="./css/kolibri-base.css">
+	<meta charset="UTF-8">
+	<title>Kolibri</title>
+	<link rel="shortcut icon" type="image/png" href="./img/logo/logo-60x54.png"/>
+	<link rel="stylesheet"                     href="./css/kolibri-base.css">
     <style>
         body {
-            max-width: 42em;
-            margin:    3em auto 3em auto;
+			max-width: 		42em;
+			margin: 		3em auto 3em auto;
         }
+		header {
+			display: 		flex;
+			flex-direction: column;
+			align-items: 	center;
+		}
+        .subtitle {
+            font-family: var(--kb-font-family-stylish), system-ui;
+        }
+		ul {
+			list-style-type: none;
+			padding-left: 		0;
+		}
+		dl {
+			display: grid;
+			grid-template-columns: max-content auto;
+		}
 
         header {
             display:        flex;

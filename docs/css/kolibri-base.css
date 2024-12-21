@@ -1,43 +1,12 @@
 /* make sure to keep in line with kolibriStyle.js */
 
-@import "./kolibri-light-fonts.css";
-
-@import "./kolibri-light-palette.css"; /* must choose the palette to make the colors work */
+@import "./kolibri-fonts.css";
 @import "./kolibri-colors.css";
 
-/* todo: this has to go */
-@font-face {
-    font-family: "RobotoSlab-Light";
-    src: local("RobotoSlab-Light"),
-         url("../font/Roboto_Slab/static/RobotoSlab-Light.ttf") format("truetype");
-}
-@font-face {
-    font-family: "RobotoSlab-Regular";
-    src: local("RobotoSlab-Bold"),
-         url("../font/Roboto_Slab/static/RobotoSlab-Regular.ttf") format("truetype");
-}
-@font-face {
-    font-family: "Rubik-Light";
-    src: local("Rubik-Light"),
-         url("../font/Rubik/static/Rubik-Light.ttf") format("truetype");
-}
-@font-face {
-    font-family: "JetBrainsMono-VariableFont_wght";
-    src: local("JetBrainsMono-VariableFont_wght"),
-         url("../font/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf") format("truetype");
-}
 
 :root {
-    --kolibri-color-accent:  var(--kb-hsla-danger-accent);
-    --kolibri-color-output:  var(--kb-hsla-secondary-dark);
-    --kolibri-color-ok:      var(--kb-hsla-success-accent);
-    --kolibri-color-select:  var(--kb-color-hsl-yellow-400); /* make custom use of the palette */
-    --kolibri-color-neutral: var(--kb-color-hsla-black-40);
-    --kolibri-color-shadow:  var(--kb-color-hsl-lavender-200);
-    --kolibri-box-shadow:    0 4px  8px 0 var(--kolibri-color-shadow),
-                             0 6px 20px 0 var(--kolibri-color-shadow);
-    padding:    0;
-    margin:     0;
+    padding:                 0;
+    margin:                  0;
 }
 *, *::before, *::after {
     box-sizing: border-box;
@@ -49,70 +18,29 @@
 /* --- typography --- */
 
 :root {
-    --font-serif:       "RobotoSlab-Light",   serif;
-    --font-serif-bold:  "RobotoSlab-Regular", serif;
-    --font-sans-serif:  "Rubik-Light", ui-sans-serif, sans-serif;
-    --font-mono:        "JetBrainsMono-VariableFont_wght", monospace;
-
-    font-family:    var(--font-serif), system-ui;
+    font-family: var(--kb-font-family-default), system-ui;
 }
+
+header, h1, h2 {
+    color: var(--kolibri-color-product);
+}
+
 header h1 {
-    color: var(--kolibri-color-output);
     letter-spacing: 0.06em;
 }
-header .subtitle {
-    color:          var(--kolibri-color-output);
-}
+
 h1, h2, h3 {
-    font-family:    var(--font-serif-bold), system-ui;
-    text-wrap:      balance;
+    font-family: var(--kb-font-family-stylish),var(--kb-font-family-default), system-ui;
+    font-weight: normal;
 }
-p, li, div, figcaption {
-    letter-spacing: 0.02em;
+div, p, ul, ol, dl {
+    font-family: var(--kb-font-family-running-text),var(--kb-font-family-default), system-ui;
 }
+div, p, ul, ol, dl,
 form, fieldset, label, input, button {
-    font-family:    var(--font-sans-serif), system-ui;
+    font-family: var(--font-sans-serif);
     letter-spacing: 0.02em;
 }
-figcaption {
-    font-style:     italic;
-    font-size:      var(--font-size-caption);
-    text-align:     end;
-}
-/* --- end typography --- */
-
-/* --- default element appearance --- */
-ul {
-    padding-left:       1em;
-}
-ul li::marker {
-  color:                var(--kb-hsla-primary-accent);
-}
-
-figure {
-    margin-inline:      0;
-}
-
-em {                    /* emphasis looks like highlighted with text marker */
-    position:           relative;
-    padding-inline:     0.2em 0.3em;
-    &::before {
-        content:        "";
-        position:       absolute;
-        inset:          0 0 -.2em 0;  /* inline -3px leads to strange line-break issues */
-        border-radius:  5% 5% 20% 20%;
-        background-color: var(--kolibri-color-select);
-        z-index:        -10;
-        rotate:         -3deg;
-        opacity:        60%;
-    }
-}
-
-a[href^="http"]::after { /* external link */
-    content:            " ↗";
-    opacity:            .3;
-}
-/* --- end default element appearance --- */
 
 /* --- default invalid handling --- */
 :invalid {

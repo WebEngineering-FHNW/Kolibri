@@ -169,13 +169,11 @@ const primaryAccent     = purple500;
 const primaryLight      = purple200;
 const primaryBg         = purple100;
 
-
 /* --- secondary --- */
 const secondaryDark     = blue800;
 const secondaryAccent   = blue500;
 const secondaryLight    = blue200;
 const secondaryBg       = blue100;
-
 
 /* --- success --- */
 const successDark       = green800;
@@ -183,13 +181,11 @@ const successAccent     = green500;
 const successLight      = green200;
 const successBg         = green100;
 
-
 /* --- warning --- */
 const warningDark       = yellow600;
 const warningAccent     = yellow500;
 const warningLight      = yellow200;
 const warningBg         = yellow100;
-
 
 /* --- danger --- */
 const dangerDark        = pink800;
@@ -197,6 +193,63 @@ const dangerAccent      = pink500;
 const dangerLight       = pink200;
 const dangerBg          = pink100;
 
+// todo dk: the whole typography section needs to be reworked, maybe it can even be removed
+// todo dk: atm we have no visual testing of the outcome
+
+/* --- typography --- */
+const lightRubik     = 'Rubik-Light,    system-ui, serif';
+const mediumRubik    = 'Rubik-Medium,   system-ui, serif';
+const regularRubik   = 'Rubik-Regular,  system-ui, serif';
+const semiboldRubik  = 'Rubik-SemiBold, system-ui, serif';
+
+
+/* --- font-sizes --- */
+const fontSizeH1         = '6.0rem';
+const fontSizeH2         = '3.7rem';
+const fontSizeH3         = '3.0rem';
+const fontSizeH4         = '2.0rem';
+const fontSizeH5         = '1.5rem';
+const fontSizeH6         = '1.0rem';
+
+const fontSizeTextL      = '1.25rem';
+const fontSizeTextM      = '1.0rem';
+const fontSizeTextS      = '0.875rem';
+const fontSizeTextXS     = '0.75rem';
+
+const fontSizeLinkL      = '1.25rem';
+const fontSizeLinkM      = '1.125rem';
+const fontSizeLinkS      = '1.0rem';
+const fontSizeLinkXS     = '0.875rem';
+
+const fontSizeCaption    = '0.875rem';
+const fontSizeOverline   = '0.625rem';
+
+
+/* --- spacing in rem--- */
+const remSpacer1         = '0.3rem';
+const remSpacer2         = '0.5rem';
+const remSpacer3         = '0.8rem';
+const remSpacer4         = '1.0rem';
+const remSpacer5         = '1.3rem';
+const remSpacer6         = '1.5rem';
+const remSpacer7         = '1.8rem';
+const remSpacer8         = '2.0rem';
+const remSpacer9         = '2.2rem';
+const remSpacer10        = '2.5rem';
+const remSpacer12        = '3.0rem';
+
+/* --- spacing in px--- */
+const pxSpacer1          = '4px;';
+const pxSpacer2          = '8px;';
+const pxSpacer3          = '12px';
+const pxSpacer4          = '16px';
+const pxSpacer5          = '20px';
+const pxSpacer6          = '24px';
+const pxSpacer7          = '28px';
+const pxSpacer8          = '32px';
+const pxSpacer9          = '36px';
+const pxSpacer10         = '40px';
+const pxSpacer12         = '48px';
 // todo dk: the whole typography section needs to be reworked, maybe it can even be removed
 // todo dk: atm we have no visual testing of the outcome
 
