@@ -1410,31 +1410,33 @@ function ObservableList(list) {
  */
 
 /**
- * @typedef { <_T_> (...x) => _T_ } ProducerType<_T_>
+ * @template  _T_
+ * @typedef { <_T_> (...x) => _T_ } ProducerType
  * A function that takes arbitrary arguments (possibly none) and produces a value of type _T_.
  */
 
 /**
- * @typedef { <_T_> (_T_) => void } ConsumerType<_T_>
+ * @template  _T_
+ * @typedef { <_T_> (_T_) => void } ConsumerType
  * A function that consumes a value of type _T_ and returns nothing.
  */
 
 /**
- * @typedef { <_T_> (_T_) => Boolean } ConsumingPredicateType<_T_>
+ * @template  _T_
+ * @typedef { <_T_> (_T_) => Boolean } ConsumingPredicateType
  * A function that consumes a value of type _T_ and returns a Boolean.
  */
 
 /**
- * @typedef { <_T_>  (_T_) => _T_ } UnaryOperatorType<_T_>
+ * @template  _T_
+ * @typedef { <_T_>  (_T_) => _T_ } UnaryOperatorType
  * A unary operator on _T_.
  */
+
 /**
- * A callback which takes one argument of type {@link _A_} and transforms it to {@link _B_}.
- * @template _A_
- * @template _B_
- * @callback Functor
- * @param   { _A_ } value
- * @returns { _B_ }
+ * A function which takes one argument of type {@link _A_} and transforms it to {@link _B_}.
+ * @template _A_, _B_
+ * @typedef { <_A_,_B_>  (_A_) => _B_ } FunctionType
  */
 
 /**
@@ -1447,6 +1449,7 @@ function ObservableList(list) {
  */
 
 /**
+ * @template  _T_, _U_, _R_
  * A callback which takes two arguments of type _T_ and _U_}and transforms it to _R_.
  * @callback BiFunction
  * @type {  <_T_, _U_, _R_> (value1:_T_, value2:_U_) => _R_ }
@@ -1479,14 +1482,15 @@ function ObservableList(list) {
  * With it, it is possible to query different data sources using the one and same query language.
  *
  * @template _T_
+ * @template _U_
  * @typedef JinqType
- * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               map      - maps the current value to a new value
- * @property { <_U_> (selector:  Functor<_T_, _U_>)  => JinqType<_U_> }               select   - alias for map
- * @property { <_U_> ((prev: _T_) => MonadType<_U_>) => JinqType<_U_> }               inside   - maps the current value to a new {@link MonadType}
- * @property { <_U_> (monad:     MonadType<_U_>)     => JinqType<PairType<_T_,_U_>> } pairWith - combines the underlying data structure with the given data structure as {@link PairType}
- * @property { <_U_> (monadCtor: (_T_) =>  MonadType<_U_>)    => JinqType<PairType<_T_,_U_>> } combine - combines the underlying data structure with the given constructor as {@link PairType}
- * @property {       (predicate: ConsumingPredicateType<_T_>) => JinqType<_T_> }      where    - only keeps the items that fulfill the predicate
- * @property {       ()                              => MonadType<_T_> }              result   - returns the result of this query
+ * @property { <_U_> (selector:  FunctionType<_T_, _U_>)      => JinqType<_U_> }               map      - maps the current value to a new value
+ * @property { <_U_> (selector:  FunctionType<_T_, _U_>)      => JinqType<_U_> }               select   - alias for map
+ * @property { <_U_> ((prev: _T_) => MonadType<_U_>)          => JinqType<_U_> }               inside   - maps the current value to a new {@link MonadType}
+ * @property { <_U_> (monad:     MonadType<_U_>)              => JinqType<PairType<_T_,_U_>> } pairWith - combines the underlying data structure with the given data structure as {@link PairType}
+ * @property { <_U_> (monadCtor: (_T_) =>  MonadType<_U_>)    => JinqType<PairType<_T_,_U_>> } combine  - combines the underlying data structure with the given constructor as {@link PairType}
+ * @property {       (predicate: ConsumingPredicateType<_T_>) => JinqType<_T_> }               where    - only keeps the items that fulfill the predicate
+ * @property {       ()                                       => MonadType<_T_> }              result   - returns the result of this query
  */
 
 /**
@@ -1619,7 +1623,7 @@ const pairWith = monad1 => monad2 => {
  * This allows usages that come closer to list comprehensions.
  * It returns a {@link PairType} which holds a combination of two values.
  *
- *
+ * @template _T_, _U_
  * @type { <_T_, _U_>
  *           (monad1:     MonadType<_T_>)
  *        => (monad2ctor: (arg:_T_) => MonadType<_U_>)
@@ -1649,6 +1653,7 @@ const combine = monad1 => monad2ctor => {
 /**
  * Filters elements based on a given condition.
  *
+ * @template _T_, _U_
  * @type { <_T_>
  *            (monad: MonadType<_T_>)
  *         => (predicate: ConsumingPredicateType<_T_>)
@@ -1674,10 +1679,11 @@ const where = monad => predicate => {
 /**
  * Applies a function to each element of the collection.
  *
+ * @template _T_, _U_
  * @alias map
  * @type { <_T_, _U_>
  *           (monad: MonadType<_T_>)
- *        => (selector: Functor<_T_, _U_>)
+ *        => (selector: FunctionType<_T_, _U_>)
  *        => JinqType<_U_>
  *       }
  *
@@ -1699,10 +1705,11 @@ const select$1 = monad => mapper => {
 /**
  * Applies a function to each element of the collection.
  *
+ * @template _T_, _U_
  * @alias select
  * @type { <_T_, _U_>
  *           (monad: MonadType<_T_>)
- *        => (mapper: Functor<_T_, _U_>)
+ *        => (mapper: FunctionType<_T_, _U_>)
  *        => JinqType<_U_>
  *       }
  *
@@ -1868,7 +1875,7 @@ const limit = (epsilon, numberSequence) => {
     }
     return undefined;
 };/**
- * Transforms each element using the given {@link Functor function}.
+ * Transforms each element using the given {@link FunctionType function}.
  *
  * @function
  * @pure
@@ -1877,7 +1884,7 @@ const limit = (epsilon, numberSequence) => {
  * @template _T_
  * @template _U_
  * @type {
- *            (mapper: Functor<_T_, _U_>)
+ *            (mapper: FunctionType<_T_, _U_>)
  *         => SequenceOperation<_T_, _U_>
  *       }
  *
@@ -1893,7 +1900,7 @@ const limit = (epsilon, numberSequence) => {
  * see {@link MapOperationType}
  * @template _T_
  * @template _U_
- * @type {MapOperationType<_T_, _U_>}
+ * @type { MapOperationType<_T_, _U_> }
  */
 const map = mapper => iterable => {
 
@@ -5819,7 +5826,9 @@ const { debug: debug$1 } = LoggerFactory("ch.fhnw.kolibri.util.memoize");
  * cache for successive invocation of **f(x)**.
  * Where **x** should be a scalar value that can be used as a key in a {@link Map}.
  * The cache hit count is logged on {@link LOG_DEBUG} level.
- * @type {  <_T_, _U_>  (f: Functor<_T_,_U_>) => Functor<_T_,_U_> }
+ *
+ * @template _T_, _U_
+ * @type {  <_T_, _U_>  (f: FunctionType<_T_,_U_>) => FunctionType<_T_,_U_> }
  * @example
    let fib = n => n < 2 ? 1 : fib(n-1) + fib(n-2);
    fib = memoize(fib);
@@ -5841,9 +5850,9 @@ const memoize = f => {
         }
         return y;
     }
-};const release     = "0.9.7";
+};const release     = "0.9.8";
 
-const dateStamp   = "2024-12-21 T 13:39:25 MEZ";
+const dateStamp   = "2024-12-21 T 15:26:13 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
