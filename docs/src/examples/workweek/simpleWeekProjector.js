@@ -1,4 +1,4 @@
-import { dom, select }                       from "../../kolibri/util/dom.js";
+import { dom }                       from "../../kolibri/util/dom.js";
 import { totalMinutesToTimeString }  from "../../kolibri/projector/projectorUtils.js"
 import { DayController }             from "../workday/dayController.js";
 import { DayProjector }              from "../workday/simpleDayProjector.js";
