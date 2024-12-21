@@ -35,7 +35,7 @@ import '../src/kolibri/util/memoize.js'
 import '../src/kolibri/util/array.js'
 import '../src/kolibri/util/dom.js'
 // import '../src/kolibri/util/testUi-support.js'  // directly interacts with UI
-import '../src/kolibri/style/kolibriStyle.js'
+// import '../src/kolibri/style/kolibriStyle.js'   // for the moment, this exposes too many constants for the bundle
 import '../src/kolibri/version.js'
 import '../src/kolibri/stdlib.js'
 import '../src/kolibri/lambda/church.js'
