@@ -1290,7 +1290,8 @@ function checkWarning(list) {
 }
 
 /**
- * @typedef { <_T_> (newValue:_T_, oldValue: ?_T_) => void } ValueChangeCallback<_T_>
+ * @template _T_
+ * @typedef { (newValue:_T_, oldValue: ?_T_) => void } ValueChangeCallback
  * This is a specialized {@link ConsumerType} with an optional second value.
  * The "oldValue" contains the value before the change.
  */
@@ -4304,14 +4305,19 @@ const SimpleInputModel = ({value, label, name, type= TEXT}) => {
 
     return /** AttributeType<_T_> */ singleAttr;
 };/**
- * @typedef { object } SimpleInputControllerType
+ * @typedef  SimpleInputControllerType
  * @template _T_
- * @property { ()  => _T_ }                 getValue
- * @property { (_T_) => void }              setValue
- * @property { ()  => String}               getType
- * @property { (valid: !Boolean) => void }  setValid
+ * @property { ()       => _T_ }                            getValue
+ * @property { (_T_)    => void }                           setValue
+ * @property { ()       => String }                         getLabel
+ * @property { (String) => void }                           setLabel
+ * @property { ()       => String }                         getTooltip
+ * @property { (String) => void }                           setTooltip
+ * @property { ()       => String}                          getType
+ * @property { (valid: !Boolean) => void }                  setValid
  * @property { (converter: Converter<_T_>)        => void } setConverter
  * @property { (cb: ValueChangeCallback<String>)  => void } onLabelChanged
+ * @property { (cb: ValueChangeCallback<String>)  => void } onTooltipChanged
  * @property { (cb: ValueChangeCallback<Boolean>) => void } onValidChanged
  * @property { (cb: ValueChangeCallback<_T_>)     => void } onValueChanged
  * @property { (cb: ValueChangeCallback<String>)  => void } onNameChanged
@@ -4338,20 +4344,20 @@ const SimpleInputModel = ({value, label, name, type= TEXT}) => {
 const SimpleInputController = args => SimpleAttributeInputController(SimpleInputModel(args));
 
 const SimpleAttributeInputController = attribute => ( {
+    getValue:          attribute.getObs(VALUE)  .getValue,
     setValue:          attribute.setConvertedValue,
-    getValue:          attribute.getObs(VALUE).getValue,
-    setValid:          attribute.getObs(VALID).setValue,
-    setLabel:          attribute.getObs(LABEL).setValue,
-    getLabel:          attribute.getObs(LABEL).getValue,
-    setName:           attribute.getObs(NAME).setValue,
-    getName:           attribute.getObs(NAME).getValue,
-    setTooltip:        attribute.getObs(TOOLTIP).setValue,
+    setValid:          attribute.getObs(VALID)  .setValue,
+    getLabel:          attribute.getObs(LABEL)  .getValue,
+    setLabel:          attribute.getObs(LABEL)  .setValue,
+    getName:           attribute.getObs(NAME)   .getValue,
+    setName:           attribute.getObs(NAME)   .setValue,
     getTooltip:        attribute.getObs(TOOLTIP).getValue,
-    getType:           attribute.getObs(TYPE).getValue,
-    onValueChanged:    attribute.getObs(VALUE).onChange,
-    onValidChanged:    attribute.getObs(VALID).onChange,
-    onLabelChanged:    attribute.getObs(LABEL).onChange,
-    onNameChanged:     attribute.getObs(NAME).onChange,
+    setTooltip:        attribute.getObs(TOOLTIP).setValue,
+    getType:           attribute.getObs(TYPE)   .getValue,
+    onValueChanged:    attribute.getObs(VALUE)  .onChange,
+    onValidChanged:    attribute.getObs(VALID)  .onChange,
+    onLabelChanged:    attribute.getObs(LABEL)  .onChange,
+    onNameChanged:     attribute.getObs(NAME)   .onChange,
     onTooltipChanged:  attribute.getObs(TOOLTIP).onChange,
     onEditableChanged: attribute.getObs(EDITABLE).onChange,
     setConverter:      attribute.setConverter,
@@ -4742,7 +4748,7 @@ const projectInput = (timeout) => (eventType) =>
     }
 
     inputController.onLabelChanged (  label => {
-        labelElement.textContent = /** @type {String} */ label;
+        labelElement.textContent = label;
         inputController.setTooltip(label);
     });
     inputController.onNameChanged  (name  => inputElement.setAttribute("name", name || id));
@@ -4757,15 +4763,17 @@ const projectInput = (timeout) => (eventType) =>
         popoverElement.prepend(...icon(ICON_CHRISTMAS_TREE));
         const hide  = _e => popoverElement.hidePopover();
         const show  = _e => popoverElement.showPopover();
-        spanElement .removeEventListener("mouseenter", show);       // avoid duplicate listeners
-        spanElement .removeEventListener("mouseleave", hide);
-        labelElement.removeEventListener("click", show);
-        inputElement.removeEventListener("input", hide);
+        spanElement .removeEventListener("mouseenter",  show);      // avoid duplicate listeners
+        spanElement .removeEventListener("mouseleave",  hide);
+        labelElement.removeEventListener("click",       show);
+        inputElement.removeEventListener("input",       hide);
+        document.removeEventListener("touchstart",      hide);
         if (text && text.length > 0  ) {
             spanElement .addEventListener("mouseenter", show);
             spanElement .addEventListener("mouseleave", hide);
-            labelElement.addEventListener("click", show);
-            inputElement.addEventListener("input", hide);
+            labelElement.addEventListener("click",      show);
+            inputElement.addEventListener("input",      hide);
+            document    .addEventListener("touchstart", hide);
         }
     });
 
@@ -5833,9 +5841,9 @@ const memoize = f => {
         }
         return y;
     }
-};const release     = "0.9.6";
+};const release     = "0.9.7";
 
-const dateStamp   = "2024-12-13 T 17:51:07 MEZ";
+const dateStamp   = "2024-12-21 T 13:39:25 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
