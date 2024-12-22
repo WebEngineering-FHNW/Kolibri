@@ -1,5 +1,5 @@
-import { Attribute, TYPE, EMPHASIS, DESIGNSYSTEM, STATE }   from "../../../presentationModel.js";
-import { TEXTBTN }                                          from "../../../util/dom.js";
+import { Attribute, TYPE, EMPHASIS, DESIGNSYSTEM, STATE } from "../../../presentationModel.js";
+import { TEXT_BUTTON }                                    from "../../../util/dom.js";
 
 export { KolibriButtonModel }
 export { DEFAULT, HOVER, FOCUS, CLICK, DISABLED, SUCCESS, ERROR, PROCESSING }
@@ -60,7 +60,7 @@ export { PRIMARY, SECONDARY, ELEVATED, FILLED, OUTLINED }
 
 const KolibriButtonModel = (
     {
-     type         = TEXTBTN,
+     type         = TEXT_BUTTON,
      value       = 'Button',
      qualifier,
      designSystem     = FILLED,

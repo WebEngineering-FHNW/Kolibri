@@ -1,6 +1,6 @@
 import  { projectTextButton, BUTTON_CSS} from "./kolibriButtonProjector.js";
-import  { KolibriButtonController } from "./kolibriButtonControler.js";
-import {TEXTBTN} from "../../../util/dom.js";
+import  { KolibriButtonController }                  from "./kolibriButtonControler.js";
+import {TEXT_BUTTON}                                 from "../../../util/dom.js";
 import {DEFAULT, FOCUS, PROCESSING, FILLED, PRIMARY} from "./kolibriButtonModel.js";
 
 export { start } // exported for testing purposes
@@ -8,7 +8,7 @@ export { start } // exported for testing purposes
 const start = () => {
 
     const primaryButton =
-        { type: TEXTBTN, value:"Button", designSystem: FILLED, emphasis: PRIMARY, state: DEFAULT  };
+        { type: TEXT_BUTTON, value: "Button", designSystem: FILLED, emphasis: PRIMARY, state: DEFAULT  };
 
     const controller = KolibriButtonController(primaryButton);
     return projectTextButton(controller);

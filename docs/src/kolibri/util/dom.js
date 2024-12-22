@@ -11,7 +11,8 @@ import { toSeq }         from "../sequence/util/helpers.js";
 export {
     dom, select, fireEvent, fireChangeEvent,
     CLICK, INPUT, CHANGE,
-    TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR, TEXTBTN, ICONBTN, LEADINGICONBTN, TRAILINGICONBTN
+    TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR,
+    TEXT_BUTTON, ICON_BUTTON, LEADING_ICON_BUTTON, TRAILING_ICON_BUTTON
 }
 
 const { warn } = LoggerFactory("ch.fhnw.kolibri.util.dom");
@@ -23,7 +24,7 @@ const { warn } = LoggerFactory("ch.fhnw.kolibri.util.dom");
  * @pure
  * @example
  * const [label, input] = dom(`
- *      <label for="myId">
+ *      <label for="myId">Name</label>
  *      <input type="text" id="myId" name="myName" value="myValue">
  * `);
  */
@@ -66,9 +67,7 @@ const fireEvent = (element, eventTypeString) => {
  */
 const fireChangeEvent = element => fireEvent(element, CHANGE);
 
-
-/** @typedef { "text"|"number"|"checkbox"|"time"|"date"|"color"} InputTypeString */
-
+/** @typedef { "text" | "number" | "checkbox" | "time" | "date" | "color" } InputTypeString */
 /** @type InputTypeString */ const TEXT         = "text";
 /** @type InputTypeString */ const NUMBER       = "number";
 /** @type InputTypeString */ const CHECKBOX     = "checkbox";
@@ -76,12 +75,11 @@ const fireChangeEvent = element => fireEvent(element, CHANGE);
 /** @type InputTypeString */ const DATE         = "date";
 /** @type InputTypeString */ const COLOR        = "color";
 
-
-/** @typedef { "textBtn"|"iconBtn"|"leadingIconBtn"|"trailingIconBtn"} ButtonTypeString */
-/** @type ButtonTypeString */ const TEXTBTN         = "textBtn";
-/** @type ButtonTypeString */ const ICONBTN         = "iconBtn";
-/** @type ButtonTypeString */ const LEADINGICONBTN  = "leadingIconBtn";
-/** @type ButtonTypeString */ const TRAILINGICONBTN = "trailingIconBtn";
+/** @typedef { "textBtn" | "iconBtn" | "leadingIconBtn" | "trailingIconBtn" } ButtonTypeString */
+/** @type ButtonTypeString */ const TEXT_BUTTON             = "textBtn";
+/** @type ButtonTypeString */ const ICON_BUTTON             = "iconBtn";
+/** @type ButtonTypeString */ const LEADING_ICON_BUTTON     = "leadingIconBtn";
+/** @type ButtonTypeString */ const TRAILING_ICON_BUTTON    = "trailingIconBtn";
 
 /**
  * Utility function that works like {@link Element.querySelectorAll} but logs a descriptive warning when
