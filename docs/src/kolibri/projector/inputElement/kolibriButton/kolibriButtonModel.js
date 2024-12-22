@@ -23,7 +23,7 @@ export { PRIMARY, SECONDARY, ELEVATED, FILLED, OUTLINED }
 
 
 /**
- * @typedef {'default'|'hover'|'focus'|'clicked'|'disabled'|'success'|'error'|'processing'} ObservableStateString
+ * @typedef {'default'|'hover'|'focus'|'click'|'disabled'|'success'|'error'|'processing'} ObservableStateString
  * Feel free to extend this type with new unique type strings as needed for your application.
  */
 /** @type ObservableStateString */ const DEFAULT         = "default";
@@ -39,34 +39,32 @@ export { PRIMARY, SECONDARY, ELEVATED, FILLED, OUTLINED }
  * Create a model for the purpose of being used to bind against a single HTML Kolibri Button.
  * For a single Button, it only needs one attribute.
  * @constructor
- * @template T
+ * @template _T_
  * @param  { ButtonTypeString }                type
  * @param  { ObservableTypeString | string }   value
- * @param  { string? }                         qualifier
+ * @param  { String? }                         qualifier
  * @param  { DesignSystemString }              style
  * @param  { EmphasisString }                  emphasis
  * @param  { ObservableStateString }           state
- * @return { AttributeType<T> }
+ * @return { AttributeType<_T_> }
  * @example
- *     const model = KolibriButtonModel({
-         type:          "TEXTBTN",
-         value:         "Press ME",
-         qualifier:     "pressme.api.send.data"",
-         designSystem:  "FILLED",
-         emphasis:      "SECONDARY",
-         state:         "DEFAULT"
+ const model = KolibriButtonModel({
+      type           = TEXT_BUTTON,
+      value          = 'Button Text',
+      qualifier,
+      designSystem   = FILLED,
+      emphasis       = SECONDARY,
+      state          = DEFAULT
      });
  */
 
-const KolibriButtonModel = (
-    {
-     type         = TEXT_BUTTON,
-     value       = 'Button',
+const KolibriButtonModel = ({
+     type           = TEXT_BUTTON,
+     value          = 'Button',
      qualifier,
-     designSystem     = FILLED,
-     emphasis= SECONDARY,
+     designSystem   = FILLED,
+     emphasis       = SECONDARY,
      state          = DEFAULT
-
     }) => {
 
     const singleAttribute = Attribute(value);
