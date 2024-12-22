@@ -1,6 +1,6 @@
 import { InputProjector}        from "../../projector/simpleForm/simpleInputProjector.js";
 import { dom }                  from "../../util/dom.js";
-import { shadowCss }            from "../../style/kolibriStyle.js";
+import { shadowCss }            from "../../../customize/kolibriStyle.js";
 import { projectLoggingChoice } from "./loggingLevelProjector.js";
 
 export { projectLoggingUi, LOGGING_UI_CSS }

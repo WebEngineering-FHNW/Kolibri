@@ -13,9 +13,9 @@
  * to the application while all business logic and their test cases remain untouched.
  */
 
-import { dom }              from "../../util/dom.js";
-import { shadowCss }        from "../../style/kolibriStyle.js";
-import { InputProjector }   from "./simpleInputProjector.js";
+import { dom }            from "../../util/dom.js";
+import { shadowCss }      from "../../../customize/kolibriStyle.js";
+import { InputProjector } from "./simpleInputProjector.js";
 
 export { projectForm, FORM_CSS }
 

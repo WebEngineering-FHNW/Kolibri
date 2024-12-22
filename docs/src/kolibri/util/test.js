@@ -6,7 +6,7 @@
  * how many assertions have been tested and whether any failed.
  */
 
-import { accentColor, okColor }                         from "../style/kolibriStyle.js";
+import { colorAccent, colorOk }                         from "../../customize/kolibriStyle.js";
 import { id, Just, Tuple }                              from "../stdlib.js";
 import { Observable }                                   from "../observable.js";
 import { dom }                                          from "./dom.js";
@@ -291,8 +291,8 @@ const TestSuite = suiteName => {
  * @private
  */
 const report = (origin, results, messages) => {
-    const okStyle     = `style="color: ${okColor};"`;
-    const failedStyle = `style="color: ${accentColor};"`;
+    const okStyle     = `style="color: ${colorOk};"`;
+    const failedStyle = `style="color: ${colorAccent};"`;
 
     if ( results.every( elem => elem) ) {
         write (`

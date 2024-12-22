@@ -1,7 +1,7 @@
 import {dom}                                    from "../../../kolibri/util/dom.js";
 import {URI_HASH_UNSTYLED, href, URI_HASH_HOME} from "../../../customize/uriHashes.js";
-import {Page}                                   from "../../../kolibri/navigation/page/page.js";
-import {KOLIBRI_LOGO_SVG}                       from "../../../kolibri/style/kolibriStyle.js";
+import {Page}             from "../../../kolibri/navigation/page/page.js";
+import {KOLIBRI_LOGO_SVG} from "../../../customize/kolibriStyle.js";
 
 export { HomePage }
 

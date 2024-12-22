@@ -1,15 +1,15 @@
-import {dom}                                                        from "../../../util/dom.js";
-import {primaryAccent, primaryBg}                                   from "../../../style/kolibriStyle.js"
-import {ERROR, FOCUS, SUCCESS, CLICK, DISABLED, PROCESSING}         from "./kolibriButtonModel.js";
+import {dom}                                                from "../../../util/dom.js";
+import {colorPrimaryAccent, colorPrimaryBg}                 from "../../../../customize/kolibriStyle.js"
+import {ERROR, FOCUS, SUCCESS, CLICK, DISABLED, PROCESSING} from "./kolibriButtonModel.js";
 import {
     mediumRubik,
     fontSizeLinkM,
     pxSpacer2,
     pxSpacer6,
     pxSpacer8,
-    secondaryAccent,
-    secondaryBg, purple400, blue500, successBg, successAccent, dangerAccent, dangerBg
-} from "../../../style/kolibriStyle.js";
+    colorSecondaryAccent,
+    colorSecondaryBg, purple400, blue500, colorSuccessBg, colorSuccessAccent, colorDangerAccent, colorDangerBg
+}                                                           from "../../../../customize/kolibriStyle.js";
 
 export {projectTextButton, BUTTON_CSS}
 
@@ -110,18 +110,18 @@ const BUTTON_CSS = `
 
     .filled-primary{
       border:           none;
-      background-color: ${primaryAccent};
-      color:            ${primaryBg};
+      background-color: ${colorPrimaryAccent};
+      color:            ${colorPrimaryBg};
     }
     
     .filled-success {
-      background-color: ${successAccent};
-      color:            ${successBg};
+      background-color: ${colorSuccessAccent};
+      color:            ${colorSuccessBg};
     
     }
     .filled-error {
-        background-color: ${dangerAccent};
-        color:            ${dangerBg};
+        background-color: ${colorDangerAccent};
+        color:            ${colorDangerBg};
     }
     
     .btn-filled-processing {

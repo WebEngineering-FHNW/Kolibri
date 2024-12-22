@@ -1,13 +1,13 @@
 
 import { dom } from "../../kolibri/util/dom.js"
 import {
-    accentColor, okColor, neutralColor, selectColor, outputColor, shadowColor, shadowCss,
-    primaryDark,     primaryAccent, primaryBg,    primaryLight,
-    secondaryAccent, secondaryDark, secondaryBg,  secondaryLight,
-    successAccent,   successDark,   successLight, successBg,
-    warningAccent,   warningDark,   warningBg,    warningLight,
-    dangerAccent,    dangerDark,    dangerBg,     dangerLight
-} from "../../kolibri/style/kolibriStyle.js"
+    colorAccent, colorOk, colorNeutral, colorSelect, colorOutput, colorShadow, shadowCss,
+    colorPrimaryDark,     colorPrimaryAccent, colorPrimaryBg,    colorPrimaryLight,
+    colorSecondaryAccent, colorSecondaryDark, colorSecondaryBg,  colorSecondaryLight,
+    colorSuccessAccent,   colorSuccessDark,   colorSuccessLight, colorSuccessBg,
+    colorWarningAccent,   colorWarningDark,   colorWarningBg,    colorWarningLight,
+    colorDangerAccent,    colorDangerDark,    colorDangerBg,     colorDangerLight
+}              from "../../customize/kolibriStyle.js"
 
 const root = document.querySelector("#out");
 
@@ -30,12 +30,12 @@ const stanza2= ( colorName, color, cssName) => dom (`
     </div>
 `);
 
-root.append( ... stanza( "neutralColor", neutralColor ,"--kolibri-color-neutral"  ));
-root.append( ... stanza( "accentColor",  accentColor  ,"--kolibri-color-accent"  ));
-root.append( ... stanza( "okColor",      okColor      ,"--kolibri-color-ok"  ));
-root.append( ... stanza( "selectColor",  selectColor  ,"--kolibri-color-select"  ));
-root.append( ... stanza( "outputColor",  outputColor  ,"--kolibri-color-output"  ));
-root.append( ... stanza( "shadowColor",  shadowColor  ,"--kolibri-color-shadow"  ));
+root.append( ... stanza("colorNeutral", colorNeutral , "--kolibri-color-neutral"  ));
+root.append( ... stanza("colorAccent ", colorAccent  , "--kolibri-color-accent"  ));
+root.append( ... stanza("colorOk     ", colorOk      , "--kolibri-color-ok"  ));
+root.append( ... stanza("colorSelect ", colorSelect  , "--kolibri-color-select"  ));
+root.append( ... stanza("colorOutput ", colorOutput  , "--kolibri-color-output"  ));
+root.append( ... stanza("colorShadow ", colorShadow  , "--kolibri-color-shadow"  ));
 root.append( ... dom (`
     <p>shadow</p>
     <p>--kolibri-box-shadow</p>
@@ -44,24 +44,24 @@ root.append( ... dom (`
 `));
 
 
-root.append( ... stanza2( "primaryDark",     primaryDark     ,"primary-dark"  ));
-root.append( ... stanza2( "primaryAccent",   primaryAccent   ,"primary-accent"  ));
-root.append( ... stanza2( "primaryBg",       primaryBg       ,"primary-bg"  ));
-root.append( ... stanza2( "primaryLight",    primaryLight    ,"primary-light"  ));
-root.append( ... stanza2( "secondaryAccent", secondaryAccent ,"secondary-accent"  ));
-root.append( ... stanza2( "secondaryDark",   secondaryDark   ,"secondary-dark"  ));
-root.append( ... stanza2( "secondaryBg",     secondaryBg     ,"secondary-bg"  ));
-root.append( ... stanza2( "secondaryLight",  secondaryLight  ,"secondary-light"  ));
-root.append( ... stanza2( "successAccent",   successAccent   ,"success-accent"  ));
-root.append( ... stanza2( "successDark",     successDark     ,"success-dark"  ));
-root.append( ... stanza2( "successLight",    successLight    ,"success-light"  ));
-root.append( ... stanza2( "successBg",       successBg       ,"success-bg"  ));
-root.append( ... stanza2( "warningAccent",   warningAccent   ,"warning-accent"  ));
-root.append( ... stanza2( "warningDark",     warningDark     ,"warning-dark"  ));
-root.append( ... stanza2( "warningBg",       warningBg       ,"warning-bg"  ));
-root.append( ... stanza2( "warningLight",    warningLight    ,"warning-light"  ));
-root.append( ... stanza2( "dangerAccent",    dangerAccent    ,"danger-accent"  ));
-root.append( ... stanza2( "dangerDark",      dangerDark      ,"danger-dark"  ));
-root.append( ... stanza2( "dangerBg",        dangerBg        ,"danger-bg"  ));
-root.append( ... stanza2( "dangerLight",     dangerLight     ,"danger-light"  ));
+root.append( ... stanza2("colorPrimaryDark    ", colorPrimaryDark     , "primary-dark"  ));
+root.append( ... stanza2("colorPrimaryAccent  ", colorPrimaryAccent   , "primary-accent"  ));
+root.append( ... stanza2("colorPrimaryBg      ", colorPrimaryBg       , "primary-bg"  ));
+root.append( ... stanza2("colorPrimaryLight   ", colorPrimaryLight    , "primary-light"  ));
+root.append( ... stanza2("colorSecondaryAccent", colorSecondaryAccent , "secondary-accent"  ));
+root.append( ... stanza2("colorSecondaryDark  ", colorSecondaryDark   , "secondary-dark"  ));
+root.append( ... stanza2("colorSecondaryBg    ", colorSecondaryBg     , "secondary-bg"  ));
+root.append( ... stanza2("colorSecondaryLight ", colorSecondaryLight  , "secondary-light"  ));
+root.append( ... stanza2("colorSuccessAccent  ", colorSuccessAccent   , "success-accent"  ));
+root.append( ... stanza2("colorSuccessDark    ", colorSuccessDark     , "success-dark"  ));
+root.append( ... stanza2("colorSuccessLight   ", colorSuccessLight    , "success-light"  ));
+root.append( ... stanza2("colorSuccessBg      ", colorSuccessBg       , "success-bg"  ));
+root.append( ... stanza2("colorWarningAccent  ", colorWarningAccent   , "warning-accent"  ));
+root.append( ... stanza2("colorWarningDark    ", colorWarningDark     , "warning-dark"  ));
+root.append( ... stanza2("colorWarningBg      ", colorWarningBg       , "warning-bg"  ));
+root.append( ... stanza2("colorWarningLight   ", colorWarningLight    , "warning-light"  ));
+root.append( ... stanza2("colorDangerAccent   ", colorDangerAccent    , "danger-accent"  ));
+root.append( ... stanza2("colorDangerDark     ", colorDangerDark      , "danger-dark"  ));
+root.append( ... stanza2("colorDangerBg       ", colorDangerBg        , "danger-bg"  ));
+root.append( ... stanza2("colorDangerLight    ", colorDangerLight     , "danger-light"  ));
 

@@ -1,4 +1,4 @@
-This directory contains artefacts (mostly type definitions) that kolibri depends upon
+This directory contains artefacts (mostly type definitions, colors, icons) that kolibri depends upon
 but are to be customized by the web application that uses the kolibri.
 
 With this construction, one can keep the kolibri directory free of 
