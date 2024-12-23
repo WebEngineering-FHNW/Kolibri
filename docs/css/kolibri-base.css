@@ -32,14 +32,21 @@ header h1 {
 h1, h2, h3 {
     font-family: var(--kb-font-family-stylish),var(--kb-font-family-default), system-ui;
     font-weight: normal;
+    text-wrap:   balance;
 }
 
-div, p, ul, ol, dl,
-form, fieldset, label, input, button {
+div, p, ul, ol, dl, form, fieldset, label {
     font-family: var(--kb-font-family-running-text),var(--kb-font-family-default), system-ui;
     letter-spacing: 0.03em;
     font-weight:    300;
 }
+
+input, button, textarea, select { /* interaction elements */
+    font-family:    system-ui;
+    letter-spacing: 0.03em;
+    font-weight:    normal;
+}
+
 /* --- end typography --- */
 
 /* --- default element appearance --- */
@@ -207,6 +214,13 @@ a.skip-link:not(:focus):not(:active) {
     text-wrap:      pretty;
 }
 
+.font_numeric {
+    font-variant-numeric: tabular-nums slashed-zero;
+}
+.font_numeric_fraction {
+    font-variant-numeric: diagonal-fractions;
+}
+
 /* --- end of utility classes --- */
 
 
@@ -232,8 +246,9 @@ a.skip-link:not(:focus):not(:active) {
       animation-fill-mode:        forwards;
   }
 
-  /*For the moment, don't do this as it makes the UI appear flickering when*/
-  /*the popover closes. Sadly, there seems to be no way to transition back on close. Reserve for later.*/
+  /* For the moment, don't do this as it makes the UI appear flickering when*/
+  /* the popover closes. Sadly, there seems to be no way to transition back on close that works on all browsers.*/
+  /* For chrome and Safari (not FF yet), we could use a view transition. */
   /*:popover-open::backdrop {*/
   /*    background-color:           color-mix(in hsl, white, transparent 70%);*/
   /*    transition:                 background-color 1s linear;*/
