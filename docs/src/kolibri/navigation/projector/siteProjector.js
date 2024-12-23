@@ -101,11 +101,12 @@ const headElements = dom(`
                  #top-nav {
                      grid-area:              top-nav;
                      align-self:             center;
-                     filter:                 drop-shadow(0 0 .5rem white);
                      --kolibri-color-accent: white;
-                     font-weight:            bold;
                      & a {
                          margin-right:       1em;
+                     }
+                     & a:not(.current) {                         
+                         color:              var(--kolibri-color-secondary-bg);
                      }
                  }
                  #side-nav {
