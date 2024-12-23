@@ -6675,4 +6675,4 @@ const SiteController = () => {
         onPageActivated:   pageActivated.onChange,    // notify site projector
         onPagePassivated:  pagePassivated.onChange,   // notify site projector
     }
-};// production classes for bundling and statistics, without tests or examples
+};// production classes for bundling and statistics, without tests, examples, or customize
