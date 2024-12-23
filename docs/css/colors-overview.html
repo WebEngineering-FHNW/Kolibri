@@ -7,15 +7,20 @@
     <style>
         .squares {
             display: flex;
+            /*change below to validate transparency against black */
             /*background-color: black;*/
         }
         div {
             width:          50px;
             aspect-ratio:   1 / 1;
+            /*change below to validate color changes with breaks */
             /*margin:         1px;*/
         }
         body > p {
             margin-top: 1em;
+        }
+        body {
+            padding: 2em;
         }
     </style>
 </head>
@@ -23,6 +28,7 @@
 <h1>Kolibri Color Overview</h1>
 
 <h2>Palette</h2>
+<p>This overview shows all palette colors. Make sure that they align / contrast where appropriate.</p>
 <p>mono blue purple lavender pink green yellow mono (100 - 800)</p>
 <script>
     let out = "";
@@ -37,7 +43,8 @@
 </script>
 
 <h2>Named Selections with Variants</h2>
-<p>primary secondary success warning danger - bg light accent dark</p>
+<p>From the palette, these variants are chosen to be used by name for special purposes.</p>
+<p>Name: primary secondary success warning danger -  Purpose: bg light accent dark</p>
 <script>
     out = "";
     "primary secondary success warning danger".split(" ").forEach( semantic => {

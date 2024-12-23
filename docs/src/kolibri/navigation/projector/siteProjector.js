@@ -78,12 +78,12 @@ const headElements = dom(`
             @layer pageLayer, navigationLayer, siteLayer, kolibriLayer, kolibriLightLayer;
         
             /* the new styling will have import such that we only need one line here. */
-            @import "${window.BASE_URI}css/kolibri-base-light.css"   layer(kolibriLightLayer);
             @import "${window.BASE_URI}css/kolibri-base.css"         layer(kolibriLayer);
             
             @layer ${SITE_CLASS}Layer { /* styles for the whole website */ 
                  body {
                      margin: 0;
+                     --color-nav-bg:         hsl( from var(--kolibri-color-secondary-bg) h s calc(l * 1.08));
                  }
                  #application-frame {
                      position:               fixed;
@@ -102,7 +102,7 @@ const headElements = dom(`
                      grid-area:              top-nav;
                      align-self:             center;
                      filter:                 drop-shadow(0 0 .5rem white);
-                     --kolibri-color-accent: var(--kb-color-hsl-bg-light);
+                     --kolibri-color-accent: white;
                      font-weight:            bold;
                      & a {
                          margin-right:       1em;
@@ -110,7 +110,7 @@ const headElements = dom(`
                  }
                  #side-nav {
                      grid-area:              side-nav;
-                     background-color:       var(--kb-color-hsl-bg-light);
+                     background-color:       var(--color-nav-bg);
                      box-shadow:             var(--kolibri-box-shadow);
                      padding-block:          1lh;
                      & a {
@@ -126,18 +126,15 @@ const headElements = dom(`
                          aspect-ratio:       1 / 1;
                          display:            block;
                          border-radius:      50%;
-                         background-color:   var(--kb-color-hsl-bg-light);
-                         box-shadow:         1px 1px .2rem 0 var(--kb-color-hsl-lavender-700) inset; 
+                         background-color:   var(--color-nav-bg);
+                         box-shadow:         1px 1px .2rem 0 var(--kolibri-color-accent) inset; 
                      }
                  }
                  #top-backdrop {
                      grid-row:               1;
                      grid-column:            1 / -1;
                      z-index:                -10;
-                     background-image:       linear-gradient( 90deg,
-                                                 var(--kb-color-hsl-pink-300) 50%,
-                                                 var(--kb-color-hsl-lavender-700)
-                                             );
+                     background-image:       var(--kolibri-color-gradient-primary)
                  }
      
                  .content {                  /* must be shared in #content and #content-passivated */

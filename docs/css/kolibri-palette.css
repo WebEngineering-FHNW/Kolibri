@@ -24,7 +24,7 @@
 
     /* Warmer tones for color mixing, set lightness to 0 and 100% for black and white */
     --kolibri-palette-darkening:    hsl(  0deg  70%  10%);
-    --kolibri-palette-lightening:   hsl( 23deg 100%  95%);
+    --kolibri-palette-lightening:   hsl( 23deg 100% 100%);
 
 
     /* ------------------------------------------------ */

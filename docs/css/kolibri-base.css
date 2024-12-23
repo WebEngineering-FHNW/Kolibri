@@ -33,12 +33,10 @@ h1, h2, h3 {
     font-family: var(--kb-font-family-stylish),var(--kb-font-family-default), system-ui;
     font-weight: normal;
 }
-div, p, ul, ol, dl {
-    font-family: var(--kb-font-family-running-text),var(--kb-font-family-default), system-ui;
-}
+
 div, p, ul, ol, dl,
 form, fieldset, label, input, button {
-    font-family: var(--font-sans-serif);
+    font-family: var(--kb-font-family-running-text),var(--kb-font-family-default), system-ui;
     letter-spacing: 0.02em;
 }
 

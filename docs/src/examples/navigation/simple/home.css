@@ -36,14 +36,14 @@
 
         a.btn.primary {
             color:            #FFFFFF;
-            background-color: var(--kb-hsla-primary-accent);
+            background-color: var(--kolibri-color-primary-accent);
             border:           2px solid var(--kolibri-color-shadow);
         }
 
         a.btn.accent {
-            color:            var(--kb-hsla-primary-accent);
+            color:            var(--kolibri-color-primary-accent);
             background-color: #FFFFFF;
-            border:           2px solid var(--kb-hsla-primary-accent);
+            border:           2px solid var(--kolibri-color-primary-accent);
         }
 
         .glow {
