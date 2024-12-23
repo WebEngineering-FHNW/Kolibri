@@ -39,6 +39,44 @@ form, fieldset, label, input, button {
     font-family: var(--kb-font-family-running-text),var(--kb-font-family-default), system-ui;
     letter-spacing: 0.02em;
 }
+/* --- end typography --- */
+
+/* --- default element appearance --- */
+ul {
+    padding-left:       1em;
+}
+ul li::marker {
+  color:                var(--kolibri-color-primary-accent);
+}
+
+figure {
+    margin-inline:      0;
+}
+figcaption {
+    font-style:         italic;
+    font-size:          var(--font-size-caption);
+    text-align:         end;
+}
+em {                    /* emphasis looks like highlighted with text marker */
+    position:           relative;
+    padding-inline:     0.2em 0.3em;
+    &::before {
+        content:        "";
+        position:       absolute;
+        inset:          0 0 -.2em 0;  /* inline -3px leads to strange line-break issues */
+        border-radius:  5% 5% 20% 20%;
+        background-color: var(--kolibri-color-select);
+        z-index:        -10;
+        rotate:         -3deg;
+        opacity:        60%;
+    }
+}
+
+a[href^="http"]::after { /* external link */
+    content:            " ↗";
+    opacity:            .3;
+}
+/* --- end default element appearance --- */
 
 /* --- default invalid handling --- */
 :invalid {
