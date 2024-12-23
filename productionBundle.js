@@ -6361,7 +6361,7 @@ const projectorStyle = `
                     --icon-width:       1.6rem;
                     width:              var(--icon-width);
                     margin-inline:      calc( (3rem - var(--icon-width)) / 2); /* logo-width 3rem */
-                    fill:               var(--kb-color-hsl-lavender-700);
+                    fill:               var(--kolibri-color-accent);
                     aspect-ratio:       1;
                     stroke:             none;
                     transform:          translateY(20%);
@@ -6378,7 +6378,7 @@ const projectorStyle = `
                     pointer-events:     revert;
                     user-select:        none;
                     text-wrap:          nowrap;
-                    font-family:        system-ui;
+                    font-weight:        500;
                     transition-property:        width;
                     transition-duration:        .5s;
                     transition-timing-function: ease-out;
@@ -6388,7 +6388,7 @@ const projectorStyle = `
                     text-decoration:    none;
                 }
                 a.visited:not(.current), a.visited:not(.current) svg {
-                    filter:             brightness(150%) grayscale(60%);
+                    filter:             opacity(85%) grayscale(60%);
                 }
                 a.current {
                     color:              var(--kolibri-color-accent, deeppink);
@@ -6496,11 +6496,12 @@ const headElements = dom(`
                  #top-nav {
                      grid-area:              top-nav;
                      align-self:             center;
-                     filter:                 drop-shadow(0 0 .5rem white);
                      --kolibri-color-accent: white;
-                     font-weight:            bold;
                      & a {
                          margin-right:       1em;
+                     }
+                     & a:not(.current) {                         
+                         color:              var(--kolibri-color-secondary-bg);
                      }
                  }
                  #side-nav {
