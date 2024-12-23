@@ -67,6 +67,8 @@ const KolibriButtonModel = ({
      state          = DEFAULT
     }) => {
 
+    // todo dk: this should not be one attribute with n keys but just n Observables
+
     const singleAttribute = Attribute(value);
     if(null != qualifier) singleAttribute.setQualifier(qualifier);
     singleAttribute.getObs(TYPE)            .setValue(type);

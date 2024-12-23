@@ -5,6 +5,8 @@ import {DEFAULT, FOCUS, PROCESSING, FILLED, PRIMARY} from "./kolibriButtonModel.
 
 export { start } // exported for testing purposes
 
+// todo dk: this should go into the examples
+
 const start = () => {
 
     const primaryButton =

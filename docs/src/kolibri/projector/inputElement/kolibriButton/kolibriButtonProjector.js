@@ -13,6 +13,7 @@ import {
 
 export {projectTextButton, BUTTON_CSS}
 
+// todo dk: controller/projector combination needs a test case
 
 const BUTTON_CLASS_NAME = "kolibri-btn";
 
