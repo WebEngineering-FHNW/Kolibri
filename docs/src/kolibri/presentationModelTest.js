@@ -7,6 +7,7 @@ import {
     valueOf,
     presentationModelFromAttributeNames, LABEL
 }                    from "./presentationModel.js";
+import { SAMPLE }    from "../customize/extendedObservableTypeString.js";
 
 const pmSuite = TestSuite("presentationModel");
 
@@ -92,6 +93,27 @@ pmSuite.add("setQualifier", assert => {
     attr1.setConvertedValue("Dieter");
     assert.is(attr1.getObs(VALUE).getValue(), "Dieter"); // all syncs are now in place
     assert.is(attr2.getObs(VALUE).getValue(), "Dieter");
+});
+
+pmSuite.add("setQualifier with extensions", assert => {
+    const attr1 = Attribute("Dierk", "Person.4711.firstname");
+    const attr2 = Attribute(".....", "nothing");
+
+    assert.is(attr1.getObs(VALUE).getValue(), "Dierk"); // old known values have been updated on init
+    assert.is(attr2.getObs(VALUE).getValue(), "....."); // old known values have been updated on init
+
+    attr2.setQualifier("Person.4711.firstname");        // setting the qualifier will sync to the exiting values for the qualifier
+    assert.is(attr1.getObs(VALUE).getValue(), "Dierk");
+    assert.is(attr2.getObs(VALUE).getValue(), "Dierk");
+
+    assert.is(attr1.getObs(SAMPLE).getValue(), null);   // customized extension not yet been set
+    assert.is(attr2.getObs(SAMPLE).getValue(), null);
+
+    attr1.getObs(SAMPLE).setValue("my sample");
+    assert.is(attr1.getObs(SAMPLE).getValue(), "my sample");   // customized extension now set
+    assert.is(attr2.getObs(SAMPLE).getValue(), "my sample");   // .. via qualifier
+
+
 });
 
 pmSuite.add("qualified", assert => {
