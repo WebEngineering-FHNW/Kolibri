@@ -3948,17 +3948,23 @@ const totalMinutesToTimeString = totalMinutes => {
  */
 
 /**
- * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'|'tooltip' } ObservableTypeString
- * Feel free to extend this type with new unique type strings as needed for your application.
+ * @typedef { BasicObservableTypeString | ExtendedObservableTypeString } ObservableTypeString
+ * Feel free to extend this type customizing the {@link ExtendedObservableTypeString}.
+ * This is the type (interface) to program against.
+ */
+/**
+ * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'|'tooltip' } BasicObservableTypeString
+ * These basic keys should not be changed. Any modifications are better done
+ * by customizing the {@link ExtendedObservableTypeString}.
  */
 
-/** @type ObservableTypeString */ const VALUE           = "value";
-/** @type ObservableTypeString */ const VALID           = "valid";
-/** @type ObservableTypeString */ const EDITABLE        = "editable";
-/** @type ObservableTypeString */ const LABEL           = "label";
-/** @type ObservableTypeString */ const NAME            = "name";
-/** @type ObservableTypeString */ const TYPE            = "type"; // HTML input types: text, number, checkbox, etc. HTML Button types: submit, reset, button.
-/** @type ObservableTypeString */ const TOOLTIP         = "tooltip";
+/** @type BasicObservableTypeString */ const VALUE           = "value";
+/** @type BasicObservableTypeString */ const VALID           = "valid";
+/** @type BasicObservableTypeString */ const EDITABLE        = "editable";
+/** @type BasicObservableTypeString */ const LABEL           = "label";
+/** @type BasicObservableTypeString */ const NAME            = "name";
+/** @type BasicObservableTypeString */ const TYPE            = "type"; // HTML input types: text, number, checkbox, etc.
+/** @type BasicObservableTypeString */ const TOOLTIP         = "tooltip";
 
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
