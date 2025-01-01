@@ -13,12 +13,12 @@
  * to the application while all business logic and their test cases remain untouched.
  */
 
-import {CHANGE, dom, select, INPUT, TIME, CHECKBOX}       from "../../util/dom.js";
-import { timeStringToMinutes, totalMinutesToTimeString}   from "../projectorUtils.js";
-import {ICON_CHRISTMAS_TREE}                              from "../../../customize/icons.js";
-import {icon}                                             from "../../style/icon.js";
+import { CHANGE, dom, select, INPUT, TIME, CHECKBOX, RANGE }       from "../../util/dom.js";
+import { timeStringToMinutes, totalMinutesToTimeString }           from "../projectorUtils.js";
+import { ICON_CHRISTMAS_TREE }                                     from "../../../customize/icons.js";
+import { icon }                                                    from "../../style/icon.js";
 
-export { InputProjector }
+export { InputProjector, SIMPLE_INPUT_RANGE_SLIDER_CSS  }
 
 /**
  * @private
@@ -34,11 +34,13 @@ let counter = 0;
  */
 const projectInput = (timeout) => (eventType) =>
     (inputController, formCssClassName) => {
+
     if( ! inputController) {
         console.error("no inputController in input projector."); // be defensive
         return;
     }
-    const id = formCssClassName + "-id-" + (counter++);
+    const id = `${formCssClassName}-id-${counter++}`;
+
     // Create view.
     // The input element sits in a span that allows identification and css reference for
     // the span that serves as the invalidation marker. See kolibri-base.css for details.
@@ -54,6 +56,34 @@ const projectInput = (timeout) => (eventType) =>
     /** @type {HTMLSpanElement}  */ const spanElement       = elements[1]; // only for the sake of type casting, otherwise...
     /** @type {HTMLInputElement} */ const inputElement      = spanElement.firstElementChild; // ... we would use array deconstruction
     /** @type {HTMLSpanElement}  */ const [popoverElement]  = select(spanElement, "[popover]"); // the element that pops
+
+    if(inputController.getType() === RANGE) {
+        inputElement.classList.add('kolibri-range-slider'); //TODO Discuss with Dierk if this is the right way to handle this
+
+        // Set the max attribute for the slider
+        inputElement.setAttribute('max', '100'); //TODO Discuss with Dierk if updating simpleInputController with max value is needed
+        inputElement.setAttribute('min', '0');   //TODO Discuss with Dierk if updating simpleInputController with min value is needed
+        inputElement.setAttribute('step', '1');  //TODO Discuss with Dierk if updating simpleInputController with value is needed
+
+
+        // Event handling: Update slider value and gradient on input change
+        inputElement.addEventListener(eventType, (event) => {
+            inputController.setValue( /** @type { range } */ event.target.value);  // Todo - Aks Dierk if type range is correct?
+            // Calculate the fill percentage
+            const percentage = `${(event.target.value / inputElement.max) * 100}%`;
+            // Update the CSS variable on the slider/input element
+            inputElement.style.setProperty('--slider-fill', percentage);
+        });
+
+        // Controller bindings
+        inputController.onValueChanged((value) => {
+            const percentage = `${(value / inputElement.max) * 100}%`;
+            // Update the CSS variable on the slider/input element
+            inputElement.style.setProperty('--slider-fill', percentage);
+        });
+
+    }
+
 
     // view and data binding can depend on the type
     if (inputController.getType() === TIME) { // "hh:mm" in the vies vs minutes since midnight in the model
@@ -115,6 +145,7 @@ const projectInput = (timeout) => (eventType) =>
     return /** @type { [HTMLLabelElement, HTMLInputElement] } */ elements;
 };
 
+
 /**
  * @template _T_
  * @type { ChangeInputProjectionType<_T_> }
@@ -149,3 +180,102 @@ const InputProjector = {
     projectChangeInput,
     projectDebounceInput
 };
+
+
+
+
+// Todo - Is INPUT_RANGE_CSS_CLASS_NAME needed here? Discuss with the @Direk König how to handle this in a better way.
+/**
+ * String that must be unique in CSS classes and DOM id prefixes throughout the application.
+ * @private
+ * @type {string}
+ */
+const INPUT_RANGE_CSS_CLASS_NAME = "kolibri-range-slider";
+
+
+/**
+ * CSS snippet to append to the head style when using the form projector.
+ * @type { String }
+ * @example
+ * document.querySelector("head style").textContent += SIMPLE_INPUT_RANGE_SLIDER_CSS;
+ */
+
+// Todo - Add/Merge those CSS variables to the main CSS Style Sheet
+const SIMPLE_INPUT_RANGE_SLIDER_CSS = `
+
+input[type="range"] {
+    width               : var(--slider-width);
+    height              : var(--slider-height);
+    border-radius       : 50%;
+    outline             : none;
+    appearance          : none;
+    -webkit-appearance  : none;
+    cursor              : pointer;
+    position            : relative;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height           : var(--track-height);
+    border-radius    : calc(var(--track-height) / 2);
+    background       : linear-gradient(
+                        to right,
+                        var(--track-fill-color) var(--slider-fill),
+                        var(--track-empty-color) var(--slider-fill)
+    );              
+}
+
+ input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance  : none;
+    width               : var(--thumb-size);
+    height              : var(--thumb-size);
+    background          : var(--thumb-color);
+    border-radius       : 50%;
+    border              : var(--thumb-border) solid var(--thumb-border-color);
+    cursor              : pointer;
+    position            : relative;
+    top                 : calc((var(--track-height) - var(--thumb-size)) / 2);
+    transition          : transform 0.3s ease-in-out;
+    box-shadow          : 0 0 16px var(--thumb-glow-color), 
+                          0 0 32px var(--thumb-outer-glow-color);
+    animation           : pulseGlow var(--animation-duration) ease-in-out infinite;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+    transform        : scale(var(--thumb-hover-scale));
+    box-shadow       : 0 0 16px var(--thumb-glow-color), 
+                       0 0 32px var(--thumb-outer-glow-color);
+}
+
+input[type="range"]::-moz-range-track {
+    height           : var(--track-height);
+    border-radius    : calc(var(--track-height) / 2);
+    background       : linear-gradient(
+        to right,
+        var(--track-fill-color) var(--slider-fill),
+        var(--track-empty-color) var(--slider-fill)
+    );
+}
+
+input[type="range"]::-moz-range-thumb {
+    width            : var(--thumb-size);
+    height           : var(--thumb-size);
+    background       : var(--thumb-color);
+    border-radius    : 50%;
+    cursor           : pointer;
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow : 
+            0 0 16px var(--thumb-glow-color), 
+            0 0 32px var(--thumb-outer-glow-color);
+    }
+    50% {
+        box-shadow : 
+            0 0 24px var(--thumb-glow-color), 
+            0 0 48px var(--thumb-outer-glow-color);
+    }
+}
+    
+  
+`;
