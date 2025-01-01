@@ -11,7 +11,7 @@ import { toSeq }         from "../sequence/util/helpers.js";
 export {
     dom, select, fireEvent, fireChangeEvent,
     CLICK, INPUT, CHANGE,
-    TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR,
+    TEXT, TIME, DATE, CHECKBOX, NUMBER, COLOR, RANGE,
     TEXT_BUTTON, ICON_BUTTON, LEADING_ICON_BUTTON, TRAILING_ICON_BUTTON
 }
 
@@ -67,13 +67,14 @@ const fireEvent = (element, eventTypeString) => {
  */
 const fireChangeEvent = element => fireEvent(element, CHANGE);
 
-/** @typedef { "text" | "number" | "checkbox" | "time" | "date" | "color" } InputTypeString */
+/** @typedef { "text" | "number" | "checkbox" | "time" | "date" | "color" | "range" } InputTypeString */
 /** @type InputTypeString */ const TEXT         = "text";
 /** @type InputTypeString */ const NUMBER       = "number";
 /** @type InputTypeString */ const CHECKBOX     = "checkbox";
 /** @type InputTypeString */ const TIME         = "time";
 /** @type InputTypeString */ const DATE         = "date";
 /** @type InputTypeString */ const COLOR        = "color";
+/** @type InputTypeString */ const RANGE        = "range";
 
 /** @typedef { "textBtn" | "iconBtn" | "leadingIconBtn" | "trailingIconBtn" } ButtonTypeString */
 /** @type ButtonTypeString */ const TEXT_BUTTON             = "textBtn";
