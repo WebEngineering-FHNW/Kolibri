@@ -50,9 +50,15 @@ const projectForm = formController => {
     const form = elements[0];
     const fieldset = form.children[0];
 
-    formController.forEach( inputController =>
-       fieldset.append(...InputProjector.projectChangeInput(inputController, FORM_CLASS_NAME)));
+    // Todo: Discuss with Dierk König if the want to give the EventType also inside of the Model?;
 
+    formController.forEach( inputController => {
+        if(inputController.getType() === "range") {
+            fieldset.append(...InputProjector.projectInstantInput(inputController, FORM_CLASS_NAME));
+        } else {
+       fieldset.append(...InputProjector.projectChangeInput(inputController, FORM_CLASS_NAME));
+        }
+    });
     return [form];
 };
 
