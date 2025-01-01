@@ -4,6 +4,25 @@
 @import "./kolibri-colors.css";
 
 
+
+/*TODO InputTypeRange Change and make it more exchangeable*/
+:root {
+    --slider-width           : 18rem;
+    --slider-height          : 0.8rem;
+    --track-height           : 0.5rem;
+    --thumb-size             : 1.5rem;
+    --thumb-border           : 4px;
+    --thumb-hover-scale      : 1.2;
+    --thumb-glow-color       : rgba(134, 62, 255, 0.3);
+    --thumb-outer-glow-color : rgba(96, 0, 255, 0.4);
+    --track-fill-color       : #6000FF;
+    --track-empty-color      : #EBECFE;
+    --thumb-color            : #6000FF;
+    --thumb-border-color     : #FFFFFF;
+    --animation-duration     : 1.5s;
+}
+
+
 :root {
     padding:                 0;
     margin:                  0;
