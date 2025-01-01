@@ -9,6 +9,7 @@
  *     } InputProjectionType
  * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
  * @note   in the future we might want to depend on a more general controller than SimpleInputControllerType.
+ * @note   in the future the CSS className formCSSClassName might be used in a more general way for a more dynamic css handling.
  */
 
 /**
