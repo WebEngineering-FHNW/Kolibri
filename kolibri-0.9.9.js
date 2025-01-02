@@ -3448,12 +3448,13 @@ const ALL = Number.MAX_SAFE_INTEGER;
  * @constructor
  * @pure
  * @haskell (a, a) -> [a]
- * @param { !Number } firstBoundary  - the first boundary of the range
- * @param { Number }  secondBoundary - optionally the second boundary of the range
- * @param { Number }  step - the size of a step, processed during each iteration
+ * @param { Number? } firstBoundary=ALL - the first boundary of the range, optional with default [@link ALL]
+ * @param { Number? } secondBoundary=0  - optionally the second boundary of the range, optional with default 0
+ * @param { Number? } step=1            - the size of a step, processed during each iteration, optional with default 1
  * @returns SequenceType<Number>
  *
  * @example
+ *  const numbers             = Range();
  *  const range               = Range(3);
  *  const [five, three, one]  = Range(1, 5, -2);
  *  const [three, four, five] = Range(5, 3);
@@ -3461,7 +3462,7 @@ const ALL = Number.MAX_SAFE_INTEGER;
  *  console.log(...range);
  *  // => Logs '0, 1, 2, 3'
  */
-const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
+const Range = (firstBoundary=ALL, secondBoundary = 0, step = 1) => {
   const stepIsNegative = 0 > step;
   const [left, right]  = normalize(firstBoundary, secondBoundary, stepIsNegative);
 
@@ -3948,17 +3949,23 @@ const totalMinutesToTimeString = totalMinutes => {
  */
 
 /**
- * @typedef {'value'|'valid'|'editable'|'label'|'name'|'tooltip'|'type'} ObservableTypeString
- * Feel free to extend this type with new unique type strings as needed for your application.
+ * @typedef { BasicObservableTypeString | ExtendedObservableTypeString } ObservableTypeString
+ * Feel free to extend this type customizing the {@link ExtendedObservableTypeString}.
+ * This is the type (interface) to program against.
+ */
+/**
+ * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'|'tooltip' } BasicObservableTypeString
+ * These basic keys should not be changed. Any modifications are better done
+ * by customizing the {@link ExtendedObservableTypeString}.
  */
 
-/** @type ObservableTypeString */ const VALUE    = "value";
-/** @type ObservableTypeString */ const VALID    = "valid";
-/** @type ObservableTypeString */ const EDITABLE = "editable";
-/** @type ObservableTypeString */ const LABEL    = "label";
-/** @type ObservableTypeString */ const NAME     = "name";
-/** @type ObservableTypeString */ const TOOLTIP  = "tooltip";
-/** @type ObservableTypeString */ const TYPE     = "type"; // HTML input types: text, number, checkbox, etc.
+/** @type BasicObservableTypeString */ const VALUE           = "value";
+/** @type BasicObservableTypeString */ const VALID           = "valid";
+/** @type BasicObservableTypeString */ const EDITABLE        = "editable";
+/** @type BasicObservableTypeString */ const LABEL           = "label";
+/** @type BasicObservableTypeString */ const NAME            = "name";
+/** @type BasicObservableTypeString */ const TYPE            = "type"; // HTML input types: text, number, checkbox, etc.
+/** @type BasicObservableTypeString */ const TOOLTIP         = "tooltip";
 
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
@@ -4207,7 +4214,7 @@ const { warn: warn$2 } = LoggerFactory("ch.fhnw.kolibri.util.dom");
  * @pure
  * @example
  * const [label, input] = dom(`
- *      <label for="myId">
+ *      <label for="myId">Name</label>
  *      <input type="text" id="myId" name="myName" value="myValue">
  * `);
  */
@@ -4250,15 +4257,19 @@ const fireEvent = (element, eventTypeString) => {
  */
 const fireChangeEvent = element => fireEvent(element, CHANGE);
 
+/** @typedef { "text" | "number" | "checkbox" | "time" | "date" | "color" } InputTypeString */
+/** @type InputTypeString */ const TEXT         = "text";
+/** @type InputTypeString */ const NUMBER       = "number";
+/** @type InputTypeString */ const CHECKBOX     = "checkbox";
+/** @type InputTypeString */ const TIME         = "time";
+/** @type InputTypeString */ const DATE         = "date";
+/** @type InputTypeString */ const COLOR        = "color";
 
-/** @typedef { "text"|"number"|"checkbox"|"time"|"date"|"color" } InputTypeString */
-
-/** @type InputTypeString */ const TEXT     = "text";
-/** @type InputTypeString */ const NUMBER   = "number";
-/** @type InputTypeString */ const CHECKBOX = "checkbox";
-/** @type InputTypeString */ const TIME     = "time";
-/** @type InputTypeString */ const DATE     = "date";
-/** @type InputTypeString */ const COLOR    = "color";
+/** @typedef { "textBtn" | "iconBtn" | "leadingIconBtn" | "trailingIconBtn" } ButtonTypeString */
+/** @type ButtonTypeString */ const TEXT_BUTTON             = "textBtn";
+/** @type ButtonTypeString */ const ICON_BUTTON             = "iconBtn";
+/** @type ButtonTypeString */ const LEADING_ICON_BUTTON     = "leadingIconBtn";
+/** @type ButtonTypeString */ const TRAILING_ICON_BUTTON    = "trailingIconBtn";
 
 /**
  * Utility function that works like {@link Element.querySelectorAll} but logs a descriptive warning when
@@ -4308,7 +4319,6 @@ const SimpleInputModel = ({value, label, name, type= TEXT}) => {
     singleAttr.getObs(VALID)   .setValue(true);
     if (null != label) singleAttr.getObs(LABEL).setValue(label);
     if (null != name ) singleAttr.getObs(NAME) .setValue(name);
-
 
     return /** AttributeType<_T_> */ singleAttr;
 };/**
@@ -4393,6 +4403,8 @@ const SimpleFormController = inputAttributesArray => {
 };// noinspection JSUnusedLocalSymbols
 
 
+/* note to FA: spacers and font constants have been removed here (DK) */
+
 /**
  * Css string value for the given color. We keep values as HSL to allow easier manipulation.
  * @param hue   - 0 to 360 degrees on the color wheel, where 0 is red, then yellow, green, cyan, blue, magenta.
@@ -4416,142 +4428,134 @@ const hsl  = (hue, sat, light)        => `hsl(${hue}, ${sat}%, ${light}%)`;
  */
 const hsla = (hue, sat, light, alpha) => `hsl(${hue}, ${sat}%, ${light}%, ${alpha})`;
 
-const accentColor  = hsl(322, 73, 52);
-const okColor      = hsl(104, 89, 28);
-const neutralColor = hsl(  0,  0, 74);
-const selectColor  = hsl( 46, 90, 84);
+const colorAccent  = "var(--kolibri-color-accent)";
+const colorOk      = "var(--kolibri-color-ok)";
+const colorNeutral = "var(--kolibri-color-neutral)";
+const colorSelect  = "var(--kolibri-color-select)";
 
-const outputColorValues = [256, 82, 55];
-const outputColor = hsl (...outputColorValues);
-const shadowColor = hsla(...outputColorValues, 0.2);
+const colorOutput = "var(--kolibri-color-output)";
+const colorShadow = "var(--kolibri-color-shadow)";
 
-const shadowCss = `        
-      0 4px  8px 0 ${shadowColor}, 
-      0 6px 20px 0 ${shadowColor};
-`;
+const shadowCss   = "var(--kolibri-box-shadow)";
 
 // -- All colors according to Design File in Figma --
 
 /* --- purple --- */
-const purple800     = hsl(263, 100, 25);
-const purple700     = hsl(262, 100, 35);
-const purple600     = hsl(263, 87,  47);
-const purple500     = hsl(263, 100, 50);
-const purple400     = hsl(263, 100, 59);
-const purple300     = hsl(259, 100, 74);
-const purple200     = hsl(241, 91,  87);
-const purple100     = hsl(237, 90,  96);
+const palette_purple800     = "var(--kolibri-palette-purple-800)";
+const palette_purple700     = "var(--kolibri-palette-purple-700)";
+const palette_purple600     = "var(--kolibri-palette-purple-600)";
+const palette_purple500     = "var(--kolibri-palette-purple-500)";
+const palette_purple400     = "var(--kolibri-palette-purple-400)";
+const palette_purple300     = "var(--kolibri-palette-purple-300)";
+const palette_purple200     = "var(--kolibri-palette-purple-200)";
+const palette_purple100     = "var(--kolibri-palette-purple-100)";
 
 /* --- lavender --- */
-const lavender800   = hsl(281, 100, 17);
-const lavender700   = hsl(277, 100, 34);
-const lavender600   = hsl(275,  85, 51);
-const lavender500   = hsl(275, 100, 60);
-const lavender400   = hsl(267, 100, 73);
-const lavender300   = hsl(262, 100, 77);
-const lavender200   = hsl(252, 100, 86);
-const lavender100   = hsl(217, 100, 95);
+const palette_lavender800   = "var(--kolibri-palette-lavender-800)";
+const palette_lavender700   = "var(--kolibri-palette-lavender-700)";
+const palette_lavender600   = "var(--kolibri-palette-lavender-600)";
+const palette_lavender500   = "var(--kolibri-palette-lavender-500)";
+const palette_lavender400   = "var(--kolibri-palette-lavender-400)";
+const palette_lavender300   = "var(--kolibri-palette-lavender-300)";
+const palette_lavender200   = "var(--kolibri-palette-lavender-200)";
+const palette_lavender100   = "var(--kolibri-palette-lavender-100)";
 
 /* --- blue --- */
-const blue800       = hsl(241, 100, 25);
-const blue700       = hsl(241,  76, 38);
-const blue600       = hsl(241, 100, 39);
-const blue500       = hsl(241, 100, 55);
-const blue400       = hsl(241, 100, 71);
-const blue300       = hsl(232, 100, 65);
-const blue200       = hsl(223, 100, 86);
-const blue100       = hsl(242, 100, 95);
+const palette_blue800       = "var(--kolibri-palette-blue-800)";
+const palette_blue700       = "var(--kolibri-palette-blue-700)";
+const palette_blue600       = "var(--kolibri-palette-blue-600)";
+const palette_blue500       = "var(--kolibri-palette-blue-500)";
+const palette_blue400       = "var(--kolibri-palette-blue-400)";
+const palette_blue300       = "var(--kolibri-palette-blue-300)";
+const palette_blue200       = "var(--kolibri-palette-blue-200)";
+const palette_blue100       = "var(--kolibri-palette-blue-100)";
 
 /* --- green --- */
-const green800      = hsl(122,  85, 18);
-const green700      = hsl(120,  90, 24);
-const green600      = hsl(120, 100, 30);
-const green500      = hsl(116,  88, 39);
-const green400      = hsl(107,  91, 66);
-const green300      = hsl(103,  88, 75);
-const green200      = hsl( 99, 100, 84);
-const green100      = hsl( 93,  69, 92);
+const palette_green800      = "var(--kolibri-palette-green-800)";
+const palette_green700      = "var(--kolibri-palette-green-700)";
+const palette_green600      = "var(--kolibri-palette-green-600)";
+const palette_green500      = "var(--kolibri-palette-green-500)";
+const palette_green400      = "var(--kolibri-palette-green-400)";
+const palette_green300      = "var(--kolibri-palette-green-300)";
+const palette_green200      = "var(--kolibri-palette-green-200)";
+const palette_green100      = "var(--kolibri-palette-green-100)";
 
 /* --- yellow --- */
-const yellow800     = hsl(40,  51, 19);
-const yellow700     = hsl(40,  52, 31);
-const yellow600     = hsl(40, 100, 29);
-const yellow500     = hsl(40,  92, 54);
-const yellow400     = hsl(41, 100, 66);
-const yellow300     = hsl(41, 100, 78);
-const yellow200     = hsl(41, 100, 84);
-const yellow100     = hsl(41, 100, 94);
+const palette_yellow800     = "var(--kolibri-palette-yellow-800)";
+const palette_yellow700     = "var(--kolibri-palette-yellow-700)";
+const palette_yellow600     = "var(--kolibri-palette-yellow-600)";
+const palette_yellow500     = "var(--kolibri-palette-yellow-500)";
+const palette_yellow400     = "var(--kolibri-palette-yellow-400)";
+const palette_yellow300     = "var(--kolibri-palette-yellow-300)";
+const palette_yellow200     = "var(--kolibri-palette-yellow-200)";
+const palette_yellow100     = "var(--kolibri-palette-yellow-100)";
 
 /* --- pink --- */
-const pink900       = hsl(339, 100, 31);
-const pink800       = hsl(321, 100, 29);
-const pink700       = hsl(328, 100, 37);
-const pink600       = hsl(330, 100, 42);
-const pink500       = hsl(326, 100, 59);
-const pink400       = hsl(334, 100, 50);
-const pink300       = hsl(326, 100, 59);
-const pink200       = hsl(316, 100, 84);
-const pink100       = hsl(309, 100, 96);
+const palette_pink800       = "var(--kolibri-palette-pink-800)";
+const palette_pink700       = "var(--kolibri-palette-pink-700)";
+const palette_pink600       = "var(--kolibri-palette-pink-600)";
+const palette_pink500       = "var(--kolibri-palette-pink-500)";
+const palette_pink400       = "var(--kolibri-palette-pink-400)";
+const palette_pink300       = "var(--kolibri-palette-pink-300)";
+const palette_pink200       = "var(--kolibri-palette-pink-200)";
+const palette_pink100       = "var(--kolibri-palette-pink-100)";
 
 /* --- monochrome --- */
-const black         = hsl(240,  15,  9);
-const body          = hsl(247,  15, 35);
-const label         = hsl(235,  14, 50);
-const placeholder   = hsl(234,  18, 68);
-const bgDark        = hsl(249,  23, 18);
-const line          = hsl(233,  27, 88);
-const bgLight       = hsl(231,  28, 95);
-const white         = hsl(240,  45, 98);
+/* todo dk: these names make issues when used through the production bundle. Better prefix with "color-" or so.*/
+const colorBlack            = hsl(240,  15,  9);
+const colorBody             = hsl(247,  15, 35);
+const colorLabel            = hsl(235,  14, 50);
+const colorPlaceholder      = hsl(234,  18, 68);
+const colorBackgroundDark   = hsl(249,  23, 18);
+const colorLine             = hsl(233,  27, 88);
+const colorBackgroundLight  = hsl(231,  28, 95);
+const colorWhite            = hsl(240,  45, 98);
 
 /* --- transparent - dark --- */
-const black95       = hsla(...black, 0.95);
-const black75       = hsla(...black, 0.75);
-const black65       = hsla(...black, 0.65);
-const black40       = hsla(...black, 0.40);
-const black25       = hsla(...black, 0.25);
-const black10       = hsla(...black, 0.10);
+const palette_black95       = hsla(...colorBlack, 0.95);
+const palette_black75       = hsla(...colorBlack, 0.75);
+const palette_black65       = hsla(...colorBlack, 0.65);
+const palette_black40       = hsla(...colorBlack, 0.40);
+const palette_black25       = hsla(...colorBlack, 0.25);
+const palette_black10       = hsla(...colorBlack, 0.10);
 
 /* --- transparent - white --- */
-const white95       = hsla(...white, 0.95);
-const white75       = hsla(...white, 0.75);
-const white65       = hsla(...white, 0.65);
-const white40       = hsla(...white, 0.40);
-const white25       = hsla(...white, 0.25);
-const white10       = hsla(...white, 0.10);
+const palette_white95       = hsla(...colorWhite, 0.95);
+const palette_white75       = hsla(...colorWhite, 0.75);
+const palette_white65       = hsla(...colorWhite, 0.65);
+const palette_white40       = hsla(...colorWhite, 0.40);
+const palette_white25       = hsla(...colorWhite, 0.25);
+const palette_white10       = hsla(...colorWhite, 0.10);
 
 /* --- primary --- */
-const primaryDark       = purple700;
-const primaryAccent     = purple500;
-const primaryLight      = purple200;
-const primaryBg         = purple100;
-
+const colorPrimaryDark   = palette_purple700;
+const colorPrimaryAccent = palette_purple500;
+const colorPrimaryLight  = palette_purple200;
+const colorPrimaryBg     = palette_purple100;
 
 /* --- secondary --- */
-const secondaryDark     = blue800;
-const secondaryAccent   = blue500;
-const secondaryLight    = blue200;
-const secondaryBg       = blue100;
-
+const colorSecondaryDark   = palette_blue800;
+const colorSecondaryAccent = palette_blue500;
+const colorSecondaryLight  = palette_blue200;
+const colorSecondaryBg     = palette_blue100;
 
 /* --- success --- */
-const successDark       = green800;
-const successAccent     = green500;
-const successLight      = green200;
-const successBg         = green100;
-
+const colorSuccessDark   = palette_green800;
+const colorSuccessAccent = palette_green500;
+const colorSuccessLight  = palette_green200;
+const colorSuccessBg     = palette_green100;
 
 /* --- warning --- */
-const warningDark       = yellow600;
-const warningAccent     = yellow500;
-const warningLight      = yellow200;
-const warningBg         = yellow100;
-
+const colorWarningDark   = palette_yellow600;
+const colorWarningAccent = palette_yellow500;
+const colorWarningLight  = palette_yellow200;
+const colorWarningBg     = palette_yellow100;
 
 /* --- danger --- */
-const dangerDark        = pink900;
-const dangerAccent      = pink500;
-const dangerLight       = pink200;
-const dangerBg          = pink100;
+const colorDangerDark   = palette_pink800;
+const colorDangerAccent = palette_pink500;
+const colorDangerLight  = palette_pink200;
+const colorDangerBg     = palette_pink100;
 
 const KOLIBRI_LOGO_SVG = `
 <svg class="kolibri-logo-svg" viewBox="0 0 305 342" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4863,7 +4867,8 @@ const projectForm = formController => {
 			</fieldset>
 		</form>
     `);
-    /** @type { HTMLFormElement } */ const form = elements[0];
+    /** @type { HTMLFormElement } */
+    const form = elements[0];
     const fieldset = form.children[0];
 
     formController.forEach( inputController =>
@@ -5746,8 +5751,8 @@ const TestSuite = suiteName => {
  * @private
  */
 const report = (origin, results, messages) => {
-    const okStyle     = `style="color: ${okColor};"`;
-    const failedStyle = `style="color: ${accentColor};"`;
+    const okStyle     = `style="color: ${colorOk};"`;
+    const failedStyle = `style="color: ${colorAccent};"`;
 
     if ( results.every( elem => elem) ) {
         write (`
@@ -5850,9 +5855,9 @@ const memoize = f => {
         }
         return y;
     }
-};const release     = "0.9.8";
+};const release     = "0.9.9";
 
-const dateStamp   = "2024-12-21 T 15:26:13 MEZ";
+const dateStamp   = "2025-01-02 T 15:59:17 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
@@ -6363,7 +6368,7 @@ const projectorStyle = `
                     --icon-width:       1.6rem;
                     width:              var(--icon-width);
                     margin-inline:      calc( (3rem - var(--icon-width)) / 2); /* logo-width 3rem */
-                    fill:               var(--kb-color-hsl-lavender-700);
+                    fill:               var(--kolibri-color-accent);
                     aspect-ratio:       1;
                     stroke:             none;
                     transform:          translateY(20%);
@@ -6380,7 +6385,7 @@ const projectorStyle = `
                     pointer-events:     revert;
                     user-select:        none;
                     text-wrap:          nowrap;
-                    font-family:        system-ui;
+                    font-weight:        500;
                     transition-property:        width;
                     transition-duration:        .5s;
                     transition-timing-function: ease-out;
@@ -6390,7 +6395,7 @@ const projectorStyle = `
                     text-decoration:    none;
                 }
                 a.visited:not(.current), a.visited:not(.current) svg {
-                    filter:             brightness(150%) grayscale(60%);
+                    filter:             opacity(85%) grayscale(60%);
                 }
                 a.current {
                     color:              var(--kolibri-color-accent, deeppink);
@@ -6475,12 +6480,12 @@ const headElements = dom(`
             @layer pageLayer, navigationLayer, siteLayer, kolibriLayer, kolibriLightLayer;
         
             /* the new styling will have import such that we only need one line here. */
-            @import "${window.BASE_URI}css/kolibri-base-light.css"   layer(kolibriLightLayer);
             @import "${window.BASE_URI}css/kolibri-base.css"         layer(kolibriLayer);
             
             @layer ${SITE_CLASS}Layer { /* styles for the whole website */ 
                  body {
                      margin: 0;
+                     --color-nav-bg:         hsl( from var(--kolibri-color-secondary-bg) h s calc(l * 1.08));
                  }
                  #application-frame {
                      position:               fixed;
@@ -6498,16 +6503,17 @@ const headElements = dom(`
                  #top-nav {
                      grid-area:              top-nav;
                      align-self:             center;
-                     filter:                 drop-shadow(0 0 .5rem white);
-                     --kolibri-color-accent: var(--kb-color-hsl-bg-light);
-                     font-weight:            bold;
+                     --kolibri-color-accent: white;
                      & a {
                          margin-right:       1em;
+                     }
+                     & a:not(.current) {                         
+                         color:              var(--kolibri-color-secondary-bg);
                      }
                  }
                  #side-nav {
                      grid-area:              side-nav;
-                     background-color:       var(--kb-color-hsl-bg-light);
+                     background-color:       var(--color-nav-bg);
                      box-shadow:             var(--kolibri-box-shadow);
                      padding-block:          1lh;
                      & a {
@@ -6523,18 +6529,15 @@ const headElements = dom(`
                          aspect-ratio:       1 / 1;
                          display:            block;
                          border-radius:      50%;
-                         background-color:   var(--kb-color-hsl-bg-light);
-                         box-shadow:         1px 1px .2rem 0 var(--kb-color-hsl-lavender-700) inset; 
+                         background-color:   var(--color-nav-bg);
+                         box-shadow:         1px 1px .2rem 0 var(--kolibri-color-accent) inset; 
                      }
                  }
                  #top-backdrop {
                      grid-row:               1;
                      grid-column:            1 / -1;
                      z-index:                -10;
-                     background-image:       linear-gradient( 90deg,
-                                                 var(--kb-color-hsl-pink-300) 50%,
-                                                 var(--kb-color-hsl-lavender-700)
-                                             );
+                     background-image:       var(--kolibri-color-gradient-primary)
                  }
      
                  .content {                  /* must be shared in #content and #content-passivated */
@@ -6679,4 +6682,4 @@ const SiteController = () => {
         onPageActivated:   pageActivated.onChange,    // notify site projector
         onPagePassivated:  pagePassivated.onChange,   // notify site projector
     }
-};// production classes for bundling and statistics, without tests or examples
+};// production classes for bundling and statistics, without tests, examples, or customize
