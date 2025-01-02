@@ -65,4 +65,8 @@ arraySuite.add("sum", assert => {
     assert.is( (3).times().sum(n => n*n), 0 + 1 + 4);
 });
 
+arraySuite.add("alternativeSyntax", assert => {
+    assert.is( 10..times( n => n**3 ).sum(), 2025);
+});
+
 arraySuite.run();
