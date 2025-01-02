@@ -45,6 +45,10 @@ testSuite.add("test Walk alias", assert => {
   assert.is(result.length, 2);
 });
 
+testSuite.add("test Walk all numbers", assert => {
+  assert.is( [...Walk().take(2)].length, 2);
+});
+
 testSuite.add("test typical case spread", assert => {
   // When
   const result = [...Range(2)];

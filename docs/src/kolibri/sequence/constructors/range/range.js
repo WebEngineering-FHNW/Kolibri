@@ -29,12 +29,13 @@ const ALL = Number.MAX_SAFE_INTEGER;
  * @constructor
  * @pure
  * @haskell (a, a) -> [a]
- * @param { !Number } firstBoundary  - the first boundary of the range
- * @param { Number }  secondBoundary - optionally the second boundary of the range
- * @param { Number }  step - the size of a step, processed during each iteration
+ * @param { Number? } firstBoundary=ALL - the first boundary of the range, optional with default [@link ALL]
+ * @param { Number? } secondBoundary=0  - optionally the second boundary of the range, optional with default 0
+ * @param { Number? } step=1            - the size of a step, processed during each iteration, optional with default 1
  * @returns SequenceType<Number>
  *
  * @example
+ *  const numbers             = Range();
  *  const range               = Range(3);
  *  const [five, three, one]  = Range(1, 5, -2);
  *  const [three, four, five] = Range(5, 3);
@@ -42,7 +43,7 @@ const ALL = Number.MAX_SAFE_INTEGER;
  *  console.log(...range);
  *  // => Logs '0, 1, 2, 3'
  */
-const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
+const Range = (firstBoundary=ALL, secondBoundary = 0, step = 1) => {
   const stepIsNegative = 0 > step;
   const [left, right]  = normalize(firstBoundary, secondBoundary, stepIsNegative);
 
