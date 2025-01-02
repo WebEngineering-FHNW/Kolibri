@@ -3448,13 +3448,12 @@ const ALL = Number.MAX_SAFE_INTEGER;
  * @constructor
  * @pure
  * @haskell (a, a) -> [a]
- * @param { Number? } firstBoundary=ALL - the first boundary of the range, optional with default [@link ALL]
- * @param { Number? } secondBoundary=0  - optionally the second boundary of the range, optional with default 0
- * @param { Number? } step=1            - the size of a step, processed during each iteration, optional with default 1
+ * @param { !Number } firstBoundary  - the first boundary of the range
+ * @param { Number }  secondBoundary - optionally the second boundary of the range
+ * @param { Number }  step - the size of a step, processed during each iteration
  * @returns SequenceType<Number>
  *
  * @example
- *  const numbers             = Range();
  *  const range               = Range(3);
  *  const [five, three, one]  = Range(1, 5, -2);
  *  const [three, four, five] = Range(5, 3);
@@ -3462,7 +3461,7 @@ const ALL = Number.MAX_SAFE_INTEGER;
  *  console.log(...range);
  *  // => Logs '0, 1, 2, 3'
  */
-const Range = (firstBoundary=ALL, secondBoundary = 0, step = 1) => {
+const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
   const stepIsNegative = 0 > step;
   const [left, right]  = normalize(firstBoundary, secondBoundary, stepIsNegative);
 
@@ -3909,6 +3908,7 @@ const totalMinutesToTimeString = totalMinutes => {
  *     } InputProjectionType
  * @impure since calling the controller functions changes underlying models. The DOM remains unchanged.
  * @note   in the future we might want to depend on a more general controller than SimpleInputControllerType.
+ * @note   in the future the CSS className formCSSClassName might be used in a more general way for a more dynamic css handling.
  */
 
 /**
@@ -4257,13 +4257,14 @@ const fireEvent = (element, eventTypeString) => {
  */
 const fireChangeEvent = element => fireEvent(element, CHANGE);
 
-/** @typedef { "text" | "number" | "checkbox" | "time" | "date" | "color" } InputTypeString */
+/** @typedef { "text" | "number" | "checkbox" | "time" | "date" | "color" | "range" } InputTypeString */
 /** @type InputTypeString */ const TEXT         = "text";
 /** @type InputTypeString */ const NUMBER       = "number";
 /** @type InputTypeString */ const CHECKBOX     = "checkbox";
 /** @type InputTypeString */ const TIME         = "time";
 /** @type InputTypeString */ const DATE         = "date";
 /** @type InputTypeString */ const COLOR        = "color";
+/** @type InputTypeString */ const RANGE        = "range";
 
 /** @typedef { "textBtn" | "iconBtn" | "leadingIconBtn" | "trailingIconBtn" } ButtonTypeString */
 /** @type ButtonTypeString */ const TEXT_BUTTON             = "textBtn";
@@ -4710,11 +4711,13 @@ let counter = 0;
  */
 const projectInput = (timeout) => (eventType) =>
     (inputController, formCssClassName) => {
+
     if( ! inputController) {
         console.error("no inputController in input projector."); // be defensive
         return;
     }
-    const id = formCssClassName + "-id-" + (counter++);
+    const id = `${formCssClassName}-id-${counter++}`;
+
     // Create view.
     // The input element sits in a span that allows identification and css reference for
     // the span that serves as the invalidation marker. See kolibri-base.css for details.
@@ -4730,6 +4733,34 @@ const projectInput = (timeout) => (eventType) =>
     /** @type {HTMLSpanElement}  */ const spanElement       = elements[1]; // only for the sake of type casting, otherwise...
     /** @type {HTMLInputElement} */ const inputElement      = spanElement.firstElementChild; // ... we would use array deconstruction
     /** @type {HTMLSpanElement}  */ const [popoverElement]  = select(spanElement, "[popover]"); // the element that pops
+
+    if(inputController.getType() === RANGE) {
+        inputElement.classList.add('kolibri-range-slider'); //TODO Discuss with Dierk if this is the right way to handle this
+
+        // Set the max attribute for the slider
+        inputElement.setAttribute('max', '100'); //TODO Discuss with Dierk if updating simpleInputController with max value is needed
+        inputElement.setAttribute('min', '0');   //TODO Discuss with Dierk if updating simpleInputController with min value is needed
+        inputElement.setAttribute('step', '1');  //TODO Discuss with Dierk if updating simpleInputController with value is needed
+
+
+        // Event handling: Update slider value and gradient on input change
+        inputElement.addEventListener(eventType, (event) => {
+            inputController.setValue( /** @type { range } */ event.target.value);  // Todo - Aks Dierk if type range is correct?
+            // Calculate the fill percentage
+            const percentage = `${(event.target.value / inputElement.max) * 100}%`;
+            // Update the CSS variable on the slider/input element
+            inputElement.style.setProperty('--slider-fill', percentage);
+        });
+
+        // Controller bindings
+        inputController.onValueChanged((value) => {
+            const percentage = `${(value / inputElement.max) * 100}%`;
+            // Update the CSS variable on the slider/input element
+            inputElement.style.setProperty('--slider-fill', percentage);
+        });
+
+    }
+
 
     // view and data binding can depend on the type
     if (inputController.getType() === TIME) { // "hh:mm" in the vies vs minutes since midnight in the model
@@ -4791,6 +4822,7 @@ const projectInput = (timeout) => (eventType) =>
     return /** @type { [HTMLLabelElement, HTMLInputElement] } */ elements;
 };
 
+
 /**
  * @template _T_
  * @type { ChangeInputProjectionType<_T_> }
@@ -4824,7 +4856,106 @@ const InputProjector = {
     projectInstantInput: projectInstantInput$1,
     projectChangeInput,
     projectDebounceInput: projectDebounceInput$1
-};/**
+};
+
+
+
+
+// Todo - Is INPUT_RANGE_CSS_CLASS_NAME needed here? Discuss with the @Direk König how to handle this in a better way.
+/**
+ * String that must be unique in CSS classes and DOM id prefixes throughout the application.
+ * @private
+ * @type {string}
+ */
+const INPUT_RANGE_CSS_CLASS_NAME = "kolibri-range-slider";
+
+
+/**
+ * CSS snippet to append to the head style when using the form projector.
+ * @type { String }
+ * @example
+ * document.querySelector("head style").textContent += SIMPLE_INPUT_RANGE_SLIDER_CSS;
+ */
+
+// Todo - Add/Merge those CSS variables to the main CSS Style Sheet
+const SIMPLE_INPUT_RANGE_SLIDER_CSS = `
+
+input[type="range"] {
+    width               : var(--slider-width);
+    height              : var(--slider-height);
+    border-radius       : 50%;
+    outline             : none;
+    appearance          : none;
+    -webkit-appearance  : none;
+    cursor              : pointer;
+    position            : relative;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height           : var(--track-height);
+    border-radius    : calc(var(--track-height) / 2);
+    background       : linear-gradient(
+                        to right,
+                        var(--track-fill-color) var(--slider-fill),
+                        var(--track-empty-color) var(--slider-fill)
+    );              
+}
+
+ input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance  : none;
+    width               : var(--thumb-size);
+    height              : var(--thumb-size);
+    background          : var(--thumb-color);
+    border-radius       : 50%;
+    border              : var(--thumb-border) solid var(--thumb-border-color);
+    cursor              : pointer;
+    position            : relative;
+    top                 : calc((var(--track-height) - var(--thumb-size)) / 2);
+    transition          : transform 0.3s ease-in-out;
+    box-shadow          : 0 0 16px var(--thumb-glow-color), 
+                          0 0 32px var(--thumb-outer-glow-color);
+    animation           : pulseGlow var(--animation-duration) ease-in-out infinite;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+    transform        : scale(var(--thumb-hover-scale));
+    box-shadow       : 0 0 16px var(--thumb-glow-color), 
+                       0 0 32px var(--thumb-outer-glow-color);
+}
+
+input[type="range"]::-moz-range-track {
+    height           : var(--track-height);
+    border-radius    : calc(var(--track-height) / 2);
+    background       : linear-gradient(
+        to right,
+        var(--track-fill-color) var(--slider-fill),
+        var(--track-empty-color) var(--slider-fill)
+    );
+}
+
+input[type="range"]::-moz-range-thumb {
+    width            : var(--thumb-size);
+    height           : var(--thumb-size);
+    background       : var(--thumb-color);
+    border-radius    : 50%;
+    cursor           : pointer;
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow : 
+            0 0 16px var(--thumb-glow-color), 
+            0 0 32px var(--thumb-outer-glow-color);
+    }
+    50% {
+        box-shadow : 
+            0 0 24px var(--thumb-glow-color), 
+            0 0 48px var(--thumb-outer-glow-color);
+    }
+}
+    
+  
+`;/**
  * @module projector/simpleForm/simpleFormProjector
  *
  * Following the projector pattern, this module exports the projection function
@@ -4871,9 +5002,15 @@ const projectForm = formController => {
     const form = elements[0];
     const fieldset = form.children[0];
 
-    formController.forEach( inputController =>
-       fieldset.append(...InputProjector.projectChangeInput(inputController, FORM_CLASS_NAME)));
+    // Todo: Discuss with Dierk König if the want to give the EventType also inside of the Model?;
 
+    formController.forEach( inputController => {
+        if(inputController.getType() === "range") {
+            fieldset.append(...InputProjector.projectInstantInput(inputController, FORM_CLASS_NAME));
+        } else {
+       fieldset.append(...InputProjector.projectChangeInput(inputController, FORM_CLASS_NAME));
+        }
+    });
     return [form];
 };
 
@@ -5855,9 +5992,9 @@ const memoize = f => {
         }
         return y;
     }
-};const release     = "0.9.9";
+};const release     = "0.9.8";
 
-const dateStamp   = "2025-01-02 T 15:59:17 MEZ";
+const dateStamp   = "2024-12-21 T 15:26:13 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
