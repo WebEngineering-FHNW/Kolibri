@@ -80,7 +80,7 @@
   <section class="weight">
     <div class="weight-input">
       <h3>Styles</h3>
-      <input type="text" placeholder="Type here to preview your text" aria-label="Text preview input">
+      <input id="font-text" type="text" placeholder="Type here to preview your text" aria-label="Text preview input">
     </div>
     <div class="weight-slider">
       <label for="font-size">31 px</label>
@@ -91,8 +91,21 @@
   <section>
     <div class="font-weights">
       <!-- Repeatable style rows for each weight -->
-      <div class="font-weight">Thin 100</div>
-      <p>Whereas recognition of the inherent dignity...</p>
+<!--      <div class="font-weight">Thin 100</div>-->
+<!--      <p>Whereas recognition of the inherent dignity...</p>-->
+
+<!--      <div class="font-weight">Light 200</div>-->
+<!--      <p>Whereas recognition of the inherent dignity...</p>-->
+
+<!--      <div class="font-weight">Light 200 Italic</div>-->
+<!--      <p>Whereas recognition of the inherent dignity...</p>-->
+
+<!--      <div class="font-weight">Thin 100</div>-->
+<!--      <p>Whereas recognition of the inherent dignity...</p>-->
+
+<!--      <div class="font-weight">Thin 100</div>-->
+<!--      <p>Whereas recognition of the inherent dignity...</p>-->
+
       <!-- Add additional font-weight items as needed -->
     </div>
   </section>
@@ -107,41 +120,197 @@
 
   <!-- Numbers and Punctuation Section -->
   <section class="characters">
-    <div class="numbers">
-      <h4>Numbers</h4>
-      <div class="number-grid">
-        <!-- Number characters -->
-        <span>0</span> <span>1</span> <span>2</span> <!-- etc. -->
+    <div class="radioButtons">
+      <div class="numbers">
+        <h4>Numbers</h4>
+        <div class="radioBtnGroup">
+          <!-- Numbers And Fraction generated -->
+        </div>
+      </div>
+      <div class="punctuation">
+        <h4>Punctuation</h4>
+        <div class="radioBtnGroup">
+          <!-- Punctuation characters generated -->
+        </div>
       </div>
     </div>
-    <div class="punctuation">
-      <h4>Punctuation</h4>
-      <div class="punctuation-grid">
-        <!-- Punctuation characters -->
-        <span>/</span> <span>-</span> <span>–</span> <!-- etc. -->
-      </div>
-    </div>
+    <input class="radioBtnValue" maxlength="1" id="" type="text" placeholder="9" aria-label="">
   </section>
 
 </main>
 
 
-<script>
+<script type="module">
+
+  import { dom }          from "../src/kolibri/util/dom.js";
+  import { Observable }   from "../src/kolibri/observable.js";
+
+  const numbersRadioBtnGroup     = document.querySelector('.numbers .radioBtnGroup');
+  const punctuationRadioBtnGroup = document.querySelector('.punctuation .radioBtnGroup');
+  const radioBtnValue            = document.querySelector('.radioBtnValue');
 
   const label = document.querySelector("label[for='font-size']");
+  const textInput = document.getElementById("font-text");
   const rangeInput = document.getElementById("font-size")
 
+  const obFontSize         = Observable(rangeInput.value);
+  const obText             = Observable(textInput.value === '' ? textInput.placeholder : textInput.value);
+  const obRadioBtnValue    = Observable('9');
 
-  rangeInput.addEventListener("input", (event) => {
-    const value = event.target.value;
-    label.textContent = `${value} px`;
+
+  radioBtnValue.addEventListener('input', (e) => {
+      obRadioBtnValue.setValue(radioBtnValue.value);
+  })
+  obRadioBtnValue.onChange((value) => {
+      radioBtnValue.value = value;
+  });
+
+  rangeInput.addEventListener("input", (_) => {
+    label.textContent = `${rangeInput.value} px`;
 
     // Calculate the fill percentage
-    const percentage = `${(value / rangeInput.max) * 100}%`;
+    const percentage = `${(rangeInput.value / rangeInput.max) * 100}%`;
+    obFontSize.setValue(rangeInput.value);
 
     // Update the CSS variable
     document.body.style.setProperty('--slider-fill', percentage);
   });
+
+  textInput.addEventListener("input", (_) => {
+    obText.setValue(textInput.value);
+  });
+
+  const weights = [
+    { name: 'Thin',       weight: 100 },
+    { name: 'Light',      weight: 200 },
+    { name: 'Regular',    weight: 400 },
+    { name: 'Bold',       weight: 700 },
+    { name: 'ExtraBold',  weight: 800 },
+  ];
+
+
+  const fontWeightSection = document.querySelector('.font-weights');
+  const container = document.createElement('div');
+
+  weights.forEach( font => {
+    const elements = dom(`
+     <div class="font-weight">${font.name} ${font.weight}</div>
+     <p class="font-weight-${font.weight}">Whereas recognition of the inherent dignity...</p>
+    `);
+
+    const title = elements[0];
+    const text  = elements[1];
+
+    obText.onChange( (value) => {
+      text.textContent = value;
+    });
+
+    obFontSize.onChange( (value) => {
+      text.style.fontSize  = `${value}px`;
+    });
+
+
+    container.append(...elements);
+  });
+
+  fontWeightSection.append(container);
+
+  const createUniqueIdGenerator = (prefix = 'unique-id') => {
+    let counter = 0;
+    return () => `${prefix}-${counter++}`;
+  };
+
+  const generateUniqueId = createUniqueIdGenerator();
+
+  const numbersAndFractions = [
+      '0',  // Zero
+      '1',  // One
+      '2',  // Two
+      '3',  // Three
+      '4',  // Four
+      '5',  // Five
+      '6',  // Six
+      '7',  // Seven
+      '8',  // Eight
+      '9',  // Nine
+      '½',  // One-half
+      '⅓',  // One-third
+      '⅔',  // Two-thirds
+      '¼',  // One-quarter
+      '¾'   // Three-quarters
+  ];
+  const punctuationMarks    = [
+    '.',  // Period
+    ',',  // Comma
+    ';',  // Semicolon
+    ':',  // Colon
+    '!',  // Exclamation mark
+    '?',  // Question mark
+    '"',  // Quotation mark
+    '-',  // Hyphen
+    '–',  // En Dash
+    '—',  // Em Dash
+    '(',  // Left Parenthesis
+    ')',  // Right Parenthesis
+    '[',  // Left Bracket
+    ']',  // Right Bracket
+    '{',  // Left Brace
+    '}',  // Right Brace
+    '/',  // Slash
+    '|',  // Vertical bar
+    '@',  // At symbol
+    '#',  // Hash
+    '$',  // Dollar sign
+    '%',  // Percent
+    '^',  // Caret
+    '&',  // Ampersand
+    '*',  // Asterisk
+    '_',  // Underscore
+    '=',  // Equal sign
+    '+',  // Plus sign
+    '<',  // Less than
+    '>',  // Greater than
+    '~'   // Tilde
+  ];
+
+
+  const createRadioElements = (array, groupName, observer) => {
+    const container = document.createElement('div');
+
+    array.forEach((item, index) => {
+      const uniqueId = generateUniqueId();
+      const elements = dom(`
+            <input type="radio" id="${uniqueId}" name="${groupName}" value="${item}">
+            <label for="${uniqueId}">${item}</label>
+        `);
+      const input = elements[0];
+      const label = elements[1];
+
+
+      // Prevent label from being deselected with mouse
+      label.addEventListener('mousedown', (e) => e.preventDefault());
+
+      // Listen for input change and update observer
+      input.addEventListener('click', () => {
+        observer.setValue(input.value);
+      });
+
+      // Sync observer value with the input
+      observer.onChange((value) => {
+        input.checked = input.value === value;
+      });
+
+      // Append elements to the fragment container
+      container.append(...elements);
+    });
+
+    return container;
+  };
+
+
+  numbersRadioBtnGroup.append(...createRadioElements(numbersAndFractions, 'radioBtnGroup1', obRadioBtnValue).childNodes);
+  punctuationRadioBtnGroup.append(...createRadioElements(punctuationMarks, 'radioBtnGroup1', obRadioBtnValue).childNodes);
+
 
 
 </script>
