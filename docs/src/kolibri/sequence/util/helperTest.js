@@ -43,9 +43,15 @@ testSuite.add("plusOp with string", assert => {
 });
 
 testSuite.add("plusOp with numbers", assert => {
-  const nums = Seq(1,2,3);
+  const nums = Seq(1, 2, 3);
   const result  = nums.reduce$(plusOp, 0);
   assert.is(result, 6 );
+});
+
+testSuite.add("plusOp with bigint", assert => {
+  const nums = Seq(1n, 2n, 3n);
+  const result  = nums.reduce$(plusOp, 0n);
+  assert.is(result, 6n );
 });
 
 testSuite.add("limit ok", assert => {

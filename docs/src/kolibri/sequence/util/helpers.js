@@ -59,9 +59,9 @@ const forever = _ => true;
  * Convenience "plus operator" to be used in reduce situations where the
  * plus operator should be used in a projection.
  * Works with both, strings or numbers.
- * @param { String | Number } acc
- * @param { String | Number } cur
- * @return { String | Number }
+ * @param  { String | Number | BigInt } acc
+ * @param  { String | Number | BigInt } cur
+ * @return { String | Number | BigInt }
  * @example
  *   const nums = Seq(1,2,3);
  *   const result  = nums.reduce$( plusOp, 0);
