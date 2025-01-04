@@ -1,7 +1,7 @@
 import { TestSuite }                                                  from "../../util/test.js";
 import { Seq }                                                        from "../constructors/seq/seq.js";
 import { Pair }                                                       from "../../lambda/pair.js";
-import { forever, isIterable, isSequence, plus, toSeq,limit }         from "./helpers.js";
+import { forever, isIterable, isSequence, plusOp, toSeq,limit }       from "./helpers.js";
 import { Sequence }                                                   from "../constructors/sequence/Sequence.js";
 
 const testSuite = TestSuite("Sequence: helper");
@@ -36,15 +36,15 @@ testSuite.add("toSeq is lazy", assert => {
   assert.is(firstValue, 42);
 });
 
-testSuite.add("plus with string", assert => {
+testSuite.add("plusOp with string", assert => {
   const strings = "a b c".split(" ");
-  const string  = strings.reduce( plus, "");
+  const string  = strings.reduce(plusOp, "");
   assert.is( string, "abc" );
 });
 
-testSuite.add("plus with numbers", assert => {
+testSuite.add("plusOp with numbers", assert => {
   const nums = Seq(1,2,3);
-  const result  = nums.reduce$( plus, 0);
+  const result  = nums.reduce$(plusOp, 0);
   assert.is(result, 6 );
 });
 

@@ -39,14 +39,14 @@
 
 <script type="module">
 
-    import { ALL, Walk, limit, plus, Seq } from "../../kolibri/sequence/sequence.js";
-    import { select }                      from "../../kolibri/util/dom.js";
+    import { ALL, Walk, limit, plusOp, Seq } from "../../kolibri/sequence/sequence.js";
+    import { select }                        from "../../kolibri/util/dom.js";
 
 
     const partialSum = numSeq => n =>
         numSeq
             .take(n)
-            .reduce$(plus, 0);
+            .reduce$(plusOp, 0);
 
     const partialSumSeq = numSeq =>
         Walk(1, ALL)

@@ -61,9 +61,9 @@
 </p>
 
 <script type="module">
-    import { Walk, plus } from "../../kolibri/sequence/sequence.js";
-    import { dom  }       from "../../kolibri/util/dom.js";
-    import { ALL  }       from "../../kolibri/sequence/constructors/range/range.js";
+    import { Walk, plusOp } from "../../kolibri/sequence/sequence.js";
+    import { dom  }         from "../../kolibri/util/dom.js";
+    import { ALL  }         from "../../kolibri/sequence/constructors/range/range.js";
 
     const tableFactorEl = document.getElementById("tableFactor");
     const slicesEl      = document.getElementById("slices");
@@ -87,7 +87,7 @@
             .map(valuePair => valuePair.map(n => angles.drop(n).head()))
             .map(anglePair => anglePair.map(angle2point))
             .map(points2Line)
-            .foldl$(plus, circle);
+            .foldl$(plusOp, circle);
     };
     draw();
     [tableFactorEl, slicesEl].forEach( el => el.oninput = () => {

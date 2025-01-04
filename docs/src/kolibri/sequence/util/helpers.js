@@ -2,7 +2,7 @@ import { map }               from "../operators/map/map.js"
 import { id }                from "../../stdlib.js"
 import { SequencePrototype } from "../sequencePrototype.js";
 
-export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence, forever, plus, limit }
+export { toSeq, isIterable, iteratorOf, ensureSequence, isSequence, forever, plusOp, limit }
 
 /**
  * Casts an arbitrary {@link Iterable} into the {@link SequenceType}.
@@ -56,22 +56,22 @@ const ensureSequence = iterable =>
 const forever = _ => true;
 
 /**
- * Convenience function to be used in reduce situations where the
- * plus operation should be used as a projection.
+ * Convenience "plus operator" to be used in reduce situations where the
+ * plus operator should be used in a projection.
  * Works with both, strings or numbers.
  * @param { String | Number } acc
  * @param { String | Number } cur
  * @return { String | Number }
  * @example
  *   const nums = Seq(1,2,3);
- *   const result  = nums.reduce$( plus, 0);
+ *   const result  = nums.reduce$( plusOp, 0);
  *   assert.is(result, 6 );
  *   
  *   const strings = "a b c".split(" ");
- *   const string  = strings.reduce( plus, "");
+ *   const string  = strings.reduce( plusOp, "");
  *   assert.is( string, "abc" );
  */
-const plus = (acc, cur) => acc + cur;
+const plusOp = (acc, cur) => acc + cur;
 
 /**
  * Calculate the limit that the number sequence approaches by comparing successive elements until they are
