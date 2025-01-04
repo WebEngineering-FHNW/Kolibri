@@ -58,21 +58,31 @@ const projectInput = (timeout) => (eventType) =>
     /** @type {HTMLSpanElement}  */ const [popoverElement]  = select(spanElement, "[popover]"); // the element that pops
 
     if(inputController.getType() === RANGE) {
-        inputElement.classList.add('kolibri-range-slider'); //TODO Discuss with Dierk if this is the right way to handle this
 
-        // Set the max attribute for the slider
-        inputElement.setAttribute('max', '100'); //TODO Discuss with Dierk if updating simpleInputController with max value is needed
-        inputElement.setAttribute('min', '0');   //TODO Discuss with Dierk if updating simpleInputController with min value is needed
-        inputElement.setAttribute('step', '1');  //TODO Discuss with Dierk if updating simpleInputController with value is needed
+        //TODO Discuss with Dierk
+        // - CSS and ClassList
+        // - property Max needed for --slider-fill
+        // - property Min needed
+        // - property Step needed
 
+        inputElement.classList.add('kolibri-range-slider');
+        inputElement.max  = '94';
+        inputElement.min  = '8';
+        inputElement.step = '1';
+
+        const unit = inputController.getLabel();
 
         // Event handling: Update slider value and gradient on input change
-        inputElement.addEventListener(eventType, (event) => {
-            inputController.setValue( /** @type { range } */ event.target.value);  // Todo - Aks Dierk if type range is correct?
+        inputElement.addEventListener(eventType, ( _) => {
+            inputController.setValue( /** @type { range } */ inputElement.value);
             // Calculate the fill percentage
-            const percentage = `${(event.target.value / inputElement.max) * 100}%`;
+            const percentage = `${(inputElement.value / inputElement.max) * 100}%`;
             // Update the CSS variable on the slider/input element
             inputElement.style.setProperty('--slider-fill', percentage);
+
+            //Todo Ask Dierk if Label can be used for the binding;
+            inputController.setLabel(`${inputElement.value}${unit}`);
+
         });
 
         // Controller bindings
@@ -80,6 +90,10 @@ const projectInput = (timeout) => (eventType) =>
             const percentage = `${(value / inputElement.max) * 100}%`;
             // Update the CSS variable on the slider/input element
             inputElement.style.setProperty('--slider-fill', percentage);
+
+            //Todo Ask Dierk if Label can be used for the binding;
+            //inputController.setLabel(`${inputElement.value}${unit}`);
+            inputController.setLabel(`${value}${unit}`);
         });
 
     }
