@@ -2,7 +2,6 @@
 @import "../css/kolibri-base.css";
 
 body {
-    --slider-fill: 25%;
     font-family:        var(--Typescale-Fontfamily-heading, Saira);
 
     & h1 {
@@ -43,49 +42,6 @@ body {
         letter-spacing:     0.75px;
     }
 
-    & label {
-        color:              var(--Kolibri-Light-Monochrome---kb-color-bg-dark, #262338);
-        font-family:        var(--Typescale-Fontfamily-heading, Saira);
-        font-size:          var(--Typescale-Fontsize-7, 1rem);
-        font-weight:        500;
-        line-height:        var(--Typescale-Lineheight-7, 1.25rem);
-        letter-spacing:     0.05rem;
-    }
-
-    & input[type="range"] {
-        appearance:         none;
-        width:              18rem;
-        height:             0.8rem;
-        border-radius:      50%;
-        outline:            none;
-        position:           relative;
-    }
-
-    & input[type="range"]::-webkit-slider-runnable-track {
-        border-radius:      1rem;
-        height:             0.5rem;
-        background:         linear-gradient(to right, #6000FF var(--slider-fill), #EBECFE var(--slider-fill));
-    }
-
-    & input[type="range"]::-webkit-slider-thumb {
-        appearance:         none;
-        margin-bottom:      0.8rem;
-        width:              1.5rem;
-        height:             1.5rem;
-        position:           relative;
-        top:                calc(-0.5rem);
-        background:         rgb(96, 0, 255);
-        border-radius:      50%;
-        cursor:             pointer;
-        border:             4px solid rgb(255, 255, 255);
-        transition:         transform 0.3s ease-in-out;
-        box-shadow:         rgba(134, 62, 255, 0.3) 0px 0px 16px, rgba(96, 0, 255, 0.4) 0px 0px 32px;
-        animation:          1.5s ease-in-out 0s infinite normal none running pulseGlow;
-    }
-
-    & input[type="range"]:hover::-webkit-slider-thumb {
-        transform:          scale(1.2);
-        box-shadow:         rgba(134, 62, 255, 0.4) 0px 0px 16px, rgba(96, 0, 255, 0.4) 0px 0px 32px; }
 }
 
 header {
@@ -105,6 +61,7 @@ header {
     justify-content:        space-around;
     }
 }
+
 main {
     display:            flex;
     flex-direction:     column;
@@ -114,6 +71,7 @@ main {
     margin:             0px auto;
     gap:                6.25rem;
 }
+
 section {
     display: flex;
     align-items: center;
@@ -124,15 +82,18 @@ section {
     & > div:nth-child(1) { flex-grow: 2; flex-basis: 60rem; }
     & > div:nth-child(2) { flex-shrink: 1; flex-basis: 42rem; }
 }
+
 .intro {
     background: var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
     border-radius: 12px;
     padding: 8rem 6.25rem;
 }
+
 .intro-name h3 {
     color: var(--Kolibri-Light-Monochrome---kb-color-label, #6E7191);
     font-weight: 300;
 }
+
 .intro-sample {
     text-align: end;
     font-size: 8rem;
@@ -140,6 +101,7 @@ section {
     font-family: var(--Typescale-Fontfamily-heading, Saira);
     color: var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
 }
+
 .usage-number {
     margin: 1.5rem 0px;
     display: flex;
@@ -147,7 +109,12 @@ section {
     align-items: baseline;
     gap: 0.5rem;
 }
-.weight-input input[type="text"] {
+
+.styles-input span{
+    width: 100%;
+}
+
+.styles-input input[type="text"] {
     margin-top: 2.5rem;
     box-sizing: border-box;
     border-radius: 0.25rem;
@@ -160,11 +127,13 @@ section {
     font-weight: 300;
     letter-spacing: 0.1rem;
 }
-.weight-slider {
+
+.styles-slider {
     align-self: flex-end;
     margin-bottom: 1.25rem;
 }
-.weight-slider input[type="range"] { }
+
+.styles-slider input[type="range"] { }
 
 /* Font styles */
 .font-weight-100 {
@@ -266,12 +235,13 @@ section {
     scale: 1.1; /* Optional, gives a zoom effect */
 }
 
-.radioBtnValue {
+.characters input[type="text"] {
     width: 16rem;
     box-sizing: border-box;
     border-radius: 2rem;
     border: 1px solid var(--Kolibri-Light-Primary---kb-primary-accent, #6000FF);
     background: #FFF;
+    text-align: center;
 
     color: var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
     font-feature-settings: 'liga' off, 'clig' off;
