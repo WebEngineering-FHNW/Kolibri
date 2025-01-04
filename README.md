@@ -12,6 +12,11 @@ Kolibri does _not_ require node.js or npm or any of such tools.
 
 ## Notes for developers
 
+### Branch
+
+The christmas_tooltip branch contains styling and additions such that
+tooltips appear in a Christmas style consistently for all input fields.
+
 ### Sources
 The src dir is under docs such that we can publish the sources directly.
 
