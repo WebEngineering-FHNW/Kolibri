@@ -15,8 +15,6 @@
 
 import {CHANGE, dom, select, INPUT, TIME, CHECKBOX}       from "../../util/dom.js";
 import { timeStringToMinutes, totalMinutesToTimeString}   from "../projectorUtils.js";
-import {ICON_CHRISTMAS_TREE}                              from "../../../customize/icons.js";
-import {icon}                                             from "../../style/icon.js";
 
 export { InputProjector }
 
@@ -95,7 +93,6 @@ const projectInput = (timeout) => (eventType) =>
 
     inputController.onTooltipChanged( text => {
         popoverElement.innerHTML = text;                            // think about textContent or HTML
-        popoverElement.prepend(...icon(ICON_CHRISTMAS_TREE));
         const hide  = _e => popoverElement.hidePopover();
         const show  = _e => popoverElement.showPopover();
         spanElement .removeEventListener("mouseenter",  show);      // avoid duplicate listeners

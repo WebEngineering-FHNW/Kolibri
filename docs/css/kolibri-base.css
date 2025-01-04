@@ -285,38 +285,3 @@ a.skip-link:not(:focus):not(:active) {
       from {  transform: scaleY(0); }
       to   {  transform: scaleY(1); }
   }
-
-  .icon#icon_christmas_tree {
-      fill:             white;
-      background-color: transparent;
-  }
-  .icon#icon_christmas_tree polygon {
-      fill:             yellow;
-      filter:           brightness(2) drop-shadow(0 0 2em yellow);
-      transform:        translateX(-40%) scale(1.2);
-      transition:       all 2s ease-in-out;
-      @starting-style {
-          transform:        translateX(40%) scale(0.8);
-      }
-  }
-
-.icon#icon_christmas_tree path {
-    animation: shake .2s ease-in-out;
-    animation-delay: 3s;
-}
-.icon#icon_christmas_tree path:nth-child(3) {
-    transform-origin: center  30%;
-}
-.icon#icon_christmas_tree path:nth-child(2) {
-    transform-origin: center 70% ;
-    animation-delay: 3.1s;
-}
-.icon#icon_christmas_tree path:nth-child(1) {
-    transform-origin: center 90% ;
-}
-@keyframes shake {
-      0%   { transform: rotate(  0deg)}
-     30%   { transform: rotate(-10deg)}
-     60%   { transform: rotate(  6deg)}
-    100%   { transform: rotate(  0deg)}
-}
