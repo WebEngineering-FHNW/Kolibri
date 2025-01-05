@@ -42,8 +42,8 @@
         Walk(3)  ['==']  ( Seq(0,1,2,3) );
 
         let pyth = from(                   Walk(2, ALL))
-              .and(     z           => Walk(2, z) )
-              .and( ( [ z, y ]    ) => Walk(2, y) )
+              .combine(     z           => Walk(2, z) )
+              .combine( ( [ z, y ]    ) => Walk(2, y) )
               .where  ( ([[ z, y ], x]) => x*x + y*y === z*z )
               .select ( ([[ z, y ], x]) => ` ${x} ${y} ${z}` )
               .result();
