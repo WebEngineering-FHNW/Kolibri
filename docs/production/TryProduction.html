@@ -18,12 +18,40 @@
         fib = memoize(fib);
 
         out.textContent = `
+            The 44th Fibonacci number is:
             ${ asCH( fib(44) ) }
 
             built with Kolibri ${versionInfo}
         `;
 
     </script>
+
+    <pre>
+        You can use your browser's console to try Kolibri for yourself.
+        Here are some ideas of what you can do:
+
+        let fibo = n => n < 2 ? 1 : fibo(n - 1) + fibo(n - 2);
+        fibo = memoize(fibo);
+        fibo(44);
+
+        10..times ( console.log );
+        10..times ( n => n**3 ).sum();
+
+        [1,2,3].eq([1,2,3]);
+
+        Walk(3)  ['==']  ( Seq(0,1,2,3) );
+
+        let pyth = from(                   Walk(2, ALL))
+              .and(     z           => Walk(2, z) )
+              .and( ( [ z, y ]    ) => Walk(2, y) )
+              .where  ( ([[ z, y ], x]) => x*x + y*y === z*z )
+              .select ( ([[ z, y ], x]) => ` ${x} ${y} ${z}` )
+              .result();
+        pyth.show();
+        pyth.drop(100).take(5).show();
+
+
+    </pre>
 
     </body>
 
