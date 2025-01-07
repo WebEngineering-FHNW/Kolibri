@@ -50,6 +50,18 @@
         pyth.show();
         pyth.drop(100).take(5).show();
 
+        const odds = Walk(1,ALL,2);
+        odds.show();
+
+        const partialSums = seq => Walk(1,ALL).map( n => seq.take(n).foldl$(plusOp, 0));
+
+        const triagonalNumbers = partialSums(Walk()).show();
+        const surprise         = partialSums(odds).show();
+
+        const ratios = Walk().map(n=> fib(n+1)/fib(n));
+        ratios.show();
+        const golden = limit(0.0001, ratios);
+
 
     </pre>
 
