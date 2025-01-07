@@ -5742,9 +5742,9 @@ const memoize = f => {
         }
         return y;
     }
-};const release     = "0.9.9";
+};const release     = "0.9.10";
 
-const dateStamp   = "2025-01-02 T 15:59:17 MEZ";
+const dateStamp   = "2025-01-07 T 12:24:25 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
