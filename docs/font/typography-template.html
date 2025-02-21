@@ -230,7 +230,7 @@
             <label for="${uniqueId}">${item}</label>
         `);
 
-      const [input, label] = [elements[0], elements[1]];
+      const [input, label] = elements;
 
       // Prevent label from being deselected with mouse
       label.addEventListener('mousedown', (e) => e.preventDefault());
@@ -243,7 +243,6 @@
         input.checked = input.value === value;
       });
 
-      // Append elements to the fragment container
       container.append(...elements);
     });
 
