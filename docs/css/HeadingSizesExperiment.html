@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Kolibri Relative CSS Sizes</title>
+        <style>
+            :root {
+                --font-base-unit:  1rem;    /* a flexible unit that changes with user preferences */
+                --font-base-scale: 1.62;    /* default scale is golden ratio, to be overridden */
+            }
+            h1, h2, h3, h4, h5 {
+                --font-size-factor: 1;      /* default, to be overridden */
+                font-size: calc( var(--font-size-factor) * var(--font-base-unit));
+            }
+            h1 {--font-size-factor: calc( pow(var(--font-base-scale), 3));}
+            h2 {--font-size-factor: calc( pow(var(--font-base-scale), 2));}
+            h3 {--font-size-factor: calc( pow(var(--font-base-scale), 1));}
+            h4 {--font-size-factor: calc( pow(var(--font-base-scale), 0));}
+            h5 {--font-size-factor: calc( pow(var(--font-base-scale),-1));}
+            .document    { --font-base-scale: 1.62; }
+            .application { --font-base-scale: 1.2;  }
+        </style>
+    </head>
+    <body class="document">
+        <pre>
+            The visual hierarchy of headings is created by applying a factor to the size
+            of the next smaller heading.
+
+            The overall size and the contrast in the visual hierarchy is different for
+            the document and the application context.
+
+            Heading level 4 is supposed to be scaled to the size of running readable text.
+        </pre>
+        <h1>Document Heading 1</h1>
+        <h2>Document Heading 2</h2>
+        <h3>Document Heading 3</h3>
+        <h4>Document Heading 4</h4>
+        <h5>Document Heading 5</h5>
+        <div class="application">
+            <h1>Application Heading 1</h1>
+            <h2>Application Heading 2</h2>
+            <h3>Application Heading 3</h3>
+            <h4>Application Heading 4</h4>
+            <h5>Application Heading 5</h5>
+        </div>
+    </body>
+</html>
