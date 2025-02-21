@@ -1839,22 +1839,22 @@ const ensureSequence = iterable =>
 const forever = _ => true;
 
 /**
- * Convenience "plus operator" to be used in reduce situations where the
- * plus operator should be used in a projection.
+ * Convenience function to be used in reduce situations where the
+ * plus operation should be used as a projection.
  * Works with both, strings or numbers.
- * @param  { String | Number | BigInt } acc
- * @param  { String | Number | BigInt } cur
- * @return { String | Number | BigInt }
+ * @param { String | Number } acc
+ * @param { String | Number } cur
+ * @return { String | Number }
  * @example
  *   const nums = Seq(1,2,3);
- *   const result  = nums.reduce$( plusOp, 0);
+ *   const result  = nums.reduce$( plus, 0);
  *   assert.is(result, 6 );
  *   
  *   const strings = "a b c".split(" ");
- *   const string  = strings.reduce( plusOp, "");
+ *   const string  = strings.reduce( plus, "");
  *   assert.is( string, "abc" );
  */
-const plusOp = (acc, cur) => acc + cur;
+const plus$1 = (acc, cur) => acc + cur;
 
 /**
  * Calculate the limit that the number sequence approaches by comparing successive elements until they are
@@ -3448,13 +3448,12 @@ const ALL = Number.MAX_SAFE_INTEGER;
  * @constructor
  * @pure
  * @haskell (a, a) -> [a]
- * @param { Number? } firstBoundary=ALL - the first boundary of the range, optional with default [@link ALL]
- * @param { Number? } secondBoundary=0  - optionally the second boundary of the range, optional with default 0
- * @param { Number? } step=1            - the size of a step, processed during each iteration, optional with default 1
+ * @param { !Number } firstBoundary  - the first boundary of the range
+ * @param { Number }  secondBoundary - optionally the second boundary of the range
+ * @param { Number }  step - the size of a step, processed during each iteration
  * @returns SequenceType<Number>
  *
  * @example
- *  const numbers             = Range();
  *  const range               = Range(3);
  *  const [five, three, one]  = Range(1, 5, -2);
  *  const [three, four, five] = Range(5, 3);
@@ -3462,7 +3461,7 @@ const ALL = Number.MAX_SAFE_INTEGER;
  *  console.log(...range);
  *  // => Logs '0, 1, 2, 3'
  */
-const Range = (firstBoundary=ALL, secondBoundary = 0, step = 1) => {
+const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
   const stepIsNegative = 0 > step;
   const [left, right]  = normalize(firstBoundary, secondBoundary, stepIsNegative);
 
@@ -3949,23 +3948,17 @@ const totalMinutesToTimeString = totalMinutes => {
  */
 
 /**
- * @typedef { BasicObservableTypeString | ExtendedObservableTypeString } ObservableTypeString
- * Feel free to extend this type customizing the {@link ExtendedObservableTypeString}.
- * This is the type (interface) to program against.
- */
-/**
- * @typedef {'value'|'valid'|'editable'|'label'|'name'|'type'|'tooltip' } BasicObservableTypeString
- * These basic keys should not be changed. Any modifications are better done
- * by customizing the {@link ExtendedObservableTypeString}.
+ * @typedef {'value'|'valid'|'editable'|'label'|'name'|'tooltip'|'type'} ObservableTypeString
+ * Feel free to extend this type with new unique type strings as needed for your application.
  */
 
-/** @type BasicObservableTypeString */ const VALUE           = "value";
-/** @type BasicObservableTypeString */ const VALID           = "valid";
-/** @type BasicObservableTypeString */ const EDITABLE        = "editable";
-/** @type BasicObservableTypeString */ const LABEL           = "label";
-/** @type BasicObservableTypeString */ const NAME            = "name";
-/** @type BasicObservableTypeString */ const TYPE            = "type"; // HTML input types: text, number, checkbox, etc.
-/** @type BasicObservableTypeString */ const TOOLTIP         = "tooltip";
+/** @type ObservableTypeString */ const VALUE    = "value";
+/** @type ObservableTypeString */ const VALID    = "valid";
+/** @type ObservableTypeString */ const EDITABLE = "editable";
+/** @type ObservableTypeString */ const LABEL    = "label";
+/** @type ObservableTypeString */ const NAME     = "name";
+/** @type ObservableTypeString */ const TOOLTIP  = "tooltip";
+/** @type ObservableTypeString */ const TYPE     = "type"; // HTML input types: text, number, checkbox, etc.
 
 /**
  * Convenience function to read the current state of the attribute's VALUE observable for the given attribute.
@@ -4214,7 +4207,7 @@ const { warn: warn$2 } = LoggerFactory("ch.fhnw.kolibri.util.dom");
  * @pure
  * @example
  * const [label, input] = dom(`
- *      <label for="myId">Name</label>
+ *      <label for="myId">
  *      <input type="text" id="myId" name="myName" value="myValue">
  * `);
  */
@@ -4257,19 +4250,15 @@ const fireEvent = (element, eventTypeString) => {
  */
 const fireChangeEvent = element => fireEvent(element, CHANGE);
 
-/** @typedef { "text" | "number" | "checkbox" | "time" | "date" | "color" } InputTypeString */
-/** @type InputTypeString */ const TEXT         = "text";
-/** @type InputTypeString */ const NUMBER       = "number";
-/** @type InputTypeString */ const CHECKBOX     = "checkbox";
-/** @type InputTypeString */ const TIME         = "time";
-/** @type InputTypeString */ const DATE         = "date";
-/** @type InputTypeString */ const COLOR        = "color";
 
-/** @typedef { "textBtn" | "iconBtn" | "leadingIconBtn" | "trailingIconBtn" } ButtonTypeString */
-/** @type ButtonTypeString */ const TEXT_BUTTON             = "textBtn";
-/** @type ButtonTypeString */ const ICON_BUTTON             = "iconBtn";
-/** @type ButtonTypeString */ const LEADING_ICON_BUTTON     = "leadingIconBtn";
-/** @type ButtonTypeString */ const TRAILING_ICON_BUTTON    = "trailingIconBtn";
+/** @typedef { "text"|"number"|"checkbox"|"time"|"date"|"color" } InputTypeString */
+
+/** @type InputTypeString */ const TEXT     = "text";
+/** @type InputTypeString */ const NUMBER   = "number";
+/** @type InputTypeString */ const CHECKBOX = "checkbox";
+/** @type InputTypeString */ const TIME     = "time";
+/** @type InputTypeString */ const DATE     = "date";
+/** @type InputTypeString */ const COLOR    = "color";
 
 /**
  * Utility function that works like {@link Element.querySelectorAll} but logs a descriptive warning when
@@ -4319,6 +4308,7 @@ const SimpleInputModel = ({value, label, name, type= TEXT}) => {
     singleAttr.getObs(VALID)   .setValue(true);
     if (null != label) singleAttr.getObs(LABEL).setValue(label);
     if (null != name ) singleAttr.getObs(NAME) .setValue(name);
+
 
     return /** AttributeType<_T_> */ singleAttr;
 };/**
@@ -4403,8 +4393,6 @@ const SimpleFormController = inputAttributesArray => {
 };// noinspection JSUnusedLocalSymbols
 
 
-/* note to FA: spacers and font constants have been removed here (DK) */
-
 /**
  * Css string value for the given color. We keep values as HSL to allow easier manipulation.
  * @param hue   - 0 to 360 degrees on the color wheel, where 0 is red, then yellow, green, cyan, blue, magenta.
@@ -4428,134 +4416,142 @@ const hsl  = (hue, sat, light)        => `hsl(${hue}, ${sat}%, ${light}%)`;
  */
 const hsla = (hue, sat, light, alpha) => `hsl(${hue}, ${sat}%, ${light}%, ${alpha})`;
 
-const colorAccent  = "var(--kolibri-color-accent)";
-const colorOk      = "var(--kolibri-color-ok)";
-const colorNeutral = "var(--kolibri-color-neutral)";
-const colorSelect  = "var(--kolibri-color-select)";
+const accentColor  = hsl(322, 73, 52);
+const okColor      = hsl(104, 89, 28);
+const neutralColor = hsl(  0,  0, 74);
+const selectColor  = hsl( 46, 90, 84);
 
-const colorOutput = "var(--kolibri-color-output)";
-const colorShadow = "var(--kolibri-color-shadow)";
+const outputColorValues = [256, 82, 55];
+const outputColor = hsl (...outputColorValues);
+const shadowColor = hsla(...outputColorValues, 0.2);
 
-const shadowCss   = "var(--kolibri-box-shadow)";
+const shadowCss = `        
+      0 4px  8px 0 ${shadowColor}, 
+      0 6px 20px 0 ${shadowColor};
+`;
 
 // -- All colors according to Design File in Figma --
 
 /* --- purple --- */
-const palette_purple800     = "var(--kolibri-palette-purple-800)";
-const palette_purple700     = "var(--kolibri-palette-purple-700)";
-const palette_purple600     = "var(--kolibri-palette-purple-600)";
-const palette_purple500     = "var(--kolibri-palette-purple-500)";
-const palette_purple400     = "var(--kolibri-palette-purple-400)";
-const palette_purple300     = "var(--kolibri-palette-purple-300)";
-const palette_purple200     = "var(--kolibri-palette-purple-200)";
-const palette_purple100     = "var(--kolibri-palette-purple-100)";
+const purple800     = hsl(263, 100, 25);
+const purple700     = hsl(262, 100, 35);
+const purple600     = hsl(263, 87,  47);
+const purple500     = hsl(263, 100, 50);
+const purple400     = hsl(263, 100, 59);
+const purple300     = hsl(259, 100, 74);
+const purple200     = hsl(241, 91,  87);
+const purple100     = hsl(237, 90,  96);
 
 /* --- lavender --- */
-const palette_lavender800   = "var(--kolibri-palette-lavender-800)";
-const palette_lavender700   = "var(--kolibri-palette-lavender-700)";
-const palette_lavender600   = "var(--kolibri-palette-lavender-600)";
-const palette_lavender500   = "var(--kolibri-palette-lavender-500)";
-const palette_lavender400   = "var(--kolibri-palette-lavender-400)";
-const palette_lavender300   = "var(--kolibri-palette-lavender-300)";
-const palette_lavender200   = "var(--kolibri-palette-lavender-200)";
-const palette_lavender100   = "var(--kolibri-palette-lavender-100)";
+const lavender800   = hsl(281, 100, 17);
+const lavender700   = hsl(277, 100, 34);
+const lavender600   = hsl(275,  85, 51);
+const lavender500   = hsl(275, 100, 60);
+const lavender400   = hsl(267, 100, 73);
+const lavender300   = hsl(262, 100, 77);
+const lavender200   = hsl(252, 100, 86);
+const lavender100   = hsl(217, 100, 95);
 
 /* --- blue --- */
-const palette_blue800       = "var(--kolibri-palette-blue-800)";
-const palette_blue700       = "var(--kolibri-palette-blue-700)";
-const palette_blue600       = "var(--kolibri-palette-blue-600)";
-const palette_blue500       = "var(--kolibri-palette-blue-500)";
-const palette_blue400       = "var(--kolibri-palette-blue-400)";
-const palette_blue300       = "var(--kolibri-palette-blue-300)";
-const palette_blue200       = "var(--kolibri-palette-blue-200)";
-const palette_blue100       = "var(--kolibri-palette-blue-100)";
+const blue800       = hsl(241, 100, 25);
+const blue700       = hsl(241,  76, 38);
+const blue600       = hsl(241, 100, 39);
+const blue500       = hsl(241, 100, 55);
+const blue400       = hsl(241, 100, 71);
+const blue300       = hsl(232, 100, 65);
+const blue200       = hsl(223, 100, 86);
+const blue100       = hsl(242, 100, 95);
 
 /* --- green --- */
-const palette_green800      = "var(--kolibri-palette-green-800)";
-const palette_green700      = "var(--kolibri-palette-green-700)";
-const palette_green600      = "var(--kolibri-palette-green-600)";
-const palette_green500      = "var(--kolibri-palette-green-500)";
-const palette_green400      = "var(--kolibri-palette-green-400)";
-const palette_green300      = "var(--kolibri-palette-green-300)";
-const palette_green200      = "var(--kolibri-palette-green-200)";
-const palette_green100      = "var(--kolibri-palette-green-100)";
+const green800      = hsl(122,  85, 18);
+const green700      = hsl(120,  90, 24);
+const green600      = hsl(120, 100, 30);
+const green500      = hsl(116,  88, 39);
+const green400      = hsl(107,  91, 66);
+const green300      = hsl(103,  88, 75);
+const green200      = hsl( 99, 100, 84);
+const green100      = hsl( 93,  69, 92);
 
 /* --- yellow --- */
-const palette_yellow800     = "var(--kolibri-palette-yellow-800)";
-const palette_yellow700     = "var(--kolibri-palette-yellow-700)";
-const palette_yellow600     = "var(--kolibri-palette-yellow-600)";
-const palette_yellow500     = "var(--kolibri-palette-yellow-500)";
-const palette_yellow400     = "var(--kolibri-palette-yellow-400)";
-const palette_yellow300     = "var(--kolibri-palette-yellow-300)";
-const palette_yellow200     = "var(--kolibri-palette-yellow-200)";
-const palette_yellow100     = "var(--kolibri-palette-yellow-100)";
+const yellow800     = hsl(40,  51, 19);
+const yellow700     = hsl(40,  52, 31);
+const yellow600     = hsl(40, 100, 29);
+const yellow500     = hsl(40,  92, 54);
+const yellow400     = hsl(41, 100, 66);
+const yellow300     = hsl(41, 100, 78);
+const yellow200     = hsl(41, 100, 84);
+const yellow100     = hsl(41, 100, 94);
 
 /* --- pink --- */
-const palette_pink800       = "var(--kolibri-palette-pink-800)";
-const palette_pink700       = "var(--kolibri-palette-pink-700)";
-const palette_pink600       = "var(--kolibri-palette-pink-600)";
-const palette_pink500       = "var(--kolibri-palette-pink-500)";
-const palette_pink400       = "var(--kolibri-palette-pink-400)";
-const palette_pink300       = "var(--kolibri-palette-pink-300)";
-const palette_pink200       = "var(--kolibri-palette-pink-200)";
-const palette_pink100       = "var(--kolibri-palette-pink-100)";
+const pink900       = hsl(339, 100, 31);
+const pink800       = hsl(321, 100, 29);
+const pink700       = hsl(328, 100, 37);
+const pink600       = hsl(330, 100, 42);
+const pink500       = hsl(326, 100, 59);
+const pink400       = hsl(334, 100, 50);
+const pink300       = hsl(326, 100, 59);
+const pink200       = hsl(316, 100, 84);
+const pink100       = hsl(309, 100, 96);
 
 /* --- monochrome --- */
-/* todo dk: these names make issues when used through the production bundle. Better prefix with "color-" or so.*/
-const colorBlack            = hsl(240,  15,  9);
-const colorBody             = hsl(247,  15, 35);
-const colorLabel            = hsl(235,  14, 50);
-const colorPlaceholder      = hsl(234,  18, 68);
-const colorBackgroundDark   = hsl(249,  23, 18);
-const colorLine             = hsl(233,  27, 88);
-const colorBackgroundLight  = hsl(231,  28, 95);
-const colorWhite            = hsl(240,  45, 98);
+const black         = hsl(240,  15,  9);
+const body          = hsl(247,  15, 35);
+const label         = hsl(235,  14, 50);
+const placeholder   = hsl(234,  18, 68);
+const bgDark        = hsl(249,  23, 18);
+const line          = hsl(233,  27, 88);
+const bgLight       = hsl(231,  28, 95);
+const white         = hsl(240,  45, 98);
 
 /* --- transparent - dark --- */
-const palette_black95       = hsla(...colorBlack, 0.95);
-const palette_black75       = hsla(...colorBlack, 0.75);
-const palette_black65       = hsla(...colorBlack, 0.65);
-const palette_black40       = hsla(...colorBlack, 0.40);
-const palette_black25       = hsla(...colorBlack, 0.25);
-const palette_black10       = hsla(...colorBlack, 0.10);
+const black95       = hsla(...black, 0.95);
+const black75       = hsla(...black, 0.75);
+const black65       = hsla(...black, 0.65);
+const black40       = hsla(...black, 0.40);
+const black25       = hsla(...black, 0.25);
+const black10       = hsla(...black, 0.10);
 
 /* --- transparent - white --- */
-const palette_white95       = hsla(...colorWhite, 0.95);
-const palette_white75       = hsla(...colorWhite, 0.75);
-const palette_white65       = hsla(...colorWhite, 0.65);
-const palette_white40       = hsla(...colorWhite, 0.40);
-const palette_white25       = hsla(...colorWhite, 0.25);
-const palette_white10       = hsla(...colorWhite, 0.10);
+const white95       = hsla(...white, 0.95);
+const white75       = hsla(...white, 0.75);
+const white65       = hsla(...white, 0.65);
+const white40       = hsla(...white, 0.40);
+const white25       = hsla(...white, 0.25);
+const white10       = hsla(...white, 0.10);
 
 /* --- primary --- */
-const colorPrimaryDark   = palette_purple700;
-const colorPrimaryAccent = palette_purple500;
-const colorPrimaryLight  = palette_purple200;
-const colorPrimaryBg     = palette_purple100;
+const primaryDark       = purple700;
+const primaryAccent     = purple500;
+const primaryLight      = purple200;
+const primaryBg         = purple100;
+
 
 /* --- secondary --- */
-const colorSecondaryDark   = palette_blue800;
-const colorSecondaryAccent = palette_blue500;
-const colorSecondaryLight  = palette_blue200;
-const colorSecondaryBg     = palette_blue100;
+const secondaryDark     = blue800;
+const secondaryAccent   = blue500;
+const secondaryLight    = blue200;
+const secondaryBg       = blue100;
+
 
 /* --- success --- */
-const colorSuccessDark   = palette_green800;
-const colorSuccessAccent = palette_green500;
-const colorSuccessLight  = palette_green200;
-const colorSuccessBg     = palette_green100;
+const successDark       = green800;
+const successAccent     = green500;
+const successLight      = green200;
+const successBg         = green100;
+
 
 /* --- warning --- */
-const colorWarningDark   = palette_yellow600;
-const colorWarningAccent = palette_yellow500;
-const colorWarningLight  = palette_yellow200;
-const colorWarningBg     = palette_yellow100;
+const warningDark       = yellow600;
+const warningAccent     = yellow500;
+const warningLight      = yellow200;
+const warningBg         = yellow100;
+
 
 /* --- danger --- */
-const colorDangerDark   = palette_pink800;
-const colorDangerAccent = palette_pink500;
-const colorDangerLight  = palette_pink200;
-const colorDangerBg     = palette_pink100;
+const dangerDark        = pink900;
+const dangerAccent      = pink500;
+const dangerLight       = pink200;
+const dangerBg          = pink100;
 
 const KOLIBRI_LOGO_SVG = `
 <svg class="kolibri-logo-svg" viewBox="0 0 305 342" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4569,6 +4565,118 @@ const KOLIBRI_LOGO_SVG = `
     <path class="wing" opacity="0.7" d="M128 178.895C162.922 103.67 248.073 126.739 305 47C278.211 119.718 247.116 181.904 128 178.895Z" fill="#FF2CA5"/>
 </svg>
 `;/**
+ * A typesafe way to create icons from svg and ensure consistent styling.
+ * Many icon SVGs based on www.svgrepo.com.
+ */
+
+/**
+ * @typedef {
+ *        "empty"
+ *      | "house"
+ *      | "one_two"
+ *      | "plus_minus"
+ *      | "terminal"
+ *      | "kolibri"
+ *      | "christmas_tree"
+ *      }  IconNameType
+ */
+
+/** @type { IconNameType } */ const ICON_EMPTY          = "empty";
+/** @type { IconNameType } */ const ICON_HOUSE          = "house";
+/** @type { IconNameType } */ const ICON_ONE_TWO        = "one_two";
+/** @type { IconNameType } */ const ICON_PLUS_MINUS     = "plus_minus";
+/** @type { IconNameType } */ const ICON_TERMINAL       = "terminal";
+/** @type { IconNameType } */ const ICON_KOLIBRI        = "kolibri";
+/** @type { IconNameType } */ const ICON_CHRISTMAS_TREE = "christmas_tree";
+
+
+const svg = /** @type { Object.<IconNameType, String>  } */ {};
+
+svg[ICON_EMPTY] = `
+    <svg id="icon_${ICON_EMPTY}" viewBox="0 0 1 1" >
+    </svg>
+`;
+svg[ICON_HOUSE] = `
+    <svg id="icon_${ICON_HOUSE}" viewBox="0 0 30 32" >
+        <path d="M1 12.5815C1 11.6147 1.46592 10.7072 2.25152 10.1437L15 1L27.7485 10.1437C28.5341 10.7072 29 11.6147 29 12.5815V28.5C29 29.8807 27.8807 31 26.5 31H20.2C19.6477 31 19.2 30.5523 19.2 30V21.2727C19.2 20.9966 18.9761 20.7727 18.7 20.7727H11.3C11.0239 20.7727 10.8 20.9966 10.8 21.2727V30C10.8 30.5523 10.3523 31 9.8 31H3.5C2.11929 31 1 29.8807 1 28.5V12.5815Z" />
+    </svg>
+`;
+svg[ICON_ONE_TWO] = `
+    <svg id="icon_${ICON_ONE_TWO}" viewBox="0 0 24 24" >
+        <path d="M3.604 3.089A.75.75 0 014 3.75V8.5h.75a.75.75 0 010 1.5h-3a.75.75 0 110-1.5h.75V5.151l-.334.223a.75.75 0 01-.832-1.248l1.5-1a.75.75 0 01.77-.037zM8.75 5.5a.75.75 0 000 1.5h11.5a.75.75 0 000-1.5H8.75zm0 6a.75.75 0 000 1.5h11.5a.75.75 0 000-1.5H8.75zm0 6a.75.75 0 000 1.5h11.5a.75.75 0 000-1.5H8.75zM5.5 15.75c0-.704-.271-1.286-.72-1.686a2.302 2.302 0 00-1.53-.564c-.535 0-1.094.178-1.53.565-.449.399-.72.982-.72 1.685a.75.75 0 001.5 0c0-.296.104-.464.217-.564A.805.805 0 013.25 15c.215 0 .406.072.533.185.113.101.217.268.217.565 0 .332-.069.48-.21.657-.092.113-.216.24-.403.419l-.147.14c-.152.144-.33.313-.52.504l-1.5 1.5a.75.75 0 00-.22.53v.25c0 .414.336.75.75.75H5A.75.75 0 005 19H3.31l.47-.47c.176-.176.333-.324.48-.465l.165-.156a5.98 5.98 0 00.536-.566c.358-.447.539-.925.539-1.593z"/>
+    </svg>
+`;
+svg[ICON_PLUS_MINUS] = `
+    <svg id="icon_${ICON_PLUS_MINUS}" viewBox="0 0 24 24" >
+        <path d="M12.5 6.75a.75.75 0 00-1.5 0V9H8.75a.75.75 0 000 1.5H11v2.25a.75.75 0 001.5 0V10.5h2.25a.75.75 0 000-1.5H12.5V6.75zM8.75 16a.75.75 0 000 1.5h6a.75.75 0 000-1.5h-6z"/><path fill-rule="evenodd" d="M5 1a2 2 0 00-2 2v18a2 2 0 002 2h14a2 2 0 002-2V7.018a2 2 0 00-.586-1.414l-4.018-4.018A2 2 0 0014.982 1H5zm-.5 2a.5.5 0 01.5-.5h9.982a.5.5 0 01.354.146l4.018 4.018a.5.5 0 01.146.354V21a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V3z"/>
+    </svg>
+`;
+svg[ICON_TERMINAL] = `
+    <svg id="icon_${ICON_TERMINAL}" viewBox="0 0 24 24" >
+        <path d="M9.25 12a.75.75 0 01-.22.53l-2.75 2.75a.75.75 0 01-1.06-1.06L7.44 12 5.22 9.78a.75.75 0 111.06-1.06l2.75 2.75c.141.14.22.331.22.53zm2 2a.75.75 0 000 1.5h5a.75.75 0 000-1.5h-5z"/><path fill-rule="evenodd" d="M0 4.75C0 3.784.784 3 1.75 3h20.5c.966 0 1.75.784 1.75 1.75v14.5A1.75 1.75 0 0122.25 21H1.75A1.75 1.75 0 010 19.25V4.75zm1.75-.25a.25.25 0 00-.25.25v14.5c0 .138.112.25.25.25h20.5a.25.25 0 00.25-.25V4.75a.25.25 0 00-.25-.25H1.75z"/>
+    </svg>
+`;
+svg[ICON_KOLIBRI] = `
+<svg id="icon_${ICON_KOLIBRI}" viewBox="0 0 128 128" style="fill:none" >
+    <path d="M82.375 106C80.0436 75.8514 58.9236 72.2085 48.775 67.9375C49.3236 74.8465 65.9582 80.6396 70.2898 84.7704C76.6469 90.8328 81.2331 95.8391 82.375 106Z" fill="#1E19FF"/>
+    <path d="M52.7125 54.025C52.7125 34.075 33.1562 26.4625 22 22C43.315 32.29 42.3438 42.8687 43.1312 58.225C44.8375 78.8312 63.2125 82.5062 63.2125 82.5062C50.875 72.5312 52.7125 63.2125 52.7125 54.025Z" fill="#FF2CA5"/>
+    <path d="M62.1239 84.2567C48.0491 78.3159 44.767 74.1573 43.525 60.85C43.525 60.85 48.5519 74.6326 62.1239 78.3159C75.696 81.9992 82.2075 98.0393 82.375 106C78.2095 91.148 75.6573 89.9689 62.1239 84.2567Z" fill="#6000FF"/>
+    <path d="M58.4127 62.7124C62.7709 39.208 83.6844 51.0936 94.8144 28.3C89.5866 54.8305 65.1945 55.0495 58.4127 62.7124Z" fill="#1E19FF"/>
+    <path d="M58.4156 62.7193C69.1306 44.5994 89.6791 52.8668 105.942 34.2029C97.3011 51.9087 87.6772 66.7312 58.4156 62.7193Z" fill="#FF2CA5"/>
+    <path d="M58.4064 62.7154C69.2766 74.3202 90.1304 65.5289 96.8058 58.0697C87.5516 63.8076 73.8789 55.7374 58.4064 62.7154Z" fill="#6000FF"/>
+    <ellipse cx="48.1188" cy="37.8812" rx="2.49375" ry="2.49375" fill="#14141B"/>
+    <path d="M51.4253 33.3451C47.9627 30.8207 43.78 33.9764 37.4875 29.4554C46.1943 30.0331 49.8099 26.8381 54.657 31.6257C59.5498 37.2528 55.1288 44.5092 59.9453 50.8416C54.2063 48.6284 55.7238 36.4788 51.4253 33.3451Z" fill="#1E19FF"/>
+</svg>
+`;
+svg[ICON_CHRISTMAS_TREE] = `
+<svg id="icon_${ICON_CHRISTMAS_TREE}" viewBox="0 0 512 512"  xml:space="preserve">
+	<path d="M449.414,478.037l-72.517-92.833c-16.287-0.187-24.22-12.898-28.482-19.753
+		c-0.437-0.718-0.968-1.57-1.499-2.389c-0.531,0.812-1.062,1.663-1.499,2.374c-4.294,6.901-12.304,19.753-28.81,19.753
+		c-16.521-0.016-24.5-12.875-28.794-19.777c-0.437-0.718-0.968-1.57-1.499-2.397c-0.547,0.82-1.062,1.671-1.515,2.39
+		c-4.294,6.901-12.305,19.745-28.795,19.745c-16.521-0.016-24.5-12.875-28.794-19.792c-0.437-0.711-0.968-1.561-1.499-2.389
+		c-0.547,0.828-1.078,1.678-1.515,2.389c-4.294,6.902-12.32,19.753-28.825,19.753c-16.521-0.015-24.5-12.882-28.795-19.792
+		c-0.437-0.71-0.968-1.561-1.499-2.381c-0.516,0.812-1.047,1.663-1.484,2.373c-4.263,6.84-12.18,19.473-28.357,19.715
+		l-72.658,93.012c-10.29,13.21-5.044,24.008,11.727,24.008c18.176,0,26.343-18.98,43.598-18.98
+		c17.271,0,17.271,28.935,34.526,28.935c17.27,0,17.27-28.935,34.525-28.935c17.271,0,17.271,28.935,34.526,28.935
+		c17.27,0,17.27-28.935,34.525-28.935c17.271,0,17.271,28.935,34.526,28.935c17.271,0,17.271-28.935,34.51-28.935
+		c17.286,0,17.286,28.935,34.51,28.935c17.271,0,17.271-28.935,34.526-28.935c17.27,0,25.453,18.98,43.614,18.98
+		C454.458,502.046,459.721,491.247,449.414,478.037z"/>
+	<path  d="M134.783,366.84c15.162,0,15.162-24.359,30.309-24.344c15.162,0,15.131,24.376,30.278,24.391
+		c15.178,0,15.193-24.367,30.356-24.344c15.147,0,15.131,24.367,30.278,24.383c15.148,0,15.163-24.368,30.31-24.337
+		c15.162,0,15.146,24.36,30.293,24.376c15.162,0,15.162-24.36,30.309-24.337c15.163,0,15.148,24.36,30.294,24.383
+		c16.755,0,21.924-10.697,11.477-23.797l-60.93-76.484c-2.483,0.422-5.075,0.703-7.808,0.703c-10.868,0-17.411-6.246-21.315-11.376
+		c-3.92,5.13-10.447,11.376-21.315,11.376c-10.853,0-17.396-6.246-21.316-11.376c-3.919,5.13-10.462,11.376-21.33,11.376
+		c-10.852,0-17.396-6.238-21.315-11.368c-3.904,5.13-10.447,11.368-21.3,11.368c-2.732,0-5.309-0.281-7.792-0.703l-60.947,76.288
+		C112.859,356.106,118.013,366.825,134.783,366.84z"/>
+	<path  d="M192.075,249.212c10.65,0,10.65-16.24,21.299-16.24s10.649,16.24,21.315,16.24
+		c10.681,0,10.681-16.24,21.314-16.24c10.666,0,10.666,16.24,21.331,16.24c10.634,0,10.634-16.24,21.315-16.24
+		c10.65,0,10.65,16.24,21.3,16.24c16.755,0,22.548-11.204,12.882-24.876l-59.26-83.776c-9.635-13.694-25.484-13.694-35.165,0
+		l-59.228,83.776C169.496,238.007,175.289,249.212,192.075,249.212z"/>
+	<polygon  points="213.656,130.293 256.004,104.176 298.321,130.293 286.579,81.956 324.492,49.766 274.899,46.01 
+		256.004,0 237.094,46.01 187.501,49.766 225.414,81.956 	"/>
+</svg>
+`;const xmlns ="http://www.w3.org/2000/svg";
+
+/**
+ * Convenience function to properly set up SVG elements for icons from their String representation.
+ * @param { IconNameType } iconName
+ * @return { SequenceType<SVGElement> }
+ */
+const icon = iconName => {
+    const svgString = svg[iconName] ?? svg[ICON_EMPTY];
+    const [iconSVG] =  /** @type { Array<SVGElement> } */ dom(svgString);
+
+    iconSVG.removeAttribute("height");      // remove attributes that we likely to override via class styling
+    iconSVG.removeAttribute("width");
+    iconSVG.removeAttribute("stroke-width");
+    iconSVG.removeAttribute("stroke-linecap");
+    iconSVG.removeAttribute("stroke-linejoin");
+
+    iconSVG.setAttribute("xmlns", xmlns);   // add standard attributes
+    iconSVG.setAttribute("class", "icon");
+
+    return Seq(iconSVG);
+};/**
  * @module projector/simpleForm/simpleInputProjector
  *
  * Following the projector pattern, this module exports an implementation of the {@link IInputProjector}
@@ -4659,6 +4767,7 @@ const projectInput = (timeout) => (eventType) =>
 
     inputController.onTooltipChanged( text => {
         popoverElement.innerHTML = text;                            // think about textContent or HTML
+        popoverElement.prepend(...icon(ICON_CHRISTMAS_TREE));
         const hide  = _e => popoverElement.hidePopover();
         const show  = _e => popoverElement.showPopover();
         spanElement .removeEventListener("mouseenter",  show);      // avoid duplicate listeners
@@ -4754,8 +4863,7 @@ const projectForm = formController => {
 			</fieldset>
 		</form>
     `);
-    /** @type { HTMLFormElement } */
-    const form = elements[0];
+    /** @type { HTMLFormElement } */ const form = elements[0];
     const fieldset = form.children[0];
 
     formController.forEach( inputController =>
@@ -5638,8 +5746,8 @@ const TestSuite = suiteName => {
  * @private
  */
 const report = (origin, results, messages) => {
-    const okStyle     = `style="color: ${colorOk};"`;
-    const failedStyle = `style="color: ${colorAccent};"`;
+    const okStyle     = `style="color: ${okColor};"`;
+    const failedStyle = `style="color: ${accentColor};"`;
 
     if ( results.every( elem => elem) ) {
         write (`
@@ -5742,9 +5850,9 @@ const memoize = f => {
         }
         return y;
     }
-};const release     = "0.9.10";
+};const release     = "0.9.8";
 
-const dateStamp   = "2025-01-07 T 12:24:25 MEZ";
+const dateStamp   = "2024-12-21 T 15:26:13 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
@@ -6148,119 +6256,7 @@ const [styleElement, contentElement] = dom(`
     <div class="${PAGE_CLASS}">
         Empty Page      
     </div>
-`);/**
- * A typesafe way to create icons from svg and ensure consistent styling.
- * Many icon SVGs based on www.svgrepo.com.
- */
-
-/**
- * @typedef {
- *        "empty"
- *      | "house"
- *      | "one_two"
- *      | "plus_minus"
- *      | "terminal"
- *      | "kolibri"
- *      | "christmas_tree"
- *      }  IconNameType
- */
-
-/** @type { IconNameType } */ const ICON_EMPTY          = "empty";
-/** @type { IconNameType } */ const ICON_HOUSE          = "house";
-/** @type { IconNameType } */ const ICON_ONE_TWO        = "one_two";
-/** @type { IconNameType } */ const ICON_PLUS_MINUS     = "plus_minus";
-/** @type { IconNameType } */ const ICON_TERMINAL       = "terminal";
-/** @type { IconNameType } */ const ICON_KOLIBRI        = "kolibri";
-/** @type { IconNameType } */ const ICON_CHRISTMAS_TREE = "christmas_tree";
-
-
-const svg = /** @type { Object.<IconNameType, String>  } */ {};
-
-svg[ICON_EMPTY] = `
-    <svg id="icon_${ICON_EMPTY}" viewBox="0 0 1 1" >
-    </svg>
-`;
-svg[ICON_HOUSE] = `
-    <svg id="icon_${ICON_HOUSE}" viewBox="0 0 30 32" >
-        <path d="M1 12.5815C1 11.6147 1.46592 10.7072 2.25152 10.1437L15 1L27.7485 10.1437C28.5341 10.7072 29 11.6147 29 12.5815V28.5C29 29.8807 27.8807 31 26.5 31H20.2C19.6477 31 19.2 30.5523 19.2 30V21.2727C19.2 20.9966 18.9761 20.7727 18.7 20.7727H11.3C11.0239 20.7727 10.8 20.9966 10.8 21.2727V30C10.8 30.5523 10.3523 31 9.8 31H3.5C2.11929 31 1 29.8807 1 28.5V12.5815Z" />
-    </svg>
-`;
-svg[ICON_ONE_TWO] = `
-    <svg id="icon_${ICON_ONE_TWO}" viewBox="0 0 24 24" >
-        <path d="M3.604 3.089A.75.75 0 014 3.75V8.5h.75a.75.75 0 010 1.5h-3a.75.75 0 110-1.5h.75V5.151l-.334.223a.75.75 0 01-.832-1.248l1.5-1a.75.75 0 01.77-.037zM8.75 5.5a.75.75 0 000 1.5h11.5a.75.75 0 000-1.5H8.75zm0 6a.75.75 0 000 1.5h11.5a.75.75 0 000-1.5H8.75zm0 6a.75.75 0 000 1.5h11.5a.75.75 0 000-1.5H8.75zM5.5 15.75c0-.704-.271-1.286-.72-1.686a2.302 2.302 0 00-1.53-.564c-.535 0-1.094.178-1.53.565-.449.399-.72.982-.72 1.685a.75.75 0 001.5 0c0-.296.104-.464.217-.564A.805.805 0 013.25 15c.215 0 .406.072.533.185.113.101.217.268.217.565 0 .332-.069.48-.21.657-.092.113-.216.24-.403.419l-.147.14c-.152.144-.33.313-.52.504l-1.5 1.5a.75.75 0 00-.22.53v.25c0 .414.336.75.75.75H5A.75.75 0 005 19H3.31l.47-.47c.176-.176.333-.324.48-.465l.165-.156a5.98 5.98 0 00.536-.566c.358-.447.539-.925.539-1.593z"/>
-    </svg>
-`;
-svg[ICON_PLUS_MINUS] = `
-    <svg id="icon_${ICON_PLUS_MINUS}" viewBox="0 0 24 24" >
-        <path d="M12.5 6.75a.75.75 0 00-1.5 0V9H8.75a.75.75 0 000 1.5H11v2.25a.75.75 0 001.5 0V10.5h2.25a.75.75 0 000-1.5H12.5V6.75zM8.75 16a.75.75 0 000 1.5h6a.75.75 0 000-1.5h-6z"/><path fill-rule="evenodd" d="M5 1a2 2 0 00-2 2v18a2 2 0 002 2h14a2 2 0 002-2V7.018a2 2 0 00-.586-1.414l-4.018-4.018A2 2 0 0014.982 1H5zm-.5 2a.5.5 0 01.5-.5h9.982a.5.5 0 01.354.146l4.018 4.018a.5.5 0 01.146.354V21a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V3z"/>
-    </svg>
-`;
-svg[ICON_TERMINAL] = `
-    <svg id="icon_${ICON_TERMINAL}" viewBox="0 0 24 24" >
-        <path d="M9.25 12a.75.75 0 01-.22.53l-2.75 2.75a.75.75 0 01-1.06-1.06L7.44 12 5.22 9.78a.75.75 0 111.06-1.06l2.75 2.75c.141.14.22.331.22.53zm2 2a.75.75 0 000 1.5h5a.75.75 0 000-1.5h-5z"/><path fill-rule="evenodd" d="M0 4.75C0 3.784.784 3 1.75 3h20.5c.966 0 1.75.784 1.75 1.75v14.5A1.75 1.75 0 0122.25 21H1.75A1.75 1.75 0 010 19.25V4.75zm1.75-.25a.25.25 0 00-.25.25v14.5c0 .138.112.25.25.25h20.5a.25.25 0 00.25-.25V4.75a.25.25 0 00-.25-.25H1.75z"/>
-    </svg>
-`;
-svg[ICON_KOLIBRI] = `
-<svg id="icon_${ICON_KOLIBRI}" viewBox="0 0 128 128" style="fill:none" >
-    <path d="M82.375 106C80.0436 75.8514 58.9236 72.2085 48.775 67.9375C49.3236 74.8465 65.9582 80.6396 70.2898 84.7704C76.6469 90.8328 81.2331 95.8391 82.375 106Z" fill="#1E19FF"/>
-    <path d="M52.7125 54.025C52.7125 34.075 33.1562 26.4625 22 22C43.315 32.29 42.3438 42.8687 43.1312 58.225C44.8375 78.8312 63.2125 82.5062 63.2125 82.5062C50.875 72.5312 52.7125 63.2125 52.7125 54.025Z" fill="#FF2CA5"/>
-    <path d="M62.1239 84.2567C48.0491 78.3159 44.767 74.1573 43.525 60.85C43.525 60.85 48.5519 74.6326 62.1239 78.3159C75.696 81.9992 82.2075 98.0393 82.375 106C78.2095 91.148 75.6573 89.9689 62.1239 84.2567Z" fill="#6000FF"/>
-    <path d="M58.4127 62.7124C62.7709 39.208 83.6844 51.0936 94.8144 28.3C89.5866 54.8305 65.1945 55.0495 58.4127 62.7124Z" fill="#1E19FF"/>
-    <path d="M58.4156 62.7193C69.1306 44.5994 89.6791 52.8668 105.942 34.2029C97.3011 51.9087 87.6772 66.7312 58.4156 62.7193Z" fill="#FF2CA5"/>
-    <path d="M58.4064 62.7154C69.2766 74.3202 90.1304 65.5289 96.8058 58.0697C87.5516 63.8076 73.8789 55.7374 58.4064 62.7154Z" fill="#6000FF"/>
-    <ellipse cx="48.1188" cy="37.8812" rx="2.49375" ry="2.49375" fill="#14141B"/>
-    <path d="M51.4253 33.3451C47.9627 30.8207 43.78 33.9764 37.4875 29.4554C46.1943 30.0331 49.8099 26.8381 54.657 31.6257C59.5498 37.2528 55.1288 44.5092 59.9453 50.8416C54.2063 48.6284 55.7238 36.4788 51.4253 33.3451Z" fill="#1E19FF"/>
-</svg>
-`;
-svg[ICON_CHRISTMAS_TREE] = `
-<svg id="icon_${ICON_CHRISTMAS_TREE}" viewBox="0 0 512 512"  xml:space="preserve">
-	<path d="M449.414,478.037l-72.517-92.833c-16.287-0.187-24.22-12.898-28.482-19.753
-		c-0.437-0.718-0.968-1.57-1.499-2.389c-0.531,0.812-1.062,1.663-1.499,2.374c-4.294,6.901-12.304,19.753-28.81,19.753
-		c-16.521-0.016-24.5-12.875-28.794-19.777c-0.437-0.718-0.968-1.57-1.499-2.397c-0.547,0.82-1.062,1.671-1.515,2.39
-		c-4.294,6.901-12.305,19.745-28.795,19.745c-16.521-0.016-24.5-12.875-28.794-19.792c-0.437-0.711-0.968-1.561-1.499-2.389
-		c-0.547,0.828-1.078,1.678-1.515,2.389c-4.294,6.902-12.32,19.753-28.825,19.753c-16.521-0.015-24.5-12.882-28.795-19.792
-		c-0.437-0.71-0.968-1.561-1.499-2.381c-0.516,0.812-1.047,1.663-1.484,2.373c-4.263,6.84-12.18,19.473-28.357,19.715
-		l-72.658,93.012c-10.29,13.21-5.044,24.008,11.727,24.008c18.176,0,26.343-18.98,43.598-18.98
-		c17.271,0,17.271,28.935,34.526,28.935c17.27,0,17.27-28.935,34.525-28.935c17.271,0,17.271,28.935,34.526,28.935
-		c17.27,0,17.27-28.935,34.525-28.935c17.271,0,17.271,28.935,34.526,28.935c17.271,0,17.271-28.935,34.51-28.935
-		c17.286,0,17.286,28.935,34.51,28.935c17.271,0,17.271-28.935,34.526-28.935c17.27,0,25.453,18.98,43.614,18.98
-		C454.458,502.046,459.721,491.247,449.414,478.037z"/>
-	<path  d="M134.783,366.84c15.162,0,15.162-24.359,30.309-24.344c15.162,0,15.131,24.376,30.278,24.391
-		c15.178,0,15.193-24.367,30.356-24.344c15.147,0,15.131,24.367,30.278,24.383c15.148,0,15.163-24.368,30.31-24.337
-		c15.162,0,15.146,24.36,30.293,24.376c15.162,0,15.162-24.36,30.309-24.337c15.163,0,15.148,24.36,30.294,24.383
-		c16.755,0,21.924-10.697,11.477-23.797l-60.93-76.484c-2.483,0.422-5.075,0.703-7.808,0.703c-10.868,0-17.411-6.246-21.315-11.376
-		c-3.92,5.13-10.447,11.376-21.315,11.376c-10.853,0-17.396-6.246-21.316-11.376c-3.919,5.13-10.462,11.376-21.33,11.376
-		c-10.852,0-17.396-6.238-21.315-11.368c-3.904,5.13-10.447,11.368-21.3,11.368c-2.732,0-5.309-0.281-7.792-0.703l-60.947,76.288
-		C112.859,356.106,118.013,366.825,134.783,366.84z"/>
-	<path  d="M192.075,249.212c10.65,0,10.65-16.24,21.299-16.24s10.649,16.24,21.315,16.24
-		c10.681,0,10.681-16.24,21.314-16.24c10.666,0,10.666,16.24,21.331,16.24c10.634,0,10.634-16.24,21.315-16.24
-		c10.65,0,10.65,16.24,21.3,16.24c16.755,0,22.548-11.204,12.882-24.876l-59.26-83.776c-9.635-13.694-25.484-13.694-35.165,0
-		l-59.228,83.776C169.496,238.007,175.289,249.212,192.075,249.212z"/>
-	<polygon  points="213.656,130.293 256.004,104.176 298.321,130.293 286.579,81.956 324.492,49.766 274.899,46.01 
-		256.004,0 237.094,46.01 187.501,49.766 225.414,81.956 	"/>
-</svg>
-`;const xmlns ="http://www.w3.org/2000/svg";
-
-/**
- * Convenience function to properly set up SVG elements for icons from their String representation.
- * @param { IconNameType } iconName
- * @return { SequenceType<SVGElement> }
- */
-const icon = iconName => {
-    const svgString = svg[iconName] ?? svg[ICON_EMPTY];
-    const [iconSVG] =  /** @type { Array<SVGElement> } */ dom(svgString);
-
-    iconSVG.removeAttribute("height");      // remove attributes that we likely to override via class styling
-    iconSVG.removeAttribute("width");
-    iconSVG.removeAttribute("stroke-width");
-    iconSVG.removeAttribute("stroke-linecap");
-    iconSVG.removeAttribute("stroke-linejoin");
-
-    iconSVG.setAttribute("xmlns", xmlns);   // add standard attributes
-    iconSVG.setAttribute("class", "icon");
-
-    return Seq(iconSVG);
-};const NAVIGATION_CLASS = "simpleNavigationProjector";
+`);const NAVIGATION_CLASS = "simpleNavigationProjector";
 
 const iconSVGStr = `
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -6367,7 +6363,7 @@ const projectorStyle = `
                     --icon-width:       1.6rem;
                     width:              var(--icon-width);
                     margin-inline:      calc( (3rem - var(--icon-width)) / 2); /* logo-width 3rem */
-                    fill:               var(--kolibri-color-accent);
+                    fill:               var(--kb-color-hsl-lavender-700);
                     aspect-ratio:       1;
                     stroke:             none;
                     transform:          translateY(20%);
@@ -6384,7 +6380,7 @@ const projectorStyle = `
                     pointer-events:     revert;
                     user-select:        none;
                     text-wrap:          nowrap;
-                    font-weight:        500;
+                    font-family:        system-ui;
                     transition-property:        width;
                     transition-duration:        .5s;
                     transition-timing-function: ease-out;
@@ -6394,7 +6390,7 @@ const projectorStyle = `
                     text-decoration:    none;
                 }
                 a.visited:not(.current), a.visited:not(.current) svg {
-                    filter:             opacity(85%) grayscale(60%);
+                    filter:             brightness(150%) grayscale(60%);
                 }
                 a.current {
                     color:              var(--kolibri-color-accent, deeppink);
@@ -6479,12 +6475,12 @@ const headElements = dom(`
             @layer pageLayer, navigationLayer, siteLayer, kolibriLayer, kolibriLightLayer;
         
             /* the new styling will have import such that we only need one line here. */
+            @import "${window.BASE_URI}css/kolibri-base-light.css"   layer(kolibriLightLayer);
             @import "${window.BASE_URI}css/kolibri-base.css"         layer(kolibriLayer);
             
             @layer ${SITE_CLASS}Layer { /* styles for the whole website */ 
                  body {
                      margin: 0;
-                     --color-nav-bg:         hsl( from var(--kolibri-color-secondary-bg) h s calc(l * 1.08));
                  }
                  #application-frame {
                      position:               fixed;
@@ -6502,17 +6498,16 @@ const headElements = dom(`
                  #top-nav {
                      grid-area:              top-nav;
                      align-self:             center;
-                     --kolibri-color-accent: white;
+                     filter:                 drop-shadow(0 0 .5rem white);
+                     --kolibri-color-accent: var(--kb-color-hsl-bg-light);
+                     font-weight:            bold;
                      & a {
                          margin-right:       1em;
-                     }
-                     & a:not(.current) {                         
-                         color:              var(--kolibri-color-secondary-bg);
                      }
                  }
                  #side-nav {
                      grid-area:              side-nav;
-                     background-color:       var(--color-nav-bg);
+                     background-color:       var(--kb-color-hsl-bg-light);
                      box-shadow:             var(--kolibri-box-shadow);
                      padding-block:          1lh;
                      & a {
@@ -6528,15 +6523,18 @@ const headElements = dom(`
                          aspect-ratio:       1 / 1;
                          display:            block;
                          border-radius:      50%;
-                         background-color:   var(--color-nav-bg);
-                         box-shadow:         1px 1px .2rem 0 var(--kolibri-color-accent) inset; 
+                         background-color:   var(--kb-color-hsl-bg-light);
+                         box-shadow:         1px 1px .2rem 0 var(--kb-color-hsl-lavender-700) inset; 
                      }
                  }
                  #top-backdrop {
                      grid-row:               1;
                      grid-column:            1 / -1;
                      z-index:                -10;
-                     background-image:       var(--kolibri-color-gradient-primary)
+                     background-image:       linear-gradient( 90deg,
+                                                 var(--kb-color-hsl-pink-300) 50%,
+                                                 var(--kb-color-hsl-lavender-700)
+                                             );
                  }
      
                  .content {                  /* must be shared in #content and #content-passivated */
@@ -6681,4 +6679,4 @@ const SiteController = () => {
         onPageActivated:   pageActivated.onChange,    // notify site projector
         onPagePassivated:  pagePassivated.onChange,   // notify site projector
     }
-};// production classes for bundling and statistics, without tests, examples, or customize
+};// production classes for bundling and statistics, without tests or examples
