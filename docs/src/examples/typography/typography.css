@@ -1,5 +1,5 @@
 
-@import "../css/kolibri-base.css";
+@import "../../../css/kolibri-base.css";
 
 body {
     font-family:        var(--Typescale-Fontfamily-heading, Saira);

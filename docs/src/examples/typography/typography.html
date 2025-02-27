@@ -3,7 +3,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Styleguide Typography</title>
-  <link rel="stylesheet" href="typography-template.css">
+  <link rel="stylesheet" href="typography.css">
   <style></style>
 </head>
 <body>
@@ -78,7 +78,7 @@
   <section class="animation">
     <h3>Animation</h3>
     <p>On hover: try mouse over here!</p>
-    <div class="hover-element">9</div>
+    <div class="hover-element">999 999</div>
   </section>
 
   <!-- Numbers and Punctuation Section -->
@@ -105,17 +105,14 @@
 
 <script type="module">
 
-  import { LOGO_KOLIBRI_SVG }                                 from "../img/logo/logo-svg.js";
-  import { dom, TEXT, RANGE }                                 from "../src/kolibri/util/dom.js";
-  import { SimpleInputController }                            from "../src/kolibri/projector/simpleForm/simpleInputController.js";
-  import { InputProjector, SIMPLE_INPUT_RANGE_SLIDER_CSS }    from "../src/kolibri/projector/simpleForm/simpleInputProjector.js";
+  import { dom, TEXT, RANGE }                              from "../../kolibri/util/dom.js";
+  import { SimpleInputController }                         from "../../kolibri/projector/simpleForm/simpleInputController.js";
+  import { InputProjector, SIMPLE_INPUT_RANGE_SLIDER_CSS } from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
+  import { icon }                                          from "../../kolibri/style/icon.js";
+  import { ICON_KOLIBRI }                                  from "../../customize/icons.js";
 
-  //TODO Discuss with Dierk for a better way
-  const generateUniqueId = ((prefix = 'unique-id') => {
-    let counter = 0;
-    return () => `${prefix}-${counter++}`;
-  })();
-
+  let counter = 0;
+  const generateUniqueId = () => `unique-id-${counter++}` ;
 
   const fontStyles          = [
     { name: 'Thin',       weight: 100 },
@@ -258,8 +255,9 @@
   document.querySelector('.numbers .radioBtnGroup').append(...genNumberAndPunctuationRadioBtn(numbersAndFractions, 'numberAndPunctuation'));
   document.querySelector('.punctuation .radioBtnGroup').append(...genNumberAndPunctuationRadioBtn(punctuationMarks, 'numberAndPunctuation'));
 
-  // Todo Discuss with Dierk if that is a good way to handle your Logo.
-  document.querySelector('.header-logo').append(...LOGO_KOLIBRI_SVG({width: 94, height: 94, viewBox: '0 0 128 128'}));
+  // document.querySelector('.header-logo').append(...LOGO_KOLIBRI_SVG({width: 94, height: 94, viewBox: '0 0 128 128'}));
+  document.querySelector('.header-logo').append(...icon(ICON_KOLIBRI));
+
   document.querySelector("head style").textContent += SIMPLE_INPUT_RANGE_SLIDER_CSS;
 
 
