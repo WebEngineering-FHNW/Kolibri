@@ -17,8 +17,8 @@
 
 /* --- typography --- */
 
-:root {
-    font-family: var(--kb-font-family-default), system-ui;
+body {
+    font-family: var(--font-family), system-ui;
 }
 
 header, h1, h2 {
@@ -30,13 +30,12 @@ header h1 {
 }
 
 h1, h2, h3 {
-    font-family: var(--kb-font-family-stylish),var(--kb-font-family-default), system-ui;
     font-weight: normal;
     text-wrap:   balance;
 }
 
 div, p, ul, ol, dl, form, fieldset, label {
-    font-family: var(--kb-font-family-running-text),var(--kb-font-family-default), system-ui;
+    font-family:    var(--font-family), system-ui;
     letter-spacing: 0.03em;
     font-weight:    300;
 }

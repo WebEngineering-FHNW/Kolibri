@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Kolibri Relative Heading Sizes</title>
+        <link rel="stylesheet" href="../../../css/kolibri-base.css">
+        <style>
+
+        </style>
+    </head>
+    <body class="document">
+        <pre>
+            The visual hierarchy of headings is created by applying a factor to the size
+            of the next smaller heading.
+
+            The overall size and the contrast in the visual hierarchy is different for
+            the document and the application context.
+
+            Heading level 4 is supposed to be scaled to the size of running readable text.
+        </pre>
+        <h1>Document Heading 1</h1><p>some text<span class="font-size-h1" > in font size h1</span></p>
+        <h2>Document Heading 2</h2><p>some text<span class="font-size-h2" > in font size h2</span></p>
+        <h3>Document Heading 3</h3><p>some text<span class="font-size-h3" > in font size h3</span></p>
+        <h4>Document Heading 4</h4><p>some text<span class="font-size-h4" > in font size h4</span></p>
+        <h5>Document Heading 5</h5><p>some text<span class="font-size-h5" > in font size h5</span></p>
+        <div class="application">
+            <h1>Application Heading 1</h1><p>some text<span class="font-size-h1" > in font size h1</span></p>
+            <h2>Application Heading 2</h2><p>some text<span class="font-size-h2" > in font size h2</span></p>
+            <h3>Application Heading 3</h3><p>some text<span class="font-size-h3" > in font size h3</span></p>
+            <h4>Application Heading 4</h4><p>some text<span class="font-size-h4" > in font size h4</span></p>
+            <h5>Application Heading 5</h5><p>some text<span class="font-size-h5" > in font size h5</span></p>
+        </div>
+        <p>
+            Finally, here is some text with
+            <span class="font-size-relative" style="--font-size-factor: 1.5">arbitrary relative font size (times 1.5)</span>
+        </p>
+
+        <hr>
+
+        <div style="--font-base-unit: 1.5vmin">
+            <p>
+                And by changing the font base unit, one can have responsive font sizes
+                with all the relative font sizes still in place.
+            </p>
+            <h1>Document Heading 1</h1><p>some text<span class="font-size-h1" > in font size h1</span></p>
+            <h2>Document Heading 2</h2><p>some text<span class="font-size-h2" > in font size h2</span></p>
+            <h3>Document Heading 3</h3><p>some text<span class="font-size-h3" > in font size h3</span></p>
+            <h4>Document Heading 4</h4><p>some text<span class="font-size-h4" > in font size h4</span></p>
+            <h5>Document Heading 5</h5><p>some text<span class="font-size-h5" > in font size h5</span></p>
+            <div class="application">
+                <h1>Application Heading 1</h1><p>some text<span class="font-size-h1" > in font size h1</span></p>
+                <h2>Application Heading 2</h2><p>some text<span class="font-size-h2" > in font size h2</span></p>
+                <h3>Application Heading 3</h3><p>some text<span class="font-size-h3" > in font size h3</span></p>
+                <h4>Application Heading 4</h4><p>some text<span class="font-size-h4" > in font size h4</span></p>
+                <h5>Application Heading 5</h5><p>some text<span class="font-size-h5" > in font size h5</span></p>
+            </div>
+            <p>
+                Finally, here is some text with
+                <span class="font-size-relative" style="--font-size-factor: 1.5">arbitrary relative font size (times 1.5)</span>
+            </p>
+        </div>
+
+    </body>
+</html>

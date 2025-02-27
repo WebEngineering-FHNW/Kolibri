@@ -53,7 +53,9 @@ header {
     gap:                    2rem;
 
     & .header-logo {
-    max-height:             94px; }
+        min-height:         6rem;
+        aspect-ratio:       1 /1;
+    }
 
     & .header-title {
     display:                flex;

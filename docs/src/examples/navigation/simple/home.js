@@ -97,8 +97,8 @@ const [contentElement] = dom(`
             </a>. </p>
             <p>The Kolibri navigation support is based on a bachelor project by
                our FHNW students Altermatt and Schnidrig.</p>            
-            <p>You can find a showcase of the initial contribution with many more features
-                <a href="https://kolibri-navigation.github.io/ip6-kolibri-navigation/prototype/showcase-app/#home">here</a>.
+            <p>You might also want to visit
+                <a href="https://kolibri-navigation.github.io/ip6-kolibri-navigation/prototype/showcase-app/#home">the initial contribution with many more features</a>.
             </p>
         </section>
         

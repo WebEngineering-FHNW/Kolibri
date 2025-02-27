@@ -48,7 +48,7 @@ const onBootstrap = () => {
 
 const [contentElement] = dom(`
     <div class="${PAGE_CLASS} prosa">
-        <div class="card">
+        <div class="application card">
             <h1>Person Master View</h1>
         
             <div class="holder" id="masterContainer">
@@ -56,7 +56,7 @@ const [contentElement] = dom(`
             </div>
         </div>
         
-        <div class="card" id="detailCard">
+        <div class="application card" id="detailCard">
             <h1>Person Detail</h1>
         
             <div class="holder" id="detailContainer">
