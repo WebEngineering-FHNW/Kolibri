@@ -1,34 +1,26 @@
 
 @import "../../../css/kolibri-base.css";
 
+:root {
+    --Typescale-Fontfamily-heading:                 Saira;
+    --Kolibri-Light-Monochrome---kb-color-black:    var(--kolibri-palette-mono-800);
+    --Kolibri-Light-Monochrome---kb-color-bg-dark:  var(--kolibri-palette-mono-600);
+    --Kolibri-Light-Monochrome---kb-color-plachold: var(--kolibri-palette-mono-400);
+    --Kolibri-Light-Monochrome---kb-color-body:     var(--kolibri-palette-mono-600);
+    --Kolibri-Light-Monochrome---kb-color-label:    var(--kolibri-palette-mono-600);
+    --Kolibri-Light-Monochrome---kb-color-bg-light: var(--kolibri-palette-mono-100);
+    --Kolibri-color-primary-light:                  var(--kolibri-color-primary-light);
+    --Kolibri-Light-Primary---kb-primary-accent:    var(--kolibri-color-primary-accent);
+
+    --Typescale-Lineheight-1:   2.4rem;
+    --Typescale-Lineheight-3:   2rem;
+    --Typescale-Lineheight-5:   1.1rem;
+    --Typescale-Fontsize-1:     1.6rem;
+    --Typescale-Fontsize-6:     1.25rem;
+}
+
 body {
-    font-family:        var(--Typescale-Fontfamily-heading, Saira);
-
-    & h1 {
-        margin:             0px;
-        color:              var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
-        font-size:          var(--Typescale-Fontsize-1, 6rem);
-        font-weight:        300;
-        letter-spacing:     -1px;
-    }
-
-    & h3 {
-        margin:             0px;
-        color:              var(--Kolibri-Light-Monochrome---kb-color-bg-dark, #262338);
-        font-size:          var(--Typescale-Lineheight-3, 2rem);
-        font-weight:        400;
-        line-height:        var(--Typescale-Lineheight-3, 2.5rem);
-        letter-spacing:     -0.5px;
-    }
-
-    & h5 {
-        margin:             0px;
-        color:              var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
-        font-size:          var(--Typescale-Lineheight-5, 1.1rem);
-        font-weight:        500;
-        line-height:        var(--Typescale-Lineheight-5, 1.4rem);
-        letter-spacing:     0.15px;
-    }
+    font-family:        var(--Typescale-Fontfamily-heading, Saira), cursive;
 
     & a {
         color:              rgb(0, 115, 230);
@@ -41,7 +33,31 @@ body {
         line-height:        var(--Typescale-Lineheight-1, 2.4rem);
         letter-spacing:     0.75px;
     }
+}
 
+h1 {
+    margin:             0;
+    color:              var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
+    font-weight:        300;
+    letter-spacing:     -1px;
+}
+
+h3 {
+    margin:             0;
+    color:              var(--Kolibri-Light-Monochrome---kb-color-bg-dark, #262338);
+    font-size:          var(--Typescale-Lineheight-3, 2rem);
+    font-weight:        400;
+    line-height:        var(--Typescale-Lineheight-3, 2.5rem);
+    letter-spacing:     -0.5px;
+}
+
+h5 {
+    margin:             0;
+    color:              var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    font-size:          var(--Typescale-Lineheight-5, 1.1rem);
+    font-weight:        500;
+    line-height:        var(--Typescale-Lineheight-5, 1.4rem);
+    letter-spacing:     0.15px;
 }
 
 header {
@@ -70,72 +86,69 @@ main {
     justify-content:    center;
     align-items:        center;
     padding:            4.5rem 5rem;
-    margin:             0px auto;
+    margin:             0 auto;
     gap:                6.25rem;
 }
 
 section {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 100rem;
-    gap: 5rem;
-    & > * { }
-    & > div:nth-child(1) { flex-grow: 2; flex-basis: 60rem; }
+    display:            flex;
+    align-items:        center;
+    width:              100%;
+    max-width:          100rem;
+    gap:                5rem;
+    & > div:nth-child(1) { flex-grow:   2; flex-basis: 60rem; }
     & > div:nth-child(2) { flex-shrink: 1; flex-basis: 42rem; }
 }
 
 .intro {
-    background: var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
-    border-radius: 12px;
-    padding: 8rem 6.25rem;
+    background:         var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
+    border-radius:      12px;
+    padding:            8rem 6.25rem;
 }
 
 .intro-name h3 {
-    color: var(--Kolibri-Light-Monochrome---kb-color-label, #6E7191);
-    font-weight: 300;
+    color:              var(--Kolibri-Light-Monochrome---kb-color-label, #6E7191);
+    font-weight:        300;
 }
 
 .intro-sample {
-    text-align: end;
-    font-size: 8rem;
-    font-weight: 600;
-    font-family: var(--Typescale-Fontfamily-heading, Saira);
-    color: var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
+    text-align:         end;
+    font-size:          8rem;
+    font-weight:        600;
+    font-family:        var(--Typescale-Fontfamily-heading, Saira), cursive;
+    color:              var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
 }
 
 .usage-number {
-    margin: 1.5rem 0px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: baseline;
-    gap: 0.5rem;
+    margin:             1.5rem 0;
+    display:            flex;
+    justify-content:    flex-start;
+    align-items:        baseline;
+    gap:                0.5rem;
 }
 
-.styles-input span{
-    width: 100%;
+.styles-input span {
+    width:              100%;
 }
 
 .styles-input input[type="text"] {
-    margin-top: 2.5rem;
-    box-sizing: border-box;
-    border-radius: 0.25rem;
-    line-height: 4rem;
-    text-indent: 1rem;
-    width: 100%;
-    border: 0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
-    font-family: var(--Typescale-Fontfamily-heading, Saira);
-    font-size: var(--Typescale-Fontsize-6, 1.25rem);
-    font-weight: 300;
-    letter-spacing: 0.1rem;
+    margin-top:         2.5rem;
+    box-sizing:         border-box;
+    border-radius:      0.25rem;
+    line-height:        4rem;
+    text-indent:        1rem;
+    width:              100%;
+    border:             0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    font-family:        var(--Typescale-Fontfamily-heading, Saira), cursive;
+    font-size:          var(--Typescale-Fontsize-6, 1.25rem);
+    font-weight:        300;
+    letter-spacing:     0.1rem;
 }
 
 .styles-slider {
-    align-self: flex-end;
-    margin-bottom: 1.25rem;
+    align-self:         flex-end;
+    margin-bottom:      1.25rem;
 }
-
-.styles-slider input[type="range"] { }
 
 /* Font styles */
 .font-weight-100 {
@@ -184,74 +197,74 @@ section {
 }
 
 .radioBtnGroup {
-    display: flex;
+    display:        flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap:      wrap;
 
 }
 
 
 .radioBtnGroup input[type="radio"] {
-    display: none;
+    display:        none;
 }
 
 .radioBtnGroup label {
 
-    box-sizing: border-box;
-    border-radius: 0.25rem;
-    line-height: 4rem;
-    width: 4rem;
-    background-color: var(--Kolibri-Light-Monochrome---kb-color-bg-light, #ffffff);
-    border: 0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
-    font-family: var(--Typescale-Fontfamily-heading, Saira);
-    font-size: var(--Typescale-Fontsize-6, 1.25rem);
-    font-weight: 300;
-    letter-spacing: 0.1rem;
+    box-sizing:         border-box;
+    border-radius:      0.25rem;
+    line-height:        4rem;
+    width:              4rem;
+    background-color:   var(--Kolibri-Light-Monochrome---kb-color-bg-light, #ffffff);
+    border:             0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    font-family:        var(--Typescale-Fontfamily-heading, Saira), cursive;
+    font-size:          var(--Typescale-Fontsize-6, 1.25rem);
+    font-weight:        300;
+    letter-spacing:     0.1rem;
 
-    display: inline-block;
-    text-align: center;
-    padding: 0 1rem;
-    cursor: pointer; /* Indicate interactivity */
+    display:            inline-block;
+    text-align:         center;
+    padding:            0 1rem;
+    cursor:             pointer; /* Indicate interactivity */
 }
 
 .radioBtnGroup input[type="radio"]:checked + label {
-    background: var(--Kolibri-Light-Monochrome---kb-color-bg-light, #EFF0F6);
-    color: var(--Kolibri-color-primary-light, #6000FF);
-    font-weight: 500;
-    border: 1px solid var(--Kolibri-color-primary-light, #6000FF);
+    background:     var(--Kolibri-Light-Monochrome---kb-color-bg-light, #EFF0F6);
+    color:          var(--Kolibri-color-primary-light, #6000FF);
+    font-weight:    500;
+    border:         1px solid var(--Kolibri-color-primary-light, #6000FF);
 }
 
 .radioBtnGroup input[type="radio"]:focus + label:hover {
-    background: var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
-    color: var(--Kolibri-color-primary-light, #6000FF);
-    border: 0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
-    scale: 1.1;
+    background:     var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
+    color:          var(--Kolibri-color-primary-light, #6000FF);
+    border:         0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    scale:          1.1;
 }
 
 /* Focused state for keyboard interaction */
 .radioBtnGroup label:focus {
-    outline: none;
+    outline:    none;
     background: var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
-    color: var(--kolibri-color-primary-light, #6000FF);
-    border: 0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
-    scale: 1.1; /* Optional, gives a zoom effect */
+    color:      var(--kolibri-color-primary-light, #6000FF);
+    border:     0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    scale:      1.1; /* Optional, gives a zoom effect */
 }
 
 .characters input[type="text"] {
-    width: 16rem;
-    box-sizing: border-box;
-    border-radius: 2rem;
-    border: 1px solid var(--Kolibri-Light-Primary---kb-primary-accent, #6000FF);
-    background: #FFF;
-    text-align: center;
+    width:          16rem;
+    box-sizing:     border-box;
+    border-radius:  2rem;
+    border:         1px solid var(--Kolibri-Light-Primary---kb-primary-accent, #6000FF);
+    background:     #FFF;
+    text-align:     center;
 
-    color: var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
+    color:          var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
     font-feature-settings: 'liga' off, 'clig' off;
-    font-family: Saira;
-    font-size: 10.75rem;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 10.75rem; /* 100% */
+    font-family:    Saira, cursive;
+    font-size:      10.75rem;
+    font-style:     normal;
+    font-weight:    600;
+    line-height:    10.75rem; /* 100% */
     letter-spacing: 0.125rem;
 
 }
