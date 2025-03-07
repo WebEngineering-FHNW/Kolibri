@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Styleguide Typography</title>
+  <title>Kolibri Font Saira</title>
   <link rel="stylesheet" href="typography.css">
   <style></style>
 </head>
@@ -12,8 +12,8 @@
 <header>
   <div class="header-logo"> <!-- Logo gets placed with js --></div>
   <div class="header-title">
-    <h5> Styleguide Typography</h5>
-    <h3> Kolibri Font Family / Sans-Serif</h3>
+    <div class="category font-size-h3">Styleguide Typography</div>
+    <div class="chapter  font-size-h2">Kolibri Font Family / Sans-Serif</div>
   </div>
 </header>
 
@@ -24,7 +24,7 @@
   <section class="intro">
       <div class="intro-name">
         <h1>Saira</h1>
-        <h3>Nice font for fancy headers but also reads well for running text.</h3>
+        <div class="blurb">Nice font for fancy headers but also reads well for running text.</div>
       </div>
       <div class="intro-sample">
         <span>Ag</span>
@@ -35,22 +35,24 @@
   <section>
     <div class="about">
       <h3>About</h3>
-      <p>Saira is a sans serif system. It features a huge range of weights and widths, ready for all kind of
-        typographic challenges.<br><br>
-        This is the Normal family, which is part of the superfamily along with <u> Semi Condensed,
-        Condensed,</u> and <u>Extra Condensed</u>, each with 9 weights.<br><br>
-        Saira has been upgraded in 2020 to a variable font with axes for weight and width, adding expanded
-        widths to the superfamily.<br><br>
-
-        This typeface was designed by Hector Gatti and developed by the Omnibus Type team. To contribute to the
-        project, visit <a href="https://github.com/Omnibus-Type/Saira" class="kolibri-link"> Github Saira </a>
-      </p>
+        <p>Saira is a sans serif system. It features a huge range of weights and widths, ready for all kind of
+            typographic challenges.</p>
+        <p>
+            This is the Normal family, which is part of the superfamily along with <u> Semi Condensed,
+            Condensed,</u> and <u>Extra Condensed</u>, each with 9 weights.</p>
+        <p>
+            Saira has been upgraded in 2020 to a variable font with axes for weight and width, adding expanded
+            widths to the superfamily.</p>
+        <p>
+            This typeface was designed by Hector Gatti and developed by the Omnibus Type team. To contribute to the
+            project, visit <a href="https://github.com/Omnibus-Type/Saira" class="kolibri-link">Saira on GitHub</a>.
+        </p>
     </div>
 
     <div class="usage">
       <h3>Usage</h3>
       <div class="usage-number">
-        <h1>11.6</h1><span>million</span>
+        <div class="font-size-h1">11.6</div><span>million</span>
       </div>
       <p>Number of times Google Fonts API served Saira Extra Condensed over the last week. Saira Extra Condensed
         is featured in more than 27,500 websites.</p>
@@ -77,8 +79,7 @@
   <!-- Animation Section -->
   <section class="animation">
     <h3>Animation</h3>
-    <p>On hover: try mouse over here!</p>
-    <div class="hover-element">999 999</div>
+    <p class="animate_on_hover">Font weight should smoothly change when mouse is over this text.</p>
   </section>
 
   <!-- Numbers and Punctuation Section -->
@@ -105,11 +106,11 @@
 
 <script type="module">
 
-  import { dom, TEXT, RANGE }                              from "../../kolibri/util/dom.js";
-  import { SimpleInputController }                         from "../../kolibri/projector/simpleForm/simpleInputController.js";
-  import { InputProjector, SIMPLE_INPUT_RANGE_SLIDER_CSS } from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
-  import { icon }                                          from "../../kolibri/style/icon.js";
-  import { ICON_KOLIBRI }                                  from "../../customize/icons.js";
+  import { dom, TEXT, RANGE }        from "../../kolibri/util/dom.js";
+  import { SimpleInputController }   from "../../kolibri/projector/simpleForm/simpleInputController.js";
+  import { InputProjector }          from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
+  import { icon }                    from "../../kolibri/style/icon.js";
+  import { ICON_KOLIBRI }            from "../../customize/icons.js";
 
   let counter = 0;
   const generateUniqueId = () => `unique-id-${counter++}` ;
@@ -220,7 +221,7 @@
 
     const container = document.createElement('div');
 
-    args.forEach((item, index) => {
+    args.forEach((item) => {
       const uniqueId = generateUniqueId();
       const elements = dom(`
             <input type="radio" id="${uniqueId}" name="${groupName}" value="${item}">
@@ -257,11 +258,6 @@
 
   // document.querySelector('.header-logo').append(...LOGO_KOLIBRI_SVG({width: 94, height: 94, viewBox: '0 0 128 128'}));
   document.querySelector('.header-logo').append(...icon(ICON_KOLIBRI));
-
-  document.querySelector("head style").textContent += SIMPLE_INPUT_RANGE_SLIDER_CSS;
-
-
-
 
 </script>
 

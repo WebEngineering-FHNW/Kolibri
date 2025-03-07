@@ -5,6 +5,8 @@
     - duplication and possible inconsistencies, i.e. in the page style name.
 */
 @layer pageLayer {
+
+    /*noinspection CssUnusedSymbol*/
     .home {
         header {
             display:        flex;
@@ -68,10 +70,13 @@
             opacity: 100;
         }
 
+
         &.activate {
             --activation-ms: 500;
             animation:       home_activation calc(var(--activation-ms) * 1ms) linear forwards;
         }
+
+        /*noinspection CssUnusedSymbol*/
 
         &.passivate {
             --passivation-ms: 500;
@@ -114,6 +119,7 @@
 /* Here we have a special case where we really want to
    override a kolibri default style and therefor put it outside the pageLayer
 */
+/*noinspection CssUnusedSymbol*/
 .home.passivate .kolibri-logo-anim {
     animation: kolibri_fly_out  calc(var(--passivation-ms) * 1ms) ease-in forwards;
 }

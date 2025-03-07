@@ -13,10 +13,10 @@
  * to the application while all business logic and their test cases remain untouched.
  */
 
-import {CHANGE, dom, select, INPUT, TIME, CHECKBOX}       from "../../util/dom.js";
-import { timeStringToMinutes, totalMinutesToTimeString}   from "../projectorUtils.js";
+import { CHANGE, dom, select, INPUT, TIME, CHECKBOX }      from "../../util/dom.js";
+import { timeStringToMinutes, totalMinutesToTimeString }   from "../projectorUtils.js";
 
-export { InputProjector, SIMPLE_INPUT_RANGE_SLIDER_CSS }
+export { InputProjector }
 
 /**
  * @private
@@ -146,100 +146,3 @@ const InputProjector = {
     projectChangeInput,
     projectDebounceInput
 };
-
-
-// Todo - Is INPUT_RANGE_CSS_CLASS_NAME needed here? Discuss with the @Direk König how to handle this in a better way.
-/**
- * String that must be unique in CSS classes and DOM id prefixes throughout the application.
- * @private
- * @type {string}
- */
-const INPUT_RANGE_CSS_CLASS_NAME = "kolibri-range-slider";
-
-
-/**
- * CSS snippet to append to the head style when using the form projector.
- * @type { String }
- * @example
- * document.querySelector("head style").textContent += SIMPLE_INPUT_RANGE_SLIDER_CSS;
- */
-
-// Todo - Add/Merge those CSS variables to the main CSS Style Sheet
-const SIMPLE_INPUT_RANGE_SLIDER_CSS = `
-
-input[type="range"] {
-    width               : var(--slider-width);
-    height              : var(--slider-height);
-    border-radius       : 50%;
-    outline             : none;
-    appearance          : none;
-    -webkit-appearance  : none;
-    cursor              : pointer;
-    position            : relative;
-}
-
-input[type="range"]::-webkit-slider-runnable-track {
-    height           : var(--track-height);
-    border-radius    : calc(var(--track-height) / 2);
-    background       : linear-gradient(
-                        to right,
-                        var(--track-fill-color) var(--slider-fill),
-                        var(--track-empty-color) var(--slider-fill)
-    );              
-}
-
- input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance  : none;
-    width               : var(--thumb-size);
-    height              : var(--thumb-size);
-    background          : var(--thumb-color);
-    border-radius       : 50%;
-    border              : var(--thumb-border) solid var(--thumb-border-color);
-    cursor              : pointer;
-    position            : relative;
-    top                 : calc((var(--track-height) - var(--thumb-size)) / 2);
-    transition          : transform 0.3s ease-in-out;
-    box-shadow          : 0 0 16px var(--thumb-glow-color), 
-                          0 0 32px var(--thumb-outer-glow-color);
-    animation           : pulseGlow var(--animation-duration) ease-in-out infinite;
-}
-
-input[type="range"]:hover::-webkit-slider-thumb {
-    transform        : scale(var(--thumb-hover-scale));
-    box-shadow       : 0 0 16px var(--thumb-glow-color), 
-                       0 0 32px var(--thumb-outer-glow-color);
-}
-
-input[type="range"]::-moz-range-track {
-    height           : var(--track-height);
-    border-radius    : calc(var(--track-height) / 2);
-    background       : linear-gradient(
-        to right,
-        var(--track-fill-color) var(--slider-fill),
-        var(--track-empty-color) var(--slider-fill)
-    );
-}
-
-input[type="range"]::-moz-range-thumb {
-    width            : var(--thumb-size);
-    height           : var(--thumb-size);
-    background       : var(--thumb-color);
-    border-radius    : 50%;
-    cursor           : pointer;
-}
-
-@keyframes pulseGlow {
-    0%, 100% {
-        box-shadow : 
-            0 0 16px var(--thumb-glow-color), 
-            0 0 32px var(--thumb-outer-glow-color);
-    }
-    50% {
-        box-shadow : 
-            0 0 24px var(--thumb-glow-color), 
-            0 0 48px var(--thumb-outer-glow-color);
-    }
-}
-    
-  
-`;

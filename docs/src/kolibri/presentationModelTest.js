@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import { TestSuite } from "./util/test.js";
 import {
     Attribute,

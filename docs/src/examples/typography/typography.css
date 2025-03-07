@@ -21,28 +21,16 @@
 
 body {
     font-family:        var(--Typescale-Fontfamily-heading, Saira), cursive;
-
-    & a {
-        color:              rgb(0, 115, 230);
-    }
-
-    & p {
-        color:              var(--Kolibri-Light-Monochrome---kb-color-body, #4E4B66);
-        font-size:          var(--Typescale-Fontsize-1, 1.6rem);
-        font-weight:        400;
-        line-height:        var(--Typescale-Lineheight-1, 2.4rem);
-        letter-spacing:     0.75px;
-    }
 }
 
-h1 {
+h1, .chapter {
     margin:             0;
     color:              var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
     font-weight:        300;
     letter-spacing:     -1px;
 }
 
-h3 {
+h3, .blurb {
     margin:             0;
     color:              var(--Kolibri-Light-Monochrome---kb-color-bg-dark, #262338);
     font-size:          var(--Typescale-Lineheight-3, 2rem);
@@ -51,13 +39,24 @@ h3 {
     letter-spacing:     -0.5px;
 }
 
-h5 {
+
+/*noinspection CssNonIntegerLengthInPixels*/
+h5, .category {
     margin:             0;
     color:              var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
     font-size:          var(--Typescale-Lineheight-5, 1.1rem);
     font-weight:        500;
     line-height:        var(--Typescale-Lineheight-5, 1.4rem);
     letter-spacing:     0.15px;
+}
+
+/*noinspection CssNonIntegerLengthInPixels*/
+p {
+    color:              var(--Kolibri-Light-Monochrome---kb-color-body, #4E4B66);
+    font-size:          var(--Typescale-Fontsize-1, 1.6rem);
+    font-weight:        400;
+    line-height:        var(--Typescale-Lineheight-1, 2.4rem);
+    letter-spacing:     0.75px;
 }
 
 header {
@@ -131,6 +130,7 @@ section {
     width:              100%;
 }
 
+/*noinspection CssNonIntegerLengthInPixels*/
 .styles-input input[type="text"] {
     margin-top:         2.5rem;
     box-sizing:         border-box;
@@ -208,6 +208,7 @@ section {
     display:        none;
 }
 
+/*noinspection CssNonIntegerLengthInPixels*/
 .radioBtnGroup label {
 
     box-sizing:         border-box;
@@ -234,6 +235,7 @@ section {
     border:         1px solid var(--Kolibri-color-primary-light, #6000FF);
 }
 
+/*noinspection CssNonIntegerLengthInPixels*/
 .radioBtnGroup input[type="radio"]:focus + label:hover {
     background:     var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
     color:          var(--Kolibri-color-primary-light, #6000FF);
@@ -242,6 +244,7 @@ section {
 }
 
 /* Focused state for keyboard interaction */
+/*noinspection CssNonIntegerLengthInPixels*/
 .radioBtnGroup label:focus {
     outline:    none;
     background: var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
@@ -267,4 +270,11 @@ section {
     line-height:    10.75rem; /* 100% */
     letter-spacing: 0.125rem;
 
+}
+
+.animate_on_hover {
+    transition: font-weight linear 1.5s;
+}
+.animate_on_hover:hover {
+    font-weight: 800;
 }
