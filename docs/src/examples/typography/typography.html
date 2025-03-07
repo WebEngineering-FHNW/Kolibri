@@ -173,19 +173,13 @@
   ];
 
   // -- Your own text input field --
-  //TODO Discuss with Dierk
-  // - if this is already kind of a form -> to be build with SimpleFormController?
-  // - if SimpleInputModel is needed? Or if its simpler with object as parameters (Model)
-  // const yourOwnTextM = new SimpleInputModel({ value : '', label: '', name: 'yourOwnText', type: TEXT});
   const yourOwnTextInputC =  SimpleInputController( { value : 'Type here to preview your text', label: '', name: 'yourOwnText', type: TEXT} );
   const yourOwnTextInputP =  InputProjector.projectInstantInput ( yourOwnTextInputC, 'styles-input-text');
 
-  // Todo Discuss with Dierk
-  // - would a Placeholder be a nice to have?
-  // - what would be then the value? empty or == placeholder?
-  // yourOwnTextInputP[1].querySelector('input').placeholder = 'Type here to preview your text';
   const yourOwnTextRangeC =  SimpleInputController( { value : '24', label: 'px', name: 'yourOwnTextSize', type: RANGE} );
   const yourOwnTextRangeP =  InputProjector.projectInstantInput ( yourOwnTextRangeC, 'styles-input-range');
+  yourOwnTextRangeP[0].classList.add("font_numeric"); // format and bind label
+  yourOwnTextRangeC.onValueChanged( val => yourOwnTextRangeC.setLabel(val.padStart(2,"0")+" px"));
 
   // -- Numbers and Punctuation --
   const numberAndPunctuationC = SimpleInputController( { value : '9', label: '', name: 'numberAndPunctuation', type: TEXT} );
@@ -193,7 +187,6 @@
 
 
   const genFontStyles = (args = []) => {
-
     const container = document.createElement('div');
 
     args.forEach(font => {
@@ -217,6 +210,7 @@
 
     return container.childNodes;
   };
+
   const genNumberAndPunctuationRadioBtn = (args = [], groupName)=> {
 
     const container = document.createElement('div');
@@ -249,15 +243,16 @@
 
 
 
-  document.querySelector('.styles-slider').append(...yourOwnTextRangeP);
-  document.querySelector('.styles-input').append(...yourOwnTextInputP);
-  document.querySelector('.styles-weights').append(...genFontStyles(fontStyles));
-  document.querySelector('.characters').append(...numberAndPunctuationP);
-  document.querySelector('.numbers .radioBtnGroup').append(...genNumberAndPunctuationRadioBtn(numbersAndFractions, 'numberAndPunctuation'));
-  document.querySelector('.punctuation .radioBtnGroup').append(...genNumberAndPunctuationRadioBtn(punctuationMarks, 'numberAndPunctuation'));
+  document.querySelector('.styles-slider')              .append(...yourOwnTextRangeP);
+  document.querySelector('.styles-input')               .append(...yourOwnTextInputP);
+  document.querySelector('.styles-weights')             .append(...genFontStyles(fontStyles));
+  document.querySelector('.characters')                 .append(...numberAndPunctuationP);
+  document.querySelector('.numbers .radioBtnGroup')     .append(...genNumberAndPunctuationRadioBtn(numbersAndFractions,
+                                                                                                   'numberAndPunctuation'));
+  document.querySelector('.punctuation .radioBtnGroup') .append(...genNumberAndPunctuationRadioBtn(punctuationMarks,
+                                                                                                   'numberAndPunctuation'));
 
-  // document.querySelector('.header-logo').append(...LOGO_KOLIBRI_SVG({width: 94, height: 94, viewBox: '0 0 128 128'}));
-  document.querySelector('.header-logo').append(...icon(ICON_KOLIBRI));
+  document.querySelector('.header-logo')                .append(...icon(ICON_KOLIBRI));
 
 </script>
 

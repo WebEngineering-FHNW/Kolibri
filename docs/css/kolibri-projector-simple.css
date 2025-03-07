@@ -68,6 +68,8 @@
 
 /* --- projected slider style  --- */
 
+/* currently disabled - discuss with Fabian
+
 input[type="range"] {
     --slider-width:         100%;
     --slider-height:        3lh;
@@ -157,3 +159,4 @@ input[type="range"]::-moz-range-thumb {
     }
 }
 
+*/

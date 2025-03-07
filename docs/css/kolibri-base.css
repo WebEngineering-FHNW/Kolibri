@@ -217,7 +217,7 @@ a.skip-link:not(:focus):not(:active) {
 }
 
 .font_numeric {
-    font-variant-numeric: tabular-nums slashed-zero;
+    font-variant-numeric: tabular-nums;
 }
 .font_numeric_fraction {
     font-variant-numeric: diagonal-fractions;
