@@ -50,7 +50,7 @@ const [contentElement] = dom(`
           <h2>Features</h2>
             <p>Kolibri supports the user of this site and its developers with these <em>basic</em> features:</p>
             <ul>
-                <li>use links in the page content or in the navigation menues</li>
+                <li>use links in the page content or in the navigation menus</li>
                 <li>use the browsers back and forward buttons and gestures</li>
                 <li>use the browser history</li>
                 <li>jump directly to any page via shared URL, QR code, or bookmark</li>
@@ -82,7 +82,7 @@ const [contentElement] = dom(`
             </p>
             <p>
                 <figure>
-                    <img src="typeError.png" alt="screenshoot of the type error" 
+                    <img src="typeError.png" alt="screenshot of the type error" 
                      style="max-width: 100%; border: 1px solid grey;">
                     <figcaption>The navigation type error as seen in the IDE.</figcaption> 
                 </figure>
