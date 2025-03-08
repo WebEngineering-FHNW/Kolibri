@@ -27,7 +27,6 @@ h1, .chapter {
     margin:             0;
     color:              var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
     font-weight:        300;
-    letter-spacing:     -1px;
 }
 
 h3, .blurb {
@@ -36,27 +35,22 @@ h3, .blurb {
     font-size:          var(--Typescale-Lineheight-3, 2rem);
     font-weight:        400;
     line-height:        var(--Typescale-Lineheight-3, 2.5rem);
-    letter-spacing:     -0.5px;
 }
 
 
-/*noinspection CssNonIntegerLengthInPixels*/
 h5, .category {
     margin:             0;
     color:              var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
     font-size:          var(--Typescale-Lineheight-5, 1.1rem);
     font-weight:        500;
     line-height:        var(--Typescale-Lineheight-5, 1.4rem);
-    letter-spacing:     0.15px;
 }
 
-/*noinspection CssNonIntegerLengthInPixels*/
 p {
     color:              var(--Kolibri-Light-Monochrome---kb-color-body, #4E4B66);
     font-size:          var(--Typescale-Fontsize-1, 1.6rem);
     font-weight:        400;
     line-height:        var(--Typescale-Lineheight-1, 2.4rem);
-    letter-spacing:     0.75px;
 }
 
 header {
@@ -126,28 +120,28 @@ section {
     gap:                0.5rem;
 }
 
-.styles-input span {
-    width:              100%;
-}
-
-/*noinspection CssNonIntegerLengthInPixels*/
 .styles-input input[type="text"] {
     margin-top:         2.5rem;
-    box-sizing:         border-box;
     border-radius:      0.25rem;
     line-height:        4rem;
     text-indent:        1rem;
-    width:              100%;
-    border:             0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    min-width:          36ch;
+    border:             1px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
     font-family:        var(--Typescale-Fontfamily-heading, Saira), cursive;
     font-size:          var(--Typescale-Fontsize-6, 1.25rem);
     font-weight:        300;
     letter-spacing:     0.1rem;
 }
+input[type="range"] {
+    width: 100%;
+}
 
 .styles-slider {
     align-self:         flex-end;
     margin-bottom:      1.25rem;
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    gap: 1em;
 }
 
 /* Font styles */
@@ -208,7 +202,6 @@ section {
     display:        none;
 }
 
-/*noinspection CssNonIntegerLengthInPixels*/
 .radioBtnGroup label {
 
     box-sizing:         border-box;
@@ -216,7 +209,7 @@ section {
     line-height:        4rem;
     width:              4rem;
     background-color:   var(--Kolibri-Light-Monochrome---kb-color-bg-light, #ffffff);
-    border:             0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    border:             0.05rem solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
     font-family:        var(--Typescale-Fontfamily-heading, Saira), cursive;
     font-size:          var(--Typescale-Fontsize-6, 1.25rem);
     font-weight:        300;
@@ -235,21 +228,19 @@ section {
     border:         1px solid var(--Kolibri-color-primary-light, #6000FF);
 }
 
-/*noinspection CssNonIntegerLengthInPixels*/
 .radioBtnGroup input[type="radio"]:focus + label:hover {
     background:     var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
     color:          var(--Kolibri-color-primary-light, #6000FF);
-    border:         0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    border:         0.05rem solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
     scale:          1.1;
 }
 
 /* Focused state for keyboard interaction */
-/*noinspection CssNonIntegerLengthInPixels*/
 .radioBtnGroup label:focus {
     outline:    none;
     background: var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
     color:      var(--kolibri-color-primary-light, #6000FF);
-    border:     0.75px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    border:     0.05rem solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
     scale:      1.1; /* Optional, gives a zoom effect */
 }
 
