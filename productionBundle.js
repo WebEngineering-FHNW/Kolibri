@@ -89,180 +89,6 @@ const Scheduler = () => {
         addOk: task => add( ok => { task(); ok(); }) // convenience
     }
 };/**
- * @module util/arrayFunctions
- * Utility module for array-dependent functions.
- */
-
-
-/**
- * A function that compares two arrays for equality by checking that they are of the same length and
- * all elements are pairwise equal with respect to the "===" operator. Arguments are given in curried style.
- * Arguments must not be null/undefined and must be of type {@link Array}.
- * @template T
- * @pure
- * @complexity O(n)
- * @haskell  [a] -> [a] -> bool
- * @function arrayEq
- * @type    { (arrayA:!Array<T>) => (arrayB:!Array<T>) => boolean }
- * @param   { !Array<T>} arrayA - the first array. Mandatory.
- * @returns { (arrayB:!Array<T>) => boolean}
- * @example
- * arrayEq ([])  ([])  === true;
- * arrayEq ([1]) ([2]) === false;
- */
-const arrayEq = arrayA => arrayB =>
-    arrayA.length === arrayB.length && arrayA.every( (it, idx) => it === arrayB[idx]);
-
-/**
- * From the {@link array}, remove the item at position "index". The arguments are given in curried style.
- * The index must be >= 0 and < `array.length` or nothing is removed and an empty array is returned.
- * @impure Since the given array is modified.
- * @function removeAt
- * @template T
- * @type    { (array:!Array<T>) => (index:!number) => Array<T> }
- * @param   { !Array<T>} array - the array to remove from. Mandatory.
- * @returns { (index:!number) => Array<T> } - finally, the removed element is returned in a singleton array, or an empty array in case nothing was removed, see {@link splice}
- * @example
- * const array = [1,2,3];
- * removeAt(array)(0);
- * arrayEq(array)([2,3]);
- */
-const removeAt = array => index => array.splice(index, 1);
-
-/**
- * From the {@link array}, remove the "item". The arguments are given in curried style.
- * In case that the item occurs multiple times in the array, only the first occurrence is removed.
- * @impure Since the given array is modified.
- * @function removeItem
- * @template T
- * @type    { (array:!Array<T>) => (item:!T) => Array<T> }
- * @param   { !Array<T>} array - the array to remove from. Mandatory.
- * @returns { (item:!T) => Array<T> } - finally, the removed element is returned in a singleton array or an empty array in case nothing was removed, see {@link splice}
- * @example
- * const array = ["a","b","c"];
- * removeItem(array)("b");
- * arrayEq(array)(["a","c"]);
- */
-const removeItem = array => item => {
-    const i = array.indexOf(item);
-    if (i >= 0) {
-        return removeAt(array)(i);
-    }
-    return [];
-};
-
-/**
- * @typedef { <_T_> (!Number) => _T_ } TimesCallback<_T_>
- */
-
-/**
- * A function that executes the optional {@link TimesCallback} "soMany" times, assembles the results and returns them in an
- * {@link array} of length "soMany". The arguments are given in curried style.
- * If no callback is given, the unaltered index is returned. Indexes go from 0 to soMany-1.
- * @impure if the callback is impure
- * @haskell  Int -> (Int -> a) -> [a]
- * @function times
- * @type    { <_T_> (soMany: !Number) => (cb: ?TimesCallback) => Array<_T_> }
- * soMany - how often to execute the callback. Negative values will be treated like 0. Mandatory.
- * @throws  { TypeError } - if soMany is given as a String but does not represent a number
- * @example
- * times(3)(i => console.log(i)); // logs 0, 1, 2
- * times(5)(x=>x*x); // returns [0, 1, 4, 9, 16]
- */
-const times = soMany => (callback) => {
-    const number = Number(soMany.valueOf());
-    if (isNaN(number)) {
-        throw new TypeError("Object '" + soMany + "' is not a valid number.");
-    }
-    return Array.from({length: number}, (it, idx) => callback ? callback(idx) : idx);
-};
-
-/**
- * @typedef { <_T_> (!_T_, index: ?Number) => Number } SumCallback<_T_>
- */
-
-/**
- * A function that sums up all items from an {@link array} by applying the {@link SumCallback} to each item before adding up.
- * The arguments are given in curried style.
- * @impure   if the callback is impure
- * @haskell  Num n => [a] -> (a -> n) -> n
- * @type    { <_T_> (array:!Array<_T_>) => (cb:  ProducerType<Number> | ?SumCallback<_T_>) => Number }
- * @example
- * sum([1,2,3])()     === 1 + 2 + 3;
- * sum(["1"])(Number) === 1;
- */
-const sum = array => (callback = Number) => {
-    const cb = /** @type {ProducerType<Number> | ?SumCallback} */ callback;
-    return array.reduce( (acc, cur, idx) => acc + cb(cur, idx), 0);
-};/**
- * @module util/array
- * Augmenting the {@link Array}, {@link String}, and {@link Number} prototypes with functions from the arrayFunctions module.
- * These functions live in their own module such that users of the library can keep their code clean
- * from prototype modifications if they prefer to do so.
- */
-
-
-/**
- * See {@link arrayEq}.
- * @template _T_
- * @param  { Array<_T_> } array
- * @return { Boolean  }
- * @example
- * [1].eq([1]); // true
- */
-Array.prototype.eq = function(array) { return arrayEq(this)(array);};
-
-/**
- * See {@link removeAt}.
- * @template _T_
- * @impure Modifies the array instance.
- * @param  { Number } index
- * @return { Array<_T_> }
- * @example
- * [1,2,3].removeAt(0);
- */
-Array.prototype.removeAt = function(index){ return removeAt(this)(index); };
-
-/**
- * See {@link removeItem}.
- * @template _T_
- * @impure Modifies the array instance.
- * @param  { _T_ } item
- * @return { Array<_T_> }
- * @example
- * ["a","b","c"].removeItem("b");
- */
-Array.prototype.removeItem = function(item){ return removeItem(this)(item); };
-
-/**
- * See {@link times}.
- * @template _T_
- * @param  { ?TimesCallback } callback
- * @return { Array<_T_> }
- * @example
- * "10".times(it => console.log(it));
- */
-String.prototype.times = function(callback = undefined){ return times(this)(callback); };
-
-/**
- * See {@link times}.
- * @template _T_
- * @param  { ?TimesCallback } callback
- * @return { Array<_T_> }
- * @example
- * (5).times(x => x * x); // [0, 1, 4, 9, 16]
- */
-Number.prototype.times = function(callback= undefined){ return times(this)(callback); };
-
-/**
- * See {@link sum}.
- * @param  { ?SumCallback } callback
- * @return { Number }
- * @example
- * [1,2,3].sum();     // 6
- * ["1"].sum(Number); // 1
- */
-Array.prototype.sum = function(callback = undefined){ return sum(this)(callback); };/**
  * @module lambda/church
  * Church encoding of the lambda calculus in JavaScript
  * to the extent that we need it in Kolibri.
@@ -1278,7 +1104,113 @@ const LOG_CONTEXT_KOLIBRI_TEST = LOG_CONTEXT_KOLIBRI_BASE + ".test";
 /**
  * Constant for the log context that logs for all contexts.
  * @type { String } */
-const LOG_CONTEXT_All = "";let warn$3 = undefined;
+const LOG_CONTEXT_All = "";/**
+ * @module util/arrayFunctions
+ * Utility module for array-dependent functions.
+ */
+
+
+/**
+ * A function that compares two arrays for equality by checking that they are of the same length and
+ * all elements are pairwise equal with respect to the "===" operator. Arguments are given in curried style.
+ * Arguments must not be null/undefined and must be of type {@link Array}.
+ * @template T
+ * @pure
+ * @complexity O(n)
+ * @haskell  [a] -> [a] -> bool
+ * @function arrayEq
+ * @type    { (arrayA:!Array<T>) => (arrayB:!Array<T>) => boolean }
+ * @param   { !Array<T>} arrayA - the first array. Mandatory.
+ * @returns { (arrayB:!Array<T>) => boolean}
+ * @example
+ * arrayEq ([])  ([])  === true;
+ * arrayEq ([1]) ([2]) === false;
+ */
+const arrayEq = arrayA => arrayB =>
+    arrayA.length === arrayB.length && arrayA.every( (it, idx) => it === arrayB[idx]);
+
+/**
+ * From the {@link array}, remove the item at position "index". The arguments are given in curried style.
+ * The index must be >= 0 and < `array.length` or nothing is removed and an empty array is returned.
+ * @impure Since the given array is modified.
+ * @function removeAt
+ * @template T
+ * @type    { (array:!Array<T>) => (index:!number) => Array<T> }
+ * @param   { !Array<T>} array - the array to remove from. Mandatory.
+ * @returns { (index:!number) => Array<T> } - finally, the removed element is returned in a singleton array, or an empty array in case nothing was removed, see {@link splice}
+ * @example
+ * const array = [1,2,3];
+ * removeAt(array)(0);
+ * arrayEq(array)([2,3]);
+ */
+const removeAt = array => index => array.splice(index, 1);
+
+/**
+ * From the {@link array}, remove the "item". The arguments are given in curried style.
+ * In case that the item occurs multiple times in the array, only the first occurrence is removed.
+ * @impure Since the given array is modified.
+ * @function removeItem
+ * @template T
+ * @type    { (array:!Array<T>) => (item:!T) => Array<T> }
+ * @param   { !Array<T>} array - the array to remove from. Mandatory.
+ * @returns { (item:!T) => Array<T> } - finally, the removed element is returned in a singleton array or an empty array in case nothing was removed, see {@link splice}
+ * @example
+ * const array = ["a","b","c"];
+ * removeItem(array)("b");
+ * arrayEq(array)(["a","c"]);
+ */
+const removeItem = array => item => {
+    const i = array.indexOf(item);
+    if (i >= 0) {
+        return removeAt(array)(i);
+    }
+    return [];
+};
+
+/**
+ * @typedef { <_T_> (!Number) => _T_ } TimesCallback<_T_>
+ */
+
+/**
+ * A function that executes the optional {@link TimesCallback} "soMany" times, assembles the results and returns them in an
+ * {@link array} of length "soMany". The arguments are given in curried style.
+ * If no callback is given, the unaltered index is returned. Indexes go from 0 to soMany-1.
+ * @impure if the callback is impure
+ * @haskell  Int -> (Int -> a) -> [a]
+ * @function times
+ * @type    { <_T_> (soMany: !Number) => (cb: ?TimesCallback) => Array<_T_> }
+ * soMany - how often to execute the callback. Negative values will be treated like 0. Mandatory.
+ * @throws  { TypeError } - if soMany is given as a String but does not represent a number
+ * @example
+ * times(3)(i => console.log(i)); // logs 0, 1, 2
+ * times(5)(x=>x*x); // returns [0, 1, 4, 9, 16]
+ */
+const times = soMany => (callback) => {
+    const number = Number(soMany.valueOf());
+    if (isNaN(number)) {
+        throw new TypeError("Object '" + soMany + "' is not a valid number.");
+    }
+    return Array.from({length: number}, (it, idx) => callback ? callback(idx) : idx);
+};
+
+/**
+ * @typedef { <_T_> (!_T_, index: ?Number) => Number } SumCallback<_T_>
+ */
+
+/**
+ * A function that sums up all items from an {@link array} by applying the {@link SumCallback} to each item before adding up.
+ * The arguments are given in curried style.
+ * @impure   if the callback is impure
+ * @haskell  Num n => [a] -> (a -> n) -> n
+ * @type    { <_T_> (array:!Array<_T_>) => (cb:  ProducerType<Number> | ?SumCallback<_T_>) => Number }
+ * @example
+ * sum([1,2,3])()     === 1 + 2 + 3;
+ * sum(["1"])(Number) === 1;
+ */
+const sum = array => (callback = Number) => {
+    const cb = /** @type {ProducerType<Number> | ?SumCallback} */ callback;
+    return array.reduce( (acc, cur, idx) => acc + cb(cur, idx), 0);
+};let warn$3 = undefined;
 /** @private */
 function checkWarning(list) {
     if (list.length > 100) {
@@ -1291,9 +1223,13 @@ function checkWarning(list) {
 
 /**
  * @template _T_
- * @typedef { (newValue:_T_, oldValue: ?_T_) => void } ValueChangeCallback
+ * @typedef { (newValue:_T_, oldValue: ?_T_, selfRemove: ?ConsumerType<void>) => void } ValueChangeCallback
  * This is a specialized {@link ConsumerType} with an optional second value.
  * The "oldValue" contains the value before the change.
+ * The "selfRemove" is an optional function with the side effect that the current listener can use to
+ * remove itself from the list of listeners.
+ * @example
+ * obs.onChange( (_val, _old, removeMe) => removeMe() );
  */
 
 /**
@@ -1325,21 +1261,24 @@ function checkWarning(list) {
  * obs.setValue("some other value"); // will be logged
  */
 function Observable(value) {
-    const listeners = [];
+    const listeners      = [];
+    const removeListener = listener => removeItem(listeners)(listener);
+    const noop           = () => undefined;
     return {
         onChange: callback => {
             checkWarning(listeners);
             listeners.push(callback);
-            callback(value, value);
+            callback(value, value, noop);
         },
         getValue: () => value,
         setValue: newValue => {
             if (value === newValue) return;
-            const oldValue = value;
-            value          = newValue;
-            listeners.forEach(callback => {
+            const oldValue    = value;
+            value             = newValue;
+            const safeIterate = [...listeners]; // shallow copy as we might change the listeners array while iterating
+            safeIterate.forEach( listener => {
                 if (value === newValue) { // pre-ordered listeners might have changed this and thus the callback no longer applies
-                    callback(value, oldValue);
+                    listener(value, oldValue, () => removeListener(listener));
                 }
             });
         }
@@ -1354,7 +1293,10 @@ function Observable(value) {
  * @template _T_
  * @impure   Observables change their inner decorated list and maintain two lists of observers that changes over time.  
  * @property { (cb:ConsumerType<_T_>) => void }  onAdd - register an observer that is called whenever an item is added.
- * @property { (cb:ConsumerType<_T_>) => void }  onDel - register an observer that is called whenever an item is added.
+ * @property { (cb:ConsumerType<_T_>) => void }  onDel -
+ * register an observer that is called whenever an item is deleted.
+ * The observer callback gets passed an optional second argument that allows to remove itself -
+ * just like {@link removeDeleteListener} following the same strategy as {@link ValueChangeCallback}.
  * @property { (_T_) => void }  add - add an item to the observable list and notify the observers. Modifies the list.
  * @property { (_T_) => void }  del - delete an item to the observable list and notify the observers. Modifies the list.
  * @property { (cb:ConsumerType<_T_>) => void }  removeAddListener - unregister the "add" observer
@@ -1401,7 +1343,7 @@ function ObservableList(list) {
         },
         removeAddListener,
         removeDeleteListener,
-        count:   () => list.length,
+        count:   ()   => list.length,
         countIf: pred => list.reduce((sum, item) => pred(item) ? sum + 1 : sum, 0)
     };
 }/**
@@ -5743,9 +5685,77 @@ const memoize = f => {
         }
         return y;
     }
-};const release     = "0.9.10";
+};/**
+ * @module util/array
+ * Augmenting the {@link Array}, {@link String}, and {@link Number} prototypes with functions from the arrayFunctions module.
+ * These functions live in their own module such that users of the library can keep their code clean
+ * from prototype modifications if they prefer to do so.
+ */
 
-const dateStamp   = "2025-01-07 T 12:24:25 MEZ";
+
+/**
+ * See {@link arrayEq}.
+ * @template _T_
+ * @param  { Array<_T_> } array
+ * @return { Boolean  }
+ * @example
+ * [1].eq([1]); // true
+ */
+Array.prototype.eq = function(array) { return arrayEq(this)(array);};
+
+/**
+ * See {@link removeAt}.
+ * @template _T_
+ * @impure Modifies the array instance.
+ * @param  { Number } index
+ * @return { Array<_T_> }
+ * @example
+ * [1,2,3].removeAt(0);
+ */
+Array.prototype.removeAt = function(index){ return removeAt(this)(index); };
+
+/**
+ * See {@link removeItem}.
+ * @template _T_
+ * @impure Modifies the array instance.
+ * @param  { _T_ } item
+ * @return { Array<_T_> }
+ * @example
+ * ["a","b","c"].removeItem("b");
+ */
+Array.prototype.removeItem = function(item){ return removeItem(this)(item); };
+
+/**
+ * See {@link times}.
+ * @template _T_
+ * @param  { ?TimesCallback } callback
+ * @return { Array<_T_> }
+ * @example
+ * "10".times(it => console.log(it));
+ */
+String.prototype.times = function(callback = undefined){ return times(this)(callback); };
+
+/**
+ * See {@link times}.
+ * @template _T_
+ * @param  { ?TimesCallback } callback
+ * @return { Array<_T_> }
+ * @example
+ * (5).times(x => x * x); // [0, 1, 4, 9, 16]
+ */
+Number.prototype.times = function(callback= undefined){ return times(this)(callback); };
+
+/**
+ * See {@link sum}.
+ * @param  { ?SumCallback } callback
+ * @return { Number }
+ * @example
+ * [1,2,3].sum();     // 6
+ * ["1"].sum(Number); // 1
+ */
+Array.prototype.sum = function(callback = undefined){ return sum(this)(callback); };const release     = "0.9.11";
+
+const dateStamp   = "2025-03-24 T 20:47:15 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
