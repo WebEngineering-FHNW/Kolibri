@@ -1,6 +1,6 @@
-import "./util/array.js";
 import { LoggerFactory }            from "./logger/loggerFactory.js";
 import { LOG_CONTEXT_KOLIBRI_BASE } from "./logger/logConstants.js";
+import { removeItem }               from "./util/arrayFunctions.js";
 
 export {Observable, ObservableList}
 
@@ -17,9 +17,13 @@ function checkWarning(list) {
 
 /**
  * @template _T_
- * @typedef { (newValue:_T_, oldValue: ?_T_) => void } ValueChangeCallback
+ * @typedef { (newValue:_T_, oldValue: ?_T_, selfRemove: ?ConsumerType<void>) => void } ValueChangeCallback
  * This is a specialized {@link ConsumerType} with an optional second value.
  * The "oldValue" contains the value before the change.
+ * The "selfRemove" is an optional function with the side effect that the current listener can use to
+ * remove itself from the list of listeners.
+ * @example
+ * obs.onChange( (_val, _old, removeMe) => removeMe() );
  */
 
 /**
@@ -51,21 +55,24 @@ function checkWarning(list) {
  * obs.setValue("some other value"); // will be logged
  */
 function Observable(value) {
-    const listeners = [];
+    const listeners      = [];
+    const removeListener = listener => removeItem(listeners)(listener);
+    const noop           = () => undefined;
     return {
         onChange: callback => {
             checkWarning(listeners);
             listeners.push(callback);
-            callback(value, value);
+            callback(value, value, noop);
         },
         getValue: () => value,
         setValue: newValue => {
             if (value === newValue) return;
-            const oldValue = value;
-            value          = newValue;
-            listeners.forEach(callback => {
+            const oldValue    = value;
+            value             = newValue;
+            const safeIterate = [...listeners]; // shallow copy as we might change the listeners array while iterating
+            safeIterate.forEach( listener => {
                 if (value === newValue) { // pre-ordered listeners might have changed this and thus the callback no longer applies
-                    callback(value, oldValue);
+                    listener(value, oldValue, () => removeListener(listener));
                 }
             });
         }
@@ -80,7 +87,10 @@ function Observable(value) {
  * @template _T_
  * @impure   Observables change their inner decorated list and maintain two lists of observers that changes over time.  
  * @property { (cb:ConsumerType<_T_>) => void }  onAdd - register an observer that is called whenever an item is added.
- * @property { (cb:ConsumerType<_T_>) => void }  onDel - register an observer that is called whenever an item is added.
+ * @property { (cb:ConsumerType<_T_>) => void }  onDel -
+ * register an observer that is called whenever an item is deleted.
+ * The observer callback gets passed an optional second argument that allows to remove itself -
+ * just like {@link removeDeleteListener} following the same strategy as {@link ValueChangeCallback}.
  * @property { (_T_) => void }  add - add an item to the observable list and notify the observers. Modifies the list.
  * @property { (_T_) => void }  del - delete an item to the observable list and notify the observers. Modifies the list.
  * @property { (cb:ConsumerType<_T_>) => void }  removeAddListener - unregister the "add" observer
@@ -127,7 +137,7 @@ function ObservableList(list) {
         },
         removeAddListener,
         removeDeleteListener,
-        count:   () => list.length,
+        count:   ()   => list.length,
         countIf: pred => list.reduce((sum, item) => pred(item) ? sum + 1 : sum, 0)
     };
 }

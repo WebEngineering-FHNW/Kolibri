@@ -123,4 +123,21 @@ observableSuite.add("memory leak warning", assert => {
     assert.is(obs.getValue(), 0);
 });
 
+observableSuite.add("no memory leak warning if removed", assert => {
+    const obs = Observable( 0 ); // decorator pattern
+
+    withDebugTestArrayAppender(appender => {
+        setLoggingLevel(LOG_WARN);
+        setLoggingContext("ch.fhnw.kolibri.observable");
+
+        Walk(100).forEach$( _n => obs.onChange( (_val, _old, removeMe) => removeMe()) );
+        obs.setValue(1);                // triggers the self-removal of all previous listeners
+        obs.onChange( _x => undefined); // no longer: one to many
+
+        assert.is(appender.getValue().length, 0);
+    });
+
+    assert.is(obs.getValue(), 1);
+});
+
 observableSuite.run();
