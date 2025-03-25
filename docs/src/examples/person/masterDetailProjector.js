@@ -29,7 +29,7 @@ const projectMasterView = (listController, selectionController) => {
     };
 
     rootElement.classList.add(masterClassName);
-    rootElement.style['grid-template-columns'] = '2em repeat(' + ALL_ATTRIBUTE_NAMES.length + ', auto);';
+    rootElement.setAttribute("style","grid-template-columns: 2em repeat(" + ALL_ATTRIBUTE_NAMES.length + ", auto);");
 
     // binding
     listController.onModelAdd(renderRow);

@@ -165,15 +165,22 @@ const projectForm = (detailController, detailCard, model, attributeNames) => {
  */
 const pageCss = `
     .${masterClassName} {
-        display:        grid;
-        grid-gap:       0.5em;
-        grid-row-gap:   0.5em;
+        display:            grid;
+        grid-gap:           0.5em;
+        grid-row-gap:       0.5em;
+        justify-content:    start;
+        overflow-x:         scroll;
         grid-template-columns: 2em auto auto; /* default: to be overridden dynamically */        
-        margin-bottom:  0.5em ;
+        margin-bottom:       0.5em ;
         
         & label { /* labels are not shown in the master view but are in the dom for validity */
             display:        none;
         }  
+        
+        & input {        
+            min-width:      5em;
+            field-sizing:   content;
+        }
         
         & .delete {
             background-color:   transparent;
