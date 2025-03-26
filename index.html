@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang=en>
+<head>
+	<meta charset="UTF-8">
+	<title>Kolibri</title>
+	<link rel="shortcut icon" type="image/png" href="./docs/img/logo/logo-60x54.png"/>
+	<link rel="stylesheet"                     href="./docs/css/kolibri-base.css">
+    <style>
+        body {
+			max-width: 		42em;
+			margin: 		3em auto 3em auto;
+        }
+		header {
+			display: 		flex;
+			flex-direction: column;
+			align-items: 	center;
+		}
+        .subtitle {
+            font-family: var(--font-family-stylish), system-ui;
+        }
+		ul {
+			list-style-type: none;
+			padding-left: 		0;
+		}
+		dl {
+			display: grid;
+			grid-template-columns: max-content auto;
+		}
+
+        header {
+            display:        flex;
+            flex-direction: column;
+            align-items:    center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left:    0;
+        }
+
+        dl {
+            display:               grid;
+            grid-template-columns: max-content auto;
+        }
+
+        div.kolibri-logo-svg {
+            height:       250px;
+            aspect-ratio: 1;
+            padding:      2em;
+            transition:   transform .4s linear;
+        }
+
+        svg {
+            overflow: visible;
+        }
+
+        .flatter {
+            animation-name:            kolibri-wings;
+            animation-duration:        .2s;
+            animation-iteration-count: 15;
+            animation-direction:       reverse;
+            animation-timing-function: ease-in;
+            transform-origin:          45% 45%;
+        }
+
+        @keyframes kolibri-wings {
+            from {
+                transform: scaleX(1) rotate(0deg);
+            }
+            to {
+                transform: scaleX(-1) rotate(30deg);
+            }
+        }
+
+    </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a> <!-- a11y support skip link -->
+<header>
+    <div class="kolibri-logo-svg kolibri-logo-anim">
+        <svg viewBox="0 0 305 342" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M138 194C183.5 214.5 228 221.5 236.5 341.5C229.5 273.5 187 263.5 138 194Z" fill="#5F2EEA"/>
+            <path
+                d="M117 122C117 46 42.5 17 0 0C81.2 39.2 77.5 79.5 80.5 138C87 216.5 128 235.667 150.5 248C105.7 212 117 157 117 122Z"
+                fill="#FE2EA8"/>
+            <path
+                d="M80.9999 144.5C81.3468 146.565 81.692 148.581 82.0374 150.552C86.8892 170.965 107.957 211.566 156.5 225.5C210.5 241 236.407 308.5 237.074 342C220.5 279.5 210.346 274.538 156.5 250.5C102.35 226.326 92.1459 208.229 82.0374 150.552C81.492 148.257 81.1515 146.218 80.9999 144.5Z"
+                fill="#BE58FD"/>
+            <path
+                d="M115 49.5C100.5 39.8333 79 51.0005 54 32C92.5 36.5 109.5 26 129.5 44C149.5 65 128.5 90 148 113.499C123.5 104.499 133 61.5 115 49.5Z"
+                fill="#5F2EEA"/>
+            <circle cx="100.5" cy="60.5" r="9.5" fill="#2D1FB1"/>
+            <path class="wing flatter" opacity="0.5"
+                  d="M128 179.114C176.159 220.174 254.92 177.348 279 146C243.884 171.608 187.698 146.442 128 179.114Z"
+                  fill="#BD53FE" stroke="#BD53FE"/>
+            <path class="wing flatter" opacity="0.7"
+                  d="M128 158C163.892 67.1818 241.575 130.021 305 47C263.208 149.285 161.925 132.314 128 158Z"
+                  fill="#4C2EEC"/>
+            <path class="wing flatter" opacity="0.7"
+                  d="M128 178.895C162.922 103.67 248.073 126.739 305 47C278.211 119.718 247.116 181.904 128 178.895Z"
+                  fill="#FF2CA5"/>
+        </svg>
+    </div>
+    <h1>Kolibri</h1>
+    <div class="subtitle">The Web UI Toolbox</div>
+</header>
+
+<main id="main" tabindex="-1"> <!-- a11y support: can be tabbed to -->
+
+    <section>
+        <h2>What's New</h2>
+        <p>
+            Beta testing new features: <a href="./src/examples/navigation/simple/simpleNavigation.html">typesafe
+            routing and animated page transitions</a> (basic start, more to come).
+            All <a href="https://github.com/WebEngineering-FHNW/Kolibri/issues/15">feedback</a> is
+            much appreciated!
+        </p>
+    </section>
+
+    <section>
+        <h2>Features</h2>
+        <p>
+            Kolibri's typesafe <em>standard library</em> contains the functional and immutable:
+            Pair, Tuple, Maybe, Either, Choice, Sequence, JINQ, and JSON monad
+            along with many church-encoded lambda abstractions.
+        </p>
+        <p>
+            For interactive <em>user interfaces</em> we have:
+            Observable, ObservableList, DataFlowVariable, Scheduler, Attribute, and the ModelWorld.
+        </p>
+        <p>
+            Additional utilities care for: array extensions,
+            DOM handling, test facility (incl. async testing), logging, and REST calls.
+        </p>
+        <p>
+            Classic MVC and the <em>Projector Pattern</em> lead us
+            from simple to more-and-more advanced web clients as shown in the
+            <a href="./examples.html">examples</a>. The UI becomes rich, reliable,
+            consistent and efficient to build and maintain.
+        </p>
+        <p>
+            Kolibri also puts forward <em>best practices</em> on how to organize code,
+            organize types, organize styles, develop to interfaces,
+            layout code, use JavaScript features wisely, ubiquitous testing, and helpful JsDoc.
+        </p>
+    </section>
+
+    <section>
+        <h2>Examples</h2>
+        <p>Browse through many <a href="./examples.html">examples</a>.
+        </p>
+    </section>
+
+    <section>
+        <h2>Guided Tour</h2>
+        <p>Take the tour through a selection of examples in order to understand how
+            Kolibri helps with developing web applications. They are arranged from simple to
+            increasingly complex and introduce new concepts along the way.
+        </p>
+        <p>Create a <a href="./src/examples/simpleForm/simpleFormView.html">simple form</a> very
+            efficiently with just one line of code.
+        </p>
+        <p>Enforce and test <a href="./src/examples/workday/WorkingHours.html">business rules</a> in the UI
+            to interactively manage working hours in a day.
+        </p>
+        <p>Put the daily work hours in a <a href="./src/examples/workweek/WorkingHours.html">week overview</a>
+            and keep all the business rules in place by simply delegating to what we have done before.
+            Show compositionality of controllers and projectors.
+        </p>
+        <p>Have some fun with multi-way editing in a
+            <a href="./src/examples/person/MasterDetail.html">master-detail</a> view.
+            It builds on what we already know and adds real interactive richness to our application.
+        </p>
+    </section>
+
+    <section>
+        <h2>Why is Kolibri the way it is?</h2>
+        <p>Have a look at our <a href="philosophy.html">philosophy</a>.
+        </p>
+    </section>
+
+    <section>
+        <h2>Free Open Source</h2>
+        <p>
+            Kolibri is freely available on
+            <a href="https://github.com/webengineering-fhnw/Kolibri/">GitHub</a>, which is
+            also the place for any discussions and issues.
+        </p>
+        <p>
+            Please have a look at how to
+            <a href="philosophy.html#installation">install without dependencies</a>.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <h2>Contact</h2>
+    <address>
+        <a href="https://dierk.github.io/Home">Prof. Dierk König</a>
+    </address>
+</footer>
+</body>
+</html>
