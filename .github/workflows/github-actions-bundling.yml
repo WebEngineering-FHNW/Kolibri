@@ -22,8 +22,3 @@ jobs:
       run: |
         cd docs/production
         npx rollup -o productionBundle.js -f es production.js --no-treeshake --compact
-
-    - name: Deploy bundle to github pages
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        folder: . # The folder the action should deploy.

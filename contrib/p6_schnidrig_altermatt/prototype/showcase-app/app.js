@@ -1,18 +1,18 @@
-import { NavigationController }                            from '../../../../docs/src/kolibri/navigation/navigationController.js';
-import { CardNavigationProjector }                         from '../../../../docs/src/kolibri/navigation/projector/card/cardNavigationProjector.js';
+import { NavigationController }           from '../../../../src/kolibri/navigation/navigationController.js';
+import { CardNavigationProjector }        from '../../../../src/kolibri/navigation/projector/card/cardNavigationProjector.js';
 // import { SideNavigationProjector }                       from "../../../../docs/src/kolibri/navigation/projector/dashboard-refined/dashboardRefinedNavigationProjector.js";
-import { FlowerNavigationProjector }                       from "../../../../docs/src/kolibri/navigation/projector/flower/flowerNavigationProjector.js";
-import { BubbleStateNavigationProjector }                  from "../../../../docs/src/kolibri/navigation/projector/bubble/bubbleNavigationProjector.js";
-import { BreadCrumbProjector }                             from "../../../../docs/src/kolibri/navigation/projector/breadcrumb/breadCrumbProjector.js";
+import { FlowerNavigationProjector }      from "../../../../src/kolibri/navigation/projector/flower/flowerNavigationProjector.js";
+import { BubbleStateNavigationProjector } from "../../../../src/kolibri/navigation/projector/bubble/bubbleNavigationProjector.js";
+import { BreadCrumbProjector }            from "../../../../src/kolibri/navigation/projector/breadcrumb/breadCrumbProjector.js";
 // import { PageSwitchProjector }                             from '../../../../docs/src/kolibri/navigation/projector/page-switch/pageSwitchProjector.js';
 import { PageController }                                  from '../pages/pageController.js';
 import { ForbiddenPageProjector }                          from '../pages/error-pages/403/forbiddenPageProjector.js';
 import { PageNotFoundProjector }                           from '../pages/error-pages/404/pageNotFoundProjector.js';
 import { StaticPageProjector }                             from '../pages/StaticPageProjector.js';
 import { DebugPageProjector }                              from '../pages/debug/debugPageProjector.js';
-import { StyleGuidePageProjector }                         from '../pages/style-guide/styleGuidePageProjector.js';
-import { SimpleFormController }                            from "../../../../docs/src/kolibri/projector/simpleForm/simpleFormController.js";
-import { SimpleFormPageProjector }                         from "../pages/simpleform/simpleFormPageProjector.js";
+import { StyleGuidePageProjector }        from '../pages/style-guide/styleGuidePageProjector.js';
+import { SimpleFormController }           from "../../../../src/kolibri/projector/simpleForm/simpleFormController.js";
+import { SimpleFormPageProjector }        from "../pages/simpleform/simpleFormPageProjector.js";
 import { TestCasesPageProjector }                          from "../pages/test-cases/testCasesPageProjector.js";
 import { DayController }                                   from "../pages/workday/dayController.js";
 import { WorkDayPageProjector }                            from "../pages/workday/workDayPageProjector.js";
@@ -20,7 +20,7 @@ import { WeekController }                                  from "../pages/workwe
 import { WorkWeekPageProjector }                           from "../pages/workweek/workWeekPageProjector.js";
 import { Person, personSelectionMold }                     from "../pages/person/person.js";
 import { PersonListController, PersonSelectionController}  from "../pages/person/personController.js";
-import { PersonPageProjector }                             from "../pages/person/personPageProjector.js";
+import { PersonPageProjector }            from "../pages/person/personPageProjector.js";
 import {
     DEBUGMODE, DESCRIPTION,
     FAVICON,
@@ -29,7 +29,7 @@ import {
     LOGO,
     NAME, NAVIGATIONAL, VALUE,
     VISIBLE
-} from '../../../../docs/src/kolibri/presentationModel.js';
+}                                         from '../../../../src/kolibri/presentationModel.js';
 import {
     CHECKBOX,
     COLOR,
@@ -37,11 +37,11 @@ import {
     NUMBER,
     TEXT,
     TIME
-} from "../../../../docs/src/kolibri/util/dom.js";
-import {PageSwitchProjector} from "../../../../docs/src/kolibri/navigation/projector/pageSwitch/pageSwitchProjector.js";
+}                                         from "../../../../src/kolibri/util/dom.js";
+import {PageSwitchProjector}              from "../../../../src/kolibri/navigation/projector/pageSwitch/pageSwitchProjector.js";
 import {
     SideNavigationProjector
-}                            from "../../../../docs/src/kolibri/navigation/projector/sideNavigation/sideNavigationProjector.js";
+}                                         from "../../../../src/kolibri/navigation/projector/sideNavigation/sideNavigationProjector.js";
 
 /* ********************************************* PIN TO ELEMENTS ************************************************************ */
 const pinToCardNavElement          = document.getElementById('card-nav');

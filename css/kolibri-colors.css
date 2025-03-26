@@ -1,0 +1,68 @@
+@import "kolibri-palette.css";
+
+/**
+ The semantic colors. 
+ */
+
+:root {
+
+    /* --- primary --- */
+
+    --kolibri-color-primary-dark:        var(--kolibri-palette-purple-700);
+    --kolibri-color-primary-accent:      var(--kolibri-palette-purple-500);
+    --kolibri-color-primary-light:       var(--kolibri-palette-purple-200);
+    --kolibri-color-primary-bg:          var(--kolibri-palette-purple-100);
+
+
+    /* --- secondary --- */
+
+    --kolibri-color-secondary-dark:      var(--kolibri-palette-blue-800);
+    --kolibri-color-secondary-accent:    var(--kolibri-palette-blue-500);
+    --kolibri-color-secondary-light:     var(--kolibri-palette-blue-200);
+    --kolibri-color-secondary-bg:        var(--kolibri-palette-blue-100);
+
+
+    /* --- success --- */
+
+    --kolibri-color-success-dark:        var(--kolibri-palette-green-800);
+    --kolibri-color-success-accent:      var(--kolibri-palette-green-500);
+    --kolibri-color-success-light:       var(--kolibri-palette-green-200);
+    --kolibri-color-success-bg:          var(--kolibri-palette-green-100);
+
+
+    /* --- warning --- */
+
+    --kolibri-color-warning-dark:        var(--kolibri-palette-yellow-600);
+    --kolibri-color-warning-accent:      var(--kolibri-palette-yellow-500);
+    --kolibri-color-warning-light:       var(--kolibri-palette-yellow-200);
+    --kolibri-color-warning-bg:          var(--kolibri-palette-yellow-100);
+
+
+    /* --- danger --- */
+
+    --kolibri-color-danger-dark:         var(--kolibri-palette-pink-800);
+    --kolibri-color-danger-accent:       var(--kolibri-palette-pink-500);
+    --kolibri-color-danger-light:        var(--kolibri-palette-pink-200);
+    --kolibri-color-danger-bg:           var(--kolibri-palette-pink-100);
+
+
+    /* --- gradient - kolibri --- */
+    --kolibri-color-gradient-primary:    linear-gradient(145deg,
+                                            var(--kolibri-palette-pink-500)     0%,
+                                            var(--kolibri-palette-purple-500) 100%);
+
+    /* --- semantic --- */
+
+    /* the color that identifies the Kolibri product */
+    --kolibri-color-product: var(--kolibri-palette-purple-700);
+
+    --kolibri-color-shadow:  color-mix(in srgb, var(--kolibri-color-product) 20%, transparent 80%);
+    --kolibri-box-shadow:    0 4px  8px 0 var(--kolibri-color-shadow),
+                             0 6px 20px 0 var(--kolibri-color-shadow);
+
+    --kolibri-color-accent:  var(--kolibri-palette-lavender-500);
+    --kolibri-color-output:  var(--kolibri-palette-blue-700);
+    --kolibri-color-ok:      var(--kolibri-palette-green-600);
+    --kolibri-color-select:  var(--kolibri-palette-yellow-100);
+    --kolibri-color-neutral: var(--kolibri-palette-mono-200);
+}

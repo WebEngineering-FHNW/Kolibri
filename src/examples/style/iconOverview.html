@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+    <link rel="stylesheet" href="../../../css/kolibri-base.css">
+    <title>Icon Overview</title>
+
+    <style>
+        .icon {
+            height:             2em;
+            aspect-ratio:       1;
+            fill:               rebeccapurple;
+            stroke:             none;
+            stroke-width:       2;
+            stroke-linecap:     round;
+            stroke-linejoin:    round;
+
+            border:             1px solid lightgray;
+        }
+        #out {
+            display:            flex;
+            gap:                1em;
+        }
+        #out > div {
+            display:            flex;
+            flex-direction:     column;
+            align-items:        center;
+            gap:                .2lh;
+        }
+    </style>
+
+</head>
+<body>
+<h1>Kolibri Icon Overview</h1>
+<p>
+    The gallery of icons.
+</p>
+
+
+<div id="out">
+
+</div>
+
+<script type="module">
+    import {icon} from "../../kolibri/style/icon.js";
+    import {dom}  from "../../kolibri/util/dom.js";
+    import {
+        ICON_EMPTY,
+        ICON_HOUSE,
+        ICON_KOLIBRI,
+        ICON_ONE_TWO,
+        ICON_PLUS_MINUS,
+        ICON_TERMINAL
+    }             from "../../customize/icons.js";
+
+    [
+        ICON_EMPTY, ICON_KOLIBRI, ICON_HOUSE, ICON_ONE_TWO, ICON_PLUS_MINUS, ICON_TERMINAL
+    ].forEach( iconName => {
+        const [entryDiv] = dom(`
+            <div title="${iconName.toUpperCase()}">
+                <span>${iconName.toUpperCase()}</span>
+            </div>
+        `);
+        entryDiv.prepend(...icon(iconName));
+        out.append(entryDiv);
+    });
+
+
+</script>
+
+
+</body>
+</html>
