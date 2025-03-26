@@ -20,5 +20,5 @@ jobs:
 
     - name: Build
       run: |
-        cd docs/production
+        cd production
         npx rollup -o productionBundle.js -f es production.js --no-treeshake --compact
