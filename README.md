@@ -13,7 +13,6 @@ Kolibri does _not_ require node.js or npm or any of such tools.
 ## Notes for developers
 
 ### Sources
---The src dir is under docs such that we can publish the sources directly.--
 **UPDATE (Mar 25): the source are now under src as usual**
 since the GitHub publishing restrictions no longer apply.
 
