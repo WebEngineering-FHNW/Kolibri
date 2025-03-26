@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [22.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -20,10 +20,5 @@ jobs:
 
     - name: Build
       run: |
-        cd docs/production
+        cd production
         npx rollup -o productionBundle.js -f es production.js --no-treeshake --compact
-
-    - name: Deploy bundle to github pages
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        folder: docs/production # The folder the action should deploy.

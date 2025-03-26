@@ -1,6 +1,6 @@
-import { PageController }                 from "../../prototype/pages/pageController.js";
-import { NavigationController }           from "../../../../docs/src/kolibri/navigation/navigationController.js";
-import { PageProjector }                  from "./pages/pageProjector/pageProjector.js";
+import { PageController }       from "../../prototype/pages/pageController.js";
+import { NavigationController } from "../../../../src/kolibri/navigation/navigationController.js";
+import { PageProjector }        from "./pages/pageProjector/pageProjector.js";
 import { DebugPageProjector }             from "./pages/debug/debugPageProjector.js";
 import { NavigationProjector }            from "./navigations/bubble-state/bubblestateNavigationProjector.js";
 import { BreadCrumbProjector }            from "./navigations/bread-crumbs/breadCrumbProjector.js";
