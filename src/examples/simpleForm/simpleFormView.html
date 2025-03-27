@@ -30,28 +30,28 @@
             model and view are always kept in sync. After that, any controller can solely
             work on the presentation models without ever touching the view.
         </p>
-        <p> Only <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/simpleForm/starter.js"
+        <p> Only <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/simpleForm/starter.js"
             >starter.js</a> is application-specific. It sets up the information of
             what the form should consist of.
         </p>
         <p> Our initial, simplistic form does not contain any business logic and can therefore use the
             generic
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleFormController.js"
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/kolibri/projector/simpleForm/simpleFormController.js"
             >SimpleFormController</a>.
             If we had any business logic, we would put it in a specialized
             controller and write test cases against that controller. Since we currently have no business
             logic, we have no specialized controller and no test cases for the logic.
         </p>
         <p> Models, view, and bindings are totally generic and provided by Kolibri. The current generic
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleFormProjector.js"
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/kolibri/projector/simpleForm/simpleFormProjector.js"
             >simpleFormProjector</a> creates a simple form with
             simple input types. Each such type is created and bound by the generic
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleInputProjector.js"
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/kolibri/projector/simpleForm/simpleInputProjector.js"
             >simpleInputProjector</a>.
             "Simple" means types that the standard HTML Input element can handle it (no selects or multiple values).
         </p>
         <p> The remaining non-generic thing to test is the general setup. We test this in
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/simpleForm/simpleFormViewTest.js"
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/simpleForm/simpleFormViewTest.js"
             >simpleFormViewTest.js</a>.
             It also serves as an example of how to do integration testing.
         </p>

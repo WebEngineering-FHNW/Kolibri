@@ -48,20 +48,20 @@
         <p>The
             <a href="https://dierk.github.io/Home/projectorPattern/ProjectorPattern.html">projector pattern</a>
             encourages compositionality. The
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workweek/simpleWeekProjector.js"
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/workweek/simpleWeekProjector.js"
             >simpleWeekProjector</a> delegates to
             the already existing
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workday/simpleDayProjector.js"
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/workday/simpleDayProjector.js"
             >simpleDayProjector</a>,
             which in turn relies on the generic
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleFormProjector.js"
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/kolibri/projector/simpleForm/simpleFormProjector.js"
             >simpleFormProjector</a> that again delegates to
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleInputProjector.js"
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/kolibri/projector/simpleForm/simpleInputProjector.js"
             >simpleInputProjector</a>.
         </p>
         <p> The visual appearance of an application needs to stay fresh and appealing.
             This is why it is so important that we can replace projectors very easily in the
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workweek/starter.js"
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/workweek/starter.js"
             >starter</a>.
         </p>
         <p>Visuals are ephemeral but logic is here to stay. This is why we never bind logic directly to
@@ -80,17 +80,17 @@
             the same business rules as in <a href="../workday/WorkingHours.html">workday</a> apply.
         </p>
         <p>
-            Since our <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workweek/weekController.js"
+            Since our <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/workweek/weekController.js"
             >weekController</a> delegates all work to the already existing
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workday/dayController.js"
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/workday/dayController.js"
             >dayController</a>, we can be sure to have the same
             business rules in place and that we enforce them correctly. We do not even have to test.
         </p>
         <p>
-            The <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workday/dayController.js"
+            The <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/workday/dayController.js"
             >dayController</a> in turn delegates to the
             generic
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/kolibri/projector/simpleForm/simpleInputController.js"
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/kolibri/projector/simpleForm/simpleInputController.js"
             >simpleInputController</a>
             to ensure proper binding against the presentation model.
         </p>
@@ -100,12 +100,12 @@
             controllers. This is another benefit of delegating most of the work to existing, well-tested code.
         </p>
         <p >
-            The <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workweek/simpleWeekProjectorTest.js"
+            The <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/workweek/simpleWeekProjectorTest.js"
             >simpleWeekProjectorTest</a> simply asserts that
             the "total" views per day and week are available and updated on user input.
         </p>
         <p>
-            The <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workweek/weekControllerTest.js"
+            The <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/workweek/weekControllerTest.js"
             >weekControllerTest</a> does the equivalent for
             proper calculation of the actual total number of minutes as exposed on the controller API.
         </p>

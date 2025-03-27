@@ -92,7 +92,7 @@ const [contentElement] = dom(`
         <section>
             <h2>References</h2>
             <p>Find the sources of 
-            <a href="https://github.com/WebEngineering-FHNW/Kolibri/blob/21dba296a3761ced3e909fb9eae3580994468d1a/docs/src/examples/navigation/simple/starter.js">
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/blob/21dba296a3761ced3e909fb9eae3580994468d1a/src/examples/navigation/simple/starter.js">
             this site on github
             </a>. </p>
             <p>The Kolibri navigation support is based on a bachelor project by

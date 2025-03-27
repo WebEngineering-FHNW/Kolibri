@@ -45,7 +45,7 @@
     </p>
     <p> Kolibri makes multi-way editing and other consistent updates throughout the application
         very easy. You just define what your attribute represents by giving it a
-        <a href="https://github.com/WebEngineering-FHNW/Kolibri/blob/main/docs/src/examples/person/person.js">qualifier</a>
+        <a href="https://github.com/WebEngineering-FHNW/Kolibri/blob/main/src/examples/person/person.js">qualifier</a>
         like "Person.1.firstname".
         Kolibri takes care that all attributes with the same qualifier are always kept in sync.
         This applies not only to their values but to all of their visual properties (validity, label,
@@ -71,9 +71,9 @@
     <p> The Kolibri approach is always the same, no matter which of the many master-detail views we encounter.
         We bind the selection to a presentation model. This is so repetitive that we can delegate the
         work to a 
-        <a href="https://github.com/WebEngineering-FHNW/Kolibri/blob/main/docs/src/examples/person/masterDetailProjector.js"
+        <a href="https://github.com/WebEngineering-FHNW/Kolibri/blob/main/src/examples/person/masterDetailProjector.js"
         >master-detail projector</a> that delegates the handling of updates to the
-        <a href="https://github.com/WebEngineering-FHNW/Kolibri/blob/main/docs/src/examples/person/instantUpdateProjector.js">instant-update
+        <a href="https://github.com/WebEngineering-FHNW/Kolibri/blob/main/src/examples/person/instantUpdateProjector.js">instant-update
             projector</a>.
     </p>
     <h2>Testing Master-Detail Views and Multi-Way Editing</h2>
@@ -82,14 +82,14 @@
         and observing effects. You get bored, become unobservant and bugs creep in.
     </p>
     <p> Test automation comes to the rescue, and it is quite easy to implement. Have a look at
-        <a href="https://github.com/WebEngineering-FHNW/Kolibri/blob/main/docs/src/examples/person/personTest.js"
+        <a href="https://github.com/WebEngineering-FHNW/Kolibri/blob/main/src/examples/person/personTest.js"
         >Person test</a> that covers master-detail construction, proper selection handling, and 
         multi-way update. We hope you can pick up the pattern how to write those tests.
     </p>
     <p> You can actually <a href="../../allTests.html">run those tests live
         in your browser</a> right now!
     </p>
-    <p> <a href="../../../docs/index.html">Home</a>
+    <p> <a href="../../../index.html">Home</a>
     </p>
 
 
