@@ -28,11 +28,14 @@ export { Pair }
 
 /**
  * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
- * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
+ * Access functions are {@link fst} and {@link snd}. Pairs are immutable but
+ * accessing the values via the _iterator is not totally safe since some malicious
+ * programmer could have overridden the iterator_. Accessing via `fst` or `snd` is safe.
  * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
  *
  * @constructor
  * @pure
+ * @immutable
  * @haskell a -> b -> (a -> b -> a|b) -> a|b
  * @template _T_, _U_
  * @type    { PairType<_T_, _U_> }
