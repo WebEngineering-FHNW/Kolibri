@@ -24,6 +24,7 @@ export {
  * The function is pure and runs in O(1). Function calls can be inlined.
  * @haskell  a -> a
  * @pure
+ * @template _T_
  * @type  { <_T_> (_T_) => _T_ }
  * @example 
  * id(1) === 1
@@ -36,6 +37,7 @@ const id = x => x;
  * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
  * @haskell  a -> b -> a
  * @pure
+ * @template _T_
  * @type     { <_T_> (x:_T_) => (...y) => _T_ }
  * @example
  * c(1)(undefined) === 1;
@@ -47,6 +49,7 @@ const c = x => () => x;
 
 /** The first of two curried arguments, identical to {@link c} (see there for more info).
  * Often used to pick the first element of a {@link Pair}.
+ * @template _T_
  * @type     { <_T_> (x:_T_) => (...y) => _T_ }
  * @example
  * const point = Pair(1)(2);
@@ -61,6 +64,7 @@ const fst = c;
  * Often used to pick the first element of a {@link Pair}.
  * @haskell  b -> a -> a
  * @pure
+ * @template _T_
  * @type     { <_T_> (...x) => (y:_T_) => _T_ }
  * @example
  * snd(undefined)(1) === 1;
@@ -144,12 +148,14 @@ const Choice = n => { // number of constructors
  * Only needed internally for the sake of proper JsDoc.
  * @typedef  FunctionAtoBType
  * @pure     supposed to be pure
+ * @template _T_
  * @type     { <_T_, _U_> (x:_T_) => _U_ }
  */
 
 /**
  * Type of the {@link Left} constructor after being bound to a value x of type _T_.
  * @typedef LeftXType
+ * @template _T_, _U_
  * @type    { <_T_, _U_>  (f:FunctionAtoBType<_T_, _U_>) => (g:*) => _U_ }
  */
 
@@ -162,6 +168,7 @@ const Choice = n => { // number of constructors
  * Left values are immutable.
  * @haskell a -> (a -> b) -> c -> b
  * @pure    if FunctionAtoBType is pure
+ * @template _T_, _U_
  * @type    { <_T_, _U_>  (x:_T_) =>  LeftXType<_T_, _U_> }
  * @example
  * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
@@ -175,6 +182,7 @@ const Left  = x => f => _g => f(x);
 /**
  * Type of the {@link Right} constructor after being bound to a value x of type _T_.
  * @typedef RightXType
+ * @template _T_, _U_
  * @type     { <_T_, _U_>  (f:*)  => (f:FunctionAtoBType<_T_, _U_>) => _U_ }
  */
 
@@ -187,6 +195,7 @@ const Left  = x => f => _g => f(x);
  * Right values are immutable.
  * @haskell a -> c -> (a -> b) -> b
  * @pure    if FunctionAtoBType is pure
+ * @template _T_, _U_
  * @type    { <_T_, _U_>  (x:_T_) =>  RightXType<_T_, _U_> }
  * @example
  * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
@@ -198,14 +207,14 @@ const Right = x => _f => g => g(x);
 
 /**
  * @typedef { LeftXType<_T_,_U_> | RightXType<_T_,_U_> } EitherType
- * @template _T_
- * @template _U_
+ * @template _T_, _U_
  * @pure
  */
 
 /** function application, beta reduction
  * @haskell (a -> b) -> a -> b
  * @pure if f is pure
+ * @template _T_, _U_
  * @type { <_T_, _U_> (f: FunctionAtoBType<_T_, _U_>) => (x: _T_) => _U_ }
  * @example
  * beta(id)(42) === 42;
@@ -220,6 +229,7 @@ const konst = c;
  * Sometimes used to prepare for later eta reduction or make for more convenient use of f 
  * when the x argument is a lengthy in-line expression.
  * @haskell (a -> b -> c) -> b -> a -> c
+ * @template _T_, _U_, _V_
  * @type { <_T_, _U_, _V_> (f: (_T_) => (_U_) => _V_) => (_U_) => (_T_) => _V_ }
  */
 const flip = f => x => y => f(y)(x);
@@ -229,6 +239,7 @@ const kite = snd;
 
 /** Composition of two functions, aka Bluebird (B) in the Smullyan bird metaphors.
  * @haskell (b -> c) -> (a -> b) -> a -> c
+ * @template _T_, _U_, _V_
  * @type { <_T_, _U_, _V_> (f: FunctionAtoBType<_U_, _V_>) => (g: FunctionAtoBType<_T_, _U_>) => (x: _T_) => _V_ }
  */
 const cmp = f => g => x => f(g(x));
@@ -242,7 +253,7 @@ const cmp2 = f => g => x => y => f(g(x)(y));
 // ---- boolean logic
 
 /**
- * True is the success case of the Boolean type. 
+ * True is the success case of the Boolean type.
  */
 const T   = fst;
 /**
@@ -310,6 +321,8 @@ const churchBool = jsB => /** @type {ChurchBooleanType} */ jsB ? T : F;
  * In other words:
  * LazyIf acts like a church boolean where we know that the result will be a function that we call without arguments.
  *
+ *
+ * @template _T_
  * @type { <_T_>
  *     (ChurchBooleanType)
  *     => (f:FunctionAtoBType<undefined, _T_>)
@@ -325,20 +338,24 @@ const LazyIf = condition => thenFunction => elseFunction => ( condition(thenFunc
 
 /**
  * Calling the function f recursively.
+ * @template _T_
  * @type { <_T_> (f: (_T_) => _T_) => _T_ }
  */
 const rec = f => f ( n => rec(f)(n)  ) ;
 
 /**
  * @callback HandleLeftCallback
+ * @template _T_, _U_, _V_
  * @type { <_T_,_U_,_V_> (l:LeftXType<_T_,_U_>) => _V_ }
  */
 /**
  * @callback HandleRightCallback
+ * @template _T_, _U_, _V_
  * @type { <_T_,_U_,_V_> (r:RightXType<_T_,_U_>) => _V_ }
  */
 /**
  * Apply the f or g handling function to the Either value.
+ * @template _T_, _U_, _V_
  * @type  { <_T_,_U_,_V_> (e:EitherType<_T_,_U_>) => (hl:HandleLeftCallback<_T_,_U_>) => (hr:HandleRightCallback<_T_,_U_>) => _V_ }
  */
 const either = e => f => g => e(f)(g);
@@ -355,6 +372,7 @@ const either = e => f => g => e(f)(g);
  */
 /**
  * Apply the f or g handling function to the Maybe value depending on whether it is a Just or a Nothing.
+ * @template _T_, _U_
  * @type  { <_T_,_U_> (m:MaybeType<_T_>) => (hn:HandleNothingCallback<_T_,_U_>) => (hj:HandleJustCallback<_T_,_U_>) => _U_ }
  */
 const maybe = m => f => g => m(f)(g);
@@ -363,6 +381,7 @@ const maybe = m => f => g => m(f)(g);
  * Take a function of two arguments and return a function of one argument that returns a function of one argument,
  * i.e. a function of two arguments in curried style.
  * @haskell curry :: ((a,b)->c) -> a -> b -> c
+ * @template _T_, _U_, _V_
  * @type { <_T_,_U_,_V_> (f:FunctionAtoBType<_T_,FunctionAtoBType<_U_,_V_>>) => FunctionAtoBType<_T_,FunctionAtoBType<_U_,_V_>> }
  */
 const curry = f => x => y => f(x,y);
@@ -370,6 +389,7 @@ const curry = f => x => y => f(x,y);
 /**
  * Take af function of two arguments in curried style and return a function of two arguments.
  * @haskell uncurry :: ( a -> b -> c) -> ((a,b) -> c)
+ * @template _T_, _U_, _V_
  * @type { <_T_,_U_,_V_> (f:FunctionAtoBType<_T_,FunctionAtoBType<_U_,_V_>>) => FunctionAtoBType<_T_,_U_,_V_> }
  */
 const uncurry = f => (x,y) => f(x)(y);
