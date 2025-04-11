@@ -40,6 +40,15 @@ window["LOG_NOTHING"] = LOG_NOTHING;
 window["setLoggingLevel"  ] = setLoggingLevel  ;
 window["setLoggingContext"] = setLoggingContext;
 
+/**
+ * Set the logging to the default formatter and console appender.
+ * @param { LogContextType } context
+ * @param { LogLevelType } level
+ * @return { void }
+ * @impure side effects the logging setup
+ * @example
+ * defaultConsoleLogging("ch.fhnw", LOG_WARN);
+ */
 const defaultConsoleLogging = (context, level) => {
   addToAppenderList(ConsoleAppender());
   setLoggingContext(context);

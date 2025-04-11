@@ -38,7 +38,7 @@ export {
  * @function
  * @pure if the {@link AppendCallback} in the appender list and the parameter msgFormatter of type {@link LogMessageFormatterType} are pure.
  * @type    {
- *               (loggerLevel:      LogLevelChoice)
+ *               (loggerLevel:      LogLevelType)
  *            => (loggerContext:    LogContextType)
  *            => (msg:              LogMeType)
  *            => Boolean
@@ -88,7 +88,7 @@ const messageShouldBeLogged = loggerLevel => loggerContext =>
 
 /**
  * Returns whether the loggerLevel will log under the current loggingLevel.
- * @type { (loggerLevel: LogLevelChoice) => Boolean }
+ * @type { (loggerLevel: LogLevelType) => Boolean }
  * @private
  */
 const logLevelActivated = loggerLevel => contains(getLoggingLevel(), loggerLevel);

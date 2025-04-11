@@ -37,11 +37,11 @@ const loggingLevelObs = /** @type { IObservable<LogLevelType> } */ Observable(LO
 /**
  * This function can be used to set the logging level for the logging framework.
  * Only messages whose have at least the set log level are logged.
- * @param { LogLevelChoice } newLoggingLevel
+ * @param { LogLevelType } newLoggingLevel
  * @example
  * setLoggingLevel(LOG_DEBUG);
  */
-const setLoggingLevel = loggingLevelObs.setValue;
+const setLoggingLevel  = loggingLevelObs.setValue;
 
 /**
  * Getter for the loggingLevel.

@@ -23,10 +23,6 @@ export {
  */
 
 /**
- * @typedef { LOG_TRACE | LOG_DEBUG | LOG_INFO | LOG_WARN | LOG_ERROR | LOG_FATAL | LOG_NOTHING } LogLevelChoice
- */
-
-/**
  * Alias for the use of the {@link Pair} constructor as a {@link LogLevelType}.
  * @type { PairType<Number, String> }
  * @private
