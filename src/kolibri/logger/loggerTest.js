@@ -17,6 +17,7 @@ import {
     setLoggingLevel,
 }                                 from "./logging.js";
 import {LOG_CONTEXT_KOLIBRI_TEST} from "./logConstants.js";
+import {lineSupportFormatter}     from "./loggingSupport.js";
 
 export { withDebugTestArrayAppender }
 
@@ -127,6 +128,18 @@ loggerSuite.add("test debug tag formatted log message", assert =>
         const result = debug(logMessage);
         assert.is(result, true);
         assert.is(appender.getValue()[0], `[DEBUG] ${logMessage}`);
+    }));
+
+loggerSuite.add("test debug tag formatted-with-stacktrace log message", assert =>
+    withDebugTestArrayAppender(appender => {
+        const old = getGlobalMessageFormatter;
+        setGlobalMessageFormatter(lineSupportFormatter);
+        setLoggingLevel(LOG_DEBUG);
+        const debug = debugLogger(LOG_CONTEXT_KOLIBRI_TEST);
+        const result = debug(logMessage);
+        setGlobalMessageFormatter(old);
+        assert.is(result, true);
+        assert.is(appender.getValue()[0].includes("loggerTest.js:139"), true);
     }));
 
 loggerSuite.add("test context tag formatted log message", assert =>
