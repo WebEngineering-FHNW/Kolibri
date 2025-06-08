@@ -1,10 +1,10 @@
 
-import {Observable, ObservableList}         from "./observable.js"
-import {TestSuite}                          from "./util/test.js";
-import {Walk}                               from "./sequence/constructors/range/range.js";
-import {withDebugTestArrayAppender}         from "./logger/loggerTest.js";
-import {setLoggingContext, setLoggingLevel} from "./logger/logging.js";
-import {LOG_WARN}                           from "./logger/logLevel.js";
+import {Observable}                         from "./observable.js"
+import {TestSuite}                          from "../util/test.js";
+import {Walk}                               from "../sequence/constructors/range/range.js";
+import {withDebugTestArrayAppender}         from "../logger/loggerTest.js";
+import {setLoggingContext, setLoggingLevel} from "../logger/logging.js";
+import {LOG_WARN}                           from "../logger/logLevel.js";
 
 const observableSuite = TestSuite("observable");
 
@@ -81,30 +81,6 @@ observableSuite.add("edge case", assert => {
     // the second observer might _not_ have seen all value changes, but he sees
     // at least the last proper value change !!!
     assert.is(["start", "start", "second", "second_x"].eq(log2), true);
-});
-
-observableSuite.add("list", assert => {
-    const raw  = [];
-    const list = ObservableList( raw ); // decorator pattern
-
-    assert.is(list.count(), 0);
-    let addCount = 0;
-    let delCount = 0;
-    list.onAdd( item => addCount += item);
-    list.add(1);
-    assert.is(addCount, 1);
-    assert.is(list.count(), 1);
-    assert.is(list.countIf( item => 1 === item), 1);
-    assert.is(list.countIf( item => 0 === item), 0);
-    assert.is(raw.length, 1);
-
-    list.onDel( item => delCount += item);
-    list.del(1);
-    assert.is(delCount, 1);
-    assert.is(list.count(), 0);
-    assert.is(list.countIf( _ => true), 0);
-    assert.is(raw.length, 0);
-
 });
 
 observableSuite.add("memory leak warning", assert => {

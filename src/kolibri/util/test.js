@@ -7,9 +7,9 @@
  */
 
 import { colorAccent, colorOk }                      from "../../customize/kolibriStyle.js";
-import { id, Just, Tuple }                           from "../stdlib.js";
-import { Observable }                                from "../observable.js";
-import { dom }                                       from "./dom.js";
+import { id, Just, Tuple } from "../stdlib.js";
+import { Observable }      from "../observable.js";
+import { dom }             from "./dom.js";
 import { LoggerFactory }                             from "../logger/loggerFactory.js";
 import {
     addToAppenderList,

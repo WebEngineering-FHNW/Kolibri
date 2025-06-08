@@ -6,7 +6,7 @@ import "./util/arrayTest.js";
 import "./util/domTest.js";
 import "./util/memoizeTest.js";
 import "./util/testTest.js";
-import "./observableTest.js";
+import "./observable/allObservableTests.js";
 import "./presentationModelTest.js";
 import "./logger/loggerTest.js";
 import "./logger/loggingTest.js";
