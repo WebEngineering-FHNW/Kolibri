@@ -49,8 +49,9 @@ window["setLoggingContext"] = setLoggingContext;
  * @type { LogMessageFormatterType }
  */
 const lineSupportFormatter = context => level => msg => {
-    let line = "__no_line__";
+    let line;
     try {
+        // noinspection ExceptionCaughtLocallyJS
         throw Error("logger");
     } catch(e) {
         const stackFrames = e.stack.split("\n");
