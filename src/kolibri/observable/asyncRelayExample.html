@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Async Relay Example</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<p> Setting up both OM1 and OM2 to both synchronize with ROM.</p>
+<p> At start, issuing a lot of concurrent changes to test against endless loops.</p>
+<p> Change any input field and the change should be immediately visible in all other fields.</p>
+<div>
+    <h2>OM1</h2>
+    <label><input id="omInput1"></label>
+</div>
+<div>
+    <h2>OM2</h2>
+    <label><input id="omInput2"></label>
+</div>
+<div>
+    <h2>ROM</h2>
+    <label><input id="romInput"></label>
+</div>
+
+<script type="module">
+
+    import {AsyncRelay}     from "./asyncRelay.js";
+    import {ObservableMap}  from "./observableMap.js";
+    import {Walk}           from "../sequence/constructors/range/range.js";
+
+    // setting up and binding om1
+    const om1 = ObservableMap("om1",0);
+    omInput1.oninput = _ => om1.setValue("sharedInput", omInput1.value);
+    om1.onChange((key, value) => {
+        if (key === "sharedInput") {
+            omInput1.value = value;
+        }
+    });
+    om1.setValue("sharedInput", "om1");
+
+
+    // setting up and binding om2
+    const om2 = ObservableMap("om2",0);
+    omInput2.oninput = _ => om2.setValue("sharedInput", omInput2.value);
+    om2.onChange((key, value) => {
+        if (key === "sharedInput") {
+            omInput2.value = value;
+        }
+    });
+    om2.setValue("sharedInput", "om2");
+
+    // setting up and binding rom
+    const rom = ObservableMap("rom",0);
+    romInput.oninput = _ => rom.setValue("sharedInput", romInput.value);
+    rom.onChange( (key, value) => {
+        if (key === "sharedInput") {
+            romInput.value = value;
+        }
+    });
+    rom.setValue("sharedInput", "rom");
+
+    // connect the models
+    AsyncRelay(rom)(om1);
+    // AsyncRelay(rom)(om2);
+
+    // issue a lot of concurrent changes (note the use of setTimeout, we need to set values in a UI action)
+    Walk(1).forEach$(n=> {
+            om1.setValue("sharedInput", n)
+    });
+    /*
+    setTimeout( _=> {
+        Walk(50).forEach$(n=> {
+                om2.setValue("sharedInput", n*10)
+        });
+    },100);
+
+    setTimeout( _=> {
+        Walk(50).forEach$(n=> {
+                rom.setValue("sharedInput", n*100)
+        });
+    },200);
+*/
+</script>
+
+
+</body>
+</html>
