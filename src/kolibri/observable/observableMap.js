@@ -5,6 +5,8 @@ export {ObservableMap}
 
 const log = LoggerFactory("ch.fhnw.kolibri.observable.observableMap");
 
+const originSymbol = Symbol("origin"); // singleton non-JSON-stringified property key
+
 /**
  * @typedef { String } ForeignKeyType
  */
@@ -23,6 +25,8 @@ const log = LoggerFactory("ch.fhnw.kolibri.observable.observableMap");
  * @property { (key:ForeignKeyType, value:_T_) => void}     setValue - stores the value and
  * notifies all respective listeners about addition, deletion or value change if it is indeed a change.
  * Implicitly adds the key if it is new and removes the key if it is nullish.
+ * The key must be a proper Object (not a primitive value) such that we can add
+ * meta-information like the "origin" Symbol without adding the value's properties.
  * @property { (key:ForeignKeyType) => MaybeType<_T_>}      getValue  - the value is never nullish
  * @property { (key:ForeignKeyType)=> void}                 removeKey - removes and notifies only if key is available
  * @property { (newKeyCallback)=> void}                     onKeyAdded
@@ -60,6 +64,17 @@ const ObservableMap = (name, debounceMS = 10) => {
     const knownToBeDeletedKeys = [];
 
     const setKeyValue = (key, value) => {
+        if (! (value instanceof Object)) {  // e.g. value is a plain String
+            log.warn(`value '${value}' is not an object and will be wrapped. Consider Object(value).`);
+            value = Object(value);
+        }
+        if ( value[originSymbol] === name) { // if this value change originated from ourselves, ignore
+            log.debug(`value change originated from ourselves name ${name} key ${key} value ${value}`);
+            return;                          // avoid infinite "echos"
+        }
+        if ( value[originSymbol] === undefined) { // this value change has no origin, yet
+            value[originSymbol] = name;           // ... therefore, we are the origin
+        }
         if (knownToBeDeletedKeys.includes(key)) {
             return;                                 // do not resurrect zombies
         }
@@ -85,7 +100,7 @@ const ObservableMap = (name, debounceMS = 10) => {
                 if (keyIsNew) {
                      addListeners.forEach( callback => callback(key));
                  }
-                 if(valueIsNew) {
+                 if (valueIsNew) {
                      changeListeners.forEach( callback => callback(key, value));
                  }
             };

@@ -10,22 +10,25 @@ asyncTest("asyncRelay set/get", assert => {
 
     const scheduler = AsyncRelay(rom)(om);
 
+    const valueA = Object("A");
+    const valueB = Object("B");
+
     scheduler.addOk( _=> {
-        om.setValue("a","A"); // setting the value on om should relay it to rom
+        om.setValue("a",valueA); // setting the value on om should relay it to rom
     });
     scheduler.addOk( _=> {
         rom.getValue("a")
            (_=> assert.isTrue(false))
-           (v=>assert.is(v,"A"));
+           (v=>assert.is(v,valueA));
     });
 
     scheduler.addOk( _=> {
-        rom.setValue("a","B"); // and vice versa
+        rom.setValue("a",valueB); // and vice versa
     });
     scheduler.addOk( _=> {
         om.getValue("a")
            (_=> assert.isTrue(false))
-           (v=>assert.is(v,"B"));
+           (v=>assert.is(v,valueB));
     });
 
     return new Promise( done => {
@@ -48,8 +51,11 @@ asyncTest("asyncRelay onChange om", assert => {
 
     om.onChange( (key, value) => omChanges.push(`${key} ${value}`));
 
+    const valueA = Object("A");
+    const valueB = Object("B");
+
     scheduler.addOk( _=> {
-        om.setValue("a","A");
+        om.setValue("a",valueA);
     });
     scheduler.addOk( _=> {
         // we add the listener late, such that the first update
@@ -63,7 +69,7 @@ asyncTest("asyncRelay onChange om", assert => {
     return new Promise( done => {
         // change value through om
         scheduler.addOk( _=> {
-            om.setValue("a","B");
+            om.setValue("a", valueB);
             scheduler.addOk( _=> {
                     assert.iterableEq(omChanges, romChanges);
                     done();
@@ -86,8 +92,11 @@ asyncTest("asyncRelay onChange rom", assert => {
 
     om.onChange( (key, value) => omChanges.push(`${key} ${value}`));
 
+    const valueA = Object("A");
+    const valueB = Object("B");
+
     scheduler.addOk( _=> {
-        om.setValue("a","A");
+        om.setValue("a",valueA);
     });
     scheduler.addOk( _=> {
         // we add the listener late, such that the first update
@@ -100,7 +109,7 @@ asyncTest("asyncRelay onChange rom", assert => {
 
     return new Promise( done => {    // change value through rom
         scheduler.addOk(_ => {
-            rom.setValue("a", "B");
+            rom.setValue("a", valueB);
             scheduler.addOk(_ => {
                 assert.iterableEq(omChanges, romChanges);
                 done();
@@ -127,7 +136,7 @@ asyncTest("asyncRelay om set value once", assert => {
     assert.is(omChanges .length, 0);
     assert.is(romChanges.length, 0);
 
-    om.setValue("a","A");
+    om.setValue("a",Object("A"));
 
     return new Promise( done => {
         scheduler.addOk( _=> {
@@ -154,9 +163,9 @@ asyncTest("asyncRelay om set value three times from same work package", assert =
     assert.is(omChanges .length, 0);
     assert.is(romChanges.length, 0);
 
-    om.setValue("a","A1"); // add
-    om.setValue("a","A2"); // then change two times before async rom can update
-    om.setValue("a","A3");
+    om.setValue("a",Object("A1")); // add
+    om.setValue("a",Object("A2")); // then change two times before async rom can update
+    om.setValue("a",Object("A3"));
 
     assert.is(omChanges .length, 3); // om is immediately updated
 
@@ -167,7 +176,3 @@ asyncTest("asyncRelay om set value three times from same work package", assert =
         });
     });
 });
-
-// todo: test
-// om.setValue -> rom.setValue -> om.setValue (blocked due to same Value)
-// om.setValue(1), omSetValue(2) -> rom.setValue -> om.setValue (cannot be blocked due to value change -> oscillation)

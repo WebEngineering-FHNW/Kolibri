@@ -12,12 +12,13 @@ suite.add("basic get/set", assert => {
         (_ => assert.isTrue(true))
         (_v=> assert.isTrue(false)); // we must not get a value
 
-    observableMap.setValue("goodKey","goodValue");
+    const goodValue = Object("goodValue");
+    observableMap.setValue("goodKey",goodValue);
 
     const willBeFound = observableMap.getValue("goodKey");
     willBeFound
         (_ => assert.isTrue(false))
-        (v => assert.is("goodValue", v));
+        (v => assert.is(goodValue, v));
 
     observableMap.setValue("goodKey", undefined);
 
@@ -45,7 +46,8 @@ suite.add("listeners", assert => {
 
     const observableMap = ObservableMap("test", 0);
 
-    observableMap.setValue("keyA","valueA");
+    const valueA = Object("valueA");
+    observableMap.setValue("keyA",valueA);
 
     assert.is(added  .length, 0);
     assert.is(removed.length, 0);
@@ -66,34 +68,38 @@ suite.add("listeners", assert => {
     assert.is(removed.length, 0);
     assert.is(changed.length, 1);
     assert.is(changed.at(-1)[0], "keyA");
-    assert.is(changed.at(-1)[1], "valueA");
+    assert.is(changed.at(-1)[1], valueA);
 
     // value change
-    observableMap.setValue("keyA","valueA2");
+
+    const valueA2 = Object("valueA2");
+    observableMap.setValue("keyA",valueA2);
 
     assert.is(added.length,   0);
     assert.is(removed.length, 0);
     assert.is(changed.length, 2);
     assert.is(changed.at(-1)[0], "keyA");
-    assert.is(changed.at(-1)[1], "valueA2");
+    assert.is(changed.at(-1)[1], valueA2);
 
     // new value adds and changes
-    observableMap.setValue("keyB","valueB");
+
+    const valueB = Object("valueB");
+    observableMap.setValue("keyB",valueB);
 
     assert.is(added.length, 1);
     assert.is(removed.length, 0);
     assert.is(changed.length, 3);
     assert.is(changed.at(-1)[0], "keyB");
-    assert.is(changed.at(-1)[1], "valueB");
+    assert.is(changed.at(-1)[1], valueB);
 
     // setting to the same value is not a change
-    observableMap.setValue("keyB","valueB");
+    observableMap.setValue("keyB",valueB);
 
     assert.is(added.length, 1);
     assert.is(removed.length, 0);
     assert.is(changed.length, 3);
     assert.is(changed.at(-1)[0], "keyB");
-    assert.is(changed.at(-1)[1], "valueB");
+    assert.is(changed.at(-1)[1], valueB);
 
     // how to remove
     observableMap.removeKey("keyB");

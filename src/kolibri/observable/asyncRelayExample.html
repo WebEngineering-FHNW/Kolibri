@@ -38,7 +38,7 @@
             omInput1.value = value;
         }
     });
-    om1.setValue("sharedInput", "om1");
+    om1.setValue("sharedInput", Object("om1"));
 
 
     // setting up and binding om2
@@ -49,7 +49,7 @@
             omInput2.value = value;
         }
     });
-    om2.setValue("sharedInput", "om2");
+    om2.setValue("sharedInput", Object("om2"));
 
     // setting up and binding rom
     const rom = ObservableMap("rom",0);
@@ -59,17 +59,17 @@
             romInput.value = value;
         }
     });
-    rom.setValue("sharedInput", "rom");
+    rom.setValue("sharedInput", Object("rom"));
 
     // connect the models
     AsyncRelay(rom)(om1);
-    // AsyncRelay(rom)(om2);
+    AsyncRelay(rom)(om2);
 
     // issue a lot of concurrent changes (note the use of setTimeout, we need to set values in a UI action)
-    Walk(1).forEach$(n=> {
-            om1.setValue("sharedInput", n)
+    Walk(50).forEach$(n=> {
+            om1.setValue("sharedInput", Object(n))
     });
-    /*
+
     setTimeout( _=> {
         Walk(50).forEach$(n=> {
                 om2.setValue("sharedInput", n*10)
@@ -81,7 +81,7 @@
                 rom.setValue("sharedInput", n*100)
         });
     },200);
-*/
+
 </script>
 
 
