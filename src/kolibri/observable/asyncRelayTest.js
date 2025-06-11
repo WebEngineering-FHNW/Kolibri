@@ -1,6 +1,7 @@
 import {AsyncRelay} from "./asyncRelay.js"
 import {asyncTest}  from "../util/test.js";
 import {ObservableMap} from "./observableMap.js";
+import {Scheduler} from "../dataflow/dataflow.js";
 
 
 asyncTest("asyncRelay set/get", assert => {
@@ -173,6 +174,62 @@ asyncTest("asyncRelay om set value three times from same work package", assert =
         scheduler.addOk( _=> {
             assert.is(romChanges.length, 3); // rom is asyncly updated
             done();
+        });
+    });
+});
+
+
+asyncTest("asyncRelay om1 - rom - om2", assert => {
+
+    const om1 = ObservableMap("om1", 0);
+    const om2 = ObservableMap("om2", 0);
+    const rom = ObservableMap("rom", 0);
+
+    const om1Changes = [];
+    const om2Changes = [];
+    const romChanges = [];
+
+    // This scenario works fine when all access to the OMs is sequenced through
+    // an overarching scheduler
+
+    const testScheduler = Scheduler();
+    AsyncRelay(rom)(om1);
+    AsyncRelay(rom)(om2);
+
+    om1.onChange( (key, value) => om1Changes.push(`${key} ${value}`));
+    om2.onChange( (key, value) => om2Changes.push(`${key} ${value}`));
+    rom.onChange( (key, value) => romChanges.push(`${key} ${value}`));
+
+    testScheduler.addOk( _ => {
+        om1.setValue("a",Object("A1")); // add
+        assert.is(om1Changes .length, 1);
+    });
+    testScheduler.addOk( _ => {           // note: this doesn't need scheduler1 because we are added after the s1 tasks
+        assert.is(romChanges.length, 1); // rom was asyncly updated
+        assert.is(om2Changes.length, 1); // and so was om2
+    });
+
+    testScheduler.addOk( _ => {
+        om1.setValue("a",Object("A2")); // change value
+        assert.is(om1Changes .length, 2);
+    });
+    testScheduler.addOk( _ => {
+        assert.is(romChanges.length, 2);
+        assert.is(om2Changes.length, 2);
+    });
+
+    testScheduler.addOk( _ => {
+        om2.setValue("a",Object("A3"));     // now change through om2
+        assert.is(om2Changes .length, 3);
+    });
+    testScheduler.addOk( _ => {
+        assert.is(romChanges.length, 3);
+        assert.is(om2Changes.length, 3);
+    });
+
+    return new Promise( done => { // both schedulers must be done
+        testScheduler.addOk( _=> {
+           done();
         });
     });
 });
