@@ -2,6 +2,7 @@ import {AsyncRelay} from "./asyncRelay.js"
 import {asyncTest}  from "../util/test.js";
 import {ObservableMap} from "./observableMap.js";
 import {Scheduler} from "../dataflow/dataflow.js";
+import {Walk} from "../sequence/constructors/range/range.js";
 
 
 asyncTest("asyncRelay set/get", assert => {
@@ -225,6 +226,106 @@ asyncTest("asyncRelay om1 - rom - om2", assert => {
     testScheduler.addOk( _ => {
         assert.is(romChanges.length, 3);
         assert.is(om2Changes.length, 3);
+    });
+
+    return new Promise( done => { // both schedulers must be done
+        testScheduler.addOk( _=> {
+           done();
+        });
+    });
+});
+
+asyncTest("asyncRelay om1 - om2 - change in same action", assert => {
+
+    const om1 = ObservableMap("om1", 0);
+    const om2 = ObservableMap("om2", 0);
+    const rom = ObservableMap("rom", 0);
+
+    const om1Changes = [];
+    const om2Changes = [];
+    const romChanges = [];
+
+    // This scenario works fine when all access to the OMs is sequenced through
+    // an overarching scheduler
+
+    const testScheduler = Scheduler();
+    AsyncRelay(rom)(om1);
+    AsyncRelay(rom)(om2);
+
+    om1.onChange( (key, value) => om1Changes.push(`${key} ${value}`));
+    om2.onChange( (key, value) => om2Changes.push(`${key} ${value}`));
+    rom.onChange( (key, value) => romChanges.push(`${key} ${value}`));
+
+    testScheduler.addOk( _ => {
+        om1.setValue("a",Object("A1"));    // add
+        om2.setValue("a",Object("A2"));    // add
+        assert.is(om1Changes.length, 1);
+        assert.is(om2Changes.length, 2);   // interesting that om2 sees both changes right here
+        assert.is(romChanges.length, 1);   // while rom has only seen the first one (?)
+    });
+    // this action comes a bit too early, the update actions are behind us in the queue
+    testScheduler.addOk( _ => {
+        assert.is(om1Changes.length, 1);   // the A2 update is missing
+        assert.is(om2Changes.length, 2);
+        assert.is(romChanges.length, 1);   // the A2 update is missing
+    });
+    // now we're talking
+    testScheduler.addOk( _ => {
+        assert.is(om1Changes.length, 2);   // it comes eventually
+        assert.is(om2Changes.length, 2);
+        assert.is(romChanges.length, 2);   // it comes eventually
+    });
+
+    return new Promise( done => { // both schedulers must be done
+        testScheduler.addOk( _=> {
+           done();
+        });
+    });
+});
+
+asyncTest("asyncRelay many maps synced", assert => {
+
+    const mapCount = 20;
+    const oms = mapCount.times( n => ObservableMap(`om${n}`,0));
+    const rom = ObservableMap("rom", 0);
+
+    const omsChanges = mapCount.times( _ => []);
+    const romChanges = [];
+
+    // This scenario works fine when all access to the OMs is sequenced through
+    // an overarching scheduler
+
+    const testScheduler = Scheduler();
+    mapCount.times( n => {
+        AsyncRelay(rom)(oms[n]);
+        oms[n].onChange( (key, value) => omsChanges[n].push(`${key} ${value}`));
+    });
+    rom.onChange( (key, value) => romChanges.push(`${key} ${value}`));
+
+    testScheduler.addOk( _ => {
+        oms[0].setValue("a","A0");
+        assert.is(omsChanges[0].length, 1); // local effect immediately visible
+    });
+
+    testScheduler.addOk( _ => {           // note: this doesn't need scheduler1 because we are added after the s1 tasks
+        assert.is(romChanges.length, 1); // rom was asyncly updated
+        mapCount.times( n => {
+            assert.is(omsChanges[n].length, 1); // and so were all other oms
+        });
+    });
+
+    mapCount.times( n => {
+        if (n===0) return; // we covered this above
+        testScheduler.addOk( _ => {
+            oms[n].setValue("a",Object("A"+n));
+            assert.is(omsChanges[n].length, n+1);
+        });
+        testScheduler.addOk( _ => {
+            assert.is(romChanges.length, n+1);
+            mapCount.times( i => {
+                assert.is(omsChanges[i].length, n+1);
+            });
+        });
     });
 
     return new Promise( done => { // both schedulers must be done
