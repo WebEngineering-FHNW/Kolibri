@@ -1,14 +1,15 @@
-import {AsyncRelay} from "./asyncRelay.js"
-import {asyncTest}  from "../util/test.js";
-import {ObservableMap} from "./observableMap.js";
-import {Scheduler} from "../dataflow/dataflow.js";
-import {Walk} from "../sequence/constructors/range/range.js";
+// noinspection DuplicatedCode
+
+import {AsyncRelay}     from "./asyncRelay.js"
+import {asyncTest}      from "../util/test.js";
+import {ObservableMap}  from "./observableMap.js";
+import {Scheduler}      from "../dataflow/dataflow.js";
 
 
 asyncTest("asyncRelay set/get", assert => {
 
-    const om  = ObservableMap("om",0);
-    const rom = ObservableMap("rom",0);
+    const om  = ObservableMap("om", 0);
+    const rom = ObservableMap("rom", 0);
 
     const scheduler = AsyncRelay(rom)(om);
 
@@ -16,12 +17,12 @@ asyncTest("asyncRelay set/get", assert => {
     const valueB = Object("B");
 
     scheduler.addOk( _=> {
-        om.setValue("a",valueA); // setting the value on om should relay it to rom
+        om.setValue("a", valueA); // setting the value on om1 should relay it to rom
     });
     scheduler.addOk( _=> {
         rom.getValue("a")
            (_=> assert.isTrue(false))
-           (v=>assert.is(v,valueA));
+           (v=> assert.is(v,valueA));
     });
 
     scheduler.addOk( _=> {
@@ -30,7 +31,7 @@ asyncTest("asyncRelay set/get", assert => {
     scheduler.addOk( _=> {
         om.getValue("a")
            (_=> assert.isTrue(false))
-           (v=>assert.is(v,valueB));
+           (v=> assert.is(v,valueB));
     });
 
     return new Promise( done => {
@@ -57,7 +58,7 @@ asyncTest("asyncRelay onChange om", assert => {
     const valueB = Object("B");
 
     scheduler.addOk( _=> {
-        om.setValue("a",valueA);
+        om.setValue("a", valueA);
     });
     scheduler.addOk( _=> {
         // we add the listener late, such that the first update
@@ -82,8 +83,8 @@ asyncTest("asyncRelay onChange om", assert => {
 });
 asyncTest("asyncRelay onChange rom", assert => {
 
-    const om  = ObservableMap("om",0);
-    const rom = ObservableMap("rom",0);
+    const om  = ObservableMap("om", 0);
+    const rom = ObservableMap("rom", 0);
 
     const omChanges = [];
     const romChanges = [];
@@ -169,11 +170,11 @@ asyncTest("asyncRelay om set value three times from same work package", assert =
     om.setValue("a",Object("A2")); // then change two times before async rom can update
     om.setValue("a",Object("A3"));
 
-    assert.is(omChanges .length, 3); // om is immediately updated
+    assert.is(omChanges .length, 3); // om1 is immediately updated
 
     return new Promise( done => {
         scheduler.addOk( _=> {
-            assert.is(romChanges.length, 3); // rom is asyncly updated
+            assert.is(romChanges.length, 3); // rom is asynchronously updated
             done();
         });
     });
@@ -205,8 +206,8 @@ asyncTest("asyncRelay om1 - rom - om2", assert => {
         om1.setValue("a",Object("A1")); // add
         assert.is(om1Changes .length, 1);
     });
-    testScheduler.addOk( _ => {           // note: this doesn't need scheduler1 because we are added after the s1 tasks
-        assert.is(romChanges.length, 1); // rom was asyncly updated
+    testScheduler.addOk( _ => {
+        assert.is(romChanges.length, 1); // rom was asynchronously updated
         assert.is(om2Changes.length, 1); // and so was om2
     });
 
@@ -220,15 +221,26 @@ asyncTest("asyncRelay om1 - rom - om2", assert => {
     });
 
     testScheduler.addOk( _ => {
-        om2.setValue("a",Object("A3"));     // now change through om2
+        om2.setValue("a", Object("A3"));     // now change through om2
         assert.is(om2Changes .length, 3);
     });
     testScheduler.addOk( _ => {
         assert.is(romChanges.length, 3);
+        assert.is(om1Changes.length, 3);
         assert.is(om2Changes.length, 3);
     });
 
-    return new Promise( done => { // both schedulers must be done
+    testScheduler.addOk( _ => {
+        rom.setValue("a", Object("A4"));     // now change through rom
+        assert.is(romChanges .length, 4);
+    });
+    testScheduler.addOk( _ => {
+        assert.is(romChanges.length, 4);
+        assert.is(om1Changes.length, 4);
+        assert.is(om2Changes.length, 4);
+    });
+
+    return new Promise( done => { // scheduler must be done
         testScheduler.addOk( _=> {
            done();
         });
@@ -236,6 +248,11 @@ asyncTest("asyncRelay om1 - rom - om2", assert => {
 });
 
 asyncTest("asyncRelay om1 - om2 - change in same action", assert => {
+
+    // while this scenario works, it is better to have separate actions
+    // for updates from separate maps because it is clearer at which point in time
+    // the values will be in sync.
+    // Note that only changes through the OMs are guaranteed, not directly on ROM!
 
     const om1 = ObservableMap("om1", 0);
     const om2 = ObservableMap("om2", 0);
@@ -308,7 +325,7 @@ asyncTest("asyncRelay many maps synced", assert => {
     });
 
     testScheduler.addOk( _ => {           // note: this doesn't need scheduler1 because we are added after the s1 tasks
-        assert.is(romChanges.length, 1); // rom was asyncly updated
+        assert.is(romChanges.length, 1); // rom was asynchronously updated
         mapCount.times( n => {
             assert.is(omsChanges[n].length, 1); // and so were all other oms
         });

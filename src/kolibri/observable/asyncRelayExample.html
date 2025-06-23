@@ -71,11 +71,17 @@
     // issue a lot of concurrent changes (note the use of appScheduler to sequence updates)
 
     Walk(50).forEach$( n => {
-        appScheduler.addOk(_ => om1.setValue("sharedInput", Object(n)));
+        appScheduler.addOk(_ => om1.setValue("sharedInput", n));
     });
 
     Walk(50).forEach$( n => {
         appScheduler.addOk(_ => om2.setValue("sharedInput", n * 10));
+    });
+
+    appScheduler.addOk( _=> {
+        Walk(50).forEach$( n => {
+            appScheduler.addOk(_ => rom.setValue("sharedInput", n * 100));
+        });
     });
 
 </script>
