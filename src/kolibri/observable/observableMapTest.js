@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode,FunctionTooLongJS
+
 import {ObservableMap} from "./observableMap.js";
 import {TestSuite}     from "../util/test.js";
 
@@ -5,7 +7,7 @@ const suite = TestSuite("observable/observableMap");
 
 suite.add("basic get/set", assert => {
 
-    const observableMap = ObservableMap("test", 0);
+    const observableMap = ObservableMap("test");
 
     const notFound = observableMap.getValue("no-such-key");
     notFound
@@ -44,7 +46,7 @@ suite.add("listeners", assert => {
     const removed = [];
     const changed = [];
 
-    const observableMap = ObservableMap("test", 0);
+    const observableMap = ObservableMap("test");
 
     const valueA = Object("valueA");
     observableMap.setValue("keyA",valueA);

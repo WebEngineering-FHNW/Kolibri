@@ -32,7 +32,7 @@
     import {Scheduler}      from "../dataflow/dataflow.js";
 
     // setting up and binding om1
-    const om1 = ObservableMap("om1",0);
+    const om1 = ObservableMap("om1");
     omInput1.oninput = _ => om1.setValue("sharedInput", omInput1.value);
     om1.onChange((key, value) => {
         if (key === "sharedInput") {
@@ -43,7 +43,7 @@
 
 
     // setting up and binding om2
-    const om2 = ObservableMap("om2",0);
+    const om2 = ObservableMap("om2");
     omInput2.oninput = _ => om2.setValue("sharedInput", omInput2.value);
     om2.onChange((key, value) => {
         if (key === "sharedInput") {
@@ -53,7 +53,7 @@
     om2.setValue("sharedInput", Object("om2"));
 
     // setting up and binding rom
-    const rom = ObservableMap("rom",0);
+    const rom = ObservableMap("rom");
     romInput.oninput = _ => rom.setValue("sharedInput", romInput.value);
     rom.onChange( (key, value) => {
         if (key === "sharedInput") {

@@ -36,11 +36,10 @@ const originSymbol = Symbol("origin"); // singleton non-JSON-stringified propert
 
 /**
  * @param { String? } name - to identify the ObservableMap (mainly for logging and debugging purposes)
- * @param { Number? } debounceMS - debounce time in milliseconds, defaults to 10, non-negative, 0 means "no debounce"
  * @return { ObservableMapType }
  * @constructor
  */
-const ObservableMap = (name, debounceMS = 10) => {
+const ObservableMap = (name) => {
 
     const backingMap      = {};
     const addListeners    = [];
@@ -59,8 +58,6 @@ const ObservableMap = (name, debounceMS = 10) => {
 
     const hasKey = key => backingMap.hasOwnProperty(key);
 
-    const changeTimeoutMap = {}; // key => timeoutId
-    const removeTimeoutMap = {}; // key => timeoutId
     const knownToBeDeletedKeys = [];
 
     const setKeyValue = (key, value) => {
@@ -91,11 +88,6 @@ const ObservableMap = (name, debounceMS = 10) => {
             new ${newStr}, 
             isNew ${valueIsNew}`);
 
-            const timeoutId = changeTimeoutMap[key]; // de-bouncing value updates that come in short succession
-            if ( timeoutId ) {
-                log.debug(_=>`bounced ${key} change, waiting: ${Object.keys(changeTimeoutMap).length}`);
-                clearTimeout(timeoutId);
-            }
             const notifyAll = () => {
                 if (keyIsNew) {
                      addListeners.forEach( callback => callback(key));
@@ -104,16 +96,8 @@ const ObservableMap = (name, debounceMS = 10) => {
                      changeListeners.forEach( callback => callback(key, value));
                  }
             };
-            if (debounceMS <= 0 ) {
-                backingMap[key] = value;
-                notifyAll();
-                return;
-            }
-            changeTimeoutMap[key] = setTimeout( _=> {  // bounce
-                delete changeTimeoutMap[key];
-                backingMap[key] = value;
-                notifyAll();
-            }, debounceMS ); // too low: no effect, too high: slow updates
+            backingMap[key] = value;
+            notifyAll();
         }
     };
 
@@ -125,26 +109,12 @@ const ObservableMap = (name, debounceMS = 10) => {
             knownToBeDeletedKeys.splice(100); // only keep the last 100 at most
         }
         knownToBeDeletedKeys.unshift(key);
-        // todo: think about removing duplication in debounce handling
-        const timeoutId = removeTimeoutMap[key]; // de-bouncing value updates that come in short succession
-        if ( timeoutId ) {
-            log.debug(_=>`de-bounced ${key} removal, waiting: ${Object.keys(removeTimeoutMap).length}`);
-            clearTimeout(timeoutId);
-        }
         const notifyAll = () => {
             const removedValue = backingMap[key];
             delete backingMap[key];
             removeListeners.forEach(callback => callback(key, removedValue));
         };
-        if (debounceMS <= 0) {
-            notifyAll();
-            return;
-        }
-        removeTimeoutMap[key] = setTimeout(_ => {  // bounce
-            delete removeTimeoutMap[key];
-            notifyAll();
-        }, debounceMS ); // give all remaining value updates a chance to come first
-
+        notifyAll();
     };
 
     const getValue = key =>

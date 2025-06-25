@@ -8,8 +8,8 @@ import {Scheduler}      from "../dataflow/dataflow.js";
 
 asyncTest("asyncRelay set/get", assert => {
 
-    const om  = ObservableMap("om", 0);
-    const rom = ObservableMap("rom", 0);
+    const om  = ObservableMap("om");
+    const rom = ObservableMap("rom");
 
     const scheduler = AsyncRelay(rom)(om);
 
@@ -42,8 +42,8 @@ asyncTest("asyncRelay set/get", assert => {
 
 asyncTest("asyncRelay onChange om", assert => {
 
-    const om  = ObservableMap("om",0);
-    const rom = ObservableMap("rom",0);
+    const om  = ObservableMap("om");
+    const rom = ObservableMap("rom");
 
     const omChanges = [];
     const romChanges = [];
@@ -83,8 +83,8 @@ asyncTest("asyncRelay onChange om", assert => {
 });
 asyncTest("asyncRelay onChange rom", assert => {
 
-    const om  = ObservableMap("om", 0);
-    const rom = ObservableMap("rom", 0);
+    const om  = ObservableMap("om");
+    const rom = ObservableMap("rom");
 
     const omChanges = [];
     const romChanges = [];
@@ -125,8 +125,8 @@ asyncTest("asyncRelay onChange rom", assert => {
 
 asyncTest("asyncRelay om set value once", assert => {
 
-    const om  = ObservableMap("om",0);
-    const rom = ObservableMap("rom",0);
+    const om  = ObservableMap("om");
+    const rom = ObservableMap("rom");
 
     const omChanges = [];
     const romChanges = [];
@@ -152,8 +152,8 @@ asyncTest("asyncRelay om set value once", assert => {
 
 asyncTest("asyncRelay om set value three times from same work package", assert => {
 
-    const om  = ObservableMap("om" , 0);
-    const rom = ObservableMap("rom", 0);
+    const om  = ObservableMap("om");
+    const rom = ObservableMap("rom");
 
     const omChanges  = [];
     const romChanges = [];
@@ -183,9 +183,9 @@ asyncTest("asyncRelay om set value three times from same work package", assert =
 
 asyncTest("asyncRelay om1 - rom - om2", assert => {
 
-    const om1 = ObservableMap("om1", 0);
-    const om2 = ObservableMap("om2", 0);
-    const rom = ObservableMap("rom", 0);
+    const om1 = ObservableMap("om1");
+    const om2 = ObservableMap("om2");
+    const rom = ObservableMap("rom");
 
     const om1Changes = [];
     const om2Changes = [];
@@ -254,9 +254,9 @@ asyncTest("asyncRelay om1 - om2 - change in same action", assert => {
     // the values will be in sync.
     // Note that only changes through the OMs are guaranteed, not directly on ROM!
 
-    const om1 = ObservableMap("om1", 0);
-    const om2 = ObservableMap("om2", 0);
-    const rom = ObservableMap("rom", 0);
+    const om1 = ObservableMap("om1");
+    const om2 = ObservableMap("om2");
+    const rom = ObservableMap("rom");
 
     const om1Changes = [];
     const om2Changes = [];
@@ -303,8 +303,8 @@ asyncTest("asyncRelay om1 - om2 - change in same action", assert => {
 asyncTest("asyncRelay many maps synced", assert => {
 
     const mapCount = 20;
-    const oms = mapCount.times( n => ObservableMap(`om${n}`,0));
-    const rom = ObservableMap("rom", 0);
+    const oms = mapCount.times( n => ObservableMap(`om${n}`));
+    const rom = ObservableMap("rom");
 
     const omsChanges = mapCount.times( _ => []);
     const romChanges = [];
