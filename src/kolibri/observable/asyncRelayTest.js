@@ -8,28 +8,28 @@ import {Scheduler}      from "../dataflow/dataflow.js";
 
 asyncTest("asyncRelay set/get", assert => {
 
-    const om  = ObservableMap("om");
-    const rom = ObservableMap("rom");
+    const observableMap  = ObservableMap("observableMap");
+    const remoteObservableMap = ObservableMap("remoteObservableMap");
 
-    const scheduler = AsyncRelay(rom)(om);
+    const scheduler = AsyncRelay(remoteObservableMap)(observableMap);
 
     const valueA = Object("A");
     const valueB = Object("B");
 
     scheduler.addOk( _=> {
-        om.setValue("a", valueA); // setting the value on om1 should relay it to rom
+        observableMap.setValue("a", valueA); // setting the value on om1 should relay it to remoteObservableMap
     });
     scheduler.addOk( _=> {
-        rom.getValue("a")
+        remoteObservableMap.getValue("a")
            (_=> assert.isTrue(false))
            (v=> assert.is(v,valueA));
     });
 
     scheduler.addOk( _=> {
-        rom.setValue("a",valueB); // and vice versa
+        remoteObservableMap.setValue("a",valueB); // and vice versa
     });
     scheduler.addOk( _=> {
-        om.getValue("a")
+        observableMap.getValue("a")
            (_=> assert.isTrue(false))
            (v=> assert.is(v,valueB));
     });
@@ -40,39 +40,39 @@ asyncTest("asyncRelay set/get", assert => {
 
 });
 
-asyncTest("asyncRelay onChange om", assert => {
+asyncTest("asyncRelay onChange observableMap", assert => {
 
-    const om  = ObservableMap("om");
-    const rom = ObservableMap("rom");
+    const observableMap  = ObservableMap("observableMap");
+    const remoteObservableMap = ObservableMap("remoteObservableMap");
 
     const omChanges = [];
     const romChanges = [];
 
     assert.iterableEq(omChanges, romChanges);
 
-    const scheduler = AsyncRelay(rom)(om);
+    const scheduler = AsyncRelay(remoteObservableMap)(observableMap);
 
-    om.onChange( (key, value) => omChanges.push(`${key} ${value}`));
+    observableMap.onChange( (key, value) => omChanges.push(`${key} ${value}`));
 
     const valueA = Object("A");
     const valueB = Object("B");
 
     scheduler.addOk( _=> {
-        om.setValue("a", valueA);
+        observableMap.setValue("a", valueA);
     });
     scheduler.addOk( _=> {
         // we add the listener late, such that the first update
         // has already gone through. Still, everything has to be in sync.
-        rom.onChange( (key, value) => romChanges.push(`${key} ${value}`));
+        remoteObservableMap.onChange( (key, value) => romChanges.push(`${key} ${value}`));
     });
     scheduler.addOk( _=> {
         assert.iterableEq(omChanges, romChanges);
     });
 
     return new Promise( done => {
-        // change value through om
+        // change value through observableMap
         scheduler.addOk( _=> {
-            om.setValue("a", valueB);
+            observableMap.setValue("a", valueB);
             scheduler.addOk( _=> {
                     assert.iterableEq(omChanges, romChanges);
                     done();
@@ -81,38 +81,38 @@ asyncTest("asyncRelay onChange om", assert => {
     });
 
 });
-asyncTest("asyncRelay onChange rom", assert => {
+asyncTest("asyncRelay onChange remoteObservableMap", assert => {
 
-    const om  = ObservableMap("om");
-    const rom = ObservableMap("rom");
+    const observableMap  = ObservableMap("observableMap");
+    const remoteObservableMap = ObservableMap("remoteObservableMap");
 
     const omChanges = [];
     const romChanges = [];
 
     assert.iterableEq(omChanges, romChanges);
 
-    const scheduler = AsyncRelay(rom)(om);
+    const scheduler = AsyncRelay(remoteObservableMap)(observableMap);
 
-    om.onChange( (key, value) => omChanges.push(`${key} ${value}`));
+    observableMap.onChange( (key, value) => omChanges.push(`${key} ${value}`));
 
     const valueA = Object("A");
     const valueB = Object("B");
 
     scheduler.addOk( _=> {
-        om.setValue("a",valueA);
+        observableMap.setValue("a",valueA);
     });
     scheduler.addOk( _=> {
         // we add the listener late, such that the first update
         // has already gone through. Still, everything has to be in sync.
-        rom.onChange( (key, value) => romChanges.push(`${key} ${value}`));
+        remoteObservableMap.onChange( (key, value) => romChanges.push(`${key} ${value}`));
     });
     scheduler.addOk( _=> {
         assert.iterableEq(omChanges, romChanges);
     });
 
-    return new Promise( done => {    // change value through rom
+    return new Promise( done => {    // change value through remoteObservableMap
         scheduler.addOk(_ => {
-            rom.setValue("a", valueB);
+            remoteObservableMap.setValue("a", valueB);
             scheduler.addOk(_ => {
                 assert.iterableEq(omChanges, romChanges);
                 done();
@@ -123,23 +123,23 @@ asyncTest("asyncRelay onChange rom", assert => {
 
 });
 
-asyncTest("asyncRelay om set value once", assert => {
+asyncTest("asyncRelay observableMap set value once", assert => {
 
-    const om  = ObservableMap("om");
-    const rom = ObservableMap("rom");
+    const observableMap  = ObservableMap("observableMap");
+    const remoteObservableMap = ObservableMap("remoteObservableMap");
 
     const omChanges = [];
     const romChanges = [];
 
-    const scheduler = AsyncRelay(rom)(om);
+    const scheduler = AsyncRelay(remoteObservableMap)(observableMap);
 
-    om .onChange( (key, value) => omChanges .push(`${key} ${value}`));
-    rom.onChange( (key, value) => romChanges.push(`${key} ${value}`));
+    observableMap .onChange( (key, value) => omChanges .push(`${key} ${value}`));
+    remoteObservableMap.onChange( (key, value) => romChanges.push(`${key} ${value}`));
 
     assert.is(omChanges .length, 0);
     assert.is(romChanges.length, 0);
 
-    om.setValue("a",Object("A"));
+    observableMap.setValue("a",Object("A"));
 
     return new Promise( done => {
         scheduler.addOk( _=> {
@@ -150,42 +150,42 @@ asyncTest("asyncRelay om set value once", assert => {
     });
 });
 
-asyncTest("asyncRelay om set value three times from same work package", assert => {
+asyncTest("asyncRelay observableMap set value three times from same work package", assert => {
 
-    const om  = ObservableMap("om");
-    const rom = ObservableMap("rom");
+    const observableMap  = ObservableMap("observableMap");
+    const remoteObservableMap = ObservableMap("remoteObservableMap");
 
     const omChanges  = [];
     const romChanges = [];
 
-    const scheduler = AsyncRelay(rom)(om);
+    const scheduler = AsyncRelay(remoteObservableMap)(observableMap);
 
-    om .onChange( (key, value) => omChanges .push(`${key} ${value}`));
-    rom.onChange( (key, value) => romChanges.push(`${key} ${value}`));
+    observableMap .onChange( (key, value) => omChanges .push(`${key} ${value}`));
+    remoteObservableMap.onChange( (key, value) => romChanges.push(`${key} ${value}`));
 
     assert.is(omChanges .length, 0);
     assert.is(romChanges.length, 0);
 
-    om.setValue("a",Object("A1")); // add
-    om.setValue("a",Object("A2")); // then change two times before async rom can update
-    om.setValue("a",Object("A3"));
+    observableMap.setValue("a",Object("A1")); // add
+    observableMap.setValue("a",Object("A2")); // then change two times before async remoteObservableMap can update
+    observableMap.setValue("a",Object("A3"));
 
     assert.is(omChanges .length, 3); // om1 is immediately updated
 
     return new Promise( done => {
         scheduler.addOk( _=> {
-            assert.is(romChanges.length, 3); // rom is asynchronously updated
+            assert.is(romChanges.length, 3); // remoteObservableMap is asynchronously updated
             done();
         });
     });
 });
 
 
-asyncTest("asyncRelay om1 - rom - om2", assert => {
+asyncTest("asyncRelay om1 - remoteObservableMap - om2", assert => {
 
     const om1 = ObservableMap("om1");
     const om2 = ObservableMap("om2");
-    const rom = ObservableMap("rom");
+    const remoteObservableMap = ObservableMap("remoteObservableMap");
 
     const om1Changes = [];
     const om2Changes = [];
@@ -195,19 +195,19 @@ asyncTest("asyncRelay om1 - rom - om2", assert => {
     // an overarching scheduler
 
     const testScheduler = Scheduler();
-    AsyncRelay(rom)(om1);
-    AsyncRelay(rom)(om2);
+    AsyncRelay(remoteObservableMap)(om1);
+    AsyncRelay(remoteObservableMap)(om2);
 
     om1.onChange( (key, value) => om1Changes.push(`${key} ${value}`));
     om2.onChange( (key, value) => om2Changes.push(`${key} ${value}`));
-    rom.onChange( (key, value) => romChanges.push(`${key} ${value}`));
+    remoteObservableMap.onChange( (key, value) => romChanges.push(`${key} ${value}`));
 
     testScheduler.addOk( _ => {
         om1.setValue("a",Object("A1")); // add
         assert.is(om1Changes .length, 1);
     });
     testScheduler.addOk( _ => {
-        assert.is(romChanges.length, 1); // rom was asynchronously updated
+        assert.is(romChanges.length, 1); // remoteObservableMap was asynchronously updated
         assert.is(om2Changes.length, 1); // and so was om2
     });
 
@@ -231,7 +231,7 @@ asyncTest("asyncRelay om1 - rom - om2", assert => {
     });
 
     testScheduler.addOk( _ => {
-        rom.setValue("a", Object("A4"));     // now change through rom
+        remoteObservableMap.setValue("a", Object("A4"));     // now change through remoteObservableMap
         assert.is(romChanges .length, 4);
     });
     testScheduler.addOk( _ => {
@@ -256,7 +256,7 @@ asyncTest("asyncRelay om1 - om2 - change in same action", assert => {
 
     const om1 = ObservableMap("om1");
     const om2 = ObservableMap("om2");
-    const rom = ObservableMap("rom");
+    const remoteObservableMap = ObservableMap("remoteObservableMap");
 
     const om1Changes = [];
     const om2Changes = [];
@@ -266,19 +266,19 @@ asyncTest("asyncRelay om1 - om2 - change in same action", assert => {
     // an overarching scheduler
 
     const testScheduler = Scheduler();
-    AsyncRelay(rom)(om1);
-    AsyncRelay(rom)(om2);
+    AsyncRelay(remoteObservableMap)(om1);
+    AsyncRelay(remoteObservableMap)(om2);
 
     om1.onChange( (key, value) => om1Changes.push(`${key} ${value}`));
     om2.onChange( (key, value) => om2Changes.push(`${key} ${value}`));
-    rom.onChange( (key, value) => romChanges.push(`${key} ${value}`));
+    remoteObservableMap.onChange( (key, value) => romChanges.push(`${key} ${value}`));
 
     testScheduler.addOk( _ => {
         om1.setValue("a",Object("A1"));    // add
         om2.setValue("a",Object("A2"));    // add
         assert.is(om1Changes.length, 1);
         assert.is(om2Changes.length, 2);   // interesting that om2 sees both changes right here
-        assert.is(romChanges.length, 1);   // while rom has only seen the first one (?)
+        assert.is(romChanges.length, 1);   // while remoteObservableMap has only seen the first one (?)
     });
     // this action comes a bit too early, the update actions are behind us in the queue
     testScheduler.addOk( _ => {
@@ -304,7 +304,7 @@ asyncTest("asyncRelay many maps synced", assert => {
 
     const mapCount = 20;
     const oms = mapCount.times( n => ObservableMap(`om${n}`));
-    const rom = ObservableMap("rom");
+    const remoteObservableMap = ObservableMap("remoteObservableMap");
 
     const omsChanges = mapCount.times( _ => []);
     const romChanges = [];
@@ -314,10 +314,10 @@ asyncTest("asyncRelay many maps synced", assert => {
 
     const testScheduler = Scheduler();
     mapCount.times( n => {
-        AsyncRelay(rom)(oms[n]);
+        AsyncRelay(remoteObservableMap)(oms[n]);
         oms[n].onChange( (key, value) => omsChanges[n].push(`${key} ${value}`));
     });
-    rom.onChange( (key, value) => romChanges.push(`${key} ${value}`));
+    remoteObservableMap.onChange( (key, value) => romChanges.push(`${key} ${value}`));
 
     testScheduler.addOk( _ => {
         oms[0].setValue("a","A0");
@@ -325,7 +325,7 @@ asyncTest("asyncRelay many maps synced", assert => {
     });
 
     testScheduler.addOk( _ => {           // note: this doesn't need scheduler1 because we are added after the s1 tasks
-        assert.is(romChanges.length, 1); // rom was asynchronously updated
+        assert.is(romChanges.length, 1); // remoteObservableMap was asynchronously updated
         mapCount.times( n => {
             assert.is(omsChanges[n].length, 1); // and so were all other oms
         });

@@ -6,8 +6,8 @@ export {AsyncRelay}
 const log = LoggerFactory("ch.fhnw.kolibri.observable.asyncRelay");
 
 /**
- * @typedef { (rom:ObservableMapType) => (om:ObservableMapType) => SchedulerType } AsyncRelayType
- * Connecting a remote observable map (rom) with another observable map (om) such that
+ * @typedef { (remoteObservableMap:ObservableMapType) => (observableMap:ObservableMapType) => SchedulerType } AsyncRelayType
+ * Connecting a remote observable map (remoteObservableMap) with another observable map (observableMap) such that
  * value changes from either side are synchronized with the other side.
  * The remote observable map is supposed to work in an asynchronous fashion, which means that
  * all function calls need to happen under the control of a {@link SchedulerType scheduler}
@@ -18,41 +18,41 @@ const log = LoggerFactory("ch.fhnw.kolibri.observable.asyncRelay");
  * @type { AsyncRelayType }
  * @see {@link AsyncRelayType}
  * */
-const AsyncRelay = rom => om => {
+const AsyncRelay = remoteObservableMap => observableMap => {
 
-    // only access to the (async) rom is scheduled
+    // only access to the (async) remoteObservableMap is scheduled
     const romScheduler = Scheduler();
 
-    // whenever om changes, tell rom
-    om.onKeyAdded( key => {
+    // whenever observableMap changes, tell remoteObservableMap
+    observableMap.onKeyAdded( key => {
         romScheduler.addOk( _=> {
-            om.getValue(key)
-              (_=> rom.removeKey(key))
-              (v=> rom.setValue(key, v)) // might debounce
+            observableMap.getValue(key)
+              (_=> remoteObservableMap.removeKey(key))
+              (v=> remoteObservableMap.setValue(key, v)) // might debounce
         } );
     });
-    om.onKeyRemoved( key => {
-        romScheduler.addOk( _=> {rom.removeKey(key)} );
+    observableMap.onKeyRemoved( key => {
+        romScheduler.addOk( _=> {remoteObservableMap.removeKey(key)} );
     });
-    om.onChange( (key, value) => {
+    observableMap.onChange( (key, value) => {
         romScheduler.addOk( _=> {
-            log.debug(_=>`relay: om onchange key ${key} value ${value}`);
-            rom.setValue(key, value)     // might debounce
+            log.debug(_=>`relay: observableMap onchange key ${key} value ${value}`);
+            remoteObservableMap.setValue(key, value)     // might debounce
         } );
     });
 
-    // whenever rom changes, update om immediately
-    rom.onKeyAdded( key => {
-            rom.getValue(key)
-              (_=> om.removeKey(key))
-              (v=> om.setValue(key, v))  // might debounce and oscillate
+    // whenever remoteObservableMap changes, update observableMap immediately
+    remoteObservableMap.onKeyAdded( key => {
+            remoteObservableMap.getValue(key)
+              (_=> observableMap.removeKey(key))
+              (v=> observableMap.setValue(key, v))  // might debounce and oscillate
     });
-    rom.onKeyRemoved( key => {
-            om.removeKey(key)
+    remoteObservableMap.onKeyRemoved( key => {
+            observableMap.removeKey(key)
     });
-    rom.onChange((key, value) => {
-        log.debug(`relay: rom onchange key ${key} value ${value}`);
-        om.setValue(key, value);         // might debounce and oscillate
+    remoteObservableMap.onChange((key, value) => {
+        log.debug(`relay: remoteObservableMap onchange key ${key} value ${value}`);
+        observableMap.setValue(key, value);         // might debounce and oscillate
     });
 
     return romScheduler;

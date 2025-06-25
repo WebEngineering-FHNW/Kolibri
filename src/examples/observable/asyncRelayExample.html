@@ -26,10 +26,10 @@
 
 <script type="module">
 
-    import {AsyncRelay}     from "./asyncRelay.js";
-    import {ObservableMap}  from "./observableMap.js";
-    import {Walk}           from "../sequence/constructors/range/range.js";
-    import {Scheduler}      from "../dataflow/dataflow.js";
+    import {AsyncRelay}    from "../../kolibri/observable/asyncRelay.js";
+    import {ObservableMap} from "../../kolibri/observable/observableMap.js";
+    import {Walk}          from "../../kolibri/sequence/constructors/range/range.js";
+    import {Scheduler}     from "../../kolibri/dataflow/dataflow.js";
 
     // setting up and binding om1
     const om1 = ObservableMap("om1");
@@ -52,19 +52,19 @@
     });
     om2.setValue("sharedInput", Object("om2"));
 
-    // setting up and binding rom
-    const rom = ObservableMap("rom");
-    romInput.oninput = _ => rom.setValue("sharedInput", romInput.value);
-    rom.onChange( (key, value) => {
+    // setting up and binding remoteObservableMap
+    const remoteObservableMap = ObservableMap("remoteObservableMap");
+    romInput.oninput = _ => remoteObservableMap.setValue("sharedInput", romInput.value);
+    remoteObservableMap.onChange( (key, value) => {
         if (key === "sharedInput") {
             romInput.value = value;
         }
     });
-    rom.setValue("sharedInput", Object("rom"));
+    remoteObservableMap.setValue("sharedInput", Object("remoteObservableMap"));
 
     // connect the models
-    AsyncRelay(rom)(om1);
-    AsyncRelay(rom)(om2);
+    AsyncRelay(remoteObservableMap)(om1);
+    AsyncRelay(remoteObservableMap)(om2);
 
     const appScheduler = Scheduler();
 
@@ -80,7 +80,7 @@
 
     appScheduler.addOk( _=> {
         Walk(50).forEach$( n => {
-            appScheduler.addOk(_ => rom.setValue("sharedInput", n * 100));
+            appScheduler.addOk(_ => remoteObservableMap.setValue("sharedInput", n * 100));
         });
     });
 
