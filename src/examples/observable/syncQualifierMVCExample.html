@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sync Controllers with Observable Map Example</title>
+    <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+    <link rel="stylesheet"                     href="../../../css/kolibri-base.css">
+    <style>
+        body {
+            max-width: 42em;
+            margin: 3em auto 3em auto;
+        }
+        main {
+            display: grid;
+            grid-template-columns: repeat(2, max-content);
+            gap: .5em 2em;
+        }
+    </style>
+</head>
+<body>
+<h1>Shared Qualifier Example</h1>
+<p> Synchronizing values in classical MVC with the help of qualified attributes.</p>
+<p> Changing any input value should immediately update all others.</p>
+<p> Note that qualified attributes synchronize not only the value but all
+    recognized observables (editable, valid, label, etc.) and the projector makes use of those.</p>
+<main id="main">
+</main>
+
+<script type="module">
+
+    import {SimpleAttributeInputController}    from "../../kolibri/projector/simpleForm/simpleInputController.js";
+    import {InputProjector}                    from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
+    import {times}                             from "../../kolibri/util/arrayFunctions.js";
+    import {Attribute, EDITABLE, LABEL, VALID} from "../../kolibri/presentationModel.js";
+
+    const sharedKey     = "sharedKey";
+
+    times(4)( _n => {
+
+        const attribute = Attribute("Dierk", sharedKey);
+        attribute.getObs(LABEL).setValue("First Name");
+        attribute.getObs(EDITABLE).setValue(true);
+        attribute.getObs(VALID).setValue(true);
+
+        // make a controller
+        const ctrl = SimpleAttributeInputController(attribute);
+
+        // project the controlled data
+        main.append(...InputProjector.projectInstantInput(ctrl, "noCssClass"));
+
+    });
+
+
+</script>
+
+
+</body>
+</html>
