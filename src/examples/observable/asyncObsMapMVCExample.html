@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Async Controllers with Observable Map Example</title>
+    <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+    <link rel="stylesheet"                     href="../../../css/kolibri-base.css">
+    <style>
+        body {
+            max-width: 42em;
+            margin: 3em auto 3em auto;
+        }
+        main {
+            display: grid;
+            grid-template-columns: repeat(3, max-content);
+            gap: .5em 2em;
+        }
+        input {
+            field-sizing: content; /* atm only works in chrome (June 2025)*/
+        }
+    </style>
+</head>
+<body>
+<h1>Async Observable Map Example</h1>
+<p> Sharing values in classical MVC with the help of observable maps.</p>
+<p> The maps synchronize asynchronously via a remote observable map.</p>
+<p> Change any input to see the others update immediately.</p>
+<p> Hit multiple buttons to see how updates intermix without loss of consistency.</p>
+<main id="main">
+</main>
+
+<script type="module">
+
+    import {ObservableMap}         from "../../kolibri/observable/observableMap.js";
+    import {SimpleInputController} from "../../kolibri/projector/simpleForm/simpleInputController.js";
+    import {InputProjector}        from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
+    import {times}                 from "../../kolibri/util/arrayFunctions.js";
+    import {AsyncRelay}            from "../../kolibri/observable/asyncRelay.js";
+    import {dom}                   from "../../kolibri/util/dom.js";
+
+    const remoteObservableMap = ObservableMap("remote");
+    const sharedKey = "sharedKey";
+
+    times(8)( n => {
+        const observableMap = ObservableMap("map-"+n);
+        // make a controller
+        const ctrl = SimpleInputController({
+            label: "First Name " + n,
+            name:  "firstname",
+            type:  "text",
+            value: "Dierk",
+        });
+
+        const [button] = dom(`<button>multiple async changes</button>`);
+        button.addEventListener("click", _e => {
+            times(5)(j=> {
+                setTimeout(
+                    _=>{ ctrl.setValue(ctrl.getValue() + String(j))}
+                    , 500*(j++));
+                });
+        });
+        main.append(button);
+
+        // project the controlled data
+        main.append(...InputProjector.projectInstantInput(ctrl, "noCssClass"));
+
+        // bidirectional binding to observable map
+        observableMap.onChange( (key, value) => sharedKey === key ? ctrl.setValue(value.toString()) : null );
+        ctrl.onValueChanged( val => observableMap.setValue(sharedKey, val));
+
+        AsyncRelay(remoteObservableMap)(observableMap);
+    });
+
+
+</script>
+
+
+</body>
+</html>
