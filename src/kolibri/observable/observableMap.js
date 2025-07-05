@@ -1,7 +1,10 @@
 import {LoggerFactory} from "../logger/loggerFactory.js";
 import {Just, Nothing} from "../lambda/maybe.js";
 
-export {ObservableMap}
+export {
+    ObservableMap,
+    originSymbol, // exported for testing purposes only
+}
 
 const log = LoggerFactory("ch.fhnw.kolibri.observable.observableMap");
 
@@ -70,7 +73,12 @@ const ObservableMap = (name) => {
             return;                          // avoid infinite "echos"
         }
         if ( value[originSymbol] === undefined) { // this value change has no origin, yet
-            value[originSymbol] = name;           // ... therefore, we are the origin
+            Object.defineProperty(value, originSymbol, {
+              enumerable:   false,                // origin should live through shallow copies
+              configurable: false,
+              writable:     false,
+              value:        name,                 // ... therefore, we are the origin
+            });
         }
         if (knownToBeDeletedKeys.includes(key)) {
             return;                                 // do not resurrect zombies

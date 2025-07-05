@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode,FunctionTooLongJS
 
-import {ObservableMap} from "./observableMap.js";
-import {TestSuite}     from "../util/test.js";
+import {ObservableMap, originSymbol}        from "./observableMap.js";
+import {TestSuite}                          from "../util/test.js";
 
 const suite = TestSuite("observable/observableMap");
 
@@ -21,6 +21,10 @@ suite.add("basic get/set", assert => {
     willBeFound
         (_ => assert.isTrue(false))
         (v => assert.is(goodValue, v));
+
+    // while the object identity stayed the same, the observable map
+    // added a symbol to keep track of the origin of the change
+    assert.is(goodValue[originSymbol], "test");
 
     observableMap.setValue("goodKey", undefined);
 
@@ -85,7 +89,7 @@ suite.add("listeners", assert => {
 
     // new value adds and changes
 
-    const valueB = Object("valueB");
+    const valueB = { b: "B" };
     observableMap.setValue("keyB",valueB);
 
     assert.is(added.length, 1);
@@ -94,7 +98,7 @@ suite.add("listeners", assert => {
     assert.is(changed.at(-1)[0], "keyB");
     assert.is(changed.at(-1)[1], valueB);
 
-    // setting to the same value is not a change
+    // setting to the identical value is not a change
     observableMap.setValue("keyB",valueB);
 
     assert.is(added.length, 1);
@@ -102,20 +106,41 @@ suite.add("listeners", assert => {
     assert.is(changed.length, 3);
     assert.is(changed.at(-1)[0], "keyB");
     assert.is(changed.at(-1)[1], valueB);
+
+    // setting to the identical value is not a change - even if the value changed internally
+    valueB.b = "changedB";
+    observableMap.setValue("keyB",valueB);
+
+    assert.is(added.length, 1);
+    assert.is(removed.length, 0);
+    assert.is(changed.length, 3);
+    assert.is(changed.at(-1)[0], "keyB");
+    assert.is(changed.at(-1)[1], valueB);
+
+    // but one can enforce the change by making a shallow copy (origin symbol is not copied)
+    const newValue = {...valueB};
+    newValue.b = "changedAgain";                // note that any change must be applied to the _copy_
+    observableMap.setValue("keyB", newValue );
+
+    assert.is(added.length, 1);
+    assert.is(removed.length, 0);
+    assert.is(changed.length, 4);
+    assert.is(changed.at(-1)[0], "keyB");
+    assert.is(changed.at(-1)[1], newValue);
 
     // how to remove
     observableMap.removeKey("keyB");
 
     assert.is(added.length, 1);
     assert.is(removed.length, 1);
-    assert.is(changed.length, 3);
+    assert.is(changed.length, 4);
 
     // null or undefined removes (is not a change)
     observableMap.setValue("keyA", null);
 
     assert.is(added.length, 1);
     assert.is(removed.length, 2);
-    assert.is(changed.length, 3);
+    assert.is(changed.length, 4);
 
     // which means that onChange listeners will
     // never be called with a null or undefined value
