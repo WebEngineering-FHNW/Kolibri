@@ -128,19 +128,30 @@ suite.add("listeners", assert => {
     assert.is(changed.at(-1)[0], "keyB");
     assert.is(changed.at(-1)[1], newValue);
 
+    // but one can enforce the change by making a shallow copy (origin symbol is not copied)
+    const newValueC = {...newValue};
+    // it does not even need an _actual_ change
+    observableMap.setValue("keyB", newValueC );
+
+    assert.is(added.length, 1);
+    assert.is(removed.length, 0);
+    assert.is(changed.length, 5);
+    assert.is(changed.at(-1)[0], "keyB");
+    assert.is(changed.at(-1)[1], newValueC);
+
     // how to remove
     observableMap.removeKey("keyB");
 
     assert.is(added.length, 1);
     assert.is(removed.length, 1);
-    assert.is(changed.length, 4);
+    assert.is(changed.length, 5);
 
     // null or undefined removes (is not a change)
     observableMap.setValue("keyA", null);
 
     assert.is(added.length, 1);
     assert.is(removed.length, 2);
-    assert.is(changed.length, 4);
+    assert.is(changed.length, 5);
 
     // which means that onChange listeners will
     // never be called with a null or undefined value

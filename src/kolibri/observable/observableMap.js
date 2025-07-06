@@ -72,35 +72,23 @@ const ObservableMap = (name) => {
         }
         if ( value[originSymbol] === undefined) { // this value change has no origin, yet
             Object.defineProperty(value, originSymbol, {
-              enumerable:   false,                // origin should live through shallow copies
-              configurable: false,
-              writable:     false,
-              value:        name,                 // ... therefore, we are the origin
+                value:        name,                 // ... therefore, we are the origin
+                enumerable:   false,                // origin should live through shallow copies
             });
         }
         const keyIsNew   = !hasKey(key);
-        const oldStr = JSON.stringify(backingMap[key]);
-        const newStr = JSON.stringify(value);
         const valueIsNew = keyIsNew
             ? true
-            : oldStr !== newStr;
+            : value !== backingMap[key]; // since we essentially work on distinct objects, we can rely on identity
 
         if ( keyIsNew || valueIsNew) {
-            log.debug(_=>`OM.setKeyValue name ${name}, key ${key}, 
-            old ${oldStr}, 
-            new ${newStr}, 
-            isNew ${valueIsNew}`);
-
-            const notifyAll = () => {
-                if (keyIsNew) {
-                     addListeners.forEach( callback => callback(key));
-                 }
-                 if (valueIsNew) {
-                     changeListeners.forEach( callback => callback(key, value));
-                 }
-            };
             backingMap[key] = value;
-            notifyAll();
+            if (keyIsNew) {
+                addListeners.forEach(callback => callback(key));
+            }
+            if (valueIsNew) {
+                changeListeners.forEach(callback => callback(key, value));
+            }
         }
     };
 
@@ -108,12 +96,9 @@ const ObservableMap = (name) => {
         if (!hasKey(key)) {
             return;
         }
-        const notifyAll = () => {
-            const removedValue = backingMap[key];
-            delete backingMap[key];
-            removeListeners.forEach(callback => callback(key, removedValue));
-        };
-        notifyAll();
+        const removedValue = backingMap[key];
+        delete backingMap[key];
+        removeListeners.forEach(callback => callback(key, removedValue));
     };
 
     const getValue = key =>
