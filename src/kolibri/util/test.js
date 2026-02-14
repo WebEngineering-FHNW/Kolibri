@@ -2,15 +2,15 @@
 
 /**
  * @module util/test
- * The test utility, exports the Suite, helper functions,  plus {@link Observable}s for
+ * The test utility, exports the Suite, helper functions,  plus {@link IObservable observables} for
  * how many assertions have been tested and whether any failed.
  */
 
-import { colorAccent, colorOk }                      from "../../customize/kolibriStyle.js";
-import { id, Just, Tuple } from "../stdlib.js";
-import { Observable }      from "../observable.js";
-import { dom }             from "./dom.js";
-import { LoggerFactory }                             from "../logger/loggerFactory.js";
+import {colorAccent, colorOk} from "../../customize/kolibriStyle.js";
+import {id, Just, Tuple}      from "../stdlib.js";
+import {Observable}           from "../observable.js";
+import {dom}                  from "./dom.js";
+import {LoggerFactory}        from "../logger/loggerFactory.js";
 import {
     addToAppenderList,
     getLoggingContext,
@@ -63,7 +63,7 @@ const addToTotal = num => total.setValue( num + total.getValue());
  * @callback IterableEq
  * @param { Iterable<*> } actual            - the actual iterable
  * @param { Iterable<*> } expected          - an iterable with the expected elements
- * @param { number } [maxElementsToConsume] - if set, the thrown errors message will be compared to this string
+ * @param { Number? } maxElementsToConsume  - if set, at most so many elements are used before comparison is cancelled
  * @returns void
  */
 
@@ -164,7 +164,9 @@ const Assert = () => {
                 iterationCount++;
             }
 
-            if (!testPassed) log.error(message);
+            if (!testPassed) {
+                log.error(message);
+            }
             results.push(testPassed);
             addMessage(message);
         },
