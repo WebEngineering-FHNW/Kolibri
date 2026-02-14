@@ -11,6 +11,7 @@ import "./pipe/pipeTest.js";
 import "./dropWhere/dropWhereTest.js";
 import "./takeWhere/takeWhereTest.js";
 import "./reverse/reverseTest.js";
+import "./scan/scanTest.js";
 import "./take/takeTest.js";
 import "./takeWhile/takeWhileTest.js";
 import "./zip/zipTest.js";

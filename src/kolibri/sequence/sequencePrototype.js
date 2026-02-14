@@ -8,26 +8,27 @@ import {
   nil
 }                                 from "./constructors/nil/nil.js";
 import {
-  append,
-  bind,
-  catMaybes,
-  cons,
-  cycle,
-  drop,
-  dropWhere,
-  dropWhile,
-  map,
-  mconcat,
-  pipe,
-  reverse$,
-  snoc,
-  take,
-  takeWhere,
-  takeWhile,
-  tap,
-  zip,
-  zipWith
-}                                 from "./operators/operators.js";
+    append,
+    bind,
+    catMaybes,
+    cons,
+    cycle,
+    drop,
+    dropWhere,
+    dropWhile,
+    map,
+    mconcat,
+    pipe,
+    reverse$,
+    scan,
+    snoc,
+    take,
+    takeWhere,
+    takeWhile,
+    tap,
+    zip,
+    zipWith
+} from "./operators/operators.js";
 import {
   count$,
   eq$,
@@ -193,6 +194,10 @@ SequencePrototype.dropWhere = function (predicate) {
 
 SequencePrototype.dropWhile = function (predicate) {
   return dropWhile(predicate)(this);
+};
+
+SequencePrototype.scan = function (binOp, startValue) {
+  return scan(binOp, startValue)(this);
 };
 
 SequencePrototype.tap = function (callback) {

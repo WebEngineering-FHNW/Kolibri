@@ -55,6 +55,10 @@
  *              - Type: {@link DropWhereOperationType}
  *              - jump over all elements that satisfy the predicate
  *              - Example: `Seq(1, 2, 0).dropWhere(x => x > 1) ['=='] (Seq(1, 0))`
+ * @property { ScanOperationType<_T_> } scan
+ *              - Type: {@link ScanOperationType}
+ *              - like a {@link ReduceSequenceOperationType} but for each element,
+ *              - example: `Seq(1, 2, 3).scan((acc, cur) => acc + cur, 0) ['=='] Seq(1, 3, 6)`
  * @property { TapOperationType<_T_> } tap
  *             - Type: {@link TapOperationType}
  *             - Executes the callback when tapping into each element, great for debugging and separating side effects.
