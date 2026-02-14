@@ -33,6 +33,7 @@
 
     // setting up and binding om1
     const om1 = ObservableMap("om1");
+    const omInput1 = document.getElementById("omInput1");
     omInput1.oninput = _ => om1.setValue("sharedInput", omInput1.value);
     om1.onChange((key, value) => {
         if (key === "sharedInput") {
@@ -44,6 +45,7 @@
 
     // setting up and binding om2
     const om2 = ObservableMap("om2");
+    const omInput2 = document.getElementById("omInput2");
     omInput2.oninput = _ => om2.setValue("sharedInput", omInput2.value);
     om2.onChange((key, value) => {
         if (key === "sharedInput") {
@@ -54,6 +56,7 @@
 
     // setting up and binding remoteObservableMap
     const remoteObservableMap = ObservableMap("remoteObservableMap");
+    const romInput = document.getElementById("romInput");
     romInput.oninput = _ => remoteObservableMap.setValue("sharedInput", romInput.value);
     remoteObservableMap.onChange( (key, value) => {
         if (key === "sharedInput") {
