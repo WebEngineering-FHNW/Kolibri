@@ -65,7 +65,7 @@ const fireEvent = (element, eventTypeString) => {
  * Convenience function for {@link fireEvent} function with value "change".
  * @param { HTMLElement } element - The "target" element that fires the event.
  */
-const fireChangeEvent = element => fireEvent(element, CHANGE);
+const fireChangeEvent = element => fireEvent(element, "change");
 
 /** @typedef { "text" | "number" | "checkbox" | "time" | "date" | "color" | "range" } InputTypeString */
 /** @type InputTypeString */ const TEXT         = "text";
