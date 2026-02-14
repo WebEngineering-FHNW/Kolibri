@@ -68,7 +68,7 @@ const SlotMachineController = () => {
 
     model.wheels.map( obs =>
         setInterval(() => obs.setValue(obs.getValue().right()), ROTATION_SPEED))
-        .forEach(clearIntervalAfterTimout(minimalRunTime));
+        .forEach(clearIntervalAfterTimeout(minimalRunTime));
   };
 
   /**
@@ -76,7 +76,7 @@ const SlotMachineController = () => {
    *
    * @param { Number } runTime - the minimal runtime
    */
-  const clearIntervalAfterTimout = runTime => (intervalId, idx) => {
+  const clearIntervalAfterTimeout = runTime => (intervalId, idx) => {
     runTime += 500 + Math.random() * 300; // do not stop all wheels at once
     const isLast = idx === model.wheels.length - 1;
     setTimeout(() => {
