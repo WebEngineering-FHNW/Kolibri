@@ -1,6 +1,7 @@
 import {createMonadicSequence} from "../../sequencePrototype.js";
 import {iteratorOf}            from "../../util/helpers.js";
 
+export { cycle }
 /**
  * {@link cycle} ties a finite {@link Iterable} into a circular one, or equivalently,
  * the infinite repetition of the original {@link Iterable}.
@@ -10,7 +11,7 @@ import {iteratorOf}            from "../../util/helpers.js";
  * @function
  * @pure
  * @haskell [a] -> [a]
- * @type { SequenceOperation<_T_>}
+ * @type { <_T_> (iterable:Iterable<_T_>) => SequenceOperation<_T_>}
  *
  * @example
  * const numbers = [0, 1, 2];
@@ -20,7 +21,6 @@ import {iteratorOf}            from "../../util/helpers.js";
  * console.log(...result);
  * // => Logs '0, 1, 2, 0, 1, 2'
  */
-export { cycle }
 
 /**
  * see {@link CycleOperationType}
