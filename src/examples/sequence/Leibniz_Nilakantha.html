@@ -39,52 +39,65 @@
 
 <script type="module">
 
-    import { ALL, Walk, limit, plusOp, Seq } from "../../kolibri/sequence/sequence.js";
-    import { select }                        from "../../kolibri/util/dom.js";
+    import {ALL, Walk, plusOp, Seq}       from "../../kolibri/sequence/sequence.js";
+    import {select}                       from "../../kolibri/util/dom.js";
+    import {id, Just, Nothing, Pair, snd} from "../../kolibri/stdlib.js";
 
+    const numForm = Intl.NumberFormat("en-us").format;
 
-    const partialSum = numSeq => n =>
-        numSeq
-            .take(n)
-            .reduce$(plusOp, 0);
+    const last$ = seq =>
+            seq.foldl$( (_acc, cur) => Just(cur), Nothing );
 
-    const partialSumSeq = numSeq =>
-        Walk(1, ALL)
-            .map(partialSum(numSeq));
+    const takeWhileDiff = epsilon => numSeq =>
+            numSeq
+                .zip(numSeq.drop(1))
+                .map      ( ([el, next]) => Pair (Math.abs(next-el)) (next) )
+                .takeWhile( ([diff,_el]) => diff > epsilon )
+                .map      ( pair         => pair(snd));
 
     const plusMinus = Seq(1, -1).cycle();
 
     const leib_seq =
         Walk(1, ALL, 2)
-            .map( n => 1 / n )
+            .map( n => 4 / n )
             .zipWith((x, sign) => sign * x)(plusMinus);
 
     const nila_seq =
         Walk(2, ALL, 2)
-            .map( n => 1 / (n * (n + 1) * (n + 2)))
+            .map( n => 4 / (n * (n + 1) * (n + 2)))
             .zipWith((x, sign) => sign * x)(plusMinus);
 
-    const partialLeibnizSums  = partialSumSeq(leib_seq);
-    const leibniz             = 4 * limit(1e-3, partialLeibnizSums );
+    const partialLeibnizSums  = leib_seq.scan(plusOp, 0);
+    const leibnizLimited      = takeWhileDiff(1e-5)(partialLeibnizSums);
+    const leibniz             = last$(leibnizLimited)(id)(id);
+    const leibnizLength       = leibnizLimited.count$();
 
-    const partialNilaSums     = partialSumSeq(nila_seq);
-    const nilakantha          = 3 + 4 * limit(1e-8, partialNilaSums );
+    const partialNilaSums     = nila_seq.scan(plusOp, 0);
+    const nilaLimited         = takeWhileDiff(1e-8)(partialNilaSums);
+    const nilakantha          = last$(nilaLimited)(id)(id);
+    const nilakanthaLength    = nilaLimited.count$();
 
+    const tabular = str => str.replaceAll(/[\[\],]/g,"\n");
     const [lout] = select(document.body, "#leibnizOut");
     lout.textContent = `
-Partial sum sequence
-${partialLeibnizSums.show()}
+Partial sum sequence, limiting at 1e-5
+${tabular(partialLeibnizSums.show(5))}
+  and ${numForm(leibnizLength-8)} more values, until ...
+${tabular(partialLeibnizSums.drop(leibnizLength-3).show(3))}
 
-Limit * 4:      ${leibniz}
+Limit :      ${leibniz}
     `;
 
     const [nilaOut] = select(document.body, "#nilaOut");
     nilaOut.textContent = `
-Partial sum sequence
-${partialNilaSums.show()}
+Partial sum sequence limiting at 1e-8
+${tabular(partialNilaSums.show(5))}
+ and ${numForm(nilakanthaLength-8)} more values, until ...
+${tabular(partialNilaSums.drop(nilakanthaLength-3).show(3))}
 
-limit * 4 + 3:   ${nilakantha}
+limit + 3:   ${nilakantha + 3}
     `;
+
 </script>
 
 
