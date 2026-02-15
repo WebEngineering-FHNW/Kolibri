@@ -9,7 +9,7 @@
 
     <pre id="out"> waiting ... </pre>
 
-    <script src="kolibri-0.9.11.js"></script>
+    <script src="kolibri-2026-02-15.js"></script>
     <script >
         defaultConsoleLogging("ch", LOG_DEBUG);
         const asCH = new Intl.NumberFormat("ch-DE").format;
@@ -53,10 +53,12 @@
         const odds = Walk(1,ALL,2);
         odds.show();
 
-        const partialSums = seq => Walk(1,ALL).map( n => seq.take(n).foldl$(plusOp, 0));
+        const partialSums = scan(plusOp, 0); // eta reduced
 
-        const triagonalNumbers = partialSums(Walk()).show();
-        const surprise         = partialSums(odds).show();
+        const triagonalNumbers = partialSums(Walk());
+        console.log(triagonalNumbers.show(10));
+        const surprise         = partialSums(odds);
+        console.log(surprise.show(10));
 
         const ratios = Walk().map(n=> fib(n+1)/fib(n));
         ratios.show();

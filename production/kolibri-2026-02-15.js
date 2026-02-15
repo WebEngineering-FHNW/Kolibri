@@ -89,180 +89,6 @@ const Scheduler = () => {
         addOk: task => add( ok => { task(); ok(); }) // convenience
     }
 };/**
- * @module util/arrayFunctions
- * Utility module for array-dependent functions.
- */
-
-
-/**
- * A function that compares two arrays for equality by checking that they are of the same length and
- * all elements are pairwise equal with respect to the "===" operator. Arguments are given in curried style.
- * Arguments must not be null/undefined and must be of type {@link Array}.
- * @template T
- * @pure
- * @complexity O(n)
- * @haskell  [a] -> [a] -> bool
- * @function arrayEq
- * @type    { (arrayA:!Array<T>) => (arrayB:!Array<T>) => boolean }
- * @param   { !Array<T>} arrayA - the first array. Mandatory.
- * @returns { (arrayB:!Array<T>) => boolean}
- * @example
- * arrayEq ([])  ([])  === true;
- * arrayEq ([1]) ([2]) === false;
- */
-const arrayEq = arrayA => arrayB =>
-    arrayA.length === arrayB.length && arrayA.every( (it, idx) => it === arrayB[idx]);
-
-/**
- * From the {@link array}, remove the item at position "index". The arguments are given in curried style.
- * The index must be >= 0 and < `array.length` or nothing is removed and an empty array is returned.
- * @impure Since the given array is modified.
- * @function removeAt
- * @template T
- * @type    { (array:!Array<T>) => (index:!number) => Array<T> }
- * @param   { !Array<T>} array - the array to remove from. Mandatory.
- * @returns { (index:!number) => Array<T> } - finally, the removed element is returned in a singleton array, or an empty array in case nothing was removed, see {@link splice}
- * @example
- * const array = [1,2,3];
- * removeAt(array)(0);
- * arrayEq(array)([2,3]);
- */
-const removeAt = array => index => array.splice(index, 1);
-
-/**
- * From the {@link array}, remove the "item". The arguments are given in curried style.
- * In case that the item occurs multiple times in the array, only the first occurrence is removed.
- * @impure Since the given array is modified.
- * @function removeItem
- * @template T
- * @type    { (array:!Array<T>) => (item:!T) => Array<T> }
- * @param   { !Array<T>} array - the array to remove from. Mandatory.
- * @returns { (item:!T) => Array<T> } - finally, the removed element is returned in a singleton array or an empty array in case nothing was removed, see {@link splice}
- * @example
- * const array = ["a","b","c"];
- * removeItem(array)("b");
- * arrayEq(array)(["a","c"]);
- */
-const removeItem = array => item => {
-    const i = array.indexOf(item);
-    if (i >= 0) {
-        return removeAt(array)(i);
-    }
-    return [];
-};
-
-/**
- * @typedef { <_T_> (!Number) => _T_ } TimesCallback<_T_>
- */
-
-/**
- * A function that executes the optional {@link TimesCallback} "soMany" times, assembles the results and returns them in an
- * {@link array} of length "soMany". The arguments are given in curried style.
- * If no callback is given, the unaltered index is returned. Indexes go from 0 to soMany-1.
- * @impure if the callback is impure
- * @haskell  Int -> (Int -> a) -> [a]
- * @function times
- * @type    { <_T_> (soMany: !Number) => (cb: ?TimesCallback) => Array<_T_> }
- * soMany - how often to execute the callback. Negative values will be treated like 0. Mandatory.
- * @throws  { TypeError } - if soMany is given as a String but does not represent a number
- * @example
- * times(3)(i => console.log(i)); // logs 0, 1, 2
- * times(5)(x=>x*x); // returns [0, 1, 4, 9, 16]
- */
-const times = soMany => (callback) => {
-    const number = Number(soMany.valueOf());
-    if (isNaN(number)) {
-        throw new TypeError("Object '" + soMany + "' is not a valid number.");
-    }
-    return Array.from({length: number}, (it, idx) => callback ? callback(idx) : idx);
-};
-
-/**
- * @typedef { <_T_> (!_T_, index: ?Number) => Number } SumCallback<_T_>
- */
-
-/**
- * A function that sums up all items from an {@link array} by applying the {@link SumCallback} to each item before adding up.
- * The arguments are given in curried style.
- * @impure   if the callback is impure
- * @haskell  Num n => [a] -> (a -> n) -> n
- * @type    { <_T_> (array:!Array<_T_>) => (cb:  ProducerType<Number> | ?SumCallback<_T_>) => Number }
- * @example
- * sum([1,2,3])()     === 1 + 2 + 3;
- * sum(["1"])(Number) === 1;
- */
-const sum = array => (callback = Number) => {
-    const cb = /** @type {ProducerType<Number> | ?SumCallback} */ callback;
-    return array.reduce( (acc, cur, idx) => acc + cb(cur, idx), 0);
-};/**
- * @module util/array
- * Augmenting the {@link Array}, {@link String}, and {@link Number} prototypes with functions from the arrayFunctions module.
- * These functions live in their own module such that users of the library can keep their code clean
- * from prototype modifications if they prefer to do so.
- */
-
-
-/**
- * See {@link arrayEq}.
- * @template _T_
- * @param  { Array<_T_> } array
- * @return { Boolean  }
- * @example
- * [1].eq([1]); // true
- */
-Array.prototype.eq = function(array) { return arrayEq(this)(array);};
-
-/**
- * See {@link removeAt}.
- * @template _T_
- * @impure Modifies the array instance.
- * @param  { Number } index
- * @return { Array<_T_> }
- * @example
- * [1,2,3].removeAt(0);
- */
-Array.prototype.removeAt = function(index){ return removeAt(this)(index); };
-
-/**
- * See {@link removeItem}.
- * @template _T_
- * @impure Modifies the array instance.
- * @param  { _T_ } item
- * @return { Array<_T_> }
- * @example
- * ["a","b","c"].removeItem("b");
- */
-Array.prototype.removeItem = function(item){ return removeItem(this)(item); };
-
-/**
- * See {@link times}.
- * @template _T_
- * @param  { ?TimesCallback } callback
- * @return { Array<_T_> }
- * @example
- * "10".times(it => console.log(it));
- */
-String.prototype.times = function(callback = undefined){ return times(this)(callback); };
-
-/**
- * See {@link times}.
- * @template _T_
- * @param  { ?TimesCallback } callback
- * @return { Array<_T_> }
- * @example
- * (5).times(x => x * x); // [0, 1, 4, 9, 16]
- */
-Number.prototype.times = function(callback= undefined){ return times(this)(callback); };
-
-/**
- * See {@link sum}.
- * @param  { ?SumCallback } callback
- * @return { Number }
- * @example
- * [1,2,3].sum();     // 6
- * ["1"].sum(Number); // 1
- */
-Array.prototype.sum = function(callback = undefined){ return sum(this)(callback); };/**
  * @module lambda/church
  * Church encoding of the lambda calculus in JavaScript
  * to the extent that we need it in Kolibri.
@@ -277,6 +103,7 @@ Array.prototype.sum = function(callback = undefined){ return sum(this)(callback)
  * The function is pure and runs in O(1). Function calls can be inlined.
  * @haskell  a -> a
  * @pure
+ * @template _T_
  * @type  { <_T_> (_T_) => _T_ }
  * @example 
  * id(1) === 1
@@ -289,6 +116,7 @@ const id = x => x;
  * "K" in the SKI calculus, or "Kestrel" in the Smullyan bird metaphors.
  * @haskell  a -> b -> a
  * @pure
+ * @template _T_
  * @type     { <_T_> (x:_T_) => (...y) => _T_ }
  * @example
  * c(1)(undefined) === 1;
@@ -300,6 +128,7 @@ const c = x => () => x;
 
 /** The first of two curried arguments, identical to {@link c} (see there for more info).
  * Often used to pick the first element of a {@link Pair}.
+ * @template _T_
  * @type     { <_T_> (x:_T_) => (...y) => _T_ }
  * @example
  * const point = Pair(1)(2);
@@ -314,6 +143,7 @@ const fst = c;
  * Often used to pick the first element of a {@link Pair}.
  * @haskell  b -> a -> a
  * @pure
+ * @template _T_
  * @type     { <_T_> (...x) => (y:_T_) => _T_ }
  * @example
  * snd(undefined)(1) === 1;
@@ -397,12 +227,14 @@ const Choice = n => { // number of constructors
  * Only needed internally for the sake of proper JsDoc.
  * @typedef  FunctionAtoBType
  * @pure     supposed to be pure
+ * @template _T_
  * @type     { <_T_, _U_> (x:_T_) => _U_ }
  */
 
 /**
  * Type of the {@link Left} constructor after being bound to a value x of type _T_.
  * @typedef LeftXType
+ * @template _T_, _U_
  * @type    { <_T_, _U_>  (f:FunctionAtoBType<_T_, _U_>) => (g:*) => _U_ }
  */
 
@@ -415,6 +247,7 @@ const Choice = n => { // number of constructors
  * Left values are immutable.
  * @haskell a -> (a -> b) -> c -> b
  * @pure    if FunctionAtoBType is pure
+ * @template _T_, _U_
  * @type    { <_T_, _U_>  (x:_T_) =>  LeftXType<_T_, _U_> }
  * @example
  * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
@@ -428,6 +261,7 @@ const Left  = x => f => _g => f(x);
 /**
  * Type of the {@link Right} constructor after being bound to a value x of type _T_.
  * @typedef RightXType
+ * @template _T_, _U_
  * @type     { <_T_, _U_>  (f:*)  => (f:FunctionAtoBType<_T_, _U_>) => _U_ }
  */
 
@@ -440,6 +274,7 @@ const Left  = x => f => _g => f(x);
  * Right values are immutable.
  * @haskell a -> c -> (a -> b) -> b
  * @pure    if FunctionAtoBType is pure
+ * @template _T_, _U_
  * @type    { <_T_, _U_>  (x:_T_) =>  RightXType<_T_, _U_> }
  * @example
  * const withFoo = (null == foo) ? Left("could not find foo") : Right(foo);
@@ -451,14 +286,14 @@ const Right = x => _f => g => g(x);
 
 /**
  * @typedef { LeftXType<_T_,_U_> | RightXType<_T_,_U_> } EitherType
- * @template _T_
- * @template _U_
+ * @template _T_, _U_
  * @pure
  */
 
 /** function application, beta reduction
  * @haskell (a -> b) -> a -> b
  * @pure if f is pure
+ * @template _T_, _U_
  * @type { <_T_, _U_> (f: FunctionAtoBType<_T_, _U_>) => (x: _T_) => _U_ }
  * @example
  * beta(id)(42) === 42;
@@ -473,6 +308,7 @@ const konst = c;
  * Sometimes used to prepare for later eta reduction or make for more convenient use of f 
  * when the x argument is a lengthy in-line expression.
  * @haskell (a -> b -> c) -> b -> a -> c
+ * @template _T_, _U_, _V_
  * @type { <_T_, _U_, _V_> (f: (_T_) => (_U_) => _V_) => (_U_) => (_T_) => _V_ }
  */
 const flip = f => x => y => f(y)(x);
@@ -482,6 +318,7 @@ const kite = snd;
 
 /** Composition of two functions, aka Bluebird (B) in the Smullyan bird metaphors.
  * @haskell (b -> c) -> (a -> b) -> a -> c
+ * @template _T_, _U_, _V_
  * @type { <_T_, _U_, _V_> (f: FunctionAtoBType<_U_, _V_>) => (g: FunctionAtoBType<_T_, _U_>) => (x: _T_) => _V_ }
  */
 const cmp = f => g => x => f(g(x));
@@ -495,7 +332,7 @@ const cmp2 = f => g => x => y => f(g(x)(y));
 // ---- boolean logic
 
 /**
- * True is the success case of the Boolean type. 
+ * True is the success case of the Boolean type.
  */
 const T   = fst;
 /**
@@ -563,6 +400,8 @@ const churchBool = jsB => /** @type {ChurchBooleanType} */ jsB ? T : F;
  * In other words:
  * LazyIf acts like a church boolean where we know that the result will be a function that we call without arguments.
  *
+ *
+ * @template _T_
  * @type { <_T_>
  *     (ChurchBooleanType)
  *     => (f:FunctionAtoBType<undefined, _T_>)
@@ -578,20 +417,24 @@ const LazyIf = condition => thenFunction => elseFunction => ( condition(thenFunc
 
 /**
  * Calling the function f recursively.
+ * @template _T_
  * @type { <_T_> (f: (_T_) => _T_) => _T_ }
  */
 const rec = f => f ( n => rec(f)(n)  ) ;
 
 /**
  * @callback HandleLeftCallback
+ * @template _T_, _U_, _V_
  * @type { <_T_,_U_,_V_> (l:LeftXType<_T_,_U_>) => _V_ }
  */
 /**
  * @callback HandleRightCallback
+ * @template _T_, _U_, _V_
  * @type { <_T_,_U_,_V_> (r:RightXType<_T_,_U_>) => _V_ }
  */
 /**
  * Apply the f or g handling function to the Either value.
+ * @template _T_, _U_, _V_
  * @type  { <_T_,_U_,_V_> (e:EitherType<_T_,_U_>) => (hl:HandleLeftCallback<_T_,_U_>) => (hr:HandleRightCallback<_T_,_U_>) => _V_ }
  */
 const either = e => f => g => e(f)(g);
@@ -608,6 +451,7 @@ const either = e => f => g => e(f)(g);
  */
 /**
  * Apply the f or g handling function to the Maybe value depending on whether it is a Just or a Nothing.
+ * @template _T_, _U_
  * @type  { <_T_,_U_> (m:MaybeType<_T_>) => (hn:HandleNothingCallback<_T_,_U_>) => (hj:HandleJustCallback<_T_,_U_>) => _U_ }
  */
 const maybe = m => f => g => m(f)(g);
@@ -616,6 +460,7 @@ const maybe = m => f => g => m(f)(g);
  * Take a function of two arguments and return a function of one argument that returns a function of one argument,
  * i.e. a function of two arguments in curried style.
  * @haskell curry :: ((a,b)->c) -> a -> b -> c
+ * @template _T_, _U_, _V_
  * @type { <_T_,_U_,_V_> (f:FunctionAtoBType<_T_,FunctionAtoBType<_U_,_V_>>) => FunctionAtoBType<_T_,FunctionAtoBType<_U_,_V_>> }
  */
 const curry = f => x => y => f(x,y);
@@ -623,6 +468,7 @@ const curry = f => x => y => f(x,y);
 /**
  * Take af function of two arguments in curried style and return a function of two arguments.
  * @haskell uncurry :: ( a -> b -> c) -> ((a,b) -> c)
+ * @template _T_, _U_, _V_
  * @type { <_T_,_U_,_V_> (f:FunctionAtoBType<_T_,FunctionAtoBType<_U_,_V_>>) => FunctionAtoBType<_T_,_U_,_V_> }
  */
 const uncurry = f => (x,y) => f(x)(y);
@@ -668,11 +514,14 @@ const toJsBool = churchBoolean =>  churchBoolean(true)(false);/**
 
 /**
  * A Pair is a {@link Tuple}(2) with a smaller and specialized implementation.
- * Access functions are {@link fst} and {@link snd}. Pairs are immutable.
+ * Access functions are {@link fst} and {@link snd}. Pairs are immutable but
+ * accessing the values via the _iterator is not totally safe since some malicious
+ * programmer could have overridden the iterator_. Accessing via `fst` or `snd` is safe.
  * "V" in the SKI calculus, or "Vireo" in the Smullyan bird metaphors.
  *
  * @constructor
  * @pure
+ * @immutable
  * @haskell a -> b -> (a -> b -> a|b) -> a|b
  * @template _T_, _U_
  * @type    { PairType<_T_, _U_> }
@@ -851,10 +700,6 @@ const choiceMaybe = maybe1 => maybe2 =>
  */
 
 /**
- * @typedef { LOG_TRACE | LOG_DEBUG | LOG_INFO | LOG_WARN | LOG_ERROR | LOG_FATAL | LOG_NOTHING } LogLevelChoice
- */
-
-/**
  * Alias for the use of the {@link Pair} constructor as a {@link LogLevelType}.
  * @type { PairType<Number, String> }
  * @private
@@ -955,11 +800,11 @@ const loggingLevelObs = /** @type { IObservable<LogLevelType> } */ Observable(LO
 /**
  * This function can be used to set the logging level for the logging framework.
  * Only messages whose have at least the set log level are logged.
- * @param { LogLevelChoice } newLoggingLevel
+ * @param { LogLevelType } newLoggingLevel
  * @example
  * setLoggingLevel(LOG_DEBUG);
  */
-const setLoggingLevel = loggingLevelObs.setValue;
+const setLoggingLevel  = loggingLevelObs.setValue;
 
 /**
  * Getter for the loggingLevel.
@@ -1119,7 +964,7 @@ const onAppenderRemoved = appenderListObs.onDel;/**
  * @function
  * @pure if the {@link AppendCallback} in the appender list and the parameter msgFormatter of type {@link LogMessageFormatterType} are pure.
  * @type    {
- *               (loggerLevel:      LogLevelChoice)
+ *               (loggerLevel:      LogLevelType)
  *            => (loggerContext:    LogContextType)
  *            => (msg:              LogMeType)
  *            => Boolean
@@ -1169,7 +1014,7 @@ const messageShouldBeLogged = loggerLevel => loggerContext =>
 
 /**
  * Returns whether the loggerLevel will log under the current loggingLevel.
- * @type { (loggerLevel: LogLevelChoice) => Boolean }
+ * @type { (loggerLevel: LogLevelType) => Boolean }
  * @private
  */
 const logLevelActivated = loggerLevel => contains(getLoggingLevel(), loggerLevel);
@@ -1278,22 +1123,132 @@ const LOG_CONTEXT_KOLIBRI_TEST = LOG_CONTEXT_KOLIBRI_BASE + ".test";
 /**
  * Constant for the log context that logs for all contexts.
  * @type { String } */
-const LOG_CONTEXT_All = "";let warn$3 = undefined;
+const LOG_CONTEXT_All = "";/**
+ * @module util/arrayFunctions
+ * Utility module for array-dependent functions.
+ */
+
+
+/**
+ * A function that compares two arrays for equality by checking that they are of the same length and
+ * all elements are pairwise equal with respect to the "===" operator. Arguments are given in curried style.
+ * Arguments must not be null/undefined and must be of type {@link Array}.
+ * @template T
+ * @pure
+ * @complexity O(n)
+ * @haskell  [a] -> [a] -> bool
+ * @function arrayEq
+ * @type    { (arrayA:!Array<T>) => (arrayB:!Array<T>) => boolean }
+ * @param   { !Array<T>} arrayA - the first array. Mandatory.
+ * @returns { (arrayB:!Array<T>) => boolean}
+ * @example
+ * arrayEq ([])  ([])  === true;
+ * arrayEq ([1]) ([2]) === false;
+ */
+const arrayEq = arrayA => arrayB =>
+    arrayA.length === arrayB.length && arrayA.every( (it, idx) => it === arrayB[idx]);
+
+/**
+ * From the {@link array}, remove the item at position "index". The arguments are given in curried style.
+ * The index must be >= 0 and < `array.length` or nothing is removed and an empty array is returned.
+ * @impure Since the given array is modified.
+ * @function removeAt
+ * @template T
+ * @type    { (array:!Array<T>) => (index:!number) => Array<T> }
+ * @param   { !Array<T>} array - the array to remove from. Mandatory.
+ * @returns { (index:!number) => Array<T> } - finally, the removed element is returned in a singleton array, or an empty array in case nothing was removed, see {@link splice}
+ * @example
+ * const array = [1,2,3];
+ * removeAt(array)(0);
+ * arrayEq(array)([2,3]);
+ */
+const removeAt = array => index => array.splice(index, 1);
+
+/**
+ * From the {@link array}, remove the "item". The arguments are given in curried style.
+ * In case that the item occurs multiple times in the array, only the first occurrence is removed.
+ * @impure Since the given array is modified.
+ * @function removeItem
+ * @template T
+ * @type    { (array:!Array<T>) => (item:!T) => Array<T> }
+ * @param   { !Array<T>} array - the array to remove from. Mandatory.
+ * @returns { (item:!T) => Array<T> } - finally, the removed element is returned in a singleton array or an empty array in case nothing was removed, see {@link splice}
+ * @example
+ * const array = ["a","b","c"];
+ * removeItem(array)("b");
+ * arrayEq(array)(["a","c"]);
+ */
+const removeItem = array => item => {
+    const i = array.indexOf(item);
+    if (i >= 0) {
+        return removeAt(array)(i);
+    }
+    return [];
+};
+
+/**
+ * @typedef { <_T_> (!Number) => _T_ } TimesCallback<_T_>
+ */
+
+/**
+ * A function that executes the optional {@link TimesCallback} "soMany" times, assembles the results and returns them in an
+ * {@link array} of length "soMany". The arguments are given in curried style.
+ * If no callback is given, the unaltered index is returned. Indexes go from 0 to soMany-1.
+ * @impure if the callback is impure
+ * @haskell  Int -> (Int -> a) -> [a]
+ * @function times
+ * @type    { <_T_> (soMany: !Number) => (cb: ?TimesCallback) => Array<_T_> }
+ * soMany - how often to execute the callback. Negative values will be treated like 0. Mandatory.
+ * @throws  { TypeError } - if soMany is given as a String but does not represent a number
+ * @example
+ * times(3)(i => console.log(i)); // logs 0, 1, 2
+ * times(5)(x=>x*x); // returns [0, 1, 4, 9, 16]
+ */
+const times = soMany => (callback) => {
+    const number = Number(soMany.valueOf());
+    if (isNaN(number)) {
+        throw new TypeError("Object '" + soMany + "' is not a valid number.");
+    }
+    return Array.from({length: number}, (it, idx) => callback ? callback(idx) : idx);
+};
+
+/**
+ * @typedef { <_T_> (!_T_, index: ?Number) => Number } SumCallback<_T_>
+ */
+
+/**
+ * A function that sums up all items from an {@link array} by applying the {@link SumCallback} to each item before adding up.
+ * The arguments are given in curried style.
+ * @impure   if the callback is impure
+ * @haskell  Num n => [a] -> (a -> n) -> n
+ * @type    { <_T_> (array:!Array<_T_>) => (cb:  ProducerType<Number> | ?SumCallback<_T_>) => Number }
+ * @example
+ * sum([1,2,3])()     === 1 + 2 + 3;
+ * sum(["1"])(Number) === 1;
+ */
+const sum = array => (callback = Number) => {
+    const cb = /** @type {ProducerType<Number> | ?SumCallback} */ callback;
+    return array.reduce( (acc, cur, idx) => acc + cb(cur, idx), 0);
+};let warn$4 = undefined;
 /** @private */
-function checkWarning(list) {
+function checkWarning$1(list) {
     if (list.length > 100) {
-        if (!warn$3) {
-            warn$3 = LoggerFactory(LOG_CONTEXT_KOLIBRI_BASE + ".observable").warn;
+        if (!warn$4) {
+            warn$4 = LoggerFactory(LOG_CONTEXT_KOLIBRI_BASE + ".observable").warn;
         }
-        warn$3(`Beware of memory leak. ${list.length} listeners.`);
+        warn$4(`Beware of memory leak. ${list.length} listeners.`);
     }
 }
 
 /**
  * @template _T_
- * @typedef { (newValue:_T_, oldValue: ?_T_) => void } ValueChangeCallback
+ * @typedef { (newValue:_T_, oldValue: ?_T_, selfRemove: ?ConsumerType<void>) => void } ValueChangeCallback
  * This is a specialized {@link ConsumerType} with an optional second value.
  * The "oldValue" contains the value before the change.
+ * The "selfRemove" is an optional function with the side effect that the current listener can use to
+ * remove itself from the list of listeners.
+ * @example
+ * obs.onChange( (_val, _old, removeMe) => removeMe() );
  */
 
 /**
@@ -1325,25 +1280,105 @@ function checkWarning(list) {
  * obs.setValue("some other value"); // will be logged
  */
 function Observable(value) {
-    const listeners = [];
+    const listeners      = [];
+    const removeListener = listener => removeItem(listeners)(listener);
+    const noop           = () => undefined;
     return {
         onChange: callback => {
-            checkWarning(listeners);
+            checkWarning$1(listeners);
             listeners.push(callback);
-            callback(value, value);
+            callback(value, value, noop);
         },
         getValue: () => value,
         setValue: newValue => {
             if (value === newValue) return;
-            const oldValue = value;
-            value          = newValue;
-            listeners.forEach(callback => {
+            const oldValue    = value;
+            value             = newValue;
+            const safeIterate = [...listeners]; // shallow copy as we might change the listeners array while iterating
+            safeIterate.forEach( listener => {
                 if (value === newValue) { // pre-ordered listeners might have changed this and thus the callback no longer applies
-                    callback(value, oldValue);
+                    listener(value, oldValue, () => removeListener(listener));
                 }
             });
         }
     };
+}/**
+ * @module util/array
+ * Augmenting the {@link Array}, {@link String}, and {@link Number} prototypes with functions from the arrayFunctions module.
+ * These functions live in their own module such that users of the library can keep their code clean
+ * from prototype modifications if they prefer to do so.
+ */
+
+
+/**
+ * See {@link arrayEq}.
+ * @template _T_
+ * @param  { Array<_T_> } array
+ * @return { Boolean  }
+ * @example
+ * [1].eq([1]); // true
+ */
+Array.prototype.eq = function(array) { return arrayEq(this)(array);};
+
+/**
+ * See {@link removeAt}.
+ * @template _T_
+ * @impure Modifies the array instance.
+ * @param  { Number } index
+ * @return { Array<_T_> }
+ * @example
+ * [1,2,3].removeAt(0);
+ */
+Array.prototype.removeAt = function(index){ return removeAt(this)(index); };
+
+/**
+ * See {@link removeItem}.
+ * @template _T_
+ * @impure Modifies the array instance.
+ * @param  { _T_ } item
+ * @return { Array<_T_> }
+ * @example
+ * ["a","b","c"].removeItem("b");
+ */
+Array.prototype.removeItem = function(item){ return removeItem(this)(item); };
+
+/**
+ * See {@link times}.
+ * @template _T_
+ * @param  { ?TimesCallback } callback
+ * @return { Array<_T_> }
+ * @example
+ * "10".times(it => console.log(it));
+ */
+String.prototype.times = function(callback = undefined){ return times(this)(callback); };
+
+/**
+ * See {@link times}.
+ * @template _T_
+ * @param  { ?TimesCallback } callback
+ * @return { Array<_T_> }
+ * @example
+ * (5).times(x => x * x); // [0, 1, 4, 9, 16]
+ */
+Number.prototype.times = function(callback= undefined){ return times(this)(callback); };
+
+/**
+ * See {@link sum}.
+ * @param  { ?SumCallback } callback
+ * @return { Number }
+ * @example
+ * [1,2,3].sum();     // 6
+ * ["1"].sum(Number); // 1
+ */
+Array.prototype.sum = function(callback = undefined){ return sum(this)(callback); };let warn$3 = undefined;
+/** @private */
+function checkWarning(list) {
+    if (list.length > 100) {
+        if (!warn$3) {
+            warn$3 = LoggerFactory(LOG_CONTEXT_KOLIBRI_BASE + ".observableList").warn;
+        }
+        warn$3(`Beware of memory leak. ${list.length} listeners.`);
+    }
 }
 
 /**
@@ -1354,7 +1389,10 @@ function Observable(value) {
  * @template _T_
  * @impure   Observables change their inner decorated list and maintain two lists of observers that changes over time.  
  * @property { (cb:ConsumerType<_T_>) => void }  onAdd - register an observer that is called whenever an item is added.
- * @property { (cb:ConsumerType<_T_>) => void }  onDel - register an observer that is called whenever an item is added.
+ * @property { (cb:ConsumerType<_T_>) => void }  onDel -
+ * register an observer that is called whenever an item is deleted.
+ * The observer callback gets passed an optional second argument that allows to remove itself -
+ * just like {@link removeDeleteListener} following the same strategy as {@link ValueChangeCallback}.
  * @property { (_T_) => void }  add - add an item to the observable list and notify the observers. Modifies the list.
  * @property { (_T_) => void }  del - delete an item to the observable list and notify the observers. Modifies the list.
  * @property { (cb:ConsumerType<_T_>) => void }  removeAddListener - unregister the "add" observer
@@ -1401,10 +1439,13 @@ function ObservableList(list) {
         },
         removeAddListener,
         removeDeleteListener,
-        count:   () => list.length,
+        count:   ()   => list.length,
         countIf: pred => list.reduce((sum, item) => pred(item) ? sum + 1 : sum, 0)
     };
 }/**
+ * @module observable
+ * relay from the observable subdirectory for backwards compatibility purposes.
+ *//**
  * @module stdtypes
  * The js doc definitions of the types that are most commonly used.
  */
@@ -2098,6 +2139,26 @@ const append = it1 => it2 => mconcat([it1, it2]);/**
  *
  */
 const cons = element => append( Seq(element) )  ;/**
+ * {@link cycle} ties a finite {@link Iterable} into a circular one, or equivalently,
+ * the infinite repetition of the original {@link Iterable}.
+ *
+ * @template _T_
+ * @typedef CycleOperationType
+ * @function
+ * @pure
+ * @haskell [a] -> [a]
+ * @type { <_T_> (iterable:Iterable<_T_>) => SequenceOperation<_T_>}
+ *
+ * @example
+ * const numbers = [0, 1, 2];
+ * const cycled = cycle(numbers);
+ * const result = take(6)(cycled);
+ *
+ * console.log(...result);
+ * // => Logs '0, 1, 2, 0, 1, 2'
+ */
+
+/**
  * see {@link CycleOperationType}
  * @template _T_
  * @type { CycleOperationType<_T_> }
@@ -2346,6 +2407,59 @@ const reverse$ = iterable => {
   };
 
   return createMonadicSequence(reverse$Iterator);
+};/**
+ * Transforms each element using the given {@link FunctionType function} `f` and `startValue` just as
+ * if we would have replaced each element with `foldl$(f,startValue)` on an iterable that ends with the current element.
+ * However, while a naïve implementation would result in an O(n*n) complexity, `scan` runs in O(n)
+ * for n elements.
+ *
+ * Typical use cases are partial sums and any kind of operation that wants to keep track of
+ * how the history of calculating steps led to the next value.
+ * It is also a device that can "carry state" from one element to the next.
+ *
+ * @function
+ * @pure    as long as the binOperator is pure
+ * @haskell (a -> b) -> b -> [a] -> [b]
+ * @typedef ScanOperationType
+ * @template _T_
+ * @template _U_
+ * @type { <_T_, _U_>
+ *            (binOperator: BiFunction<_U_, _T_, _U_>, startValue: _U_)
+ *         => SequenceOperation<_T_, _U_>
+ *       }
+ *
+ * @example
+ *     const partialSum = scan(plusOp, 0);
+ *     const result     = partialSum(Seq(1, 1, 1, 1, 1));
+ *     assert.iterableEq(result, Seq(1, 2, 3, 4, 5));
+ */
+
+/**
+ * see {@link ScanOperationType}
+ * @template _T_
+ * @template _U_
+ * @type { ScanOperationType<_T_, _U_> }
+ */
+
+const scan = (binOperator, startValue) => iterable => {
+
+    const scanIterator = () => {
+        const inner = iteratorOf(iterable);
+
+        let nextValue = startValue;
+        const next    = () => {
+            const {done, value} = inner.next();
+            if (done) {
+                return {done};
+            }
+            nextValue = binOperator(nextValue, value);
+            return { /**@type boolean */ done, value: nextValue};
+        };
+
+        return {next};
+    };
+
+    return createMonadicSequence(/** @type { <_U_> () => Iterator<_U_> } */ scanIterator);
 };/**
  * Adds the given element to the end of the {@link Iterable}.
  * @typedef SnocOperationType
@@ -3231,6 +3345,10 @@ SequencePrototype.dropWhile = function (predicate) {
   return dropWhile(predicate)(this);
 };
 
+SequencePrototype.scan = function (binOp, startValue) {
+  return scan(binOp, startValue)(this);
+};
+
 SequencePrototype.tap = function (callback) {
   return tap(callback)(this);
 };
@@ -3686,6 +3804,10 @@ const innerIterable = (...elements) => {
  *              - Type: {@link DropWhereOperationType}
  *              - jump over all elements that satisfy the predicate
  *              - Example: `Seq(1, 2, 0).dropWhere(x => x > 1) ['=='] (Seq(1, 0))`
+ * @property { ScanOperationType<_T_> } scan
+ *              - Type: {@link ScanOperationType}
+ *              - like a {@link ReduceSequenceOperationType} but for each element,
+ *              - example: `Seq(1, 2, 3).scan((acc, cur) => acc + cur, 0) ['=='] Seq(1, 3, 6)`
  * @property { TapOperationType<_T_> } tap
  *             - Type: {@link TapOperationType}
  *             - Executes the callback when tapping into each element, great for debugging and separating side effects.
@@ -4255,15 +4377,16 @@ const fireEvent = (element, eventTypeString) => {
  * Convenience function for {@link fireEvent} function with value "change".
  * @param { HTMLElement } element - The "target" element that fires the event.
  */
-const fireChangeEvent = element => fireEvent(element, CHANGE);
+const fireChangeEvent = element => fireEvent(element, "change");
 
-/** @typedef { "text" | "number" | "checkbox" | "time" | "date" | "color" } InputTypeString */
+/** @typedef { "text" | "number" | "checkbox" | "time" | "date" | "color" | "range" } InputTypeString */
 /** @type InputTypeString */ const TEXT         = "text";
 /** @type InputTypeString */ const NUMBER       = "number";
 /** @type InputTypeString */ const CHECKBOX     = "checkbox";
 /** @type InputTypeString */ const TIME         = "time";
 /** @type InputTypeString */ const DATE         = "date";
 /** @type InputTypeString */ const COLOR        = "color";
+/** @type InputTypeString */ const RANGE        = "range";
 
 /** @typedef { "textBtn" | "iconBtn" | "leadingIconBtn" | "trailingIconBtn" } ButtonTypeString */
 /** @type ButtonTypeString */ const TEXT_BUTTON             = "textBtn";
@@ -5234,10 +5357,41 @@ window["LOG_NOTHING"] = LOG_NOTHING;
 window["setLoggingLevel"  ] = setLoggingLevel  ;
 window["setLoggingContext"] = setLoggingContext;
 
-const defaultConsoleLogging = (context, level) => {
-  addToAppenderList(ConsoleAppender());
-  setLoggingContext(context);
-  setLoggingLevel(level);
+/**
+ * A log formatter that includes the location of the logged line by
+ * inspecting the stack frames.
+ * @warn This can be expensive when logging excessively
+ * @warn It is a best-effort approach and might not work in all circumstances
+ * @type { LogMessageFormatterType }
+ */
+const lineSupportFormatter = context => level => msg => {
+    let line;
+    try {
+        // noinspection ExceptionCaughtLocallyJS
+        throw Error("logger");
+    } catch(e) {
+        const stackFrames = e.stack.split("\n");
+        line = stackFrames[5]; // as long as the logger impl. does not chane, the call site is always 5 levels deep in the stack
+    }
+    return `${msg} ${line} ${context} ${level}`;
+};
+/**
+ * Set the logging to the default formatter and console appender.
+ * @param { LogContextType } context
+ * @param { LogLevelType }   level
+ * @param { Boolean? }       includeLines - extensive logging with line numbers (slower), optional, default = false
+ * @return { void }
+ * @impure side effects the logging setup
+ * @example
+ * defaultConsoleLogging("ch.fhnw", LOG_WARN);
+ */
+const defaultConsoleLogging = (context, level, includeLines = false) => {
+    if (includeLines) {
+        setGlobalMessageFormatter(lineSupportFormatter);
+    }
+    addToAppenderList(ConsoleAppender());
+    setLoggingContext(context);
+    setLoggingLevel(level);
 };let idPostfix = 0; // makes sure we have unique ids in case of many such controls
 
 /**
@@ -5410,7 +5564,7 @@ const addToTotal = num => total.setValue( num + total.getValue());
  * @callback IterableEq
  * @param { Iterable<*> } actual            - the actual iterable
  * @param { Iterable<*> } expected          - an iterable with the expected elements
- * @param { number } [maxElementsToConsume] - if set, the thrown errors message will be compared to this string
+ * @param { Number? } maxElementsToConsume  - if set, at most so many elements are used before comparison is cancelled
  * @returns void
  */
 
@@ -5511,7 +5665,9 @@ const Assert = () => {
                 iterationCount++;
             }
 
-            if (!testPassed) log.error(message);
+            if (!testPassed) {
+                log.error(message);
+            }
             results.push(testPassed);
             addMessage(message);
         },
@@ -5742,9 +5898,9 @@ const memoize = f => {
         }
         return y;
     }
-};const release     = "0.9.10";
+};const release     = "0.9.12";
 
-const dateStamp   = "2025-01-07 T 12:24:25 MEZ";
+const dateStamp   = "2026-02-14 T 21:49:17 MEZ";
 
 const versionInfo = release + " at " + dateStamp;
 
