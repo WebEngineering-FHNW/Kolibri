@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Maybe Division Example</title>
+    <meta name="keywords" content="Lambda Calculus, JavaScript">
+    <meta name="description" content="A Maybe example with division handling (lambda calculus),">
+    <meta charset="UTF-8">
+    <style>
+        html {
+            background-color: lightgrey;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        body {
+            font-family: 'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
+            background-color: whitesmoke;
+            padding: 2rem;
+            border-width: 1px;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05);
+        }
+        label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+
+<label for="firstNumInput">number</label>
+<input id="firstNumInput" type="number">
+
+<br><br>
+
+<label for="secondNumInput">divisor</label>
+<input id="secondNumInput" type="number">
+
+<br><br>
+
+<button id="divisionBtn">divide</button>
+
+<p>result = <span id="resultDivision">-</span></p>
+
+<script src="maybeExample.js" type="module"></script>
+</body>
+</html>

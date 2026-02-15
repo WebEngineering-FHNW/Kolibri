@@ -1,0 +1,226 @@
+/* make sure to keep in line with kolibriStyle.js */
+
+@import "kolibri-fonts.css";
+@import "kolibri-colors.css";
+@import "kolibri-projector-simple.css";
+
+
+:root {
+    padding:                 0;
+    margin:                  0;
+}
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+::selection {
+    background-color: var(--kolibri-color-select);
+}
+
+/* --- typography --- */
+
+body {
+    font-family: var(--font-family), system-ui;
+}
+
+header, h1, h2 {
+    color: var(--kolibri-color-product);
+}
+
+header h1 {
+    letter-spacing: 0.06em;
+}
+
+h1, h2, h3 {
+    font-weight: normal;
+    text-wrap:   balance;
+}
+
+div, p, ul, ol, dl, form, fieldset, label {
+    font-family:    var(--font-family), system-ui;
+    letter-spacing: 0.03em;
+    font-weight:    300;
+}
+
+input, button, textarea, select { /* interaction elements */
+    font-family:    system-ui;
+    letter-spacing: 0.03em;
+    font-weight:    normal;
+}
+
+/* --- end typography --- */
+
+/* --- default element appearance --- */
+ul {
+    padding-left:       1em;
+}
+ul li::marker {
+  color:                var(--kolibri-color-primary-accent);
+}
+
+figure {
+    margin-inline:      0;
+}
+figcaption {
+    font-style:         italic;
+    font-size:          var(--font-size-caption);
+    text-align:         end;
+}
+em {                    /* emphasis looks like highlighted with text marker */
+    position:           relative;
+    padding-inline:     0.2em 0.3em;
+    &::before {
+        content:        "";
+        position:       absolute;
+        inset:          0 0 -.2em 0;  /* inline -3px leads to strange line-break issues */
+        border-radius:  5% 5% 20% 20%;
+        background-color: var(--kolibri-color-select);
+        z-index:        -10;
+        rotate:         -3deg;
+        opacity:        60%;
+    }
+}
+
+a[href^="http"]::after { /* external link */
+    content:            " ↗";
+    opacity:            .3;
+}
+/* --- end default element appearance --- */
+
+/* --- default invalid handling --- */
+:invalid {
+    border-color: var(--kolibri-color-accent);
+}
+input:invalid {
+    border-color: transparent transparent var(--kolibri-color-accent) transparent;
+}
+input[type=text]:invalid {
+    color: var(--kolibri-color-accent);
+}
+/* We cannot use pseudo elements with input type text so we introduce an extra following span.
+   Note that the html structure is label - span ( input - span) like in simpleInputProjector.
+*/
+label + span { /* the "holder" span for the input comes right after a label */
+    position:   relative; /* such that we can position against it */
+}
+label + span > input + span.invalidation_marker {
+    /* background is transparent by default, so nothing is shown unless input becomes invalid */
+    position:       absolute; /* get it out of the stacking context */
+    top:            0;
+    left:           0;
+    width:          1ch;
+    aspect-ratio:   1;
+    transform:      translateX(-5ch);
+}
+label + span > input:invalid + span.invalidation_marker {
+    background-image: radial-gradient(circle closest-side, white 0%, white 20%, var(--kolibri-color-accent) 99%, transparent 100%);
+    filter:           drop-shadow(0 0 .2ch var(--kolibri-color-accent));
+    transform:        translateX(-1ch);
+    transition:       transform 0.5s ease-out;
+}
+/* --- end default invalid handling --- */
+
+/* --- logo handling -- */
+/* The information about where the actual logo file is, the format, etc. should
+   not be distributed over all the files but kept in one place.
+   Since the logo is decorative only, we avoid having to set fake "alt" attributes.
+ */
+
+.kolibri-logo {         /* for getting the logo from svg file, inline SVG element is in kolibriStyle.js */
+	width:              342px;                       /* default - you might want to override this with inline style */
+	aspect-ratio:       1;
+	background-image:   url("../img/logo/logo.svg"); /* keep in one place */
+	background-repeat:  no-repeat;
+    background-size:    contain;
+}
+
+/* --- fun stuff with the logo --- */
+
+.kolibri-logo-anim {                                /* works for both svg file or svg element */
+	animation:          kolibri_fly_in 2s ease;
+    .wing {
+        animation-name:            kolibri-flapping;
+        animation-duration:        .2s;
+        animation-iteration-count: 15;
+        animation-direction:       reverse;
+        animation-timing-function: ease-in;
+        transform-origin:          45% 45%;
+    }
+}
+@keyframes kolibri_fly_in {
+	0% {
+		transform: scaleX(-1)  scale(0.4) translateX(400%) rotate(-30deg);
+	}
+	60% {
+		transform:             scale(0.6) translateX(300%) rotate(-30deg);
+	}
+	100% {
+		transform:             scale(1.0) translateX(0)    rotate(  0deg) ;
+	}
+}
+@keyframes kolibri-flapping {
+      from {
+          transform:            scaleX(1)  rotate(0deg);
+      }
+      to {
+          transform:            scaleX(-1) rotate(30deg);
+      }
+ }
+
+/* --- standard values --- */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms ;
+  }
+}
+
+/*noinspection CssUnknownProperty*/
+:root {
+    /*
+        Needed to animate e.g. from height:0 to height:auto.
+        Works in Chrome but does not work in FF, Safari yet (dec.24).
+    */
+    interpolate-size: allow-keywords; /* progressive enhancement*/
+}
+/* --- end of standard values --- */
+
+/* --- a11y support: the "skip" link --- */
+
+a.skip-link { /* position top center */
+    position:     absolute;
+    z-index:      100;
+    top:          1em;
+    left:         50%;
+    transform:    translateX(-50%);
+}
+
+/* hide if not tabbed to
+   but in such a way that it still can be tabbed to */
+a.skip-link:not(:focus):not(:active) {
+    position:   absolute;
+    overflow:   hidden;
+    height:     1px;
+    width:      1px;
+    clip:       rect(0 0 0 0);
+    clip-path:  inset(50%);
+    white-space: nowrap;
+}
+
+/* --- end of a11y support --- */
+
+/* --- utility classes --- */
+
+.prosa {
+    margin-inline:  auto;
+    max-width:      70ch;
+    text-rendering: optimizeLegibility;
+    text-wrap:      pretty;
+}
+
+.font_numeric {
+    font-variant-numeric: tabular-nums;
+}
+.font_numeric_fraction {
+    font-variant-numeric: diagonal-fractions;
+}
+
+/* --- end of utility classes --- */

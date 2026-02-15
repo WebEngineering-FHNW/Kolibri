@@ -1,0 +1,134 @@
+/*
+    Example for keeping css in an extra file instead.
+    + easier to edit
+    * can be shared with other pages
+    - duplication and possible inconsistencies, i.e. in the page style name.
+*/
+@layer pageLayer {
+
+    /*noinspection CssUnusedSymbol*/
+    .home {
+        header {
+            display:        flex;
+            flex-direction: column;
+            align-items:    center;
+        }
+
+        section.buttons {
+            display:         flex;
+            flex-wrap:       wrap;
+            gap:             1em 2em;
+            justify-content: center;
+        }
+
+        section.buttons > * {
+            min-width: fit-content; /* intrinsic layout */
+        }
+
+        a.btn {
+            display:         block;
+            text-align:      center;
+            width:           12em;
+            padding:         1rem;
+            border-radius:   8px;
+            text-decoration: none;
+            box-shadow:      var(--kolibri-box-shadow);
+
+        }
+
+        a.btn.primary {
+            color:            #FFFFFF;
+            background-color: var(--kolibri-color-primary-accent);
+            border:           2px solid var(--kolibri-color-shadow);
+        }
+
+        a.btn.accent {
+            color:            var(--kolibri-color-primary-accent);
+            background-color: #FFFFFF;
+            border:           2px solid var(--kolibri-color-primary-accent);
+        }
+
+        .glow {
+            position: relative;
+        }
+
+        .glow::before {
+            content:         '';
+            position:        absolute;
+            inset:           0;
+            background:      linear-gradient(45deg, #993333, #ff00ff, #6e0dd0, #099fff, #ff00, #993333);
+            background-size: 400%;
+            border-radius:   8px;
+            z-index:         -10;
+            filter:          blur(.8em);
+            opacity:         0;
+            transition:      opacity 0.5s ease-in-out;
+            animation:       animate_glow 20s linear infinite;
+        }
+
+        a.glow:hover::before {
+            opacity: 100;
+        }
+
+
+        &.activate {
+            --activation-ms: 500;
+            animation:       home_activation calc(var(--activation-ms) * 1ms) linear forwards;
+        }
+
+        /*noinspection CssUnusedSymbol*/
+
+        &.passivate {
+            --passivation-ms: 500;
+            animation:        home_passivation calc(var(--passivation-ms) * 1ms) linear forwards;
+        }
+
+    }
+
+    @keyframes animate_glow {
+        0% {
+            background-position: 0 0;
+        }
+        50% {
+            background-position: 400% 0;
+        }
+        100% {
+            background-position: 0 0;
+        }
+    }
+
+    @keyframes home_activation {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    @keyframes home_passivation {
+        0% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+}   /*  end of pageLayer*/
+
+/* Here we have a special case where we really want to
+   override a kolibri default style and therefor put it outside the pageLayer
+*/
+/*noinspection CssUnusedSymbol*/
+.home.passivate .kolibri-logo-anim {
+    animation: kolibri_fly_out  calc(var(--passivation-ms) * 1ms) ease-in forwards;
+}
+@keyframes kolibri_fly_out {
+    0% {
+        transform: translateX(0) scale(1.0) rotate(0deg);
+    }
+    100% {
+        transform: translateX(-50cqw) scale(0.2) rotate(-40deg);
+    }
+}
+

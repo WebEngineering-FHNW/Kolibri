@@ -1,0 +1,58 @@
+<div id="content-wrapper">
+    <section>
+        <h2>Under Development</h2>
+        <p>
+            Kolibri and its home page are under development on Github, which is
+            also the place for any discussions and issues.
+        </p>
+        <a class="btn primary glow center" href="https://github.com/webengineering-fhnw/Kolibri/" target="_blank"><img src="../navigation/icons/github.svg" alt="github-icon"><span>Github</span><span class="arrow">&#8599</span></a>
+    </section>
+    <section>
+        <h2>Installation without dependency</h2>
+        <p>Common wisdom has it that web development comes with a myriad of dependencies.
+            Kolibri follows a different approach. We do not use any dependencies at all - neither
+            at runtime nor at build-time. There actually is no build-time since we never need building.
+        </p>
+        <p>Likewise, a project that uses Kolibri should be able to follow the same
+            approach and not even depend on Kolibri itself!
+        </p>
+        <p>We assume that you simply copy the Kolibri source code (everything under the
+            src directory) into your own project. You become the owner of the copied code -
+            just as if you copied it from stackoverflow.
+        </p>
+        <p>This copy includes the documentation, examples, the testing facility, and the test cases.
+            It will likely contain more than you need for your production code but that does no harm.
+            Kolibri is fully written as ES6 modules, which means that you can "treeshake" with any bundler
+            to remove all unused parts from your own production bundle while still having all the best
+            developer experience when programming.
+        </p>
+        <p>For the die-hard "but I just want to have Kolibri as a single file" developers, there is a
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/blob/main/docs/production/productionBundle.js" target="_blank">production bundle</a> that always reflects the
+            latest version). It contains the
+            jsdoc but neither the test cases nor the examples.
+            This might be useful for quick experiments.
+        </p>
+    </section>
+    <section class="buttons">
+        <a class="btn primary glow" href="https://raw.githubusercontent.com/WebEngineering-FHNW/Kolibri/main/docs/production/productionBundle.js" target="_blank"><span>Get Bundle</span><span class="arrow">&#8599</span></a>
+        <a class="btn accent glow" href="https://github.com/WebEngineering-FHNW/Kolibri/blob/main/docs/src/kolibri/version.js" target="_blank"><span>View Version</span><span class="arrow">&#8599</span></a>
+    </section>
+    <section>
+        <h2 id="notes-for-developers">Notes for developers</h2>
+        <h3 id="sources">Sources</h3>
+        <p>The src dir is under docs such that we can publish the sources directly.</p>
+        <h3 id="styling">Styling</h3>
+        <p>Kolibri comes with its own design system. You can find it in Figma.</p>
+        <p>When changing default css or the style API, make sure to check examples, test report, and the style guide.
+        <section class="buttons">
+            <a class="btn primary glow" href="https://www.figma.com/file/8Yq9C2CFomC1Uv6qlzfGri/Kolibri-(α)?node-id=82%3A1326)" target="_blank"><span>Design System</span><span class="arrow">&#8599</span></a>
+            <a class="btn accent glow" href="#style-guide">Style Guide</a>
+        </section>
+
+        <h3 id="inspection-profile">Inspection Profile</h3>
+        <p>The settings for the inspection profile are maintained in the file <code>JS_TypeSystem.xml</code>
+            that can be imported in IntelliJIDEA under Preferences -&gt; Inspection Profile.</p>
+        <p>The goal is to never push code that causes any inspection findings.
+            Some perceived typos (unknown words) might remain that you can safely add to your local dictionary.</p>
+    </section>
+</div>

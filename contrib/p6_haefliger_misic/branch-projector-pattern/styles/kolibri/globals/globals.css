@@ -1,0 +1,161 @@
+
+
+/* General CSS Reset and font declarations */
+*, html {
+  font-family: 'Poppins', sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  color: var(--text);
+}
+
+
+
+/* Kolibri default Input styles */
+input {
+  outline: none;
+  border: 1px solid var(--text);
+  border-radius: 2.5px;
+  height: 2.3rem;
+
+  text-indent: 0.3rem;
+}
+
+input:hover {
+  border-color: var(--input-hover);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: var(--primary) !important; /* overrides css styles upon focus, that are used for input validations. */
+  filter: drop-shadow(0px 0px 3px var(--primary)) !important; /* overrides css styles upon focus, that are used for input validations. */
+}
+
+input:not(:placeholder-shown) {
+  border-color: var(--primary);
+}
+
+input[type="button"] {
+  cursor: pointer;
+}
+
+input[type="submit"] {
+  cursor: pointer;
+}
+
+/* Input validations */
+input {
+  width: 100%;
+
+  font-size: var(--font-medium);
+
+  transition: var(--transition-quick);
+}
+
+input.valid {
+  border-color: var(--success);
+  filter: drop-shadow(0px 0px 3px var(--success))
+}
+
+input.invalid {
+  border-color: var(--error);
+  filter: drop-shadow(0px 0px 3px var(--error))
+}
+
+
+
+/* Title */
+h2 {
+  font-size: var(--font-xlarge);
+  font-weight: var(--font-xbold);
+}
+
+
+
+/* Label */
+label {
+  display: inline-block;
+  margin-top: 2.5rem;
+  margin-bottom: 0.3rem;
+
+  font-size: var(--font-small);
+  font-weight: var(--font-regular);
+}
+
+
+
+/* Primary Buttons */
+.primary,
+button.primary,
+input[type="button"].primary {
+  border: none;
+
+  font-size: var(--font-small);
+  font-weight: var(--font-bold);
+
+  background-color: var(--primary);
+  color: var(--text-contrast);
+
+  transition: var(--transition-quick);
+}
+
+.primary:hover,
+button.primary:hover,
+input[type="button"].primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.primary:active,
+button.primary:active,
+input[type="button"].primary:active {
+  box-shadow: inset 0px 4px 8px var(--text);
+}
+
+.primary:disabled,
+button.primary:disabled,
+input[type="button"].primary:disabled {
+  opacity: 0.4;
+  background-color: var(--primary);
+}
+
+
+
+/* Secondary Buttons */
+.secondary,
+button.secondary,
+input[type="button"].secondary {
+  font-size: var(--font-small);
+  font-weight: var(--font-bold);
+
+  background-color: transparent;
+  border-color: var(--primary);
+
+  transition: var(--transition-quick);
+}
+
+.secondary:hover,
+button.secondary:hover,
+input[type="button"].secondary:hover {
+  filter: drop-shadow(2px 3px 1px var(--shadow-contrast));
+}
+
+.secondary:active,
+button.secondary:active,
+input[type="button"].secondary:active {
+  background-color: var(--primary-opac);
+}
+
+.secondary:disabled,
+button.secondary:disabled,
+input[type="button"].secondary:disabled {
+  opacity: 0.4;
+}
+
+
+
+/* General Variables */
+:root {
+  --transition-quick: all 0.15s ease-in-out;
+  --transition-slow:  all 0.25s ease-in-out;
+}

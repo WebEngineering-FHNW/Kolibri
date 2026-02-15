@@ -1,0 +1,66 @@
+@import "../../css/kolibri-base.css";
+
+body {
+    background-color: white; /*only needed for chrome :-(*/
+    max-width: 42em;
+    margin:    3em auto 3em auto;
+}
+
+main {
+    margin: 2em;
+}
+
+h2 {
+    margin-bottom: 0;
+}
+
+div {
+    line-height: 1.2em;
+    padding: 0.5em 0 0 0;
+}
+
+fieldset {
+    opacity: 1;
+    border-style: solid;
+    border-width: 0 0 0 2px;
+    border-color: transparent;
+}
+
+fieldset:disabled {
+    opacity: 0.5;
+}
+
+output {
+    color: var(--kolibri-color-output);
+    font-variant-numeric: tabular-nums;
+}
+
+/*noinspection ALL*/
+.darkTheme {
+    filter: invert(85%) hue-rotate(180deg);
+}
+
+em {
+    color: var(--kolibri-color-accent);
+}
+
+.rules *:nth-child(even) {
+    color: var(--kolibri-color-accent);
+}
+
+header div.kolibri-logo {
+    height:         150px;
+    position:       absolute;
+    top:            6em;
+    margin-left:    39em;
+}
+
+.rules {
+    display: grid;
+    grid-column-gap: 2em;
+    grid-template-columns: auto max-content;
+}
+
+label ~ span {
+    margin-left: 1em;
+}

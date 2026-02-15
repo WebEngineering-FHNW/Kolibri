@@ -1,0 +1,19 @@
+:root {
+    --background: #FFFFFF;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:      var(--kb-font-rubik-light-regular);
+}
+
+body {
+    overflow-anchor: none;
+}
+
+h1 {
+    text-align: center;
+}
+

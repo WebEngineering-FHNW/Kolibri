@@ -1,0 +1,26 @@
+body {
+    padding-top: 96px;
+    overflow-x: auto;
+    margin-top: 0;
+}
+
+.side-navigation {
+    top: auto;
+    min-height: calc(100vh - 96px);
+    z-index: 1;
+}
+
+.bubble-state-nav {
+    z-index: 9;
+}
+
+.card-nav.nav-wrapper {
+    z-index: 10;
+}
+
+#debug-table {
+    z-index: 8;
+}
+#debug-table ~ .close-button {
+    z-index: 9;
+}

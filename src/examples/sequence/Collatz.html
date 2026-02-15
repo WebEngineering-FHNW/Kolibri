@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang=en>
+<head>
+    <meta charset="UTF-8">
+    <title>Collatz</title>
+    <style>
+        td,th                 {
+                                padding: 0 0 0 1em;
+                                font-family: system-ui;
+                                font-variant-numeric: tabular-nums;
+        }
+        thead th              { text-align: end }
+        thead th:nth-child(4) { text-align: start; }
+        tbody td              { text-align: end }
+        tbody td:nth-child(4) { text-align: start; }
+
+    </style>
+</head>
+<body>
+
+<h1>Collatz</h1>
+
+<p>
+    Numbers from the Collatz Conjecture
+    calculated with the help of
+    Sequences and memoization.
+</p>
+
+<p>
+    <label>
+        Collatz Sequence for
+        <input id="input" type="number" min="1" value="1">
+    </label>
+</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Nr</th>
+        <th>Steps</th>
+        <th>Max</th>
+        <th>Sequence</th>
+    </tr>
+    </thead>
+    <tbody id="out">
+
+    </tbody>
+</table>
+
+
+<script type="module">
+
+    import { Seq }         from "../../kolibri/sequence/sequence.js";
+    import { memoize }     from "../../kolibri/util/memoize.js";
+    import { dom, select } from "../../kolibri/util/dom.js";
+
+    let collatz = n =>
+        n < 2
+            ? Seq(1)
+            : n % 2 === 0
+                ?  collatz( n / 2 )    .cons(n)
+                :  collatz( n * 3 + 1 ).cons(n)
+     ;
+    collatz = memoize(collatz);
+
+    const [input] = select(document.body, "#input");
+    const [out]   = select(document.body, "#out");
+
+    input.onchange = _e => {
+        const n = Number(input.value);
+        const seq = collatz(n);
+        const [table] = dom(`
+            <table>
+                <tr>
+                    <td>${n}</td>
+                    <td>${seq.count$()}</td>
+                    <td>${seq.max$()}</td>
+                    <td>${seq.show(10_000)}</td>
+                </tr>
+            </table>
+        `);
+        out.prepend(...select(table,"tr"));
+    }
+
+</script>
+
+
+</body>
+</html>

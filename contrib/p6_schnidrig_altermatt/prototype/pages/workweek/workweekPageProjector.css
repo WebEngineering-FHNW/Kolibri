@@ -1,0 +1,77 @@
+#content .workweek {
+    background-color: white; /*only needed for chrome :-(*/
+}
+
+#content .workweek h2 {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+#content .workweek div {
+    line-height: 1.2em;
+}
+
+#content .workweek fieldset {
+    opacity: 1;
+    border-style: solid;
+    border-width: 0 0 0 2px;
+    border-color: transparent;
+}
+
+#content .workweek fieldset:disabled {
+    opacity: 0.5;
+}
+
+#content .workweek output {
+    color: var(--kolibri-color-output);
+}
+
+#content .workweek em {
+    color: var(--kolibri-color-accent);
+}
+
+#content .workweek .rules *:nth-child(even) {
+    color: var(--kolibri-color-accent);
+}
+
+#content .workweek .rules {
+    display: grid;
+    grid-column-gap: 2em;
+    grid-template-columns: auto max-content;
+}
+
+#content .workweek label ~ span {
+    margin-left: 1em;
+}
+
+#content .workweek .workweekInput div {
+    display:            flex;
+    justify-content:    flex-start;
+    align-items:        center;
+    gap:                1em;
+}
+#content .workweek .workweekInput label {
+    display:            none;
+}
+#content .workweek .workweekInput {
+    display:            grid;
+    grid-column-gap:    2em;
+    grid-template-columns: repeat(4, max-content);
+}
+#content .workweek .until {
+    display: none;
+}
+
+#content .workweek {
+    margin-bottom: 120px;
+}
+
+#content .workweek p {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+#content .workweek .invisible {
+    display: none;
+}
+

@@ -1,0 +1,95 @@
+<div id="content-wrapper">
+    <section>
+        <h2>Projecting Work Hours for a Day</h2>
+        <p>
+            We manage four time entries that need to fulfil a shared purpose: capturing and
+            visualizing the working hours in the morning and in the afternoon. These time entries have to
+            comply to constraints that are given to us as business rules (see below).
+        </p>
+        <p>
+            Kolibri allows us to keep two things totally separate: what to display and how to display.
+            The "what" part  with model and business rules is in the
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workday/dayController.js" target="_blank"
+            >dayController</a>. The "how" part with view and binding
+            is in the
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workday/simpleDayProjector.js" target="_blank"
+            >simpleDayProjector</a>, which is an instance of
+            the <a href="https://dierk.github.io/Home/projectorPattern/ProjectorPattern.html" target="_blank">projector pattern</a>.
+        </p>
+        <p>
+            Since controller and projector are separate, they can be separately
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workday/dayControllerTest.js" target="_blank">tested</a>.
+            Also, the simple projector that just uses simple input fields, can be easily
+            replaced in the
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/docs/src/examples/workday/starter.js" target="_blank"
+            >starter</a> with a more elaborate projector.
+            When this happens, the controller - and thus all logic - remains untouched.
+        </p>
+    </section>
+
+    <section>
+        <h2>Business Rules</h2>
+        <div class="rules">
+            <div>Time values between 0:00 and 24:00, are required, cannot be empty.</div> <div>otherwise invalid</div>
+            <div>AM Start &lt; = AM End.</div>                    <div>automatically enforced</div>
+            <div>AM End &lt; = PM Start.</div>                    <div>automatically enforced</div>
+            <div>PM Start &lt; = PM End.</div>                    <div>automatically enforced</div>
+            <div>Start not earlier than 4:00. </div>              <div>otherwise invalid</div>
+            <div>End not later than 22:00. </div>                 <div>otherwise invalid</div>
+            <div>Lunch break must be at least 40 minutes.</div>   <div>automatically enforced</div>
+            <div>Total time must not exceed 12 hours. </div>      <div>otherwise invalid</div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Try this</h2>
+        <p>
+            Set the AM Start to 00:00, which violates the "not more than 12 hours" rule.
+            Observe how all time entries become invalid as well as the whole fieldset (left vertical bar).
+        </p>
+        <p>
+            Set the PM End to 16:00 and the AM Start to 03:00, which violates the "no start before 04:00" rule.
+            Observe how only the AM Start field and the fieldset become invalid.
+        </p>
+        <p>
+            Set the PM End to 13:00 and delete the AM Start to --:--, with the DEL or Backspace key.
+            Then check/uncheck "Required" and observe
+            how the AM Start becomes invalid when it is required but has no value.
+        </p>
+    </section>
+
+    <div id="workday-holder">
+        <div id="workday">
+            <fieldset class="workingHoursInput" name="workingHoursInput" id="workingHoursInput">
+                <legend>Working Hours</legend>
+                <!-- projection will be added here: -->
+            </fieldset>
+            <div>
+                <div>
+                    <input type="checkbox" id="checkDisabled">
+                    <label for="checkDisabled">Disabled</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="checkReadOnly">
+                    <label for="checkReadOnly">Read Only</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="checkRequired">
+                    <label for="checkRequired">Required</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="checkDarkTheme">
+                    <label for="checkDarkTheme">Dark Theme</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section>
+        <h2>Next Step</h2>
+        <p>
+            Have a look at the <a href="#workweek">work week</a> where we use
+            multiple day controllers and projectors in an aggregated way.
+        </p>
+    </section>
+</div>

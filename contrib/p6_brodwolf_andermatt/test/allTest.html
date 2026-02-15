@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> All Tests </title>
+
+    <style>
+        body {
+            font-family: Monaco, monospace, arial;
+            margin: 0;
+            padding: 0;
+        }
+
+        .centerDiv {
+            width: 80%;
+            min-width: 50%;
+            margin: 0 auto;
+        }
+
+        .dot {
+            height: 5px;
+            width: 5px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 2px 3px 2px 2px;
+        }
+
+        .red {
+            background-color: #ff7329;
+        }
+
+        .green {
+            background-color: #45c110;
+            border-width: 8px;
+
+        }
+
+        .testContainer p {
+            margin: 1px;
+            font-size: 0.9em;
+        }
+
+        h4, h3 {
+            margin: 0;
+        }
+        h4{
+            padding-top: 15px;
+        }
+
+        legend {
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        fieldset {
+            padding: 15px;
+            margin: 30px;
+            border-style: solid;
+        }
+
+        th {
+            text-align: left;
+        }
+
+        th:nth-child(2), td:nth-child(2) {
+            padding-left: 55px;
+            padding-top: 5px;
+        }
+
+        .failMessage {
+            padding-left: 25px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="centerDiv">
+    <h1>All Tests (Total:<span id="totalTests"></span>)</h1>
+    <div id="output"></div>
+</div>
+
+<script src="lambda-calculus-library/lambda-calculus-test.js" type="module"></script>
+<script src="lambda-calculus-library/church-numerals-test.js" type="module"></script>
+<script src="calculator/calculator-test.js" type="module"></script>
+<script src="stack/stack-test.js" type="module"></script>
+<script src="listMap/listMap-test.js" type="module"></script>
+<script src="observable/observable-test.js" type="module"></script>
+<script src="maybe/maybe-test.js" type="module"></script>
+<script src="box/box-test.js" type="module"></script>
+
+</body>
+</html>

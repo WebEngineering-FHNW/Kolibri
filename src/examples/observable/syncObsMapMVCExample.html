@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sync Controllers with Observable Map Example</title>
+    <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+    <link rel="stylesheet"                     href="../../../css/kolibri-base.css">
+    <style>
+        body {
+            max-width: 42em;
+            margin: 3em auto 3em auto;
+        }
+        main {
+            display: grid;
+            grid-template-columns: repeat(2, max-content);
+            gap: .5em 2em;
+        }
+    </style>
+</head>
+<body>
+<h1>Observable Map Example</h1>
+<p> Synchronizing values in classical MVC with the help of an observable map.</p>
+<p> Changing any input value should immediately update all others.</p>
+<main id="main">
+</main>
+
+<script type="module">
+
+    import {ObservableMap}         from "../../kolibri/observable/observableMap.js";
+    import {SimpleInputController} from "../../kolibri/projector/simpleForm/simpleInputController.js";
+    import {InputProjector}        from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
+    import {times}                 from "../../kolibri/util/arrayFunctions.js";
+
+    const observableMap = ObservableMap("shared");
+    const sharedKey     = "sharedKey";
+
+    times(4)( n => {
+
+        // make a controller
+        const ctrl = SimpleInputController({
+            label: "First Name " + n,
+            name:  "firstname",
+            type:  "text",
+            value: "Dierk",
+        });
+
+        // project the controlled data
+        main.append(...InputProjector.projectInstantInput(ctrl, "noCssClass"));
+
+        // bidirectional binding to observable map
+        observableMap.onChange( (key, value) => sharedKey === key ? ctrl.setValue(value.toString()) : null );
+        ctrl.onValueChanged( val => observableMap.setValue(sharedKey, val));
+    });
+
+
+</script>
+
+
+</body>
+</html>

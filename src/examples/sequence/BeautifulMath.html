@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Graphical Example</title>
+  <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+</head>
+<style>
+    body {
+        margin: 1em;
+    }
+    svg {
+        display:        block;
+        margin-inline:  auto;
+        max-width:      70vmin ;
+        aspect-ratio:   1 / 1;
+    }
+    svg * {
+        stroke:       rgba(87, 87, 165, 0.5);
+        stroke-width: .01; /* in SVG units */
+    }
+    /* un-comment to play with styles */
+    /*svg *:nth-child(2n) {*/
+    /*    stroke:       rgba(162, 87, 165, 0.5);*/
+    /*}*/
+    /*svg *:nth-child(3n) {*/
+    /*    stroke:        rgba(255, 0, 204, 0.5);*/
+    /*}*/
+    circle {
+        fill: transparent;
+    }
+    .inputs {
+        display: grid;
+        grid-template-columns: max-content 3ch auto;
+        gap: 1em;
+        & span {
+            font-variant-numeric: tabular-nums;
+            text-align: end;
+        }
+    }
+</style>
+<body>
+<header>
+  <h2>Simple SVG Graphics: Beautiful Math</h2>
+</header>
+
+<div id="out">
+</div>
+
+<div class="inputs">
+    <label for="slices"     >Slices</label><span>10</span><input id="slices"      type="range" value="10" min="10" max="500" step="1" autofocus>
+    <label for="tableFactor">Factor</label><span>2 </span><input id="tableFactor" type="range" value="2"  min= "2" max="50"  step="1">
+</div>
+
+
+<p> Explanation of the math and more visualizations at the
+    <a href="https://www.youtube.com/watch?v=qhbuKbxJsk8">Mathologer (YouTube)</a>.
+</p>
+<p> More solutions in
+    <a href="https://dierk.github.io/tryPux/beautifulMathInTS/index.html">TypeScript,  PureScript, and Elm</a>.
+</p>
+
+<script type="module">
+    import { Walk, plusOp } from "../../kolibri/sequence/sequence.js";
+    import { dom  }         from "../../kolibri/util/dom.js";
+    import { ALL  }         from "../../kolibri/sequence/constructors/range/range.js";
+
+    const tableFactorEl = document.getElementById("tableFactor");
+    const slicesEl      = document.getElementById("slices");
+
+    const svgWidth = 2.2;
+    const [svg] = dom(` <svg id="svg" viewBox="${-svgWidth/2} ${-svgWidth/2} ${svgWidth} ${svgWidth}"></svg> `);
+    document.getElementById("out").append(svg);
+    const circle = `<circle r="1" cx="0" cy="0"></circle>`;
+
+    const angle2point = angle => ( {x: Math.cos(angle), y: Math.sin(angle) } ) ;
+    const points2Line = ([p1, p2]) => `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}"></line>`;
+    
+    const draw = () => {
+        const tableFactor = Number(tableFactorEl.value);
+        const slices      = Number(slicesEl     .value);
+
+        const table       = Walk(1, slices).map( n => [n, n * tableFactor]);
+        const angles      = Walk(0, ALL, Math.PI * 2 / slices);
+
+        svg.innerHTML = table
+            .map(valuePair => valuePair.map(n => angles.drop(n).head()))
+            .map(anglePair => anglePair.map(angle2point))
+            .map(points2Line)
+            .foldl$(plusOp, circle);
+    };
+    draw();
+    [tableFactorEl, slicesEl].forEach( el => el.oninput = () => {
+        draw();
+        el.previousSibling.textContent = el.value;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang=en>
+<head>
+    <meta charset="UTF-8">
+    <title>Kolibri Philosophy</title>
+    <link rel="shortcut icon" type="image/png" href="../img/logo/logo-60x54.png"/>
+    <link rel="stylesheet" href="../css/kolibri-base.css">
+    <style>
+        body {
+            max-width:       42em;
+            margin:          3em auto 3em auto;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            display:        flex;
+            flex-direction: column;
+            align-items:    center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left:    0;
+        }
+
+        dl {
+            display:               grid;
+            grid-template-columns: 10em auto;
+        }
+
+        dd {
+            margin-block-end:    1lh;
+            margin-inline-start: 2em;
+        }
+
+        div.kolibri-logo-svg {
+            height:       250px;
+            aspect-ratio: 1;
+            padding:      2em;
+            transition:   transform .4s linear;
+        }
+
+        svg {
+            overflow: visible;
+        }
+
+        .flatter {
+            animation-name:            kolibri-wings;
+            animation-duration:        .2s;
+            animation-iteration-count: 15;
+            animation-direction:       reverse;
+            animation-timing-function: ease-in;
+            transform-origin:          45% 45%;
+        }
+
+        @keyframes kolibri-wings {
+            from {
+                transform: scaleX(1) rotate(0deg);
+            }
+            to {
+                transform: scaleX(-1) rotate(30deg);
+            }
+        }
+
+    </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a> <!-- a11y support skip link -->
+<header>
+    <div class="kolibri-logo-svg kolibri-logo-anim">
+        <svg viewBox="0 0 305 342" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M138 194C183.5 214.5 228 221.5 236.5 341.5C229.5 273.5 187 263.5 138 194Z" fill="#5F2EEA"/>
+            <path
+                d="M117 122C117 46 42.5 17 0 0C81.2 39.2 77.5 79.5 80.5 138C87 216.5 128 235.667 150.5 248C105.7 212 117 157 117 122Z"
+                fill="#FE2EA8"/>
+            <path
+                d="M80.9999 144.5C81.3468 146.565 81.692 148.581 82.0374 150.552C86.8892 170.965 107.957 211.566 156.5 225.5C210.5 241 236.407 308.5 237.074 342C220.5 279.5 210.346 274.538 156.5 250.5C102.35 226.326 92.1459 208.229 82.0374 150.552C81.492 148.257 81.1515 146.218 80.9999 144.5Z"
+                fill="#BE58FD"/>
+            <path
+                d="M115 49.5C100.5 39.8333 79 51.0005 54 32C92.5 36.5 109.5 26 129.5 44C149.5 65 128.5 90 148 113.499C123.5 104.499 133 61.5 115 49.5Z"
+                fill="#5F2EEA"/>
+            <circle cx="100.5" cy="60.5" r="9.5" fill="#2D1FB1"/>
+            <path class="wing flatter" opacity="0.5"
+                  d="M128 179.114C176.159 220.174 254.92 177.348 279 146C243.884 171.608 187.698 146.442 128 179.114Z"
+                  fill="#BD53FE" stroke="#BD53FE"/>
+            <path class="wing flatter" opacity="0.7"
+                  d="M128 158C163.892 67.1818 241.575 130.021 305 47C263.208 149.285 161.925 132.314 128 158Z"
+                  fill="#4C2EEC"/>
+            <path class="wing flatter" opacity="0.7"
+                  d="M128 178.895C162.922 103.67 248.073 126.739 305 47C278.211 119.718 247.116 181.904 128 178.895Z"
+                  fill="#FF2CA5"/>
+        </svg>
+    </div>
+    <h1>Kolibri</h1>
+    <div class="subtitle">Philosophy</div>
+</header>
+
+<main id="main" tabindex="-1"> <!-- a11y support: can be tabbed to -->
+
+    <section>
+        <h2>Why Kolibri?</h2>
+        <p>
+            Kolibri is an aggregate (aka "bunch") of utilities, patterns, and best practices
+            that we discovered or invented as part of our duties at the
+            <a href="https://fhnw.ch">University of Applied Sciences and Arts,
+                Northwestern Switzerland</a>. It covers educational content from modules and lectures,
+            achievements from student projects and workshops, findings from our
+            <a href="https://www.fhnw.ch/de/weiterbildung/informatik/cas-web-applikationen">
+                Certificate of Advanced Studies</a> (CAS) programme, and contributions from our
+            industry and academic experts.
+        </p>
+    </section>
+
+    <section>
+        <h2>Values</h2>
+        <dl>
+            <dt>Top Quality</dt>
+            <dd>Kolibri is a sustainable, high-quality toolkit.
+                Contributions are validated through usability testing and automated tests.
+                Industry experts and academic advisers assess the code quality
+                and the completeness of the documentation.
+                Every <a href="#contribution">contribution</a> must have proven its worth in an application.
+            </dd>
+            <dt>No Dependencies</dt>
+            <dd> Kolibri has no dependencies at all - neither
+                at runtime nor at build-time. Likewise, a project that uses Kolibri
+                should be able to follow the same
+                approach and not even depend on Kolibri itself!
+                See <a href="#installation">installation without dependency</a>.
+            </dd>
+            <dt>Test Driven</dt>
+            <dd>
+                Kolibri comes with its own testing facility.
+                Have a look at the live <a href="../src/allTests.html">test case report</a>.
+            </dd>
+            <dt>Typesafe</dt>
+            <dd>
+                Kolibri shows how to develop with plain vanilla JavaScript in a typesafe manner.
+                This is possible with the help of JsDoc. Kolibri comes with many advanced
+                examples on how to use that type system: generics, union types, intersection types, etc.
+            </dd>
+            <dt>Free Open Source</dt>
+            <dd>
+                There is no licence. Just pick and choose what you want to use. The code is yours.
+            </dd>
+        </dl>
+    </section>
+
+    <section id="installation">
+        <h2>Installation without dependency</h2>
+        <p>Common wisdom has it that web development comes with a myriad of dependencies.
+            Kolibri follows a different approach. We do not use any dependencies at all - neither
+            at runtime nor at build-time. There actually is no build-time since we never need building.
+        </p>
+        <p>Likewise, a project that uses Kolibri should be able to follow the same
+            approach and not even depend on Kolibri itself!
+        </p>
+        <p>We assume that you simply copy the Kolibri source code (everything under the
+            src directory) into your own project. You become the owner of the copied code -
+            just as if you copied it from stackoverflow. (This has the nice side effect that
+            AI tools will pick up Kolibri as "your code" and suggest Kolibri-style completions.)
+        </p>
+        <p>This copy includes the documentation, examples, the testing facility, and the test cases.
+            It will likely contain more than you need for your production code but that does no harm.
+            Kolibri is fully written as ES6 modules, which means that you can "treeshake" with any bundler
+            to remove all unused parts from your own production bundle and still having the best
+            developer experience while programming.
+        </p>
+        <p>For the die-hard "but I just want to have Kolibri as a single file" developers, there is an
+            automatically generated
+            <a href="https://raw.githubusercontent.com/WebEngineering-FHNW/Kolibri/gh-pages/productionBundle.js">production
+                bundle</a>
+            that always reflects the
+            latest version (see <a href="../src/kolibri/version.js">version</a>). It contains the
+            production code, type definitions, and documentation but neither the test cases nor the examples.
+            This might be useful for quick experiments and when using the browser console as a REPL.
+        </p>
+    </section>
+
+    <section id="contribution">
+        <h2>Contributions</h2>
+        <p>
+            Contributions are validated through usability testing
+            and automated tests.
+            Industry experts and academic advisers assess the code quality
+            and the completeness of the documentation.
+            Every contribution must have proven its worth in an application.
+        </p>
+        <p>
+            When integrating into Kolibri-core, the contributions are usually trimmed-down
+            and adapted. So expect changes from the original contributions below.
+        </p>
+        <dl>
+            <dt> Andermatt, Brodwolf
+            </dt>
+            <dd>Lambda calculus and start of the functional stdlib:<br>
+                <a href="https://github.com/mattwolf-corporation/ip6_lambda-calculus-in-js">code</a>,
+                <a href="https://mattwolf-corporation.gitbook.io/ip5-lambda-calculus/">git book</a>
+            </dd>
+            <dt> Häfliger, Misic
+            </dt>
+            <dd>Styling, incl. logo, plus login/registration:<br>
+             <a href="https://github.com/fabianhaef/ip6-web-ui-toolkit">code</a>,
+                <a href="https://dierk.github.io/Home/data/IP6_Bericht_Misic_Häfliger.pdf">documentation.pdf</a>
+            </dd>
+            <dt> Christen, Robin
+            </dt>
+            <dd>MVC and collaborative web applications:<br>
+             <a href="https://github.com/robin-fhnw/IP5-Puerro">code</a>,
+                <a href="https://robin-christen.gitbook.io/puerro/">git book</a>
+                </dd>
+            <dt> Berchtold, Duss
+            </dt>
+            <dd>Facetted search:<br>
+                <!-- repo is currently unavailable <a href="https://github.com/KDuss/bezel">code</a>, -->
+                <a href="https://dierk.github.io/Home/data/Bachelorarbeit_Facettierte_Suche_Duss_Berchtold.pdf"
+                >documentation.pdf</a>,
+                <a href="https://www.fhnw.ch/plattformen/bachelor20/IMVS20/index.html">info</a>
+            </dd>
+            <dt> Eser, Thiévant
+            </dt>
+            <dd>Switch and Monolog:<br>
+                <a href="https://github.com/kolibri-ui/ip6-web-ui-toolkit-business-components"
+                >code</a>
+            </dd>
+            <dt> Wild, Wyss
+            </dt>
+            <dd>Logging, sequences, and JINQ:<br>
+                <a href="https://github.com/wildwyss/Kolibri/tree/main/contrib/wild_wyss">code</a>,
+                <a href="https://wildwyss.github.io/ip6-overview/">documentation</a>,
+            </dd>
+            <dt> Altermatt, Schnidrig
+            </dt>
+            <dd>Navigation:<br>
+                <a href="https://github.com/CeeDiii/ip6-navigation-kolibri">code</a>,
+                <a href="https://navigation-for-kolibri.gitbook.io/advanced-kolibri-navigation/">documentation</a>,
+                <a href="https://kolibri-navigation.github.io/ip6-kolibri-navigation/prototype/showcase-app/#home">showcase</a>
+            </dd>
+            <dt> Burki, Marti
+            </dt>
+            <dd>Select Component:<br>
+                <a href="https://fhnw-ramonamarti.github.io/ip6/index.html">overview</a>,
+                <a href="https://github.com/fhnw-ramonamarti/Kolibri">code</a>,
+                <a href="https://kolibri-selection-component.gitbook.io/generalisierte-auswahlkomponente-fur-kolibri">git book</a>
+            </dd>
+            <dt> Advisors and Experts
+            </dt>
+            <dd>Prof. Dierk König, Fabian Affolter, Dr. Dieter Holz, Daniel Kröni, François Martin,
+                Marco Sanfratello, Dirk Lemmermann, Gerrit Grunwald
+            </dd>
+        </dl>
+    </section>
+</main>
+
+</body>
+</html>

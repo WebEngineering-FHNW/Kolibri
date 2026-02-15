@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Try Kolibri Production Bundle</title>
+    </head>
+    <body>
+    <h1>Try Kolibri Production Bundle</h1>
+
+    <pre id="out"> waiting ... </pre>
+
+    <script src="kolibri-0.9.11.js"></script>
+    <script >
+        defaultConsoleLogging("ch", LOG_DEBUG);
+        const asCH = new Intl.NumberFormat("ch-DE").format;
+
+        let fib = n => n < 2 ? 1 : fib(n - 1) + fib(n - 2);
+        fib = memoize(fib);
+
+        out.textContent = `
+            The 44th Fibonacci number is:
+            ${ asCH( fib(44) ) }
+
+            built with Kolibri ${versionInfo}
+        `;
+
+    </script>
+
+    <pre>
+        You can use your browser's console to try Kolibri for yourself.
+        Here are some ideas of what you can do:
+
+        let fibo = n => n < 2 ? 1 : fibo(n - 1) + fibo(n - 2);
+        fibo = memoize(fibo);
+        fibo(44);
+
+        10..times ( console.log );
+        10..times ( n => n**3 ).sum();
+
+        [1,2,3].eq([1,2,3]);
+
+        Walk(3)  ['==']  ( Seq(0,1,2,3) );
+
+        let pyth = from(                   Walk(2, ALL))
+              .combine(     z           => Walk(2, z) )
+              .combine( ( [ z, y ]    ) => Walk(2, y) )
+              .where  ( ([[ z, y ], x]) => x*x + y*y === z*z )
+              .select ( ([[ z, y ], x]) => ` ${x} ${y} ${z}` )
+              .result();
+        pyth.show();
+        pyth.drop(100).take(5).show();
+
+        const odds = Walk(1,ALL,2);
+        odds.show();
+
+        const partialSums = seq => Walk(1,ALL).map( n => seq.take(n).foldl$(plusOp, 0));
+
+        const triagonalNumbers = partialSums(Walk()).show();
+        const surprise         = partialSums(odds).show();
+
+        const ratios = Walk().map(n=> fib(n+1)/fib(n));
+        ratios.show();
+        const golden = limit(0.0001, ratios);
+
+
+    </pre>
+
+    </body>
+
+
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+    <link rel="stylesheet" href="../../../css/kolibri-base.css">
+    <title>Style Overview</title>
+
+    <style>
+        body {
+            width:      48em;
+            margin:     auto;
+        }
+        #out {
+            display:    grid;
+            grid-template-columns: max-content max-content;
+            grid-column-gap: 1em;
+        }
+        .drop-size {
+            width: 40px;
+            height:40px;
+        }
+        .drop-shape {
+            border-radius: 50% 15% 50% 50%;
+            transform: rotate(-45deg) ;
+        }
+        .flow {
+            display: flex;
+            gap: 1em;
+        }
+        div.kolibri-logo-svg {
+            height:         250px;
+            aspect-ratio:   1;
+            padding:        2em;
+            text-align:     center;
+        }
+        svg {
+            overflow: visible;
+        }
+        .flatter {
+            animation-name:             kolibri-wings;
+            animation-duration:         .2s;
+            animation-iteration-count:  5;
+            animation-direction:        reverse;
+            animation-timing-function:  ease-in;
+            transform-origin:           45% 45%;
+        }
+        @keyframes kolibri-wings {
+            from {
+                transform:      scaleX(1) rotate(0deg);
+            }
+            to {
+                transform:      scaleX(-1) rotate(30deg);
+            }
+        }
+    </style>
+
+</head>
+<body>
+<h1>Kolibri Style Overview</h1>
+<p>
+    Kolibri comes with its default set of colors, shadows, fonts, and other style elements that make up its
+    design system (see <!--suppress SpellCheckingInspection -->
+    <a href="https://www.figma.com/file/8Yq9C2CFomC1Uv6qlzfGri/Kolibri-(%CE%B1)?node-id=82%3A1326&t=iNQmpiVgOXTlKYeb-1">figma</a>).
+    Any application that uses Kolibri can of course selectively override or totally ignore the default style.
+</p>
+<p>
+    The style is available in two ways: via CSS - see
+    <a href="../../../css/colors-overview.html">colors-overview.html</a>, which refers to
+    <a href="../../../css/kolibri-base.css">kolibri-base.css</a> and
+    <a href="../../../css/kolibri-colors.css">kolibri-colors.css</a> -
+    or by using the style API as provided by the
+    <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/kolibri/style/kolibriStyle.js">
+        style module
+    </a>.
+    Sometimes, you might even want to combine both approaches, like the
+    <a href="https://webengineering-fhnw.github.io/Kolibri/src/allTests.html"
+    >live test report</a> does.
+</p>
+<p>
+    The list below serves as an overview and also allows checking visually whether both
+    approaches lead to the same result.
+</p>
+
+<div id="out">
+    <h2>API constants</h2>
+    <h2>CSS custom properties</h2>
+</div>
+
+<div class="kolibri-logo-svg">
+    Click me!
+    <svg width="305" height="305" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M82.375 106C80.0436 75.8514 58.9236 72.2085 48.775 67.9375C49.3236 74.8465 65.9582 80.6396 70.2898 84.7704C76.6469 90.8328 81.2331 95.8391 82.375 106Z" fill="#1E19FF"/>
+    <path d="M52.7125 54.025C52.7125 34.075 33.1562 26.4625 22 22C43.315 32.29 42.3438 42.8687 43.1312 58.225C44.8375 78.8312 63.2125 82.5062 63.2125 82.5062C50.875 72.5312 52.7125 63.2125 52.7125 54.025Z" fill="#FF2CA5"/>
+    <path d="M62.1239 84.2567C48.0491 78.3159 44.767 74.1573 43.525 60.85C43.525 60.85 48.5519 74.6326 62.1239 78.3159C75.696 81.9992 82.2075 98.0393 82.375 106C78.2095 91.148 75.6573 89.9689 62.1239 84.2567Z" fill="#6000FF"/>
+    <path d="M51.4253 33.3451C47.9627 30.8207 43.78 33.9764 37.4875 29.4554C46.1943 30.0331 49.8099 26.8381 54.657 31.6257C59.5498 37.2528 55.1288 44.5092 59.9453 50.8416C54.2063 48.6284 55.7238 36.4788 51.4253 33.3451Z" fill="#1E19FF"/>
+    <ellipse cx="48.1188" cy="37.8812" rx="2.49375" ry="2.49375" fill="#14141B"/>
+    <g class="wing flatter">
+        <path d="M58.4064 62.7154C69.2766 74.3202 90.1304 65.5289 96.8058 58.0697C87.5516 63.8076 73.8789 55.7374 58.4064 62.7154Z"
+              fill="#6000FF" opacity="0.5"/>
+        <path d="M58.4156 62.7193C69.1306 44.5994 89.6791 52.8668 105.942 34.2029C97.3011 51.9087 87.6772 66.7312 58.4156 62.7193Z"
+              fill="#FF2CA5" opacity="0.7"/>
+        <path d="M58.4127 62.7124C62.7709 39.208 83.6844 51.0936 94.8144 28.3C89.5866 54.8305 65.1945 55.0495 58.4127 62.7124Z"
+              fill="#1E19FF" opacity="0.8"/>
+    </g>
+   </svg>
+</div>
+
+
+<p>
+    <a href="../../../index.html">Home</a>
+</p>
+
+<script src="useStyles.js" type="module"></script>
+<script>
+    const logoDivs = document.querySelectorAll("div.kolibri-logo-svg");
+    const wings   = document.querySelectorAll(".wing");
+    // remove all flatter classes after initial load
+    const resetFlatterClasses = () =>
+        setTimeout( _=> wings.forEach( wing => wing.classList.remove("flatter")), 2000);
+    resetFlatterClasses();
+
+    logoDivs.forEach( logoDiv => logoDiv.onclick = _ => {
+        wings.forEach( wing => wing.classList.add("flatter"));
+        resetFlatterClasses();
+    });
+</script>
+
+<!--empty div just to use the classes once and avoid inspection warnings-->
+<div class="drop-size drop-shape flow"></div>
+</body>
+</html>

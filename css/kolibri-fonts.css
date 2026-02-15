@@ -1,0 +1,53 @@
+/**
+This file is a one-to-one implementation of the design system
+todo:
+- line-height?, letter-spacing?, running text font size 1.2em
+one for code examples
+ */
+@import "../font/Saira/font-face.css";
+@import "../font/JetBrains_Mono/font-face.css";
+
+/* Not needed at the moment - un-comment if needed. */
+/*@import "../font/Rubik/font-face.css";*/
+/*@import "../font/Roboto_Slab/font-face.css";*/
+
+:root {
+
+    /* --- font metric defaults --- */
+    --font-base-unit:  1rem;    /* a flexible unit that changes with user preferences - can even be responsive */
+    --font-base-scale: 1.62;    /* default scale is golden ratio, to be overridden */
+
+    /* --- semantic font family defaults --- */
+    --font-family:              "Saira";
+    --font-family-stylish:      "Saira";
+    --font-family-mono:         "JetBrains Mono", monotype;
+
+    /* --- specialized font sizes - add as we need them but keep them relative --- */
+    --font-size-caption:        calc(0.8 * var(--font-base-unit));
+}
+
+/* --- relative font sizes --- */
+
+h1, h2, h3, h4, h5, .font-size-relative,
+.font-size-h1, .font-size-h2, .font-size-h3, .font-size-h4, .font-size-h5 {
+    --font-size-factor: 1;      /* default, to be overridden */
+    font-size: clamp( .8rem, var(--font-size-factor) * var(--font-base-unit), 100vb);
+}
+h1, .font-size-h1 {--font-size-factor: calc( pow(var(--font-base-scale), 3));}
+h2, .font-size-h2 {--font-size-factor: calc( pow(var(--font-base-scale), 2));}
+h3, .font-size-h3 {--font-size-factor: calc( pow(var(--font-base-scale), 1));}
+h4, .font-size-h4 {--font-size-factor: calc( pow(var(--font-base-scale), 0));}
+h5, .font-size-h5 {--font-size-factor: calc( pow(var(--font-base-scale),-1));}
+
+.document    {                                  /* a class for web documents that are intended to be read */
+    --font-base-scale:          1.9;           /* documents build the visual hierarchy by the golden ration */
+    --font-family:              "Saira";
+}
+
+.application {                                  /* a class for web applications that are intended to be worked with */
+    --font-base-scale:          1.2;            /* applications build the visual hierarchy by 20% compounded */
+    --font-family:              system-ui;
+}
+
+
+

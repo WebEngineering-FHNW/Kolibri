@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Observable Text-Input</title>
+    <meta name="description" content="A Text-Input example with the Observable in pure function (lambda calculus),">
+    <meta name="keywords" content="Lambda Calculus, JavaScript">
+    <meta charset="UTF-8">
+</head>
+<style>
+    html {
+        background-color: lightgrey;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;    }
+    body {
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
+        background-color: whitesmoke;
+        padding: 2rem;
+        border-width: 1px;
+        border-radius: 1rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05);
+    }
+    input {
+        cursor: pointer;
+    }
+    label {
+        font-weight: bold;
+    }
+</style>
+<body>
+
+<label for="inputText">Observable Text-Input: </label>
+<input name="inputText" id="inputText" type="text">
+
+<br>
+
+<input type="checkbox" id="unsubNewValue" name="unsubNewValue" checked>
+<label for="newValue">Listener New Value:&nbsp</label>
+<span id="newValue"></span>
+
+<br>
+
+<input type="checkbox" id="unsubOldValue" name="unsubOldValue" checked>
+<label for="oldValue">Listener Old Value:&nbsp;&nbsp</label>
+<span id="oldValue"></span>
+
+<br>
+
+<input type="checkbox" id="unsubSize" name="unsubSize" checked>
+<label for="sizes">Listener Text-Size:&nbsp;&nbsp;</label>
+<span id="sizes"></span>
+
+
+<script src="observableTextInputExample.js" type="module"></script>
+</body>
+</html>

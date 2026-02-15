@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FontStyleExample</title>
+    <style>
+        @import "../example.css";
+        @import "font-face.css";
+
+        body {
+            font-family: "Roboto Slab", cursive; /* make it obvious if font doesn't load */
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>H1 Roboto Slab </h1>
+
+<blockquote>Numeric font variants not supported.</blockquote>
+
+<script src="../example-template.js">
+</script>
+<script>
+    document.writeln(HTML_TEMPLATE);
+</script>
+
+</body>
+</html>

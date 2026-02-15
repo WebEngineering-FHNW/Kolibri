@@ -1,0 +1,271 @@
+
+@import "../../../css/kolibri-base.css";
+
+:root {
+    --Typescale-Fontfamily-heading:                 Saira;
+    --Kolibri-Light-Monochrome---kb-color-black:    var(--kolibri-palette-mono-800);
+    --Kolibri-Light-Monochrome---kb-color-bg-dark:  var(--kolibri-palette-mono-600);
+    --Kolibri-Light-Monochrome---kb-color-plachold: var(--kolibri-palette-mono-400);
+    --Kolibri-Light-Monochrome---kb-color-body:     var(--kolibri-palette-mono-600);
+    --Kolibri-Light-Monochrome---kb-color-label:    var(--kolibri-palette-mono-600);
+    --Kolibri-Light-Monochrome---kb-color-bg-light: var(--kolibri-palette-mono-100);
+    --Kolibri-color-primary-light:                  var(--kolibri-color-primary-light);
+    --Kolibri-Light-Primary---kb-primary-accent:    var(--kolibri-color-primary-accent);
+
+    --Typescale-Lineheight-1:   2.4rem;
+    --Typescale-Lineheight-3:   2rem;
+    --Typescale-Lineheight-5:   1.1rem;
+    --Typescale-Fontsize-1:     1.6rem;
+    --Typescale-Fontsize-6:     1.25rem;
+}
+
+body {
+    font-family:        var(--Typescale-Fontfamily-heading, Saira), cursive;
+}
+
+h1, .chapter {
+    margin:             0;
+    color:              var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
+    font-weight:        300;
+}
+
+h3, .blurb {
+    margin:             0;
+    color:              var(--Kolibri-Light-Monochrome---kb-color-bg-dark, #262338);
+    font-size:          var(--Typescale-Lineheight-3, 2rem);
+    font-weight:        400;
+    line-height:        var(--Typescale-Lineheight-3, 2.5rem);
+}
+
+
+h5, .category {
+    margin:             0;
+    color:              var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    font-size:          var(--Typescale-Lineheight-5, 1.1rem);
+    font-weight:        500;
+    line-height:        var(--Typescale-Lineheight-5, 1.4rem);
+}
+
+p {
+    color:              var(--Kolibri-Light-Monochrome---kb-color-body, #4E4B66);
+    font-size:          var(--Typescale-Fontsize-1, 1.6rem);
+    font-weight:        400;
+    line-height:        var(--Typescale-Lineheight-1, 2.4rem);
+}
+
+header {
+    display:                flex;
+    flex-direction:         row;
+    align-items:            center;
+    padding:                2.5rem 6rem;
+    background:             var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
+    gap:                    2rem;
+
+    & .header-logo {
+        min-height:         6rem;
+        aspect-ratio:       1 /1;
+    }
+
+    & .header-title {
+    display:                flex;
+    flex-direction:         column;
+    justify-content:        space-around;
+    }
+}
+
+main {
+    display:            flex;
+    flex-direction:     column;
+    justify-content:    center;
+    align-items:        center;
+    padding:            4.5rem 5rem;
+    margin:             0 auto;
+    gap:                6.25rem;
+}
+
+section {
+    display:            flex;
+    align-items:        center;
+    width:              100%;
+    max-width:          100rem;
+    gap:                5rem;
+    & > div:nth-child(1) { flex-grow:   2; flex-basis: 60rem; }
+    & > div:nth-child(2) { flex-shrink: 1; flex-basis: 42rem; }
+}
+
+.intro {
+    background:         var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
+    border-radius:      12px;
+    padding:            8rem 6.25rem;
+}
+
+.intro-name h3 {
+    color:              var(--Kolibri-Light-Monochrome---kb-color-label, #6E7191);
+    font-weight:        300;
+}
+
+.intro-sample {
+    text-align:         end;
+    font-size:          8rem;
+    font-weight:        600;
+    font-family:        var(--Typescale-Fontfamily-heading, Saira), cursive;
+    color:              var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
+}
+
+.usage-number {
+    margin:             1.5rem 0;
+    display:            flex;
+    justify-content:    flex-start;
+    align-items:        baseline;
+    gap:                0.5rem;
+}
+
+.styles-input input[type="text"] {
+    margin-top:         2.5rem;
+    border-radius:      0.25rem;
+    line-height:        4rem;
+    text-indent:        1rem;
+    min-width:          36ch;
+    border:             1px solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    font-family:        var(--Typescale-Fontfamily-heading, Saira), cursive;
+    font-size:          var(--Typescale-Fontsize-6, 1.25rem);
+    font-weight:        300;
+    letter-spacing:     0.1rem;
+}
+input[type="range"] {
+    width: 100%;
+}
+
+.styles-slider {
+    align-self:         flex-end;
+    margin-bottom:      1.25rem;
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    gap: 1em;
+}
+
+/* Font styles */
+.font-weight-100 {
+    font-weight: 100;
+}
+
+.font-weight-100-italic {
+    font-weight: 100;
+    font-style: italic;
+}
+
+.font-weight-200 {
+    font-weight: 200;
+}
+
+.font-weight-200-italic {
+    font-weight: 200;
+    font-style: italic;
+}
+
+.font-weight-400 {
+    font-weight: 400;
+}
+
+.font-weight-400-italic {
+    font-weight: 400;
+    font-style: italic;
+}
+
+.font-weight-700 {
+    font-weight: 700;
+}
+
+.font-weight-700-italic {
+    font-weight: 700;
+    font-style: italic;
+}
+
+.font-weight-800 {
+    font-weight: 800;
+}
+
+.font-weight-800-italic {
+    font-weight: 800;
+    font-style: italic;
+}
+
+.radioBtnGroup {
+    display:        flex;
+    flex-direction: row;
+    flex-wrap:      wrap;
+
+}
+
+
+.radioBtnGroup input[type="radio"] {
+    display:        none;
+}
+
+.radioBtnGroup label {
+
+    box-sizing:         border-box;
+    border-radius:      0.25rem;
+    line-height:        4rem;
+    width:              4rem;
+    background-color:   var(--Kolibri-Light-Monochrome---kb-color-bg-light, #ffffff);
+    border:             0.05rem solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    font-family:        var(--Typescale-Fontfamily-heading, Saira), cursive;
+    font-size:          var(--Typescale-Fontsize-6, 1.25rem);
+    font-weight:        300;
+    letter-spacing:     0.1rem;
+
+    display:            inline-block;
+    text-align:         center;
+    padding:            0 1rem;
+    cursor:             pointer; /* Indicate interactivity */
+}
+
+.radioBtnGroup input[type="radio"]:checked + label {
+    background:     var(--Kolibri-Light-Monochrome---kb-color-bg-light, #EFF0F6);
+    color:          var(--Kolibri-color-primary-light, #6000FF);
+    font-weight:    500;
+    border:         1px solid var(--Kolibri-color-primary-light, #6000FF);
+}
+
+.radioBtnGroup input[type="radio"]:focus + label:hover {
+    background:     var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
+    color:          var(--Kolibri-color-primary-light, #6000FF);
+    border:         0.05rem solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    scale:          1.1;
+}
+
+/* Focused state for keyboard interaction */
+.radioBtnGroup label:focus {
+    outline:    none;
+    background: var(--Kolibri-Light-Monochrome---kb-color-bg-light, #F7F7FC);
+    color:      var(--kolibri-color-primary-light, #6000FF);
+    border:     0.05rem solid var(--Kolibri-Light-Monochrome---kb-color-plachold, #A0A3BD);
+    scale:      1.1; /* Optional, gives a zoom effect */
+}
+
+.characters input[type="text"] {
+    width:          16rem;
+    box-sizing:     border-box;
+    border-radius:  2rem;
+    border:         1px solid var(--Kolibri-Light-Primary---kb-primary-accent, #6000FF);
+    background:     #FFF;
+    text-align:     center;
+
+    color:          var(--Kolibri-Light-Monochrome---kb-color-black, #14141B);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family:    Saira, cursive;
+    font-size:      10.75rem;
+    font-style:     normal;
+    font-weight:    600;
+    line-height:    10.75rem; /* 100% */
+    letter-spacing: 0.125rem;
+
+}
+
+.animate_on_hover {
+    transition: font-weight linear 1.5s;
+}
+.animate_on_hover:hover {
+    font-weight: 800;
+}

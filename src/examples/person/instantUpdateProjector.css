@@ -1,0 +1,42 @@
+@import "../../../css/kolibri-base.css";
+
+body {
+    perspective: 100vw;
+}
+.card {
+    transition: all ease-in-out .5s;
+    max-width:  40em;
+    margin:     1em auto 2em auto;
+    padding:    2em;
+    box-shadow: var(--kolibri-box-shadow);
+}
+h1 {
+    text-align: center;
+}
+.holder {
+    margin: 0 3em 0 3em;
+}
+input[type=text] {
+    font-size:      1.1em;
+    color:          var(--kolibri-color-output);
+    border-width:   0 0 1px 0;
+
+    background-image:    linear-gradient(orange, orange);
+    background-position: left bottom;
+    background-repeat:   no-repeat;
+    background-size:     0 1px; /* default:  do not show */
+}
+
+input[type=text]:focus {
+    outline:             transparent none 0;
+    border-bottom-color: transparent;
+
+    background-size:     100% 1px;
+    transition:          background-size linear .5s;
+}
+
+#plus {
+    position: relative;
+    top: -1em;
+}
+

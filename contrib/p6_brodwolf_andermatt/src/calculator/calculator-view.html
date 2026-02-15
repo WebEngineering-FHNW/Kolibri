@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The FP-Calculator</title>
+
+    <style>
+         body{
+            position: fixed;top: 50%; left: 50%; margin-top: -50px;  margin-left: -100px;
+        }
+        .title {
+            margin: 10px;
+            text-align: center;
+            width: 210px;
+            color: #333333;
+            border: solid black 2px;
+        }
+
+        input[type="button"] {
+            background-color: #b6b6b6;
+            color: black;
+            border: solid black 2px;
+            width: 100%
+        }
+
+        input[type="button"]:hover {
+            cursor: pointer;
+            background-color: beige;
+        }
+
+        input[type="text"] {
+            text-align: center;
+            background-color: white;
+            border: solid black 2px;
+            width: 100%
+        }
+        table{
+            padding: 7px;
+            margin: 10px;
+        }
+        h4{
+            /*padding-top: 1px;*/
+            margin-top: 1px;
+        }
+    </style>
+</head>
+
+<body>
+<div class=title>Functional Calculator</div>
+<table border="1">
+    <tr>
+        <td colspan="3"><input value="Welcome Programmer" type="text" id="displayOutput"/></td>
+        <td><input type="button" value="clear"  lambda="clr" /></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="1"  lambda="n1"     /></td>
+        <td><input type="button" value="2"  lambda="n2"     /></td>
+        <td><input type="button" value="3"  lambda="n3"     /></td>
+        <td><input type="button" value="pow"  lambda="pow"  /></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="4"  lambda="n4"     /></td>
+        <td><input type="button" value="5"  lambda="n5"     /></td>
+        <td><input type="button" value="6"  lambda="n6"     /></td>
+        <td><input type="button" value="-"  lambda="sub"    /></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="7"  lambda="n7"     /></td>
+        <td><input type="button" value="8"  lambda="n8"     /></td>
+        <td><input type="button" value="9"  lambda="n9"     /></td>
+        <td><input type="button" value="+"  lambda="add"    /></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="/"  lambda="result" /></td>
+        <td><input type="button" value="0"  lambda="n0"     /></td>
+        <td><input type="button" value="="  lambda="result" /></td>
+        <td><input type="button" value="*"  lambda="multi"  /></td>
+    </tr>
+</table>
+
+JavaScript-Number & -Arithmetic:
+<h4 id="functionalOutput"></h4>
+
+Church-Numerals & Lambda-Arithmetic:
+<h4 id="lambdaOutput"></h4>
+
+<script src="calculator-starter.js" type="module" ></script>
+
+</body>
+</html>

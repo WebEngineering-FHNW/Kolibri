@@ -1,0 +1,162 @@
+
+/* --- projected tooltips: experimental popover and anchor positioning --- */
+
+[popover] {             /* style that pops for all elements with popover attribute */
+      flex-direction:     column;
+      gap:                .5em;
+      background-image:   linear-gradient(170deg, #4c4cc6 45%, darkblue 50%, darkblue 80%, #4c4cc6);
+      box-shadow:         .2em .2em  1em 0 lightslategray,
+                          0    0    .5em 0 white           inset;
+      border-width:       0;
+      border-radius:      .5em;
+      color:              white;
+      font-family:        system-ui;
+      padding:            1em;
+  }
+
+/*noinspection CssInvalidPseudoSelector*/
+:popover-open {
+      animation-name:             appear;
+      animation-duration:         .5s;
+      animation-timing-function:  ease-in-out;
+      animation-fill-mode:        forwards;
+  }
+
+  /* For the moment, don't do this as it makes the UI appear flickering when*/
+  /* the popover closes. Sadly, there seems to be no way to transition back on close that works on all browsers.*/
+  /* For chrome and Safari (not FF yet), we could use a view transition. */
+  /*:popover-open::backdrop {*/
+  /*    background-color:           color-mix(in hsl, white, transparent 70%);*/
+  /*    transition:                 background-color 1s linear;*/
+  /*    @starting-style {*/
+  /*        background-color:       transparent;*/
+  /*    }*/
+  /*}*/
+
+  .popover_anchor {
+      /* anchor-name will be set on the element */
+      position:           relative;
+      display:            inline-flex;  /* for FF and Safari or it does not always work */
+  }
+
+/*noinspection CssInvalidFunction*/
+.popover_tooltip {
+      /* position-anchor will be set on the element */
+      position:           absolute;     /* override the popover-hidden default */
+      inset:              unset;
+      top:                anchor(top);  /* dirty trick for FF and Safari (anchor(bottom) does not work) */
+      left:               anchor(left);
+      translate:          0 1.2lh;      /* dirty trick for FF and Safari */
+
+      transform-origin:   top center; /* makes expandY a drop-down */
+  }
+
+/*noinspection CssInvalidPseudoSelector*/
+.popover_tooltip:popover-open {
+      display:                    flex;              /* override */
+      animation-name:             appear, expandY;
+  }
+
+  @keyframes appear {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+  }
+  @keyframes expandY {
+      from {  transform: scaleY(0); }
+      to   {  transform: scaleY(1); }
+  }
+
+/* --- projected slider style  --- */
+
+/* currently disabled - discuss with Fabian
+
+input[type="range"] {
+    --slider-width:         100%;
+    --slider-height:        3lh;
+    --track-height:         1lh;
+    --track-fill-color:     black;
+    --track-empty-color:    transparent;
+    --slider-fill:          white;
+    --thumb-size:           1;
+    --thumb-color:          blue;
+    --thumb-border:         1px ;
+    --thumb-border-color:   black;
+    --thumb-glow-color:     lightblue;
+    --thumb-outer-glow-color: red;
+    --thumb-hover-scale:    1.5;
+    --animation-duration:   1s;
+
+    width               : var(--slider-width);
+    height              : var(--slider-height);
+    border-radius       : 50%;
+    outline             : none;
+    appearance          : none;
+    -webkit-appearance  : none;
+    cursor              : pointer;
+    position            : relative;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height           : var(--track-height);
+    border-radius    : calc(var(--track-height) / 2);
+    background       : linear-gradient(
+                        to right,
+                        var(--track-fill-color) var(--slider-fill),
+                        var(--track-empty-color) var(--slider-fill)
+    );
+}
+
+ input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance  : none;
+    width               : var(--thumb-size);
+    height              : var(--thumb-size);
+    background          : var(--thumb-color);
+    border-radius       : 50%;
+    border              : var(--thumb-border) solid var(--thumb-border-color);
+    cursor              : pointer;
+    position            : relative;
+    top                 : calc((var(--track-height) - var(--thumb-size)) / 2);
+    transition          : transform 0.3s ease-in-out;
+    box-shadow          : 0 0 16px var(--thumb-glow-color),
+                          0 0 32px var(--thumb-outer-glow-color);
+    animation           : pulseGlow var(--animation-duration) ease-in-out infinite;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+    transform        : scale(var(--thumb-hover-scale));
+    box-shadow       : 0 0 16px var(--thumb-glow-color),
+                       0 0 32px var(--thumb-outer-glow-color);
+}
+
+input[type="range"]::-moz-range-track {
+    height           : var(--track-height);
+    border-radius    : calc(var(--track-height) / 2);
+    background       : linear-gradient(
+        to right,
+        var(--track-fill-color) var(--slider-fill),
+        var(--track-empty-color) var(--slider-fill)
+    );
+}
+
+input[type="range"]::-moz-range-thumb {
+    width            : var(--thumb-size);
+    height           : var(--thumb-size);
+    background       : var(--thumb-color);
+    border-radius    : 50%;
+    cursor           : pointer;
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow :
+            0 0 16px var(--thumb-glow-color),
+            0 0 32px var(--thumb-outer-glow-color);
+    }
+    50% {
+        box-shadow :
+            0 0 24px var(--thumb-glow-color),
+            0 0 48px var(--thumb-outer-glow-color);
+    }
+}
+
+*/

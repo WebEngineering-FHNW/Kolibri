@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang=en>
+<head>
+    <meta charset="UTF-8">
+    <title>Kolibri Simple Form View</title>
+    <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+    <link rel="stylesheet"                     href="../../../css/kolibri-base.css">
+    <style>
+        body {
+            max-width: 42em;
+            margin: 3em auto 3em auto;
+        }
+    </style>
+</head>
+<body>
+
+<main>
+
+    <section id="form-holder">
+
+    </section>
+
+    <section>
+        <h2>Simple Kolibri Forms</h2>
+        <p> Kolibri can create model-view-controller (MVC) forms by using the
+            <a href="https://dierk.github.io/Home/projectorPattern/ProjectorPattern.html">projector pattern</a>.
+        </p>
+        <p> It only takes a single line of code to create the form,
+            set up the presentation models, and bind all required listeners such that
+            model and view are always kept in sync. After that, any controller can solely
+            work on the presentation models without ever touching the view.
+        </p>
+        <p> Only <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/simpleForm/starter.js"
+            >starter.js</a> is application-specific. It sets up the information of
+            what the form should consist of.
+        </p>
+        <p> Our initial, simplistic form does not contain any business logic and can therefore use the
+            generic
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/kolibri/projector/simpleForm/simpleFormController.js"
+            >SimpleFormController</a>.
+            If we had any business logic, we would put it in a specialized
+            controller and write test cases against that controller. Since we currently have no business
+            logic, we have no specialized controller and no test cases for the logic.
+        </p>
+        <p> Models, view, and bindings are totally generic and provided by Kolibri. The current generic
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/kolibri/projector/simpleForm/simpleFormProjector.js"
+            >simpleFormProjector</a> creates a simple form with
+            simple input types. Each such type is created and bound by the generic
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/kolibri/projector/simpleForm/simpleInputProjector.js"
+            >simpleInputProjector</a>.
+            "Simple" means types that the standard HTML Input element can handle it (no selects or multiple values).
+        </p>
+        <p> The remaining non-generic thing to test is the general setup. We test this in
+            <a href="https://github.com/WebEngineering-FHNW/Kolibri/tree/main/src/examples/simpleForm/simpleFormViewTest.js"
+            >simpleFormViewTest.js</a>.
+            It also serves as an example of how to do integration testing.
+        </p>
+    </section>
+
+
+    <section>
+        <h2>Next Step</h2>
+        <p>
+            If all we ever wanted is a passive web form that we can submit, we wouldn't bother
+            creating controllers, models, binding, and so on. But our investment will pay off as
+            soon as there is interactivity and business logic in our application.
+        </p>
+        <p>
+            Proceed with <a href="../workday/WorkingHours.html">work day</a> and let's
+            combine form elements with business rules.
+        </p>
+    </section>
+</main>
+
+<script src="starter.js" type="module"></script>
+
+</body>
+</html>

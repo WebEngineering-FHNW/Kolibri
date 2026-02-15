@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang=en>
+<head>
+	<meta charset="UTF-8">
+	<title>Kolibri Examples</title>
+	<link rel="shortcut icon" type="image/png" href="../img/logo/logo-60x54.png"/>
+	<link rel="stylesheet"                     href="../css/kolibri-base.css">
+    <style>
+        body {
+			max-width: 		42em;
+			margin: 		3em auto 3em auto;
+        }
+		header {
+			display: 		flex;
+			flex-direction: column;
+			align-items: 	center;
+		}
+		ul {
+			list-style-type: none;
+			padding-left: 		0;
+		}
+		dl {
+			display: grid;
+			grid-template-columns: 10em auto;
+		}
+        dd {
+            margin-block-end:     1lh;
+            margin-inline-start:  2em;
+        }
+
+		div.kolibri-logo-svg {
+			  height:         250px;
+			  aspect-ratio:   1;
+			  padding:        2em;
+			  transition:     transform .4s linear;
+		  }
+		  svg {
+			  overflow: visible;
+		  }
+		  .flatter {
+			  animation-name:             kolibri-wings;
+			  animation-duration:         .2s;
+			  animation-iteration-count:  15;
+			  animation-direction:        reverse;
+			  animation-timing-function:  ease-in;
+			  transform-origin:           45% 45%;
+		  }
+		  @keyframes kolibri-wings {
+			  from {
+				  transform:      scaleX(1) rotate(0deg);
+			  }
+			  to {
+				  transform:      scaleX(-1) rotate(30deg);
+			  }
+		  }
+
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a> <!-- a11y support skip link -->
+	<header>
+		<div class="kolibri-logo-svg kolibri-logo-anim">
+			<svg viewBox="0 0 305 342" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M138 194C183.5 214.5 228 221.5 236.5 341.5C229.5 273.5 187 263.5 138 194Z" fill="#5F2EEA"/>
+				<path d="M117 122C117 46 42.5 17 0 0C81.2 39.2 77.5 79.5 80.5 138C87 216.5 128 235.667 150.5 248C105.7 212 117 157 117 122Z"
+					  fill="#FE2EA8"/>
+				<path d="M80.9999 144.5C81.3468 146.565 81.692 148.581 82.0374 150.552C86.8892 170.965 107.957 211.566 156.5 225.5C210.5 241 236.407 308.5 237.074 342C220.5 279.5 210.346 274.538 156.5 250.5C102.35 226.326 92.1459 208.229 82.0374 150.552C81.492 148.257 81.1515 146.218 80.9999 144.5Z"
+					  fill="#BE58FD"/>
+				<path d="M115 49.5C100.5 39.8333 79 51.0005 54 32C92.5 36.5 109.5 26 129.5 44C149.5 65 128.5 90 148 113.499C123.5 104.499 133 61.5 115 49.5Z"
+					  fill="#5F2EEA"/>
+				<circle cx="100.5" cy="60.5" r="9.5" fill="#2D1FB1"/>
+				<path class="wing flatter" opacity="0.5"
+					  d="M128 179.114C176.159 220.174 254.92 177.348 279 146C243.884 171.608 187.698 146.442 128 179.114Z"
+					  fill="#BD53FE" stroke="#BD53FE"/>
+				<path class="wing flatter" opacity="0.7"
+					  d="M128 158C163.892 67.1818 241.575 130.021 305 47C263.208 149.285 161.925 132.314 128 158Z"
+					  fill="#4C2EEC"/>
+				<path class="wing flatter" opacity="0.7"
+					  d="M128 178.895C162.922 103.67 248.073 126.739 305 47C278.211 119.718 247.116 181.904 128 178.895Z"
+					  fill="#FF2CA5"/>
+			</svg>
+		</div>
+        <h1>Kolibri</h1>
+        <div class="subtitle">List of Examples</div>
+	</header>
+
+	<main id="main" tabindex="-1"> <!-- a11y support: can be tabbed to -->
+
+        <section>
+      		  <h2>Purpose</h2>
+      		  <p>
+                  Kolibri comes with many features. Every feature is tested and used in an application.
+                  Many features have additional, self-contained example pages that visualize the feature.
+              </p>
+      		  <p>
+                  This page provides an overview over the example pages such that you can browse
+                  through your favorites.
+              </p>
+        </section>
+
+        <section>
+            <h2>Forms and Input</h2>
+            <dl>
+                <dt><a href="../src/examples/simpleForm/simpleFormView.html">Simple Form</a></dt>
+                <dd>The <a href="../src/examples/simpleForm/simpleFormView.html">Simple Form</a> example
+                    shows how to create a form by only providing the essential information and get a
+                    web form that is fully styled and bound to the underlying controller and model.
+                </dd>
+                <dt><a href="../src/examples/person/MasterDetail.html">Master - Detail</a></dt>
+                <dd>The <a href="../src/examples/person/MasterDetail.html">Master - Detail</a> example
+                    uses a form in the detail view and a table-like overview where you can select a
+                    person for editing. It shines with direct manipulation, instant-update behavior,
+                    and multi-way editing.
+                </dd>
+                <dt><a href="../src/examples/workday/WorkingHours.html">Workday</a> mini app</dt>
+                <dd>A <a href="../src/examples/workday/WorkingHours.html">mini application</a>
+                    for timekeeping within a single day. Enforced business rules make it somewhat realistic.
+                </dd>
+                <dt><a href="../src/examples/workweek/WorkingHours.html">Workweek</a> mini app</dt>
+                <dd>An extension of the workday to a
+                    <a href="../src/examples/workweek/WorkingHours.html">work week</a>
+                    to show the aggregation of data and business rules while re-using
+                    the workday building blocks.
+                </dd>
+                <dt><a href="../src/examples/debounceInput/debounceTest.html">Debounce</a></dt>
+                <dd>This is a tiny example for an
+                    <a href="../src/examples/debounceInput/debounceTest.html">input field with
+                    debounce</a> behavior such that the user input gets transmitted only after the
+                    user stops typing.
+                </dd>
+            </dl>
+        </section>
+
+        <section>
+          <h2>Navigation</h2>
+              <dl>
+                <dt><a href="../src/examples/navigation/simple/simpleNavigation.html">
+                    Simple Navigation</a></dt>
+                <dd>Kolibri comes with a <a href="../src/examples/navigation/simple/simpleNavigation.html">
+                    Simple Navigation</a>
+                facility that supports animated page transitions, style isolation, and type-safe navigation.
+                </dd>
+                <dt><a href="https://kolibri-navigation.github.io/ip6-kolibri-navigation/prototype/showcase-app/#home">
+                    Extensive Navigation</a></dt>
+                <dd>
+                    A more
+                    <a href="https://kolibri-navigation.github.io/ip6-kolibri-navigation/prototype/showcase-app/#home">
+                       Extensive Navigation</a>
+                    is an external showcase with many different views on a tree-like navigation structure,
+                    consistent visualization, add/remove of navigation points at runtime, and a debugging view.
+                </dd>
+             </dl>
+        </section>
+
+        <section>
+          <h2>Sequences</h2>
+              <dl>
+                <dt><a href="../src/examples/sequence/Stairs.html">Stairs</a>
+                </dt>
+                <dd>Kolibri sequences are lazy, immutable, persistent data structures with a rich API and a purely
+                    functional, monadic nature. They can still be used with even animated graphics as the
+                    <a href="../src/examples/sequence/Stairs.html">Stairs</a> example shows.</dd>
+                <dt><a href="../src/examples/sequence/BeautifulMath.html">Beautiful Math</a>
+                </dt>
+                <dd>Who would have thought that a simple multiplication table can lead to such
+                    <a href="../src/examples/sequence/BeautifulMath.html">Beautiful Math</a> when
+                    distributed over a circle?
+                </dd>
+                <dt><a href="../src/examples/sequence/Collatz.html">Collatz Number Exploration</a>
+                </dt>
+                <dd>Explore the
+                    <a href="../src/examples/sequence/Collatz.html">Collatz Numbers</a>. With the help
+                    of sequences and memoization you can browse through them in realtime.
+                </dd>
+                <dt><a href="../src/examples/sequence/Leibniz_Nilakantha.html">Approximating PI</a>
+                </dt>
+                <dd>Different sequences to approximate PI like
+                    <a href="../src/examples/sequence/Leibniz_Nilakantha.html">Gregory, Leibniz, and Nilakantha</a>
+                    have shown. We use the sequence API and the "limit" helper to celebrate their work
+                    in a functional approach.
+                </dd>
+                <dt><a href="../src/examples/sequence/fibonacci/Fibonacci.html">Fibonacci</a></dt>
+                <dd>While the fibonacci sequence is of course everybody's favorite,
+                it is also lends itself to a nice graphical <a href="../src/examples/sequence/fibonacci/Fibonacci.html">
+                Fibonacci</a> construction. Explore for yourself and let the golden ratio emerge!</dd>
+                <dt>Fizzbuzz</dt>
+                <dd>Prepare for the next job interview by solving the fizzbuzz challenge as a
+                    <a href="../src/examples/sequence/fizzbuzz/SimpleFizzBuzz.html">
+                    Simple Functional Fizzbuzz</a> solution or even in an interactive
+                    <a href="../src/examples/sequence/fizzbuzz/FizzBuzz.html">
+                    Generalized Functional Fizzbuzz</a> solution - all made from Kolibri sequences.
+                </dd>
+                <dt><a href="../src/examples/sequence/focusring/demo/SlotMachine.html">Focusring</a></dt>
+                <dd>The focusring is a usage or sequences where a sequence builds an endless ring
+                while one element in the ring is considered the focus. For example, the
+                    <a href="../src/examples/sequence/focusring/demo/SlotMachine.html">Slot Machine</a>
+                    is made from three focus rings.
+                </dd>
+                <dt><a href="../src/examples/sequence/tictactoe/TicTacToe.html">Tic Tac Toe</a></dt>
+                <dd>Playing <a href="../src/examples/sequence/tictactoe/TicTacToe.html">Tic Tac Toe</a>
+                against the computer gives you some winning chances since the computer only looks
+                three half-moves ahead. However, this is an example of the functional minimax
+                algorithm (see John Hughes "Why FP matters") based on Kolibri sequences and the
+                monadic JINQ (read "jinx") API.</dd>
+             </dl>
+        </section>
+
+        <section>
+          <h2>Interactive</h2>
+              <dl>
+                  <dt><a href="https://webengineering-fhnw.github.io/Kolibri/production/TryProduction.html">Kolibri Bundle</a></dt>
+                  <dd>You can try the Kolibri
+                      <a href="https://raw.githubusercontent.com/WebEngineering-FHNW/Kolibri/gh-pages/productionBundle.js">production
+                      bundle</a> on a dedicated
+                      <a href="https://webengineering-fhnw.github.io/Kolibri/production/TryProduction.html">bundle page</a>.
+                      Open the page and use the console of your browser's developer tools as a REPL to play with the Kolibri!
+                  </dd>
+             </dl>
+        </section>
+
+        <section>
+          <h2>Logging</h2>
+              <dl>
+                <dt><a href="../src/examples/logger/loggerExample.html">Logger</a></dt>
+                <dd>An interactive way to play with <a href="../src/examples/logger/loggerExample.html">Loggers</a>,
+                    log levels, appenders, and more. Please note that a "logger" is the entity that issues a
+                    potential log message, while "logging" refers to the facility that controls which log
+                    messages are currently written and where they go.
+                </dd>
+                <dt><a href="../src/examples/loggingControlUI/logUiExampleView.html">Log UI</a></dt>
+                <dd> Kolibri allows to change the logging characteristics from the browser console.
+                    However, some applications might want to include a
+                    <a href="../src/examples/loggingControlUI/logUiExampleView.html">user interface
+                    to control the logging</a>. Don't be surprised if the page appears empty. Just
+                    open the drawer from the upper-right corner.
+                </dd>
+
+             </dl>
+        </section>
+
+        <section>
+          <h2>Styling</h2>
+              <dl>
+                  <dt><a href="../src/examples/style/styleOverview.html">Style Overview</a></dt>
+                  <dd>Kolibri makes use of modern CSS features but also provides some css-in-js
+                      solutions and plain programmatic styling. The
+                      <a href="../src/examples/style/styleOverview.html">Style Overview</a> serves
+                      as a visual checkpoint to see what is available and helps to ensure
+                      consistent visual representations.
+                  </dd>
+                <dt><a href="../src/examples/layeredStyle/LayeredStyleUsage.html">Layered Style</a></dt>
+                <dd>The Kolibri CSS does not by itself define any layers but can easily be used with the
+                    @layer construct as <a href="../src/examples/layeredStyle/LayeredStyleUsage.html">Layered Style</a>
+                    shows. The Kolibri user is in full control whether Kolibri or application-specific styles
+                    should have precedence - regardless of selector specificity.
+                </dd>
+                <dt>CSS Best Practices</dt>
+                <dd>The Kolibri contains a lot of modern CSS features and examples of best practices including:
+                    @import, @layer, @container, style isolation, css-in-js, custom properties,
+                    "CSS-API", design system, layout, color palette, font handling, animations, consistency, validation,
+                    and accessibility features like disabled animations and "tab into content".
+                </dd>
+
+             </dl>
+        </section>
+
+	</main>
+</body>
+</html>

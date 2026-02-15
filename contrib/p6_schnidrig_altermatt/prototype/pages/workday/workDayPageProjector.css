@@ -1,0 +1,47 @@
+#content .workday div {
+    line-height: 1.2em;
+}
+
+#content .workday fieldset {
+    opacity: 1;
+    border-style: solid;
+    border-width: 0 0 0 2px;
+    border-color: transparent;
+}
+
+#content .workday fieldset:disabled {
+    opacity: 0.5;
+}
+
+#content .workday output {
+    color: var(--kolibri-color-output);
+}
+
+#content .workday em {
+    color: var(--kolibri-color-accent);
+}
+
+#content .workday .rules *:nth-child(even) {
+    color: var(--kolibri-color-accent);
+}
+
+#content .workday header div.kolibri-logo {
+    height:         150px;
+    position:       absolute;
+    top:            6em;
+    margin-left:    39em;
+}
+
+#content .workday .rules {
+    display: grid;
+    grid-column-gap: 2em;
+    grid-template-columns: auto max-content;
+}
+
+#content .workday label ~ span {
+    margin-left: 1em;
+}
+
+#content .workday .invisible {
+    display: none;
+}

@@ -1,0 +1,30 @@
+
+:root {
+
+  --text:                 hsl(0,   0%,   20%);
+  --input-hover:          hsl(0,   0%,   74%);
+  --shadow-contrast:      hsl(0,   0%,   88%);
+  --text-contrast:        hsl(0,   0%,   95%);
+  --background:           hsl(0,   0%,   99%);
+  --primary:              hsl(223, 79%,  45%);
+  --primary-opac:         hsla(223, 79%,  45%, 0.1);
+  --primary-hover:        hsl(233, 79%,  56%);
+  --success:              hsl(104, 89%,  28%);
+  --error:                hsl(0,   79%,  63%);
+  --warning:              hsl(36,  100%, 48%);
+}
+
+[data-theme="dark"] {
+
+  --text:                 hsl(0,   0%,   95%);
+  --input-hover:          hsl(0,   0%,   51%);
+  --shadow-contrast:      hsl(0, 0%, 31%);
+  --text-contrast:        hsl(0,   0%,   20%);
+  --background:           hsl(0,   0%,   20%);
+  --primary:              hsl(187, 100%, 76%); 
+  --primary-opac:         hsla(187, 100%, 76%, 0.1);
+  --primary-hover:        hsl(187, 79%,  86%);
+  --success:              hsl(117, 85%,  76%);
+  --error:                hsl(0,   79%,  63%);
+  --warning:              hsl(36,  85%,  62%);
+}

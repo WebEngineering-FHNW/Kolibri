@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fizz Buzz Example</title>
+  <link rel="shortcut icon" type="image/png" href="../../../../img/logo/logo-60x54.png"/>
+  <link rel="stylesheet" href="../../../../css/kolibri-base.css">
+  <style>
+      output {
+          display: grid;
+          grid-template-columns: repeat(10, max-content);
+          gap: 0 1em;
+          font-family: system-ui;
+      }
+  </style>
+</head>
+<body>
+<header>
+  <h2>Simple Fizz Buzz</h2>
+</header>
+<p>The basic version of the FizzBuzz challenge
+   to show the solution idea.</p>
+<output id="out"></output>
+<script type="module">
+    import * as _ from "../../../kolibri/sequence/sequence.js";
+
+    const nums   = _.Sequence(1, _ => true, n => n + 1);
+
+    const fizzes = _.Seq( "","",      "fizz" ).cycle();
+    const buzzes = _.Seq( "","","","","buzz" ).cycle();
+
+    const rules  = fizzes.zipWith( (a, b) => a + b )(buzzes);
+
+    const result = nums.zipWith( (n, s) => s === "" ? n : s )(rules);
+
+    document.getElementById("out").innerHTML = result
+        .drop(0)
+        .take(200)
+        .foldl$( (acc,it) => `${acc} <span>${it}</span>`, "");
+
+</script>
+</body>
+</html>

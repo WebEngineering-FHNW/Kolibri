@@ -1,0 +1,117 @@
+
+/*
+    The purpose of the palette is to define the colors that are to
+    be used in the color scheme.
+    The focus is to define colors that fit together and provide
+    a pleasing and consistent shading.
+
+    We do not yet know, what the colors will be used for.
+    That will be decided by the color scheme, which will set semantic
+    colors from the choices that this palette provides.
+*/
+
+:root {
+
+    /* Colors that define the palette. Make changes here. */
+
+    --kolibri-palette-mono:         hsl(240deg  20%  50%);
+    --kolibri-palette-blue:         hsl(240deg 100%  50%);
+    --kolibri-palette-purple:       hsl(260deg 100%  50%);
+    --kolibri-palette-lavender:     hsl(280deg 100%  50%);
+    --kolibri-palette-pink:         hsl(330deg  90%  60%);
+    --kolibri-palette-green:        hsl(120deg 100%  30%);
+    --kolibri-palette-yellow:       hsl( 40deg 100%  50%);
+
+    /* Warmer tones for color mixing, set lightness to 0 and 100% for black and white */
+    --kolibri-palette-darkening:    hsl(  0deg  70%  10%);
+    --kolibri-palette-lightening:   hsl( 23deg 100% 100%);
+
+
+    /* ------------------------------------------------ */
+    /* Below comes a technical area that derives the    */
+    /* color variants in a consistent way.              */
+    /* This should not be changed.                      */
+    /* ------------------------------------------------ */
+    /* Might be generated in the future.                */
+
+
+    /* --- purple --- */
+
+    --kolibri-palette-purple-800: color-mix(in srgb, var(--kolibri-palette-purple), var(--kolibri-palette-darkening) 45% );
+    --kolibri-palette-purple-700: color-mix(in srgb, var(--kolibri-palette-purple), var(--kolibri-palette-darkening) 30% );
+    --kolibri-palette-purple-600: color-mix(in srgb, var(--kolibri-palette-purple), var(--kolibri-palette-darkening) 15% );
+    --kolibri-palette-purple-500:                    var(--kolibri-palette-purple);
+    --kolibri-palette-purple-400: color-mix(in srgb, var(--kolibri-palette-purple), var(--kolibri-palette-lightening) 20% );
+    --kolibri-palette-purple-300: color-mix(in srgb, var(--kolibri-palette-purple), var(--kolibri-palette-lightening) 40% );
+    --kolibri-palette-purple-200: color-mix(in srgb, var(--kolibri-palette-purple), var(--kolibri-palette-lightening) 60% );
+    --kolibri-palette-purple-100: color-mix(in srgb, var(--kolibri-palette-purple), var(--kolibri-palette-lightening) 80% );
+
+    /* --- lavender --- */
+
+    --kolibri-palette-lavender-800: color-mix(in srgb, var(--kolibri-palette-lavender), var(--kolibri-palette-darkening) 45% );
+    --kolibri-palette-lavender-700: color-mix(in srgb, var(--kolibri-palette-lavender), var(--kolibri-palette-darkening) 30% );
+    --kolibri-palette-lavender-600: color-mix(in srgb, var(--kolibri-palette-lavender), var(--kolibri-palette-darkening) 15% );
+    --kolibri-palette-lavender-500:                    var(--kolibri-palette-lavender);
+    --kolibri-palette-lavender-400: color-mix(in srgb, var(--kolibri-palette-lavender), var(--kolibri-palette-lightening) 20% );
+    --kolibri-palette-lavender-300: color-mix(in srgb, var(--kolibri-palette-lavender), var(--kolibri-palette-lightening) 40% );
+    --kolibri-palette-lavender-200: color-mix(in srgb, var(--kolibri-palette-lavender), var(--kolibri-palette-lightening) 60% );
+    --kolibri-palette-lavender-100: color-mix(in srgb, var(--kolibri-palette-lavender), var(--kolibri-palette-lightening) 80% );
+
+    /* --- blue --- */
+
+    --kolibri-palette-blue-800: color-mix(in srgb, var(--kolibri-palette-blue), var(--kolibri-palette-darkening) 45% );
+    --kolibri-palette-blue-700: color-mix(in srgb, var(--kolibri-palette-blue), var(--kolibri-palette-darkening) 30% );
+    --kolibri-palette-blue-600: color-mix(in srgb, var(--kolibri-palette-blue), var(--kolibri-palette-darkening) 15% );
+    --kolibri-palette-blue-500:                    var(--kolibri-palette-blue);
+    --kolibri-palette-blue-400: color-mix(in srgb, var(--kolibri-palette-blue), var(--kolibri-palette-lightening) 20% );
+    --kolibri-palette-blue-300: color-mix(in srgb, var(--kolibri-palette-blue), var(--kolibri-palette-lightening) 40% );
+    --kolibri-palette-blue-200: color-mix(in srgb, var(--kolibri-palette-blue), var(--kolibri-palette-lightening) 60% );
+    --kolibri-palette-blue-100: color-mix(in srgb, var(--kolibri-palette-blue), var(--kolibri-palette-lightening) 80% );
+
+    /* --- green --- */
+
+    --kolibri-palette-green-800: color-mix(in srgb, var(--kolibri-palette-green), var(--kolibri-palette-darkening) 45% );
+    --kolibri-palette-green-700: color-mix(in srgb, var(--kolibri-palette-green), var(--kolibri-palette-darkening) 30% );
+    --kolibri-palette-green-600: color-mix(in srgb, var(--kolibri-palette-green), var(--kolibri-palette-darkening) 15% );
+    --kolibri-palette-green-500:                    var(--kolibri-palette-green);
+    --kolibri-palette-green-400: color-mix(in srgb, var(--kolibri-palette-green), var(--kolibri-palette-lightening) 20% );
+    --kolibri-palette-green-300: color-mix(in srgb, var(--kolibri-palette-green), var(--kolibri-palette-lightening) 40% );
+    --kolibri-palette-green-200: color-mix(in srgb, var(--kolibri-palette-green), var(--kolibri-palette-lightening) 60% );
+    --kolibri-palette-green-100: color-mix(in srgb, var(--kolibri-palette-green), var(--kolibri-palette-lightening) 80% );
+
+    /* --- yellow --- */
+
+    --kolibri-palette-yellow-800: color-mix(in srgb, var(--kolibri-palette-yellow), var(--kolibri-palette-darkening) 45% );
+    --kolibri-palette-yellow-700: color-mix(in srgb, var(--kolibri-palette-yellow), var(--kolibri-palette-darkening) 30% );
+    --kolibri-palette-yellow-600: color-mix(in srgb, var(--kolibri-palette-yellow), var(--kolibri-palette-darkening) 15% );
+    --kolibri-palette-yellow-500:                    var(--kolibri-palette-yellow);
+    --kolibri-palette-yellow-400: color-mix(in srgb, var(--kolibri-palette-yellow), var(--kolibri-palette-lightening) 20% );
+    --kolibri-palette-yellow-300: color-mix(in srgb, var(--kolibri-palette-yellow), var(--kolibri-palette-lightening) 40% );
+    --kolibri-palette-yellow-200: color-mix(in srgb, var(--kolibri-palette-yellow), var(--kolibri-palette-lightening) 60% );
+    --kolibri-palette-yellow-100: color-mix(in srgb, var(--kolibri-palette-yellow), var(--kolibri-palette-lightening) 80% );
+
+    /* --- pink --- */
+
+    --kolibri-palette-pink-800: color-mix(in srgb, var(--kolibri-palette-pink), var(--kolibri-palette-darkening) 45% );
+    --kolibri-palette-pink-700: color-mix(in srgb, var(--kolibri-palette-pink), var(--kolibri-palette-darkening) 30% );
+    --kolibri-palette-pink-600: color-mix(in srgb, var(--kolibri-palette-pink), var(--kolibri-palette-darkening) 15% );
+    --kolibri-palette-pink-500:                    var(--kolibri-palette-pink);
+    --kolibri-palette-pink-400: color-mix(in srgb, var(--kolibri-palette-pink), var(--kolibri-palette-lightening) 20% );
+    --kolibri-palette-pink-300: color-mix(in srgb, var(--kolibri-palette-pink), var(--kolibri-palette-lightening) 40% );
+    --kolibri-palette-pink-200: color-mix(in srgb, var(--kolibri-palette-pink), var(--kolibri-palette-lightening) 60% );
+    --kolibri-palette-pink-100: color-mix(in srgb, var(--kolibri-palette-pink), var(--kolibri-palette-lightening) 80% );
+
+    /* --- monochrome --- */
+
+    --kolibri-palette-mono-800: color-mix(in srgb, var(--kolibri-palette-mono), var(--kolibri-palette-darkening) 45% );
+    --kolibri-palette-mono-700: color-mix(in srgb, var(--kolibri-palette-mono), var(--kolibri-palette-darkening) 30% );
+    --kolibri-palette-mono-600: color-mix(in srgb, var(--kolibri-palette-mono), var(--kolibri-palette-darkening) 15% );
+    --kolibri-palette-mono-500:                    var(--kolibri-palette-mono);
+    --kolibri-palette-mono-400: color-mix(in srgb, var(--kolibri-palette-mono), var(--kolibri-palette-lightening) 20% );
+    --kolibri-palette-mono-300: color-mix(in srgb, var(--kolibri-palette-mono), var(--kolibri-palette-lightening) 40% );
+    --kolibri-palette-mono-200: color-mix(in srgb, var(--kolibri-palette-mono), var(--kolibri-palette-lightening) 60% );
+    --kolibri-palette-mono-100: color-mix(in srgb, var(--kolibri-palette-mono), var(--kolibri-palette-lightening) 80% );
+
+}
+
+

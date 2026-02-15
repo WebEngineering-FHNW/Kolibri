@@ -1,0 +1,245 @@
+
+<!--suppress JSUnusedGlobalSymbols -->
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kolibri Font Saira</title>
+  <link rel="stylesheet" href="typography.css">
+  <style></style>
+</head>
+<body>
+
+<!-- Header Section -->
+<header>
+  <div class="header-logo"> <!-- Logo gets placed with js --></div>
+  <div class="header-title">
+    <div class="category font-size-h3">Styleguide Typography</div>
+    <div class="chapter  font-size-h2">Kolibri Font Family / Sans-Serif</div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main>
+
+  <!-- Introduction Section -->
+  <section class="intro">
+      <div class="intro-name">
+        <h1>Saira</h1>
+        <div class="blurb">Nice font for fancy headers but also reads well for running text.</div>
+      </div>
+      <div class="intro-sample">
+        <span>Ag</span>
+      </div>
+  </section>
+
+  <!-- About Section -->
+  <section>
+    <div class="about">
+      <h3>About</h3>
+        <p>Saira is a sans serif system. It features a huge range of weights and widths, ready for all kind of
+            typographic challenges.</p>
+        <p>
+            This is the Normal family, which is part of the superfamily along with <u> Semi Condensed,
+            Condensed,</u> and <u>Extra Condensed</u>, each with 9 weights.</p>
+        <p>
+            Saira has been upgraded in 2020 to a variable font with axes for weight and width, adding expanded
+            widths to the superfamily.</p>
+        <p>
+            This typeface was designed by Hector Gatti and developed by the Omnibus Type team. To contribute to the
+            project, visit <a href="https://github.com/Omnibus-Type/Saira" class="kolibri-link">Saira on GitHub</a>.
+        </p>
+    </div>
+
+    <div class="usage">
+      <h3>Usage</h3>
+      <div class="usage-number">
+        <div class="font-size-h1">11.6</div><span>million</span>
+      </div>
+      <p>Number of times Google Fonts API served Saira Extra Condensed over the last week. Saira Extra Condensed
+        is featured in more than 27,500 websites.</p>
+    </div>
+  </section>
+
+  <!-- Styles Section -->
+  <section class="styles">
+    <div class="styles-input">
+      <h3>Styles</h3>
+      <!-- Input field for your own text preview placed with js -->
+    </div>
+    <div class="styles-slider">
+      <!-- Range-Slider for your own text size preview placed with js -->
+      <span id="fontSizeValue" class="font_numeric">0 px</span>
+    </div>
+  </section>
+
+  <section>
+    <div class="styles-weights">
+      <!-- Font-Styles for your own text placed with js -->
+    </div>
+  </section>
+
+  <!-- Animation Section -->
+  <section class="animation">
+    <h3>Animation</h3>
+    <p class="animate_on_hover">Font weight should smoothly change when mouse is over this text.</p>
+  </section>
+
+  <!-- Numbers and Punctuation Section -->
+  <section class="characters">
+    <div class="radioButtons">
+      <div class="numbers">
+        <h4>Numbers</h4>
+        <div class="radioBtnGroup">
+          <!-- Numbers And Fraction generated -->
+        </div>
+      </div>
+      <div class="punctuation">
+        <h4>Punctuation</h4>
+        <div class="radioBtnGroup">
+          <!-- Punctuation characters generated -->
+        </div>
+      </div>
+    </div>
+    <!-- NumbersAndPunctuation Input Field placed with js  -->
+  </section>
+
+</main>
+
+
+<script type="module">
+
+  import { dom, TEXT, RANGE }      from "../../kolibri/util/dom.js";
+  import { SimpleInputController } from "../../kolibri/projector/simpleForm/simpleInputController.js";
+  import { InputProjector }        from "../../kolibri/projector/simpleForm/simpleInputProjector.js";
+  import { icon }                  from "../../kolibri/style/icon.js";
+  import { ICON_KOLIBRI }          from "../../customize/icons.js";
+
+  let counter = 0;
+  const generateUniqueId = () => `unique-id-${counter++}` ;
+
+  const fontStyles          = [
+    { name: 'Thin',       weight: 100 },
+    { name: 'Light',      weight: 200 },
+    { name: 'Regular',    weight: 400 },
+    { name: 'Bold',       weight: 700 },
+    { name: 'ExtraBold',  weight: 800 },
+  ];
+  const numbersAndFractions = [
+    '0',  // Zero
+    '1',  // One
+    '2',  // Two
+    '3',  // Three
+    '4',  // Four
+    '5',  // Five
+    '6',  // Six
+    '7',  // Seven
+    '8',  // Eight
+    '9',  // Nine
+    '½',  // One-half
+    '⅓',  // One-third
+    '⅔',  // Two-thirds
+    '¼',  // One-quarter
+    '¾'   // Three-quarters
+  ];
+  const punctuationMarks    = [
+    '.',  // Period
+    ',',  // Comma
+    ';',  // Semicolon
+    ':',  // Colon
+    '!',  // Exclamation mark
+    '?',  // Question mark
+    '-',  // Hyphen
+    '–',  // En Dash
+    '—',  // Em Dash
+    '(',  // Left Parenthesis
+    ')',  // Right Parenthesis
+    '[',  // Left Bracket
+    ']',  // Right Bracket
+    '{',  // Left Brace
+    '}',  // Right Brace
+    '/',  // Slash
+    '|',  // Vertical bar
+    '@',  // At symbol
+    '#',  // Hash
+    '$',  // Dollar sign
+    '%',  // Percent
+    '^',  // Caret
+    '&',  // Ampersand
+    '*',  // Asterisk
+    '_',  // Underscore
+    '=',  // Equal sign
+    '+',  // Plus sign
+    '<',  // Less than
+    '>',  // Greater than
+    '~'   // Tilde
+  ];
+
+  const exampleTextController         =  SimpleInputController( { value : 'Type here to preview your text', label: '', name: 'example', type: TEXT} );
+  const [_noLabel0, exampleTextField] =  InputProjector.projectInstantInput ( exampleTextController, 'styles-input-text');
+
+  const fontSizeController            =  SimpleInputController( { value : '24', label: '', name: 'yourOwnTextSize', type: RANGE} );
+  const [_noLabel1, fontSizeSlider]   =  InputProjector.projectInstantInput ( fontSizeController, 'styles-input-range');
+  fontSizeController.onValueChanged( val => document.getElementById("fontSizeValue").textContent = val.padStart(2, "0") + " px");
+
+  // -- Numbers and Punctuation --
+  const specialCharSelectionController = SimpleInputController( { value : '9', label: '', name: 'numberAndPunctuation', type: TEXT} );
+  const [_noLabel2, specialCharField]  = InputProjector.projectInstantInput ( specialCharSelectionController, 'numberAndPunctuation');
+
+
+  const fontElements = (fonts = []) => {
+    const container = document.createElement('div');
+
+    fonts.forEach( font => {
+      const elements = dom(`
+            <div class="font-weight">${font.name} ${font.weight}</div>
+            <p class="font-weight-${font.weight}">Whereas recognition of the inherent dignity...</p>
+      `);
+      const text  = elements[1];
+      exampleTextController.onValueChanged( (value) => {
+        text.textContent = value === '' ? '|' : value;
+      });
+      fontSizeController.onValueChanged( (value) => {
+        text.style.fontSize  = `${value}px`;
+      });
+      container.append(...elements);
+    });
+    return container.childNodes;
+  };
+
+  const specialCharElements = (specialChars = [], groupName)=> {
+    const container = document.createElement('div');
+
+    specialChars.forEach( specialChar => {
+      const uniqueId = generateUniqueId();
+      const [input, label] = dom(`
+            <input type="radio" id="${uniqueId}" name="${groupName}" value="${specialChar}">
+            <label for="${uniqueId}">${specialChar}</label>
+        `);
+
+      // Prevent label from being deselected with mouse
+      label.addEventListener('mousedown', e => e.preventDefault());
+      input.addEventListener('click', () => {
+        specialCharSelectionController.setValue(input.value);
+      });
+      specialCharSelectionController.onValueChanged((value) => {
+        input.checked = input.value === value;
+      });
+      container.append(input, label);
+    });
+    return container.childNodes;
+  };
+
+  document.querySelector('.styles-slider')              .prepend(fontSizeSlider);
+  document.querySelector('.styles-input')               .append(exampleTextField);
+  document.querySelector('.styles-weights')             .append(...fontElements(fontStyles));
+  document.querySelector('.characters')                 .append(specialCharField);
+  document.querySelector('.numbers .radioBtnGroup')     .append(...specialCharElements(numbersAndFractions,
+                                                                                                   'numbersAndFractions'));
+  document.querySelector('.punctuation .radioBtnGroup') .append(...specialCharElements(punctuationMarks,
+                                                                                                   'punctuationMarks'));
+  document.querySelector('.header-logo')                .append(...icon(ICON_KOLIBRI));
+
+</script>
+
+

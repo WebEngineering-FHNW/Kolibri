@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FontStyleExample</title>
+    <style>
+        @import "../example.css";
+        @import "font-face.css";
+
+        body {
+            font-family: "Saira", cursive; /* make it obvious if font doesn't load */
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>H1 Saira</h1>
+
+<blockquote>Nice font for fancy headers but also reads well for running text.</blockquote>
+
+<script src="../example-template.js">
+</script>
+<script>
+    document.writeln(HTML_TEMPLATE);
+</script>
+
+</body>
+</html>

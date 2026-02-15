@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logger Example</title>
+    <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+    <link rel="stylesheet" href="../../../css/kolibri-base.css">
+    <style>
+        .twoColumns {
+            display:                inline-grid;
+            grid-template-columns:  repeat(2, 1fr);
+            gap:                    .5rem 2rem;
+        }
+        main > div {
+            margin-bottom:  1.5rem;
+        }
+        button {
+            margin-right:   2rem;
+        }
+
+        .tooltip {
+            cursor:     help;
+            position:   relative;
+            color:      var(--kolibri-color-output);
+        }
+
+        .tooltip .tooltip-content {
+            display:    none;
+            position:   absolute;
+            left:       0;
+            background: var(--kolibri-color-output);
+            color:      aliceblue;
+            padding:    1em;
+            min-width:  20em;
+            border-radius: .6em;
+            z-index:    1;
+            pointer-events: none;
+        }
+        .tooltip:hover .tooltip-content {
+            display:    initial;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Logger Example Page</h1>
+</header>
+<main>
+<div class="twoColumns">
+
+    <fieldset>
+        <legend>Select a Logging Level</legend>
+        <div>
+            <input type="radio" id="log-level-trace" name="log-level" value="trace" checked>
+            <label for="log-level-trace">Trace</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-debug" name="log-level" value="debug">
+            <label for="log-level-debug">Debug</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-info" name="log-level" value="info">
+            <label for="log-level-info">Info</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-warn" name="log-level" value="info">
+            <label for="log-level-warn">Warn</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-error" name="log-level" value="info">
+            <label for="log-level-error">Error</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-fatal" name="log-level" value="info">
+            <label for="log-level-fatal">Fatal</label>
+        </div>
+        <div>
+            <input type="radio" id="log-level-nothing" name="log-level" value="info">
+            <label for="log-level-nothing">Nothing</label>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Select an Appender</legend>
+        <div>
+            <input type="radio" id="appender-console" name="appender" value="console" checked>
+            <label class="tooltip" for="appender-console">
+                Console
+                <span class="tooltip-content">
+                    A Console Appender logs messages to the browsers console.
+                </span>
+            </label>
+        </div>
+        <div>
+            <input type="radio" id="appender-array" name="appender" value="array">
+            <label class="tooltip" for="appender-array">
+                Array
+                <span class="tooltip-content">An Array Appender manages log statements in an array.
+                    With the <em>getValue()</em> method, an array will be returned.
+                </span>
+            </label>
+        </div>
+        <div>
+            <input type="radio" id="appender-count" name="appender" value="count">
+            <label class="tooltip" for="appender-count">
+                Count
+                <span class="tooltip-content">A Count Appender logs messages to the browsers console.
+                    Simultaneously, you can obtain a statistic using the <em>getValue()</em> method.
+                </span>
+            </label>
+        </div>
+    </fieldset>
+</div>
+
+<div class="twoColumns">
+    <div>
+        <label for="context-logger">Logger context:</label>
+    </div>
+    <div>
+        <input type="text" id="context-logger" value="ch.fhnw.sample.logger" disabled>
+    </div>
+    <div >
+        <label class="tooltip" for="context-global">
+            Logging context:
+            <span class="tooltip-content">The logging context enables or disables logger with a matching context.
+                If the logging context is a prefix of a logger context, the logger's messages will be processed.
+            </span>
+        </label>
+    </div>
+    <div>
+        <input type="text" id="context-global" value="ch.fhnw">
+    </div>
+    <div>
+        <label for="log-msg">Message: </label>
+    </div>
+    <div>
+        <input type="text" id="log-msg" value="Log Message">
+    </div>
+</div>
+
+<div >
+    Use the buttons below to log messages at the level
+    that is indicated on the button.
+</div>
+
+<div >
+    <button style="color:black"         id="btn-trace">Trace</button>
+    <button style="color:green"         id="btn-debug">Debug</button>
+    <button style="color:blue"          id="btn-info"> Info</button>
+    <button style="color:orange"        id="btn-warn"> Warn</button>
+    <button style="color:red"           id="btn-error">Error</button>
+    <button style="color:blueviolet"    id="btn-fatal">Fatal</button>
+</div>
+
+<div >
+    <div>
+        <label for="log-output">Log Output:</label>
+    </div>
+    <div>
+        <textarea id="log-output" name="output-area" rows="8" cols="80"></textarea>
+    </div>
+    <div>
+        <button id="btn-reset">Reset all Loggers</button>
+    </div>
+</div>
+
+</main>
+
+<script src="loggerExample.js" type="module"></script>
+
+</body>
+</html>

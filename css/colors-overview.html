@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kolibri Color Overview</title>
+    <link rel="stylesheet" href="kolibri-base.css">
+    <style>
+        .squares {
+            display: flex;
+            /*change below to validate transparency against black */
+            /*background-color: black;*/
+        }
+        div {
+            width:          50px;
+            aspect-ratio:   1 / 1;
+            /*change below to validate color changes with breaks */
+            /*margin:         1px;*/
+        }
+        body > p {
+            margin-top: 1em;
+        }
+        body {
+            padding: 2em;
+        }
+    </style>
+</head>
+<body>
+<h1>Kolibri Color Overview</h1>
+
+<h2>Palette</h2>
+<p>This overview shows all palette colors. Make sure that they align / contrast where appropriate.</p>
+<p>mono blue purple lavender pink green yellow mono (100 - 800)</p>
+<script>
+    let out = "";
+    "mono blue purple lavender pink green yellow mono".split(" ").forEach( colorName => {
+        out += `<div class="squares">`;
+        [1,2,3,4,5,6,7,8].forEach( step => {
+            out += `<div title="${colorName} ${step}00" style="background-color: var(--kolibri-palette-${colorName}-${step}00)"></div>`;
+        });
+        out += `</div>`;
+    });
+    document.writeln(out);
+</script>
+
+<h2>Named Selections with Variants</h2>
+<p>From the palette, these variants are chosen to be used by name for special purposes.</p>
+<p>Name: primary secondary success warning danger -  Purpose: bg light accent dark</p>
+<script>
+    out = "";
+    "primary secondary success warning danger".split(" ").forEach( semantic => {
+        out += `<div class="squares">`;
+        "bg light accent dark".split(" ").forEach( mod => {
+            out += `<div title="${semantic} ${mod}" style="background-color: var(--kolibri-color-${semantic}-${mod})"></div>`;
+        });
+        out += `</div>`;
+    });
+    document.writeln(out);
+</script>
+
+<h2>Semantic Colors</h2>
+<p>accent output ok select neutral</p>
+<script>
+    out = "";
+    "kolibri".split(" ").forEach( _semantic => {
+        out += `<div class="squares">`;
+        "accent output ok select neutral".split(" ").forEach( mod => {
+            out += `<div title="${mod}" style="background-color: var(--kolibri-color-${mod})"></div>`;
+        });
+        out += `</div>`;
+    });
+    document.writeln(out);
+</script>
+
+<p>--kolibri-color-product</p>
+<div style="background-color: var(--kolibri-color-product)"></div>
+
+<p>--kolibri-color-gradient-primary</p>
+<div style="background-image: var(--kolibri-color-gradient-primary)"></div>
+
+<p>--kolibri-box-shadow:</p>
+<div style="box-shadow: var(--kolibri-box-shadow)"></div>
+
+
+
+</body>
+</html>
