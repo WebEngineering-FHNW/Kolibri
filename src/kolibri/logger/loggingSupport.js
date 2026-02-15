@@ -55,7 +55,10 @@ const lineSupportFormatter = context => level => msg => {
         throw Error("logger");
     } catch(e) {
         const stackFrames = e.stack.split("\n");
-        line = stackFrames[5]; // as long as the logger impl. does not chane, the call site is always 5 levels deep in the stack
+        // Safari has removed the "Error: logger" from the stack frames, while chrome and firefox have it
+        // Maintainer note: when the test cases fail for a certain browser only, this is likely the culprit
+        const offset = stackFrames[0].match("Error") ? 1 : 0;
+        line = stackFrames[4+offset]; // as long as the logger impl. does not change, the call site is always so deep in the stack
     }
     return `${msg} ${line} ${context} ${level}`;
 };
