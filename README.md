@@ -33,6 +33,6 @@ Some perceived typos (unknown words) might remain that you can safely add to you
 ## Automatic Bundling
 Every push to the repository automatically creates a production bundle via a 
 [GitHub action](https://github.com/WebEngineering-FHNW/Kolibri/actions)
-and deploys the bundle 
-[here](https://raw.githubusercontent.com/WebEngineering-FHNW/Kolibri/gh-pages/productionBundle.js) 
+and deploys the bundle to
+[the last generated bundle](https://raw.githubusercontent.com/WebEngineering-FHNW/Kolibri/gh-pages/production/productionBundle.js) 
 .
