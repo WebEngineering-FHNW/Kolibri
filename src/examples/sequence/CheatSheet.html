@@ -23,6 +23,9 @@
     .src, .out {
         font-family: monospace;
     }
+    .src {
+        white-space: pre-line;
+    }
     .out {
         color: #0006;
     }
@@ -38,8 +41,12 @@
 </main>
 
 <script type="module">
-    import { Sequence, Seq, Walk, ALL, plusOp, forever}  from "../../kolibri/sequence/sequence.js";
-    import { dom }          from "../../kolibri/util/dom.js";
+    import { Sequence, Seq, Walk, ALL, plusOp, forever, drop, take,TupleSequence}  from "../../kolibri/sequence/sequence.js";
+    import { dom }         from "../../kolibri/util/dom.js";
+    import {Just, Nothing, Pair, Tuple, id} from "../../kolibri/stdlib.js";
+    import {
+        nil
+    }                                                                              from "../../kolibri/sequence/constructors/nil/nil.js";
 
     const main = document.querySelector("main");
 
@@ -65,7 +72,8 @@
         "Seq(42,'***',true).show()",
         "Seq(...[1,2,3]).eq$(Walk(1,3))",
         "Seq(1).cycle().show()",
-        "Seq('_','🌹','🐦‍🔥').cycle().show()",
+        "Seq(1).cycle().show()",
+        "Seq('_','🌹').cycle().show()",
         "Sequence('a', x => x.length < 100, x => x+x).show()",
         "Sequence(1, forever, x => x/2).show()",
         "Walk().map (n => n*n).show()",
@@ -76,10 +84,58 @@
         "Walk().drop(5).show()",
         "Walk().dropWhile(n => n < 9).show()",
         "Walk().dropWhere(n => n % 3 === 0).show()",
-
+        "Walk(1,5).count$()",
+        "Walk(1,5).reduce$( (acc,cur) => acc + cur, 0)",
+        "Walk(1,5).reduce$(plusOp, 0)",
+        "Walk(1,5).map(String).foldl$(plusOp, '')",
+        "Walk(1,5).map(String).scan(plusOp, '').show()",
+        "Seq(1,2,3).append(Walk()).show()",
+        "Seq(1,2,3).cons(0).show()",
+        "Seq(1,2,3).snoc(4).show()",
+        "Walk(1,4).and( n => Walk(1,n)).show()",
+        "Walk().and( n => n < 10 ? Seq() : Seq(n,n)).show()",
+        "Seq(Just(1), Nothing, Just(2)).catMaybes().show()",
+        `const getAt = idx => Seq(drop(idx-1), take(1));
+         Walk().pipe(...getAt(10)).show()`,
+        "Seq(...Pair(1)(2)).show()",
+        `const [Triple] = Tuple(3);
+         TupleSequence(Triple ('_')(42)(true) ).show()`,
+        "Seq(1,2,3).reverse$().show()",
+        "Seq(1,2,3).min$()",
+        "Seq('**','***','*').max$((a,b) => a.length < b.length)",
+        `const seen = [];
+         Walk()
+         .tap(n=>seen.push(n))
+         .take(5)
+         .forEach$(id);
+         seen;`,
+        `const seen = [];
+         for(const x of Walk().take(5)) { seen.push(x) }
+         seen;`,
+         "[...Walk().take(5)]"
     ];
     codeLines.forEach( line => main.append(...makeRow(line, eval(line))) );
 
+
+    const minToFront = s => s.reduce$((acc, cur) =>
+           acc.isEmpty()
+            ? Seq(cur)
+            : cur <= acc.head()
+                ? acc.cons(cur)
+                : acc.snoc(cur)
+        , Seq()
+    );
+
+    const foo = s => s.scan( (acc, _cur) =>
+          minToFront(acc.drop(1))
+        , minToFront(s)
+    );
+
+    const sort = s => foo(s.cons(nil)).and(vals=>vals.take(1));
+
+    console.log( sort(Seq(5,2,6,3)).show());
+    console.log( sort(Seq(5,2,6,2)).show());
+    console.log( sort(Seq()).show());
 
 </script>
 
