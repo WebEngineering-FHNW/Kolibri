@@ -10,9 +10,9 @@ addToTestingTable(testSuite)(
   createTestConfig({
     name:      "TupleSequence",
     iterable:  () => {
-      const [ Triple ]    = Tuple(5);
-      const triple        = Triple(0)(1)(2)(3)(4);
-      return TupleSequence(triple)
+      const [ Quintuple ] = Tuple(5);
+      const quintuple     = Quintuple(0)(1)(2)(3)(4);
+      return TupleSequence(quintuple)
     },
     expected:  [0,1,2,3,4],
     excludedTests: [
