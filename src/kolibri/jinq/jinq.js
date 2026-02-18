@@ -84,7 +84,7 @@ const from = jinq;
  * @type {
  *           (monad1: MonadType<_T_>)
  *        => (selector: (_T_) => MonadType<_U_>)
- *        => JinqType<PairType<_T_,_U_>>
+ *        => JinqType<_U_>
  *      }
  *
  * @example
