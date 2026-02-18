@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kolibri Lazy Sort with Sequence</title>
+  <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+</head>
+<style>
+    body {
+        margin: 1em;
+    }
+    #out {
+        color: #fffd;
+        font-family: monospace;
+        font-weight: bolder;
+        letter-spacing: .2em;
+        line-height: 1.5lh;
+        text-transform: uppercase;
+        display: flex;
+        & > *    { flex-grow: 1; text-align: center}
+        & .true  { background-color: forestgreen}
+        & .false { background-color: red}
+    }
+
+
+</style>
+<body>
+<header>
+  <h1>Kolibri Lazy Sort with Sequence</h1>
+</header>
+
+<main>
+
+    <pre>
+        /*
+            This code mimics the effect of Haskell-like languages
+            where one can take the minimum of a list by first sorting but then taking only the first element.
+            Taking the second element of the "sorted" list, finds the minimum of the remaining rest and so on.
+
+            While this sounds utterly inefficient, it is suitable if sorting is lazy in the sense
+            that we do not sort until a value is actually requested.
+            In this example, we make use of Kolibris lazy sequences.
+            WARNING: When many elements of the sorted sequence are needed, one better relies on
+            [...seq].sort();
+
+            Please note that we
+            - do not introduce any mutable state
+            - do not use recursion
+            - have nice operator composition with "pipe"
+        */
+
+        import { Seq, Walk,  take, nil}  from "../../kolibri/sequence/sequence.js";
+        import { plusOp }                from "../../kolibri/sequence/util/helpers.js";
+
+        // make a new sequence with the minimum placed at the front, otherwise unchanged
+        const minToFront = seq => seq.reduce$((acc, cur) =>
+               acc.isEmpty()
+                ? Seq(cur)
+                : cur <= acc.head()
+                    ? acc.cons(cur)
+                    : acc.snoc(cur)
+            , Seq()
+        );
+
+        // for each element, make a sequence with the minimum at front and pass on the remainder
+        // this is strikingly similar to list deconstruction plus recursion on the remainder in haskell
+        // - *without using recursion*
+        const cascade = seq => seq.scan( (acc, _cur) =>
+              minToFront(acc.drop(1))
+            , minToFront(seq)
+        );
+
+        const sort = seq => seq
+              .cons(nil)          // such that the first element gets its call
+              .pipe(cascade)
+              .and(take(1))       // like map(head), but getting rid of last empty sequence
+        ;
+
+        // let's check
+        const results = Seq(
+            Walk(100,10,-1).pipe(sort).take(5) ['=='] ([10,11,12,13,14]),   // in O(5*n), i.e. O(n)
+            Seq(5,2,6,3).pipe(sort)            ['=='] ([2,3,5,6]),
+            Seq(5,2,6,2).pipe(sort)            ['=='] ([2,2,5,6]),          // check duplicates
+            Seq().pipe(sort)                   ['=='] ([]),                 // check empty
+        );
+        out.innerHTML = results
+            .map( passed => `<`+`span class="${passed}">${passed}<`+`/span>`)
+            .reduce$(plusOp, '');
+
+
+    </pre>
+
+    <div id="out"></div>
+</main>
+
+<script type="module">
+    import { Seq, Walk,  take, nil}  from "../../kolibri/sequence/sequence.js";
+    import { plusOp }                from "../../kolibri/sequence/util/helpers.js";
+
+    // make a new sequence with the minimum placed at the front, otherwise unchanged
+    const minToFront = seq => seq.reduce$((acc, cur) =>
+           acc.isEmpty()
+            ? Seq(cur)
+            : cur <= acc.head()
+                ? acc.cons(cur)
+                : acc.snoc(cur)
+        , Seq()
+    );
+
+    // for each element, make a sequence with the minimum at front and pass on the remainder
+    // this is strikingly similar to list deconstruction plus recursion on the remainder in haskell
+    // - *without using recursion*
+    const cascade = seq => seq.scan( (acc, _cur) =>
+          minToFront(acc.drop(1))
+        , minToFront(seq)
+    );
+
+    const sort = seq => seq
+          .cons(nil)          // such that the first element gets its call
+          .pipe(cascade)
+          .and(take(1))       // like map(head), but getting rid of last empty sequence
+    ;
+
+    // let's check
+    const results = Seq(
+        Walk(100,10,-1).pipe(sort).take(5) ['=='] ([10,11,12,13,14]),   // in O(5*n), i.e. O(n)
+        Seq(5,2,6,3).pipe(sort)            ['=='] ([2,3,5,6]),
+        Seq(5,2,6,2).pipe(sort)            ['=='] ([2,2,5,6]),          // check duplicates
+        Seq().pipe(sort)                   ['=='] ([]),                 // check empty
+    );
+    out.innerHTML = results
+        .map( passed => `<`+`span class="${passed}">${passed}<`+`/span>`)
+        .reduce$(plusOp, '');
+
+
+</script>
+
+</body>
+</html>
