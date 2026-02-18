@@ -40,13 +40,17 @@
 
 </main>
 
+<footer>
+    <hr>
+</footer>
+
 <script type="module">
-    import { Sequence, Seq, Walk, ALL, plusOp, forever, drop, take,TupleSequence}  from "../../kolibri/sequence/sequence.js";
+    import { Sequence, Seq, Walk, ALL, plusOp, forever, drop, take,TupleSequence,
+        bind, reduce$, nil, cons, pipe, dropWhile, isEmpty, toSeq
+    }  from "../../kolibri/sequence/sequence.js";
     import { dom }         from "../../kolibri/util/dom.js";
     import {Just, Nothing, Pair, Tuple, id} from "../../kolibri/stdlib.js";
-    import {
-        nil
-    }                                                                              from "../../kolibri/sequence/constructors/nil/nil.js";
+
 
     const main = document.querySelector("main");
 
@@ -90,6 +94,7 @@
         "Walk(1,5).map(String).foldl$(plusOp, '')",
         "Walk(1,5).map(String).scan(plusOp, '').show()",
         "Seq(1,2,3).append(Walk()).show()",
+        "Seq(1,2,3) ['++'] (Walk()).show()",
         "Seq(1,2,3).cons(0).show()",
         "Seq(1,2,3).snoc(4).show()",
         "Walk(1,4).and( n => Walk(1,n)).show()",
@@ -112,30 +117,26 @@
         `const seen = [];
          for(const x of Walk().take(5)) { seen.push(x) }
          seen;`,
-         "[...Walk().take(5)]"
+        "[...Walk().take(5)]",
+        "[...Iterator.from(Walk()).take(5)] // Seq -> JS Iterator",
+        `const every = f => reduce$((acc,cur) => acc && f(cur),true);
+         Walk(10).pipe(every(n=> n < 11));`,
+        `const some = f => seq => ! seq.takeWhere(f).isEmpty();
+         Walk().pipe(some(n=> n > 10));`,
+        `const last = reduce$((_acc,cur) => Just(cur), Nothing);
+         Walk(10).pipe(last)(_=>"no last value")(id);`,
+        `const last = reduce$((_acc,cur) => Just(cur), Nothing);
+         Seq().pipe(last)(_=>"no last value")(id);`,
+        `Seq('*','**','***').zip(Walk()).map(([n,i]) => i+":"+n).show()`,
+        `Seq('*','**','***').zipWith((n,i) => i+":"+n)(Walk()).show()`,
+        `// make sequence from iterable without consuming
+         toSeq("abc").show();`,
+        `toSeq("hello kolibri".split(/ /)).show();`,
+        `toSeq("0+1-2+3-44".match(/-\\d*/g)).show();`,
+        `toSeq(document.querySelectorAll('.src')).count$();`,
+        `toSeq(document.body.children).count$();`,
     ];
     codeLines.forEach( line => main.append(...makeRow(line, eval(line))) );
-
-
-    const minToFront = s => s.reduce$((acc, cur) =>
-           acc.isEmpty()
-            ? Seq(cur)
-            : cur <= acc.head()
-                ? acc.cons(cur)
-                : acc.snoc(cur)
-        , Seq()
-    );
-
-    const foo = s => s.scan( (acc, _cur) =>
-          minToFront(acc.drop(1))
-        , minToFront(s)
-    );
-
-    const sort = s => foo(s.cons(nil)).and(vals=>vals.take(1));
-
-    console.log( sort(Seq(5,2,6,3)).show());
-    console.log( sort(Seq(5,2,6,2)).show());
-    console.log( sort(Seq()).show());
 
 </script>
 
