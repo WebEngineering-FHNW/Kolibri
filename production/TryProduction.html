@@ -41,11 +41,12 @@
 
         Walk(3)  ['==']  ( Seq(0,1,2,3) );
 
-        let pyth = from(                   Walk(2, ALL))
+        const  pyth = from(                Walk(2, ALL))
               .combine(     z           => Walk(2, z) )
               .combine( ( [ z, y ]    ) => Walk(2, y) )
-              .where  ( ([[ z, y ], x]) => x*x + y*y === z*z )
-              .select ( ([[ z, y ], x]) => ` ${x} ${y} ${z}` )
+              .select ( ([[ z, y ], x]) => Seq(x, y, z) )
+              .where  ( ([x, y, z])     => x*x + y*y === z*z )
+              .select ( ([x, y, z])     => ` ${x} ${y} ${z}` )
               .result();
         pyth.show();
         pyth.drop(100).take(5).show();
