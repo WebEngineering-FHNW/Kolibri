@@ -50,6 +50,7 @@
     }  from "../../kolibri/sequence/sequence.js";
     import { dom }         from "../../kolibri/util/dom.js";
     import {Just, Nothing, Pair, Tuple, id} from "../../kolibri/stdlib.js";
+    import {from} from "../../kolibri/jinq/jinq.js";
 
 
     const main = document.querySelector("main");
@@ -135,8 +136,15 @@
         `toSeq("0+1-2+3-44".match(/-\\d*/g)).show();`,
         `toSeq(document.querySelectorAll('.src')).count$();`,
         `toSeq(document.body.children).count$();`,
+        `from(                    Walk(2,ALL))
+        .combine( z            => Walk(2,z,1))
+        .combine( ([z,y])      => Walk(2,Math.sqrt(z),1))
+        .where  ( ([[z,y], x]) => x * y === z )
+        .select ( ([[z,y], x]) => z+"="+y+"*"+x)
+        .result().show();`,
     ];
     codeLines.forEach( line => main.append(...makeRow(line, eval(line))) );
+
 
 </script>
 
