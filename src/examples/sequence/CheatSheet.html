@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kolibri Sequence Cheat Sheet</title>
+  <link rel="shortcut icon" type="image/png" href="../../../img/logo/logo-60x54.png"/>
+  <link rel="stylesheet" href="../../../css/kolibri-base.css">
+</head>
+<style>
+    body {
+        margin-inline: 3rem;
+    }
+
+    header {
+        margin-bottom: 2lh;
+    }
+
+    .intro {
+        padding:       1em;
+        column-count:  auto;
+        column-width:  40ch;
+        border-radius: .5em;
+        color:         black;
+        box-shadow:    var(--kolibri-box-shadow);
+
+        & li {
+            margin-bottom: .3lh;
+        }
+
+        & p:nth-child(1) {
+            margin-top: 0;
+        }
+    }
+
+
+    main div {
+        display:               flex;
+        flex-direction:        column;
+        gap:                   .5lh;
+        padding:               .8em;
+        font-family:            monospace;
+        border-radius:          1em;
+        &:nth-child(odd) {
+            background-color:   rgb( from var(--kolibri-color-shadow) r g b / .03);
+        }
+    }
+
+    .src {
+        white-space: pre;
+    }
+
+    .out {
+        color:                  var(--kolibri-color-output);
+        opacity:                60%;
+        word-wrap:              break-word;
+    }
+
+</style>
+<body>
+<header>
+    <h1>Kolibri Sequence Cheat Sheet</h1>
+    <div class="intro">
+        <p>
+            The Kolibri Sequence facility is an extension of the standard
+            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols">Iteration
+                protocols</a> that are in the JavaScript stdlib since 2016
+            and have been upgraded considerably with Baseline 2025 that introduced
+            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator">new
+                Iterator functions</a> like map, filter, reduce, forEach, flatMap, and more.
+        </p>
+        <p>
+            This cheat sheet shows how to use Kolibri Sequences and how they play nicely together
+            with the stdlib iteration features. For full coverage, see the Kolibri sequence test cases and
+            additional demos and examples.
+        </p>
+        <p>
+            A few things to keep in mind that make all Kolibri Sequences and their operators special:
+        </p>
+        <ul>
+            <li>all constructors and operators are thoroughly typed, documented, and tested</li>
+            <li>Sequences are immutable, lazy, compositional, and pure (as long as the callback functions are pure)</li>
+            <li>Sequences can be infinite</li>
+            <li>names of operators that should only be called on finite sequences end with a $ character (e.g.
+                reduce$)
+            </li>
+            <li>non-terminal operators can be chained (they are monoidal where possible)</li>
+            <li>Sequences provide "fusion optimization" by design</li>
+            <li>all operators are available as instance methods as well as utility functions in curried
+                style for eta reduction, pipelining, and custom operators
+            </li>
+            <li>Sequences - along with Pair, Tuple, MayBe, and JSON - are monadic and can therefore be used
+                with JINQ like in from(...).where(...).select(...).result()
+            </li>
+        </ul>
+    </div>
+</header>
+
+<main>
+
+</main>
+
+<footer>
+    <hr>
+</footer>
+
+<script type="module">
+    import { Sequence, Seq, Walk, ALL, plusOp, forever, drop, take,TupleSequence,
+        bind, reduce$, nil, cons, pipe, dropWhile, isEmpty, toSeq
+    }  from "../../kolibri/sequence/sequence.js";
+    import { dom }         from "../../kolibri/util/dom.js";
+    import {Just, Nothing, Pair, Tuple, id} from "../../kolibri/stdlib.js";
+    import {from} from "../../kolibri/jinq/jinq.js";
+
+
+    const main = document.querySelector("main");
+
+    const makeRow = (code, result) => dom (`
+        <div>
+            <span class="src">${code}</span>
+            <span class="out">${result}</span>
+        </div>
+    `);
+    const codeLines = [
+"Walk().show()",
+"Walk().show(10)",
+"Walk(5).show()",
+"Walk(5,10).show()",
+"Walk(0,20,5).show()",
+"Walk(100,0,-7).show()",
+"Walk(1,ALL,2).take(4).show()",
+"Walk(1,5,2) ['=='] (Walk(5,1,2))",
+"Walk(1,5,-2).eq$(Walk(5,1,-2))",
+"Seq().show()",
+"Seq(1,2,3).show()",
+"Seq(3,4,5,6) ['=='] (Walk(3,6))",
+"Seq(42,'***',true).show()",
+"Seq(...[1,2,3]).eq$(Walk(1,3))",
+"Seq(1).cycle().show()",
+"Seq('_','🌹').cycle().show()",
+"Sequence('a', x => x.length < 100, x => x+x).show()",
+"Sequence(1, forever, x => x+x).show(17)",
+"Walk().map (n => n*n).show()",
+"Walk().fmap(n => n*n).show()",
+"Walk().take(5).show()",
+"Walk().takeWhile(n => n < 9).show()",
+"Walk().takeWhere(n => n % 3 === 0).show()",
+"Walk().drop(5).show()",
+"Walk().dropWhile(n => n < 9).show()",
+"Walk().dropWhere(n => n % 3 === 0).show()",
+"Walk(1,5).count$()",
+"Walk(1,5).reduce$( (acc,cur) => acc + cur, 0)",
+"Walk(1,5).reduce$(plusOp, 0)",
+"Walk(1,5).map(String).foldl$(plusOp, '')",
+"Walk(1,5).map(String).scan(plusOp, '').show()",
+"Seq(1,2,3).append(Walk()).show()",
+"Seq(1,2,3) ['++'] (Walk()).show()",
+"Seq(1,2,3).cons(0).show()",
+"Seq(1,2,3).snoc(4).show()",
+"Walk(1,4).and( n => Walk(1,n)).show()",
+"Walk().and( n => n < 10 ? Seq() : Seq(n,n)).show()",
+"Seq(Just(1), Nothing, Just(2)).catMaybes().show()",
+`const getAt = idx => Seq(drop(idx-1), take(1));
+Walk().pipe(...getAt(10)).show()`,
+"Seq(...Pair(1)(2)).show()",
+`const [Triple] = Tuple(3);
+TupleSequence(Triple ('_')(42)(true) ).show()`,
+"Seq(1,2,3).reverse$().show()",
+"Seq(1,2,3).min$()",
+"Seq('**','***','*').max$((a,b) => a.length < b.length)",
+`const seen = [];
+Walk()
+.tap(n=>seen.push(n)) // keep side effects in "tap"
+.take(5)
+.forEach$(id);
+seen;`,
+`const seen = [];
+for(const x of Walk().take(5)) { seen.push(x) }
+seen;`,
+"[...Walk().take(5)]",
+"Iterator.from(Walk()).take(5).toArray() // Seq -> JS Iterator",
+`const every = f => reduce$((acc,cur) => acc && f(cur),true);
+Walk(10).pipe(every(n=> n < 11));`,
+`const some = f => seq => ! seq.takeWhere(f).isEmpty();
+Walk().pipe(some(n=> n > 10));`,
+`const last = reduce$((_acc,cur) => Just(cur), Nothing);
+Walk(10).pipe(last)(_=>"no last value")(id);`,
+`const last = reduce$((_acc,cur) => Just(cur), Nothing);
+Seq().pipe(last)(_=>"no last value")(id);`,
+`Seq('*','**','***').zip(Walk()).map(([n,i]) => i+":"+n).show()`,
+`Seq('*','**','***').zipWith((n,i) => i+":"+n)(Walk()).show()`,
+`// make sequence from iterable without consuming
+toSeq("abc").show();`,
+`toSeq("hello kolibri".split(/ /)).show();`,
+`toSeq("0+1-2+3-44".match(/-\\d*/g)).show();`,
+`toSeq(document.querySelectorAll('.src')).count$();`,
+`toSeq(document.body.children).count$();`,
+`from(                     Walk(2,ALL))
+.combine( z            => Walk(2,z,1))
+.combine( ([z,y])      => Walk(2,Math.sqrt(z),1))
+.where  ( ([[z,y], x]) => z === y * x )
+.select ( ([[z,y], x]) => z + "=" + y + "*" + x)
+.result().show();`,
+    ];
+    codeLines.forEach( line => main.append(...makeRow(line, eval(line))) );
+
+
+</script>
+
+</body>
+</html>

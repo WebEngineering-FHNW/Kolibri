@@ -84,7 +84,7 @@ const from = jinq;
  * @type {
  *           (monad1: MonadType<_T_>)
  *        => (selector: (_T_) => MonadType<_U_>)
- *        => JinqType<PairType<_T_,_U_>>
+ *        => JinqType<_U_>
  *      }
  *
  * @example
@@ -158,17 +158,18 @@ const pairWith = monad1 => monad2 => {
  *      }
  *
  * @example
- *  const result =
- *     from(                         Range(2, Number.MAX_VALUE)) // infinite sequence
- *       .combine( z              => Range(2, z) )
- *       .combine( ([_z, y])      => Range(2, y) )
- *       .where ( ([[ z, y ], x]) => x*x + y*y === z*z )
- *       .result()                                               // monad to sequence
- *       .take(2)                                                // lazy pruning
- *       .map ( ([[ z, y ], x]) => `${x} ${y} ${z}`)             // easy to compare
- *   ;
- *
- *   assert.is( [...result].join(" - "), "3 4 5 - 6 8 10");
+ const result =
+   from(                         Range(2, Number.MAX_VALUE)) // infinite
+     .combine( z              => Range(2, z) )
+     .combine( ([_z, y])      => Range(2, y) )
+     .select( ([[ z, y ], x]) => Seq(x, y, z))               // flatten the params for cosmetics
+     .where ( ([x, y, z])     => x*x + y*y === z*z )
+     .result()                                               // monad to sequence
+     .take(2)                                                // lazy pruning
+     .map ( ([x, y, z])       => `${x} ${y} ${z}`)           // easy to compare
+ ;
+
+ assert.is( [...result].join(" - "), "3 4 5 - 6 8 10");
  */
 const combine = monad1 => monad2ctor => {
   const processed = monad1.and(x =>

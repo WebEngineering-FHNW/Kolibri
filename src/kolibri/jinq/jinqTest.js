@@ -2,7 +2,7 @@
 
 import { TestSuite }     from "../util/test.js";
 import { from }          from "./jinq.js";
-import { Range }         from "../sequence/sequence.js";
+import {Range, Seq} from "../sequence/sequence.js";
 import { Just, Nothing } from "../lambda/maybe.js";
 import { JsonMonad }     from "../json/jsonMonad.js";
 
@@ -48,10 +48,11 @@ jinqSuite.add("combine for pyth triples", assert => {
     from(                         Range(2, Number.MAX_VALUE)) // infinite
       .combine( z              => Range(2, z) )
       .combine( ([_z, y])      => Range(2, y) )
-      .where ( ([[ z, y ], x]) => x*x + y*y === z*z )
+      .select( ([[ z, y ], x]) => Seq(x, y, z))               // flatten the params for cosmetics
+      .where ( ([x, y, z])     => x*x + y*y === z*z )
       .result()                                               // monad to sequence
       .take(2)                                                // lazy pruning
-      .map ( ([[ z, y ], x]) => `${x} ${y} ${z}`)             // easy to compare
+      .map ( ([x, y, z])       => `${x} ${y} ${z}`)           // easy to compare
   ;
 
   assert.is( [...result].join(" - "), "3 4 5 - 6 8 10");
