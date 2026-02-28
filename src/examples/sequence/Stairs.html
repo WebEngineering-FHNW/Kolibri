@@ -64,15 +64,15 @@
 
     const allTrails  = Sequence(trail, forever, nextAfter);                     // pure, lazy
     const renderLine = line => svg.innerHTML += line;                           // impure side effect
-    const wait       = ms   => ok => setTimeout( ok, ms);                       // impure async
-    const immediate  = f    => ok => { f(); ok() };                             // ready for promise ctor
+    const waitThenOk = ms   => ok => setTimeout(ok, ms);                        // impure async
+    const callThenOk = f    => ok => { f(); ok() };                             // ready for promise ctor
 
     const lazyLines = allTrails
         .map( lineFor )
-        .map( line => () => renderLine(line))       // map to a sequence of _functions_ that can be called as f()
-        .map( immediate )                           // make each function Promise-ready
-        .and( f => Seq(f, wait(50)))                // intersperse with monads FTW
-        .scan( (acc, cur) => acc.then(() => new Promise(cur)), Promise.resolve(undefined));
+        .map( line => () => renderLine(line))               // map to a sequence of _functions_ that can be called as f()
+        .map( callThenOk )                                  // make each function Promise-ready
+        .and( f => Seq(f, waitThenOk(50)))                  // intersperse monadically FTW
+        .scan( (acc, cur) => acc.then(() => new Promise(cur)), Promise.resolve(undefined)); // fixes sequence
 
     lazyLines
         .take(255 * 2)          // late "pruning" thanks to laziness
