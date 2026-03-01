@@ -38,7 +38,6 @@
     import { Sequence }  from "../../kolibri/sequence/constructors/sequence/Sequence.js";
     import { dom }       from "../../kolibri/util/dom.js";
     import { Seq }       from "../../kolibri/sequence/constructors/seq/seq.js";
-    import { id }        from "../../kolibri/stdlib.js";
 
     const svgWidth = 500;
     const [svg] = dom(`<svg id="svg" viewBox="${-svgWidth/2} ${-svgWidth/2} ${svgWidth} ${svgWidth}" > </svg> `);
@@ -65,18 +64,17 @@
     const allTrails  = Sequence(trail, forever, nextAfter);                     // pure, lazy
     const renderLine = line => svg.innerHTML += line;                           // impure side effect
     const waitThenOk = ms   => ok => setTimeout(ok, ms);                        // impure async
-    const callThenOk = f    => ok => { f(); ok() };                             // ready for promise ctor
+    const callThenOk = f    => ok => ok(f());                                   // ready for promise ctor
 
     const lazyLines = allTrails
         .map( lineFor )
         .map( line => () => renderLine(line))               // map to a sequence of _functions_ that can be called as f()
         .map( callThenOk )                                  // make each function Promise-ready
         .and( f => Seq(f, waitThenOk(50)))                  // intersperse monadically FTW
-        .scan( (acc, cur) => acc.then(() => new Promise(cur)), Promise.resolve(undefined)); // fixes sequence
-
+    ;
     lazyLines
-        .take(255 * 2)          // late "pruning" thanks to laziness
-        .reduce$(id,undefined); // start the promises, trigger the painting
+        .take(255 * 2)                                      // late "pruning" thanks to laziness
+        .reduce$( (acc, cur) => acc.then(() => new Promise(cur)), Promise.resolve(undefined));
 
 
 </script>
