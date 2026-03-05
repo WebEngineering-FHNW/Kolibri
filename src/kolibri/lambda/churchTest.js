@@ -398,5 +398,101 @@ churchSuite.add("boolean type conversion", assert => {
     assert.is(toJsBool(toChurchBoolean(false)), false);
 });
 
+// result is the sc pair of sum and carry
+const halfAdder = a => b =>  sc => sc (xor(a)(b)) (and(a)(b)) ;
+
+churchSuite.add("half adder from church booleans", assert => {
+    assert.is(halfAdder(F)(F)(fst), F); // sum
+    assert.is(halfAdder(F)(T)(fst), T); // sum
+    assert.is(halfAdder(T)(F)(fst), T); // sum
+    assert.is(halfAdder(T)(T)(fst), F); // sum
+
+    assert.is(halfAdder(F)(F)(snd), F); // carry
+    assert.is(halfAdder(F)(T)(snd), F); // carry
+    assert.is(halfAdder(T)(F)(snd), F); // carry
+    assert.is(halfAdder(T)(T)(snd), T); // carry !
+});
+
+const fullAdder = a => b => c => // DIN 40900
+    sc => {
+        const hab = halfAdder(a)(b);
+        const habSum = hab (fst);
+        const habCar = hab (snd);
+        const hcHabSum = halfAdder (c) (habSum) ;
+        return sc
+            (              hcHabSum (fst)  )
+            ( or (habCar) (hcHabSum (snd)) );
+    };
+
+churchSuite.add("full adder from church booleans", assert => {
+    // full adder has three inputs (two boolean digits and a carry)
+    // and has two outputs - a boolean digit and a new carry
+
+    // a full adder variant without half-adder compositions
+    // const fullAdder = a => b => c =>
+    //     sc => sc
+    //         ( c (beq(a)(b)) (xor(a)(b)) )
+    //         ( c ( or(a)(b)) (and(a)(b)) );
+
+
+    assert.is(fullAdder(F)(F)(F)(fst), F); // sum
+    assert.is(fullAdder(T)(F)(F)(fst), T);
+    assert.is(fullAdder(F)(T)(F)(fst), T);
+    assert.is(fullAdder(T)(T)(F)(fst), F);
+
+    assert.is(fullAdder(F)(F)(T)(fst), T); // sum with carry
+    assert.is(fullAdder(T)(F)(T)(fst), F);
+    assert.is(fullAdder(F)(T)(T)(fst), F);
+    assert.is(fullAdder(T)(T)(T)(fst), T);
+
+    assert.is(fullAdder(F)(F)(F)(snd), F); // new carry when old carry is false
+    assert.is(fullAdder(T)(F)(F)(snd), F);
+    assert.is(fullAdder(F)(T)(F)(snd), F);
+    assert.is(fullAdder(T)(T)(F)(snd), T);
+
+    assert.is(fullAdder(F)(F)(T)(snd), F); // new carry when carry is true
+    assert.is(fullAdder(T)(F)(T)(snd), T);
+    assert.is(fullAdder(F)(T)(T)(snd), T);
+    assert.is(fullAdder(T)(T)(T)(snd), T);
+
+});
+
+churchSuite.add("3 bit adder for church booleans", assert => {
+    const [ThreeBit, b2,b1,b0] = Tuple(3);
+    const threeBitAdder = a => b => {
+        const sc0 = fullAdder (a(b0)) (b(b0)) (F);        // rightmost carry is false
+        const sc1 = fullAdder (a(b1)) (b(b1)) (sc0(snd)); // pass on the carry
+        const sc2 = fullAdder (a(b2)) (b(b2)) (sc1(snd)); // and so on...
+          return ThreeBit
+              (sc2(fst))
+              (sc1(fst))
+              (sc0(fst));
+        }
+    ;
+
+    let result;
+
+    result = threeBitAdder (ThreeBit(F)(F)(F)) (ThreeBit(F)(F)(F));  // 0 + 0 = 0
+    assert.is(result(b0), F);
+    assert.is(result(b1), F);
+    assert.is(result(b2), F);
+
+    result = threeBitAdder (ThreeBit(F)(F)(T)) (ThreeBit(F)(F)(T));  // 1 + 1 = 2
+    assert.is(result(b0), F);
+    assert.is(result(b1), T);
+    assert.is(result(b2), F);
+
+    result = threeBitAdder (ThreeBit(T)(T)(T)) (ThreeBit(F)(F)(F));  // 7 + 0 = 7
+    assert.is(result(b0), T);
+    assert.is(result(b1), T);
+    assert.is(result(b2), T);
+
+    result = threeBitAdder (ThreeBit(T)(T)(T)) (ThreeBit(F)(F)(T));  // 7 + 1 = 0
+    assert.is(result(b0), F);
+    assert.is(result(b1), F);
+    assert.is(result(b2), F);
+
+});
+
 
 churchSuite.run();
