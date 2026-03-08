@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kolibri Favicon check</title>
+
+<!--    should work without additional css or external refs in the svn file itself -->
+
+
+    <link rel="icon" href="../img/logo/logo.svg"         type="image/svg+xml" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="../img/logo/logo-on-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/logo/logo.svg">
+
+    <style>
+        img {
+            max-height: 20vh;
+        }
+    </style>
+</head>
+<body>
+<h1>Kolibri Favicon check</h1>
+
+<p> Check favicon and touch-icon in various browsers and light/dark themes</p>
+
+<div >
+    <label>on light<img alt="" src="../img/logo/logo.svg"></label>
+</div>
+<div style="color:white; background-color: black;">
+    <label>on dark<img alt="" src="../img/logo/logo-on-dark.svg"></label>
+</div>
+
+</body>
+</html>
