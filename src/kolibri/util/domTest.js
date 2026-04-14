@@ -11,6 +11,14 @@ domSuite.add("dom", assert => {
     assert.is( resultElement instanceof HTMLElement, true);
 });
 
+domSuite.add("dom toplevel children", assert => {
+    const [resultElement1, resultElement2] = dom('<section></section><p></p>');
+    assert.is( resultElement1 instanceof HTMLElement, true);
+    assert.is( resultElement2 instanceof HTMLElement, true);
+    const results = dom('<section></section><p></p>');
+    assert.is( results.length, 2);
+});
+
 domSuite.add("fire-event", assert => {
     const [inputElement] = dom('<input type="text" value="old"/>');
     let value = "";
