@@ -16,50 +16,33 @@
 
 /*noinspection CssInvalidPseudoSelector*/
 :popover-open {
-      animation-name:             appear;
+      opacity:                    0;      /* do not show until animation kicks in */
+      animation-delay:            1s;     /* wait before showing */
+      animation-name:             appear; /* to be overridden by more specific popover types like tooltip */
       animation-duration:         .5s;
       animation-timing-function:  ease-in-out;
       animation-fill-mode:        forwards;
   }
 
-  /* For the moment, don't do this as it makes the UI appear flickering when*/
-  /* the popover closes. Sadly, there seems to be no way to transition back on close that works on all browsers.*/
-  /* For chrome and Safari (not FF yet), we could use a view transition. */
-  /*:popover-open::backdrop {*/
-  /*    background-color:           color-mix(in hsl, white, transparent 70%);*/
-  /*    transition:                 background-color 1s linear;*/
-  /*    @starting-style {*/
-  /*        background-color:       transparent;*/
-  /*    }*/
-  /*}*/
-
   .popover_anchor {
       /* anchor-name will be set on the element */
-      position:           relative;
-      display:            inline-flex;  /* for FF and Safari or it does not always work */
   }
 
 /*noinspection CssInvalidFunction*/
 .popover_tooltip {
       /* position-anchor will be set on the element */
-      position:           absolute;     /* override the popover-hidden default */
-      inset:              unset;
-      top:                anchor(top);  /* dirty trick for FF and Safari (anchor(bottom) does not work) */
-      left:               anchor(left);
-      translate:          0 1.2lh;      /* dirty trick for FF and Safari */
-
+      inset:              calc(anchor(bottom) + .2em) auto auto anchor(left);
       transform-origin:   top center; /* makes expandY a drop-down */
   }
 
-/*noinspection CssInvalidPseudoSelector*/
 .popover_tooltip:popover-open {
       display:                    flex;              /* override */
       animation-name:             appear, expandY;
   }
 
   @keyframes appear {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      from { opacity:  0; }
+      to   { opacity: .9; }
   }
   @keyframes expandY {
       from {  transform: scaleY(0); }
