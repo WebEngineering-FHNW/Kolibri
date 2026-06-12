@@ -82,6 +82,10 @@ const SiteController = () => {
         const activePage = pageActivated.getValue();
         const newPage     = allPages[mainHash(newUriHash)];
 
+        if (activePage === newPage) {    // guard if only the subhash changed:
+            return;                      // page stays active no passivation/activation needed.
+        }
+
         debug(`passivate ${activePage.titleText}`);
         pagePassivated.setValue(activePage);
 
