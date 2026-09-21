@@ -40,7 +40,7 @@ h4, .font-size-h4 {--font-size-factor: calc( pow(var(--font-base-scale), 0));}
 h5, .font-size-h5 {--font-size-factor: calc( pow(var(--font-base-scale),-1));}
 
 .document    {                                  /* a class for web documents that are intended to be read */
-    --font-base-scale:          1.9;           /* documents build the visual hierarchy by the golden ration */
+    --font-base-scale:          1.9;           /* documents build the visual hierarchy by this ratio */
     --font-family:              "Saira";
 }
 
