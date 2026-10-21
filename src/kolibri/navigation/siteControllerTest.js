@@ -48,6 +48,46 @@ siteControllerSuite.add('typical sequence', assert => {
     assert.iterableEq(passivePage, ["Empty", "Sample"] );
 });
 
+
+siteControllerSuite.add('subhash within the same page', assert => {
+
+    const siteController = SiteController();
+
+    const uriHash     = [];
+    const activePage  = [];
+    const passivePage = [];
+    siteController.onUriHashChanged( it => uriHash    .push(it));
+    siteController.onPageActivated ( it => activePage .push(it.titleText));
+    siteController.onPagePassivated( it => passivePage.push(it.titleText));
+
+    const samplePage = Page({
+        titleText:      "Sample",
+        pageClass:      "sample",
+        styleElement:   undefined,
+        contentElement: undefined
+    });
+
+    // "#sample" cast since it is not in the UriHashType union
+    const sampleHash = /** @type { UriHashType } */ ("#sample");
+    const subHashA   = /** @type { UriHashType } */ (sampleHash + "/file-a");
+    const subHashB   = /** @type { UriHashType } */ (sampleHash + "/file-b");
+
+    siteController.registerPage(sampleHash, samplePage);
+
+    siteController.gotoUriHash(subHashA);
+    assert.iterableEq(uriHash,     ["#empty", subHashA]);
+    assert.iterableEq(activePage,  ["Empty", "Sample"]);
+    assert.iterableEq(passivePage, ["Empty"]);             // emptyPage was already the initial value
+
+    // navigate to another subhash of the SAME page (e.g. preview another file)
+    siteController.gotoUriHash(subHashB);
+
+    // listeners must see the new subhash so the page can react to it
+    assert.iterableEq(uriHash,     ["#empty", subHashA, subHashB]);
+    assert.iterableEq(passivePage, ["Empty"]);
+    assert.iterableEq(activePage,  ["Empty", "Sample"]);
+});
+
 siteControllerSuite.add('unknown uriHash', assert => {
 
     const siteController = SiteController();
